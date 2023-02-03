@@ -1,0 +1,56 @@
+//
+// Tables
+// --------------------------------------------------
+
+.table {
+    --#{$prefix}table-th-color: #{$table-th-color};
+    --#{$prefix}table-dark-color: #{$body-dark-mode-color};
+    white-space: nowrap !important;
+    &:not(.table-dark) {
+        thead:not(.thead-dark) th,
+        tbody th {
+            color: var(--#{$prefix}table-th-color);
+        }
+    }
+    &.table-dark td {
+        color: var(--#{$prefix}table-dark-color);
+    }
+
+    &.top-border {
+        border-top: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    font-weight: 600;
+
+    > thead {
+        font-weight: 800;
+        vertical-align: bottom;
+        opacity: 0.70;
+
+        > tr {
+            > th {
+                font-size: $font-size-base;
+                font-weight: $font-weight-medium;
+
+                .btn-sort {
+                    border: none;
+                    padding: 0.125rem 0.125rem;
+                    font-size: inherit;
+                    font-weight: inherit;
+                }
+            }
+        }
+
+    }
+}
+.table > :not(:last-child) > :last-child > * {
+    border-bottom-color: darken($border-color, 12%);
+}
+.table.table-dark > :not(:last-child) > :last-child > * {
+    border-bottom-color: rgba($white, .3);
+}
+
+// Remove highlight border color between thead, tbody and tfoot.
+.table > :not(:first-child) {
+    border-top: 0;
+}

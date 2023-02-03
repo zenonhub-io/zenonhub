@@ -1,0 +1,20 @@
+//
+// Social buttons
+// --------------------------------------------------
+
+@each $brand, $value in $social-buttons {
+  .btn-#{$brand} {
+    &:hover, &:focus, &:active {
+      border-color: $value !important;
+      background-color: $value !important;
+      color: $white !important;
+      box-shadow: 0 .375rem 1.125rem -.375rem rgba($value, .8) !important;
+    }
+  }
+}
+
+.btn-snapchat {
+  &:hover, &:focus, &:active {
+    color: $gray-800 !important;
+  }
+}

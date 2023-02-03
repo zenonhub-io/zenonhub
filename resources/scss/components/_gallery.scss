@@ -1,0 +1,132 @@
+//
+// Gallery
+// based on https://github.com/sachinchoolur/lightgallery.js
+// --------------------------------------------------
+
+
+.gallery {
+  --#{$prefix}gallery-overlay-bg: #{$gallery-overlay-bg};
+  --#{$prefix}gallery-indicator-size: #{$gallery-indicator-size};
+  --#{$prefix}gallery-image-indicator-color: #{$gallery-image-indicator-color};
+  --#{$prefix}gallery-image-indicator-font-size: #{$gallery-image-indicator-font-size};
+  --#{$prefix}gallery-video-indicator-bg: #{$gallery-video-indicator-bg};
+  --#{$prefix}gallery-video-indicator-color: #{$gallery-video-indicator-color};
+  --#{$prefix}gallery-video-indicator-font-size: #{$gallery-video-indicator-font-size};
+  --#{$prefix}gallery-video-indicator-box-shadow: #{$gallery-video-indicator-box-shadow};
+  --#{$prefix}gallery-video-indicator-hover-bg: #{$gallery-video-indicator-hover-bg};
+  --#{$prefix}gallery-video-indicator-hover-color: #{$gallery-video-indicator-hover-color};
+  --#{$prefix}gallery-video-indicator-hover-box-shadow: #{$gallery-video-indicator-hover-box-shadow};
+
+
+}
+.gallery-item {
+  display: block;
+  position: relative;
+  text-decoration: none !important;
+  overflow: hidden;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+  > img {
+    display: block;
+    width: 100%;
+  }
+
+  // Overlay
+  &::before {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: opacity .3s ease-in-out;
+    background-color: var(--#{$prefix}gallery-overlay-bg);
+    content: '';
+    opacity: 0;
+    z-index: 1;
+  }
+
+  // Indicator
+  &::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--#{$prefix}gallery-indicator-size);
+    height: var(--#{$prefix}gallery-indicator-size);
+    margin: {
+      top: calc(var(--#{$prefix}gallery-indicator-size) * -.5);
+      left: calc(var(--#{$prefix}gallery-indicator-size) * -.5);
+    }
+    transform: scale(.3);
+    color: var(--#{$prefix}gallery-image-indicator-color);
+    font: {
+      family: 'boxicons';
+      size: var(--#{$prefix}gallery-image-indicator-font-size);
+    }
+    text-align: center;
+    line-height: var(--#{$prefix}gallery-indicator-size);
+    content: '\ec90';
+    z-index: 5;
+  }
+
+  // Item caption
+  .gallery-item-caption {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: $spacer;
+    transform: translateY(.5rem);
+    color: $gallery-caption-color;
+    z-index: 5;
+  }
+
+  &::after,
+  .gallery-item-caption {
+    transition: all .3s ease-in-out;
+    opacity: 0;
+  }
+  
+  // Hover state
+  &:hover, &.is-hovered {
+    &::before, &::after,
+    .gallery-item-caption {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  // Video item
+  &.video-item {
+    &::after {
+      padding: {
+        top: .0625rem;
+        left: .25rem;
+      }
+      transform: none;
+      border-radius: 50%;
+      background-color: var(--#{$prefix}gallery-video-indicator-bg);
+      color:var(--#{$prefix}gallery-video-indicator-color);
+      font-size: var(--#{$prefix}gallery-video-indicator-font-size);
+      opacity: 1;
+      @include box-shadow(var(--#{$prefix}gallery-video-indicator-box-shadow));
+      content: '\ebbd';
+    }
+    &:hover::after {
+      background-color: var(--#{$prefix}gallery-video-indicator-hover-bg);
+      color: var(--#{$prefix}gallery-video-indicator-hover-color);
+      @include box-shadow(var(--#{$prefix}gallery-video-indicator-hover-box-shadow));
+    }
+  }
+}
+.lg-backdrop { z-index: $zindex-modal-backdrop + 5; }
+.lg-outer {
+  z-index: $zindex-modal + 5;
+  .lg-thumb-item:hover,
+  .lg-thumb-item.active {
+    border-color: var(--#{$prefix}primary);
+  }
+}
+.lg-on { overflow: hidden; }
+.lg-item:focus, .lg:focus, .lg-outer:focus,
+.lg-inner:focus { outline: none; }

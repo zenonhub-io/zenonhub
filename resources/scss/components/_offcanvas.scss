@@ -1,0 +1,17 @@
+//
+// Offcanvas
+// --------------------------------------------------
+
+
+// Header
+
+.offcanvas-header {
+  padding: calc(var(--#{$prefix}offcanvas-padding-y) * .75) var(--#{$prefix}offcanvas-padding-x);
+}
+
+
+// Body
+
+.offcanvas-body {
+  display: block !important;
+}

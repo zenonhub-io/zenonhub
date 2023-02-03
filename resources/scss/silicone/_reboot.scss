@@ -1,0 +1,93 @@
+//
+// Reboot
+// --------------------------------------------------
+
+// Import Google Fonts (Manrope)
+@import url($path-to-fonts);
+
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Sticky footer
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+.page-wrapper {
+  flex: 1 0 auto;
+}
+.footer {
+  flex-shrink: 0;
+}
+
+// Root
+:root {
+  --#{$prefix}user-selection-color: #{$user-selection-color};
+  --#{$prefix}heading-link-color: #{$nav-link-color};
+  --#{$prefix}heading-link-hover-color: #{$nav-link-hover-color};
+}
+
+// Links
+a {
+  transition: $link-transition;
+  &:focus { outline: none; }
+}
+
+// Background transition for links
+a[class^='bg-']:not(.btn),
+a[class*='bg-']:not(.btn) {
+  transition: background-color .25s ease;
+}
+
+
+// Images
+// Responsive images (ensure images don't scale beyond their parents)
+img,
+figure {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+svg { max-width: 100%; }
+.dark-mode-img { display: none; }
+
+// Responsive iframes
+iframe {
+  width: 100%;
+}
+
+// Text Selection Color
+::selection {
+  background: var(--#{$prefix}user-selection-color);
+}
+::-moz-selection {
+  background: var(--#{$prefix}user-selection-color);
+}
+
+b,
+strong {
+  font-weight: $font-weight-bold;
+}
+
+small { font-weight: inherit; }
+
+// Disable button :focus outline
+button:focus {
+  outline: none;
+}
+
+
+// Docs container
+.docs-container {
+  @include media-breakpoint-up(lg) {
+    padding-left: 21rem;
+  }
+  @include media-breakpoint-up(xxl) {
+    padding-right: 20rem;
+  }
+}
