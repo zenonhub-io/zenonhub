@@ -1,0 +1,16 @@
+//
+// Tooltips
+// --------------------------------------------------
+
+.tooltip-inner {
+    max-width: 350px;
+}
+
+@include media-breakpoint-up(sm) {
+    .tooltip-inner {
+        max-width: var(--#{$prefix}tooltip-max-width);
+    }
+}
+
+
+

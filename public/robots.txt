@@ -1,0 +1,14 @@
+User-agent: *
+
+Disallow: /auth/*
+Disallow: /api/*
+
+Disallow: /account
+Disallow: /account/*
+
+Disallow: /explorer/momentum/*
+Disallow: /explorer/transaction/*
+Disallow: /explorer/account/*
+Disallow: /explorer/token/*
+
+Sitemap: https://zenonhub.io/sitemap.xml

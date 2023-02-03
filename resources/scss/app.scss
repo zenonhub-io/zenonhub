@@ -1,0 +1,29 @@
+// Setup
+@import '~bootstrap/scss/functions';
+
+// User variables
+@import 'user-variables';
+
+// Configuration & utilities
+@import 'silicone/variables';
+@import 'silicone/utilities';
+
+// Bootstrap core
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/utilities';
+@import "bootstrap";
+
+// Bootstrap icons
+@import '~bootstrap-icons/font/bootstrap-icons';
+@import '~boxicons/css/boxicons.css';
+
+// Layout & components
+@import 'silicone/reboot';
+@import 'components';
+
+// Dark mode
+@import "silicone/dark-mode";
+
+// Components
+//@import 'fonts';
+@import 'user';
