@@ -4,19 +4,27 @@ namespace App\Services\Discord;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
-use App\Services\Discord\Contracts\DiscordWebHook;
 
 class Embed implements Arrayable
 {
     public ?string $title = null;
+
     public ?string $description = null;
+
     public ?string $url = null;
+
     public ?int $color = null;
+
     public ?array $footer = null;
+
     public ?array $image = null;
+
     public ?array $thumbnail = null;
+
     public ?array $author = null;
+
     public ?array $fields = null;
+
     public ?string $timestamp = null;
 
     public static function make(): Embed
@@ -32,6 +40,7 @@ class Embed implements Arrayable
     {
         $this->title = $title;
         $this->url = $url;
+
         return $this;
     }
 
@@ -39,12 +48,14 @@ class Embed implements Arrayable
     {
         $this->description = Str::limit($description,
             2000 - 3 /* Accounting for ellipsis */);
+
         return $this;
     }
 
     public function color(int $code): Embed
     {
         $this->color = $code;
+
         return $this;
     }
 
@@ -54,19 +65,21 @@ class Embed implements Arrayable
             'text' => $text,
             'icon_url' => $icon_url,
         ];
+
         return $this;
     }
 
     public function image(string $url): Embed
     {
-        $this->image = ['url' => $url,];
+        $this->image = ['url' => $url];
 
         return $this;
     }
 
     public function thumbnail(string $url): Embed
     {
-        $this->thumbnail = ['url' => $url,];
+        $this->thumbnail = ['url' => $url];
+
         return $this;
     }
 
@@ -84,12 +97,14 @@ class Embed implements Arrayable
     public function field(string $name, string $value, bool $inline = false): Embed
     {
         $this->fields[] = EmbedField::make($name, $value, $inline);
+
         return $this;
     }
 
     public function timestamp(string $timestamp): Embed
     {
         $this->timestamp = $timestamp;
+
         return $this;
     }
 
@@ -109,7 +124,7 @@ class Embed implements Arrayable
                 'timestamp' => $this->timestamp,
             ],
             static function ($value) {
-                return $value !== null && $value !== "" && $value !== [];
+                return $value !== null && $value !== '' && $value !== [];
             });
     }
 

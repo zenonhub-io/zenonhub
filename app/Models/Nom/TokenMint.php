@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TokenMint extends Model
 {
@@ -29,6 +30,7 @@ class TokenMint extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'token_id',
         'issuer_id',
         'receiver_id',
@@ -46,48 +48,42 @@ class TokenMint extends Model
         'created_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
 
-    public function token()
+    public function token(): BelongsTo
     {
         return $this->belongsTo(Token::class, 'token_id', 'id');
     }
 
-    public function issuer()
+    public function issuer(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'issuer_id', 'id');
     }
 
-    public function receiver()
+    public function receiver(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'receiver_id', 'id');
     }
 
-    public function account_block()
+    public function account_block(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
     }
 
+    //
+    // Scopes
 
-    /*
-     * Scopes
-     */
-
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getDisplayAmountAttribute()
     {
         return $this->token->getDisplayAmount($this->amount);
-    }
-
-    public function getListDisplayWeightAttribute()
-    {
-        return $this->token->getDisplayAmount($this->amount, 2);
     }
 }

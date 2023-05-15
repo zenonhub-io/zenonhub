@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="row">
             <div class="col-24 col-md-16 mb-3 mb-md-0 align-self-center">
-                <livewire:tables.toolbar :enableExport="true" />
+                <livewire:tables.toolbar :enableExport="true" :search="$search" />
             </div>
             <div class="col-24 col-md-8">
                 <div class="d-flex justify-content-center justify-content-md-end">
@@ -32,9 +32,7 @@
                     <thead>
                     <tr>
                         <th>
-                            <button type="button" class="btn btn-sort" wire:click="sortBy('project')">
-                                <x-table-sort-button :sort="$sort" :order="$order" check="project"/>
-                            </button>
+                            Project/Phase
                         </th>
                         <th>
                             Vote
@@ -50,9 +48,22 @@
                     @foreach($data as $vote)
                         <tr>
                             <td>
-                                <a href="{{ route('az.project', ['hash' => $vote->project->hash]) }}">
-                                    {{ $vote->project->name }}
-                                </a>
+                                @if ($vote->votable instanceof \App\Models\Nom\AcceleratorProject)
+                                    <div class="text-muted fs-xs mb-n1">
+                                        Project
+                                    </div>
+                                    <a href="{{ route('az.project', ['hash' => $vote->votable->hash]) }}">
+                                        {{ $vote->votable->name }}
+                                    </a>
+                                @endif
+                                @if ($vote->votable instanceof \App\Models\Nom\AcceleratorPhase)
+                                    <div class="text-muted fs-xs mb-n1">
+                                        {{ $vote->votable->project->name }}
+                                    </div>
+                                    <a href="{{ route('az.phase', ['hash' => $vote->votable->hash]) }}">
+                                        {{ $vote->votable->name }}
+                                    </a>
+                                @endif
                             </td>
                             <td>
                                 @if ($vote->is_yes)

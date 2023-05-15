@@ -1,24 +1,12 @@
-<x-layouts.app>
-    <x-slot name="pageTitle">
-        {{ $meta['title'] }}
-    </x-slot>
-    <x-slot name="pageMetaTags">
-        <meta name="description" content="{{ $meta['description'] }}">
-        <meta name="og:description" content="{{ $meta['description'] }}">
-    </x-slot>
+<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
     <x-slot name="pageBreadcrumbs">
-        @if (isset($data['component']))
-            {{ Breadcrumbs::render($data['component']) }}
-        @else
-            {{ Breadcrumbs::render("account") }}
-        @endif
+        {{ Breadcrumbs::render($data['component'] ?? 'account') }}
     </x-slot>
-
     <div class="container">
         <div class="row">
             @if (isset($data['component']))
                 <div class="col-lg-8">
-                    <x-layouts.app-sidebar :items="[
+                    <x-site.sidebar :items="[
                         'Account' => [
                             [
                                 'route' => 'account.details',
@@ -29,11 +17,6 @@
                                 'route' => 'account.notifications',
                                 'title' => 'Notifications',
                                 'icon' => 'bell-fill',
-                            ],
-                            [
-                                'route' => 'account.addresses',
-                                'title' => 'Addresses',
-                                'icon' => 'link-45deg',
                             ],
                             [
                                 'route' => 'account.security',
@@ -58,7 +41,7 @@
                             <div class="d-block">
                                 <a href="{{ route('account.details') }}">
                                     <span class="d-block">
-                                        <i class="bi-person-fill opacity-70" style="font-size:2.3rem;"></i>
+                                        <i class="bi-person-circle opacity-70" style="font-size:2.3rem;"></i>
                                     </span>
                                     <h5>Details</h5>
                                 </a>
@@ -90,14 +73,14 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('account.addresses') }}">
+                                <a href="{{ route('account.security') }}">
                                     <span class="d-block">
-                                        <i class="bi-link-45deg opacity-70" style="font-size:2.3rem;"></i>
+                                        <i class="bi-shield-shaded opacity-70" style="font-size:2.3rem;"></i>
                                     </span>
-                                    <h5>Addresses</h5>
+                                    <h5>Security</h5>
                                 </a>
                                 <p class="mb-0">
-                                    Link your network addresses
+                                    Change your account password
                                 </p>
                             </div>
                         </div>
@@ -107,14 +90,14 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('account.security') }}">
+                                <a href="{{ route('logout') }}">
                                     <span class="d-block">
-                                        <i class="bi-bell-fill opacity-70" style="font-size:2.3rem;"></i>
+                                        <i class="bi-lock-fill opacity-70" style="font-size:2.3rem;"></i>
                                     </span>
-                                    <h5>Security</h5>
+                                    <h5>Logout</h5>
                                 </a>
                                 <p class="mb-0">
-                                    Change your account password
+                                    Sign out of your account
                                 </p>
                             </div>
                         </div>

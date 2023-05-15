@@ -11,22 +11,26 @@ class MomentumBlocks extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Momentum $momentum;
+
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'created_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
     {
         $this->loadData();
 
-        return view('livewire.tables.momentum-blocks', [
-            'data' => $this->data
+        return view('livewire.tables.transactions', [
+            'data' => $this->data,
         ]);
     }
 
@@ -51,19 +55,12 @@ class MomentumBlocks extends Component
 
         if ($this->search) {
             $this->query->where(function ($q) {
-                $q->where('height', $this->search);
-                $q->orWhere('hash', $this->search);
-                $q->orWhereHas('token', fn($q2) => $q2->where('name', $this->search));
-                $q->orWhereHas('account', function ($q2) {
-                    $q2->where('address', 'LIKE', "%{$this->search}%")
-                        ->orWhere('name', 'LIKE', "%{$this->search}%");
-                });
-                $q->orWhereHas('to_account', function ($q2) {
-                    $q2->where('address', 'LIKE', "%{$this->search}%")
-                        ->orWhere('name', 'LIKE', "%{$this->search}%");
-                });
+                $q->where('height', $this->search)
+                    ->orWhere('hash', $this->search)
+                    ->orWhereHas('token', fn ($q2) => $q2->where('name', $this->search))
+                    ->orWhereHas('account', fn ($q3) => $q3->where('address', $this->search))
+                    ->orWhereHas('to_account', fn ($q4) => $q4->where('address', $this->search));
             });
-            $this->resetPage();
         }
     }
 }

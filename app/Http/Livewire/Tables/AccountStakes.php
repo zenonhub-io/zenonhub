@@ -11,14 +11,18 @@ class AccountStakes extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Account $account;
+
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'started_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
@@ -26,7 +30,7 @@ class AccountStakes extends Component
         $this->loadData();
 
         return view('livewire.tables.account-stakes', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -52,7 +56,6 @@ class AccountStakes extends Component
 
         if ($this->search) {
             $this->query->where('amount', (is_numeric($this->search) ? $this->search * 100000000 : '0'));
-            $this->resetPage();
         }
     }
 }

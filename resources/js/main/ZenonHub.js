@@ -332,6 +332,7 @@ export default class ZenonHub {
      * If any plugin returns a `false`, the event is considered cancelled.
      *
      * @param {string} eventName
+     * @param parameters
      * @returns {boolean} If event was not cancelled
      */
     globalEvent(eventName, ...parameters) {
@@ -485,7 +486,7 @@ export default class ZenonHub {
                     try {
                         const instancePromise = instance[listenMethod](...parameters);
 
-                        if (instancePromise instanceof Promise === false) {
+                        if (!(instancePromise instanceof Promise)) {
                             return;
                         }
 
@@ -509,7 +510,7 @@ export default class ZenonHub {
             this.listeners[eventName].forEach((listener) => {
                 try {
                     const listenerPromise = listener(...parameters);
-                    if (listenerPromise instanceof Promise === false) {
+                    if (!(listenerPromise instanceof Promise)) {
                         return;
                     }
 

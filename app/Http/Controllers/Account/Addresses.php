@@ -26,11 +26,11 @@ class Addresses extends PageController
             'address' => [
                 'required',
                 'string',
-                'exists:nom_accounts,address'
+                'exists:nom_accounts,address',
             ],
             'nickname' => [
                 'string',
-                'nullable'
+                'nullable',
             ],
             'message' => [
                 'required',
@@ -80,7 +80,7 @@ class Addresses extends PageController
             }
 
             return redirect()->route('account.addresses')
-                ->with('alert' , [
+                ->with('alert', [
                     'type' => 'success',
                     'message' => 'Address verified!',
                     'icon' => 'check-circle-fill',

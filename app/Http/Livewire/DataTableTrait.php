@@ -2,27 +2,34 @@
 
 namespace App\Http\Livewire;
 
-use Str;
-
 trait DataTableTrait
 {
     public $search;
+
     public $sort = 'id';
+
     public $order = 'desc';
+
     public $perPage = 25;
+
     public $simplePaginate = false;
+
     public $loadResults = false;
+
     public $namedComponent = false;
 
     protected $query;
+
     protected $data = null;
+
     protected $paginationTheme = 'bootstrap';
+
     protected $componentName;
 
-	protected function getListeners()
-	{
-		return ['search', 'export'];
-	}
+    protected function getListeners()
+    {
+        return ['search', 'export'];
+    }
 
     public function sortBy($field)
     {
@@ -54,10 +61,11 @@ trait DataTableTrait
             : 25);
     }
 
-	public function search($query)
-	{
-		$this->search = $query;
-	}
+    public function search($query)
+    {
+        $this->search = $query;
+        $this->resetPage($this->componentName);
+    }
 
     public function shouldLoadResults()
     {
@@ -112,25 +120,26 @@ trait DataTableTrait
 
     protected function doExport($export, string $exportName)
     {
-	    return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
+        return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
 
-		// TODO - revisit when doing account upgrades
-//        if (request()->user() && request()->user()->email_verified_at) {
-//            $this->exported = 'queued';
-//            $exportName = Str::ulid() . '-' . $exportName;
-//            $export->queue("exports/{$exportName}")->chain([
-//                new \App\Jobs\NotifyUserOfCompletedExport(request()->user(), $exportName),
-//            ]);
-//        } else {
-//            $this->exported = 'free';
-//            return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
-//        }
+        // TODO - revisit when doing account upgrades
+        //        if (request()->user() && request()->user()->email_verified_at) {
+        //            $this->exported = 'queued';
+        //            $exportName = Str::ulid() . '-' . $exportName;
+        //            $export->queue("exports/{$exportName}")->chain([
+        //                new \App\Jobs\NotifyUserOfCompletedExport(request()->user(), $exportName),
+        //            ]);
+        //        } else {
+        //            $this->exported = 'free';
+        //            return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
+        //        }
     }
 
     protected function getComponentName($default = true)
     {
         if (! $default) {
             $_class = explode('\\', get_called_class());
+
             return strtolower(array_reverse($_class)[0]);
         }
 

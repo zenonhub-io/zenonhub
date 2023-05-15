@@ -18,10 +18,6 @@ class ForgotPassword extends PageController
         return $this->render('pages/auth');
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate(['email' => 'required|email']);

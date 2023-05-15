@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Nom\Account;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -13,8 +13,11 @@ class AccountProjects implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public Account $account;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(Account $account, ?string $search = null, ?string $sort = null, ?string $order = null)
@@ -42,8 +45,8 @@ class AccountProjects implements FromQuery, WithHeadings, WithMapping
         return [
             $row->name,
             $row->hash,
-            float_number($row->display_znn_funds_needed),
-            float_number($row->display_qsr_funds_needed),
+            float_number($row->display_znn_requested),
+            float_number($row->display_qsr_requested),
             $row->display_status,
             $row->created_at->format('Y-m-d H:i:s'),
         ];

@@ -12,7 +12,7 @@ class Accounts extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'znn_balance'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -26,12 +26,12 @@ class Accounts extends Component
         $this->loadData();
 
         return view('livewire.explorer.accounts', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
     protected function initQuery()
     {
-        $this->query = Account::query();
+        $this->query = Account::withCount('sent_blocks');
     }
 }

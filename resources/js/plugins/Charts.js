@@ -1,4 +1,5 @@
 import ApexCharts from "apexcharts";
+import Gradient from "javascript-color-gradient";
 
 export default class Charts extends window.zenonHub.Singleton {
 
@@ -18,6 +19,13 @@ export default class Charts extends window.zenonHub.Singleton {
         } else {
             return chart;
         }
+    }
+
+    getColourGradient(length) {
+        return new Gradient()
+            .setColorGradient('#6FF34D', '#0061EB', '#F91690')
+            .setMidpoint(length)
+            .getColors();
     }
 
     destroyChart(id) {

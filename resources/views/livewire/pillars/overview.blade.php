@@ -86,7 +86,7 @@
                         </th>
                         <th>
                             <button type="button" class="btn btn-sort" wire:click="sortBy('az_engagement')">
-                                <x-table-sort-button :sort="$sort" :order="$order" check="az_engagement" title="Engagement" tooltip="% of Accelerator projects voted on"/>
+                                <x-table-sort-button :sort="$sort" :order="$order" check="az_engagement" title="Engagement" tooltip="% of Accelerator projects and phases voted on"/>
                             </button>
                         </th>
                         <th>
@@ -119,7 +119,7 @@
                                 -
                             @endif
                         </td>
-                        <td>{{ $pillar->give_momentum_reward_percentage }} / {{ $pillar->give_delegate_reward_percentage }}</td>
+                        <td>{{ $pillar->momentum_rewards }} / {{ $pillar->delegate_rewards }}</td>
                         <td>
                             @if (! $pillar->is_revoked)
                                 @if ($pillar->is_producing)

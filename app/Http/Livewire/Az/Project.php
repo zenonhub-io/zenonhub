@@ -8,7 +8,9 @@ use Livewire\Component;
 class Project extends Component
 {
     public string $hash;
+
     public string $tab = 'votes';
+
     protected $queryString = [
         'tab' => ['except' => 'votes'],
     ];
@@ -16,7 +18,7 @@ class Project extends Component
     public function render()
     {
         return view('livewire.az.project', [
-            'project' => AcceleratorProject::findByHash($this->hash)
+            'project' => AcceleratorProject::findByHash($this->hash),
         ]);
     }
 }

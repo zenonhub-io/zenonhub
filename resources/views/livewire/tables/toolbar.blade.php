@@ -8,10 +8,10 @@
                 <input
                     type="text"
                     class="form-control"
-                    id="account.sent-transactions.filters.search"
                     placeholder="Search"
                     aria-label="Search"
-                    wire:keydown.debounce.150ms="$emit('search', $event.target.value)"
+                    wire:keydown.debounce.300ms="$emit('search', $event.target.value)"
+                    value="{{ $search }}"
                 >
             </div>
         </div>

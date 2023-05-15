@@ -10,9 +10,13 @@ use Livewire\Component;
 class VerifySignature extends Component
 {
     public ?string $address = null;
+
     public ?string $public_key = null;
+
     public ?string $message = null;
+
     public ?string $signature = null;
+
     public ?bool $result = null;
 
     protected function rules()
@@ -21,7 +25,7 @@ class VerifySignature extends Component
             'address' => [
                 'required',
                 'string',
-                'exists:nom_accounts,address'
+                'exists:nom_accounts,address',
             ],
             'public_key' => [
                 'required',

@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="row">
             <div class="col-24 col-md-16 mb-3 mb-md-0 align-self-center">
-                <livewire:tables.toolbar :enableExport="true" />
+                <livewire:tables.toolbar :enableExport="true" :search="$search" />
             </div>
             <div class="col-24 col-md-8">
                 <div class="d-flex justify-content-center justify-content-md-end">
@@ -35,13 +35,13 @@
                             Title
                         </th>
                         <th>
-                            <button type="button" class="btn btn-sort" wire:click="sortBy('znn_funds_needed')">
-                                <x-table-sort-button :sort="$sort" :order="$order" check="znn_funds_needed" title="ZNN"/>
+                            <button type="button" class="btn btn-sort" wire:click="sortBy('znn_requested')">
+                                <x-table-sort-button :sort="$sort" :order="$order" check="znn_requested" title="ZNN"/>
                             </button>
                         </th>
                         <th>
-                            <button type="button" class="btn btn-sort" wire:click="sortBy('qsr_funds_needed')">
-                                <x-table-sort-button :sort="$sort" :order="$order" check="qsr_funds_needed" title="QSR"/>
+                            <button type="button" class="btn btn-sort" wire:click="sortBy('qsr_requested')">
+                                <x-table-sort-button :sort="$sort" :order="$order" check="qsr_requested" title="QSR"/>
                             </button>
                         </th>
                         <th>
@@ -65,10 +65,10 @@
                                 </a>
                             </td>
                             <td>
-                                {{ $project->display_znn_funds_needed }}
+                                {{ $project->display_znn_requested }}
                             </td>
                             <td>
-                                {{ $project->display_qsr_funds_needed }}
+                                {{ $project->display_qsr_requested }}
                             </td>
                             <td>
                                 {!! $project->display_badge !!}

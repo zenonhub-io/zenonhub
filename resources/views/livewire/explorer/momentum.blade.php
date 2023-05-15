@@ -10,9 +10,9 @@
                         </div>
                         <h5 class="card-title mb-0 flex-grow-1"># {{ $momentum->display_height }}</h5>
                     </div>
-                    <div class="d-block d-md-flex justify-content-md-end">
+                    <div class="d-block d-md-flex justify-content-md-end order-0 order-sm-1">
                         <div class="w-100">
-                            <nav class="align-items-center p-1 bg-secondary rounded-2">
+                            <nav class="align-items-center p-1 bg-secondary rounded-2 border border-light border-1">
                                 <ul class="pagination justify-content-between">
                                     {{-- Previous Page Link --}}
                                     @if ($momentum->previous_momentum)
@@ -68,40 +68,33 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-24">
-                        <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-2 mb-2 p-3">
+                        <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="text-start text-md-center">
                                 <span class="d-inline d-md-block fs-sm text-muted">Transactions</span>
-                                <span class="fw-bold float-end float-md-none">{{ number_format($momentum->account_blocks->count()) }}</span>
+                                <span class="float-end float-md-none">{{ number_format($momentum->account_blocks->count()) }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-24"></div>
                 </div>
                 <ul class="list-group list-group-flush list-group-sm mb-0">
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Timestamp</span>
-                        <span class="fw-bold">
-                            {{ $momentum->created_at->format(config('zenon.date_format')) }}
-                        </span>
+                        <span class="d-block fs-sm text-muted">Timestamp</span>
+                        {{ $momentum->created_at->format(config('zenon.date_format')) }}
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Hash</span>
-                        <span class="fw-bold">
-                            <x-hash-tooltip :hash="$momentum->hash"/>
-                        </span>
+                        <span class="d-block fs-sm text-muted">Hash</span>
+                        <x-hash-tooltip :hash="$momentum->hash"/>
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Producer</span>
-                        <span class="fw-bold">
-                            @if ($momentum->producer_account)
-                                <x-address :account="$momentum->producer_account"/>
-                            @endif
-                            @if ($momentum->producer_pillar)
-                                | <a href="{{ route('pillars.detail', ['slug' => $momentum->producer_pillar->slug]) }}">
-                                    {{ $momentum->producer_pillar->name }}
-                                </a>
-                            @endif
-                        </span>
+                        <span class="d-block fs-sm text-muted">Producer</span>
+                        @if ($momentum->producer_account)
+                            <x-address :account="$momentum->producer_account"/>
+                        @endif
+                        @if ($momentum->producer_pillar)
+                            | <a href="{{ route('pillars.detail', ['slug' => $momentum->producer_pillar->slug]) }}">
+                                {{ $momentum->producer_pillar->name }}
+                            </a>
+                        @endif
                     </li>
                 </ul>
             </div>
@@ -118,12 +111,12 @@
                     <ul class="nav nav-tabs-alt card-header-tabs">
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'transactions' ? 'active' : '' }}" wire:click="$set('tab', 'transactions')">
-                                <i class="bi bi-arrow-left-right opacity-70 me-2"></i> Transactions
+                                Transactions
                             </button>
                         </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'json' ? 'active' : '' }}" wire:click="$set('tab', 'json')">
-                                <i class="bi bi-code-slash opacity-70 me-2"></i> JSON
+                                JSON
                             </button>
                         </li>
                     </ul>
@@ -135,7 +128,16 @@
                         <livewire:tables.momentum-blocks :momentum="$momentum" key="{{now()}}" />
                     @elseif ($tab === 'json')
                         <div class="p-4">
-                            <pre class="line-numbers"><code class="lang-json">{{ pretty_json($momentum->raw_json) }}</code></pre>
+                            @if ($momentum->raw_json)
+                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($momentum->raw_json) }}</code></pre>
+                            @else
+                                <x-alert
+                                    message="Unable to load JSON data"
+                                    type="info"
+                                    icon="info-circle-fill"
+                                    class="d-flex mb-0"
+                                />
+                            @endif
                         </div>
                     @endif
                 </div>

@@ -28,9 +28,8 @@ class UpdateNamedAddresses extends Command
      */
     public function handle()
     {
-
-        $this->info("Updating named addresses");
-        $namedAccounts = config('zenon.named_accounts');
+        $this->info('Updating named addresses');
+        $namedAccounts = config('explorer.named_accounts');
 
         foreach ($namedAccounts as $address => $name) {
             $address = Account::findByAddress($address);

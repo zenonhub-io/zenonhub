@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AccountBlockData extends Model
 {
@@ -30,9 +31,9 @@ class AccountBlockData extends Model
      */
     public $fillable = [
         'account_block_id',
-        'contract_method_id',
         'raw',
         'decoded',
+        'is_processed',
     ];
 
     /**
@@ -44,28 +45,24 @@ class AccountBlockData extends Model
         'decoded' => 'array',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
-
-    public function account_block()
+    public function account_block(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
     }
 
-    public function contract_method()
-    {
-        return $this->hasOne(ContractMethod::class, 'id', 'contract_method_id');
-    }
-
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getJsonAttribute()
     {
         return json_encode($this->decoded, JSON_PRETTY_PRINT);
+    }
+
+    public function getParsedAttribute()
+    {
+        return base64_decode($this->raw);
     }
 }

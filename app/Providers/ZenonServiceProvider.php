@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\Discord\GuzzleWebHook;
 use App\Services\Prices;
+use App\Services\Twitter;
 use App\Services\Zenon;
 use DigitalSloth\ZnnPhp\Zenon as ZenonApi;
 use GuzzleHttp\Client;
@@ -19,19 +20,18 @@ class ZenonServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         //
         // Zenon
 
         $this->app->singleton('zenon.api', function ($app, $params) {
             $node = $params['node'] ?? config('zenon.node_url');
+
             return new ZenonApi($node, config('zenon.throw_api_errors'));
         });
 
         $this->app->singleton('zenon.services', function ($app, $params) {
             return new Zenon();
         });
-
 
         //
         // Integrations
@@ -40,8 +40,18 @@ class ZenonServiceProvider extends ServiceProvider
             return new Prices();
         });
 
+        $this->app->singleton('twitter.api', function ($app, $params) {
+            return new Twitter(
+                $params['api_key'],
+                $params['api_key_secret'],
+                $params['access_token'],
+                $params['access_token_secret'],
+            );
+        });
+
         $this->app->singleton('discord.api', function ($app, $params) {
             $httpClient = new Client();
+
             return new GuzzleWebHook($httpClient, $params['webhook']);
         });
 

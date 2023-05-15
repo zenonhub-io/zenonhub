@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ContractMethod extends Model
 {
@@ -35,20 +36,24 @@ class ContractMethod extends Model
         'fingerprint',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
-
-    public function contract()
+    public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
 
+    //
+    // Attributes
 
-    /*
-     * methods
-     */
+    public function getJobClassNameAttribute()
+    {
+        return "App\Jobs\Nom\\{$this->contract->name}\\{$this->name}";
+    }
+
+    //
+    // Methods
 
     public static function findByFingerprint(string $fingerprint): ?ContractMethod
     {

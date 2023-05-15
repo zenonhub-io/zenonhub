@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\ProcessBlock;
-use App\Models\Nom\AccountBlockData;
+use App\Models\Nom\AccountBlock;
 use App\Models\Nom\ContractMethod;
 use Illuminate\Console\Command;
 
@@ -14,7 +13,7 @@ class ProcessBlockType extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:process-block-type {type*}';
+    protected $signature = 'zenon:process-block-type {type*} {--alerts=false} {--balances=false}';
 
     /**
      * The console command description.
@@ -25,15 +24,23 @@ class ProcessBlockType extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
         $blockTypes = $this->argument('type');
+        $whaleAlerts = $this->option('alerts');
+        $balances = $this->option('balances');
         $methods = ContractMethod::whereIn('id', $blockTypes)->get();
 
-        $this->info("Processing block types...");
+        if ($whaleAlerts) {
+            $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($balances) {
+            $balances = filter_var($balances, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        $this->info('Processing block types...');
         $methods->each(function ($method) {
             $this->line("{$method->contract->name}.{$method->name}");
         })->implode(', ');
@@ -41,15 +48,19 @@ class ProcessBlockType extends Command
 
         if ($this->confirm('Do you wish to continue?')) {
             $bar = $this->output->createProgressBar(
-                AccountBlockData::whereIn('contract_method_id', $blockTypes)->count()
+                AccountBlock::whereIn('contract_method_id', $blockTypes)->count()
             );
             $bar->start();
 
-            AccountBlockData::whereIn('contract_method_id', $blockTypes)
+            AccountBlock::whereIn('contract_method_id', $blockTypes)
                 ->orderBy('id', 'ASC')
-                ->chunk(100, function ($chunk) use ($bar) {
-                    foreach ($chunk as $blockData) {
-                        ProcessBlock::dispatch($blockData->account_block);
+                ->chunk(100, function ($chunk) use ($bar, $whaleAlerts, $balances) {
+                    foreach ($chunk as $block) {
+                        (new \App\Actions\ProcessBlock(
+                            $block,
+                            $whaleAlerts,
+                            $balances
+                        ))->execute();
                         $bar->advance();
                     }
                 });

@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App;
-use Log;
 use App\Classes\Indexer;
 use App\Models\Nom\Momentum;
 use Illuminate\Console\Command;
@@ -15,14 +14,14 @@ class Index extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:index';
+    protected $signature = 'zenon:index {height?} {--auto=false} {--alerts=false} {--balances=false}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Indexes the NoM';
+    protected $description = 'Indexes the Network of Momentum';
 
     /**
      * Execute the console command.
@@ -31,37 +30,50 @@ class Index extends Command
      */
     public function handle()
     {
-        $znn = App::make('zenon.api');
-        $indexer = new Indexer($znn);
+        $height = $this->argument('height');
+        $auto = $this->option('auto');
+        $whaleAlerts = $this->option('alerts');
+        $balances = $this->option('balances');
+
+        if ($auto) {
+            $auto = filter_var($auto, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($whaleAlerts) {
+            $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($balances) {
+            $balances = filter_var($balances, FILTER_VALIDATE_BOOLEAN);
+        }
 
         try {
+            $znn = App::make('zenon.api');
             $momentum = $znn->ledger->getFrontierMomentum()['data'];
         } catch (\Exception $e) {
             return self::FAILURE;
         }
 
-        $dbCount = number_format(Momentum::where('id', '>', 1)->count());
-        $nodeCount = number_format($momentum->height);
-        $this->info("Indexing Network of Momentum...");
-        $this->line("Latest momentum height: {$nodeCount}");
-        $this->line("Current database height: {$dbCount}");
+        if (! $height) {
+            $height = Momentum::max('height');
 
-        while ($momentum->height > Momentum::where('id', '>', 1)->count()) {
-            try {
-                $momentum = $znn->ledger->getFrontierMomentum()['data'];
-                $dbCount = number_format(Momentum::where('id', '>', 1)->count());
-                $nodeCount = number_format($momentum->height);
-                $this->line("Processing {$dbCount} of {$nodeCount}");
-                $indexer->run();
-            } catch (\Exception $e) {
-                Log::error($e);
-                return self::FAILURE;
+            // Re-sync last momentum to be safe but ignore genesis
+            if ($height > 2) {
+                $height--;
+            } else {
+                $height = 2;
             }
         }
 
-        $this->newLine();
+        $networkHeight = number_format($momentum->height);
+        $startHeight = number_format($height);
+        $this->info('Indexing Network of Momentum...');
+        $this->info("Network height {$networkHeight}");
+        $this->info("Start height {$startHeight}");
+        $this->line('Processing...');
 
-        sleep(10);
+        $indexer = new Indexer($znn, $auto, $height, $whaleAlerts, $balances);
+        $indexer->run();
 
         return self::SUCCESS;
     }

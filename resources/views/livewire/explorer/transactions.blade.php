@@ -2,9 +2,12 @@
     <div class="card-header border-bottom">
         <div class="d-block d-sm-flex align-items-center">
             <div class="flex-grow-1">
-                <h4 class="mb-3 mb-sm-0">
+                <h4 class="mb-0">
                     Transactions
                 </h4>
+                <div class="text-muted fs-sm mt-1 mb-3 mb-sm-0">
+                    Showing the latest 50k results
+                </div>
             </div>
             <div class="d-block d-md-flex justify-content-md-end">
                 {{ ($data ? $data->links('vendor/livewire/top-links') : '') }}
@@ -30,52 +33,57 @@
             <table class="table table-nowrap align-middle table-striped table-hover">
                 <thead>
                 <tr>
+                    <th style="min-width:32px"></th>
                     <th>
                         Hash
+                    </th>
+                    <th>
+                        From
+                    </th>
+                    <th></th>
+                    <th>
+                        To
                     </th>
                     <th>
                         Type
                     </th>
                     <th>
-                        From
-                    </th>
-                    <th>
-                        To
-                    </th>
-                    <th>
-                        Method
+                        Amount
                     </th>
                     <th>
                         Token
                     </th>
                     <th>
-                        <button type="button" class="btn btn-sort" wire:click="sortBy('amount')">
-                            <x-table-sort-button :sort="$sort" :order="$order" check="amount"/>
-                        </button>
-                    </th>
-                    <th>
-                        <button type="button" class="btn btn-sort" wire:click="sortBy('created_at')">
-                            <x-table-sort-button :sort="$sort" :order="$order" check="created_at" title="Timestamp"/>
-                        </button>
+                        Timestamp
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($data as $block)
                     <tr>
+                        <td class="pe-0">
+                            @if ($block->is_un_received)
+                                <span data-bs-toggle="tooltip" data-bs-title="Unreceived">
+                                    {!! svg('explorer.unreceived', 'text-danger') !!}
+                                </span>
+                            @endif
+                        </td>
                         <td>
                             <a href=" {{ route('explorer.transaction', ['hash' => $block->hash]) }}">
                                 <x-hash-tooltip :hash="$block->hash" :eitherSide="8" :alwaysShort="true"/>
                             </a>
                         </td>
-                        <td>{{ $block->display_type }}</td>
                         <td>
                             <x-address :account="$block->account" :eitherSide="8" :alwaysShort="true"/>
+                        </td>
+                        <td class="px-0">
+                            {!! svg('explorer.send', 'text-success', 'transform: rotate(90deg);') !!}
                         </td>
                         <td>
                             <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>
                         </td>
-                        <td>{{ ($block->contract_method ? $block->contract_method->name : '-')  }}</td>
+                        <td>{{ $block->display_type }}</td>
+                        <td>{{ ($block->display_amount ?: '-')  }}</td>
                         <td>
                             @if ($block->token)
                                 <a href=" {{ route('explorer.token', ['zts' => $block->token->token_standard]) }}">
@@ -85,7 +93,6 @@
                                 -
                             @endif
                         </td>
-                        <td>{{ ($block->list_display_amount ?: '-')  }}</td>
                         <td>{{ $block->created_at->format(config('zenon.short_date_format')) }}</td>
                     </tr>
                 @endforeach

@@ -11,7 +11,9 @@ use Livewire\Component;
 class Search extends Component
 {
     public $search;
+
     protected $results;
+
     public bool $error = false;
 
     public function render()
@@ -20,14 +22,13 @@ class Search extends Component
 
         return view('livewire.explorer.search', [
             'results' => $this->results,
-            'error' => $this->error
+            'error' => $this->error,
         ]);
     }
 
     private function loadData()
     {
         if ($this->search) {
-
             $token = Token::whereListSearch($this->search)->first();
             if ($token) {
                 return redirect()->route('explorer.token', ['zts' => $token->token_standard]);

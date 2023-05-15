@@ -14,6 +14,7 @@ class NewDelegator extends BaseNotification implements ShouldQueue
     use Queueable;
 
     protected Pillar $pillar;
+
     protected Account $account;
 
     /**
@@ -48,7 +49,7 @@ class NewDelegator extends BaseNotification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . $this->type->name)
+            ->subject(get_env_prefix().$this->type->name)
             ->markdown('mail.notifications.pillar.new-delegator', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,

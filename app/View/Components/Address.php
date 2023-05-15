@@ -8,10 +8,15 @@ use Illuminate\View\Component;
 class Address extends Component
 {
     public Account $account;
+
     public bool $named;
+
     public bool $linked;
+
     public bool $alwaysShort;
+
     public int $eitherSide;
+
     public string $breakpoint;
 
     /**
@@ -26,8 +31,7 @@ class Address extends Component
         bool $alwaysShort = false,
         int $eitherSide = 10,
         string $breakpoint = 'md'
-    )
-    {
+    ) {
         $this->account = $account;
         $this->named = $named;
         $this->linked = $linked;

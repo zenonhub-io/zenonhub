@@ -12,9 +12,10 @@ class PhaseVotes extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public AcceleratorPhase $phase;
+
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -29,7 +30,7 @@ class PhaseVotes extends Component
         $this->loadData();
 
         return view('livewire.tables.phase-votes', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

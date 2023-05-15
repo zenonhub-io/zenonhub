@@ -2,9 +2,22 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark-mode">
     <head>
         <x-site.meta/>
-        <title>{{ $pageTitle }} | {{ config('app.name') }}</title>
-        <meta property="og:title" content="{{ $pageTitle }} | {{ config('app.name') }}" />
-        {{ $pageMetaTags }}
+        <title>{{ $pageTitle }}</title>
+        <meta name="title" content="{{ $pageTitle }}">
+        <meta name="description" content="{{ $pageDescription }}">
+        <meta property="twitter:title" content="{{ $pageTitle }}">
+        <meta property="twitter:description" content="{{ $pageDescription }}">
+        <meta property="twitter:image" content="{{ (request()->routeIs('home') ? url()->to('img/meta-big.png') : url()->to('img/meta-small.png')) }}?v=1">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:card" content="summary">
+        <meta property="twitter:site" content="@zenonhub">
+        <meta property="og:site_name" content="{{ config('app.name') }}" />
+        <meta property="og:title" content="{{ $pageTitle }}">
+        <meta property="og:description" content="{{ $pageDescription }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:image" content="{{ (request()->routeIs('home') ? url()->to('img/meta-big.png') : url()->to('img/meta-small.png')) }}?v=1">
+        <meta property="og:type" content="website">
+
         <x-site.head-tags/>
         <style>
             .page-loading {
@@ -91,22 +104,7 @@
             </div>
         </div>
         <main class="page-wrapper">
-            <header class="header navbar bg-none border-0 navbar-expand-lg mb-2">
-                <div class="container">
-                    <div class="d-flex align-items-center">
-                        {!! svg('logo', 'text-primary me-3', 'width: 45px') !!}
-                        <div class="text-nowrap">
-                            <h5 class="mb-0">
-                                <a href="{{ route('home') }}">
-                                    {{ config('app.name') }}
-                                </a>
-                            </h5>
-                            {{ isset($pageBreadcrumbs) ? $pageBreadcrumbs : '' }}
-                        </div>
-                    </div>
-                    <x-layouts.app-navbar/>
-                </div>
-            </header>
+            <x-layouts.app-header/>
             {{ $slot }}
         </main>
         <x-layouts.app-footer/>

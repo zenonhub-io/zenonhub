@@ -3,8 +3,6 @@
 namespace App\Jobs\Sync;
 
 use App;
-use Log;
-use Throwable;
 use App\Classes\Utilities;
 use App\Models\Nom\Sentinel;
 use Illuminate\Bus\Queueable;
@@ -13,13 +11,17 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Log;
+use Throwable;
 
 class Sentinels implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 25;
-    public int $backoff = 10;
+    public int $tries = 5;
+
+    public int $backoff = 60;
+
     protected Collection $sentinels;
 
     public function __construct()
@@ -36,7 +38,7 @@ class Sentinels implements ShouldQueue
             Log::error('Sync sentinels error - could not load data from API');
             $this->release(10);
         } catch (Throwable $exception) {
-            Log::error('Sync sentinels error - ' . $exception);
+            Log::error('Sync sentinels error - '.$exception);
             $this->release(10);
         }
     }
@@ -71,14 +73,12 @@ class Sentinels implements ShouldQueue
             })->first();
 
             if (! $exists) {
-
+                $chain = Utilities::loadChain();
                 $owner = Utilities::loadAccount($data->owner);
 
                 Sentinel::create([
+                    'chain_id' => $chain->id,
                     'owner_id' => $owner->id,
-                    'is_revocable' => $data->isRevocable,
-                    'revoke_cooldown' => $data->revokeCooldown,
-                    'is_active' => $data->active,
                     'created_at' => $data->registrationTimestamp,
                 ]);
             }

@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App;
-use Log;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use Illuminate\Bus\Batchable;
@@ -13,18 +12,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Log;
 
 class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 25;
-    public Account $account;
+    public int $tries = 5;
 
-    public function __construct(Account $account)
-    {
-        $this->account = $account->refresh();
-        $this->onQueue('indexer');
+    public function __construct(
+        protected Account $account
+    ) {
+        $this->account->refresh();
     }
 
     /**
@@ -64,7 +63,6 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
         $apiData = $znn->ledger->getAccountInfoByAddress($this->account->address);
 
         foreach ($apiData['data']->balanceInfoMap as $tokenStandard => $holdings) {
-
             if ($tokenStandard === Token::ZTS_ZNN) {
                 $this->account->znn_balance = $holdings->balance;
             }

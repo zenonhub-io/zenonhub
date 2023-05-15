@@ -12,7 +12,7 @@
                     </div>
                     <div class="d-block d-md-flex justify-content-md-end">
                         <div class="w-100">
-                            <nav class="align-items-center p-1 bg-secondary rounded-2">
+                            <nav class="align-items-center p-2 bg-secondary rounded-2 border border-light border-1">
                                 <ul class="pagination justify-content-between">
                                     {{-- Previous Page Link --}}
                                     @if ($transaction->previous_block)
@@ -67,122 +67,116 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-24">
-                        <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-2 mb-2 p-3">
-                            <div class="text-start text-md-center mb-2 mb-md-0">
-                                <span class="d-inline d-md-block fs-sm text-muted">Type</span>
-                                <span class="fw-bold float-end float-md-none">{{ $transaction->display_type }}</span>
+                        <div class="bg-secondary shadow rounded-3 mb-2 p-3">
+                            <div class="d-block d-md-flex justify-content-md-evenly">
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">From</span>
+                                    <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->account"/></span>
+                                </div>
+                                <div class="d-none d-md-block text-md-center align-self-center">
+                                    {!! svg('explorer.send', 'text-success', 'transform: rotate(90deg);') !!}
+                                </div>
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">To</span>
+                                    <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->to_account"/></span>
+                                </div>
                             </div>
-                            <div class="text-start text-md-center mb-2 mb-md-0">
-                                <span class="d-inline d-md-block fs-sm text-muted">Amount</span>
-                                <span class="fw-bold float-end float-md-none">
-                                    @if ($transaction->token)
-                                        {{ $transaction->display_amount }} {{ $transaction->token->symbol }}
-                                    @else
-                                        -
-                                    @endif
-                                </span>
+                            <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+                                @if ($transaction->is_un_received)
+                                    <div class="text-start text-md-center mb-2 mb-md-0">
+                                        <span class="d-inline d-md-block fs-sm text-muted">Unreceived</span>
+                                        <span class="float-end float-md-none">
+                                            {!! svg('explorer.unreceived', 'text-danger') !!}
+                                        </span>
+                                    </div>
+                                @endif
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Confirmations</span>
+                                    <span class="float-end float-md-none">
+                                        @if ($transaction->raw_json?->confirmationDetail?->numConfirmations)
+                                            {{ number_format($transaction->raw_json->confirmationDetail->numConfirmations) }}
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Type</span>
+                                    <span class="float-end float-md-none">{{ $transaction->display_type }}</span>
+                                </div>
+                                <div class="text-start text-md-center">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Amount</span>
+                                    <span class="float-end float-md-none">
+                                        @if ($transaction->token && $transaction->amount > 0)
+                                            {{ $transaction->display_amount }}
+                                            <a href=" {{ route('explorer.token', ['zts' => $transaction->token->token_standard]) }}">
+                                                {{ $transaction->token->symbol }}
+                                            </a>
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
+                                </div>
                             </div>
-                            <div class="text-start text-md-center">
-                                <span class="d-inline d-md-block fs-sm text-muted">Confirmations</span>
-                                <span class="fw-bold float-end float-md-none">{{ number_format($transaction->raw_json->confirmationDetail->numConfirmations) }}</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
                 <ul class="list-group list-group-flush mb-0">
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Timestamp</span>
-                        <span class="fw-bold">
-                            {{ $transaction->created_at->format(config('zenon.date_format')) }}
-                        </span>
+                        <span class="d-block fs-sm text-muted">Timestamp</span>
+                        {{ $transaction->created_at->format(config('zenon.date_format')) }}
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Hash</span>
-                        <span class="fw-bold">
-                            <x-hash-tooltip :hash="$transaction->hash"/>
-                        </span>
+                        <span class="d-block fs-sm text-muted">Hash</span>
+                        <x-hash-tooltip :hash="$transaction->hash"/>
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Token</span>
-                        <span class="fw-bold">
-                            @if ($transaction->token)
-                                <a href=" {{ route('explorer.token', ['zts' => $transaction->token->token_standard]) }}">
-                                    {{ $transaction->token->name }}
-                                </a>
+                        <span class="d-block fs-sm text-muted">Data</span>
+                        @if ($transaction->contract_method)
+                            {{ $transaction->contract_method->name }} ({{ $transaction->contract_method->contract->name }})
+                        @endif
+                        @if ($transaction->data)
+                            @if ($transaction->contract_method_id)
+                                <pre class="line-numbers mt-2"><code class="lang-json">{{ $transaction->data->json }}</code></pre>
+                            @elseif ($transaction->data->raw)
+                                <pre class="line-numbers mt-2">{{ $transaction->data->raw }}</pre>
                             @else
                                 -
                             @endif
-                        </span>
+                        @else
+                            -
+                        @endif
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Method</span>
-                        <span class="fw-bold">
-                            @if ($transaction->contract_method)
-                                {{ $transaction->contract_method->name }} ({{ $transaction->contract_method->contract->name }})
-                            @else
-                                -
-                            @endif
-                        </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="d-block fs-sm">Data</span>
-                        <span class="fw-bold">
-                            @if ($transaction->data)
-                                @if ($transaction->data->contract_method_id)
-                                    <pre class="line-numbers mt-2"><code class="lang-json">{{ $transaction->data->json }}</code></pre>
-                                @elseif (! in_array($transaction->data->raw, ['AAAAAAAAAAI=', 'AAAAAAAAAAE=', 'IAk+pg==']))
-                                    <pre class="line-numbers mt-2">{{ base64_decode($transaction->data->raw) }}</pre>
-                                @else
-                                    -
-                                @endif
-                            @else
-                                -
-                            @endif
-                        </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="d-block fs-sm">From</span>
-                        <span class="fw-bold">
-                            <x-address :account="$transaction->account"/>
-                        </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="d-block fs-sm">To</span>
-                        <span class="fw-bold">
-                            <x-address :account="$transaction->to_account"/>
-                        </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="d-block fs-sm">Momentum</span>
-                        <span class="fw-bold">
+                        <span class="d-block fs-sm text-muted">Momentum</span>
+                        @if ($transaction->momentum)
                             <a href="{{ route('explorer.momentum', ['hash' => $transaction->momentum->hash]) }}">
                                 <x-hash-tooltip :hash="$transaction->momentum->hash"/>
                             </a>
-                        </span>
+                        @else
+                            -
+                        @endif
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Paired account block</span>
-                        <span class="fw-bold">
-                            @if ($transaction->paired_account_block)
-                                <a href=" {{ route('explorer.transaction', ['hash' => $transaction->paired_account_block->hash]) }}">
-                                    <x-hash-tooltip :hash="$transaction->paired_account_block->hash"/>
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </span>
+                        <span class="d-block fs-sm text-muted">Paired account block</span>
+                        @if ($transaction->paired_account_block)
+                            <a href=" {{ route('explorer.transaction', ['hash' => $transaction->paired_account_block->hash]) }}">
+                                <x-hash-tooltip :hash="$transaction->paired_account_block->hash"/>
+                            </a>
+                        @else
+                            -
+                        @endif
                     </li>
                     <li class="list-group-item">
-                        <span class="d-block fs-sm">Parent</span>
-                        <span class="fw-bold">
-                            @if ($transaction->parent)
-                                <a href=" {{ route('explorer.transaction', ['hash' => $transaction->parent->hash]) }}">
-                                    <x-hash-tooltip :hash="$transaction->parent->hash"/>
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </span>
+                        <span class="d-block fs-sm text-muted">Parent</span>
+                        @if ($transaction->parent)
+                            <a href=" {{ route('explorer.transaction', ['hash' => $transaction->parent->hash]) }}">
+                                <x-hash-tooltip :hash="$transaction->parent->hash"/>
+                            </a>
+                        @else
+                            -
+                        @endif
                     </li>
                 </ul>
             </div>
@@ -199,12 +193,12 @@
                     <ul class="nav nav-tabs-alt card-header-tabs">
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'descendants' ? 'active' : '' }}" wire:click="$set('tab', 'descendants')">
-                                <i class="bi bi-box opacity-70 me-2"></i> Descendants
+                                Descendants
                             </button>
                         </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'json' ? 'active' : '' }}" wire:click="$set('tab', 'json')">
-                                <i class="bi bi-code-slash opacity-70 me-2"></i> JSON
+                                JSON
                             </button>
                         </li>
                     </ul>
@@ -216,7 +210,16 @@
                         <livewire:tables.block-descendants :transaction="$transaction" key="{{now()}}" />
                     @elseif ($tab === 'json')
                         <div class="p-4">
-                            <pre class="line-numbers"><code class="lang-json">{{ pretty_json($transaction->raw_json) }}</code></pre>
+                            @if ($transaction->raw_json)
+                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($transaction->raw_json) }}</code></pre>
+                            @else
+                                <x-alert
+                                    message="Unable to load JSON data"
+                                    type="info"
+                                    icon="info-circle-fill"
+                                    class="d-flex mb-0"
+                                />
+                            @endif
                         </div>
                     @endif
                 </div>

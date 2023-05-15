@@ -13,5 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('tools/node-map', 'node-statistics', 301);
-Route::redirect('tools/api', 'api-playground', 301);
+Route::redirect('tools/node-map', '/tools/node-statistics', 301);
+Route::redirect('tools/api', '/tools/api-playground', 301);
+Route::redirect('tools/node-statistics', '/stats/nodes', 301);

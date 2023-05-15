@@ -7,8 +7,8 @@
 
 This is built on [Laravel](https://laravel.com/) 
 
-- PHP 8.1
-- MariaDB 10
+- PHP 8.2
+- MariaDB/MySQL
 
 ## Install
 
@@ -21,17 +21,18 @@ Then install and compile frontend assets `npm i && npm mix`
 - Create a new database
 - Copy the `example.env` to `.env` and fill in the details
 - Next run migrations `php artisan migrate`
-- Then sync initial network data `php artisan zenon:sync tokens pillars sentinels az`
+- Then seed the database `php artisan db:seed --class=DatabaseSeeder`
+- Finally run the genesis data `php artisan db:seed --class=GenesisSeeder`
 
-## Indexing and Explorer
+## Indexer
 
-The system uses queues for most processing, on a server configure a [supervisor](https://laravel.com/docs/9.x/queues#supervisor-configuration) task to run these two queues:
+The system uses queues for most processing, we use [horizon](https://laravel.com/docs/6.x/horizon) for managing queues on a production environment.
+To run these locally run this command:
 ```bash
-artisan queue:work --queue=default
-artisan queue:work --queue=indexer --tries=25 --backoff=10
+artisan queue:work --queue=default,indexer
 ```
 
-Next you'll need to run the indexer, again if running on a server setup supervisor for this command as well:
+Next you'll need to run the indexer, it will index the network to the current height and exit. On a server configure [short-schedule](https://github.com/spatie/laravel-short-schedule) and the indexer will be run every 10 seconds. Or locally run:
 ```bash
 php artisan zenon:index
 ```

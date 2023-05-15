@@ -11,14 +11,18 @@ class TokenHolders extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Token $token;
+
     protected $queryString = [
         'sort' => ['except' => 'balance'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'balance');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()

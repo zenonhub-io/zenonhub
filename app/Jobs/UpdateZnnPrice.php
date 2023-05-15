@@ -14,16 +14,21 @@ class UpdateZnnPrice implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 5;
+    public int $tries = 1;
 
     public function handle(): void
     {
-        $price = App::make('coingeko.api')->currenPrice();
+        $znnPrice = App::make('coingeko.api')->currenPrice();
+        $qsrPrice = App::make('coingeko.api')->currenPrice('quasar');
 
-        if ($price) {
-            Cache::forever("znn-price", $price);
-        } else {
-            $this->release(30);
+        if ($znnPrice) {
+            Cache::forever('znn-price', $znnPrice);
         }
+
+        if ($qsrPrice) {
+            Cache::forever('qsr-price', $qsrPrice);
+        }
+
+        $this->release(30);
     }
 }

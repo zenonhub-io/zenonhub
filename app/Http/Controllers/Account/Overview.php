@@ -10,6 +10,7 @@ class Overview extends PageController
     public function show(Request $request)
     {
         $this->page['meta']['title'] = 'Account Account';
+
         return $this->render('pages/account');
     }
 }

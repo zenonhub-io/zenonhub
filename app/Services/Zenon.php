@@ -69,6 +69,7 @@ Signature: {$signature}
         if ($forumPost && $forumPost->http_code === 200) {
             $pillarMessage->is_broadcast = true;
             $pillarMessage->save();
+
             return true;
         }
 

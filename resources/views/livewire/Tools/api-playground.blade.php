@@ -5,7 +5,7 @@
         </div>
         <div class="card-body">
             <div class="mb-0">
-                <p class="text-white-70">Use the form to query the Network of Momentum. We provide http endpoints to all the request listed below, test your requests here and use them in your own project. Or download our <a href="https://github.com/zenonhub-io/znn-php">PHP SDK</a>.</p>
+                Use the form to query the Network of Momentum. We provide http endpoints to all the request listed below, test your requests here and use them in your own project. Or download our <a href="https://github.com/zenonhub-io/znn-php">PHP SDK</a>.
             </div>
             <hr class="border-secondary my-4">
             <form action="#" method="post" class="needs-validation">
@@ -48,8 +48,8 @@
                             @endforeach
                         </div>
                     @endif
-                    <button type="button" class="btn w-100 btn-primary" wire:click="makeRequest">
-                        {!! svg('api-circle', 'me-2') !!}
+                    <button type="button" class="btn w-100 btn-outline-primary" wire:click="makeRequest">
+                        <i class="bi bi-cloud-fill me-2"></i>
                         Make request
                     </button>
                 @endif
@@ -69,9 +69,9 @@
                     <div class="mb-3">
                         <label class="form-label" for="form-url">URL</label>
                         <div class="input-group">
-                                    <span class="input-group-text">
-                                        {{ $method }}
-                                    </span>
+                            <span class="input-group-text">
+                                {{ $method }}
+                            </span>
                             <input
                                 type="text"
                                 id="form-url"
@@ -81,8 +81,8 @@
                                 wire:model.defer="url"
                             >
                             <span class="input-group-text js-copy" data-clipboard-target="#form-url" data-bs-toggle="tooltip" data-bs-title="Copy">
-                                        <i class="bi-clipboard text-zenon-blue"></i>
-                                    </span>
+                                <i class="bi-clipboard text-zenon-blue"></i>
+                            </span>
                         </div>
                     </div>
                     <label class="form-label" for="form-result">Response</label>

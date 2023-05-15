@@ -3,11 +3,13 @@
 namespace App\Models\Nom;
 
 use App;
-use Cache;
-use Str;
 use App\Traits\AzVotes;
+use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Str;
 
 class AcceleratorPhase extends Model
 {
@@ -15,6 +17,7 @@ class AcceleratorPhase extends Model
     use AzVotes;
 
     public const STATUS_OPEN = 0;
+
     public const STATUS_PAID = 2;
 
     /**
@@ -37,6 +40,7 @@ class AcceleratorPhase extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'accelerator_project_id',
         'hash',
         'owner',
@@ -45,8 +49,8 @@ class AcceleratorPhase extends Model
         'url',
         'description',
         'status',
-        'znn_funds_needed',
-        'qsr_funds_needed',
+        'znn_requested',
+        'qsr_requested',
         'znn_price',
         'qsr_price',
         'vote_total',
@@ -70,25 +74,26 @@ class AcceleratorPhase extends Model
         'updated_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class);
+    }
 
-    public function project()
+    public function project(): BelongsTo
     {
         return $this->belongsTo(AcceleratorProject::class, 'accelerator_project_id', 'id');
     }
 
-    public function votes()
+    public function votes(): MorphMany
     {
-        return $this->hasMany(AcceleratorPhaseVote::class, 'accelerator_phase_id', 'id');
+        return $this->morphMany(AcceleratorVote::class, 'votable');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeReminderDue($query)
     {
@@ -96,16 +101,16 @@ class AcceleratorPhase extends Model
             ->where('send_reminders_at', '<', now());
     }
 
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getDisplayStatusAttribute()
     {
         if ($this->status === self::STATUS_OPEN) {
             return 'Open';
-        } elseif ($this->status === self::STATUS_PAID) {
+        }
+
+        if ($this->status === self::STATUS_PAID) {
             return 'Paid';
         }
     }
@@ -114,7 +119,9 @@ class AcceleratorPhase extends Model
     {
         if ($this->status === self::STATUS_OPEN) {
             return 'primary';
-        } elseif ($this->status === self::STATUS_PAID) {
+        }
+
+        if ($this->status === self::STATUS_PAID) {
             return 'success';
         }
     }
@@ -123,6 +130,7 @@ class AcceleratorPhase extends Model
     {
         $text = $this->getDisplayStatusAttribute();
         $colour = $this->getDisplayColourStatusAttribute();
+
         return "<span class=\"badge bg-{$colour}\">{$text}</span>";
     }
 
@@ -131,40 +139,62 @@ class AcceleratorPhase extends Model
         return $this->created_at->addWeeks(2)->diffForHumans(['parts' => 2], true);
     }
 
-    public function getQuorumStauts()
+    public function getQuorumStautsAttribute()
     {
         if ($this->total_more_votes_needed > 0) {
-            return $this->total_more_votes_needed . ' '  . Str::plural('vote', $this->total_more_votes_needed) . ' needed';
+            return $this->total_more_votes_needed.' '.Str::plural('vote', $this->total_more_votes_needed).' needed';
         } else {
             return 'Quorum reached';
         }
     }
 
+    public function getIsQuorumReachedAttribute()
+    {
+        return ! ($this->total_more_votes_needed > 0);
+    }
+
     public function getPhaseNumberAttribute()
     {
-        return ($this->project->phases->pluck('id')->sort()->search($this->id) + 1);
+        return $this->project->phases->pluck('id')->sort()->search($this->id) + 1;
     }
 
-    public function getDisplayZnnFundsNeededAttribute()
+    public function getDisplayZnnRequestedAttribute()
     {
-        return znn_token()->getDisplayAmount($this->znn_funds_needed);
+        return znn_token()->getDisplayAmount($this->znn_requested);
     }
 
-    public function getDisplayQsrFundsNeededAttribute()
+    public function getDisplayQsrRequestedAttribute()
     {
-        return qsr_token()->getDisplayAmount($this->qsr_funds_needed);
+        return qsr_token()->getDisplayAmount($this->qsr_requested);
     }
 
-    public function getDisplayUsdFundsAttribute()
+    public function getDisplayUsdRequestedAttribute()
     {
-        $znn = float_number(znn_token()->getDisplayAmount($this->znn_funds_needed));
-        $qsr = float_number(qsr_token()->getDisplayAmount($this->qsr_funds_needed));
+        if (! $this->znn_price || ! $this->qsr_price) {
+            $znnPrice = App::make('coingeko.api')->historicPrice('zenon', 'usd', $this->created_at->timestamp);
+            $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $this->created_at->timestamp);
 
-        $znnPrice = (float) znn_price();
-        $qsrPrice = ($znnPrice / 10);
+            // Projects created before QSR price available
+            if (is_null($qsrPrice) && $znnPrice) {
+                $qsrPrice = $znnPrice / 10;
+            }
 
-        $znnTotal = ($znnPrice * $znn);
-        $qsrTotal = ($qsrPrice * $qsr);
+            if ($znnPrice) {
+                $this->znn_price = $znnPrice;
+                $this->saveQuietly();
+            }
+
+            if ($qsrPrice) {
+                $this->qsr_price = $qsrPrice;
+                $this->saveQuietly();
+            }
+        }
+
+        $znn = float_number(znn_token()->getDisplayAmount($this->znn_requested));
+        $qsr = float_number(qsr_token()->getDisplayAmount($this->qsr_requested));
+
+        $znnTotal = ($this->znn_price * $znn);
+        $qsrTotal = ($this->qsr_price * $qsr);
 
         return number_format(($znnTotal + $qsrTotal), 2);
     }
@@ -172,15 +202,18 @@ class AcceleratorPhase extends Model
     public function getRawJsonAttribute()
     {
         return Cache::remember("phase-{$this->id}-json", 10, function () {
-            $znn = App::make('zenon.api');
-            return $znn->accelerator->getPhaseById($this->hash)['data'];
+            try {
+                $znn = App::make('zenon.api');
+
+                return $znn->accelerator->getPhaseById($this->hash)['data'];
+            } catch (\Exception $exception) {
+                return null;
+            }
         });
     }
 
-
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public static function findBySlug(string $slug): ?AcceleratorPhase
     {
@@ -192,5 +225,3 @@ class AcceleratorPhase extends Model
         return static::where('hash', $hash)->first();
     }
 }
-
-

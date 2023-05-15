@@ -5,50 +5,51 @@
 
 
 // General
-$prefix:            zn-;
-$grid-columns:      24;
-$grid-gutter-width: 1.5rem;
-$spacer:            1rem;
-$border-width:      2px;
+$prefix:              zn-;
+$grid-columns:        24;
+$grid-gutter-width:   1.5rem;
+$spacer:              1rem;
 
-$zenon-green:   #6FF34D;
-$zenon-blue:    #0061EB;
-$plasma-pink:   #F91690;
-$syrius-pink:   #00D557;
+$zenon-green:         #6FF34D;
+$zenon-blue:          #0061EB;
+$plasma-pink:         #F91690;
+$syrius-green:        #00D557;
 $intergalactic-black: #151515;
+$zenon-orange:        #CE7C4E;
+$zenon-red:           #8D2C2C;
 
-$white:         #fff;
-$gray-100:      #f3f6ff;
-$gray-200:      #eff2fc;
-$gray-300:      #e2e5f1;
-$gray-400:      #d4d7e5;
-$gray-500:      #b4b7c9;
-$gray-600:      #9397ad;
-$gray-700:      #565973;
-$gray-800:      #33354d;
-$gray-900:      #0b0f19;
-$black:         #000;
+$white:               #fff;
+$gray-100:            #f3f6ff;
+$gray-200:            #eff2fc;
+$gray-300:            #e2e5f1;
+$gray-400:            #d4d7e5;
+$gray-500:            #b4b7c9;
+$gray-600:            #9397ad;
+$gray-700:            #9b9b9b;
+$gray-800:            #33354d;
+$gray-900:            #0b0f19;
+$black:               #000;
 
-$gray-light:    #292829;
-$gray-dark:     #191818;
+$gray-light:          #292829;
+$gray-dark:           #191919;
 
-$border-width:       2px;
-$border-color:       $gray-300;
-$border-light-color: rgba($white, .14);
+$border-width:        1px;
+$border-color:        $gray-300;
+$border-light-color:  rgba($white, .14);
 
-$border-radius:      .375rem;
-$border-radius-lg:   .5rem;
-$border-radius-sm:   .25rem;
-$border-radius-pill: 50rem;
+$border-radius-sm:    .4rem;
+$border-radius:       .4rem;
+$border-radius-lg:    1rem;
+$border-radius-xl:    1.2rem;
+$border-radius-2xl:   1.4rem;
+$border-radius-pill:  50rem;
 
-$tooltip-max-width: 1000px;
+$tooltip-max-width:   1000px;
+
+$btn-border-radius-lg: $border-radius;
+
 
 // Grid breakpoints
-//
-// Define the minimum dimensions at which your layout will change,
-// adapting to different screen sizes, for use in media queries.
-
-// scss-docs-start grid-breakpoints
 $grid-breakpoints: (
     xs: 0,
     sm: 576px,
@@ -58,18 +59,18 @@ $grid-breakpoints: (
     xxl: 1400px
 );
 
+
 // Theme colors
 //$primary:       #6366f1;
 $primary:       #4277FF;
 $secondary:     $gray-200;
 $info:	        #4c82f7;
 $success:       #22c55e;
-$warning:       #ffba08;
-$danger:        #ef4444;
+$warning:       $zenon-orange;
+$danger:        $zenon-red;
 $light:         $white;
 $dark:          $intergalactic-black;
 
-// Bootstrap's $theme-colors map
 $theme-colors: (
     'primary':      $primary,
     'secondary':    $secondary,
@@ -83,7 +84,6 @@ $theme-colors: (
     'zenon-blue':   $zenon-blue,
 );
 
-// Faded colors map
 $theme-faded-colors: (
     'primary':      rgba($primary, .12),
     'success':      rgba($success, .12),
@@ -96,7 +96,6 @@ $theme-faded-colors: (
     'zenon-blue':   rgba($zenon-blue, .12)
 );
 
-// Border colors map
 $border-colors: (
     'primary': rgba($primary, .35),
     'success': rgba($success, .35),
@@ -110,7 +109,6 @@ $border-colors: (
     'zenon-blue':   rgba($zenon-blue, .35)
 );
 
-// Button colors map
 $button-faded-colors: (
     'primary': darken($primary, 20%),
     'success': darken($success, 20%),
@@ -126,77 +124,87 @@ $button-faded-colors: (
 
 
 // Body
-//$body-dark-mode-bg:                         $gray-light;
-$body-color:                                $gray-700;
-$body-bg:                                   $white;
-$text-muted:                                var(--#{$prefix}gray-600);
+$body-color:                                rgba($gray-300, 85%);
+$body-bg:                                   $gray-dark;
 
-$body-dark-mode-color:                      rgba($white, .7);
-//$body-dark-mode-bg:                         $gray-900;
-$body-dark-mode-bg:                         $gray-light;
+$body-dark-mode-color:                      $body-color;
+$body-dark-mode-bg:                         $body-bg;
 
-$dropdown-bg: $gray-light;
-
-
-//@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-//@import url('https://fonts.googleapis.com/css2?family=Gantari&display=swap');
 
 // Fonts
-$path-to-fonts:                             'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap';
+$path-to-fonts:                             'https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap';
 $font-family-sans-serif:                    'Montserrat', sans-serif;
 
+$font-weight-normal:                        600;
+$font-weight-medium:                        700;
+$font-weight-semibold:                      800;
+$font-weight-bold:                          900;
+
+$headings-color:                            rgba($gray-300, 95%);
+$text-muted:                                rgba($gray-300, 45%);
+
+$dropdown-bg:                               $gray-light;
+$dropdown-font-weight:                      $font-weight-normal;
+
+$list-group-action-font-weight:             $font-weight-normal;
+
+
 // Shadows
-$box-shadow-sm:                             0 .275rem .75rem -.0625rem rgba($gray-900, .06),
-                                            0 .125rem .4rem -.0625rem rgba($gray-900, .03);
-$box-shadow:                                0 .275rem 1.25rem rgba($gray-900, .4),
-                                            0 .25rem .5625rem rgba($gray-900, .25);
-$box-shadow-lg:                             0 .3rem 1.525rem -.375rem rgba($gray-900, .1),
-                                            0 .25rem .8125rem -.125rem rgba($gray-900, .06);
-$box-shadow-inset:                          inset 0 0 0 transparent;
+$box-shadow:                                0 .5rem 1rem rgba($black, 20%) !default;
+$box-shadow-sm:                             0 .125rem .25rem rgba($black, 20%) !default;
+$box-shadow-lg:                             0 1rem 3rem rgba($black, 20%) !default;
+$box-shadow-inset:                          inset 0 1px 4px rgba($black, 20%) !default;
 
 
 // Links
-$link-color:                                rgba($primary, 80%);
+$link-color:                                rgba($gray-300, 65%);
 $link-decoration:                           none;
 $link-hover-color:                          $primary;
 $link-hover-decoration:                     none;
 $link-transition:                           color .2s ease-in-out;
 $emphasized-link-hover-darken-percentage:   0%;
 
+
 // Breadcrumbs
 $breadcrumb-font-size:                      0.75rem;
-//$breadcrumb-font-weight:                    $font-weight-medium;
 $breadcrumb-item-padding-x:                 .425rem;
+$breadcrumb-color:                          $link-color;
+$breadcrumb-hover-color:                    $link-hover-color;
+$breadcrumb-active-color:                   $headings-color;
+
 
 // Navbar
 $navbar-nav-link-padding-x:                 .675rem !default;
 
+
 // Cards
-//$card-dark-mode-bg:                         $body-dark-mode-bg;
+$card-dark-mode-color:                      $body-color;
 $card-dark-mode-bg:                         $gray-dark;
+$card-border-width:                         2px;
 
 
 // Offcanvas
 $offcanvas-dark-mode-bg-color:              $gray-dark;
 
+
 // Modal
 $modal-dark-mode-content-bg:                $gray-dark;
 
+
 // List groups
-$list-group-item-sm-padding-y:                 $spacer * .5;
-$list-group-item-sm-padding-x:                 $spacer;
+$list-group-item-sm-padding-y:              $spacer * .5;
+$list-group-item-sm-padding-x:              $spacer;
+
 
 // Accordion
 $accordion-dark-mode-bg:                    $gray-dark;
-
+$accordion-dark-mode-button-color:          $link-color;
 
 
 // Legend indicator
-$legend-indicator-bg-color:                                 $gray-400;
-$legend-indicator-border-radius:                            $border-radius;
-$legend-indicator-width:                                    .5rem;
-$legend-indicator-height:                                   $legend-indicator-width;
-$legend-indicator-margin-y:                                 .5rem;
-$legend-indicator-margin-x:                                 .4375rem;
-
-//$nav-link-dark-mode-active-color:           $zenon-green;
+$legend-indicator-bg-color:                 $gray-400;
+$legend-indicator-border-radius:            $border-radius;
+$legend-indicator-width:                    .5rem;
+$legend-indicator-height:                   $legend-indicator-width;
+$legend-indicator-margin-y:                 .5rem;
+$legend-indicator-margin-x:                 .4375rem;

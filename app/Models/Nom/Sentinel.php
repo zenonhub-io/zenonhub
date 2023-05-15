@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sentinel extends Model
 {
@@ -29,9 +30,8 @@ class Sentinel extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'owner_id',
-        'is_revocable',
-        'revoke_cooldown',
         'active',
         'created_at',
     ];
@@ -45,23 +45,24 @@ class Sentinel extends Model
         'created_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class);
+    }
 
-    public function owner()
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'owner_id', 'id');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsActive($query)
     {
-        return $query->where('is_active', '1')->whereNull('revoked_at');
+        return $query->whereNull('revoked_at');
     }
 }

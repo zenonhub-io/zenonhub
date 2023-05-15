@@ -32,13 +32,11 @@ class NotificationSubscription extends Pivot
      * @var array
      */
     protected $casts = [
-        'data' => 'array'
+        'data' => 'array',
     ];
 
-
-    /*
-     * Relations
-     */
+    //
+    // Relations
 
     public function user()
     {

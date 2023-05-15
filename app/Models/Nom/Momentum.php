@@ -7,6 +7,8 @@ use Cache;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Momentum extends Model
 {
@@ -32,14 +34,12 @@ class Momentum extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'producer_account_id',
         'producer_pillar_id',
         'version',
-        'chain_identifier',
         'height',
         'hash',
-        'public_key',
-        'signature',
         'data',
         'created_at',
     ];
@@ -53,30 +53,31 @@ class Momentum extends Model
         'created_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
 
-    public function producer_account()
+    public function producer_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'producer_account_id', 'id');
     }
 
-    public function producer_pillar()
+    public function producer_pillar(): BelongsTo
     {
         return $this->belongsTo(Pillar::class, 'producer_pillar_id', 'id');
     }
 
-    public function account_blocks()
+    public function account_blocks(): HasMany
     {
         return $this->hasMany(AccountBlock::class, 'momentum_id', 'id');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeWhereListSearch($query, $search)
     {
@@ -89,23 +90,14 @@ class Momentum extends Model
         }
     }
 
-    /*
-     * Attributes
-     */
-
-    public function getDecodedPublicKeyAttribute()
-    {
-        return ZnnUtilities::decodeData($this->public_key);
-    }
-
-    public function getDecodedSignatureAttribute()
-    {
-        return ZnnUtilities::decodeData($this->signature);
-    }
+    //
+    // Attributes
 
     public function getDecodedDataAttribute()
     {
-        return ZnnUtilities::decodeData($this->data);
+        $data = base64_decode($this->data);
+
+        return ZnnUtilities::toHex($data);
     }
 
     public function getDisplayHeightAttribute()
@@ -132,15 +124,18 @@ class Momentum extends Model
     public function getRawJsonAttribute()
     {
         return Cache::rememberForever("momentum-{$this->id}", function () {
-            $znn = App::make('zenon.api');
-            return $znn->ledger->getMomentumByHash($this->hash)['data'];
+            try {
+                $znn = App::make('zenon.api');
+
+                return $znn->ledger->getMomentumByHash($this->hash)['data'];
+            } catch (\Exception $exception) {
+                return null;
+            }
         });
     }
 
-
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public static function findByHash($hash)
     {

@@ -22,9 +22,12 @@ const webpackConfig = {
 mix.js('resources/js/app.js', 'public/js').version();
 mix.js('resources/js/app.debug.js', 'public/js').version();
 mix.js('resources/js/pages/Explorer.js', 'public/js/pages/explorer.js').version();
-mix.js('resources/js/pages/NodeStatistics.js', 'public/js/pages/node-statistics.js').version();
+mix.js('resources/js/pages/NodeStats.js', 'public/js/pages/stats/nodes.js').version();
+mix.js('resources/js/pages/AcceleratorStats.js', 'public/js/pages/stats/accelerator.js').version();
 mix.sass('resources/scss/app.scss', 'public/css').version();
 mix.copyDirectory('resources/svg', 'public/svg')
+    .copyDirectory('resources/images', 'public/img')
+    .copyDirectory('resources/favicon', 'public')
     .copyDirectory('node_modules/bootstrap-icons/icons', 'public/svg/icons');
 
 // fs.readdirSync("resources/js/pages")

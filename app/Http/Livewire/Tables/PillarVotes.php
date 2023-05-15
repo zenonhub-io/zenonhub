@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Tables;
 
+use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 use Livewire\Component;
@@ -12,14 +13,18 @@ class PillarVotes extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Pillar $pillar;
+
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'created_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
         $this->perPage = 10;
     }
 
@@ -28,7 +33,7 @@ class PillarVotes extends Component
         $this->loadData();
 
         return view('livewire.tables.pillar-votes', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -42,7 +47,7 @@ class PillarVotes extends Component
 
     protected function initQuery()
     {
-        $this->query = $this->pillar->az_project_votes();
+        $this->query = $this->pillar->az_votes();
     }
 
     protected function filterList()
@@ -52,7 +57,10 @@ class PillarVotes extends Component
         }
 
         if ($this->search) {
-            $this->query->whereHas('project', function ($q) {
+            $this->query->whereHasMorph('votable', [
+                AcceleratorProject::class,
+                AcceleratorPhase::class,
+            ], function ($q) {
                 $q->where('name', 'LIKE', "%{$this->search}%");
             });
             $this->resetPage();

@@ -12,8 +12,8 @@ class MessageCouldNotBeSent extends Exception
     public static function serviceRespondedWithAnError(ClientException $exception): MessageCouldNotBeSent
     {
         $response = $exception->getResponse();
-        $code = $response===null ? 0 : $response->getStatusCode();
-        $message = $response===null ? '' : $response->getBody()->getContents();
+        $code = $response === null ? 0 : $response->getStatusCode();
+        $message = $response === null ? '' : $response->getBody()->getContents();
 
         return new static("Discord web hook responded with an error ({$code}): {$message}");
     }

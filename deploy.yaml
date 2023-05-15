@@ -1,0 +1,27 @@
+import:
+- deploy/main.php
+
+tasks:
+  deploy:
+    - deploy:prepare
+    - deploy:vendors
+    - npx:build:production
+    - npx:build:cleanup
+    - artisan:storage:link
+    - artisan:view:cache
+    - artisan:down
+    - artisan:migrate
+    - deploy:publish
+    - artisan:horizon:terminate
+    - artisan:queue:restart
+    - artisan:site:after-deploy
+    - artisan:up
+  artisan:site:after-deploy:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan site:after-deploy'
+  npx:build:production:
+    - run: 'cd {{release_or_current_path}} && npm i && npm run production'
+  npx:build:cleanup:
+    - run: 'cd {{release_or_current_path}} && rm -r node_modules'
+
+after:
+  deploy:failed: deploy:unlock

@@ -25,12 +25,12 @@
                                             </a>
                                         </div>
                                         <div class="ps-1">
-                                            @if ($account->pillar)
+                                            @if ($account->active_pillar)
                                                 <span class="ms-2 d-inline" data-bs-toggle="tooltip" data-bs-title="Pillar">
                                                     {!! svg('pillar', 'opacity-70', 'height: 18px') !!}
                                                 </span>
                                             @endif
-                                            @if ($account->sentinel)
+                                            @if ($account->active_sentinel)
                                                 <span class="ms-2 d-inline" data-bs-toggle="tooltip" data-bs-title="Sentinel">
                                                     {!! svg('sentinel', '', 'width: 16px') !!}
                                                 </span>
@@ -153,7 +153,7 @@
 
         <div class="card-footer pt-0">
             <div class="d-flex justify-content-end gap-3">
-                <button class="w-100 btn btn-primary" type="submit">
+                <button class="w-100 btn btn-outline-primary" type="submit">
                     <i class="bi bi-link-45deg me-2"></i>
                     Link address
                 </button>

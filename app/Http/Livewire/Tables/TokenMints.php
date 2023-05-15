@@ -11,14 +11,18 @@ class TokenMints extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Token $token;
+
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'created_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()

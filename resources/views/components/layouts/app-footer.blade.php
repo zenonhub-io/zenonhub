@@ -2,9 +2,9 @@
     <div class="container">
         <div class="d-md-flex justify-content-sm-between align-items-sm-center text-center">
             <div class="d-block d-md-flex align-items-md-center order-md-1">
-                <button type="button" class="btn btn-sm btn-primary order-md-1" data-bs-toggle="modal" data-bs-target="#info-modal">
+                <a href="{{ route('donate') }}" class="btn btn-sm btn-outline-primary order-md-1">
                     <i class="bi-heart-fill me-2"></i> Donate
-                </button>
+                </a>
                 <div class="d-block d-md-inline my-3 my-md-0">
                     <a target="_blank" href="https://github.com/zenonhub-io" class="me-4">
                         <i class="bi-github" style="font-size: 1.35rem;"></i>
@@ -24,16 +24,19 @@
                 </div>
             </div>
             <div>
-                <span class="">Synced momentum height:</span>
-                <strong>
-                    <span class="text-primary">{{ number_format(\App\Models\Nom\Momentum::max('height')) }}</span>
-                </strong>
+                <span class="text-muted">Momentum height:</span>
+                <span class="text-primary">{{ number_format(\App\Models\Nom\Momentum::max('height')) }}</span>
+{{--                <div class="d-block text-muted fs-sm">--}}
+{{--                    <span class="text-break">--}}
+{{--                        {{ config('zenon.public_node_https') }}--}}
+{{--                    </span>--}}
+{{--                    <span class="text-break">--}}
+{{--                        {{ config('zenon.public_node_wss') }}--}}
+{{--                    </span>--}}
+{{--                </div>--}}
             </div>
         </div>
     </div>
 </footer>
-
-@include('modals/info')
-@include('modals/privacy')
 
 

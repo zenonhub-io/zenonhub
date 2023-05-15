@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PillarDelegator extends Model
 {
@@ -29,6 +30,7 @@ class PillarDelegator extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'pillar_id',
         'account_id',
         'started_at',
@@ -45,50 +47,45 @@ class PillarDelegator extends Model
         'ended_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
 
-    public function pillar()
+    public function pillar(): BelongsTo
     {
         return $this->belongsTo(Pillar::class, 'pillar_id', 'id');
     }
 
-    public function account()
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsActive($query)
     {
         return $query->whereNull('ended_at');
     }
 
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getDisplayWeightAttribute()
     {
         return $this->account->displayZnnBalance();
     }
 
-    public function getListDisplayWeightAttribute()
-    {
-        return $this->account->displayZnnBalance(2);
-    }
-
     public function getDisplayDurationAttribute()
     {
         $endDate = $this->ended_at ?: now();
         $duration = $endDate->timestamp - $this->started_at->timestamp;
+
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
     }
 

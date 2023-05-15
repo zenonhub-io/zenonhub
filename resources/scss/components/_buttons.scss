@@ -10,10 +10,6 @@
   align-items: center;
   justify-content: center;
 
-  &:not([class^='btn-outline-']):not([class*=' btn-outline-']):not(.btn-secondary):not(.btn-light):not(.btn-link) {
-    --#{$prefix}btn-color: #{$btn-color};
-  }
-
   &:hover,
   &:disabled, &.disabled {
       box-shadow: none !important;

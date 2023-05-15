@@ -3,9 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Notifications\Channels\DatabaseChannel;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

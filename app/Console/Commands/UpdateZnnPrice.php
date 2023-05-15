@@ -27,8 +27,9 @@ class UpdateZnnPrice extends Command
      */
     public function handle()
     {
-        $this->info("Update znn price job queued");
+        $this->info('Update znn price job queued');
         \App\Jobs\UpdateZnnPrice::dispatch();
+
         return self::SUCCESS;
     }
 }

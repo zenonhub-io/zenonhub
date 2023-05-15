@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationType extends Model
@@ -43,12 +42,11 @@ class NotificationType extends Model
      * @var array
      */
     protected $casts = [
-        'data' => 'array'
+        'data' => 'array',
     ];
 
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsActive($query)
     {
@@ -70,14 +68,11 @@ class NotificationType extends Model
         return $query->where('type', 'pillar');
     }
 
+    //
+    // Attributes
 
-    /*
-     * Attributes
-     */
-
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public static function findByCode(string $code): ?NotificationType
     {

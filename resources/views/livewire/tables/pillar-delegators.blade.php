@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="row">
             <div class="col-24 col-md-16 mb-3 mb-md-0 align-self-center">
-                <livewire:tables.toolbar :enableExport="true" />
+                <livewire:tables.toolbar :enableExport="true" :search="$search" />
             </div>
             <div class="col-24 col-md-8">
                 <div class="d-flex justify-content-center justify-content-md-end">
@@ -55,7 +55,7 @@
                             <td>
                                 <x-address :account="$delegate->account" :eitherSide="8" :alwaysShort="true"/>
                             </td>
-                            <td>{{ $delegate->list_display_weight }}</td>
+                            <td>{{ $delegate->display_weight }}</td>
                             <td>{{ $delegate->started_at->format(config('zenon.short_date_format')) }}</td>
                             <td>{{ $delegate->display_duration }}</td>
                         </tr>

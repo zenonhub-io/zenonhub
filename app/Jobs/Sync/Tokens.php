@@ -3,8 +3,6 @@
 namespace App\Jobs\Sync;
 
 use App;
-use Log;
-use Throwable;
 use App\Classes\Utilities;
 use App\Models\Nom\Token;
 use Illuminate\Bus\Queueable;
@@ -13,13 +11,17 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Log;
+use Throwable;
 
 class Tokens implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 25;
+
     public int $backoff = 10;
+
     protected Collection $tokens;
 
     public function __construct()
@@ -36,7 +38,7 @@ class Tokens implements ShouldQueue
             Log::error('Sync tokens error - could not load data from API');
             $this->release(10);
         } catch (Throwable $exception) {
-            Log::error('Sync tokens error - ' . $exception);
+            Log::error('Sync tokens error - '.$exception);
             $this->release(10);
         }
     }
@@ -68,8 +70,10 @@ class Tokens implements ShouldQueue
         $this->tokens->each(function ($data) {
             $exists = Token::whereZts($data->tokenStandard)->first();
             if (! $exists) {
+                $chain = Utilities::loadChain();
                 $owner = Utilities::loadAccount($data->owner);
                 Token::create([
+                    'chain_id' => $chain->id,
                     'owner_id' => $owner->id,
                     'name' => $data->name,
                     'symbol' => $data->symbol,

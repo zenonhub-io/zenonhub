@@ -7,15 +7,17 @@ use Livewire\Component;
 class Account extends Component
 {
     public string $address;
-    public string $tab = 'sent-transactions';
+
+    public string $tab = 'transactions';
+
     protected $queryString = [
-        'tab' => ['except' => 'sent-transactions']
+        'tab' => ['except' => 'transactions'],
     ];
 
     public function render()
     {
         return view('livewire.explorer.account', [
-            'account' => \App\Models\Nom\Account::findByAddress($this->address)
+            'account' => \App\Models\Nom\Account::findByAddress($this->address),
         ]);
     }
 }

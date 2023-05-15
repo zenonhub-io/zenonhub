@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="row">
             <div class="col-24 col-md-16 mb-3 mb-md-0 align-self-center">
-                <livewire:tables.toolbar :enableExport="true" />
+                <livewire:tables.toolbar :enableExport="true" :search="$search" />
             </div>
             <div class="col-24 col-md-8">
                 <div class="d-flex justify-content-center justify-content-md-end">

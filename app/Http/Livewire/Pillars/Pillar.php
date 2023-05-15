@@ -8,7 +8,9 @@ use Livewire\Component;
 class Pillar extends Component
 {
     public string $slug;
+
     public string $tab = 'delegators';
+
     protected $queryString = [
         'tab' => ['except' => 'delegators'],
     ];
@@ -16,7 +18,7 @@ class Pillar extends Component
     public function render()
     {
         return view('livewire.pillars.pillar', [
-            'pillar' => PillarModel::findBySlug($this->slug)
+            'pillar' => PillarModel::findBySlug($this->slug),
         ]);
     }
 }

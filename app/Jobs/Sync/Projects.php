@@ -3,9 +3,6 @@
 namespace App\Jobs\Sync;
 
 use App;
-use Log;
-use Str;
-use Throwable;
 use App\Classes\Utilities;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
@@ -16,13 +13,16 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Log;
+use Str;
+use Throwable;
 
 class Projects implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 25;
-    public int $backoff = 10;
+    public int $tries = 5;
+
     protected Collection $projects;
 
     public function __construct()
@@ -37,10 +37,10 @@ class Projects implements ShouldQueue
             $this->processProjects();
         } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
             Log::error('Sync projects error - could not load data from API');
-            $this->release(10);
+            $this->release(30);
         } catch (Throwable $exception) {
-            Log::error('Sync projects error - ' . $exception->getMessage());
-            $this->release(10);
+            Log::error('Sync projects error - '.$exception->getMessage());
+            $this->release(30);
         }
     }
 
@@ -71,7 +71,7 @@ class Projects implements ShouldQueue
         $this->projects->each(function ($data) {
             $project = AcceleratorProject::where('hash', $data->id)->first();
             if (! $project) {
-
+                $chain = Utilities::loadChain();
                 $owner = Utilities::loadAccount($data->owner);
 
                 $project = AcceleratorProject::create([
@@ -82,8 +82,8 @@ class Projects implements ShouldQueue
                     'url' => $data->url,
                     'description' => $data->description,
                     'status' => $data->status,
-                    'znn_funds_needed' => $data->znnFundsNeeded,
-                    'qsr_funds_needed' => $data->qsrFundsNeeded,
+                    'znn_requested' => $data->znnFundsNeeded,
+                    'qsr_requested' => $data->qsrFundsNeeded,
                     'vote_total' => $data->votes->total,
                     'vote_yes' => $data->votes->yes,
                     'vote_no' => $data->votes->no,
@@ -94,8 +94,8 @@ class Projects implements ShouldQueue
                 ]);
             }
 
-            $project->znn_funds_needed = $data->znnFundsNeeded;
-            $project->qsr_funds_needed = $data->qsrFundsNeeded;
+            $project->znn_requested = $data->znnFundsNeeded;
+            $project->qsr_requested = $data->qsrFundsNeeded;
             $project->vote_total = $data->votes->total;
             $project->vote_yes = $data->votes->yes;
             $project->vote_no = $data->votes->no;
@@ -113,7 +113,9 @@ class Projects implements ShouldQueue
         foreach ($phases as $data) {
             $phase = AcceleratorPhase::where('hash', $data->phase->id)->first();
             if (! $phase) {
+                $chain = Utilities::loadChain();
                 $phase = AcceleratorPhase::create([
+                    'chain_id' => $chain->id,
                     'accelerator_project_id' => $project->id,
                     'hash' => $data->phase->id,
                     'name' => $data->phase->name,
@@ -121,8 +123,8 @@ class Projects implements ShouldQueue
                     'url' => $data->phase->url,
                     'description' => $data->phase->description,
                     'status' => $data->phase->status,
-                    'znn_funds_needed' => $data->phase->znnFundsNeeded,
-                    'qsr_funds_needed' => $data->phase->qsrFundsNeeded,
+                    'znn_requested' => $data->phase->znnFundsNeeded,
+                    'qsr_requested' => $data->phase->qsrFundsNeeded,
                     'vote_total' => $data->votes->total,
                     'vote_yes' => $data->votes->yes,
                     'vote_no' => $data->votes->no,

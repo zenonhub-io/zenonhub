@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Nom\Pillar;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -13,8 +13,11 @@ class PillarHistory implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public Pillar $pillar;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(Pillar $pillar, ?string $search = null, ?string $sort = null, ?string $order = null)
@@ -37,8 +40,8 @@ class PillarHistory implements FromQuery, WithHeadings, WithMapping
     public function map($row): array
     {
         return [
-            $row->give_momentum_reward_percentage,
-            $row->give_delegate_reward_percentage,
+            $row->momentum_rewards,
+            $row->delegate_rewards,
             $row->updated_at->format('Y-m-d H:i:s'),
         ];
     }
@@ -50,8 +53,8 @@ class PillarHistory implements FromQuery, WithHeadings, WithMapping
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('give_momentum_reward_percentage', $this->search)
-                    ->orWhere('give_delegate_reward_percentage', $this->search);
+                $q->where('momentum_rewards', $this->search)
+                    ->orWhere('delegate_rewards', $this->search);
             });
         }
 

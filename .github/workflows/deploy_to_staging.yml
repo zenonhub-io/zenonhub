@@ -15,7 +15,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.2'
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -36,6 +36,10 @@ jobs:
         run: ./vendor/bin/phpunit
         env:
           APP_ENV: testing
+
+      - name: Create deploy env file
+        run: |
+          echo "${{ secrets.ENV_DEPLOY }}" > ./deploy/.env
 
       - name: Deploy
         uses: deployphp/action@v1

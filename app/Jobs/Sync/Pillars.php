@@ -3,9 +3,6 @@
 namespace App\Jobs\Sync;
 
 use App;
-use Log;
-use Str;
-use Throwable;
 use App\Classes\Utilities;
 use App\Models\Nom\Pillar;
 use Illuminate\Bus\Queueable;
@@ -14,13 +11,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Log;
+use Str;
+use Throwable;
 
 class Pillars implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 25;
-    public int $backoff = 10;
+    public int $tries = 5;
+
+    public int $backoff = 60;
+
     protected Collection $pillars;
 
     public function __construct()
@@ -33,12 +35,11 @@ class Pillars implements ShouldQueue
         try {
             $this->loadPillars();
             $this->processPillars();
-            $this->processMissingPillars();
         } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
             Log::error('Sync pillars error - could not load data from API');
             $this->release(10);
         } catch (Throwable $exception) {
-            Log::error('Sync pillars error - ' . $exception);
+            Log::error('Sync pillars error - '.$exception);
             $this->release(10);
         }
     }
@@ -70,12 +71,14 @@ class Pillars implements ShouldQueue
         $this->pillars->each(function ($data) {
             $pillar = Pillar::where('name', $data->name)->first();
 
+            $chain = Utilities::loadChain();
             $ownerAddress = Utilities::loadAccount($data->ownerAddress);
             $producerAddress = Utilities::loadAccount($data->producerAddress);
             $withdrawAddress = Utilities::loadAccount($data->withdrawAddress);
 
             if (! $pillar) {
                 $pillar = Pillar::create([
+                    'chain_id' => $chain->id,
                     'owner_id' => $ownerAddress?->id,
                     'producer_id' => $producerAddress?->id,
                     'withdraw_id' => $withdrawAddress?->id,
@@ -84,8 +87,8 @@ class Pillars implements ShouldQueue
                     'weight' => $data->weight,
                     'produced_momentums' => $data->currentStats->producedMomentums,
                     'expected_momentums' => $data->currentStats->expectedMomentums,
-                    'give_momentum_reward_percentage' => $data->giveMomentumRewardPercentage,
-                    'give_delegate_reward_percentage' => $data->giveDelegateRewardPercentage,
+                    'momentum_rewards' => $data->giveMomentumRewardPercentage,
+                    'delegate_rewards' => $data->giveDelegateRewardPercentage,
                 ]);
             }
 
@@ -104,32 +107,14 @@ class Pillars implements ShouldQueue
             $pillar->expected_momentums = $data->currentStats->expectedMomentums;
 
             if ($missed) {
-                if($pillar->missed_momentums < 999) {
+                if ($pillar->missed_momentums < 999) {
                     $pillar->missed_momentums++;
                 }
-            } else if($pillar->expected_momentums > 0) {
+            } elseif ($pillar->expected_momentums > 0) {
                 $pillar->missed_momentums = 0;
             }
 
             $pillar->save();
         });
-    }
-
-    private function processMissingPillars()
-    {
-        $missingPillars = config('zenon.missing_pillars');
-        foreach ($missingPillars as $name => $account) {
-            $pillar = Pillar::where('name', $name)->first();
-            if (! $pillar) {
-                $account = Utilities::loadAccount($account);
-                Pillar::create([
-                    'owner_id' => $account?->id,
-                    'producer_id' => $account?->id,
-                    'withdraw_id' => $account?->id,
-                    'name' => $name,
-                    'slug' => Str::slug($name),
-                ]);
-            }
-        }
     }
 }

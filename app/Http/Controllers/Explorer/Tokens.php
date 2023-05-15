@@ -9,8 +9,8 @@ class Tokens extends PageController
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Zenon Tokens';
-        $this->page['meta']['description'] = "The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum";
+        $this->page['meta']['title'] = 'Tokens';
+        $this->page['meta']['description'] = 'The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum';
         $this->page['data'] = [
             'component' => 'explorer.tokens',
         ];
@@ -26,7 +26,7 @@ class Tokens extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Token Detail';
+        $this->page['meta']['title'] = 'Token Detail | '.$token->name;
         $this->page['meta']['description'] = "{$token->name} ({$token->symbol}) Token Details shows total and current supply information and list of holders, transactions, mints and burns";
         $this->page['data'] = [
             'component' => 'explorer.token',

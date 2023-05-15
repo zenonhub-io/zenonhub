@@ -8,8 +8,6 @@ class Alert extends Component
 {
     /**
      * The alert message.
-     *
-     * @var string
      */
     public string $message;
 
@@ -29,17 +27,14 @@ class Alert extends Component
 
     /**
      * If the alert shows a close icon
-     *
-     * @var bool
      */
     public bool $closeButton = false;
 
     /**
      * Create the component instance.
      *
-     * @param string $message
-     * @param ?string $type
-     * @param ?string $icon
+     * @param  ?string  $type
+     * @param  ?string  $icon
      * @return void
      */
     public function __construct(string $message, string $type = null, string $icon = null, bool $closeButton = false)

@@ -15,7 +15,7 @@ export default class Core extends Singleton {
     }
 
     ready() {
-        this.reopenTab();
+        //this.reopenTab();
         this.attachHandlers();
     }
 
@@ -37,6 +37,7 @@ export default class Core extends Singleton {
         this.onTabs();
         this.onCopiers();
         this.onTooltips();
+        this.onSyntaxHighlight();
     }
 
     offPageGlobals() {
@@ -128,6 +129,16 @@ export default class Core extends Singleton {
 
         this.tooltipList.forEach(tooltip => {
             tooltip.dispose();
+        });
+    }
+
+    onSyntaxHighlight() {
+        const highlight = document.querySelectorAll('pre > code.lang-json');
+        [...highlight].map(function (highlightEl) {
+            if(! highlightEl.classList.contains('highlighted')) {
+                highlightEl.innerHTML = window.zenonHub.helpers().syntaxHighlight(highlightEl.innerHTML);
+                highlightEl.classList.add('highlighted');
+            }
         });
     }
 

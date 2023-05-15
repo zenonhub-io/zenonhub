@@ -13,9 +13,6 @@ use Illuminate\Validation\Validator;
  */
 class ApiController extends Controller
 {
-    /**
-     * @var Zenon $znn;
-     */
     protected Zenon $znn;
 
     public function __construct()
@@ -26,15 +23,14 @@ class ApiController extends Controller
     /**
      * Returns a successful response to the client
      *
-     * @param mixed $result The result data.
-     * @param string $message Optional message.
-     * @return JsonResponse
+     * @param  mixed  $result The result data.
+     * @param  string  $message Optional message.
      */
     protected function success(mixed $result, string $message = ''): JsonResponse
     {
         $response = [
             'success' => true,
-            'data'    => $result,
+            'data' => $result,
         ];
 
         return response()->json($response);
@@ -43,11 +39,10 @@ class ApiController extends Controller
     /**
      * Returns errors to the client
      *
-     * @param string $error Custom error message.
-     * @param int $code HTTP Error code, defaults to 404.
-     * @param array $data Custom data to include with the response.
-     * @param string|null $redirect Redirect route for frontend.
-     * @return JsonResponse
+     * @param  string  $error Custom error message.
+     * @param  int  $code HTTP Error code, defaults to 404.
+     * @param  array  $data Custom data to include with the response.
+     * @param  string|null  $redirect Redirect route for frontend.
      */
     protected function error(string $error, int $code = 404, array $data = [], string $redirect = null): JsonResponse
     {
@@ -66,15 +61,14 @@ class ApiController extends Controller
     /**
      * Returns validation errors to the client
      *
-     * @param Validator $validator The validator object.
-     * @return JsonResponse
+     * @param  Validator  $validator The validator object.
      */
     protected function validationError(Validator $validator): JsonResponse
     {
         $response = [
             'success' => false,
             'message' => 'Validation error',
-            'data'    => $validator->errors()->getMessages(),
+            'data' => $validator->errors()->getMessages(),
         ];
 
         return response()->json($response, 422);

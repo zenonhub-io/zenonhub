@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
-use Storage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Storage;
 
 class UpdateMaxmindDb implements ShouldQueue
 {
@@ -17,12 +17,12 @@ class UpdateMaxmindDb implements ShouldQueue
 
     public function handle(): void
     {
-        $citiesDb      = 'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=NEEv1mKCYo46J0oy&suffix=tar.gz';
-        $storageFolder = storage_path("app");
-        $baseDir       = 'maxmind';
-        $filename      = 'GeoLite2-City.mmdb';
-        $downloadPath  = "$storageFolder/{$baseDir}/GeoLite2-City.tar.gz";
-        $archivePath   = "$storageFolder/{$baseDir}/GeoLite2-City.tar";
+        $citiesDb = 'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=NEEv1mKCYo46J0oy&suffix=tar.gz';
+        $storageFolder = storage_path('app');
+        $baseDir = 'maxmind';
+        $filename = 'GeoLite2-City.mmdb';
+        $downloadPath = "$storageFolder/{$baseDir}/GeoLite2-City.tar.gz";
+        $archivePath = "$storageFolder/{$baseDir}/GeoLite2-City.tar";
 
         Storage::delete("{$baseDir}/{$filename}");
 

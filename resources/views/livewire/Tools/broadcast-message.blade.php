@@ -29,7 +29,7 @@
             <div class="tab-content">
                 <div class="tab-pane fade show active">
                     @if ($tab === 'send')
-                        <p class="text-white-70">
+                        <p>
                             Pillar owners can use this tool to broadcast a message to the <a href="https://forum.zenon.org/c/zenon/pillar-messages/20">Pillar Messages</a> forum category. Sign the message in SYRIUS and submit the generated signature along with your post.
                         </p>
                         <hr class="border-secondary my-4">
@@ -145,8 +145,8 @@
                             </div>
                             <div class="row mb-0">
                                 <div class="col-24">
-                                    <button type="submit" class="btn w-100 btn-primary">
-                                        {!! svg('send-circle', 'me-2') !!}
+                                    <button type="submit" class="btn w-100 btn-outline-primary">
+                                        <i class="bi bi-send-fill me-2"></i>
                                         Broadcast message
                                     </button>
                                 </div>

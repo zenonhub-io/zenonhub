@@ -11,14 +11,18 @@ class PillarHistory extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Pillar $pillar;
+
     protected $queryString = [
         'sort' => ['except' => 'updated_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'updated_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
         $this->perPage = 10;
     }
 
@@ -27,7 +31,7 @@ class PillarHistory extends Component
         $this->loadData();
 
         return view('livewire.tables.pillar-history', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -53,10 +57,9 @@ class PillarHistory extends Component
 
         if ($this->search) {
             $this->query->where(function ($q) {
-                $q->where('give_momentum_reward_percentage', $this->search)
-                    ->orWhere('give_delegate_reward_percentage', $this->search);
+                $q->where('momentum_rewards', $this->search)
+                    ->orWhere('delegate_rewards', $this->search);
             });
-            $this->resetPage();
         }
     }
 }

@@ -11,14 +11,18 @@ class AccountRewards extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Account $account;
+
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'created_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
@@ -26,7 +30,7 @@ class AccountRewards extends Component
         $this->loadData();
 
         return view('livewire.tables.account-rewards', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -50,7 +54,6 @@ class AccountRewards extends Component
         }
 
         if ($this->search) {
-
             $searchTerm = strtolower($this->search);
 
             if ($searchTerm === 'delegate') {
@@ -63,9 +66,9 @@ class AccountRewards extends Component
                 $this->query->where('type', '4');
             } elseif ($searchTerm === 'liquidity') {
                 $this->query->where('type', '5');
+            } elseif ($searchTerm === 'liquidity program') {
+                $this->query->where('type', '6');
             }
-
-            $this->resetPage();
         }
     }
 }

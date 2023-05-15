@@ -19,14 +19,38 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::group(['middleware' => ['throttle:60,1']], function () {
-
-    Route::prefix('nom')->group(function (){
+    Route::prefix('nom')->group(function () {
         Route::prefix('accelerator')->name('Accelerator.')->group(function () {
             Route::get('get-all', [App\Http\Controllers\Api\Accelerator::class, 'getAll'])->name('getAll');
             Route::get('get-project-by-id', [App\Http\Controllers\Api\Accelerator::class, 'getProjectById'])->name('getProjectById');
             Route::get('get-phase-by-id', [App\Http\Controllers\Api\Accelerator::class, 'getPhaseById'])->name('getPhaseById');
             Route::get('get-pillar-votes', [App\Http\Controllers\Api\Accelerator::class, 'getPillarVotes'])->name('getPillarVotes');
             Route::get('get-vote-breakdown', [App\Http\Controllers\Api\Accelerator::class, 'getPillarVotes'])->name('getPillarVotes');
+        });
+
+        Route::prefix('bridge')->name('Bridge.')->group(function () {
+            Route::get('get-bridge-info', [App\Http\Controllers\Api\Bridge::class, 'getBridgeInfo'])->name('getBridgeInfo');
+            Route::get('get-security-info', [App\Http\Controllers\Api\Bridge::class, 'getSecurityInfo'])->name('getSecurityInfo');
+            Route::get('get-orchestrator-info', [App\Http\Controllers\Api\Bridge::class, 'getOrchestratorInfo'])->name('getOrchestratorInfo');
+            Route::get('get-time-challenges-info', [App\Http\Controllers\Api\Bridge::class, 'getTimeChallengesInfo'])->name('getTimeChallengesInfo');
+            Route::get('get-network-info', [App\Http\Controllers\Api\Bridge::class, 'getNetworkInfo'])->name('getNetworkInfo');
+            Route::get('get-all-networks', [App\Http\Controllers\Api\Bridge::class, 'getAllNetworks'])->name('getAllNetworks');
+            Route::get('get-redeemable-in', [App\Http\Controllers\Api\Bridge::class, 'getRedeemableIn'])->name('getRedeemableIn');
+            Route::get('get-confirmations-to-finality', [App\Http\Controllers\Api\Bridge::class, 'getConfirmationsToFinality'])->name('getConfirmationsToFinality');
+            Route::get('get-wrap-token-request-by-id', [App\Http\Controllers\Api\Bridge::class, 'getWrapTokenRequestById'])->name('getWrapTokenRequestById');
+            Route::get('get-all-wrap-token-requests', [App\Http\Controllers\Api\Bridge::class, 'getAllWrapTokenRequests'])->name('getAllWrapTokenRequests');
+            Route::get('get-all-wrap-token-requests-by-to-address', [App\Http\Controllers\Api\Bridge::class, 'getAllWrapTokenRequestsByToAddress'])->name('getAllWrapTokenRequestsByToAddress');
+            Route::get('get-all-wrap-token-requests-by-to-address-network-class-and-chain-id', [App\Http\Controllers\Api\Bridge::class, 'getAllWrapTokenRequestsByToAddressNetworkClassAndChainId'])->name('getAllWrapTokenRequestsByToAddressNetworkClassAndChainId');
+            Route::get('get-all-unsigned-wrap-token-requests', [App\Http\Controllers\Api\Bridge::class, 'getAllUnsignedWrapTokenRequests'])->name('getAllUnsignedWrapTokenRequests');
+            Route::get('get-unwrap-token-request-by-hash-and-log', [App\Http\Controllers\Api\Bridge::class, 'getUnwrapTokenRequestByHashAndLog'])->name('getUnwrapTokenRequestByHashAndLog');
+            Route::get('get-all-unwrap-token-requests', [App\Http\Controllers\Api\Bridge::class, 'getAllUnwrapTokenRequests'])->name('getAllUnwrapTokenRequests');
+            Route::get('get-all-unwrap-token-requests-by-to-address', [App\Http\Controllers\Api\Bridge::class, 'getAllUnwrapTokenRequestsByToAddress'])->name('getAllUnwrapTokenRequestsByToAddress');
+            Route::get('get-fee-token-pair', [App\Http\Controllers\Api\Bridge::class, 'getFeeTokenPair'])->name('getFeeTokenPair');
+        });
+
+        Route::prefix('htlc')->name('Htlc.')->group(function () {
+            Route::get('get-by-id', [App\Http\Controllers\Api\Htlc::class, 'getById'])->name('getById');
+            Route::get('get-proxy-unlock-status', [App\Http\Controllers\Api\Htlc::class, 'getProxyUnlockStatus'])->name('getProxyUnlockStatus');
         });
 
         Route::prefix('ledger')->name('Ledger.')->group(function () {
@@ -43,6 +67,15 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
             Route::get('get-momentums-by-height', [App\Http\Controllers\Api\Ledger::class, 'getMomentumsByHeight'])->name('getMomentumsByHeight');
             Route::get('get-detailed-momentums-by-height', [App\Http\Controllers\Api\Ledger::class, 'getDetailedMomentumsByHeight'])->name('getDetailedMomentumsByHeight');
             Route::get('get-account-info-by-address', [App\Http\Controllers\Api\Ledger::class, 'getAccountInfoByAddress'])->name('getAccountInfoByAddress');
+        });
+
+        Route::prefix('liquidity')->name('Liquidity.')->group(function () {
+            Route::get('get-liquidity-info', [App\Http\Controllers\Api\Liquidity::class, 'getLiquidityInfo'])->name('getLiquidityInfo');
+            Route::get('get-security-info', [App\Http\Controllers\Api\Liquidity::class, 'getSecurityInfo'])->name('getSecurityInfo');
+            Route::get('get-liquidity-stake-entries-by-address', [App\Http\Controllers\Api\Liquidity::class, 'getLiquidityStakeEntriesByAddress'])->name('getLiquidityStakeEntriesByAddress');
+            Route::get('get-uncollected-reward', [App\Http\Controllers\Api\Liquidity::class, 'getUncollectedReward'])->name('getUncollectedReward');
+            Route::get('get-frontier-reward-by-page', [App\Http\Controllers\Api\Liquidity::class, 'getFrontierRewardByPage'])->name('getFrontierRewardByPage');
+            Route::get('get-time-challenges-info', [App\Http\Controllers\Api\Liquidity::class, 'getTimeChallengesInfo'])->name('getTimeChallengesInfo');
         });
 
         Route::prefix('pillars')->name('Pillar.')->group(function () {

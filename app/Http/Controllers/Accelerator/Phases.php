@@ -15,10 +15,10 @@ class Phases extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Accelerator Project Phase | ' . $phase->name;
+        $this->page['meta']['title'] = 'Accelerator Project Phase | '.$phase->name;
         $this->page['meta']['description'] = "A detailed overview of project phase {$phase->hash} see the funding request, description and voting status";
         $this->page['data'] = [
-            'phase' => $phase
+            'phase' => $phase,
         ];
 
         return $this->render('pages/az/phase');

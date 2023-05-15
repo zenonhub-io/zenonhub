@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="row">
             <div class="col-24 col-md-16 mb-3 mb-md-0 align-self-center">
-                <livewire:tables.toolbar :enableExport="true" />
+                <livewire:tables.toolbar :enableExport="true" :search="$search" />
             </div>
             <div class="col-24 col-md-8">
                 <div class="d-flex justify-content-center justify-content-md-end">
@@ -32,7 +32,7 @@
                     <thead>
                     <tr>
                         <th>
-                            Beneficiary
+                            From/To
                         </th>
                         <th>
                             <button type="button" class="btn btn-sort" wire:click="sortBy('amount')">
@@ -53,7 +53,11 @@
                     @foreach($data as $fusion)
                         <tr>
                             <td>
-                                <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                @if ($account->id === $fusion->from_account_id)
+                                    <span data-bs-toggle="tooltip" data-bs-title="To">{!! svg('explorer.send', 'me-2 text-warning') !!}</span> <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                @else
+                                    <span data-bs-toggle="tooltip" data-bs-title="From">{!! svg('explorer.receive', 'me-2 text-success') !!}</span> <x-address :account="$fusion->from_account" :eitherSide="8" :alwaysShort="true"/>
+                                @endif
                             </td>
                             <td>{{ $fusion->display_amount }} QSR</td>
                             <td>{{ $fusion->started_at->format(config('zenon.short_date_format')) }}</td>

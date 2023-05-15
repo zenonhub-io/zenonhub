@@ -4,6 +4,8 @@ namespace App\Classes;
 
 use App;
 use App\Models\Nom\Account;
+use App\Models\Nom\Chain;
+use App\Models\Nom\Token;
 
 class Utilities
 {
@@ -31,6 +33,11 @@ class Utilities
         return false;
     }
 
+    public static function loadChain(): ?Chain
+    {
+        return Chain::getCurrentChainId();
+    }
+
     public static function loadAccount(string $address): ?Account
     {
         $account = Account::findByAddress($address);
@@ -38,12 +45,46 @@ class Utilities
         if (! $account) {
             $znn = App::make('zenon.api');
             $block = $znn->ledger->getFrontierAccountBlock($address)['data'];
+            $chain = Utilities::loadChain();
             $account = Account::create([
+                'chain_id' => $chain->id,
                 'address' => $address,
                 'public_key' => $block?->publicKey,
             ]);
         }
 
         return $account;
+    }
+
+    public static function loadToken(?string $zts): ?Token
+    {
+        if (! $zts) {
+            return null;
+        }
+
+        $token = Token::findByZts($zts);
+
+        if (! $token) {
+            $znn = App::make('zenon.api');
+            $data = $znn->token->getByZts($zts)['data'];
+            $chain = Utilities::loadChain();
+            $owner = self::loadAccount($data->owner);
+            $token = Token::create([
+                'chain_id' => $chain->id,
+                'owner_id' => $owner->id,
+                'name' => $data->name,
+                'symbol' => $data->symbol,
+                'domain' => $data->domain,
+                'token_standard' => $data->tokenStandard,
+                'total_supply' => $data->totalSupply,
+                'max_supply' => $data->maxSupply,
+                'decimals' => $data->decimals,
+                'is_burnable' => $data->isBurnable,
+                'is_mintable' => $data->isMintable,
+                'is_utility' => $data->isUtility,
+            ]);
+        }
+
+        return $token;
     }
 }

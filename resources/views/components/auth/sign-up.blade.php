@@ -79,7 +79,7 @@
                         value="yes"
                     >
                     <label class="form-check-label" for="form-terms">
-                        By submitting this form I have read and acknowledged the <a href="#" data-bs-toggle="modal" data-bs-target="#privacy-modal">Privacy Policy</a>
+                        By submitting this form I have read and acknowledged the <a href="{{ route('privacy') }}" target="_blank">Privacy Policy</a>
                     </label>
                     <div class="invalid-feedback">
                         @error('terms') {{ $message }} @enderror

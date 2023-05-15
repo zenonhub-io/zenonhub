@@ -12,7 +12,7 @@ class Fusions extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -26,7 +26,7 @@ class Fusions extends Component
         $this->loadData();
 
         return view('livewire.explorer.fusions', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

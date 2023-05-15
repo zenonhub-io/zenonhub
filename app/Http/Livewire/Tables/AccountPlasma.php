@@ -11,11 +11,18 @@ class AccountPlasma extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Account $account;
-    protected $queryString = ['sort', 'order'];
+
+    protected $queryString = [
+        'sort' => ['except' => 'started_at'],
+        'order' => ['except' => 'desc'],
+        'search',
+    ];
 
     public function mount()
     {
-        $this->sort = 'started_at';
+        $this->sort = request()->query('sort', 'started_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
@@ -23,7 +30,7 @@ class AccountPlasma extends Component
         $this->loadData();
 
         return view('livewire.tables.account-plasma', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -37,7 +44,7 @@ class AccountPlasma extends Component
 
     protected function initQuery()
     {
-        $this->query = $this->account->fusions()
+        $this->query = $this->account->plasma()
             ->whereNull('ended_at');
     }
 
@@ -54,8 +61,6 @@ class AccountPlasma extends Component
                         ->orWhere('name', 'LIKE', "%{$this->search}%");
                 });
             });
-
-            $this->resetPage();
         }
     }
 }

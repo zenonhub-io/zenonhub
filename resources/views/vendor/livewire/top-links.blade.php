@@ -1,5 +1,5 @@
 <div class="w-100">
-    <nav class="align-items-center p-1 bg-secondary rounded-2">
+    <nav class="align-items-center p-1 bg-secondary rounded-2 border border-light border-1">
         @php(isset($this->numberOfPaginatorsRendered[$paginator->getPageName()]) ? $this->numberOfPaginatorsRendered[$paginator->getPageName()]++ : $this->numberOfPaginatorsRendered[$paginator->getPageName()] = 1)
         <ul class="pagination justify-content-between">
             {{-- Previous Page Link --}}
@@ -24,13 +24,21 @@
             @endif
             <li class="page-item">
                 <a class="page-link disabled">
-                <span class="d-inline fw-light">
-                    @if (! $paginator->total())
-                        No results
-                    @else
-                        Page {{ number_format($paginator->currentPage()) }} of {{ number_format($paginator->lastPage()) }}
-                    @endif
-                </span>
+                    <span class="d-inline fw-light">
+                        @if (get_class($paginator) === 'Illuminate\Pagination\Paginator')
+                            @if (! count($paginator->items()))
+                                No results
+                            @else
+                                Page {{ number_format($paginator->currentPage()) }}
+                            @endif
+                        @else
+                            @if (! $paginator->total())
+                                No results
+                            @else
+                                Page {{ number_format($paginator->currentPage()) }} of {{ number_format($paginator->lastPage()) }}
+                            @endif
+                        @endif
+                    </span>
                 </a>
             </li>
             {{-- Next Page Link --}}

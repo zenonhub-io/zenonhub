@@ -1,21 +1,25 @@
 @component('mail::message')
 # {{ $pillar->name }} updated their rewards
 
-You are delegating to [{{ $pillar->name }}]({{ route('pillars.detail', ['slug' => $pillar->slug]) }}) and their rewards just changed. Your affected {{ Str::plural('account', $accounts->count()) }} are:
+You are delegating to [{{ $pillar->name }}]({{ route('pillars.detail', ['slug' => $pillar->slug, 'utm_source' => 'notifications', 'utm_medium' => 'email']) }}) and their rewards just changed. Your affected {{ Str::plural('account', $accounts->count()) }} are:
 
 @foreach($accounts as $account)
 **{{ $account->address }}**
 @endforeach
 
 Current rewards:\
-**Momentum {{ $pillar->give_momentum_reward_percentage }}% | Delegation {{ $pillar->give_delegate_reward_percentage }}%**
+**Momentum {{ $pillar->momentum_rewards }}% | Delegation {{ $pillar->delegate_rewards }}%**
 
 @if ($pillar->previous_history)
 Previously:\
-**Momentum {{ $pillar->previous_history->give_momentum_reward_percentage }}% | Delegation {{ $pillar->previous_history->give_delegate_reward_percentage }}%**
+**Momentum {{ $pillar->previous_history->momentum_rewards }}% | Delegation {{ $pillar->previous_history->delegate_rewards }}%**
 @endif
 
-@component('mail::button', ['url' => route('pillars.detail', ['slug' => $pillar->slug])])
+@component('mail::button', ['url' => route('pillars.detail', [
+	'slug' => $pillar->slug,
+    'utm_source' => 'notifications',
+	'utm_medium' => 'email'
+])])
 View pillar
 @endcomponent
 @endcomponent

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
 use App\Http\Controllers\PageController;
+use Auth;
 use Illuminate\Http\Request;
 
 class Login extends PageController
@@ -22,10 +22,6 @@ class Login extends PageController
         return $this->render('pages/auth');
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([

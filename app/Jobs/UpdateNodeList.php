@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use Cache;
-use Http;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,45 +17,42 @@ class UpdateNodeList implements ShouldQueue
 
     public int $tries = 5;
 
-    /**
-     * @var string
-     */
     protected string $nodesJsonUrl = 'https://github.com/Sol-Sanctum/Zenon-PoCs/releases/download/znn_node_info/output_nodes.json';
 
     /**
      * @var ?Collection
      */
-    protected ?Collection $nodes;
+    protected ?Collection $data;
 
     public function handle(): void
     {
-        $this->setNodes();
+        $this->loadNodeData();
         $this->setCacheData();
     }
 
-    protected function setNodes()
+    protected function loadNodeData()
     {
         try {
             $nodeJson = json_decode(file_get_contents($this->nodesJsonUrl));
-            $this->nodes = collect($nodeJson);
+            $this->data = collect($nodeJson);
         } catch (\Exception $exception) {
-            $this->nodes = null;
+            $this->data = null;
         }
     }
 
     protected function setCacheData()
     {
-        if (! $this->nodes) {
+        if (! $this->data) {
             return;
         }
 
         Cache::forget('node-ips');
         Cache::rememberForever('node-ips', function () {
             $reader = new Reader(storage_path('app/maxmind/GeoLite2-City.mmdb'));
-            $data = $this->nodes->flatMap(function ($node) use ($reader) {
-
+            $data = $this->data->flatMap(function ($node) use ($reader) {
                 $locationData[$node->ip] = [
-                    'provider' => $node->provider,
+                    'version' => $node->znnd,
+                    'network' => $node->provider,
                     'city' => 'Unknown',
                     'country' => 'Unknown',
                     'lat' => null,
@@ -73,7 +69,6 @@ class UpdateNodeList implements ShouldQueue
                 }
 
                 return $locationData;
-
             })->filter()->toArray();
             $reader->close();
 
@@ -106,14 +101,24 @@ class UpdateNodeList implements ShouldQueue
                 ->toArray();
         });
 
-        Cache::forget('node-providers');
-        Cache::rememberForever('node-providers', function () {
+        Cache::forget('node-networks');
+        Cache::rememberForever('node-networks', function () {
             return collect(Cache::get('node-ips'))
-                ->sortBy('provider')
-                ->groupBy('provider')
+                ->sortBy('network')
+                ->groupBy('network')
                 ->filter(function ($item) {
-                    return $item[0]['provider'] !== 'Unknown';
+                    return $item[0]['network'] !== 'Unknown';
                 })
+                ->map
+                ->count()
+                ->toArray();
+        });
+
+        Cache::forget('node-versions');
+        Cache::rememberForever('node-versions', function () {
+            return collect(Cache::get('node-ips'))
+                ->sortBy('version')
+                ->groupBy('version')
                 ->map
                 ->count()
                 ->toArray();

@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <button class="w-100 btn btn-primary" type="submit">
+            <button class="w-100 btn btn-outline-primary" type="submit">
                 <i class="bi bi-person-check me-2"></i>
                 Save details
             </button>

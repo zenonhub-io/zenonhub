@@ -2,19 +2,25 @@
 
 namespace App\Models\Nom;
 
-use App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AccountReward extends Model
 {
     use HasFactory;
 
     public const TYPE_DELEGATE = 1;
+
     public const TYPE_STAKE = 2;
+
     public const TYPE_PILLAR = 3;
+
     public const TYPE_SENTINEL = 4;
+
     public const TYPE_LIQUIDITY = 5;
+
+    public const TYPE_LIQUIDITY_PROGRAM = 6;
 
     /**
      * The table associated with the model.
@@ -52,33 +58,24 @@ class AccountReward extends Model
         'created_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
-
-    public function account()
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');
     }
 
-    public function token()
+    public function token(): BelongsTo
     {
         return $this->belongsTo(Token::class, 'token_id', 'id');
     }
 
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
-    /*
-     * Attributes
-     */
-
-    public function getListDisplayAmountAttribute()
-    {
-        return $this->token->getDisplayAmount($this->amount, 2);
-    }
+    //
+    // Attributes
 
     public function getDisplayAmountAttribute()
     {
@@ -87,32 +84,35 @@ class AccountReward extends Model
 
     public function getDisplayTypeAttribute()
     {
-        if($this->type === self::TYPE_DELEGATE) {
+        if ($this->type === self::TYPE_DELEGATE) {
             return 'Delegate';
         }
 
-        if($this->type === self::TYPE_STAKE) {
+        if ($this->type === self::TYPE_STAKE) {
             return 'Stake';
         }
 
-        if($this->type === self::TYPE_PILLAR) {
+        if ($this->type === self::TYPE_PILLAR) {
             return 'Pillar';
         }
 
-        if($this->type === self::TYPE_SENTINEL) {
+        if ($this->type === self::TYPE_SENTINEL) {
             return 'Sentinel';
         }
 
-        if($this->type === self::TYPE_LIQUIDITY) {
+        if ($this->type === self::TYPE_LIQUIDITY) {
             return 'Liquidity';
+        }
+
+        if ($this->type === self::TYPE_LIQUIDITY_PROGRAM) {
+            return 'Liquidity Program';
         }
 
         return null;
     }
 
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public function displayAmount($decimals)
     {

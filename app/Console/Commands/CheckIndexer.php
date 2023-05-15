@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App;
 use App\Models\Nom\Momentum;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class CheckIndexer extends Command
@@ -31,9 +29,8 @@ class CheckIndexer extends Command
     public function handle()
     {
         $latestMomentum = Momentum::latest()->first();
-        if($latestMomentum->created_at < now()->subMinutes(15)) {
-
-            $this->error("Indexer NOT running");
+        if ($latestMomentum->created_at < now()->subMinutes(15)) {
+            $this->error('Indexer NOT running');
 
             \Log::critical('Indexer has stopped running, last momentum:', [
                 'height' => $latestMomentum->height,
@@ -43,7 +40,7 @@ class CheckIndexer extends Command
             return self::FAILURE;
         }
 
-        $this->info("Indexer running");
+        $this->info('Indexer running');
 
         return self::SUCCESS;
     }

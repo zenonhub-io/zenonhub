@@ -15,7 +15,6 @@
 }
 
 .accordion-button {
-  transition: none;
   font-weight: var(--#{$prefix}accordion-btn-font-weight);
   &:not(.collapsed) {
     @include box-shadow(inset 0 calc(var(--#{$prefix}accordion-border-width) * -1) 0 var(--#{$prefix}accordion-border-color));

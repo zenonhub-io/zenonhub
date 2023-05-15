@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Tables;
 
-use App\Models\PillarMessage;
+use App\Models\Nom\PillarMessage;
 use Livewire\Component;
 
 class BroadcastMessages extends Component
@@ -12,7 +12,7 @@ class BroadcastMessages extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'id'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -25,7 +25,7 @@ class BroadcastMessages extends Component
         $this->loadData();
 
         return view('livewire.tables.broadcast-messages', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

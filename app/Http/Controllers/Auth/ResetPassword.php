@@ -15,16 +15,12 @@ class ResetPassword extends PageController
         $this->page['meta']['title'] = 'Reset your password';
         $this->page['data'] = [
             'component' => 'auth.reset-password',
-            'token' => $token
+            'token' => $token,
         ];
 
         return $this->render('pages/auth');
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
@@ -37,7 +33,7 @@ class ResetPassword extends PageController
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->forceFill([
-                    'password' => $password
+                    'password' => $password,
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();
@@ -48,11 +44,11 @@ class ResetPassword extends PageController
 
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with(
-                'alert' , [
-                'type' => 'success',
-                'message' => 'Your password has been reset',
-                'icon' => 'check-circle-fill',
-            ])
+                'alert', [
+                    'type' => 'success',
+                    'message' => 'Your password has been reset',
+                    'icon' => 'check-circle-fill',
+                ])
             : back()->withErrors(['email' => [__($status)]]);
     }
 }

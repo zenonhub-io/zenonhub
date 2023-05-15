@@ -39,7 +39,7 @@ class Overview extends Component
         $this->loadData();
 
         return view('livewire.pillars.overview', [
-            'pillars' => $this->data
+            'pillars' => $this->data,
         ]);
     }
 
@@ -53,7 +53,7 @@ class Overview extends Component
 
     private function initQuery()
     {
-        $this->query = Pillar::withCount(['delegators' => function($q) {
+        $this->query = Pillar::withCount(['delegators' => function ($q) {
             $q->whereHas('account', function ($q2) {
                 $q2->where('znn_balance', '>', '0');
             })->whereNull('ended_at');
@@ -84,6 +84,10 @@ class Overview extends Component
             return;
         }
 
-        $this->query->orderBy($this->sort, $this->order);
+        if ($this->sort === 'az_avg_vote_time') {
+            $this->query->orderByRaw('ISNULL(az_avg_vote_time), az_avg_vote_time '.$this->order);
+        } else {
+            $this->query->orderBy($this->sort, $this->order);
+        }
     }
 }

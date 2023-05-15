@@ -7,12 +7,19 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "prepare": "husky install",
+        "pre-commit": "lint-staged"
+    },
+    "lint-staged": {
+        "**/*.php": "./vendor/bin/pint --preset laravel"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^4.0.0",
         "copy-webpack-plugin": "^11.0.0",
+        "husky": "^8.0.3",
         "laravel-mix": "^6.0.6",
+        "lint-staged": "^13.1.2",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "resolve-url-loader": "^5.0.0",

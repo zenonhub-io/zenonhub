@@ -34,5 +34,5 @@ return [
     'discourse' => [
         'key' => env('DISCOURSE_KEY'),
         'host' => env('DISCOURSE_HOST', 'forum.zenon.org'),
-    ]
+    ],
 ];

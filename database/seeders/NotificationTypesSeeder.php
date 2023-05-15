@@ -2,16 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\NotificationType;
 use Illuminate\Database\Seeder;
 
 class NotificationTypesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $data = [
             [
@@ -21,7 +20,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A new Accelerator project is submitted',
                 'content' => 'A new Accelerator Z project has been submitted',
                 'link' => 'az.overview',
-                'is_basic' => true,
+                'is_configurable' => true,
                 'is_active' => true,
             ],
             [
@@ -31,7 +30,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A new project phase is added',
                 'content' => 'A new project phase has been added',
                 'link' => 'az.overview',
-                'is_basic' => true,
+                'is_configurable' => true,
                 'is_active' => true,
             ],
             [
@@ -41,7 +40,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A new pillar is registered',
                 'content' => 'A new pillar has been registered',
                 'link' => 'pillars.overview',
-                'is_basic' => true,
+                'is_configurable' => true,
                 'is_active' => true,
             ],
             [
@@ -51,7 +50,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A pillar updates their rewards',
                 'content' => 'A pillar updated their rewards',
                 'link' => 'pillars.overview',
-                'is_basic' => true,
+                'is_configurable' => true,
                 'is_active' => true,
             ],
             [
@@ -61,7 +60,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A pillar is revoked',
                 'content' => 'A pillar has been revoked',
                 'link' => 'pillars.overview',
-                'is_basic' => true,
+                'is_configurable' => true,
                 'is_active' => true,
             ],
             [
@@ -71,7 +70,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A pillar you delegate to changes their rewards',
                 'content' => 'A pillar you are delegating to has updated their rewards',
                 'link' => 'pillars.overview',
-                'is_basic' => false,
+                'is_configurable' => false,
                 'is_active' => true,
             ],
             [
@@ -81,7 +80,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'A reminder to vote on a project or phase before it closes',
                 'content' => 'You have not yet voted',
                 'link' => 'az.overview',
-                'is_basic' => false,
+                'is_configurable' => false,
                 'is_active' => true,
             ],
             [
@@ -91,7 +90,7 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'An address starts delegating to you',
                 'content' => 'You have a new delegator',
                 'link' => 'pillars.overview',
-                'is_basic' => false,
+                'is_configurable' => false,
                 'is_active' => true,
             ],
             [
@@ -101,11 +100,11 @@ class NotificationTypesSeeder extends Seeder
                 'description' => 'An address stops delegating to you',
                 'content' => 'You have lost a delegator',
                 'link' => 'pillars.overview',
-                'is_basic' => false,
+                'is_configurable' => false,
                 'is_active' => true,
             ],
         ];
 
-        \App\Models\NotificationType::insert($data);
+        NotificationType::insert($data);
     }
 }

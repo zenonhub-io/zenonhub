@@ -52,7 +52,7 @@ class Notifications extends PageController
         );
 
         return redirect()->route('account.notifications')
-            ->with('alert' , [
+            ->with('alert', [
                 'type' => 'success',
                 'message' => 'Notifications saved!',
                 'icon' => 'check-circle-fill',

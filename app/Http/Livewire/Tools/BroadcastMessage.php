@@ -3,23 +3,33 @@
 namespace App\Http\Livewire\Tools;
 
 use App;
-use Str;
-use App\Models\Nom\Pillar;
 use App\Models\Nom\Account;
+use App\Models\Nom\Pillar;
 use Livewire\Component;
+use Str;
 
 class BroadcastMessage extends Component
 {
     public ?string $address = null;
+
     public ?string $public_key = null;
+
     public ?string $message = null;
+
     public ?string $signature = null;
+
     public ?string $title = null;
+
     public ?string $post = null;
+
     public ?bool $result = null;
+
     public ?string $error = null;
+
     public ?\Illuminate\Database\Eloquent\Collection $pillars = null;
+
     public string $tab = 'send';
+
     protected $queryString = [
         'tab' => ['except' => 'send'],
     ];
@@ -30,7 +40,7 @@ class BroadcastMessage extends Component
             'address' => [
                 'required',
                 'string',
-                'exists:nom_accounts,address'
+                'exists:nom_accounts,address',
             ],
             'public_key' => [
                 'required',
@@ -88,12 +98,14 @@ class BroadcastMessage extends Component
         if (! $validated) {
             $this->error = 'Invalid signature';
             $this->result = false;
+
             return;
         }
 
         if (! $account->pillar) {
             $this->error = 'Address is not a pillar, only pillars can broadcast messages';
             $this->result = false;
+
             return;
         }
 

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Validator;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Validator;
 
 class Swap extends ApiController
 {

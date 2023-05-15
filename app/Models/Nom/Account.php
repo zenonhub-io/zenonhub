@@ -5,8 +5,13 @@ namespace App\Models\Nom;
 use App;
 use Cache;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Account extends Model implements Sitemapable
@@ -14,17 +19,32 @@ class Account extends Model implements Sitemapable
     use HasFactory;
 
     public const ADDRESS_EMPTY = 'z1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsggv2f';
+
     public const ADDRESS_PLASMA = 'z1qxemdeddedxplasmaxxxxxxxxxxxxxxxxsctrp';
+
     public const ADDRESS_PILLAR = 'z1qxemdeddedxpyllarxxxxxxxxxxxxxxxsy3fmg';
+
     public const ADDRESS_TOKEN = 'z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0';
+
     public const ADDRESS_SENTINEL = 'z1qxemdeddedxsentynelxxxxxxxxxxxxxwy0r2r';
+
     public const ADDRESS_SWAP = 'z1qxemdeddedxswapxxxxxxxxxxxxxxxxxxl4yww';
+
     public const ADDRESS_STAKE = 'z1qxemdeddedxstakexxxxxxxxxxxxxxxxjv8v62';
+
     public const ADDRESS_SPORK = 'z1qxemdeddedxsp0rkxxxxxxxxxxxxxxxx956u48';
+
     public const ADDRESS_ACCELERATOR = 'z1qxemdeddedxaccelerat0rxxxxxxxxxxp4tk22';
+
     public const ADDRESS_LIQUIDITY = 'z1qxemdeddedxlyquydytyxxxxxxxxxxxxflaaae';
+
     public const ADDRESS_BRIDGE = 'z1qxemdeddedxdrydgexxxxxxxxxxxxxxxmqgr0d';
+
     public const ADDRESS_HTLC = 'z1qxemdeddedxhtlcxxxxxxxxxxxxxxxxxygecvw';
+
+    public const ADDRESS_PTLC = 'z1qxemdeddedxptlcxxxxxxxxxxxxxxxxx6lqady';
+
+    public const ADDRESS_LIQUIDITY_PROGRAM_DISTRIBUTOR = 'z1qqw8f3qxx9zg92xgckqdpfws3dw07d26afsj74';
 
     public const EMBEDDED_CONTRACTS = [
         self::ADDRESS_PLASMA => 'Plasma contract',
@@ -38,6 +58,7 @@ class Account extends Model implements Sitemapable
         self::ADDRESS_LIQUIDITY => 'Liquidity contract',
         self::ADDRESS_BRIDGE => 'Bridge contract',
         self::ADDRESS_HTLC => 'HTLC contract',
+        self::ADDRESS_PTLC => 'PTLC contract',
     ];
 
     /**
@@ -60,6 +81,7 @@ class Account extends Model implements Sitemapable
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'address',
         'public_key',
         'name',
@@ -68,6 +90,7 @@ class Account extends Model implements Sitemapable
         'total_znn_rewards',
         'total_qsr_rewards',
         'is_embedded_contract',
+        'first_active_at',
         'updated_at',
     ];
 
@@ -77,109 +100,118 @@ class Account extends Model implements Sitemapable
      * @var array
      */
     protected $casts = [
-        'updated_at' => 'datetime'
+        'first_active_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-
     //
-    // config
+    // Config
 
-    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url | string | array
+    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
         return route('explorer.account', ['address' => $this->address]);
     }
 
-    /*
-     * Relations
-     */
+    //
+    // Relations
 
-    public function delegations()
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
+
+    public function contract(): HasOne
+    {
+        return $this->hasOne(Contract::class, 'account_id', 'id')->latestOfMany();
+    }
+
+    public function delegations(): HasMany
     {
         return $this->hasMany(PillarDelegator::class, 'account_id', 'id');
     }
 
-    public function fusions()
+    public function fusions(): HasMany
     {
         return $this->hasMany(Fusion::class, 'from_account_id', 'id');
     }
 
-    public function fuses()
+    public function fuses(): HasMany
     {
         return $this->hasMany(Fusion::class, 'to_account_id', 'id');
     }
 
-    public function stakes()
+    public function plasma(): Builder
+    {
+        return Fusion::involvingAccount($this);
+    }
+
+    public function stakes(): HasMany
     {
         return $this->hasMany(Staker::class, 'account_id', 'id');
     }
 
-    public function pillars()
+    public function pillars(): HasMany
     {
         return $this->hasMany(Pillar::class, 'owner_id', 'id');
     }
 
-    public function projects()
+    public function projects(): HasMany
     {
         return $this->hasMany(AcceleratorProject::class, 'owner_id', 'id');
     }
 
-    public function sentinels()
+    public function sentinels(): HasMany
     {
         return $this->hasMany(Sentinel::class, 'owner_id', 'id');
     }
 
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(Token::class, 'owner_id', 'id');
     }
 
-    public function sent_blocks()
+    public function sent_blocks(): HasMany
     {
         return $this->hasMany(AccountBlock::class, 'account_id', 'id');
     }
 
-    public function received_blocks()
+    public function received_blocks(): HasMany
     {
         return $this->hasMany(AccountBlock::class, 'to_account_id', 'id');
     }
 
-    public function blocks()
+    public function blocks(): Builder
     {
-        $sent = $this->sent_blocks();
-        $received = $this->received_blocks();
-
-        return $sent->union($received)->orderBy('height', 'DESC');
+        return AccountBlock::involvingAccount($this);
     }
 
-    public function latest_block()
+    public function latest_block(): HasOne
     {
         return $this->hasOne(AccountBlock::class, 'account_id', 'id')->latestOfMany();
     }
 
-    public function first_block()
+    public function first_block(): HasOne
     {
         return $this->hasOne(AccountBlock::class, 'account_id', 'id')->oldestOfMany();
     }
 
-    public function rewards()
+    public function rewards(): HasMany
     {
         return $this->hasMany(AccountReward::class, 'account_id', 'id');
     }
 
-    public function balances()
+    public function balances(): BelongsToMany
     {
         return $this->belongsToMany(
             Token::class,
-            'nom_account_tokens_pivot',
+            'nom_account_tokens',
             'account_id',
             'token_id'
         )->withPivot('balance', 'updated_at');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsEmbedded($query)
     {
@@ -203,18 +235,17 @@ class Account extends Model implements Sitemapable
         });
     }
 
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getDecodedPublicKeyAttribute()
     {
         if (! $this->public_key) {
             return '-';
         }
+        $publicKey = base64_decode($this->public_key);
 
-        return ZnnUtilities::decodeData($this->public_key);
+        return ZnnUtilities::toHex($publicKey);
     }
 
     public function getLiveBalancesAttribute()
@@ -226,7 +257,7 @@ class Account extends Model implements Sitemapable
 
             if ($apiData['status']) {
                 foreach ($apiData['data']->balanceInfoMap as $token => $holdings) {
-                    if($holdings->balance > 0) {
+                    if ($holdings->balance > 0) {
                         if (! in_array($token, [Token::ZTS_ZNN, Token::ZTS_QSR])) {
                             $token = Token::whereZts($token)->first();
                             $balances[] = [
@@ -259,15 +290,13 @@ class Account extends Model implements Sitemapable
         $qsrBalance = float_number(qsr_token()->getDisplayAmount($this->qsr_balance));
 
         $znnPrice = znn_price();
-        $qsrPrice = ($znnPrice / 10);
+        $qsrPrice = qsr_price();
 
         $znnTotal = ($znnPrice * $znnBalance);
         $qsrTotal = ($qsrPrice * $qsrBalance);
 
         return number_format(($znnTotal + $qsrTotal), 2);
     }
-
-
 
     public function getDisplayZnnStakedAttribute()
     {
@@ -298,7 +327,6 @@ class Account extends Model implements Sitemapable
     {
         return qsr_token()->getDisplayAmount($this->total_qsr_rewards);
     }
-
 
     public function getActiveStakesAttribute()
     {
@@ -335,6 +363,10 @@ class Account extends Model implements Sitemapable
             return true;
         }
 
+        //        if ($this->is_stex_trader) {
+        //            return true;
+        //        }
+
         return false;
     }
 
@@ -365,6 +397,11 @@ class Account extends Model implements Sitemapable
             return $pillarCheck->name;
         }
 
+        //        if ($this->is_stex_trader) {
+        //            $ending = mb_substr($this->address, -6);
+        //            return "STEX Trader (...{$ending})";
+        //        }
+
         return $this->address;
     }
 
@@ -372,41 +409,48 @@ class Account extends Model implements Sitemapable
     {
         $start = mb_substr($this->address, 0, 6);
         $end = mb_substr($this->address, -6);
+
         return "{$start}....{$end}";
     }
 
     public function getActivePillarAttribute()
     {
-        return $this->pillars()->whereNull('revoked_at')->first();
+        return $this->pillars()->whereNull('revoked_at')->latest()->first();
     }
 
     public function getPillarAttribute()
     {
-        return $this->pillars()->first();
+        return $this->pillars()->latest()->first();
     }
 
     public function getActiveSentinelAttribute()
     {
-        return $this->sentinels()->whereNull('revoked_at')->first();
+        return $this->sentinels()->whereNull('revoked_at')->latest()->first();
     }
 
     public function getSentinelAttribute()
     {
-        return $this->sentinels()->first();
+        return $this->sentinels()->latest()->first();
     }
 
     public function getIsPillarWithdrawAddressAttribute()
     {
         $withdrawAddresses = Pillar::select('withdraw_id')->distinct()->pluck('withdraw_id');
-        $pastWithdrawAddresses = PillarHistory::select('rewards_account_id')->distinct()->pluck('rewards_account_id');
+        $pastWithdrawAddresses = PillarHistory::select('withdraw_id')->distinct()->pluck('withdraw_id');
+
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique()->contains($this->id);
     }
 
     public function getRawJsonAttribute()
     {
         return Cache::remember("account-{$this->id}-json", 10, function () {
-            $znn = App::make('zenon.api');
-            return $znn->ledger->getAccountInfoByAddress($this->address)['data'];
+            try {
+                $znn = App::make('zenon.api');
+
+                return $znn->ledger->getAccountInfoByAddress($this->address)['data'];
+            } catch (\Exception $exception) {
+                return null;
+            }
         });
     }
 
@@ -430,10 +474,15 @@ class Account extends Model implements Sitemapable
         return 'Low';
     }
 
+    public function getIsStexTraderAttribute()
+    {
+        return $this->sent_blocks()
+            ->whereHas('to_account', fn ($q) => $q->where('name', 'STEX Exchange'))
+            ->count();
+    }
 
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public static function findByAddress(string $account): ?Account
     {
@@ -493,15 +542,22 @@ class Account extends Model implements Sitemapable
         return qsr_token()->getDisplayAmount($this->total_qsr_rewards, $decimals);
     }
 
-
-    /*
-     * Static methods
-     */
+    //
+    // Static methods
 
     public static function getAllPillarWithdrawAddresses()
     {
         $withdrawAddresses = Pillar::select('withdraw_id')->distinct()->pluck('withdraw_id');
-        $pastWithdrawAddresses = PillarHistory::select('rewards_account_id')->distinct()->pluck('rewards_account_id');
+        $pastWithdrawAddresses = PillarHistory::select('withdraw_id')->distinct()->pluck('withdraw_id');
+
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique();
+    }
+
+    public static function getAllPillarProducerAddresses()
+    {
+        $producerAddresses = Pillar::select('producer_id')->distinct()->pluck('producer_id');
+        $pastProducerAddresses = PillarHistory::select('producer_id')->distinct()->pluck('producer_id');
+
+        return $producerAddresses->merge($pastProducerAddresses)->unique();
     }
 }

@@ -31,12 +31,12 @@ class CheckHeight extends Command
     {
         $znn = App::make('zenon.api');
 
-        $dbHeight = Momentum::where('id', '>', 1)->count();
+        $dbHeight = Momentum::count();
         $momentum = $znn->ledger->getFrontierMomentum()['data'];
         $networkHeight = $momentum->height;
         $syncingCount = $momentum->height - $dbHeight;
 
-        $this->info("Sync height...");
+        $this->info('Sync height...');
         $this->line("Latest momentum height: {$networkHeight}");
         $this->line("Current database height: {$dbHeight}");
         $this->line("Still to sync: {$syncingCount}");

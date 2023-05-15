@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
 use App\Http\Controllers\PageController;
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
@@ -25,8 +25,6 @@ class VerifyEmail extends PageController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
      * @throws AuthorizationException
      */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
@@ -46,7 +44,7 @@ class VerifyEmail extends PageController
         }
 
         return redirect()->route('account.details')
-            ->with('alert' , [
+            ->with('alert', [
                 'type' => 'success',
                 'message' => 'Email address verified',
                 'icon' => 'check-circle-fill',

@@ -11,9 +11,11 @@ class PillarMessages extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Pillar $pillar;
+
     protected $queryString = [
         'sort' => ['except' => 'id'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
@@ -26,13 +28,12 @@ class PillarMessages extends Component
         $this->loadData();
 
         return view('livewire.tables.pillar-messages', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
     protected function initQuery()
     {
-        $this->query = $this->pillar->messages()
-            ->where('is_public', '1');
+        $this->query = $this->pillar->messages();
     }
 }

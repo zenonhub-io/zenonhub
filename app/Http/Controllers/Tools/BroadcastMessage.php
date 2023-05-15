@@ -13,6 +13,7 @@ class BroadcastMessage extends PageController
         $this->page['data'] = [
             'component' => 'tools.broadcast-message',
         ];
+
         return $this->render('pages/tools');
     }
 }

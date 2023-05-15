@@ -18,16 +18,9 @@
                 <div class="card-body mb-0">
                     <div class="row">
                         <div class="col-24">
-                            <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-2 mb-2 p-3">
-                                <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">ZNN</span>
-                                    <span class="fw-bold float-end float-md-none text-zenon-green">{{ $phase->display_znn_funds_needed }}</span>
-                                </div>
-                                <div class="text-start text-md-center">
-                                    <span class="d-inline d-md-block fs-sm text-muted">QSR</span>
-                                    <span class="fw-bold float-end float-md-none text-zenon-blue">{{ $phase->display_qsr_funds_needed }}</span>
-                                </div>
-                            </div>
+                            <a href="{{ route('az.phase', ['hash' => $phase->hash]) }}">
+                                <x-az-card-header :item="$phase"/>
+                            </a>
                         </div>
                         <div class="col-24">
                             <ul class="list-group list-group-flush mb-0">
@@ -35,61 +28,12 @@
                                     {{ $phase->description }}
                                 </li>
                                 <li class="list-group-item">
-                                    <span class="d-block fs-sm">Link</span>
-                                    <span class="fw-bold">
-                                        <a href="{{ $phase->url }}" target="_blank">{{ $phase->url }}</a>
-                                    </span>
+                                    <span class="d-block fs-sm text-muted">Link</span>
+                                    <a href="{{ $phase->url }}" target="_blank">{{ $phase->url }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <span class="d-block fs-sm">Created</span>
-                                    <span class="fw-bold">
-                                        {{ $phase->created_at->format(config('zenon.date_format')) }}
-                                    </span>
-                                </li>
-                                <li class="list-group-item pb-0">
-                                    <div class="d-flex justify-content-evenly mt-1 mb-3">
-                                        <span class="badge bg-secondary">
-                                            {{ $phase->total_yes_votes }} Yes
-                                        </span>
-                                        <span class="badge bg-secondary">
-                                            {{ $phase->total_no_votes }} No
-                                        </span>
-                                        <span class="badge bg-secondary">
-                                            {{ $phase->total_abstain_votes }} Abstain
-                                        </span>
-                                    </div>
-                                    <div class="progress bg-dark mb-3" style="height: 4px">
-                                        <div
-                                            class="progress-bar bg-success"
-                                            role="progressbar"
-                                            aria-label="Yes"
-                                            style="width: {{ $phase->total_yes_votes_percentage }}%"
-                                            aria-valuenow="{{ $phase->total_yes_votes_percentage }}"
-                                            aria-valuemin="0"
-                                            aria-valuemax="100"
-                                        ></div>
-                                        <div
-                                            class="progress-bar bg-danger"
-                                            role="progressbar"
-                                            aria-label="No"
-                                            style="width: {{ $phase->total_no_votes_percentage }}%"
-                                            aria-valuenow="{{ $phase->total_no_votes_percentage }}"
-                                            aria-valuemin="0"
-                                            aria-valuemax="100"
-                                        ></div>
-                                        <div
-                                            class="progress-bar bg-secondary"
-                                            role="progressbar"
-                                            aria-label="Abstain"
-                                            style="width: {{ $phase->total_abstain_votes_percentage }}%"
-                                            aria-valuenow="{{ $phase->total_abstain_votes_percentage }}"
-                                            aria-valuemin="0"
-                                            aria-valuemax="100"
-                                        ></div>
-                                    </div>
-                                    <div class="text-muted text-center">
-                                        {{ $phase->quorum_stauts }}
-                                    </div>
+                                    <span class="d-block fs-sm text-muted">Created</span>
+                                    {{ $phase->created_at->format(config('zenon.date_format')) }}
                                 </li>
                             </ul>
                         </div>

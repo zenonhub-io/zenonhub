@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Charts;
 
-use Cache;
 use App\Http\Livewire\ChartTrait;
+use Cache;
 use Livewire\Component;
 
 class NodeCountries extends Component
@@ -31,9 +31,10 @@ class NodeCountries extends Component
     private function setData()
     {
         $total = $this->data->values()->sum();
-        $this->labels = $this->data->map(function ($key, $value) use ($total){
+        $this->labels = $this->data->map(function ($key, $value) use ($total) {
             $percentage = ($key / $total) * 100;
             $percentage = number_format($percentage, 1);
+
             return "{$value} {$percentage}%";
         })->values()->toArray();
 

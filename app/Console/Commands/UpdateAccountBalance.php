@@ -32,13 +32,14 @@ class UpdateAccountBalance extends Command
         $address = $this->argument('address');
         $account = Account::findByAddress($address);
 
-        if($account) {
-            $this->info("Update account balance job queued");
+        if ($account) {
+            $this->info('Update account balance job queued');
             ProcessAccountBalance::dispatch($account);
+
             return self::SUCCESS;
         }
 
-        $this->error("Invalid address");
+        $this->error('Invalid address');
 
         return self::FAILURE;
     }

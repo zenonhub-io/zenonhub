@@ -13,6 +13,7 @@ class Overview extends Component
     use DataTableTrait;
 
     public $list = 'all';
+
     public $availableLists = [
         'all',
         'new',
@@ -36,7 +37,7 @@ class Overview extends Component
         $this->loadData();
 
         return view('livewire.az.overview', [
-            'projects' => $this->data
+            'projects' => $this->data,
         ]);
     }
 
@@ -68,7 +69,7 @@ class Overview extends Component
         } elseif ($this->list === 'accepted') {
             $this->query->isAccepted();
         } elseif ($this->list === 'complete') {
-            $this->query->isComplete();
+            $this->query->isCompleted();
         } elseif ($this->list === 'rejected') {
             $this->query->isRejected();
         }

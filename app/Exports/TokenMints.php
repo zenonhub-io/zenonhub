@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Nom\Token;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -13,8 +13,11 @@ class TokenMints implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public Token $token;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(Token $token, ?string $search = null, ?string $sort = null, ?string $order = null)

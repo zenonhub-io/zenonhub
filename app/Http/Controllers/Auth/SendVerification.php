@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 
 class SendVerification extends PageController
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         if ($request->user()?->hasVerifiedEmail()) {
@@ -20,7 +16,7 @@ class SendVerification extends PageController
         $request->user()->sendEmailVerificationNotification();
 
         return redirect()->back()
-            ->with('alert' , [
+            ->with('alert', [
                 'type' => 'success',
                 'message' => 'Verification email sent',
                 'icon' => 'check-circle-fill',

@@ -4,7 +4,7 @@
             <h4 class="mb-0">Verify signature</h4>
         </div>
         <div class="card-body">
-            <p class="text-white-70">
+            <p>
                 Don't trust, verify. Fill in the form below to verify if a message signature is valid and matches the supplied address. Alternatively use our <a href="{{ route('tools.api-playground', ['request' => 'Utilities.verifySignedMessage']) }}">API</a> to verify messages in your own app.
             </p>
             <hr class="border-secondary my-4">
@@ -86,8 +86,8 @@
                 </div>
                 <div class="row mb-0">
                     <div class="col-24">
-                        <button type="submit" class="btn w-100 btn-primary">
-                            {!! svg('verify-circle', 'me-2') !!}
+                        <button type="submit" class="btn w-100 btn-outline-primary">
+                            <i class="bi bi-check-lg me-2"></i>
                             Verify
                         </button>
                     </div>

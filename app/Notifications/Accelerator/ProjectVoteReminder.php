@@ -51,14 +51,15 @@ class ProjectVoteReminder extends BaseNotification implements ShouldQueue
             ->get();
 
         $pillars = $missingVotes->map(function ($pillar) use ($accountIds) {
-            if(in_array($pillar->owner_id, $accountIds)) {
+            if (in_array($pillar->owner_id, $accountIds)) {
                 return $pillar;
             }
+
             return null;
         })->filter();
 
         return (new MailMessage)
-            ->subject(get_env_prefix() . $this->type->name)
+            ->subject(get_env_prefix().$this->type->name)
             ->markdown('mail.notifications.az.project-vote-reminder', [
                 'user' => $notifiable,
                 'project' => $this->project,

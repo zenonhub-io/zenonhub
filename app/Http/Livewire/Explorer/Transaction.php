@@ -2,22 +2,24 @@
 
 namespace App\Http\Livewire\Explorer;
 
-use App\Models\Nom\AccountBlock;
 use Livewire\Component;
 
 class Transaction extends Component
 {
     public string $hash;
+
     public string $tab = 'descendants';
+
     protected $queryString = [
-        'tab' => ['except' => 'descendants']
+        'tab' => ['except' => 'descendants'],
     ];
+
     protected $listeners = ['transactionChanged' => 'setTransaction'];
 
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.explorer.transaction', [
-            'transaction' => \App\Models\Nom\AccountBlock::findByHash($this->hash)
+            'transaction' => \App\Models\Nom\AccountBlock::findByHash($this->hash),
         ]);
     }
 

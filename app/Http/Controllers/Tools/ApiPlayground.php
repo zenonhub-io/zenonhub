@@ -13,6 +13,7 @@ class ApiPlayground extends PageController
         $this->page['data'] = [
             'component' => 'tools.api-playground',
         ];
+
         return $this->render('pages/tools');
     }
 }

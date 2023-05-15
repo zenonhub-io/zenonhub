@@ -4,9 +4,10 @@ namespace App\Models\Nom;
 
 use App;
 use Cache;
-use App\Models\PillarMessage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Pillar extends Model implements Sitemapable
@@ -33,6 +34,7 @@ class Pillar extends Model implements Sitemapable
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'owner_id',
         'producer_id',
         'withdraw_id',
@@ -43,9 +45,10 @@ class Pillar extends Model implements Sitemapable
         'produced_momentums',
         'expected_momentums',
         'missed_momentums',
-        'give_momentum_reward_percentage',
-        'give_delegate_reward_percentage',
+        'momentum_rewards',
+        'delegate_rewards',
         'az_engagement',
+        'az_avg_vote_time',
         'avg_momentums_produced',
         'total_momentums_produced',
         'is_legacy',
@@ -65,63 +68,59 @@ class Pillar extends Model implements Sitemapable
         'updated_at' => 'datetime',
     ];
 
-
     //
     // config
 
-    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url | string | array
+    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
         return route('pillars.detail', ['slug' => $this->slug]);
     }
 
-    /*
-     * Relations
-     */
+    //
+    // Relations
 
-    public function owner()
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
+
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'owner_id', 'id');
     }
 
-    public function producer_account()
+    public function producer_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'producer_id', 'id');
     }
 
-    public function withdraw_account()
+    public function withdraw_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'withdraw_id', 'id');
     }
 
-    public function history()
+    public function history(): HasMany
     {
         return $this->hasMany(PillarHistory::class, 'pillar_id', 'id');
     }
 
-    public function delegators()
+    public function delegators(): HasMany
     {
         return $this->hasMany(PillarDelegator::class, 'pillar_id', 'id');
     }
 
-    public function az_project_votes()
+    public function az_votes(): HasMany
     {
-        return $this->hasMany(AcceleratorProjectVote::class, 'owner_id', 'owner_id');
+        return $this->hasMany(AcceleratorVote::class, 'pillar_id', 'id');
     }
 
-    public function az_phase_votes()
-    {
-        return $this->hasMany(AcceleratorPhaseVote::class, 'owner_id', 'owner_id');
-    }
-
-    public function messages()
+    public function messages(): HasMany
     {
         return $this->hasMany(PillarMessage::class, 'pillar_id', 'id');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsActive($query)
     {
@@ -155,10 +154,8 @@ class Pillar extends Model implements Sitemapable
         return $query->where('name', 'LIKE', "%{$search}%");
     }
 
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getDisplayWeightAttribute()
     {
@@ -180,13 +177,14 @@ class Pillar extends Model implements Sitemapable
 
     public function getRankAttribute()
     {
-        return Cache::remember("pillar-{$this->id}-rank", 60*10, function () {
+        return Cache::remember("pillar-{$this->id}-rank", 60 * 10, function () {
             if ($this->revoked_at || ! $this->weight) {
                 return '-';
             }
 
             $pillars = self::whereNull('revoked_at')->orderBy('weight', 'desc')->get();
             $data = $pillars->where('id', $this->id);
+
             return $data->keys()->first() + 1;
         });
     }
@@ -195,6 +193,7 @@ class Pillar extends Model implements Sitemapable
     {
         if ($this->expected_momentums) {
             $percentage = ($this->produced_momentums * 100) / $this->expected_momentums;
+
             return round($percentage, 1);
         }
 
@@ -230,8 +229,8 @@ class Pillar extends Model implements Sitemapable
     {
         if (! $this->previous_history ||
             (
-                $this->previous_history->give_momentum_reward_percentage !== $this->give_momentum_reward_percentage ||
-                $this->previous_history->give_delegate_reward_percentage !== $this->give_delegate_reward_percentage
+                $this->previous_history->momentum_rewards !== $this->momentum_rewards ||
+                $this->previous_history->delegate_rewards !== $this->delegate_rewards
             )
         ) {
             return true;
@@ -243,8 +242,13 @@ class Pillar extends Model implements Sitemapable
     public function getRawJsonAttribute()
     {
         return Cache::remember("pillar-{$this->id}-json", 10, function () {
-            $znn = App::make('zenon.api');
-            return $znn->pillar->getByOwner($this->owner->address)['data'];
+            try {
+                $znn = App::make('zenon.api');
+
+                return $znn->pillar->getByOwner($this->owner->address)['data'];
+            } catch (\Exception $exception) {
+                return null;
+            }
         });
     }
 
@@ -268,13 +272,58 @@ class Pillar extends Model implements Sitemapable
         }
     }
 
+    public function getDisplayAzAvgVoteTimeAttribute()
+    {
+        if ($this->az_avg_vote_time) {
+            return now()->subSeconds($this->az_avg_vote_time)->diffForHumans(['parts' => 2], true);
+        }
 
-    /*
-     * Methods
-     */
+        return '-';
+    }
+
+    //
+    // Methods
 
     public static function findBySlug(string $slug): ?Pillar
     {
         return static::where('slug', $slug)->first();
+    }
+
+    public function updateAzEngagementScores()
+    {
+        $totalProjects = AcceleratorProject::where('created_at', '>=', $this->created_at)->count();
+        $totalPhases = AcceleratorPhase::where('created_at', '>=', $this->created_at)->count();
+        $totalVotableItems = ($totalProjects + $totalPhases);
+
+        $this->az_engagement = 0;
+
+        if ($totalVotableItems > 0) {
+
+            // Make sure the vote item was created after the pillar
+            // Projects/phases might be open after a pillar spawned, dont include these
+            $votes = $this->az_votes()->get();
+            $totalVotes = $votes->map(function ($vote) {
+                if ($vote->votable->created_at >= $this->created_at) {
+                    return 1;
+                }
+
+                return 0;
+            })->sum();
+
+            // If a pillar has more votes than projects ensure the pillar doenst get over 100% engagement
+            if ($totalVotes > $totalVotableItems) {
+                $totalVotes = $totalVotableItems;
+            }
+
+            $percentage = ($totalVotes * 100) / $totalVotableItems;
+            $this->az_engagement = round($percentage, 1);
+        }
+
+        $averageVoteTime = $this->az_votes->map(function ($vote) {
+            return $vote->created_at->timestamp - $vote->votable->created_at->timestamp;
+        })->average();
+
+        $this->az_avg_vote_time = $averageVoteTime;
+        $this->save();
     }
 }

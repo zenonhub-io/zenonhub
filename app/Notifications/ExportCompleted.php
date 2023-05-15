@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -15,8 +14,6 @@ class ExportCompleted extends Notification
 
     /**
      * Create a new notification instance.
-     *
-     * @return void
      */
     public function __construct(string $export)
     {
@@ -25,44 +22,35 @@ class ExportCompleted extends Notification
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
         return ['mail'];
     }
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): MailMessage
     {
         $attachmentName = explode('-', $this->export);
         unset($attachmentName[0]);
         $attachmentName = implode('-', $attachmentName);
 
         return (new MailMessage)
-            ->subject(get_env_prefix() . 'Export complete')
+            ->subject(get_env_prefix().'Export complete')
             ->attach(storage_path("app/exports/{$this->export}"), [
-                'as' => $attachmentName
+                'as' => $attachmentName,
             ])
             ->markdown('mail.notifications.export-complete', [
-                'filename' => $attachmentName
+                'filename' => $attachmentName,
             ]);
     }
 
     /**
      * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(mixed $notifiable): array
     {
         return [
             //

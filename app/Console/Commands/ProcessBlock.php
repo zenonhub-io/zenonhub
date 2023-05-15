@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\ProcessBlock as ProcessBlockJob;
 use App\Models\Nom\AccountBlock;
 use Illuminate\Console\Command;
 
@@ -13,7 +12,7 @@ class ProcessBlock extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:process-block {hash}';
+    protected $signature = 'zenon:process-block {hash} {--alerts=false} {--balances=false}';
 
     /**
      * The console command description.
@@ -24,17 +23,30 @@ class ProcessBlock extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
         $hash = $this->argument('hash');
-        $accountBlock = AccountBlock::findByHash($hash);
+        $whaleAlerts = $this->option('alerts');
+        $balances = $this->option('balances');
+        $block = AccountBlock::findByHash($hash);
 
-        if ($accountBlock) {
-            $this->info("Process block data job dispatched");
-            ProcessBlockJob::dispatch($accountBlock);
+        if ($whaleAlerts) {
+            $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($balances) {
+            $balances = filter_var($balances, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($block) {
+            $this->info('Process block data job dispatched');
+
+            (new \App\Actions\ProcessBlock(
+                $block,
+                $whaleAlerts,
+                $balances
+            ))->execute();
         }
 
         return self::SUCCESS;

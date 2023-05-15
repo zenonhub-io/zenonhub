@@ -11,14 +11,26 @@ class AccountProjects extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Account $account;
-    protected $queryString = ['sort', 'order'];
+
+    protected $queryString = [
+        'sort' => ['except' => 'created_at'],
+        'order' => ['except' => 'desc'],
+        'search',
+    ];
+
+    public function mount()
+    {
+        $this->sort = request()->query('sort', 'created_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
+    }
 
     public function render()
     {
         $this->loadData();
 
         return view('livewire.tables.account-projects', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -46,7 +58,6 @@ class AccountProjects extends Component
                 $q->where('name', 'LIKE', "%{$this->search}%");
                 $q->orWhere('hash', 'LIKE', "%{$this->search}%");
             });
-            $this->resetPage();
         }
     }
 }

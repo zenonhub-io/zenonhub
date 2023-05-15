@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Explorer;
 
-use App\Models\Nom\Momentum;
+use App\Models\Nom\Views\ViewLatestMomentum;
 use Livewire\Component;
 
 class Momentums extends Component
@@ -12,7 +12,7 @@ class Momentums extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'height'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -26,12 +26,12 @@ class Momentums extends Component
         $this->loadData();
 
         return view('livewire.explorer.momentums', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
     protected function initQuery()
     {
-        $this->query = Momentum::withCount('account_blocks')->where('id', '>', 1);
+        $this->query = ViewLatestMomentum::withCount('account_blocks');
     }
 }

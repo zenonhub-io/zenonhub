@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class HashTooltip extends Component
 {
     public string $hash;
+
     public int $eitherSide;
+
     public string $breakpoint;
+
     public bool $alwaysShort;
 
     public function __construct(string $hash, int $eitherSide = 10, string $breakpoint = 'md', bool $alwaysShort = false)

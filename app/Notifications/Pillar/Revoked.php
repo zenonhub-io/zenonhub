@@ -45,7 +45,7 @@ class Revoked extends BaseNotification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . $this->type->name)
+            ->subject(get_env_prefix().$this->type->name)
             ->markdown('mail.notifications.pillar.revoked', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,

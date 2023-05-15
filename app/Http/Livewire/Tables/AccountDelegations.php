@@ -11,14 +11,18 @@ class AccountDelegations extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Account $account;
+
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->sort = request()->query('sort', 'started_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
@@ -26,7 +30,7 @@ class AccountDelegations extends Component
         $this->loadData();
 
         return view('livewire.tables.account-delegations', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -53,8 +57,6 @@ class AccountDelegations extends Component
             $this->query->whereHas('pillar', function ($q) {
                 $q->where('name', 'LIKE', "%{$this->search}%");
             });
-
-            $this->resetPage();
         }
     }
 }

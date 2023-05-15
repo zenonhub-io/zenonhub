@@ -6,21 +6,22 @@ use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Token;
-use Storage;
 use Carbon\Carbon;
-use Spatie\Sitemap\Sitemap;
-use Spatie\Sitemap\Tags\Url;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
+use Storage;
 
 class GenerateSitemap implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 2;
+
     public int $backoff = 30;
 
     public function handle(): void
@@ -52,12 +53,16 @@ class GenerateSitemap implements ShouldQueue
             ->add($this->addItem('tools.api-playground'))
             ->add($this->addItem('tools.verify-signature'))
             ->add($this->addItem('tools.broadcast-message'))
-            ->add($this->addItem('tools.node-statistics'))
+
+            ->add($this->addItem('stats.overview'))
+            ->add($this->addItem('stats.nodes'))
+            ->add($this->addItem('stats.accelerator'))
 
             ->writeToFile(storage_path($file));
     }
 
-    private function addItem($route) {
+    private function addItem($route)
+    {
         return Url::create(route($route))
             ->setLastModificationDate(Carbon::yesterday())
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY);

@@ -5,6 +5,7 @@ namespace App\Models\Nom;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Staker extends Model
 {
@@ -30,6 +31,7 @@ class Staker extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'account_id',
         'amount',
         'duration',
@@ -48,19 +50,21 @@ class Staker extends Model
         'ended_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
 
-    public function account()
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
     }
 
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsActive($query)
     {
@@ -72,15 +76,8 @@ class Staker extends Model
         return $query->where('hash', $hash);
     }
 
-
-    /*
-     * Attributes
-     */
-
-    public function getListDisplayAmountAttribute()
-    {
-        return znn_token()->getDisplayAmount($this->amount, 2);
-    }
+    //
+    // Attributes
 
     public function getDisplayAmountAttribute()
     {
@@ -97,19 +94,18 @@ class Staker extends Model
         $endDate = \Carbon\Carbon::parse($this->started_at->format('Y-m-d H:i:s'))->addSeconds($this->duration);
         $days = $this->started_at->diffInDays($endDate);
 
-        return $days . ' ' . \Str::plural('day', $days);
+        return $days.' '.\Str::plural('day', $days);
     }
 
     public function getCurrentDurationAttribute()
     {
         $duration = now()->timestamp - $this->started_at->timestamp;
+
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
     }
 
-
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public function displayAmount($decimals = null)
     {

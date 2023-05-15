@@ -12,7 +12,7 @@ class Tokens extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'holders_count'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -26,13 +26,13 @@ class Tokens extends Component
         $this->loadData();
 
         return view('livewire.explorer.tokens', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
     protected function initQuery()
     {
-        $this->query = Token::withCount(['holders' => function($q) {
+        $this->query = Token::withCount(['holders' => function ($q) {
             $q->where('balance', '>', '0');
         }]);
     }

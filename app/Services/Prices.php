@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Http;
 use Log;
-use Carbon\Carbon;
 
 class Prices
 {
@@ -17,19 +17,25 @@ class Prices
         }
 
         Log::warning('Unable to load price from coingeko');
+
         return false;
     }
 
     public function historicPrice(string $token, string $currency, int $timestamp): ?float
     {
         $date = Carbon::parse($timestamp)->format('d-m-Y');
-        $response = Http::get("https://api.coingecko.com/api/v3/coins/{$token}/history?date={$date}");
 
-        if ($response->successful()) {
-            return $response->json("market_data.current_price.usd{$currency}");
+        try {
+            $response = Http::get("https://api.coingecko.com/api/v3/coins/{$token}/history?date={$date}");
+            if ($response->successful()) {
+                return $response->json("market_data.current_price.{$currency}");
+            }
+        } catch (\Illuminate\Http\Client\ConnectionException) {
+            return false;
         }
 
         Log::warning('Unable to load historic price from coingeko');
+
         return false;
     }
 }

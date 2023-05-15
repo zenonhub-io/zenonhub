@@ -7,9 +7,13 @@ use Illuminate\View\Component;
 class TableSortButton extends Component
 {
     public string $sort;
+
     public string $order;
+
     public string $check;
+
     public ?string $title;
+
     public ?string $tooltip;
 
     public function __construct(string $sort, string $order, string $check, ?string $title = null, ?string $tooltip = null)

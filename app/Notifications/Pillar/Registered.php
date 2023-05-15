@@ -45,7 +45,7 @@ class Registered extends BaseNotification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . $this->type->name)
+            ->subject(get_env_prefix().$this->type->name)
             ->markdown('mail.notifications.pillar.registered', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
@@ -65,4 +65,3 @@ class Registered extends BaseNotification implements ShouldQueue
         ];
     }
 }
-

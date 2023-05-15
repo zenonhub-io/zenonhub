@@ -9,7 +9,7 @@ class Momentums extends PageController
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Zenon Momentums';
+        $this->page['meta']['title'] = 'Momentums';
         $this->page['meta']['description'] = 'Momentums that have been confirmed on the Zenon Network. These are the network blocks and contain the transactions';
         $this->page['data'] = [
             'component' => 'explorer.momentums',

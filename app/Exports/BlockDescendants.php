@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Nom\AccountBlock;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -13,8 +13,11 @@ class BlockDescendants implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public AccountBlock $accountBlock;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(AccountBlock $accountBlock, ?string $search = null, ?string $sort = null, ?string $order = null)
@@ -33,9 +36,8 @@ class BlockDescendants implements FromQuery, WithHeadings, WithMapping
             'From',
             'To',
             'Type',
-            'Method',
-            'Token',
             'Amount',
+            'Token',
             'Timestamp',
         ];
     }
@@ -48,9 +50,8 @@ class BlockDescendants implements FromQuery, WithHeadings, WithMapping
             $row->account?->address,
             $row->to_account?->address,
             $row->display_type,
-            $row->contract_method?->name,
-            $row->token?->name,
             float_number($row->display_amount),
+            $row->token?->name,
             $row->created_at->format('Y-m-d H:i:s'),
         ];
     }
@@ -61,17 +62,11 @@ class BlockDescendants implements FromQuery, WithHeadings, WithMapping
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('height', $this->search);
-                $q->orWhere('hash', $this->search);
-                $q->orWhereHas('token', fn($q2) => $q2->where('name', $this->search));
-                $q->orWhereHas('account', function ($q2) {
-                    $q2->where('address', 'LIKE', "%{$this->search}%")
-                        ->orWhere('name', 'LIKE', "%{$this->search}%");
-                });
-                $q->orWhereHas('to_account', function ($q2) {
-                    $q2->where('address', 'LIKE', "%{$this->search}%")
-                        ->orWhere('name', 'LIKE', "%{$this->search}%");
-                });
+                $q->where('height', $this->search)
+                    ->orWhere('hash', $this->search)
+                    ->orWhereHas('token', fn ($q2) => $q2->where('name', $this->search))
+                    ->orWhereHas('account', fn ($q3) => $q3->where('address', $this->search))
+                    ->orWhereHas('to_account', fn ($q4) => $q4->where('address', $this->search));
             });
         }
 

@@ -29,7 +29,7 @@ class Security extends PageController
         $user->save();
 
         return redirect()->route('account.security')
-            ->with('alert' , [
+            ->with('alert', [
                 'type' => 'success',
                 'message' => 'Your password has been changed',
                 'icon' => 'check-circle-fill',

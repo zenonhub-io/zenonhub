@@ -20,6 +20,15 @@
     }
 }
 
+.navbar {
+    a.app-name {
+        color: $headings-color;
+
+        &:hover {
+            color: $link-hover-color;
+        }
+    }
+}
 
 // Menu toggler
 

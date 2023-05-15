@@ -12,7 +12,7 @@ class Staking extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -26,7 +26,7 @@ class Staking extends Component
         $this->loadData();
 
         return view('livewire.explorer.staking', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

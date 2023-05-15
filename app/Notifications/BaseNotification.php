@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use Str;
 use App\Models\NotificationType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;

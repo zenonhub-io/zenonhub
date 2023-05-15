@@ -4,8 +4,8 @@ namespace App\Exports;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -14,8 +14,11 @@ class PillarActiveDelegators implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public Pillar $pillar;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(Pillar $pillar, ?string $search = null, ?string $sort = null, ?string $order = null)
@@ -42,7 +45,7 @@ class PillarActiveDelegators implements FromQuery, WithHeadings, WithMapping
             $row->account->address,
             $row->started_at->format('Y-m-d H:i:s'),
             $row->started_at->diffInSeconds(now()),
-            float_number($row->list_display_weight),
+            float_number($row->display_weight),
         ];
     }
 

@@ -26,12 +26,12 @@ class Details extends PageController
                 'required',
                 'max:255',
                 'alpha_dash',
-                Rule::unique(User::class)->ignore($request->user()->id)
+                Rule::unique(User::class)->ignore($request->user()->id),
             ],
             'email' => [
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($request->user()->id)
+                Rule::unique(User::class)->ignore($request->user()->id),
             ],
         ]);
 
@@ -41,7 +41,7 @@ class Details extends PageController
         $user->save();
 
         return redirect()->route('account.details')
-            ->with('alert' , [
+            ->with('alert', [
                 'type' => 'success',
                 'message' => 'Account details updated',
                 'icon' => 'check-circle-fill',

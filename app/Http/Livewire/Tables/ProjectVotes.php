@@ -12,9 +12,10 @@ class ProjectVotes extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public AcceleratorProject $project;
+
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -29,7 +30,7 @@ class ProjectVotes extends Component
         $this->loadData();
 
         return view('livewire.tables.project-votes', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

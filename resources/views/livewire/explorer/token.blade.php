@@ -11,46 +11,42 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-24">
-                        <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-2 mb-2 p-3">
+                        <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="text-start text-md-center mb-2 mb-md-0">
                                 <span class="d-inline d-md-block fs-sm text-muted">Total</span>
-                                <span class="fw-bold float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
+                                <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
                             </div>
                             <div class="text-start text-md-center mb-2 mb-md-0">
                                 <span class="d-inline d-md-block fs-sm text-muted">Max</span>
-                                <span class="fw-bold float-end float-md-none">{{ $token->getDisplayAmount($token->max_supply) }}</span>
+                                <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->max_supply) }}</span>
                             </div>
                             <div class="text-start text-md-center">
                                 <span class="d-inline d-md-block fs-sm text-muted">Hodlers</span>
-                                <span class="fw-bold float-end float-md-none">{{ number_format($token->holders_count) }}</span>
+                                <span class="float-end float-md-none">{{ number_format($token->holders_count) }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-24">
                         <ul class="list-group list-group-flush mb-0">
                             <li class="list-group-item">
-                                <span class="d-block fs-sm">Symbol</span>
-                                <span class="fw-bold">{{ $token->symbol }}</span>
+                                <span class="d-block fs-sm text-muted">Symbol</span>
+                                {{ $token->symbol }}
                             </li>
                             <li class="list-group-item">
-                                <span class="d-block fs-sm">Domain</span>
-                                <span class="fw-bold">{{ $token->domain }}</span>
+                                <span class="d-block fs-sm text-muted">Domain</span>
+                                {{ $token->domain }}
                             </li>
                             <li class="list-group-item">
-                                <span class="d-block fs-sm">ZTS</span>
-                                <span class="fw-bold">{{ $token->token_standard }}</span>
+                                <span class="d-block fs-sm text-muted">ZTS</span>
+                                {{ $token->token_standard }}
                             </li>
                             <li class="list-group-item">
-                                <span class="d-block fs-sm">Created</span>
-                                <span class="fw-bold">
-                                    {{ ($token->created_at ? $token->created_at->format(config('zenon.date_format')) : '-') }}
-                                </span>
+                                <span class="d-block fs-sm text-muted">Created</span>
+                                {{ ($token->created_at ? $token->created_at->format(config('zenon.date_format')) : '-') }}
                             </li>
                             <li class="list-group-item">
-                                <span class="d-block fs-sm">Owner</span>
-                                <span class="fw-bold">
-                                    <x-address :account="$token->owner"/>
-                                </span>
+                                <span class="d-block fs-sm text-muted">Owner</span>
+                                <x-address :account="$token->owner"/>
                             </li>
                         </ul>
                     </div>
@@ -72,27 +68,27 @@
                     <ul class="nav nav-tabs-alt card-header-tabs">
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'holders' ? 'active' : '' }}" wire:click="$set('tab', 'holders')">
-                                <i class="bi bi-people-fill opacity-70 me-2"></i> Holders
+                                Holders
                             </button>
                         </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'transactions' ? 'active' : '' }}" wire:click="$set('tab', 'transactions')">
-                                <i class="bi bi-arrow-left-right opacity-70 me-2"></i> Transactions
+                                Transactions
                             </button>
                         </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'mints' ? 'active' : '' }}" wire:click="$set('tab', 'mints')">
-                                <i class="bi bi-plus-lg opacity-70 me-2"></i> Mints
+                                Mints
                             </button>
                         </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'burns' ? 'active' : '' }}" wire:click="$set('tab', 'burns')">
-                                <i class="bi bi-fire opacity-70 me-2"></i> Burns
+                                Burns
                             </button>
                         </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'json' ? 'active' : '' }}" wire:click="$set('tab', 'json')">
-                                <i class="bi bi-code-slash opacity-70 me-2"></i> JSON
+                                JSON
                             </button>
                         </li>
                     </ul>
@@ -110,7 +106,16 @@
                         <livewire:tables.token-burns :token="$token" key="{{now()}}" />
                     @elseif ($tab === 'json')
                         <div class="p-4">
-                            <pre class="line-numbers"><code class="lang-json">{{ pretty_json($token->raw_json) }}</code></pre>
+                            @if ($token->raw_json)
+                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($token->raw_json) }}</code></pre>
+                            @else
+                                <x-alert
+                                    message="Unable to load JSON data"
+                                    type="info"
+                                    icon="info-circle-fill"
+                                    class="d-flex mb-0"
+                                />
+                            @endif
                         </div>
                     @endif
                 </div>

@@ -24,7 +24,7 @@ class ProjectPhases extends Component
         $this->loadData();
 
         return view('livewire.az.project-phases', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

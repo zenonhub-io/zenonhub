@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
 use App\Http\Controllers\PageController;
 use App\Models\User;
+use Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -25,10 +25,6 @@ class Signup extends PageController
         return $this->render('pages/auth');
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
@@ -36,12 +32,12 @@ class Signup extends PageController
                 'required',
                 'max:255',
                 'alpha_dash',
-                Rule::unique(User::class)
+                Rule::unique(User::class),
             ],
             'email' => [
                 'email',
                 'max:255',
-                Rule::unique(User::class)
+                Rule::unique(User::class),
             ],
             'password' => ['required', 'confirmed'],
             'terms' => ['required', 'accepted'],

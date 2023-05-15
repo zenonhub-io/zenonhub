@@ -8,7 +8,9 @@ use Livewire\Component;
 class Phase extends Component
 {
     public string $hash;
+
     public string $tab = 'votes';
+
     protected $queryString = [
         'tab' => ['except' => 'votes'],
     ];
@@ -16,7 +18,7 @@ class Phase extends Component
     public function render()
     {
         return view('livewire.az.phase', [
-            'phase' => AcceleratorPhase::findByHash($this->hash)
+            'phase' => AcceleratorPhase::findByHash($this->hash),
         ]);
     }
 }

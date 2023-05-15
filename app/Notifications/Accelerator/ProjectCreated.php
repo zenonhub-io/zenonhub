@@ -45,7 +45,7 @@ class ProjectCreated extends BaseNotification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . $this->type->name)
+            ->subject(get_env_prefix().$this->type->name)
             ->markdown('mail.notifications.az.project-created', [
                 'user' => $notifiable,
                 'project' => $this->project,

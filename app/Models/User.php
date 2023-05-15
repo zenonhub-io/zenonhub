@@ -27,7 +27,7 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
         'email',
         'password',
         'privacy_confirmed_at',
-        'last_login_at'
+        'last_login_at',
     ];
 
     /**
@@ -51,11 +51,9 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
         'last_login_at' => 'datetime',
     ];
 
-
     /**
      * Relations
      */
-
     public function accounts()
     {
         return $this->belongsToMany(
@@ -76,11 +74,9 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
         )->using(NotificationSubscription::class)->withPivot('data', 'created_at', 'updated_at');
     }
 
-
     /**
      * Attributes
      */
-
     public function getIsPillarOwnerAttribute()
     {
         return $this->accounts()->wherePivot('is_pillar', '1')->exists();

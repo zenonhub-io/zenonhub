@@ -2,9 +2,12 @@
     <div class="card-header border-bottom">
         <div class="d-block d-sm-flex align-items-center">
             <div class="flex-grow-1">
-                <h4 class="mb-3 mb-sm-0">
+                <h4 class="mb-0">
                     Momentums
                 </h4>
+                <div class="text-muted fs-sm mt-1 mb-3 mb-sm-0">
+                    Showing the latest 50k results
+                </div>
             </div>
             <div class="d-block d-md-flex justify-content-md-end">
                 {{ ($data ? $data->links('vendor/livewire/top-links') : '') }}
@@ -31,9 +34,7 @@
                 <thead>
                 <tr>
                     <th>
-                        <button type="button" class="btn btn-sort" wire:click="sortBy('height')">
-                            <x-table-sort-button :sort="$sort" :order="$order" check="height"/>
-                        </button>
+                        Height
                     </th>
                     <th>
                         Hash

@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Explorer;
 
-use App\Models\Nom\AccountBlock;
+use App\Models\Nom\Views\ViewLatestAccountBlock;
 use Livewire\Component;
 
 class Transactions extends Component
@@ -12,7 +12,7 @@ class Transactions extends Component
 
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
     ];
 
     public function mount()
@@ -26,12 +26,12 @@ class Transactions extends Component
         $this->loadData();
 
         return view('livewire.explorer.transactions', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
     protected function initQuery()
     {
-        $this->query = AccountBlock::where('id', '>', 1);
+        $this->query = ViewLatestAccountBlock::query();
     }
 }

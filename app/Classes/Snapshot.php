@@ -3,14 +3,12 @@
 namespace App\Classes;
 
 use App\Models\Nom\Momentum;
-use Cache;
-use DB;
-
 use Illuminate\Console\OutputStyle;
 
 class Snapshot
 {
     protected Momentum $momentum;
+
     protected ?OutputStyle $console;
 
     public function __construct(Momentum $momentum, ?OutputStyle $console = null)

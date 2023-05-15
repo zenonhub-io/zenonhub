@@ -8,10 +8,15 @@ use Illuminate\Support\Str;
 class Message implements Arrayable
 {
     public ?string $content = null;
+
     public ?string $username = null;
+
     public ?string $avatarUrl = null;
+
     public bool $tts = false;
+
     public ?array $file = null;
+
     public ?array $embeds = null;
 
     public static function make(?string $content = null): Message
@@ -29,6 +34,7 @@ class Message implements Arrayable
     public function content(string $content): Message
     {
         $this->content = Str::limit($content, 2000 - 3 /* Accounting for ellipsis */);
+
         return $this;
     }
 
@@ -38,12 +44,14 @@ class Message implements Arrayable
         if ($avatarUrl !== null) {
             $this->avatarUrl = $avatarUrl;
         }
+
         return $this;
     }
 
     public function tts(bool $enabled = true): Message
     {
         $this->tts = $enabled;
+
         return $this;
     }
 
@@ -54,12 +62,14 @@ class Message implements Arrayable
             'contents' => $contents,
             'filename' => $filename,
         ];
+
         return $this;
     }
 
     public function embed(Embed $embed): Message
     {
         $this->embeds[] = $embed;
+
         return $this;
     }
 
@@ -67,11 +77,11 @@ class Message implements Arrayable
     {
         return array_filter(
             ['content' => $this->content,
-             'username' => $this->username,
-             'avatar_url' => $this->avatarUrl,
-             'tts' => $this->tts ? 'true' : 'false',
-             'file' => $this->file,
-             'embeds' => $this->serializeEmbeds(),],
+                'username' => $this->username,
+                'avatar_url' => $this->avatarUrl,
+                'tts' => $this->tts ? 'true' : 'false',
+                'file' => $this->file,
+                'embeds' => $this->serializeEmbeds(), ],
             static function ($value) {
                 return $value !== null && $value !== [];
             });

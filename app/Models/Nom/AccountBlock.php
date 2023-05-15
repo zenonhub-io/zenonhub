@@ -4,17 +4,24 @@ namespace App\Models\Nom;
 
 use App;
 use Cache;
-use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AccountBlock extends Model
 {
     use HasFactory;
 
+    public const TYPE_GENESIS = 1;
+
     public const TYPE_SEND = 2;
+
     public const TYPE_RECEIVE = 3;
+
     public const TYPE_CONTRACT_SEND = 4;
+
     public const TYPE_CONTRACT_RECEIVE = 5;
 
     /**
@@ -37,14 +44,15 @@ class AccountBlock extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'account_id',
         'to_account_id',
         'momentum_id',
         'parent_block_id',
         'paired_account_block_id',
         'token_id',
+        'contract_method_id',
         'version',
-        'chain_identifier',
         'block_type',
         'height',
         'amount',
@@ -53,9 +61,6 @@ class AccountBlock extends Model
         'used_plasma',
         'difficulty',
         'hash',
-        'nonce',
-        'public_key',
-        'signature',
         'created_at',
     ];
 
@@ -65,57 +70,64 @@ class AccountBlock extends Model
      * @var array
      */
     protected $casts = [
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class);
+    }
 
-    public function account()
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');
     }
 
-    public function to_account()
+    public function to_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'to_account_id', 'id');
     }
 
-    public function momentum()
+    public function momentum(): BelongsTo
     {
         return $this->belongsTo(Momentum::class);
     }
 
-    public function paired_account_block()
+    public function paired_account_block(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'paired_account_block_id', 'id');
     }
 
-    public function descendants()
+    public function descendants(): HasMany
     {
         return $this->hasMany(AccountBlock::class, 'parent_block_id', 'id');
     }
 
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'parent_block_id', 'id');
     }
 
-    public function token()
+    public function token(): HasOne
     {
         return $this->hasOne(Token::class, 'id', 'token_id');
     }
 
-    public function data()
+    public function contract_method(): HasOne
+    {
+        return $this->hasOne(ContractMethod::class, 'id', 'contract_method_id');
+    }
+
+    public function data(): HasOne
     {
         return $this->hasOne(AccountBlockData::class, 'account_block_id', 'id');
     }
 
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeWhereListSearch($query, $search)
     {
@@ -131,36 +143,75 @@ class AccountBlock extends Model
                 $q->where('height', '>=', $start)
                     ->where('height', '<', $end);
             });
-        } else {
-            return $query->whereHas('momentum', function ($q) use ($start)  {
-                $q->where('height', $start);
-            });
         }
+
+        return $query->whereHas('momentum', function ($q) use ($start) {
+            $q->where('height', $start);
+        });
     }
 
-
-    /*
-     * Attributes
-     */
-
-    public function getDisplayTypeAttribute()
+    public function scopeInvolvingAccount($query, $account)
     {
+        return $query->where(function ($q) use ($account) {
+            $q->where('account_id', $account->id)
+                ->orWhere('to_account_id', $account->id);
+        });
+    }
+
+    public function scopeIsReceived($query)
+    {
+        return $query->whereNotNull('paired_account_block_id');
+    }
+
+    public function scopeIsUnreceived($query)
+    {
+        return $query->whereNull('paired_account_block_id');
+    }
+
+    public function scopeNotToEmpty($query)
+    {
+        return $query->where('to_account_id', '!=', '1');
+    }
+
+    //
+    // Attributes
+
+    public function getDisplayActualTypeAttribute()
+    {
+        if ($this->block_type === self::TYPE_GENESIS) {
+            return 'Genesis';
+        }
+
         if ($this->block_type === self::TYPE_SEND) {
             return 'Send';
-        } elseif ($this->block_type === self::TYPE_RECEIVE) {
+        }
+
+        if ($this->block_type === self::TYPE_RECEIVE) {
             return 'Receive';
-        } elseif ($this->block_type === self::TYPE_CONTRACT_SEND) {
+        }
+
+        if ($this->block_type === self::TYPE_CONTRACT_SEND) {
             return 'Contract Send';
-        } elseif ($this->block_type === self::TYPE_CONTRACT_RECEIVE) {
+        }
+
+        if ($this->block_type === self::TYPE_CONTRACT_RECEIVE) {
             return 'Contract Receive';
         }
 
         return '-';
     }
 
-    public function getListDisplayAmountAttribute()
+    public function getDisplayTypeAttribute()
     {
-        return $this->token?->getDisplayAmount($this->amount, 2);
+        if ($this->contract_method) {
+            return $this->contract_method->name;
+        }
+
+        if ($this->amount > 0) {
+            return 'Transfer';
+        }
+
+        return $this->getDisplayActualTypeAttribute();
     }
 
     public function getDisplayAmountAttribute()
@@ -173,25 +224,11 @@ class AccountBlock extends Model
         return number_format($this->height);
     }
 
-    public function getContractMethodAttribute()
-    {
-        return $this->data?->contract_method;
-    }
-
-    public function getDecodedPublicKeyAttribute()
-    {
-        return ZnnUtilities::decodeData($this->public_key);
-    }
-
-    public function getDecodedSignatureAttribute()
-    {
-        return ZnnUtilities::decodeData($this->signature);
-    }
-
     public function getRawDataAttribute()
     {
         return Cache::rememberForever("account-block-{$this->id}", function () {
             $znn = App::make('zenon.api');
+
             return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
         });
     }
@@ -212,16 +249,24 @@ class AccountBlock extends Model
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("block-{$this->id}", 60*5, function () {
-            $znn = App::make('zenon.api');
-            return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
+        return Cache::remember("block-{$this->id}", 60 * 5, function () {
+            try {
+                $znn = App::make('zenon.api');
+
+                return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
+            } catch (\Exception $exception) {
+                return null;
+            }
         });
     }
 
+    public function getIsUnReceivedAttribute()
+    {
+        return ! $this->paired_account_block_id;
+    }
 
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public static function findByHash($hash)
     {

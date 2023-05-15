@@ -13,6 +13,7 @@ class VerifySignature extends PageController
         $this->page['data'] = [
             'component' => 'tools.verify-signature',
         ];
+
         return $this->render('pages/tools');
     }
 }

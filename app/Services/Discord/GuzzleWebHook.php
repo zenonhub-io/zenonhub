@@ -2,17 +2,18 @@
 
 namespace App\Services\Discord;
 
+use App\Services\Discord\Exceptions\InvalidMessage;
+use App\Services\Discord\Exceptions\MessageCouldNotBeSent;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
-use App\Services\Discord\Exceptions\InvalidMessage;
-use App\Services\Discord\Exceptions\MessageCouldNotBeSent;
 use GuzzleHttp\Exception\GuzzleException;
 
 class GuzzleWebHook
 {
     protected Client $http;
+
     protected string $url;
 
     public function __construct(HttpClient $http, string $url)

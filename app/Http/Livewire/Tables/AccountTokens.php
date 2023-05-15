@@ -11,14 +11,18 @@ class AccountTokens extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Account $account;
+
     protected $queryString = [
-        'sort' => ['except' => 'default'],
-        'order' => ['except' => 'desc']
+        'sort' => ['except' => 'balance'],
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
-        $this->sort = request()->query('sort', 'default');
+        $this->sort = request()->query('sort', 'balance');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
@@ -26,7 +30,7 @@ class AccountTokens extends Component
         $this->loadData();
 
         return view('livewire.tables.account-tokens', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 
@@ -62,18 +66,6 @@ class AccountTokens extends Component
             return;
         }
 
-        if ($this->sort === 'default') {
-            if ($this->order === 'desc') {
-                $this->query->orderByRaw('(token_id = 6) desc')
-                    ->orderByRaw('(token_id = 3) desc')
-                    ->orderBy('balance', 'DESC');
-            } else {
-                $this->query->orderByRaw('(token_id = 6) desc')
-                    ->orderByRaw('(token_id = 3) desc')
-                    ->orderBy('balance', 'ASC');
-            }
-        } else {
-            $this->query->orderBy($this->sort, $this->order);
-        }
+        $this->query->orderBy($this->sort, $this->order);
     }
 }

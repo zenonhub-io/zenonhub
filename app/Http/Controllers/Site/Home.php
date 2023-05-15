@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Site;
 
-use Cache;
 use App\Http\Controllers\PageController;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Sentinel;
+use Cache;
 
 class Home extends PageController
 {
@@ -20,7 +20,7 @@ class Home extends PageController
             'addresses' => short_number(Cache::get('address-count')),
             'delegators' => number_format((float) Cache::get('delegators-count')),
         ];
-        $this->page['data']['accelerator'] = AcceleratorProject::orderByLatest()->limit(7)->get();
+        $this->page['data']['accelerator'] = AcceleratorProject::orderByLatest()->limit(8)->get();
 
         return $this->render('pages/home');
     }

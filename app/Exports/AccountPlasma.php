@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Nom\Account;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -13,8 +13,11 @@ class AccountPlasma implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public Account $account;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(Account $account, ?string $search = null, ?string $sort = null, ?string $order = null)
@@ -29,6 +32,7 @@ class AccountPlasma implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'Beneficiary',
+            'Sender',
             'Amount',
             'Timestamp',
         ];
@@ -38,6 +42,7 @@ class AccountPlasma implements FromQuery, WithHeadings, WithMapping
     {
         return [
             $row->to_account->address,
+            $row->from_account->address,
             float_number($row->display_amount),
             $row->started_at->format('Y-m-d H:i:s'),
         ];
@@ -45,7 +50,7 @@ class AccountPlasma implements FromQuery, WithHeadings, WithMapping
 
     public function query()
     {
-        $query = $this->account->fusions()
+        $query = $this->account->plasma()
             ->whereNull('ended_at');
 
         if ($this->search) {

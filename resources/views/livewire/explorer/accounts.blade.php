@@ -19,6 +19,11 @@
                     Address
                 </th>
                 <th>
+                    <button type="button" class="btn btn-sort" wire:click="sortBy('sent_blocks_count')">
+                        <x-table-sort-button :sort="$sort" :order="$order" check="sent_blocks_count" title="Height"/>
+                    </button>
+                </th>
+                <th>
                     <button type="button" class="btn btn-sort" wire:click="sortBy('znn_balance')">
                         <x-table-sort-button :sort="$sort" :order="$order" check="znn_balance" title="ZNN"/>
                     </button>
@@ -52,12 +57,12 @@
                         <div class="d-flex">
                             <div class="pe-1 flex-grow-1"><x-address :account="$account" :eitherSide="10" breakpoint="lg"/></div>
                             <div class="ps-1">
-                                @if ($account->pillar)
+                                @if ($account->active_pillar)
                                     <span class="ms-2 d-inline" data-bs-toggle="tooltip" data-bs-title="Pillar">
                                         {!! svg('pillar', 'opacity-70', 'height: 18px') !!}
                                     </span>
                                 @endif
-                                @if ($account->sentinel)
+                                @if ($account->active_sentinel)
                                     <span class="ms-2 d-inline" data-bs-toggle="tooltip" data-bs-title="Sentinel">
                                         {!! svg('sentinel', '', 'width: 16px') !!}
                                     </span>
@@ -69,6 +74,9 @@
                                 @endif
                             </div>
                         </div>
+                    </td>
+                    <td>
+                        {{ number_format($account->sent_blocks_count) }}
                     </td>
                     <td>
                         <span data-bs-toggle="tooltip" data-bs-title="{{ $account->displayZnnBalance() }}">

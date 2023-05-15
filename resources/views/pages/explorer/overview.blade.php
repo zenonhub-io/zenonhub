@@ -1,19 +1,7 @@
-<x-layouts.app>
-    <x-slot name="pageTitle">
-        {{ $meta['title'] }}
-    </x-slot>
-    <x-slot name="pageMetaTags">
-        <meta name="description" content="{{ $meta['description'] }}">
-        <meta name="og:description" content="{{ $meta['description'] }}">
-    </x-slot>
+<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
     <x-slot name="pageBreadcrumbs">
-        @if (isset($data['component']))
-            {{ Breadcrumbs::render($data['component']) }}
-        @else
-            {{ Breadcrumbs::render('explorer') }}
-        @endif
+        {{ Breadcrumbs::render($data['component'] ?? 'explorer') }}
     </x-slot>
-
     <div class="container mb-4">
         <div class="row">
             <div class="col-24">

@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Nom\Account;
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
@@ -13,8 +13,11 @@ class AccountTokens implements FromQuery, WithHeadings, WithMapping
     use Exportable;
 
     public Account $account;
+
     public ?string $search;
+
     public ?string $sort;
+
     public ?string $order;
 
     public function __construct(Account $account, ?string $search = null, ?string $sort = null, ?string $order = null)

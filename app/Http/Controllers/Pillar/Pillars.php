@@ -23,10 +23,10 @@ class Pillars extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Pillar | ' . $pillar->name;
-        $this->page['meta']['description'] = "The pillar page shows an overview of the pillars on-chain stats and activity including lists of delegators, votes, updates and messages";
+        $this->page['meta']['title'] = 'Pillar | '.$pillar->name;
+        $this->page['meta']['description'] = 'The pillar page shows an overview of the pillars on-chain stats and activity including lists of delegators, votes, updates and messages';
         $this->page['data'] = [
-            'pillar' => $pillar
+            'pillar' => $pillar,
         ];
 
         return $this->render('pages/pillars/pillar');

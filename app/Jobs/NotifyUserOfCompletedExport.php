@@ -15,6 +15,7 @@ class NotifyUserOfCompletedExport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public User $user;
+
     public string $export;
 
     public function __construct(User $user, string $export)

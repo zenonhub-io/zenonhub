@@ -12,15 +12,19 @@ class PillarDelegators extends Component
     use \App\Http\Livewire\DataTableTrait;
 
     public Pillar $pillar;
+
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
-        'order' => ['except' => 'desc']
+        'order' => ['except' => 'desc'],
+        'search',
     ];
 
     public function mount()
     {
         $this->perPage = 10;
         $this->sort = request()->query('sort', 'started_at');
+        $this->order = request()->query('order', 'desc');
+        $this->search = request()->query('search');
     }
 
     public function render()
@@ -28,7 +32,7 @@ class PillarDelegators extends Component
         $this->loadData();
 
         return view('livewire.tables.pillar-delegators', [
-            'data' => $this->data
+            'data' => $this->data,
         ]);
     }
 

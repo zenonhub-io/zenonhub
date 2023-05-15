@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Fusion extends Model
 {
@@ -29,6 +30,7 @@ class Fusion extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'from_account_id',
         'to_account_id',
         'amount',
@@ -47,25 +49,26 @@ class Fusion extends Model
         'ended_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
 
-    public function from_account()
+    public function from_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'from_account_id', 'id');
     }
 
-    public function to_account()
+    public function to_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'to_account_id', 'id');
     }
 
-
-    /*
-     * Scopes
-     */
+    //
+    // Scopes
 
     public function scopeIsActive($query)
     {
@@ -77,15 +80,16 @@ class Fusion extends Model
         return $query->where('hash', $hash);
     }
 
-
-    /*
-     * Attributes
-     */
-
-    public function getListDisplayAmountAttribute()
+    public function scopeInvolvingAccount($query, $account)
     {
-        return qsr_token()->getDisplayAmount($this->amount, 2);
+        return $query->where(function ($q) use ($account) {
+            $q->where('from_account_id', $account->id)
+                ->orWhere('to_account_id', $account->id);
+        });
     }
+
+    //
+    // Attributes
 
     public function getDisplayAmountAttribute()
     {
@@ -95,13 +99,12 @@ class Fusion extends Model
     public function getDisplayDurationAttribute()
     {
         $duration = now()->timestamp - $this->started_at->timestamp;
+
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
     }
 
-
-    /*
-     * Methods
-     */
+    //
+    // Methods
 
     public function displayAmount($decimals)
     {

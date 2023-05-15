@@ -11,7 +11,6 @@ class DatabaseChannel extends IlluminateDatabaseChannel
      * Build an array payload for the DatabaseNotification Model.
      *
      * @param  mixed  $notifiable
-     * @param Notification $notification
      * @return array
      */
     public function buildPayload($notifiable, Notification $notification)

@@ -18,6 +18,7 @@
                 <th>
                     From
                 </th>
+                <th></th>
                 <th>
                     Beneficiary
                 </th>
@@ -41,6 +42,9 @@
                 <tr>
                     <td>
                         <x-address :account="$fusion->from_account" :eitherSide="8" :alwaysShort="true"/>
+                    </td>
+                    <td class="px-0">
+                        {!! svg('explorer.send', 'text-success', 'transform: rotate(90deg);') !!}
                     </td>
                     <td>
                         <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>

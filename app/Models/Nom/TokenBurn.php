@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TokenBurn extends Model
 {
@@ -29,6 +30,7 @@ class TokenBurn extends Model
      * @var array<string>
      */
     public $fillable = [
+        'chain_id',
         'token_id',
         'account_id',
         'account_block_id',
@@ -45,43 +47,37 @@ class TokenBurn extends Model
         'created_at' => 'datetime',
     ];
 
+    //
+    // Relations
 
-    /*
-     * Relations
-     */
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+    }
 
-    public function token()
+    public function token(): BelongsTo
     {
         return $this->belongsTo(Token::class, 'token_id', 'id');
     }
 
-    public function account()
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');
     }
 
-    public function account_block()
+    public function account_block(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
     }
 
+    //
+    // Scopes
 
-    /*
-     * Scopes
-     */
-
-
-    /*
-     * Attributes
-     */
+    //
+    // Attributes
 
     public function getDisplayAmountAttribute()
     {
         return $this->token->getDisplayAmount($this->amount);
-    }
-
-    public function getListDisplayWeightAttribute()
-    {
-        return $this->token->getDisplayAmount($this->amount, 2);
     }
 }

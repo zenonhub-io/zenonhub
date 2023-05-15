@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Validator;
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Validator;
 
 class Utilities extends ApiController
 {
@@ -24,6 +24,7 @@ class Utilities extends ApiController
             $account = ZnnUtilities::addressFromPublicKey(
                 $request->input('public_key')
             );
+
             return $this->success($account);
         } catch (\Exception $exception) {
             return $this->error($exception->getMessage());
@@ -44,7 +45,6 @@ class Utilities extends ApiController
         }
 
         try {
-
             $validSignature = ZnnUtilities::verifySignedMessage(
                 $request->input('public_key'),
                 $request->input('message'),

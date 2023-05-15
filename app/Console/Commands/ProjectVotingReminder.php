@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Notification;
 use Illuminate\Console\Command;
 
 class ProjectVotingReminder extends Command
@@ -28,7 +27,8 @@ class ProjectVotingReminder extends Command
      */
     public function handle()
     {
-        \App\Jobs\Accelerator\SendVotingReminders::dispatch();
+        \App\Jobs\SendVotingReminders::dispatch();
+
         return self::SUCCESS;
     }
 }

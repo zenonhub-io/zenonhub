@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
-use DB;
 use App\Jobs\ProcessAccountBalance;
 use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Jobs\Sync\Projects as SyncProjects;
 use App\Jobs\Sync\Sentinels as SyncSentinels;
 use App\Jobs\Sync\Tokens as SyncTokens;
+use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Account;
+use DB;
 use Illuminate\Console\Command;
 
 class Sync extends Command
@@ -29,8 +30,6 @@ class Sync extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -39,25 +38,39 @@ class Sync extends Command
         if (empty($types) || in_array('tokens', $types)) {
             $this->output->write('Saving tokens...');
             $this->output->newLine(2);
+
             SyncTokens::dispatch();
         }
 
         if (empty($types) || in_array('pillars', $types)) {
             $this->output->write('Saving pillars...');
             $this->output->newLine(2);
+
             SyncPillars::dispatch();
         }
 
         if (empty($types) || in_array('sentinels', $types)) {
             $this->output->write('Saving sentinels...');
             $this->output->newLine(2);
+
             SyncSentinels::dispatch();
         }
 
         if (empty($types) || in_array('az', $types)) {
             $this->output->write('Saving projects...');
             $this->output->newLine(2);
+
             SyncProjects::dispatch();
+        }
+
+        if (empty($types) || in_array('az-status', $types)) {
+            $this->output->write('Saving project statuses...');
+            $this->output->newLine(2);
+
+            $projects = AcceleratorProject::whereIn('status', [AcceleratorProject::STATUS_NEW, AcceleratorProject::STATUS_ACCEPTED])->get();
+            $projects->each(function ($project) {
+                \App\Jobs\Sync\ProjectStatus::dispatch($project);
+            });
         }
 
         if (in_array('balances', $types)) {

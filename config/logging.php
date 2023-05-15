@@ -64,7 +64,7 @@ return [
 
         'local' => [
             'driver' => 'stack',
-            'channels' => ['single', 'discord_info'],
+            'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
 
@@ -99,16 +99,9 @@ return [
 
         'discord' => [
             'driver' => 'custom',
-            'via'    => MarvinLabs\DiscordLogger\Logger::class,
-            'level' => env('LOG_LEVEL', 'debug'),
-            'url'    => env('LOG_DISCORD_WEBHOOK_URL'),
-        ],
-
-        'discord_info' => [
-            'driver' => 'custom',
-            'via'    => MarvinLabs\DiscordLogger\Logger::class,
-            'level' => 'info',
-            'url'    => env('LOG_DISCORD_WEBHOOK_URL'),
+            'via' => MarvinLabs\DiscordLogger\Logger::class,
+            'level' => 'error',
+            'url' => env('LOG_DISCORD_WEBHOOK_URL'),
         ],
 
         'slack' => [
