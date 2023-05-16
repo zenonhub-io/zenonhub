@@ -363,9 +363,9 @@ class Account extends Model implements Sitemapable
             return true;
         }
 
-//        if ($this->is_stex_trader) {
-//            return true;
-//        }
+        //        if ($this->is_stex_trader) {
+        //            return true;
+        //        }
 
         return false;
     }
@@ -397,10 +397,10 @@ class Account extends Model implements Sitemapable
             return $pillarCheck->name;
         }
 
-//        if ($this->is_stex_trader) {
-//            $ending = mb_substr($this->address, -6);
-//            return "STEX Trader (...{$ending})";
-//        }
+        //        if ($this->is_stex_trader) {
+        //            $ending = mb_substr($this->address, -6);
+        //            return "STEX Trader (...{$ending})";
+        //        }
 
         return $this->address;
     }

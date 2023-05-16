@@ -123,16 +123,16 @@ trait DataTableTrait
         return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
 
         // TODO - revisit when doing account upgrades
-//        if (request()->user() && request()->user()->email_verified_at) {
-//            $this->exported = 'queued';
-//            $exportName = Str::ulid() . '-' . $exportName;
-//            $export->queue("exports/{$exportName}")->chain([
-//                new \App\Jobs\NotifyUserOfCompletedExport(request()->user(), $exportName),
-//            ]);
-//        } else {
-//            $this->exported = 'free';
-//            return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
-//        }
+        //        if (request()->user() && request()->user()->email_verified_at) {
+        //            $this->exported = 'queued';
+        //            $exportName = Str::ulid() . '-' . $exportName;
+        //            $export->queue("exports/{$exportName}")->chain([
+        //                new \App\Jobs\NotifyUserOfCompletedExport(request()->user(), $exportName),
+        //            ]);
+        //        } else {
+        //            $this->exported = 'free';
+        //            return $export->download($exportName, \Maatwebsite\Excel\Excel::CSV);
+        //        }
     }
 
     protected function getComponentName($default = true)
