@@ -16,7 +16,7 @@ class ProjectStatus implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 5;
+    public int $tries = 2;
 
     protected AcceleratorProject $project;
 

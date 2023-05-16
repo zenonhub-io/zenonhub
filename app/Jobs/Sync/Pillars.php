@@ -19,9 +19,7 @@ class Pillars implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 5;
-
-    public int $backoff = 60;
+    public int $tries = 2;
 
     protected Collection $pillars;
 
@@ -35,12 +33,9 @@ class Pillars implements ShouldQueue
         try {
             $this->loadPillars();
             $this->processPillars();
-        } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
-            Log::error('Sync pillars error - could not load data from API');
-            $this->release(10);
         } catch (Throwable $exception) {
             Log::error('Sync pillars error - '.$exception);
-            $this->release(10);
+            $this->release(30);
         }
     }
 

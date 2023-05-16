@@ -18,9 +18,7 @@ class Tokens implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 25;
-
-    public int $backoff = 10;
+    public int $tries = 2;
 
     protected Collection $tokens;
 
@@ -34,12 +32,9 @@ class Tokens implements ShouldQueue
         try {
             $this->loadTokens();
             $this->processTokens();
-        } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
-            Log::error('Sync tokens error - could not load data from API');
-            $this->release(10);
         } catch (Throwable $exception) {
             Log::error('Sync tokens error - '.$exception);
-            $this->release(10);
+            $this->release(30);
         }
     }
 

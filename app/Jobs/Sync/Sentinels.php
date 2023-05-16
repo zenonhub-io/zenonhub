@@ -18,9 +18,7 @@ class Sentinels implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 5;
-
-    public int $backoff = 60;
+    public int $tries = 2;
 
     protected Collection $sentinels;
 
@@ -34,12 +32,9 @@ class Sentinels implements ShouldQueue
         try {
             $this->loadSentinels();
             $this->processSentinels();
-        } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
-            Log::error('Sync sentinels error - could not load data from API');
-            $this->release(10);
         } catch (Throwable $exception) {
             Log::error('Sync sentinels error - '.$exception);
-            $this->release(10);
+            $this->release(30);
         }
     }
 

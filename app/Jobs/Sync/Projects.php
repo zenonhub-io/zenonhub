@@ -21,7 +21,7 @@ class Projects implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 5;
+    public int $tries = 2;
 
     protected Collection $projects;
 
@@ -35,11 +35,8 @@ class Projects implements ShouldQueue
         try {
             $this->loadProjects();
             $this->processProjects();
-        } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
-            Log::error('Sync projects error - could not load data from API');
-            $this->release(30);
         } catch (Throwable $exception) {
-            Log::error('Sync projects error - '.$exception->getMessage());
+            Log::debug('Sync projects error - '.$exception->getMessage());
             $this->release(30);
         }
     }

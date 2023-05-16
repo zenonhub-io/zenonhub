@@ -48,12 +48,9 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
 
             $this->account->updated_at = now();
             $this->account->save();
-        } catch (\DigitalSloth\ZnnPhp\Exceptions\Exception) {
-            Log::error('Sync balances error - could not load data from API');
-            $this->release(10);
         } catch (\Exception $exception) {
             Log::error('Sync balances error');
-            $this->release(10);
+            $this->release(30);
         }
     }
 
