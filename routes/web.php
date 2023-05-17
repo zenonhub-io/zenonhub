@@ -13,6 +13,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test', function () {
+
+    $baseCommand = './znn-cli';
+    $cliPath = base_path('bin/znn');
+    $passphrase = config('plasma-bot.passphrase', 'test');
+    $keystore = config('plasma-bot.keystore', 'plasmabot');
+
+    $flags = collect([
+        'u' => config('zenon.node_url'),
+        'k' => $keystore,
+        'p' => $passphrase,
+    ]);
+
+    $flags = $flags->implode(fn ($value, $key) => "-{$key} {$value} ");
+    $flags = trim($flags);
+
+    $action = 'wallet.list';
+    $command = "{$baseCommand} {$action} {$flags}";
+
+    //dd($command);
+
+    $result = Process::path($cliPath)->run($command);
+
+    if ($result->successful()) {
+        return $result->output();
+    }
+
+    dd($result->errorOutput());
+});
+
 include 'redirects.php';
 include 'utilities.php';
 include 'auth.php';
