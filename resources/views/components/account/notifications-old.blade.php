@@ -36,7 +36,7 @@
                     <div class="tab-pane fade {{ ($type === 'general' ? 'show active' : '') }}" id="{{ $type }}" role="tabpanel">
                         <div class="card bg-secondary p-4">
                             @if (
-                                $type === 'delegate' && (! auth()->user()->accounts()->count()) ||
+                                $type === 'delegate' && (! auth()->user()->nom_accounts()->count()) ||
                                 $type === 'pillar' && (! auth()->user()->is_pillar_owner)
                             )
                                 <x-alert
