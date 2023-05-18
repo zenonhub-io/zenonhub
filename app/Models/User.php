@@ -52,9 +52,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_login_at' => 'datetime',
     ];
 
-    /**
-     * Relations
-     */
+    //
+    // Relations
+
     public function nom_accounts(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -75,9 +75,9 @@ class User extends Authenticatable implements MustVerifyEmail
         )->using(NotificationSubscription::class)->withPivot('data', 'created_at', 'updated_at');
     }
 
-    /**
-     * Attributes
-     */
+    //
+    // Attributes
+
     public function getIsPillarOwnerAttribute()
     {
         return $this->nom_accounts()->wherePivot('is_pillar', '1')->exists();
