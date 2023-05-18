@@ -2,31 +2,32 @@
 
 namespace App\Providers;
 
-use App\Events\Accelerator\Donate;
-use App\Events\Accelerator\PhaseAdded;
-use App\Events\Accelerator\PhaseUpdated;
-use App\Events\Accelerator\ProjectCreated;
-use App\Events\Accelerator\VoteByName;
-use App\Events\Accelerator\VoteByProdAddress;
-use App\Events\Common\CollectReward;
-use App\Events\Common\DepositQsr;
-use App\Events\Common\WithdrawQsr;
-use App\Events\Pillars\Delegate;
-use App\Events\Pillars\Register as RegisterPillar;
-use App\Events\Pillars\RegisterLegacy as RegisterLegacyPillar;
-use App\Events\Pillars\Revoke as RevokePillar;
-use App\Events\Pillars\Undelegate;
-use App\Events\Pillars\UpdatePillar;
-use App\Events\Plasma\CancelFuse;
-use App\Events\Plasma\Fuse;
-use App\Events\Sentinel\Register as RegisterSentinel;
-use App\Events\Sentinel\Revoke as RevokeSentinel;
-use App\Events\Stake\Cancel as CancelStake;
-use App\Events\Stake\Stake;
-use App\Events\Token\Burn;
-use App\Events\Token\IssueToken;
-use App\Events\Token\Mint;
-use App\Events\Token\UpdateToken;
+use App\Events\Nom\Accelerator\AddPhase;
+use App\Events\Nom\Accelerator\CreateProject;
+use App\Events\Nom\Accelerator\Donate;
+use App\Events\Nom\Accelerator\UpdatePhase;
+use App\Events\Nom\Accelerator\VoteByName;
+use App\Events\Nom\Accelerator\VoteByProdAddress;
+use App\Events\Nom\Common\CollectReward;
+use App\Events\Nom\Common\DepositQsr;
+use App\Events\Nom\Common\WithdrawQsr;
+use App\Events\Nom\Pillars\Delegate;
+use App\Events\Nom\Pillars\Register as RegisterPillar;
+use App\Events\Nom\Pillars\RegisterLegacy as RegisterLegacyPillar;
+use App\Events\Nom\Pillars\Revoke as RevokePillar;
+use App\Events\Nom\Pillars\Undelegate;
+use App\Events\Nom\Pillars\UpdatePillar;
+use App\Events\Nom\Plasma\CancelFuse;
+use App\Events\Nom\Plasma\Fuse;
+use App\Events\Nom\Sentinel\Register as RegisterSentinel;
+use App\Events\Nom\Sentinel\Revoke as RevokeSentinel;
+use App\Events\Nom\Stake\Cancel as CancelStake;
+use App\Events\Nom\Stake\Stake;
+use App\Events\Nom\Token\Burn;
+use App\Events\Nom\Token\IssueToken;
+use App\Events\Nom\Token\Mint;
+use App\Events\Nom\Token\UpdateToken;
+use App\Listeners\PlasmaBot\ConfirmNewFuse;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -43,9 +44,9 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Accelerator
-        ProjectCreated::class => [],
-        PhaseAdded::class => [],
-        PhaseUpdated::class => [],
+        CreateProject::class => [],
+        AddPhase::class => [],
+        UpdatePhase::class => [],
         Donate::class => [],
         VoteByName::class => [],
         VoteByProdAddress::class => [],
@@ -64,7 +65,9 @@ class EventServiceProvider extends ServiceProvider
         Undelegate::class => [],
 
         // Plasma
-        Fuse::class => [],
+        Fuse::class => [
+            ConfirmNewFuse::class,
+        ],
         CancelFuse::class => [],
 
         // Sentinels

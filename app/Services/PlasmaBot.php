@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Exceptions\ApplicationException;
-use App\Models\PlasmaBotEntry;
 use Illuminate\Support\Facades\Process;
 
 class PlasmaBot
@@ -13,30 +12,38 @@ class PlasmaBot
         $keystore = config('plasma-bot.keystore');
         $passphrase = config('plasma-bot.passphrase');
         $mnemonic = config('plasma-bot.mnemonic');
-        $this->runCommand("wallet.createFromMnemonic '{$mnemonic}' {$passphrase} {$keystore}");
+        $result = $this->runCommand("wallet.createFromMnemonic '{$mnemonic}' {$passphrase} {$keystore}");
+
+        if (! $result->seeInOutput('Done')) {
+            return false;
+        }
 
         return true;
     }
 
     public function fuse(string $address, int $amount = 10): bool
     {
-        $response = $this->runCommand("plasma.fuse {$address} {$amount}");
+        $result = $this->runCommand("plasma.fuse {$address} {$amount}");
 
-        $entry = PlasmaBotEntry::create([
-            'address' => $address,
-            'amount' => $amount,
-            'expires_at' => now()->addDay(),
-        ]);
+        if (! $result->seeInOutput('Done')) {
+            return false;
+        }
 
-        // TODO - add job to queue to check for confirmation
+        return true;
     }
 
-    public function cancel(string $id): bool
+    public function cancel(string $hash): bool
     {
-        $response = $this->runCommand("plasma.cancel {$id}");
+        $result = $this->runCommand("plasma.cancel {$hash}");
+
+        if (! $result->seeInOutput('Done')) {
+            return false;
+        }
+
+        return true;
     }
 
-    private function runCommand(string $action): string
+    private function runCommand(string $action): \Illuminate\Process\ProcessResult
     {
         $path = base_path('bin/znn');
         $flags = collect([
@@ -53,6 +60,6 @@ class PlasmaBot
             throw new ApplicationException($result->errorOutput());
         }
 
-        return $result->output();
+        return $result;
     }
 }
