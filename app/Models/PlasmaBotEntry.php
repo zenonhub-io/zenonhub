@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 
 class PlasmaBotEntry extends Model
 {
@@ -36,4 +37,24 @@ class PlasmaBotEntry extends Model
     //
     // Relations
 
+    //
+    // Scopes
+
+    public function scopeIsUnConfirmed(Builder $query): Builder
+    {
+        return $query->where('is_confirmed', 0);
+    }
+
+    //
+    // Methods
+
+    public function confirm($hash = null)
+    {
+        if ($hash) {
+            $this->hash = $hash;
+        }
+
+        $this->is_confirmed = true;
+        $this->save();
+    }
 }
