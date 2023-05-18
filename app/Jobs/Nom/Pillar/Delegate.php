@@ -39,7 +39,7 @@ class Delegate implements ShouldQueue
     public function handle(): void
     {
         $this->processDelegate();
-        $this->notifyUsers();
+        //$this->notifyUsers();
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
@@ -78,7 +78,7 @@ class Delegate implements ShouldQueue
     {
         $notificationType = NotificationType::findByCode('pillar-delegator-added');
         $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
-            ->whereHas('accounts', function ($query) {
+            ->whereHas('nom_accounts', function ($query) {
                 $query->whereHas('pillars', fn ($query) => $query->where('id', $this->pillar->id));
             })
             ->get();

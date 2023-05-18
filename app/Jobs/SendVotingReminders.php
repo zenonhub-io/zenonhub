@@ -33,7 +33,7 @@ class SendVotingReminders implements ShouldQueue
                 ->pluck('owner_id');
 
             $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
-                ->whereHas('accounts', fn ($query) => $query->whereIn('account_id', $missingVotes))
+                ->whereHas('nom_accounts', fn ($query) => $query->whereIn('account_id', $missingVotes))
                 ->get();
 
             Notification::send(
