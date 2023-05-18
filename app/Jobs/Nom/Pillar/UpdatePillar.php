@@ -89,19 +89,19 @@ class UpdatePillar implements ShouldQueue
         );
 
         // delegating pillar updated
-        $notificationType = NotificationType::findByCode('delegating-pillar-updated');
-        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
-            ->whereHas('accounts', function ($query) use ($pillar) {
-                $query->whereHas('delegations', function ($query2) use ($pillar) {
-                    $query2->where('pillar_id', $pillar->id)
-                        ->whereNull('ended_at');
-                });
-            })
-            ->get();
-
-        Notification::send(
-            $subscribedUsers,
-            new \App\Notifications\Pillar\DelegatingUpdated($notificationType, $pillar)
-        );
+        //        $notificationType = NotificationType::findByCode('delegating-pillar-updated');
+        //        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
+        //            ->whereHas('nom_accounts', function ($query) use ($pillar) {
+        //                $query->whereHas('delegations', function ($query2) use ($pillar) {
+        //                    $query2->where('pillar_id', $pillar->id)
+        //                        ->whereNull('ended_at');
+        //                });
+        //            })
+        //            ->get();
+        //
+        //        Notification::send(
+        //            $subscribedUsers,
+        //            new \App\Notifications\Pillar\DelegatingUpdated($notificationType, $pillar)
+        //        );
     }
 }
