@@ -285,21 +285,25 @@ class Indexer
                 $block->contract_method_id = $contractMethod->id;
                 $block->save();
 
-                $contractName = ucfirst(strtolower($contractMethod->contract->name));
-                $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\".$contractName;
+                $knownProblemMethods = [40];
 
-                if (class_exists($embeddedContract)) {
-                    $embeddedContract = new $embeddedContract();
-                    $decoded = $embeddedContract->decode($contractMethod->name, $data);
-                    $parameters = $embeddedContract->getParameterNames($contractMethod->name);
+                if (! in_array($block->contract_method_id, $knownProblemMethods)) {
+                    $contractName = ucfirst(strtolower($contractMethod->contract->name));
+                    $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\".$contractName;
 
-                    if ($decoded && $parameters) {
-                        $parameters = explode(',', $parameters);
+                    if (class_exists($embeddedContract)) {
+                        $embeddedContract = new $embeddedContract();
+                        $decoded = $embeddedContract->decode($contractMethod->name, $data);
+                        $parameters = $embeddedContract->getParameterNames($contractMethod->name);
 
-                        $decodedData = array_combine(
-                            $parameters,
-                            $decoded
-                        );
+                        if ($decoded && $parameters) {
+                            $parameters = explode(',', $parameters);
+
+                            $decodedData = array_combine(
+                                $parameters,
+                                $decoded
+                            );
+                        }
                     }
                 }
             }
