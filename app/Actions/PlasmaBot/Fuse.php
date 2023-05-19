@@ -13,21 +13,23 @@ class Fuse
 
     public function __construct(
         protected string $address,
+        protected int $amount = 10
     ) {
     }
 
     public function execute(): void
     {
-        $amount = 10;
-        $plasmaBot = new PlasmaBot();
-
         try {
-            $plasmaBot->fuse($this->address, $amount);
-            PlasmaBotEntry::create([
-                'address' => $this->address,
-                'amount' => $amount,
-                'expires_at' => now()->addDay(),
-            ]);
+            $plasmaBot = new PlasmaBot();
+            $result = $plasmaBot->fuse($this->address, $this->amount);
+
+            if ($result) {
+                PlasmaBotEntry::create([
+                    'address' => $this->address,
+                    'amount' => $this->amount,
+                    'expires_at' => now()->addDay(),
+                ]);
+            }
         } catch (ApplicationException) {
 
         }
