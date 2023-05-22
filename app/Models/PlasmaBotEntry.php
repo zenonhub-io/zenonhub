@@ -45,6 +45,11 @@ class PlasmaBotEntry extends Model
         return $query->where('is_confirmed', 0);
     }
 
+    public function scopeIsExpired(Builder $query): Builder
+    {
+        return $query->where('expires_at', '<', now());
+    }
+
     //
     // Methods
 
