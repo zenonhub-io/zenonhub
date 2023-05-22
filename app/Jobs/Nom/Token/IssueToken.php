@@ -36,6 +36,8 @@ class IssueToken implements ShouldQueue
         $zts = Utilities::ztsFromHash($this->block->hash);
         $tokenData = $znn->token->getByZts($zts)['data'];
         $token = Token::whereZts($tokenData->tokenStandard)->first();
+        $totalSupply = preg_replace('/[^0-9]/', '', $tokenData->totalSupply);
+        $maxSupply = preg_replace('/[^0-9]/', '', $tokenData->maxSupply);
 
         if (! $token) {
             $token = Token::create([
@@ -45,8 +47,8 @@ class IssueToken implements ShouldQueue
                 'symbol' => $tokenData->symbol,
                 'domain' => $tokenData->domain,
                 'token_standard' => $tokenData->tokenStandard,
-                'total_supply' => $tokenData->totalSupply,
-                'max_supply' => $tokenData->maxSupply,
+                'total_supply' => $totalSupply,
+                'max_supply' => $maxSupply,
                 'decimals' => $tokenData->decimals,
                 'is_burnable' => $tokenData->isBurnable,
                 'is_mintable' => $tokenData->isMintable,
