@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Events\AccountBlockProcessed;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountBlockData;
@@ -192,6 +193,8 @@ class Indexer
                     $this->syncAccountBalances
                 ))->execute();
             }
+
+            AccountBlockProcessed::dispatch($block);
         } else {
             $block->momentum_id = ($momentum ? $momentum->id : $block->momentum_id);
             $block->momentum_acknowledged_id = $momentumAcknowledged?->id;

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\AccountBlockProcessed;
 use App\Events\Nom\Accelerator\AddPhase;
 use App\Events\Nom\Accelerator\CreateProject;
 use App\Events\Nom\Accelerator\Donate;
@@ -28,6 +29,7 @@ use App\Events\Nom\Token\IssueToken;
 use App\Events\Nom\Token\Mint;
 use App\Events\Nom\Token\UpdateToken;
 use App\Listeners\PlasmaBot\ConfirmNewFuse;
+use App\Listeners\PlasmaBot\ReceiveCancelledFuse;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -83,6 +85,10 @@ class EventServiceProvider extends ServiceProvider
         Mint::class => [],
         Burn::class => [],
         UpdateToken::class => [],
+
+        AccountBlockProcessed::class => [
+            ReceiveCancelledFuse::class,
+        ],
     ];
 
     /**

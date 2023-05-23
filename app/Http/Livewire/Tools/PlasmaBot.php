@@ -33,7 +33,7 @@ class PlasmaBot extends Component
     {
         $account = Account::findByAddress(config('plasma-bot.address'));
         $totalQsrAvailable = 100 * (100000000);
-        $fusedQsr = $account->fusions->sum('amount');
+        $fusedQsr = $account->fusions()->isActive()->sum('amount');
         $percentageAvailable = ($fusedQsr / $totalQsrAvailable) * 100;
 
         return view('livewire.tools.plasma-bot', [
@@ -53,6 +53,12 @@ class PlasmaBot extends Component
             default => 40,
         };
 
-        $this->result = (new Fuse($data['address'], $plasma))->execute();
+        $expires = match ($plasma) {
+            80 => now()->addDay(),
+            120 => now()->addHours(12),
+            default => now()->addDays(2),
+        };
+
+        $this->result = (new Fuse($data['address'], $plasma, $expires))->execute();
     }
 }

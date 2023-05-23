@@ -22,12 +22,14 @@ class ReceiveCancelledFuse
     public function handle(CancelFuse $event): void
     {
         if (
-            $event->block->account->address !== Account::ADDRESS_PLASMA &&
-            $event->block->to_account->address !== config('plasma-bot.address')
+            $event->block->account->address === Account::ADDRESS_PLASMA &&
+            $event->block->to_account->address === config('plasma-bot.address')
         ) {
-            return;
+            App::make(App\Services\ZnnCli::class, [
+                'node_url' => config('plasma-bot.node_url'),
+                'keystore' => config('plasma-bot.keystore'),
+                'passphrase' => config('plasma-bot.passphrase'),
+            ])->receive($event->block->hash);
         }
-
-        App::make(App\Services\ZnnCli::class)->receive($event->block->hash);
     }
 }
