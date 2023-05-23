@@ -2,9 +2,9 @@
 
 namespace App\Actions\PlasmaBot;
 
+use App;
 use App\Exceptions\ApplicationException;
 use App\Models\PlasmaBotEntry;
-use App\Services\PlasmaBot;
 use Spatie\QueueableAction\QueueableAction;
 
 class Fuse
@@ -17,10 +17,10 @@ class Fuse
     ) {
     }
 
-    public function execute(): void
+    public function execute(): bool
     {
         try {
-            $plasmaBot = new PlasmaBot();
+            $plasmaBot = App::make(\App\Services\PlasmaBot::class);
             $result = $plasmaBot->fuse($this->address, $this->amount);
 
             if ($result) {
@@ -29,9 +29,11 @@ class Fuse
                     'amount' => $this->amount,
                     'expires_at' => now()->addDay(),
                 ]);
+
+                return true;
             }
         } catch (ApplicationException) {
-
+            return false;
         }
     }
 }

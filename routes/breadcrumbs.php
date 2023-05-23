@@ -134,9 +134,14 @@ Breadcrumbs::for('tools', function (BreadcrumbTrail $trail) {
     $trail->push('Tools', route('tools.overview'));
 });
 
+Breadcrumbs::for('tools.plasma-bot', function (BreadcrumbTrail $trail) {
+    $trail->parent('tools');
+    $trail->push('Plasma Bot', route('tools.plasma-bot'));
+});
+
 Breadcrumbs::for('tools.api-playground', function (BreadcrumbTrail $trail) {
     $trail->parent('tools');
-    $trail->push('API', route('tools.api-playground'));
+    $trail->push('API Playground', route('tools.api-playground'));
 });
 
 Breadcrumbs::for('tools.broadcast-message', function (BreadcrumbTrail $trail) {

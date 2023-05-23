@@ -45,11 +45,12 @@
                     <li><a href="{{ route('stats.accelerator') }}" class="dropdown-item {{ request()->routeIs('stats.accelerator') ? 'active' : '' }}">Accelerator</a></li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ request()->routeIs('tools.overview', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ request()->routeIs('tools.overview', 'tools.plasma-bot', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'active' : '' }}">
                 <a href="{{ route('tools.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="5">
                     Tools
                 </a>
-                <ul class="dropdown-menu {{ request()->routeIs('tools.overview', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'show' : '' }}">
+                <ul class="dropdown-menu {{ request()->routeIs('tools.overview', 'tools.plasma-bot', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'show' : '' }}">
+                    <li><a href="{{ route('tools.plasma-bot') }}" class="dropdown-item {{ request()->routeIs('tools.plasma-bot') ? 'active' : '' }}">Plasma bot</a></li>
                     <li><a href="{{ route('tools.api-playground') }}" class="dropdown-item {{ request()->routeIs('tools.api-playground') ? 'active' : '' }}">API playground</a></li>
                     <li><a href="{{ route('tools.broadcast-message') }}" class="dropdown-item {{ request()->routeIs('tools.broadcast-message') ? 'active' : '' }}">Broadcast message</a></li>
                     <li><a href="{{ route('tools.verify-signature') }}" class="dropdown-item {{ request()->routeIs('tools.verify-signature') ? 'active' : '' }}">Verify signature</a></li>
