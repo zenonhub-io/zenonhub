@@ -38,14 +38,14 @@ class Utilities
         return Chain::getCurrentChainId();
     }
 
-    public static function loadAccount(string $address): ?Account
+    public static function loadAccount(string $address): Account
     {
         $account = Account::findByAddress($address);
 
         if (! $account) {
             $znn = App::make('zenon.api');
             $block = $znn->ledger->getFrontierAccountBlock($address)['data'];
-            $chain = Utilities::loadChain();
+            $chain = self::loadChain();
             $account = Account::create([
                 'chain_id' => $chain->id,
                 'address' => $address,
@@ -67,7 +67,7 @@ class Utilities
         if (! $token) {
             $znn = App::make('zenon.api');
             $data = $znn->token->getByZts($zts)['data'];
-            $chain = Utilities::loadChain();
+            $chain = self::loadChain();
             $owner = self::loadAccount($data->owner);
             $token = Token::create([
                 'chain_id' => $chain->id,
