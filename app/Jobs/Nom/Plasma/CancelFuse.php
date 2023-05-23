@@ -43,5 +43,7 @@ class CancelFuse implements ShouldQueue
         Cache::put('fused-qsr', $fusedQsr);
 
         (new SetBlockAsProcessed($this->block))->execute();
+
+        \App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
     }
 }
