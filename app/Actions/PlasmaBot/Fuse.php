@@ -5,6 +5,7 @@ namespace App\Actions\PlasmaBot;
 use App;
 use App\Exceptions\ApplicationException;
 use App\Models\PlasmaBotEntry;
+use Carbon\Carbon;
 use Log;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -14,7 +15,8 @@ class Fuse
 
     public function __construct(
         protected string $address,
-        protected int $amount = 10
+        protected int $amount,
+        protected Carbon $expires
     ) {
     }
 
@@ -32,7 +34,7 @@ class Fuse
         PlasmaBotEntry::create([
             'address' => $this->address,
             'amount' => $this->amount,
-            'expires_at' => now()->addDay(),
+            'expires_at' => $this->expires,
         ]);
 
         return true;

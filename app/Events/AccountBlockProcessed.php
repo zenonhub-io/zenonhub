@@ -17,5 +17,6 @@ class AccountBlockProcessed
     public function __construct(
         public AccountBlock $block
     ) {
+        $this->block->refresh();
     }
 }
