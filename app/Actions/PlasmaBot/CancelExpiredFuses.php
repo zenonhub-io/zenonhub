@@ -2,9 +2,9 @@
 
 namespace App\Actions\PlasmaBot;
 
+use App;
 use App\Exceptions\ApplicationException;
 use App\Models\PlasmaBotEntry;
-use App\Services\PlasmaBot;
 use Log;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -19,7 +19,7 @@ class CancelExpiredFuses
     public function execute(): void
     {
         try {
-            $plasmaBot = new PlasmaBot();
+            $plasmaBot = App::make(\App\Services\PlasmaBot::class);
             $expiredEntries = PlasmaBotEntry::isExpired()->get();
             $expiredEntries->each(function ($entry) use ($plasmaBot) {
                 if ($plasmaBot->cancel($entry->hash)) {
