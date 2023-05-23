@@ -40,12 +40,20 @@
                 </div>
             </div>
             <hr class="border-secondary my-4">
+            <div class="w-100" wire:loading.delay>
+                <x-alert
+                    message="Processing request..."
+                    type="info"
+                    icon="arrow-repeat spin"
+                    class="mb-4"
+                />
+            </div>
             @if ($result === true)
                 <x-alert
                     message="Plasma fused"
                     type="success"
                     icon="check-circle-fill"
-                    class="mb-3"
+                    class="mb-4"
                 />
             @elseif ($result === false)
                 <x-alert
@@ -55,7 +63,8 @@
                     class="mb-4"
                 />
             @endif
-            <form wire:submit.prevent="submit">
+
+            <form wire:loading.remove wire:submit.prevent="submit">
                 <div class="row mb-4">
                     <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
                     <div class="col-sm-18">
