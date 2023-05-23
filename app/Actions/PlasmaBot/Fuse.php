@@ -5,6 +5,7 @@ namespace App\Actions\PlasmaBot;
 use App;
 use App\Exceptions\ApplicationException;
 use App\Models\PlasmaBotEntry;
+use Log;
 use Spatie\QueueableAction\QueueableAction;
 
 class Fuse
@@ -21,19 +22,19 @@ class Fuse
     {
         try {
             $plasmaBot = App::make(\App\Services\PlasmaBot::class);
-            $result = $plasmaBot->fuse($this->address, $this->amount);
+            $plasmaBot->fuse($this->address, $this->amount);
+        } catch (ApplicationException $exception) {
+            Log::error($exception);
 
-            if ($result) {
-                PlasmaBotEntry::create([
-                    'address' => $this->address,
-                    'amount' => $this->amount,
-                    'expires_at' => now()->addDay(),
-                ]);
-
-                return true;
-            }
-        } catch (ApplicationException) {
             return false;
         }
+
+        PlasmaBotEntry::create([
+            'address' => $this->address,
+            'amount' => $this->amount,
+            'expires_at' => now()->addDay(),
+        ]);
+
+        return true;
     }
 }

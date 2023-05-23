@@ -8,13 +8,9 @@ use App\Models\PlasmaBotEntry;
 use Log;
 use Spatie\QueueableAction\QueueableAction;
 
-class CancelExpiredFuses
+class CancelExpired
 {
     use QueueableAction;
-
-    public function __construct(
-    ) {
-    }
 
     public function execute(): void
     {
