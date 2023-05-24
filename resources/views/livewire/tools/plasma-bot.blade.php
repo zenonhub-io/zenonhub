@@ -19,7 +19,7 @@
                 <div class="text-start text-md-center">
                     <div class="progress bg-dark" style="height: 4px">
                         <div
-                            class="progress-bar bg-danger"
+                            class="progress-bar bg-zenon-pink"
                             role="progressbar"
                             aria-label="Yes"
                             style="width: {{ $percentageAvailable }}%"
@@ -45,7 +45,7 @@
                     message="Processing request..."
                     type="info"
                     icon="arrow-repeat spin"
-                    class="mb-4"
+                    class="mb-0"
                 />
             </div>
             @if ($result === true)
@@ -55,6 +55,8 @@
                     icon="check-circle-fill"
                     class="mb-4"
                 />
+                <p>Plasma has been fused to <a class="fw-bold" href="{{ route('explorer.account', ['address' => $address]) }}">{{ $address }}</a> please wait a few minutes for it to arrive.</p>
+                <p>Your plasma will expire at {{ $expires }} after which time you'll be able to fuse some more</p>
             @elseif ($result === false)
                 <x-alert
                     message="Error fusing, please try again"
@@ -62,50 +64,50 @@
                     icon="exclamation-octagon"
                     class="mb-4"
                 />
+            @else
+                <form wire:loading.remove wire:submit.prevent="submit">
+                    <div class="row mb-4">
+                        <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
+                        <div class="col-sm-18">
+                            <input
+                                type="text"
+                                id="form-address"
+                                name="address"
+                                class="form-control @error('address')is-invalid @enderror"
+                                wire:model="address"
+                            >
+                            <div class="invalid-feedback">
+                                @error('address') {{ $message }} @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <label for="form-address" class="col-sm-6 col-form-label form-label">Plasma</label>
+                        <div class="col-sm-18">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-low" name="plasma" value="low" wire:model="plasma">
+                                <label class="form-check-label" for="plasma-low">Low</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-medium" name="plasma" value="medium" wire:model="plasma">
+                                <label class="form-check-label" for="plasma-medium">Medium</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-high" name="plasma" value="high" wire:model="plasma">
+                                <label class="form-check-label" for="plasma-high">High</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-24">
+                            <button type="submit" class="btn w-100 btn-outline-primary">
+                                <i class="bi bi-fire me-2"></i>
+                                Get plasma
+                            </button>
+                        </div>
+                    </div>
+                </form>
             @endif
-
-            <form wire:loading.remove wire:submit.prevent="submit">
-                <div class="row mb-4">
-                    <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
-                    <div class="col-sm-18">
-                        <input
-                            type="text"
-                            id="form-address"
-                            name="address"
-                            class="form-control @error('address')is-invalid @enderror"
-                            wire:model="address"
-                        >
-                        <div class="invalid-feedback">
-                            @error('address') {{ $message }} @enderror
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <label for="form-address" class="col-sm-6 col-form-label form-label">Plasma</label>
-                    <div class="col-sm-18">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-low" name="plasma" value="low" wire:model="plasma">
-                            <label class="form-check-label" for="plasma-low">Low</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-medium" name="plasma" value="medium" wire:model="plasma">
-                            <label class="form-check-label" for="plasma-medium">Medium</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-high" name="plasma" value="high" wire:model="plasma">
-                            <label class="form-check-label" for="plasma-high">High</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-0">
-                    <div class="col-24">
-                        <button type="submit" class="btn w-100 btn-outline-primary">
-                            <i class="bi bi-fire me-2"></i>
-                            Get plasma
-                        </button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 </div>

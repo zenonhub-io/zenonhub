@@ -12,7 +12,7 @@ $spacer:              1rem;
 
 $zenon-green:         #6FF34D;
 $zenon-blue:          #0061EB;
-$plasma-pink:         #F91690;
+$zenon-pink:          #F91690;
 $syrius-green:        #00D557;
 $intergalactic-black: #151515;
 $zenon-orange:        #CE7C4E;
@@ -82,6 +82,7 @@ $theme-colors: (
     'dark':         $dark,
     'zenon-green':  $zenon-green,
     'zenon-blue':   $zenon-blue,
+    'zenon-pink':   $zenon-pink,
 );
 
 $theme-faded-colors: (
@@ -93,7 +94,8 @@ $theme-faded-colors: (
     'light':        rgba($light, .05),
     'dark':         rgba($dark, .12),
     'zenon-green':  rgba($zenon-green, .12),
-    'zenon-blue':   rgba($zenon-blue, .12)
+    'zenon-blue':   rgba($zenon-blue, .12),
+    'zenon-pink':   rgba($zenon-pink, .12)
 );
 
 $border-colors: (
@@ -106,7 +108,8 @@ $border-colors: (
     'dark':    rgba($dark, .35),
     'white':   rgba($white, .35),
     'zenon-green':  rgba($zenon-green, .35),
-    'zenon-blue':   rgba($zenon-blue, .35)
+    'zenon-blue':   rgba($zenon-blue, .35),
+    'zenon-pink':   rgba($zenon-pink, .35)
 );
 
 $button-faded-colors: (
@@ -119,7 +122,8 @@ $button-faded-colors: (
     'dark':    darken($dark, 20%),
     'white':   darken($white, 20%),
     'zenon-green':  darken($zenon-green, 20%),
-    'zenon-blue':   darken($zenon-blue, 20%)
+    'zenon-blue':   darken($zenon-blue, 20%),
+    'zenon-pink':   darken($zenon-pink, 20%)
 );
 
 
