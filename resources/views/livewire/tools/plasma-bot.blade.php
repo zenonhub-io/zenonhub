@@ -19,20 +19,20 @@
                 <div class="text-start text-md-center">
                     <div class="progress bg-dark" style="height: 4px">
                         <div
-                            class="progress-bar bg-zenon-pink"
-                            role="progressbar"
-                            aria-label="Yes"
-                            style="width: {{ $percentageAvailable }}%"
-                            aria-valuenow="{{ $percentageAvailable }}"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                        ></div>
-                        <div
                             class="progress-bar bg-success"
                             role="progressbar"
                             aria-label="No"
                             style="width: {{ $percentageUsed }}%"
                             aria-valuenow="{{ $percentageUsed }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        ></div>
+                        <div
+                            class="progress-bar bg-zenon-pink"
+                            role="progressbar"
+                            aria-label="Yes"
+                            style="width: {{ $percentageAvailable }}%"
+                            aria-valuenow="{{ $percentageAvailable }}"
                             aria-valuemin="0"
                             aria-valuemax="100"
                         ></div>
