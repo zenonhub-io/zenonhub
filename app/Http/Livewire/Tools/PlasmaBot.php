@@ -55,16 +55,18 @@ class PlasmaBot extends Component
             'high' => 120,
             'medium' => 80,
             default => 10,
+            //default => 20,
         };
 
         $expires = match ($plasma) {
             120 => now()->addHours(12),
             80 => now()->addDay(),
             default => now()->addHours(9),
+            //default => now()->addDays(2),
         };
 
-        $this->expires = $expires->format(config('zenon.date_format'));
-
+        $duration = now()->timestamp - $expires->timestamp;
+        $this->expires = now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
         $this->result = (new Fuse($data['address'], $plasma, $expires))->execute();
     }
 }

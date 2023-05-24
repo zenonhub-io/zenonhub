@@ -3,7 +3,7 @@
 namespace App\Listeners\PlasmaBot;
 
 use App;
-use App\Events\Nom\Plasma\CancelFuse;
+use App\Events\AccountBlockProcessed;
 use App\Models\Nom\Account;
 
 class ReceiveCancelledFuse
@@ -13,13 +13,12 @@ class ReceiveCancelledFuse
      */
     public function __construct()
     {
-        // ...
     }
 
     /**
      * Handle the event.
      */
-    public function handle(CancelFuse $event): void
+    public function handle(AccountBlockProcessed $event): void
     {
         if (
             $event->block->account->address === Account::ADDRESS_PLASMA &&
