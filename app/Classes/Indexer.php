@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use App\Events\AccountBlockProcessed;
+use App\Events\Nom\AccountBlockProcessed;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountBlockData;
@@ -185,6 +185,8 @@ class Indexer
                 $this->createBlockData($block, $data);
             }
 
+            AccountBlockProcessed::dispatch($block);
+
             // If not to empty address and not from pillar producer address
             if ($block->to_account->address !== Account::ADDRESS_EMPTY) {
                 (new \App\Actions\ProcessBlock(
@@ -193,8 +195,6 @@ class Indexer
                     $this->syncAccountBalances
                 ))->execute();
             }
-
-            AccountBlockProcessed::dispatch($block);
         } else {
             $block->momentum_id = ($momentum ? $momentum->id : $block->momentum_id);
             $block->momentum_acknowledged_id = $momentumAcknowledged?->id;

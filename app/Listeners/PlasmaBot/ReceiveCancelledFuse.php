@@ -3,7 +3,7 @@
 namespace App\Listeners\PlasmaBot;
 
 use App;
-use App\Events\AccountBlockProcessed;
+use App\Events\Nom\AccountBlockProcessed;
 use App\Models\Nom\Account;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
