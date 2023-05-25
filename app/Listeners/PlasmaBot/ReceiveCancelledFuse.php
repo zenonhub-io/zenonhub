@@ -17,6 +17,7 @@ class ReceiveCancelledFuse implements ShouldQueue
      */
     public function handle(AccountBlockProcessed $event): void
     {
+        Log::info('Plasma bot - listener firing');
         if (
             $event->block->account->address === Account::ADDRESS_PLASMA &&
             $event->block->to_account->address === config('plasma-bot.address')
