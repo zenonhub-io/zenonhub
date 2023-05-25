@@ -5,16 +5,12 @@ namespace App\Listeners\PlasmaBot;
 use App;
 use App\Events\AccountBlockProcessed;
 use App\Models\Nom\Account;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 
-class ReceiveCancelledFuse
+class ReceiveCancelledFuse implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-    }
+    public $delay = 10;
 
     /**
      * Handle the event.
@@ -25,17 +21,15 @@ class ReceiveCancelledFuse
             $event->block->account->address === Account::ADDRESS_PLASMA &&
             $event->block->to_account->address === config('plasma-bot.address')
         ) {
-
-            Log::debug('Plasma bot - receiving QSR from block '.$event->block->hash);
-
+            Log::info('Plasma bot - receiving all transactions');
             try {
                 App::make(App\Services\ZnnCli::class, [
                     'node_url' => config('plasma-bot.node_url'),
                     'keystore' => config('plasma-bot.keystore'),
                     'passphrase' => config('plasma-bot.passphrase'),
-                ])->receive($event->block->hash);
+                ])->receiveAll();
             } catch (\Throwable $exception) {
-                Log::error('Plasma bot - unable to receive block - '.$exception->getMessage());
+                Log::error('Plasma bot - unable to receive transactions - '.$exception->getMessage());
             }
         }
     }
