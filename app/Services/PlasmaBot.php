@@ -41,4 +41,9 @@ class PlasmaBot
     {
         return $this->cli->plasmaCancel($hash);
     }
+
+    public function receiveAll(): bool
+    {
+        return $this->cli->receiveAll();
+    }
 }
