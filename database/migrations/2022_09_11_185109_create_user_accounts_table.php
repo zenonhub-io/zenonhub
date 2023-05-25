@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_accounts_pivot', function (Blueprint $table) {
+        Schema::create('user_nom_accounts_pivot', function (Blueprint $table) {
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->cascadeOnDelete();
             $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
             $table->string('nickname')->index()->nullable();

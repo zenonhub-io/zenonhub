@@ -47,7 +47,7 @@ class Undelegate implements ShouldQueue
             $delegation->ended_at = $this->block->created_at;
             $delegation->save();
 
-            $this->notifyUsers($delegation->pillar);
+            //$this->notifyUsers($delegation->pillar);
         }
 
         $delegators = PillarDelegator::isActive()->whereHas('account', fn ($query) => $query->where('znn_balance', '>', '0'))->count();
@@ -60,7 +60,7 @@ class Undelegate implements ShouldQueue
     {
         $notificationType = NotificationType::findByCode('pillar-delegator-lost');
         $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
-            ->whereHas('accounts', function ($query) use ($pillar) {
+            ->whereHas('nom_accounts', function ($query) use ($pillar) {
                 $query->whereHas('pillars', fn ($query) => $query->where('id', $pillar->id));
             })
             ->get();

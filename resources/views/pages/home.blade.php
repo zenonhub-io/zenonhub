@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             @foreach($data['stats'] as $stat => $value)
-                <div class="col-12 col-md-8 col-lg-4 mb-1">
+                <div class="col-8 col-lg-4 mb-1">
                     <div class="p-1 bg-secondary rounded-2 text-center mb-3">
                         <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
                         {{ $value }}
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-24 col-md-12 mb-4">
+                    <div class="col-24 col-sm-12 mb-4">
                         <div class="card h-100 shadow card-hover text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
@@ -83,32 +83,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-24 col-md-12 mb-4">
+                    <div class="col-24 col-sm-12 mb-4">
                         <div class="card h-100 shadow text-center">
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <div class="d-block">
-                                    <a href="{{ route('tools.verify-signature') }}">
-                                    <span class="d-block">
-                                        {!! svg('tools.validate', 'mb-2', 'height: 2.3rem') !!}
-                                    </span>
-                                        <h5>Validate</h5>
-                                    </a>
-                                    <p class="mb-0">
-                                        Check a message and signature match
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-24 col-md-12 mb-4">
-                        <div class="card h-100 shadow card-hover text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
                                     <a href="{{ route('tools.api-playground') }}">
                                         <span class="d-block mb-2">
                                             {!! svg('tools.api', 'mb-2', 'height: 2.3rem') !!}
                                         </span>
-                                        <h5>Build</h5>
+                                        <h5>API</h5>
                                     </a>
                                     <p class="mb-0">
                                         Use our API in your own application
@@ -117,7 +100,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-24 col-md-12 mb-4">
+                    <div class="col-24 col-sm-12 mb-4">
                         <div class="card h-100 shadow card-hover text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
@@ -129,6 +112,23 @@
                                     </a>
                                     <p class="mb-0">
                                         Send a signed message to the forum
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-24 col-sm-12 mb-4">
+                        <div class="card h-100 shadow card-hover text-center">
+                            <div class="card-body d-flex align-items-center justify-content-center">
+                                <div class="d-block">
+                                    <a href="{{ route('tools.verify-signature') }}">
+                                    <span class="d-block">
+                                        {!! svg('tools.validate', 'mb-2', 'height: 2.3rem') !!}
+                                    </span>
+                                        <h5>Validate</h5>
+                                    </a>
+                                    <p class="mb-0">
+                                        Check a message and signature match
                                     </p>
                                 </div>
                             </div>

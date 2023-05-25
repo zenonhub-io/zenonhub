@@ -345,7 +345,7 @@ class Account extends Model implements Sitemapable
         }
 
         if ($user = auth()->user()) {
-            $userAddress = $user->accounts()
+            $userAddress = $user->nom_accounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
                 ->first();
@@ -378,7 +378,7 @@ class Account extends Model implements Sitemapable
 
         // If the logged-in user owns the address return its nickname
         if ($user = auth()->user()) {
-            $userAddress = $user->accounts()
+            $userAddress = $user->nom_accounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
                 ->first();

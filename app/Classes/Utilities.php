@@ -69,6 +69,9 @@ class Utilities
             $data = $znn->token->getByZts($zts)['data'];
             $chain = self::loadChain();
             $owner = self::loadAccount($data->owner);
+            $totalSupply = preg_replace('/[^0-9]/', '', $data->totalSupply);
+            $maxSupply = preg_replace('/[^0-9]/', '', $data->maxSupply);
+
             $token = Token::create([
                 'chain_id' => $chain->id,
                 'owner_id' => $owner->id,
@@ -76,8 +79,8 @@ class Utilities
                 'symbol' => $data->symbol,
                 'domain' => $data->domain,
                 'token_standard' => $data->tokenStandard,
-                'total_supply' => $data->totalSupply,
-                'max_supply' => $data->maxSupply,
+                'total_supply' => $totalSupply,
+                'max_supply' => $maxSupply,
                 'decimals' => $data->decimals,
                 'is_burnable' => $data->isBurnable,
                 'is_mintable' => $data->isMintable,

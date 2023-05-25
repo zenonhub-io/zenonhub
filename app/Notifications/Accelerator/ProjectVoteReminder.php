@@ -44,7 +44,7 @@ class ProjectVoteReminder extends BaseNotification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $accountIds = $notifiable->accounts->pluck('id')->toArray();
+        $accountIds = $notifiable->nom_accounts->pluck('id')->toArray();
         $allVotes = $this->project->votes()->pluck('owner_id')->toArray();
         $missingVotes = \App\Models\Nom\Pillar::whereNotIn('owner_id', $allVotes)
             ->where('created_at', '<', $this->project->created_at)

@@ -54,16 +54,16 @@ class Addresses extends PageController
             $user = $request->user();
 
             if ($request->input('default')) {
-                $user->accounts()->each(function ($account) {
+                $user->nom_accounts()->each(function ($account) {
                     $account->pivot->is_default = false;
                     $account->pivot->save();
                 });
             }
 
-            $accountIds = $user->accounts()->pluck('account_id')->toArray();
+            $accountIds = $user->nom_accounts()->pluck('account_id')->toArray();
 
             if (! in_array($account->id, $accountIds)) {
-                $user->accounts()->attach($account, [
+                $user->nom_accounts()->attach($account, [
                     'nickname' => $request->input('nickname'),
                     'is_pillar' => Utilities::isPillar($account->address),
                     'is_sentinel' => Utilities::isSentinel($account->address),
@@ -71,7 +71,7 @@ class Addresses extends PageController
                     'verified_at' => now(),
                 ]);
             } else {
-                $user->accounts()->updateExistingPivot($account->id, [
+                $user->nom_accounts()->updateExistingPivot($account->id, [
                     'nickname' => $request->input('nickname'),
                     'is_pillar' => Utilities::isPillar($account->address),
                     'is_sentinel' => Utilities::isSentinel($account->address),

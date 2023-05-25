@@ -5,16 +5,17 @@ namespace App\Models;
 use App\Models\Nom\Account;
 use Hash;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
-use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use CanResetPasswordTrait, HasApiTokens, HasFactory, Notifiable;
+    use CanResetPasswordTrait, HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -58,13 +59,13 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
     {
         return $this->belongsToMany(
             Account::class,
-            'user_accounts_pivot',
+            'user_nom_accounts_pivot',
             'user_id',
             'account_id'
         )->withPivot('nickname', 'is_pillar', 'is_sentinel', 'is_default', 'verified_at');
     }
 
-    public function notification_types()
+    public function notification_types(): BelongsToMany
     {
         return $this->belongsToMany(
             NotificationType::class,
@@ -79,12 +80,12 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
 
     public function getIsPillarOwnerAttribute()
     {
-        return $this->accounts()->wherePivot('is_pillar', '1')->exists();
+        return $this->nom_accounts()->wherePivot('is_pillar', '1')->exists();
     }
 
     public function getIsSentinelOwnerAttribute()
     {
-        return $this->accounts()->wherePivot('is_sentinel', '1')->exists();
+        return $this->nom_accounts()->wherePivot('is_sentinel', '1')->exists();
     }
 
     public function setPasswordAttribute($value): void

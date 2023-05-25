@@ -44,7 +44,7 @@ class DelegatingUpdated extends BaseNotification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $accounts = $notifiable->accounts->map(function ($account) {
+        $accounts = $notifiable->nom_accounts->map(function ($account) {
             if ($account->active_delegation && $account->active_delegation->pillar->id === $this->pillar->id) {
                 return $account;
             }

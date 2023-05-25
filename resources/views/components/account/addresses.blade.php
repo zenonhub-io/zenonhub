@@ -4,7 +4,7 @@
         <div class="card-header">
             <h4 class="mb-0">Linked addresses</h4>
         </div>
-        @if (auth()->user()->accounts->count())
+        @if (auth()->user()->nom_accounts->count())
             <div class="table-responsive">
                 <table class="table table-nowrap align-middle table-striped mb-0">
                     <thead>
@@ -15,7 +15,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (auth()->user()->accounts as $account)
+                        @foreach (auth()->user()->nom_accounts as $account)
                             <tr>
                                 <td>
                                     <div class="d-flex">
