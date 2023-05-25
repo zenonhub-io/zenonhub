@@ -29,6 +29,7 @@ class AfterDeploy extends Command
     {
         $this->info('Running deployment scripts');
         $this->call('optimize:clear');
+        $this->call('event:cache');
         $this->call('zenon:update-contract-methods');
         $this->call('zenon:update-named-addresses');
         $this->call('zenon:update-node-list');

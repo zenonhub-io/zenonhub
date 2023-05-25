@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Nom;
 
 use App\Models\Nom\AccountBlock;
 use Illuminate\Broadcasting\InteractsWithSockets;
