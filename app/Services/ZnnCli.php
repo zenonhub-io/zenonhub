@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\ApplicationException;
+use App\Exceptions\PlasmaBotException;
 use Illuminate\Process\ProcessResult;
 use Illuminate\Support\Facades\Process;
 
@@ -105,7 +105,7 @@ class ZnnCli
     // Internal
 
     /**
-     * @throws ApplicationException
+     * @throws PlasmaBotException
      */
     private function runCommand(string $action): ProcessResult
     {
@@ -121,7 +121,7 @@ class ZnnCli
         $result = Process::path($path)->run($command);
 
         if (! $result->successful()) {
-            throw new ApplicationException($result->errorOutput());
+            throw new PlasmaBotException($result->errorOutput());
         }
 
         return $result;
