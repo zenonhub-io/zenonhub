@@ -22,9 +22,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('zenon:update-znn-price')->hourly();
         $schedule->command('zenon:project-voting-reminder')->hourly();
         $schedule->command('plasma-bot:clear-expired')->hourly();
-        $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();
+
+        $schedule->command('plasma-bot:receive-all')->cron('5 * * * *');
+        $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }
 
     protected function shortSchedule(ShortSchedule $shortSchedule)
