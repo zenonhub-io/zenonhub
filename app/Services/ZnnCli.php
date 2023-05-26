@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\PlasmaBotException;
 use Illuminate\Process\ProcessResult;
 use Illuminate\Support\Facades\Process;
+use Log;
 
 class ZnnCli
 {
@@ -121,6 +122,7 @@ class ZnnCli
         $result = Process::path($path)->run($command);
 
         if (! $result->successful()) {
+            Log::error($result->errorOutput());
             throw new PlasmaBotException($result->errorOutput());
         }
 
