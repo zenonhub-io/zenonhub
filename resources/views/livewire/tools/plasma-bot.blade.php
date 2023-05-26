@@ -58,9 +58,6 @@
                     <p>Plasma is being generated for <a class="fw-bold" href="{{ route('explorer.account', ['address' => $address]) }}">{{ $address }}</a> please wait a few minutes for it to arrive.</p>
                     <p>Your plasma will expire in {{ $expires }} after which you'll be able to fuse some more.</p>
                 @else
-                    <p class="mb-4">
-                        Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
-                    </p>
                     @if($result === false)
                         @if ($message)
                             <x-alert
@@ -78,6 +75,9 @@
                             />
                         @endif
                     @endif
+                    <p class="mb-4">
+                        Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
+                    </p>
                     <form wire:loading.remove wire:submit.prevent="submit">
                         <div class="row mb-4">
                             <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
