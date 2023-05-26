@@ -39,7 +39,7 @@
                 </div>
             </div>
             <hr class="border-secondary my-4">
-            @if ($account->display_qsr_balance > 20)
+            @if ($account->qsr_balance > 2000000000)
                 <div class="w-100" wire:loading.delay>
                     <x-alert
                         message="Processing request..."
