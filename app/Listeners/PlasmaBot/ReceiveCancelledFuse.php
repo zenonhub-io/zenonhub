@@ -12,6 +12,8 @@ class ReceiveCancelledFuse implements ShouldQueue
 {
     public $delay = 10;
 
+    public $tries = 5;
+
     /**
      * Handle the event.
      */
@@ -22,12 +24,8 @@ class ReceiveCancelledFuse implements ShouldQueue
             $event->block->to_account->address === config('plasma-bot.address')
         ) {
             Log::info('Plasma bot - receiving all transactions');
-            try {
-                $plasmaBot = App::make(\App\Services\PlasmaBot::class);
-                $plasmaBot->receiveAll();
-            } catch (\Throwable $exception) {
-                Log::error('Plasma bot - unable to receive transactions - '.$exception->getMessage());
-            }
+            $plasmaBot = App::make(\App\Services\PlasmaBot::class);
+            $plasmaBot->receiveAll();
         }
     }
 }

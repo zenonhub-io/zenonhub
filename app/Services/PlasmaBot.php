@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App;
+use App\Exceptions\PlasmaBotException;
+use Log;
 
 class PlasmaBot
 {
@@ -25,25 +27,48 @@ class PlasmaBot
 
     public function install(): bool
     {
-        return $this->cli->walletCreateFromMnemonic(
-            config('plasma-bot.mnemonic'),
-            $this->keystore,
-            $this->passphrase
-        );
+        try {
+            return $this->cli->walletCreateFromMnemonic(
+                config('plasma-bot.mnemonic'),
+                $this->keystore,
+                $this->passphrase
+            );
+        } catch (PlasmaBotException $exception) {
+            return $this->exceptionHandler($exception);
+        }
     }
 
     public function fuse(string $address, int $amount = 10): bool
     {
-        return $this->cli->plasmaFuse($address, $amount);
+        try {
+            return $this->cli->plasmaFuse($address, $amount);
+        } catch (PlasmaBotException $exception) {
+            return $this->exceptionHandler($exception);
+        }
     }
 
     public function cancel(string $hash): bool
     {
-        return $this->cli->plasmaCancel($hash);
+        try {
+            return $this->cli->plasmaCancel($hash);
+        } catch (PlasmaBotException $exception) {
+            return $this->exceptionHandler($exception);
+        }
     }
 
     public function receiveAll(): bool
     {
-        return $this->cli->receiveAll();
+        try {
+            return $this->cli->receiveAll();
+        } catch (PlasmaBotException $exception) {
+            return $this->exceptionHandler($exception);
+        }
+    }
+
+    private function exceptionHandler(PlasmaBotException $exception): bool
+    {
+        Log::error('Plasma bot exception - '.$exception->getMessage());
+
+        return false;
     }
 }
