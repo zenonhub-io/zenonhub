@@ -75,10 +75,10 @@
                             />
                         @endif
                     @endif
-                    <p class="mb-4">
-                        Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
-                    </p>
                     <form wire:loading.remove wire:submit.prevent="submit">
+                        <p class="mb-4">
+                            Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
+                        </p>
                         <div class="row mb-4">
                             <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
                             <div class="col-sm-18">
