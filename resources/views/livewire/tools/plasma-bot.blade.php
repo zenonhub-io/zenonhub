@@ -96,9 +96,9 @@
                         </div>
                         <div class="row mb-4">
                             <label for="form-address" class="col-sm-6 col-form-label form-label">Plasma</label>
-                            <div class="col-sm-18">
+                            <div class="col-sm-18 mt-2">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-low" name="plasma" value="low" wire:model="plasma">
+                                    <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-low" name="plasma" value="low" wire:model="plasma" checked>
                                     <label class="form-check-label" for="plasma-low">Low</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -123,7 +123,7 @@
                 @endif
             @else
                 <x-alert
-                    message="The bot has run out of QSR for the next {{ $nextExpiring->expires_at->diffForHumans(['parts' => 2], true) }}, please check back later"
+                    message="The bot has run out of QSR for the next {{ $nextExpiring?->expires_at->diffForHumans(['parts' => 2], true) }}, please check back later"
                     type="info"
                     icon="info-circle"
                     class="mb-0"

@@ -13,7 +13,7 @@ class PlasmaBot extends Component
 
     public ?string $address = null;
 
-    public ?string $plasma = null;
+    public ?string $plasma = 'low';
 
     public ?string $expires = null;
 
@@ -37,7 +37,7 @@ class PlasmaBot extends Component
     public function render()
     {
         $account = Account::findByAddress(config('plasma-bot.address'));
-        $totalQsrAvailable = 100 * (100000000);
+        $totalQsrAvailable = $account->qsr_balance;
         $fusedQsr = $account->fusions()->isActive()->sum('amount');
         $percentageAvailable = ($fusedQsr / $totalQsrAvailable) * 100;
         $nextExpiring = PlasmaBotEntry::orderBy('expires_at', 'desc')->first();
@@ -52,9 +52,9 @@ class PlasmaBot extends Component
 
     public function submit()
     {
+        $data = $this->validate();
         $this->result = false;
         $this->message = false;
-        $data = $this->validate();
 
         $existing = PlasmaBotEntry::isActive()
             ->whereAddress($data['address'])
