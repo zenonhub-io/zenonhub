@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Tools;
 use App\Actions\PlasmaBot\Fuse;
 use App\Models\Nom\Account;
 use App\Models\PlasmaBotEntry;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Component;
 use Spatie\Honeypot\Http\Livewire\Concerns\HoneypotData;
 use Spatie\Honeypot\Http\Livewire\Concerns\UsesSpamProtection;
@@ -80,6 +81,17 @@ class PlasmaBot extends Component
 
             return;
         }
+
+        $rateLimitKey = 'plasma-bot-fuse:'.request()->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 1)) {
+            $seconds = RateLimiter::availableIn($rateLimitKey);
+            $this->result = false;
+            $this->message = "Too many requests, please try again in {$seconds} seconds";
+
+            return;
+        }
+
+        RateLimiter::hit($rateLimitKey);
 
         $plasma = match ($data['plasma']) {
             'high' => 120,
