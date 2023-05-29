@@ -104,7 +104,7 @@
             </div>
         </div>
         <main class="page-wrapper">
-            <x-layouts.app-header/>
+            <x-layouts.app-header :pageBreadcrumbs="$pageBreadcrumbs"/>
             {{ $slot }}
         </main>
         <x-layouts.app-footer/>
