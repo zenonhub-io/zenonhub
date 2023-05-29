@@ -23,6 +23,7 @@
         "orangehill/iseed": "^3.0",
         "pnoeric/discourse-api-php": "^2.0",
         "psr/simple-cache": "^2.0",
+        "spatie/laravel-honeypot": "^4.3",
         "spatie/laravel-permission": "^5.10",
         "spatie/laravel-queueable-action": "^2.14",
         "spatie/laravel-short-schedule": "^1.5",

@@ -76,6 +76,7 @@
                         @endif
                     @endif
                     <form wire:loading.remove wire:submit.prevent="submit">
+                        <x-honeypot livewire-model="extraFields" />
                         <p class="mb-4">
                             Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
                         </p>

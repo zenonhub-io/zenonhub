@@ -5,10 +5,15 @@ namespace App\Http\Livewire\Tools;
 use App\Actions\PlasmaBot\Fuse;
 use App\Models\Nom\Account;
 use App\Models\PlasmaBotEntry;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Component;
+use Spatie\Honeypot\Http\Livewire\Concerns\HoneypotData;
+use Spatie\Honeypot\Http\Livewire\Concerns\UsesSpamProtection;
 
 class PlasmaBot extends Component
 {
+    use UsesSpamProtection;
+
     public ?bool $result = null;
 
     public ?string $address = null;
@@ -18,6 +23,8 @@ class PlasmaBot extends Component
     public ?string $expires = null;
 
     public ?string $message = null;
+
+    public HoneypotData $extraFields;
 
     protected function rules()
     {
@@ -32,6 +39,11 @@ class PlasmaBot extends Component
                 'in:low,medium,high',
             ],
         ];
+    }
+
+    public function mount()
+    {
+        $this->extraFields = new HoneypotData();
     }
 
     public function render()
@@ -52,6 +64,8 @@ class PlasmaBot extends Component
 
     public function submit()
     {
+        $this->protectAgainstSpam();
+
         $data = $this->validate();
         $this->result = false;
         $this->message = false;
@@ -67,6 +81,17 @@ class PlasmaBot extends Component
 
             return;
         }
+
+        $rateLimitKey = 'plasma-bot-fuse:'.request()->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 1)) {
+            $seconds = RateLimiter::availableIn($rateLimitKey);
+            $this->result = false;
+            $this->message = "Too many requests, please try again in {$seconds} seconds";
+
+            return;
+        }
+
+        RateLimiter::hit($rateLimitKey);
 
         $plasma = match ($data['plasma']) {
             'high' => 120,
