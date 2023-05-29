@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\ProcessAccountBalance;
+use App\Models\Nom\Account;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Spatie\ShortSchedule\ShortSchedule;
@@ -21,9 +23,18 @@ class Kernel extends ConsoleKernel
         $schedule->command('zenon:sync az-status')->hourly();
         $schedule->command('zenon:update-znn-price')->hourly();
         $schedule->command('zenon:project-voting-reminder')->hourly();
-        $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
+        $schedule->command('plasma-bot:clear-expired')->hourly();
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();
+
+        $schedule->command('plasma-bot:receive-all')->cron('5 * * * *');
+        $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
+
+        // TODO - temp solution to update plasma bot account after receive all transactions is called
+        $schedule->call(function () {
+            $account = Account::findByAddress(config('plasma-bot.address'));
+            ProcessAccountBalance::dispatch($account);
+        })->cron('6 * * * *');
     }
 
     protected function shortSchedule(ShortSchedule $shortSchedule)

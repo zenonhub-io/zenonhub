@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Services\Discord\GuzzleWebHook;
+use App\Services\PlasmaBot;
 use App\Services\Prices;
 use App\Services\Twitter;
 use App\Services\Zenon;
+use App\Services\ZnnCli;
 use DigitalSloth\ZnnPhp\Zenon as ZenonApi;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +33,14 @@ class ZenonServiceProvider extends ServiceProvider
 
         $this->app->singleton('zenon.services', function ($app, $params) {
             return new Zenon();
+        });
+
+        $this->app->singleton(ZnnCli::class, function ($app, $params) {
+            return new ZnnCli($params['node_url'], $params['keystore'], $params['passphrase']);
+        });
+
+        $this->app->singleton(PlasmaBot::class, function ($app, $params) {
+            return new PlasmaBot();
         });
 
         //

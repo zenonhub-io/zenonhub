@@ -38,7 +38,7 @@ class Utilities
         return Chain::getCurrentChainId();
     }
 
-    public static function loadAccount(string $address): ?Account
+    public static function loadAccount(string $address): Account
     {
         $account = Account::findByAddress($address);
 

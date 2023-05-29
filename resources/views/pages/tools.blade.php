@@ -8,6 +8,10 @@
                 <div class="col-lg-8">
                     <x-site.sidebar :items="[
                         'Tools' => [
+//							[
+//                                'route' => 'tools.plasma-bot',
+//                                'title' => 'Plasma Bot',
+//                            ],
                             [
                                 'route' => 'tools.api-playground',
                                 'title' => 'API Playground',

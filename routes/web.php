@@ -65,6 +65,7 @@ Route::prefix('stats')->name('stats.')->middleware(['throttle:60,1'])->group(fun
 
 Route::prefix('tools')->name('tools.')->middleware(['throttle:60,1'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Tools\Overview::class, 'show'])->name('overview');
+    Route::get('plasma-bot', [\App\Http\Controllers\Tools\PlasmaBot::class, 'show'])->name('plasma-bot');
     Route::get('api-playground', [\App\Http\Controllers\Tools\ApiPlayground::class, 'show'])->name('api-playground');
     Route::get('verify-signature', [\App\Http\Controllers\Tools\VerifySignature::class, 'show'])->name('verify-signature');
     Route::get('broadcast-message', [\App\Http\Controllers\Tools\BroadcastMessage::class, 'show'])->name('broadcast-message');

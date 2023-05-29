@@ -49,5 +49,7 @@ class Fuse implements ShouldQueue
         Cache::put('fused-qsr', $fusedQsr);
 
         (new SetBlockAsProcessed($this->block))->execute();
+
+        \App\Events\Nom\Plasma\Fuse::dispatch($this->block, $blockData);
     }
 }

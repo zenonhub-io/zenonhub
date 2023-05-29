@@ -25,5 +25,6 @@ return [
         'z1qqujg4pagysn42ve90g8zz2kcuxj03ks7druh2' => 'Liquidity Program Treasury',
         'z1qqw8f3qxx9zg92xgckqdpfws3dw07d26afsj74' => 'Liquidity Program Distributor',
         'z1qqgr9m627e9q6fyqvzd464wa4v2g5edhxrvqfl' => 'STEX Exchange',
+        'z1qzzavvq2zywv77ts2e9yntc3y24qetjh0x0aj4' => 'Plasma Bot',
     ],
 ];

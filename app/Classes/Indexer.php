@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Events\Nom\AccountBlockProcessed;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountBlockData;
@@ -183,6 +184,8 @@ class Indexer
             if (! empty($data->data)) {
                 $this->createBlockData($block, $data);
             }
+
+            AccountBlockProcessed::dispatch($block);
 
             // If not to empty address and not from pillar producer address
             if ($block->to_account->address !== Account::ADDRESS_EMPTY) {
