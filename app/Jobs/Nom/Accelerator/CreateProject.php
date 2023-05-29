@@ -78,7 +78,7 @@ class CreateProject implements ShouldQueue
                 'vote_total' => $projectData->votes->total,
                 'vote_yes' => $projectData->votes->yes,
                 'vote_no' => $projectData->votes->no,
-                'send_reminders_at' => Carbon::parse($projectData->creationTimestamp)->addDays(13),
+                'send_reminders_at' => Carbon::createFromTimestamp($projectData->creationTimestamp)->addDays(13),
                 'modified_at' => $projectData->creationTimestamp,
                 'updated_at' => $projectData->lastUpdateTimestamp,
                 'created_at' => $projectData->creationTimestamp,
