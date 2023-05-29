@@ -50,7 +50,7 @@
                     Tools
                 </a>
                 <ul class="dropdown-menu {{ request()->routeIs('tools.overview', 'tools.plasma-bot', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'show' : '' }}">
-                    <li><a href="{{ route('tools.plasma-bot') }}" class="dropdown-item {{ request()->routeIs('tools.plasma-bot') ? 'active' : '' }}">Plasma bot</a></li>
+{{--                    <li><a href="{{ route('tools.plasma-bot') }}" class="dropdown-item {{ request()->routeIs('tools.plasma-bot') ? 'active' : '' }}">Plasma bot</a></li>--}}
                     <li><a href="{{ route('tools.api-playground') }}" class="dropdown-item {{ request()->routeIs('tools.api-playground') ? 'active' : '' }}">API playground</a></li>
                     <li><a href="{{ route('tools.broadcast-message') }}" class="dropdown-item {{ request()->routeIs('tools.broadcast-message') ? 'active' : '' }}">Broadcast message</a></li>
                     <li><a href="{{ route('tools.verify-signature') }}" class="dropdown-item {{ request()->routeIs('tools.verify-signature') ? 'active' : '' }}">Verify signature</a></li>
