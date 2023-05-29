@@ -8,7 +8,7 @@
                         {{ config('app.name') }}
                     </a>
                 </h5>
-                {{ $pageBreadcrumbs ?? '' }}
+                {{ $pageBreadcrumbs }}
             </div>
         </div>
         <x-site.navbar/>
