@@ -12,7 +12,7 @@ class UpdateNodeList extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:update-node-list {--fresh}';
+    protected $signature = 'zenon:update-node-list';
 
     /**
      * The console command description.
@@ -20,8 +20,6 @@ class UpdateNodeList extends Command
      * @var string
      */
     protected $description = 'Updates the cached node data';
-
-    protected string $nodesJsonUrl = 'https://github.com/Sol-Sanctum/Zenon-PoCs/releases/download/znn_node_info/output_nodes.json';
 
     /**
      * @var ?Collection

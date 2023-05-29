@@ -62,7 +62,7 @@ class Nodes extends Component
         $this->loadCitiesData();
         $this->loadNetworksData();
         $this->loadVersionsData();
-        $this->updated = Carbon::parse(Cache::get('node-data-updated'))->format(config('zenon.date_format'));
+        $this->updated = Carbon::createFromTimestamp(Cache::get('node-data-updated'))->format(config('zenon.date_format'));
 
         return view('livewire.stats.nodes');
     }

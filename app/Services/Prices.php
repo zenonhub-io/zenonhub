@@ -23,7 +23,7 @@ class Prices
 
     public function historicPrice(string $token, string $currency, int $timestamp): ?float
     {
-        $date = Carbon::parse($timestamp)->format('d-m-Y');
+        $date = Carbon::createFromTimestamp($timestamp)->format('d-m-Y');
 
         try {
             $response = Http::get("https://api.coingecko.com/api/v3/coins/{$token}/history?date={$date}");

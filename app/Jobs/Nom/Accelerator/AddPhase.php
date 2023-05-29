@@ -81,7 +81,7 @@ class AddPhase implements ShouldQueue
                 'vote_total' => $phaseData->votes->total,
                 'vote_yes' => $phaseData->votes->yes,
                 'vote_no' => $phaseData->votes->no,
-                'send_reminders_at' => Carbon::parse($phaseData->phase->creationTimestamp)->addDays(13),
+                'send_reminders_at' => Carbon::createFromTimestamp($phaseData->phase->creationTimestamp)->addDays(13),
                 'accepted_at' => ($phaseData->phase->acceptedTimestamp ?: null),
                 'created_at' => $phaseData->phase->creationTimestamp,
             ]);
