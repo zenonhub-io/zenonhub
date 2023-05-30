@@ -55,7 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
     //
     // Relations
 
-    public function accounts()
+    public function nom_accounts()
     {
         return $this->belongsToMany(
             Account::class,
