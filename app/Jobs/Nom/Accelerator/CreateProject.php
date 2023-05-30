@@ -87,8 +87,8 @@ class CreateProject implements ShouldQueue
 
         $project->znn_requested = $projectData->znnFundsNeeded;
         $project->qsr_requested = $projectData->qsrFundsNeeded;
-        $project->znn_price = $znnPrice ?: 0;
-        $project->qsr_price = $qsrPrice ?: 0;
+        $project->znn_price = $znnPrice ?: null;
+        $project->qsr_price = $qsrPrice ?: null;
         $project->vote_total = $projectData->votes->total;
         $project->vote_yes = $projectData->votes->yes;
         $project->vote_no = $projectData->votes->no;

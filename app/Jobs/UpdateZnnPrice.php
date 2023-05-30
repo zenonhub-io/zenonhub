@@ -22,12 +22,12 @@ class UpdateZnnPrice implements ShouldQueue
         $znnPrice = App::make('coingeko.api')->currenPrice();
         $qsrPrice = App::make('coingeko.api')->currenPrice('quasar');
 
-        if ($znnPrice) {
+        if ($znnPrice > 0) {
             Cache::forever('znn-price', $znnPrice);
             $complete++;
         }
 
-        if ($qsrPrice) {
+        if ($qsrPrice > 0) {
             Cache::forever('qsr-price', $qsrPrice);
             $complete++;
         }
