@@ -363,10 +363,6 @@ class Account extends Model implements Sitemapable
             return true;
         }
 
-        //        if ($this->is_stex_trader) {
-        //            return true;
-        //        }
-
         return false;
     }
 
@@ -393,16 +389,7 @@ class Account extends Model implements Sitemapable
             ->whereNull('revoked_at')
             ->first();
 
-        if ($pillarCheck) {
-            return $pillarCheck->name;
-        }
-
-        //        if ($this->is_stex_trader) {
-        //            $ending = mb_substr($this->address, -6);
-        //            return "STEX Trader (...{$ending})";
-        //        }
-
-        return $this->address;
+        return $pillarCheck->name ?? $this->address;
     }
 
     public function getShortAddressAttribute()
