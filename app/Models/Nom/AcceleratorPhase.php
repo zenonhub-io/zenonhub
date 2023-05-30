@@ -175,16 +175,16 @@ class AcceleratorPhase extends Model
             $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $this->created_at->timestamp);
 
             // Projects created before QSR price available
-            if (is_null($qsrPrice) && $znnPrice) {
+            if (is_null($qsrPrice) && $znnPrice > 0) {
                 $qsrPrice = $znnPrice / 10;
             }
 
-            if ($znnPrice) {
+            if ($znnPrice > 0) {
                 $this->znn_price = $znnPrice;
                 $this->saveQuietly();
             }
 
-            if ($qsrPrice) {
+            if ($qsrPrice > 0) {
                 $this->qsr_price = $qsrPrice;
                 $this->saveQuietly();
             }
