@@ -20,6 +20,16 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
 
     public int $tries = 5;
 
+    /**
+     * Calculate the number of seconds to wait before retrying the job.
+     *
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [20, 150, 10, 10, 10];
+    }
+
     public function __construct(
         protected Account $account
     ) {
@@ -28,10 +38,8 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
 
     /**
      * The unique ID of the job.
-     *
-     * @return string
      */
-    public function uniqueId()
+    public function uniqueId(): string
     {
         return $this->account->id;
     }

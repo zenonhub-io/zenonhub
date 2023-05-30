@@ -76,8 +76,8 @@ class AddPhase implements ShouldQueue
                 'status' => $phaseData->phase->status,
                 'znn_requested' => $phaseData->phase->znnFundsNeeded,
                 'qsr_requested' => $phaseData->phase->qsrFundsNeeded,
-                'znn_price' => $znnPrice ?: 0,
-                'qsr_price' => $qsrPrice ?: 0,
+                'znn_price' => $znnPrice ?: null,
+                'qsr_price' => $qsrPrice ?: null,
                 'vote_total' => $phaseData->votes->total,
                 'vote_yes' => $phaseData->votes->yes,
                 'vote_no' => $phaseData->votes->no,
@@ -90,8 +90,8 @@ class AddPhase implements ShouldQueue
         // Update existing details
         $phase->znn_requested = $phaseData->phase->znnFundsNeeded;
         $phase->qsr_requested = $phaseData->phase->qsrFundsNeeded;
-        $phase->znn_price = $znnPrice ?: 0;
-        $phase->qsr_price = $qsrPrice ?: 0;
+        $phase->znn_price = $znnPrice ?: null;
+        $phase->qsr_price = $qsrPrice ?: null;
         $phase->vote_total = $phaseData->votes->total;
         $phase->vote_yes = $phaseData->votes->yes;
         $phase->vote_no = $phaseData->votes->no;
