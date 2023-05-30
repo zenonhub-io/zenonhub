@@ -7,7 +7,6 @@ use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Jobs\Sync\Projects as SyncProjects;
 use App\Jobs\Sync\Sentinels as SyncSentinels;
 use App\Jobs\Sync\Tokens as SyncTokens;
-use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Account;
 use DB;
 use Illuminate\Console\Command;
@@ -61,16 +60,6 @@ class Sync extends Command
             $this->output->newLine(2);
 
             SyncProjects::dispatch();
-        }
-
-        if (empty($types) || in_array('az-status', $types)) {
-            $this->output->write('Saving project statuses...');
-            $this->output->newLine(2);
-
-            $projects = AcceleratorProject::whereIn('status', [AcceleratorProject::STATUS_NEW, AcceleratorProject::STATUS_ACCEPTED])->get();
-            $projects->each(function ($project) {
-                \App\Jobs\Sync\ProjectStatus::dispatch($project);
-            });
         }
 
         if (in_array('balances', $types)) {
