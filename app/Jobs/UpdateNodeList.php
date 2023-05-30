@@ -84,8 +84,7 @@ class UpdateNodeList implements ShouldQueue
                     return $item[0]['country'] !== 'Unknown';
                 })
                 ->map
-                ->count()
-                ->toArray();
+                ->count();
         });
 
         Cache::forget('node-cities');
@@ -97,8 +96,7 @@ class UpdateNodeList implements ShouldQueue
                     return $item[0]['city'] !== 'Unknown';
                 })
                 ->map
-                ->count()
-                ->toArray();
+                ->count();
         });
 
         Cache::forget('node-networks');
@@ -110,8 +108,7 @@ class UpdateNodeList implements ShouldQueue
                     return $item[0]['network'] !== 'Unknown';
                 })
                 ->map
-                ->count()
-                ->toArray();
+                ->count();
         });
 
         Cache::forget('node-versions');
@@ -120,8 +117,7 @@ class UpdateNodeList implements ShouldQueue
                 ->sortBy('version')
                 ->groupBy('version')
                 ->map
-                ->count()
-                ->toArray();
+                ->count();
         });
 
         Cache::forever('node-data-updated', now()->timestamp);
