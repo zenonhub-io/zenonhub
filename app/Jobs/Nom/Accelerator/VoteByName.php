@@ -78,6 +78,8 @@ class VoteByName implements ShouldQueue
             Cache::forget("accelerator_phase-{$item->id}-total-abstain-votes");
         }
 
+        $item->syncProjectStatus();
+
         $vote = $item
             ->votes()
             ->where('owner_id', $pillar->owner_id)
