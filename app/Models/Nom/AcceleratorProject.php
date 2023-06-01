@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Log;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Str;
 
@@ -229,31 +230,22 @@ class AcceleratorProject extends Model implements Sitemapable
         return "<span class=\"badge bg-{$colour}\">{$text}</span>";
     }
 
-    public function getOpenForTimeAttribute()
-    {
-        return $this->created_at->addDays(14)->diffForHumans(['parts' => 2], true);
-    }
-
     public function getQuorumStautsAttribute()
     {
         if ($this->status === self::STATUS_NEW && $this->total_more_votes_needed > 0) {
             return $this->total_more_votes_needed.' '.Str::plural('vote', $this->total_more_votes_needed).' needed in '.$this->open_for_time;
-        } elseif ($this->total_more_votes_needed > 0) {
-            return 'Quorum not reached';
-        } else {
-            return 'Quorum reached';
         }
+
+        if ($this->total_more_votes_needed > 0) {
+            return 'Quorum not reached';
+        }
+
+        return 'Quorum reached';
     }
 
     public function getIsQuorumReachedAttribute()
     {
-        if ($this->status === self::STATUS_NEW && $this->total_more_votes_needed > 0) {
-            return false;
-        } elseif ($this->total_more_votes_needed > 0) {
-            return true;
-        } else {
-            return true;
-        }
+        return ! ($this->total_more_votes_needed > 0);
     }
 
     public function getDisplayZnnRequestedAttribute()
@@ -321,5 +313,25 @@ class AcceleratorProject extends Model implements Sitemapable
     public static function findByHash($hash)
     {
         return static::where('hash', $hash)->first();
+    }
+
+    public function syncProjectStatus()
+    {
+        try {
+            $znn = App::make('zenon.api');
+            $data = $znn->accelerator->getProjectById($this->hash)['data'];
+
+            $this->vote_total = $data->votes->total;
+            $this->vote_yes = $data->votes->yes;
+            $this->vote_no = $data->votes->no;
+            $this->status = $data->status;
+            $this->modified_at = $data->lastUpdateTimestamp;
+            $this->updated_at = $data->lastUpdateTimestamp;
+            $this->save();
+
+        } catch (\Exception $exception) {
+            Log::error('Unable to save project status');
+            throw $exception;
+        }
     }
 }

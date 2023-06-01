@@ -67,4 +67,22 @@ class AcceleratorVote extends Model
     {
         return $this->belongsTo(Pillar::class, 'pillar_id', 'id');
     }
+
+    //
+    // Scopes
+
+    public function scopeWhereYesVote($query)
+    {
+        $query->where('is_yes', '1');
+    }
+
+    public function scopeWhereNoVote($query)
+    {
+        $query->where('is_yes', '1');
+    }
+
+    public function scopeWhereAbstainVote($query)
+    {
+        $query->where('is_yes', '1');
+    }
 }

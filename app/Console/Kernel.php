@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
         $schedule->command('plasma-bot:clear-expired')->everyFifteenMinutes();
         $schedule->command('plasma-bot:receive-all')->everyFifteenMinutes();
+        $schedule->command('zenon:sync az-status')->hourly();
         $schedule->command('zenon:update-znn-price')->hourly();
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();

@@ -15,6 +15,21 @@ trait AzVotes
         return Str::snake($cachePrefix).'-'.$this->id;
     }
 
+    public function scopeIsOpenForVoting($query)
+    {
+        return $query->whereDate('created_at', '>', now()->subDays(40));
+    }
+
+    public function getIsVotingOpen()
+    {
+        return $this->created_at->addDays(14) > now();
+    }
+
+    public function getOpenForTimeAttribute()
+    {
+        return $this->created_at->addDays(14)->diffForHumans(['parts' => 2], true);
+    }
+
     public function getVotesNeededAttribute()
     {
         return Cache::remember("{$this->getCachePrefix()}-votes-needed", 60 * 10, function () {
