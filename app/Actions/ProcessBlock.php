@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Jobs\Alerts\WhaleAlert;
 use App\Jobs\ProcessAccountBalance;
+use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use Spatie\QueueableAction\QueueableAction;
 
