@@ -7,7 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AccountBlockProcessed
+class AccountBlockCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -15,8 +15,9 @@ class AccountBlockProcessed
      * Create a new event instance.
      */
     public function __construct(
-        public AccountBlock $block
+        public AccountBlock $block,
+        public bool $sendWhaleAlerts,
+        public bool $syncAccountBalances,
     ) {
-        $this->block->refresh();
     }
 }
