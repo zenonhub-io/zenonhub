@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Site;
 
-use App\Jobs\UpdateZnnPrice;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Fusion;
@@ -47,8 +46,6 @@ class CreateCaches extends Command
 
         $stakedZnn = znn_token()->getDisplayAmount(Staker::isActive()->sum('amount'), 0);
         Cache::put('staked-znn', $stakedZnn);
-
-        UpdateZnnPrice::dispatch();
 
         return self::SUCCESS;
     }
