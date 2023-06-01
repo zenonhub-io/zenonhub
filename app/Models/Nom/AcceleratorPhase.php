@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Log;
 use Str;
 
 class AcceleratorPhase extends Model
@@ -134,18 +135,13 @@ class AcceleratorPhase extends Model
         return "<span class=\"badge bg-{$colour}\">{$text}</span>";
     }
 
-    public function getOpenForTimeAttribute()
-    {
-        return $this->created_at->addWeeks(2)->diffForHumans(['parts' => 2], true);
-    }
-
     public function getQuorumStautsAttribute()
     {
         if ($this->total_more_votes_needed > 0) {
             return $this->total_more_votes_needed.' '.Str::plural('vote', $this->total_more_votes_needed).' needed';
-        } else {
-            return 'Quorum reached';
         }
+
+        return 'Quorum reached';
     }
 
     public function getIsQuorumReachedAttribute()
@@ -223,5 +219,23 @@ class AcceleratorPhase extends Model
     public static function findByHash($hash)
     {
         return static::where('hash', $hash)->first();
+    }
+
+    public function syncProjectStatus()
+    {
+        try {
+            $znn = App::make('zenon.api');
+            $data = $znn->accelerator->getPhaseById($this->hash)['data'];
+
+            $this->vote_total = $data->votes->total;
+            $this->vote_yes = $data->votes->yes;
+            $this->vote_no = $data->votes->no;
+            $this->accepted_at = ($data->phase->acceptedTimestamp ?: null);
+            $this->save();
+
+        } catch (\Exception $exception) {
+            Log::error('Unable to save project status');
+            throw $exception;
+        }
     }
 }

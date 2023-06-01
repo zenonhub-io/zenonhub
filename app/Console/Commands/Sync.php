@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\ProcessAccountBalance;
 use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Jobs\Sync\Projects as SyncProjects;
+use App\Jobs\Sync\ProjectStatus as SyncProjectStatus;
 use App\Jobs\Sync\Sentinels as SyncSentinels;
 use App\Jobs\Sync\Tokens as SyncTokens;
 use App\Models\Nom\Account;
@@ -60,6 +61,13 @@ class Sync extends Command
             $this->output->newLine(2);
 
             SyncProjects::dispatch();
+        }
+
+        if (empty($types) || in_array('az-status', $types)) {
+            $this->output->write('Saving project statuses...');
+            $this->output->newLine(2);
+
+            SyncProjectStatus::dispatch();
         }
 
         if (in_array('balances', $types)) {
