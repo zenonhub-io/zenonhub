@@ -28,13 +28,18 @@ class ProcessBlock
             }
         }
 
-        if ($this->processAccounts) {
-            ProcessAccountBalance::dispatch($this->block->account)->delay(now()->addSeconds(15));
-            ProcessAccountBalance::dispatch($this->block->to_account)->delay(now()->addSeconds(15));
-        }
-
         if ($this->fireWhaleAlerts && $this->block->amount > 0 && in_array($this->block->token_id, [1, 2])) {
             WhaleAlert::dispatch($this->block);
+        }
+
+        if ($this->processAccounts) {
+            if ($this->block->account->address !== Account::ADDRESS_EMPTY) {
+                ProcessAccountBalance::dispatch($this->block->account)->delay(now()->addSeconds(30));
+            }
+
+            if ($this->block->to_account->address !== Account::ADDRESS_EMPTY) {
+                ProcessAccountBalance::dispatch($this->block->to_account)->delay(now()->addSeconds(30));
+            }
         }
     }
 }
