@@ -34,26 +34,23 @@ class ProcessBlock
             }
         }
 
+        $jobDelay = now()->addSeconds(30);
+
         if ($this->fireWhaleAlerts && $this->block->amount > 0 && in_array($this->block->token_id, [1, 2])) {
             Log::debug('Fire whale alerts');
-            WhaleAlert::dispatch($this->block);
+            WhaleAlert::dispatch($this->block)->delay($jobDelay);
         }
 
         if ($this->processAccounts) {
-
-            $delay = now()->addSeconds(30);
-
             if ($this->block->account->address !== Account::ADDRESS_EMPTY) {
                 Log::debug('Dispatch account balances job '.$this->block->account->address);
-                ProcessAccountBalance::dispatch($this->block->account)->delay($delay);
+                ProcessAccountBalance::dispatch($this->block->account)->delay($jobDelay);
             }
 
             if ($this->block->to_account->address !== Account::ADDRESS_EMPTY) {
                 Log::debug('Dispatch account balances job '.$this->block->to_account->address);
-                ProcessAccountBalance::dispatch($this->block->to_account)->delay($delay);
+                ProcessAccountBalance::dispatch($this->block->to_account)->delay($jobDelay);
             }
         }
-
-        Log::debug('End processing block');
     }
 }

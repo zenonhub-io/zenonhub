@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Site;
 
 use Illuminate\Console\Command;
+use Log;
 
 class AfterDeploy extends Command
 {
@@ -36,6 +37,8 @@ class AfterDeploy extends Command
         $this->call('zenon:update-znn-price');
         $this->call('site:create-caches');
         $this->call('site:generate-sitemap');
+
+        Log::debug('Running after deploy scripts');
 
         return self::SUCCESS;
     }
