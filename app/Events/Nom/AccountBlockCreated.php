@@ -11,9 +11,6 @@ class AccountBlockCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct(
         public AccountBlock $block,
         public bool $sendWhaleAlerts,
