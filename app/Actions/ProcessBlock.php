@@ -23,9 +23,10 @@ class ProcessBlock
 
     public function execute(): void
     {
-        Log::debug('Processing block '.$this->block->hash);
-        Log::debug('Whale alerts '.($this->fireWhaleAlerts ? 'Yes' : 'No'));
-        Log::debug('Account balances '.($this->processAccounts ? 'Yes' : 'No'));
+        Log::debug('Processing block '.$this->block->hash, [
+            'alerts' => ($this->fireWhaleAlerts ? 'Yes' : 'No'),
+            'balances' => ($this->processAccounts ? 'Yes' : 'No'),
+        ]);
 
         if ($this->block->data && $this->block->contract_method) {
             $jobClassName = $this->block->contract_method?->job_class_name;
