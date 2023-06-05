@@ -173,6 +173,13 @@ class AccountBlock extends Model
         return $query->where('to_account_id', '!=', '1');
     }
 
+    public function scopeNotFromPillarProducer($query)
+    {
+        $producerIds = Account::getAllPillarProducerAddresses();
+
+        return $query->whereNotIn('account_id', $producerIds);
+    }
+
     //
     // Attributes
 
@@ -198,7 +205,7 @@ class AccountBlock extends Model
             return 'Contract Receive';
         }
 
-        return '-';
+        return null;
     }
 
     public function getDisplayTypeAttribute()
@@ -211,7 +218,7 @@ class AccountBlock extends Model
             return 'Transfer';
         }
 
-        return $this->getDisplayActualTypeAttribute();
+        return null;
     }
 
     public function getDisplayAmountAttribute()

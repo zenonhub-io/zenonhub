@@ -84,10 +84,6 @@ class DiscordWhaleAlert implements ShouldQueue
 
     private function formatAddressName(Account $account): string
     {
-        if ($account->name === 'STEX Exchange') {
-            return "**[{$account->named_address}](https://app.stex.com?ref=zenonhub)**";
-        }
-
         if ($account->is_named_address) {
             return "**{$account->named_address}**";
         }

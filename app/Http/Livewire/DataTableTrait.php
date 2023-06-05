@@ -10,7 +10,7 @@ trait DataTableTrait
 
     public $order = 'desc';
 
-    public $perPage = 25;
+    public $perPage = 50;
 
     public $simplePaginate = false;
 

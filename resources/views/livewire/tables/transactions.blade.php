@@ -84,12 +84,10 @@
                             <td>
                                 <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>
                             </td>
-                            <td>
-                                {{ $block->display_type }}
-                            </td>
+                            <td>{{ ($block->display_type ?: '-') }}</td>
                             <td>{{ ($block->display_amount ?: '-')  }}</td>
                             <td>
-                                @if ($block->token)
+                                @if ($block->token && $block->amount > 0)
                                     <a href=" {{ route('explorer.token', ['zts' => $block->token->token_standard]) }}">
                                         {{ $block->token->name }}
                                     </a>
