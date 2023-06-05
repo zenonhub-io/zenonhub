@@ -173,6 +173,13 @@ class AccountBlock extends Model
         return $query->where('to_account_id', '!=', '1');
     }
 
+    public function scopeNotFromPillarProducer($query)
+    {
+        $producerIds = Account::getAllPillarProducerAddresses();
+
+        return $query->whereNotIn('account_id', $producerIds);
+    }
+
     //
     // Attributes
 
