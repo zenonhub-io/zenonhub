@@ -98,9 +98,11 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="d-inline badge bg-secondary text-muted mt-2">
-                                        {{ $block->display_type }}
-                                    </div>
+                                    @if($block->display_type)
+                                        <div class="d-inline badge bg-secondary text-muted mt-2">
+                                            {{ $block->display_type }}
+                                        </div>
+                                    @endif
                                     @if($block->token && $block->amount > 0)
                                         <div class="d-inline badge bg-secondary text-muted mt-2 ms-2">
                                             {{ $block->display_amount }} {{ $block->token->symbol }}

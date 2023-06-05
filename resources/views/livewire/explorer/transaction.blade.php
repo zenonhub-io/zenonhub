@@ -102,7 +102,9 @@
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block fs-sm text-muted">Type</span>
-                                    <span class="float-end float-md-none">{{ $transaction->display_type }}</span>
+                                    <span class="float-end float-md-none">
+                                        {{ ($transaction->display_type ?: $transaction->display_actual_type) }}
+                                    </span>
                                 </div>
                                 <div class="text-start text-md-center">
                                     <span class="d-inline d-md-block fs-sm text-muted">Amount</span>

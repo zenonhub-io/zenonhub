@@ -78,12 +78,10 @@
                                     <span data-bs-toggle="tooltip" data-bs-title="Incoming">{!! svg('explorer.receive', 'me-2 text-success') !!}</span> From <x-address :account="$block->account" :eitherSide="8" :alwaysShort="true"/>
                                 @endif
                             </td>
-                            <td>
-                                {{ $block->display_type }}
-                            </td>
+                            <td>{{ ($block->display_type ?: '-') }}</td>
                             <td>{{ ($block->display_amount ?: '-')  }}</td>
                             <td>
-                                @if ($block->token)
+                                @if ($block->token && $block->amount > 0)
                                     <a href=" {{ route('explorer.token', ['zts' => $block->token->token_standard]) }}">
                                         {{ $block->token->name }}
                                     </a>

@@ -198,7 +198,7 @@ class AccountBlock extends Model
             return 'Contract Receive';
         }
 
-        return '-';
+        return null;
     }
 
     public function getDisplayTypeAttribute()
@@ -211,7 +211,7 @@ class AccountBlock extends Model
             return 'Transfer';
         }
 
-        return $this->getDisplayActualTypeAttribute();
+        return null;
     }
 
     public function getDisplayAmountAttribute()
