@@ -27,7 +27,11 @@ class Overview extends Component
     private function loadData()
     {
         $this->momentums = Momentum::withCount('account_blocks')->limit(9)->orderBy('id', 'DESC')->get();
-        $this->transactions = AccountBlock::notToEmpty()->limit(6)->orderBy('id', 'DESC')->get();
+        $this->transactions = AccountBlock::notToEmpty()
+            ->notFromPillarProducer()
+            ->orderBy('id', 'DESC')
+            ->limit(6)
+            ->get();
 
         $this->stats = [
             'momentums' => number_format(Cache::get('momentum-count')),
