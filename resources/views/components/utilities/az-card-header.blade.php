@@ -14,11 +14,9 @@
         </div>
     </div>
     <div class="text-start text-md-center">
-        @if (! $item->is_quorum_reached)
-            <div class="text-muted fs-sm text-center mb-2">
-                {{ $item->quorum_stauts }}
-            </div>
-        @endif
+        <div class="text-muted fs-sm text-center mb-2">
+            {{ $item->quorum_stauts }}
+        </div>
         <div class="progress bg-dark mb-3" style="height: 4px">
             <div
                 class="progress-bar bg-success"
