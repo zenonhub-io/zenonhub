@@ -37,35 +37,35 @@ class Sync extends Command
 
         if (empty($types) || in_array('tokens', $types)) {
             $this->output->write('Saving tokens...');
-            $this->output->newLine(2);
+            $this->output->newLine();
 
             SyncTokens::dispatch();
         }
 
         if (empty($types) || in_array('pillars', $types)) {
             $this->output->write('Saving pillars...');
-            $this->output->newLine(2);
+            $this->output->newLine();
 
             SyncPillars::dispatch();
         }
 
         if (empty($types) || in_array('sentinels', $types)) {
             $this->output->write('Saving sentinels...');
-            $this->output->newLine(2);
+            $this->output->newLine();
 
             SyncSentinels::dispatch();
         }
 
         if (empty($types) || in_array('az', $types)) {
             $this->output->write('Saving projects...');
-            $this->output->newLine(2);
+            $this->output->newLine();
 
             SyncProjects::dispatch();
         }
 
         if (empty($types) || in_array('az-status', $types)) {
             $this->output->write('Saving project statuses...');
-            $this->output->newLine(2);
+            $this->output->newLine();
 
             SyncProjectStatus::dispatch();
         }
@@ -84,7 +84,7 @@ class Sync extends Command
                 }
             });
 
-            $this->output->newLine(2);
+            $this->output->newLine();
         }
 
         return self::SUCCESS;

@@ -3,29 +3,39 @@
 namespace App\Actions\Nom;
 
 use App\Models\Nom\AcceleratorPhase;
+use Exception;
 use Illuminate\Support\Facades\App;
+use Log;
 use Spatie\QueueableAction\QueueableAction;
 
 class SyncPhaseStatus
 {
     use QueueableAction;
 
+    protected ?object $projectData;
+
     public function __construct(
         protected AcceleratorPhase $phase,
-        protected array $projectData
     ) {
     }
 
-    public function execute()
+    public function execute(): void
     {
-        $this->loadData();
-        $this->processData();
+        try {
+            $this->loadData();
+            $this->processData();
+        } catch (Exception $exception) {
+            Log::error('Unable to sync AZ phase status '.$this->phase->hash);
+            Log::error($exception->getMessage());
+
+            return;
+        }
     }
 
     private function loadData(): void
     {
         $znn = App::make('zenon.api');
-        $this->projectData = $znn->accelerator->getProjectById($this->project->hash)['data'];
+        $this->projectData = $znn->accelerator->getProjectById($this->phase->hash)['data'];
     }
 
     private function processData(): void

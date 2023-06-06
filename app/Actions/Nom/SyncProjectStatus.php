@@ -3,23 +3,32 @@
 namespace App\Actions\Nom;
 
 use App\Models\Nom\AcceleratorProject;
+use Exception;
 use Illuminate\Support\Facades\App;
+use Log;
 use Spatie\QueueableAction\QueueableAction;
 
 class SyncProjectStatus
 {
     use QueueableAction;
 
+    protected ?object $projectData;
+
     public function __construct(
-        protected AcceleratorProject $project,
-        protected array $projectData
+        protected AcceleratorProject $project
     ) {
     }
 
-    public function execute()
+    public function execute(): void
     {
-        $this->loadData();
-        $this->processData();
+        try {
+            $this->loadData();
+            $this->processData();
+            $this->processPhases();
+        } catch (Exception $exception) {
+            Log::error('Unable to sync AZ project status '.$this->project->hash);
+            Log::error($exception->getMessage());
+        }
     }
 
     private function loadData(): void
@@ -37,5 +46,12 @@ class SyncProjectStatus
         $this->project->modified_at = $this->projectData->lastUpdateTimestamp;
         $this->project->updated_at = $this->projectData->lastUpdateTimestamp;
         $this->project->save();
+    }
+
+    private function processPhases(): void
+    {
+        $this->project->phases->each(function ($phase) {
+            (new SyncPhaseStatus($phase))->execute();
+        });
     }
 }
