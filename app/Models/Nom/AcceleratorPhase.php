@@ -3,7 +3,6 @@
 namespace App\Models\Nom;
 
 use App;
-use App\Actions\Nom\SyncPhaseStatus;
 use App\Traits\AzVotes;
 use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -219,10 +218,5 @@ class AcceleratorPhase extends Model
     public static function findByHash($hash)
     {
         return static::where('hash', $hash)->first();
-    }
-
-    public function syncPhaseStatus()
-    {
-        (new SyncPhaseStatus($this))->execute();
     }
 }

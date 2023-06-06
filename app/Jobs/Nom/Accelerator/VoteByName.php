@@ -2,6 +2,8 @@
 
 namespace App\Jobs\Nom\Accelerator;
 
+use App\Actions\Nom\SyncPhaseStatus;
+use App\Actions\Nom\SyncProjectStatus;
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
@@ -68,6 +70,7 @@ class VoteByName implements ShouldQueue
             Cache::forget("accelerator_project-{$item->id}-total-yes-votes");
             Cache::forget("accelerator_project-{$item->id}-total-no-votes");
             Cache::forget("accelerator_project-{$item->id}-total-abstain-votes");
+            (new SyncProjectStatus($item))->execute();
         }
 
         if ($item instanceof AcceleratorPhase) {
@@ -76,9 +79,8 @@ class VoteByName implements ShouldQueue
             Cache::forget("accelerator_phase-{$item->id}-total-yes-votes");
             Cache::forget("accelerator_phase-{$item->id}-total-no-votes");
             Cache::forget("accelerator_phase-{$item->id}-total-abstain-votes");
+            (new SyncPhaseStatus($item))->execute();
         }
-
-        $item->syncProjectStatus();
 
         $vote = $item
             ->votes()
