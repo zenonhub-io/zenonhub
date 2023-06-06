@@ -33,7 +33,8 @@ class Tokens implements ShouldQueue
             $this->loadTokens();
             $this->processTokens();
         } catch (Throwable $exception) {
-            Log::error('Sync tokens error - '.$exception);
+            Log::warning('Sync tokens error');
+            Log::debug($exception);
             $this->release(30);
         }
     }

@@ -34,7 +34,8 @@ class Pillars implements ShouldQueue
             $this->loadPillars();
             $this->processPillars();
         } catch (Throwable $exception) {
-            Log::error('Sync pillars error - '.$exception);
+            Log::warning('Sync pillars error');
+            Log::debug($exception);
             $this->release(30);
         }
     }

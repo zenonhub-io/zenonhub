@@ -33,7 +33,8 @@ class Sentinels implements ShouldQueue
             $this->loadSentinels();
             $this->processSentinels();
         } catch (Throwable $exception) {
-            Log::error('Sync sentinels error - '.$exception);
+            Log::warning('Sync sentinels error');
+            Log::debug($exception);
             $this->release(30);
         }
     }

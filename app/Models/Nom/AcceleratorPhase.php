@@ -3,13 +3,13 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Actions\Nom\SyncPhaseStatus;
 use App\Traits\AzVotes;
 use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Log;
 use Str;
 
 class AcceleratorPhase extends Model
@@ -221,21 +221,8 @@ class AcceleratorPhase extends Model
         return static::where('hash', $hash)->first();
     }
 
-    public function syncProjectStatus()
+    public function syncPhaseStatus()
     {
-        try {
-            $znn = App::make('zenon.api');
-            $data = $znn->accelerator->getPhaseById($this->hash)['data'];
-
-            $this->vote_total = $data->votes->total;
-            $this->vote_yes = $data->votes->yes;
-            $this->vote_no = $data->votes->no;
-            $this->accepted_at = ($data->phase->acceptedTimestamp ?: null);
-            $this->save();
-
-        } catch (\Exception $exception) {
-            Log::error('Unable to save project status');
-            throw $exception;
-        }
+        (new SyncPhaseStatus($this))->execute();
     }
 }
