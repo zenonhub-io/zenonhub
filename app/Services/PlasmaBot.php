@@ -67,7 +67,8 @@ class PlasmaBot
 
     private function exceptionHandler(PlasmaBotException $exception): bool
     {
-        Log::error('Plasma bot exception - '.$exception->getMessage());
+        Log::error('Plasma bot error - '.$exception->getMessage());
+        Log::debug($exception);
 
         return false;
     }

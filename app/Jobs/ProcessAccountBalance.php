@@ -57,7 +57,8 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
             $this->account->updated_at = now();
             $this->account->save();
         } catch (\Exception $exception) {
-            Log::error('Sync balances error');
+            Log::warning('Sync balances error');
+            Log::debug($exception);
             $this->release(30);
         }
     }

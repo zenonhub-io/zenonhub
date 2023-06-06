@@ -25,8 +25,8 @@ class SyncPhaseStatus
             $this->loadData();
             $this->processData();
         } catch (Exception $exception) {
-            Log::error('Unable to sync AZ phase status '.$this->phase->hash);
-            Log::error($exception->getMessage());
+            Log::warning('Unable to sync AZ phase status '.$this->phase->hash);
+            Log::debug($exception->getMessage());
 
             return;
         }

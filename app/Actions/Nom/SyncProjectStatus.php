@@ -26,8 +26,8 @@ class SyncProjectStatus
             $this->processData();
             $this->processPhases();
         } catch (Exception $exception) {
-            Log::error('Unable to sync AZ project status '.$this->project->hash);
-            Log::error($exception->getMessage());
+            Log::warning('Unable to sync AZ project status '.$this->project->hash);
+            Log::debug($exception->getMessage());
         }
     }
 

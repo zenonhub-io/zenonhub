@@ -46,8 +46,8 @@ class Indexer
             try {
                 $this->loadMomentums($count);
                 $this->processMomentums();
-            } catch (\Exception $e) {
-                Log::error($e);
+            } catch (\Exception $exception) {
+                Log::error($exception);
             }
         }
     }
@@ -101,8 +101,8 @@ class Indexer
                     $this->processBlock($data->hash);
                     DB::commit();
                 } catch (\Exception $exception) {
-                    Log::error('Could not process block '.$data->hash);
-                    Log::error($exception);
+                    Log::warning('Could not process block '.$data->hash);
+                    Log::debug($exception);
                     DB::rollBack();
                     exit;
                 }
