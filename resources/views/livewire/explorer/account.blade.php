@@ -30,6 +30,7 @@
                 </div>
                 <h4 class="mb-0">
                     {{ $account->address }}
+                    <i class="bi-clipboard ms-1 fs-sm hover-text js-copy" data-clipboard-text="{{ $account->address }}"></i>
                 </h4>
             </div>
             <div class="card-body">
