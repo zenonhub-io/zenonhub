@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Account;
 use App\Http\Controllers\PageController;
 use Illuminate\Http\Request;
 
-class Security extends PageController
+class Lists extends PageController
 {
     public function show(Request $request)
     {
-        $this->page['meta']['title'] = 'Account Security';
+        $this->page['meta']['title'] = 'Account Lists';
         $this->page['data'] = [
-            'component' => 'account.security',
+            'component' => 'account.lists',
         ];
 
         return $this->render('pages/account');
@@ -28,7 +28,7 @@ class Security extends PageController
         $user->password = $request->input('password');
         $user->save();
 
-        return redirect()->route('account.security')
+        return redirect()->route('account.lists')
             ->with('alert', [
                 'type' => 'success',
                 'message' => 'Your password has been changed',

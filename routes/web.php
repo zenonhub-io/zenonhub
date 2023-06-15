@@ -80,8 +80,8 @@ Route::prefix('account')->name('account.')->middleware(['throttle:60,1', 'auth',
     Route::get('addresses', [\App\Http\Controllers\Account\Addresses::class, 'show'])->name('addresses');
     Route::post('addresses', [\App\Http\Controllers\Account\Addresses::class, 'store']);
 
-    Route::get('security', [\App\Http\Controllers\Account\Security::class, 'show'])->name('security');
-    Route::post('security', [\App\Http\Controllers\Account\Security::class, 'store']);
+    Route::get('lists', [\App\Http\Controllers\Account\Lists::class, 'show'])->name('lists');
+    Route::post('lists', [\App\Http\Controllers\Account\Lists::class, 'store']);
 
     Route::get('notifications', [\App\Http\Controllers\Account\Notifications::class, 'show'])->name('notifications');
     Route::post('notifications', [\App\Http\Controllers\Account\Notifications::class, 'store']);

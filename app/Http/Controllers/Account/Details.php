@@ -11,7 +11,7 @@ class Details extends PageController
 {
     public function show(Request $request)
     {
-        $this->page['meta']['title'] = 'Account Details';
+        $this->page['meta']['title'] = 'Your Account';
         $this->page['data'] = [
             'component' => 'account.details',
         ];

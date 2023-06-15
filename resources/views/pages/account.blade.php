@@ -11,28 +11,24 @@
                             [
                                 'route' => 'account.details',
                                 'title' => 'Details',
-                                'icon' => 'person-fill',
                             ],
 							[
                                 'route' => 'account.notifications',
                                 'title' => 'Notifications',
-                                'icon' => 'bell-fill',
                             ],
                             [
-                                'route' => 'account.security',
-                                'title' => 'Security',
-                                'icon' => 'shield-shaded',
+                                'route' => 'account.lists',
+                                'title' => 'Lists',
                             ],
                             [
                                 'route' => 'logout',
                                 'title' => 'Logout',
-                                'icon' => 'lock-fill',
                             ]
                         ]
                     ]"/>
                 </div>
                 <div class="col-lg-16">
-                    <x-dynamic-component :component="$data['component']" :data="$data"/>
+                    <livewire:is :component="$data['component']" />
                 </div>
             @else
                 <div class="col-24 col-sm-12 col-md-8 offset-md-4 mb-4">
@@ -73,14 +69,14 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('account.security') }}">
+                                <a href="{{ route('account.list') }}">
                                     <span class="d-block">
                                         <i class="bi-shield-shaded opacity-70" style="font-size:2.3rem;"></i>
                                     </span>
-                                    <h5>Security</h5>
+                                    <h5>Lists</h5>
                                 </a>
                                 <p class="mb-0">
-                                    Change your account password
+                                    Manage your custom list
                                 </p>
                             </div>
                         </div>

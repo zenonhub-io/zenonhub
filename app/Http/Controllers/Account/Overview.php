@@ -9,7 +9,7 @@ class Overview extends PageController
 {
     public function show(Request $request)
     {
-        $this->page['meta']['title'] = 'Account Account';
+        $this->page['meta']['title'] = 'Mange your account';
 
         return $this->render('pages/account');
     }

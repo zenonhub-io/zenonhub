@@ -57,14 +57,14 @@
                 </ul>
             </li>
             @if (auth()->check())
-                <li class="nav-item dropdown {{ request()->routeIs('account.overview', 'account.details', 'account.addresses', 'account.security', 'account.notifications') ? 'active' : '' }}">
+                <li class="nav-item dropdown {{ request()->routeIs('account.overview', 'account.details', 'account.addresses', 'account.lists', 'account.notifications') ? 'active' : '' }}">
                     <a href="{{ route('account.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="5">
                         Account
                     </a>
-                    <ul class="dropdown-menu {{ request()->routeIs('account.overview', 'account.details', 'account.addresses', 'account.security', 'account.notifications') ? 'show' : '' }}">
+                    <ul class="dropdown-menu {{ request()->routeIs('account.overview', 'account.details', 'account.addresses', 'account.lists', 'account.notifications') ? 'show' : '' }}">
                         <li><a href="{{ route('account.details') }}" class="dropdown-item {{ request()->routeIs('account.details') ? 'active' : '' }}">Details</a></li>
                         <li><a href="{{ route('account.notifications') }}" class="dropdown-item {{ request()->routeIs('account.notifications') ? 'active' : '' }}">Notifications</a></li>
-                        <li><a href="{{ route('account.security') }}" class="dropdown-item {{ request()->routeIs('account.security') ? 'active' : '' }}">Security</a></li>
+                        <li><a href="{{ route('account.lists') }}" class="dropdown-item {{ request()->routeIs('account.lists') ? 'active' : '' }}">Lists</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a href="{{ route('logout') }}" class="dropdown-item">Logout</a></li>
                     </ul>
