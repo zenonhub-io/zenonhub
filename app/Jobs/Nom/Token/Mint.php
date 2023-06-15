@@ -63,6 +63,10 @@ class Mint implements ShouldQueue
             return;
         }
 
+        if ($this->tokenMint->receiver->address === Account::ADDRESS_LIQUIDITY) {
+            return;
+        }
+
         $rewardType = null;
         if ($this->block->account->address === Account::ADDRESS_SENTINEL) {
             $rewardType = AccountReward::TYPE_SENTINEL;
