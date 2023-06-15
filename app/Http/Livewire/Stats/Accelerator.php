@@ -90,16 +90,16 @@ class Accelerator extends Component
         $this->azFundingZnn = [
             'labels' => $fundingLabels,
             'data' => [
-                (int) filter_var($this->acceleratorContract->display_znn_balance, FILTER_SANITIZE_NUMBER_INT),
-                (int) filter_var($znnToken->getDisplayAmount($totalZnnUsed), FILTER_SANITIZE_NUMBER_INT),
+                (float) filter_var($this->acceleratorContract->display_znn_balance, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                (float) filter_var($znnToken->getDisplayAmount($totalZnnUsed), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
             ],
         ];
 
         $this->azFundingQsr = [
             'labels' => $fundingLabels,
             'data' => [
-                (int) filter_var($this->acceleratorContract->display_qsr_balance, FILTER_SANITIZE_NUMBER_INT),
-                (int) filter_var($znnToken->getDisplayAmount($totalQsrUsed), FILTER_SANITIZE_NUMBER_INT),
+                (float) filter_var($this->acceleratorContract->display_qsr_balance, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                (float) filter_var($qsrToken->getDisplayAmount($totalQsrUsed), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
             ],
         ];
     }
