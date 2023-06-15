@@ -130,6 +130,34 @@ class Token extends Model implements Sitemapable
     }
 
     //
+    // Attributes
+
+    public function getShortTokenStandardAttribute()
+    {
+        return short_hash($this->token_standard, 5);
+    }
+
+    public function getTotalMintedAttribute()
+    {
+        return $this->mints()->sum('amount');
+    }
+
+    public function getDisplayTotalMintedAttribute()
+    {
+        return $this->getDisplayAmount($this->mints()->sum('amount'));
+    }
+
+    public function getTotalBurnedAttribute()
+    {
+        return $this->burns()->sum('amount');
+    }
+
+    public function getDisplayTotalBurnedAttribute()
+    {
+        return $this->getDisplayAmount($this->burns()->sum('amount'));
+    }
+
+    //
     // Methods
 
     public static function findByZts(string $zts): ?Token

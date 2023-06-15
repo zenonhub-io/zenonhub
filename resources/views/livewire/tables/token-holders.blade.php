@@ -39,6 +39,9 @@
                                 <x-table-sort-button :sort="$sort" :order="$order" check="balance"/>
                             </button>
                         </th>
+                        <th>
+                            Share
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,6 +51,7 @@
                                 <x-address :account="$account" :eitherSide="8" :alwaysShort="true"/>
                             </td>
                             <td>{{ $account->tokenBalance($token) }}</td>
+                            <td>{{ $account->tokenBalanceShare($token) }}%</td>
                         </tr>
                     @endforeach
                     </tbody>

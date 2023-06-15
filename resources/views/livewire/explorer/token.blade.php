@@ -4,42 +4,81 @@
         <div class="card shadow mb-4">
             <div class="card-header">
                 <div class="text-muted fs-sm">
-                    Token
+                    Token | {{ $token->symbol }}
                 </div>
-                <h5 class="card-title mb-0">{{ $token->name }}</h5>
+                <h4 class="mb-0">
+                    {{ $token->name }}
+                    <i class="bi-clipboard ms-1 fs-sm hover-text js-copy" data-clipboard-text="{{ $token->token_standard }}"></i>
+                </h4>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-24">
-                        <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-3 mb-2 p-3">
-                            <div class="text-start text-md-center mb-2 mb-md-0">
-                                <span class="d-inline d-md-block fs-sm text-muted">Total</span>
-                                <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
+                        <div class="bg-secondary shadow rounded-3 mb-2 p-3">
+                            <div class="d-block d-md-flex justify-content-md-evenly">
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens currently in circulation"></i></span>
+                                    <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
+                                </div>
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens that can be minted"></i></span>
+                                    <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->max_supply) }}</span>
+                                </div>
+                                <div class="text-start text-md-center">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Hodlers</span>
+                                    <span class="float-end float-md-none">{{ number_format($token->holders_count) }}</span>
+                                </div>
                             </div>
-                            <div class="text-start text-md-center mb-2 mb-md-0">
-                                <span class="d-inline d-md-block fs-sm text-muted">Max</span>
-                                <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->max_supply) }}</span>
-                            </div>
-                            <div class="text-start text-md-center">
-                                <span class="d-inline d-md-block fs-sm text-muted">Hodlers</span>
-                                <span class="float-end float-md-none">{{ number_format($token->holders_count) }}</span>
+                            <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Decimals</span>
+                                    <span class="float-end float-md-none">
+                                        {{ $token->decimals }}
+                                    </span>
+                                </div>
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Mintable</span>
+                                    <span class="float-end float-md-none">
+                                        <span class="legend-indicator bg-{{ ($token->is_mintable ? 'success' : 'danger') }}"></span>
+                                    </span>
+                                </div>
+                                <div class="text-start text-md-center mb-2 mb-md-0">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Burnable</span>
+                                    <span class="float-end float-md-none">
+                                        <span class="legend-indicator bg-{{ ($token->is_burnable ? 'success' : 'danger') }}"></span>
+                                    </span>
+                                </div>
+                                <div class="text-start text-md-center">
+                                    <span class="d-inline d-md-block fs-sm text-muted">Utility</span>
+                                    <span class="float-end float-md-none">
+                                        <span class="legend-indicator bg-{{ ($token->is_utility ? 'success' : 'danger') }}"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-24">
                         <ul class="list-group list-group-flush mb-0">
                             <li class="list-group-item">
-                                <span class="d-block fs-sm text-muted">Symbol</span>
-                                {{ $token->symbol }}
-                            </li>
-                            <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">Domain</span>
-                                {{ $token->domain }}
+                                <a href="{{ $token->domain }}" target="_blank">{{ $token->domain }}</a>
                             </li>
                             <li class="list-group-item">
-                                <span class="d-block fs-sm text-muted">ZTS</span>
+                                <span class="d-block fs-sm text-muted">Token Standard (ZTS)</span>
                                 {{ $token->token_standard }}
                             </li>
+                            @if ($token->is_mintable)
+                                <li class="list-group-item">
+                                    <span class="d-block fs-sm text-muted">Total Minted</span>
+                                    {{ $token->display_total_minted }}
+                                </li>
+                            @endif
+                            @if ($token->is_burnable)
+                                <li class="list-group-item">
+                                    <span class="d-block fs-sm text-muted">Total Burned</span>
+                                    {{ $token->display_total_burned }}
+                                </li>
+                            @endif
                             <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">Created</span>
                                 {{ ($token->created_at ? $token->created_at->format(config('zenon.date_format')) : '-') }}
