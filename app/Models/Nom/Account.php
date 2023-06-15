@@ -489,6 +489,21 @@ class Account extends Model implements Sitemapable
         return 0;
     }
 
+    public function tokenBalanceShare($token)
+    {
+        $holdings = $this->balances()
+            ->where('token_id', $token->id)
+            ->first();
+
+        if ($holdings && $holdings->pivot->balance > 0) {
+            $percentage = ($holdings->pivot->balance / $token->total_supply) * 100;
+
+            return number_format($percentage, 2);
+        }
+
+        return 0;
+    }
+
     public function displayZnnBalance($decimals = null)
     {
         return znn_token()->getDisplayAmount($this->znn_balance, $decimals);

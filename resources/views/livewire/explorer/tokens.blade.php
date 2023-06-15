@@ -21,8 +21,8 @@
                     </button>
                 </th>
                 <th>
-                    <button type="button" class="btn btn-sort" wire:click="sortBy('symbol')">
-                        <x-table-sort-button :sort="$sort" :order="$order" check="symbol"/>
+                    <button type="button" class="btn btn-sort" wire:click="sortBy('holders_count')">
+                        <x-table-sort-button :sort="$sort" :order="$order" check="holders_count" title="Holders"/>
                     </button>
                 </th>
                 <th>
@@ -31,20 +31,9 @@
                     </button>
                 </th>
                 <th>
-                    <button type="button" class="btn btn-sort" wire:click="sortBy('max_supply')">
-                        <x-table-sort-button :sort="$sort" :order="$order" check="max_supply"/>
+                    <button type="button" class="btn btn-sort" wire:click="sortBy('token_standard')">
+                        <x-table-sort-button :sort="$sort" :order="$order" check="token_standard" title="Token Standard"/>
                     </button>
-                </th>
-                <th>
-                    <button type="button" class="btn btn-sort" wire:click="sortBy('holders_count')">
-                        <x-table-sort-button :sort="$sort" :order="$order" check="holders_count" title="Holders"/>
-                    </button>
-                </th>
-                <th>
-                    Mintable
-                </th>
-                <th>
-                    Burnable
                 </th>
                 <th>
                     <button type="button" class="btn btn-sort" wire:click="sortBy('created_at')">
@@ -60,13 +49,13 @@
                         <a href=" {{ route('explorer.token', ['zts' => $token->token_standard]) }}">
                             {{ $token->name }}
                         </a>
+                        <span class="fs-xs">
+                            {{ $token->symbol }}
+                        </span>
                     </td>
-                    <td>{{ $token->symbol }}</td>
-                    <td>{{ $token->getDisplayAmount($token->total_supply, 2) }}</td>
-                    <td>{{ $token->getDisplayAmount($token->max_supply, 2) }}</td>
                     <td>{{ number_format($token->holders_count) }}</td>
-                    <td><span class="legend-indicator bg-{{ ($token->is_burnable ? 'success' : 'danger') }}"></span></td>
-                    <td><span class="legend-indicator bg-{{ ($token->is_mintable ? 'success' : 'danger') }}"></span></td>
+                    <td>{{ $token->getDisplayAmount($token->total_supply) }}</td>
+                    <td>{{ short_hash($token->token_standard, 8) }}</td>
                     <td>{{ ($token->created_at ? $token->created_at?->format(config('zenon.short_date_format')) : '-') }}</td>
                 </tr>
             @endforeach
