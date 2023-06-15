@@ -51,7 +51,7 @@
                                     {{ $token->name }}
                                 </a>
                             </td>
-                            <td>{{ $token->getDisplayAmount($token->pivot->balance, 2) }}</td>
+                            <td>{{ $token->getDisplayAmount($token->pivot->balance) }}</td>
                         </tr>
                     @endforeach
                     </tbody>

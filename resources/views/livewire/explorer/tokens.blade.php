@@ -62,8 +62,8 @@
                         </a>
                     </td>
                     <td>{{ $token->symbol }}</td>
-                    <td>{{ $token->getDisplayAmount($token->total_supply, 2) }}</td>
-                    <td>{{ $token->getDisplayAmount($token->max_supply, 2) }}</td>
+                    <td>{{ $token->getDisplayAmount($token->total_supply) }}</td>
+                    <td>{{ $token->getDisplayAmount($token->max_supply) }}</td>
                     <td>{{ number_format($token->holders_count) }}</td>
                     <td><span class="legend-indicator bg-{{ ($token->is_burnable ? 'success' : 'danger') }}"></span></td>
                     <td><span class="legend-indicator bg-{{ ($token->is_mintable ? 'success' : 'danger') }}"></span></td>
