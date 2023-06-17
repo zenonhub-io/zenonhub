@@ -57,10 +57,22 @@
                 <div class="tab-content">
                     <div class="tab-pane show active">
                         @if ($tab === 'map')
-                            <p>
-                                Visualise the public node distribution, found <strong>{{ $nodes['total'] }} {{ Str::plural('node', $nodes['total']) }}</strong> in <strong>{{ $nodes['cities'] }} {{ Str::plural('city', $nodes['cities']) }}</strong> from <strong>{{ $nodes['countries'] }} {{ Str::plural('country', $nodes['countries']) }}</strong>.
-                            </p>
-                            <hr class="border-secondary my-4">
+                            <div class="bg-secondary shadow rounded-2 mb-3 p-3">
+                                <div class="d-block d-md-flex justify-content-md-evenly">
+                                    <div class="text-start text-md-center mb-2 mb-md-0">
+                                        <span class="d-inline d-md-block text-muted">{{ Str::plural('Node', $nodes['total']) }}</span>
+                                        <span class="float-end float-md-none">{{ $nodes['total'] }}</span>
+                                    </div>
+                                    <div class="text-start text-md-center mb-2 mb-md-0">
+                                        <span class="d-inline d-md-block text-muted">{{ Str::plural('City', $nodes['cities']) }}</span>
+                                        <span class="float-end float-md-none">{{ $nodes['cities'] }}</span>
+                                    </div>
+                                    <div class="text-start text-md-center">
+                                        <span class="d-inline d-md-block text-muted">{{ Str::plural('Country', $nodes['countries']) }}</span>
+                                        <span class="float-end float-md-none">{{ $nodes['countries'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="text-center">
                                 <canvas
                                     id="cobe"
