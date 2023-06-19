@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Account;
 use App\Http\Controllers\PageController;
 use Illuminate\Http\Request;
 
-class Details extends PageController
+class Favorites extends PageController
 {
     public function show(Request $request)
     {
-        $this->page['meta']['title'] = 'Your Account';
+        $this->page['meta']['title'] = 'Account Favorites';
         $this->page['data'] = [
-            'component' => 'account.details',
+            'component' => 'account.favorites',
         ];
 
         return $this->render('pages/account');

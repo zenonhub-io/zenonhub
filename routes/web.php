@@ -73,16 +73,8 @@ Route::prefix('tools')->name('tools.')->middleware(['throttle:60,1'])->group(fun
 
 Route::prefix('account')->name('account.')->middleware(['throttle:60,1', 'auth', 'verified'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Account\Overview::class, 'show'])->name('overview');
-
     Route::get('details', [\App\Http\Controllers\Account\Details::class, 'show'])->name('details');
-    Route::post('details', [\App\Http\Controllers\Account\Details::class, 'store']);
-
-    Route::get('addresses', [\App\Http\Controllers\Account\Addresses::class, 'show'])->name('addresses');
-    Route::post('addresses', [\App\Http\Controllers\Account\Addresses::class, 'store']);
-
-    Route::get('security', [\App\Http\Controllers\Account\Security::class, 'show'])->name('security');
-    Route::post('security', [\App\Http\Controllers\Account\Security::class, 'store']);
-
+    Route::get('favorites', [\App\Http\Controllers\Account\Favorites::class, 'show'])->name('favorites');
     Route::get('notifications', [\App\Http\Controllers\Account\Notifications::class, 'show'])->name('notifications');
-    Route::post('notifications', [\App\Http\Controllers\Account\Notifications::class, 'store']);
+    Route::get('addresses', [\App\Http\Controllers\Account\Addresses::class, 'show'])->name('addresses');
 });

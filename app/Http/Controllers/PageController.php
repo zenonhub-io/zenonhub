@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
  * PageController
  * Contains methods for returning responses to the client, all API controllers need to extend from this
  */
-class PageController extends Controller
+class PageController
 {
     protected array $page = [
         'meta' => [
