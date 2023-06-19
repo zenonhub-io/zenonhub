@@ -33,6 +33,7 @@
                             message="Account details updated"
                             type="success"
                             icon="check-circle-fill"
+                            class="mb-4"
                         />
                     @endif
                     @if ($tab === 'details')

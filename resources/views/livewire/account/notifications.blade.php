@@ -1,6 +1,6 @@
 <div class="card shadow mb-4">
     <div class="card-header">
-        <h4 class="mb-0">Your notifications</h4>
+        <h4 class="mb-0">Subscribe to notifications</h4>
     </div>
     <div class="card-body">
         @if($result)
@@ -8,6 +8,7 @@
                 message="Notification subscriptions updated"
                 type="success"
                 icon="check-circle-fill"
+                class="mb-4"
             />
         @endif
         <form wire:submit.prevent="onUpdateNotifications" class="needs-validation">
