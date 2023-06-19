@@ -11,7 +11,7 @@ use Illuminate\Validation\Validator;
  * ApiController
  * Contains methods for returning responses to the client, all API controllers need to extend from this
  */
-class ApiController extends Controller
+class ApiController
 {
     protected Zenon $znn;
 
