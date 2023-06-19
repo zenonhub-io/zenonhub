@@ -28,8 +28,15 @@
         <div class="card-body">
             <div class="tab-content">
                 <div class="tab-pane show active">
+                    @if($result)
+                        <x-alert
+                            message="Account details updated"
+                            type="success"
+                            icon="check-circle-fill"
+                        />
+                    @endif
                     @if ($tab === 'details')
-                        <form action="{{ route('account.details') }}" method="post" class="needs-validation">
+                        <form wire:submit.prevent="onUpdateDetails" class="needs-validation">
                             @csrf
                             <div class="row mb-4">
                                 <label for="form-username" class="col-sm-6 col-form-label form-label">Username</label>
@@ -37,9 +44,8 @@
                                     <input
                                         type="text"
                                         id="form-username"
-                                        name="username"
+                                        wire:model="username"
                                         class="form-control @error('username')is-invalid @enderror"
-                                        value="{{ old('username', auth()->user()->username) }}"
                                     >
                                     <div class="invalid-feedback">
                                         @error('username') {{ $message }} @enderror
@@ -47,14 +53,13 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="form-email" class="col-sm-6 col-form-label form-label">Email address</label>
+                                <label for="form-email" class="col-sm-6 col-form-label form-label">Email</label>
                                 <div class="col-sm-18">
                                     <input
                                         type="email"
                                         id="form-email"
-                                        name="email"
+                                        wire:model="email"
                                         class="form-control @error('email')is-invalid @enderror"
-                                        value="{{ old('email', auth()->user()->email) }}"
                                     >
                                     <div class="invalid-feedback">
                                         @error('email') {{ $message }} @enderror
@@ -69,47 +74,46 @@
                     @endif
 
                     @if ($tab === 'password')
-                        <form action="{{ route('account.lists') }}" method="post" class="needs-validation">
-                            @csrf
+                        <form wire:submit.prevent="onChangePassword" class="needs-validation">
                             <div class="row mb-4">
-                                <label for="form-current-password" class="col-sm-6 col-form-label form-label">Password</label>
+                                <label for="form-old-password" class="col-sm-6 col-form-label form-label">Old password</label>
                                 <div class="col-sm-18">
                                     <input
                                         type="password"
-                                        id="form-current-password"
-                                        name="current_password"
-                                        class="form-control @error('current_password')is-invalid @enderror"
+                                        id="form-old-password"
+                                        wire:model="old_password"
+                                        class="form-control @error('old_password')is-invalid @enderror"
                                     >
                                     <div class="invalid-feedback">
-                                        @error('current_password') {{ $message }} @enderror
+                                        @error('old_password') {{ $message }} @enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="form-password" class="col-sm-6 col-form-label form-label">New password</label>
+                                <label for="form-new-password" class="col-sm-6 col-form-label form-label">New password</label>
                                 <div class="col-sm-18">
                                     <input
                                         type="password"
-                                        id="form-password"
-                                        name="password"
-                                        class="form-control @error('password')is-invalid @enderror"
+                                        id="form-new-password"
+                                        wire:model="new_password"
+                                        class="form-control @error('new_password')is-invalid @enderror"
                                     >
                                     <div class="invalid-feedback">
-                                        @error('password') {{ $message }} @enderror
+                                        @error('new_password') {{ $message }} @enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="form-confirm-password" class="col-sm-6 col-form-label form-label">Confirm</label>
+                                <label for="form-confirm-new-password" class="col-sm-6 col-form-label form-label">Confirm</label>
                                 <div class="col-sm-18">
                                     <input
                                         type="password"
-                                        id="form-confirm-password"
-                                        name="password_confirmation"
-                                        class="form-control @error('password_confirmation')is-invalid @enderror"
+                                        id="form-confirm-new-password"
+                                        wire:model="new_password_confirmation"
+                                        class="form-control @error('new_password_confirmation')is-invalid @enderror"
                                     >
                                     <div class="invalid-feedback">
-                                        @error('password_confirmation') {{ $message }} @enderror
+                                        @error('new_password_confirmation') {{ $message }} @enderror
                                     </div>
                                 </div>
                             </div>
