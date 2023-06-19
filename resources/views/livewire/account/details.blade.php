@@ -37,7 +37,6 @@
                     @endif
                     @if ($tab === 'details')
                         <form wire:submit.prevent="onUpdateDetails" class="needs-validation">
-                            @csrf
                             <div class="row mb-4">
                                 <label for="form-username" class="col-sm-6 col-form-label form-label">Username</label>
                                 <div class="col-sm-18">
