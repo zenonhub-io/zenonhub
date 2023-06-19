@@ -11,18 +11,26 @@
                             [
                                 'route' => 'account.details',
                                 'title' => 'Details',
+                                'icon' => 'person-fill'
+                            ],
+							[
+                                'route' => 'account.favorites',
+                                'title' => 'Favorites',
+                                'icon' => 'heart-fill'
                             ],
 							[
                                 'route' => 'account.notifications',
                                 'title' => 'Notifications',
+                                'icon' => 'bell-fill'
                             ],
-                            [
-                                'route' => 'account.lists',
-                                'title' => 'Lists',
-                            ],
+//							[
+//                                'route' => 'account.verified-addresses',
+//                                'title' => 'Verified addresses',
+//                            ],
                             [
                                 'route' => 'logout',
                                 'title' => 'Logout',
+                                'icon' => 'lock-fill'
                             ]
                         ]
                     ]"/>
@@ -73,7 +81,7 @@
                                     <span class="d-block">
                                         <i class="bi-shield-shaded opacity-70" style="font-size:2.3rem;"></i>
                                     </span>
-                                    <h5>Lists</h5>
+                                    <h5>Favorites</h5>
                                 </a>
                                 <p class="mb-0">
                                     Manage your custom list

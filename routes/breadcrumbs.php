@@ -171,9 +171,9 @@ Breadcrumbs::for('account.addresses', function (BreadcrumbTrail $trail) {
     $trail->push('Addresses', route('account.addresses'));
 });
 
-Breadcrumbs::for('account.lists', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('account.favorites', function (BreadcrumbTrail $trail) {
     $trail->parent('account');
-    $trail->push('Lists', route('account.lists'));
+    $trail->push('Favorites', route('account.favorites'));
 });
 
 Breadcrumbs::for('account.notifications', function (BreadcrumbTrail $trail) {
