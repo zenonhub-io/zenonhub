@@ -3,34 +3,32 @@
     @else
         <div class="card shadow mb-4">
             <div class="card-header border-bottom">
-            <span class="float-end">
-                @if ($account->active_pillar)
-                    <span class="badge bg-faded-light ms-2 mb-2 d-block">
-                        <a href="{{ route('pillars.detail', ['slug' => $account->pillar->slug]) }}">
-                            {!! svg('pillar', 'me-1 opacity-70', 'height: 11px') !!}
-                            Pillar
-                        </a>
+                <div class="text-muted d-flex justify-content-between">
+                    <span>
+                        Account {{ ($account->is_named_address ?  ' | ' . $account->named_address : '') }}
+                        @if ($account->active_pillar)
+                            <a class="ms-2" href="{{ route('pillars.detail', ['slug' => $account->pillar->slug]) }}" data-bs-toggle="tooltip" data-bs-title="Pillar">
+                                {!! svg('pillar', '', 'height: 16px') !!}
+                            </a>
+                        @endif
+                        @if ($account->active_sentinel)
+                            <span class="ms-2" data-bs-toggle="tooltip" data-bs-title="Sentinel">
+                                {!! svg('sentinel', '', 'height: 16px') !!}
+                            </span>
+                        @endif
+                        @if ($account->is_embedded_contract)
+                            <span class="ms-2" data-bs-toggle="tooltip" data-bs-title="Embedded contract">
+                                <i class="bi bi-file-text-fill"></i>
+                            </span>
+                        @endif
                     </span>
-                @endif
-                @if ($account->active_sentinel)
-                    <span class="badge bg-faded-light ms-2 mb-2 d-block">
-                        {!! svg('sentinel', 'me-1 opacity-70', 'width: 11px') !!}
-                        Sentinel
+                    <span>
+                        <i class="bi bi-star hover-text" data-bs-toggle="tooltip" data-bs-title="Favorite"></i>
+                        <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $account->address }}" data-bs-toggle="tooltip" data-bs-title="Copy addresses"></i>
                     </span>
-                @endif
-                @if ($account->is_embedded_contract)
-                    <span class="badge bg-faded-light ms-2 mb-2 d-block">
-                        <i class="bi bi-file-text-fill me-1 opacity-70"></i>
-                        Embedded
-                    </span>
-                @endif
-            </span>
-                <div class="text-muted fs-sm">
-                    Account {{ ($account->is_named_address ?  ' | ' . $account->named_address : '') }}
                 </div>
                 <h4 class="mb-0">
                     {{ $account->address }}
-                    <i class="bi-clipboard ms-1 fs-sm hover-text js-copy" data-clipboard-text="{{ $account->address }}"></i>
                 </h4>
             </div>
             <div class="card-body">

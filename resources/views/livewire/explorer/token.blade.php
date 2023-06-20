@@ -3,12 +3,15 @@
     @else
         <div class="card shadow mb-4">
             <div class="card-header">
-                <div class="text-muted fs-sm">
+                <div class="text-muted d-flex justify-content-between">
                     Token | {{ $token->symbol }}
+                    <span>
+                        <i class="bi bi-star hover-text" data-bs-toggle="tooltip" data-bs-title="Favorite"></i>
+                        <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $token->token_standard }}" data-bs-toggle="tooltip" data-bs-title="Copy token standard"></i>
+                    </span>
                 </div>
                 <h4 class="mb-0">
                     {{ $token->name }}
-                    <i class="bi-clipboard ms-1 fs-sm hover-text js-copy" data-clipboard-text="{{ $token->token_standard }}"></i>
                 </h4>
             </div>
             <div class="card-body">
