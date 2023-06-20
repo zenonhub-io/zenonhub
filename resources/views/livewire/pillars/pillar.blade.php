@@ -8,7 +8,7 @@
                     <span class="badge bg-success ms-1">Active</span>
                 @endif
             </span>
-            <div class="text-muted fs-xs">
+            <div class="text-muted">
                 Pillar
             </div>
             <h4 class="mb-0">

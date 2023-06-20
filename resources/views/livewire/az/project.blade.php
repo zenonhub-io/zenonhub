@@ -4,7 +4,7 @@
             <span class="float-end">
                 {!! $project->display_badge !!}
             </span>
-            <div class="text-muted fs-xs">
+            <div class="text-muted">
                 Project
             </div>
             <h4 class="mb-0">
