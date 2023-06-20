@@ -7,7 +7,6 @@
             <div class="d-md-none">
                 <select id="sections" class="form-control" wire:change="$emit('tabChange', $event.target.value)">
                     <option value="addresses" {{ $tab === 'addresses' ? 'selected' : '' }}>Addresses</option>
-                    <option value="addresses" {{ $tab === 'pillars' ? 'selected' : '' }}>Pillars</option>
                     <option value="tokens" {{ $tab === 'tokens' ? 'selected' : '' }}>Tokens</option>
                     <option value="transactions" {{ $tab === 'transactions' ? 'selected' : '' }}>Transactions</option>
                     <option value="momentums" {{ $tab === 'momentums' ? 'selected' : '' }}>Momentums</option>
@@ -18,11 +17,6 @@
                     <li class="nav-item">
                         <button class="btn nav-link {{ $tab === 'addresses' ? 'active' : '' }}" wire:click="$emit('tabChange', 'addresses')">
                             Addresses
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn nav-link {{ $tab === 'pillars' ? 'active' : '' }}" wire:click="$emit('tabChange', 'pillars')">
-                            Pillars
                         </button>
                     </li>
                     <li class="nav-item">
