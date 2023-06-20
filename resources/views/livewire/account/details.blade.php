@@ -1,7 +1,7 @@
 <div>
     <div class="card shadow mb-4">
         <div class="card-header">
-            <h4 class="mb-0">Mange your account</h4>
+            <h4 class="mb-0">Update your account</h4>
         </div>
         <div class="card-header">
             <div class="d-md-none">
