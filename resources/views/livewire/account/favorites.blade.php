@@ -44,10 +44,6 @@
 
                     @endif
 
-                    @if ($tab === 'pillars')
-
-                    @endif
-
                     @if ($tab === 'tokens')
 
                     @endif
