@@ -93,4 +93,17 @@ class PillarDelegator extends Model
     {
         return $this->started_at->diffInSeconds($this->ended_at ?: now());
     }
+
+    public function getDisplayPercentageShareAttribute()
+    {
+        $znnBalance = $this->account->znn_balance;
+
+        if ($znnBalance) {
+            $percentage = ($znnBalance / $this->pillar->weight) * 100;
+
+            return number_format($percentage, 2);
+        }
+
+        return 0;
+    }
 }

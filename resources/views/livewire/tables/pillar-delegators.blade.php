@@ -40,6 +40,9 @@
                             </button>
                         </th>
                         <th>
+                            Share
+                        </th>
+                        <th>
                             <button type="button" class="btn btn-sort" wire:click="sortBy('started_at')">
                                 <x-table-sort-button :sort="$sort" :order="$order" check="started_at" title="Started"/>
                             </button>
@@ -56,6 +59,7 @@
                                 <x-address :account="$delegate->account" :eitherSide="8" :alwaysShort="true"/>
                             </td>
                             <td>{{ $delegate->display_weight }}</td>
+                            <td>{{ $delegate->display_percentage_share }}%</td>
                             <td>{{ $delegate->started_at->format(config('zenon.short_date_format')) }}</td>
                             <td>{{ $delegate->display_duration }}</td>
                         </tr>

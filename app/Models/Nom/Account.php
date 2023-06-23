@@ -318,7 +318,7 @@ class Account extends Model implements Sitemapable
         return qsr_token()->getDisplayAmount($this->total_qsr_balance);
     }
 
-    public function getDisplayTotalZnnrewardsAttribute()
+    public function getDisplayTotalZnnRewardsAttribute()
     {
         return znn_token()->getDisplayAmount($this->total_znn_rewards);
     }
