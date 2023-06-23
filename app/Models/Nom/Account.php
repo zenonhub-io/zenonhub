@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use Cache;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,11 +13,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Account extends Model implements Sitemapable
 {
-    use HasFactory;
+    use HasFactory, Markable;
 
     public const ADDRESS_EMPTY = 'z1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsggv2f';
 
@@ -59,6 +61,10 @@ class Account extends Model implements Sitemapable
         self::ADDRESS_BRIDGE => 'Bridge contract',
         self::ADDRESS_HTLC => 'HTLC contract',
         self::ADDRESS_PTLC => 'PTLC contract',
+    ];
+
+    protected static array $marks = [
+        Favorite::class,
     ];
 
     /**

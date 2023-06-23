@@ -3,22 +3,28 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Token extends Model implements Sitemapable
 {
-    use HasFactory;
+    use HasFactory, Markable;
 
     public const ZTS_EMPTY = 'zts1qqqqqqqqqqqqqqqqtq587y';
 
     public const ZTS_ZNN = 'zts1znnxxxxxxxxxxxxx9z4ulx';
 
     public const ZTS_QSR = 'zts1qsrxxxxxxxxxxxxxmrhjll';
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
 
     /**
      * The table associated with the model.
