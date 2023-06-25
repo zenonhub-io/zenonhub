@@ -192,6 +192,24 @@ $offcanvas-dark-mode-bg-color:              $gray-dark;
 
 
 // Modal
+$modal-inner-padding:                       $spacer * 1.5;
+
+$modal-content-border-width:                2px;
+$modal-content-box-shadow-xs:               $box-shadow;
+
+$modal-header-padding-y:                    $modal-inner-padding * .75;
+$modal-header-border-color:                 $border-color;
+$modal-header-border-width:                 $border-width;
+$modal-footer-border-width:                 $border-width;
+$modal-footer-margin-between:               .75rem;
+
+$modal-fade-transform:                      scale(.9);
+$modal-transition:                          transform .2s ease-out;
+
+$modal-backdrop-opacity:                    .65;
+
+$modal-dark-mode-content-border-width:      2px;
+$modal-dark-mode-content-border-color:      $border-light-color;
 $modal-dark-mode-content-bg:                $gray-dark;
 
 
