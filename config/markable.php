@@ -39,6 +39,6 @@ return [
 
     'allowed_values' => [
         'reaction' => [],
-        'favorite' => [],
+        'favorite' => '*',
     ],
 ];
