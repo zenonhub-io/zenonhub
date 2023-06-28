@@ -1,6 +1,6 @@
 {
-    "/js/app.js": "/js/app.js?id=8530d491b15448c13a243dd032a18071",
-    "/js/app.debug.js": "/js/app.debug.js?id=7faff00e42ed315bfec1b7e481182097",
+    "/js/app.js": "/js/app.js?id=640d1011969939236c7f6acf46f8200a",
+    "/js/app.debug.js": "/js/app.debug.js?id=21f194eaa2603248c9089fe8d2146e86",
     "/js/pages/explorer.js": "/js/pages/explorer.js?id=49b61d3e5b5519b21fa5b945e47e4836",
     "/js/pages/stats/nodes.js": "/js/pages/stats/nodes.js?id=7a934a4553612352c8e03474eb7b00d4",
     "/js/pages/stats/accelerator.js": "/js/pages/stats/accelerator.js?id=1917917dafa50ec2f0fb7147e009c070",
@@ -1987,7 +1987,7 @@
     "/fonts/vendor/boxicons/boxicons.woff": "/fonts/vendor/boxicons/boxicons.woff?id=ff5a072c1eea4f79a9e93878a25e07c8",
     "/fonts/vendor/boxicons/boxicons.woff2": "/fonts/vendor/boxicons/boxicons.woff2?id=78a5fea85045ae6de1d1af590dad2013",
     "/index.php": "/index.php?id=3b58bff18126a61c142cc576457c82a6",
-    "/mix-manifest.json": "/mix-manifest.json?id=dd1465502cbf0f4c956011d8ec0e5f18",
+    "/mix-manifest.json": "/mix-manifest.json?id=ee9e49bdc45916e7cbaa93410691edda",
     "/mstile-150x150.png": "/mstile-150x150.png?id=f27d236022843184ff80a32a9931b424",
     "/robots.txt": "/robots.txt?id=b61ae5bcb7ea383abedc5d7ac2adb531",
     "/safari-pinned-tab.svg": "/safari-pinned-tab.svg?id=7f93862f74f2146ff27e7ee21b89c48b",

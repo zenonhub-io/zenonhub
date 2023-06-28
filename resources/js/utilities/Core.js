@@ -1,6 +1,5 @@
 import Singleton from '../abstracts/Singleton';
-//import { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip } from 'bootstrap';
-import { Tab, Tooltip } from 'bootstrap';
+import {Tab, Tooltip} from 'bootstrap';
 import ClipboardJS from "clipboard";
 
 export default class Core extends Singleton {
@@ -28,6 +27,10 @@ export default class Core extends Singleton {
         });
         window.livewire.hook('message.processed', (message, component) => {
             this.onPageGlobals();
+        });
+
+        window.livewire.on('refreshPage', refresh => {
+            window.location.reload();
         });
     }
 
