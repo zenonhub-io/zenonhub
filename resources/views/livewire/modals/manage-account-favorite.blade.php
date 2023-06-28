@@ -3,7 +3,7 @@
         <form wire:submit.prevent="onAddFavorite" class="needs-validation">
             <input type="hidden" name="address" wire:model="address">
             <div class="modal-header">
-                <h5 class="modal-title">Favorite address</h5>
+                <h5 class="modal-title">Manage address</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

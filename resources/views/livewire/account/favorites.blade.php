@@ -37,15 +37,15 @@
                 </ul>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
             <div class="tab-content">
                 <div class="tab-pane show active">
                     @if ($tab === 'addresses')
-
+                        <livewire:tables.favourite-accounts key="{{now()}}" />
                     @endif
 
                     @if ($tab === 'tokens')
-
+                            <livewire:tables.favourite-tokens key="{{now()}}" />
                     @endif
 
                     @if ($tab === 'transactions')

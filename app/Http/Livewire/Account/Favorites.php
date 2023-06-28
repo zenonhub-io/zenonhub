@@ -23,14 +23,4 @@ class Favorites extends Component
     {
         return view('livewire.account.favorites');
     }
-
-    public function onUpdateDetails()
-    {
-
-    }
-
-    public function onChangePassword()
-    {
-
-    }
 }
