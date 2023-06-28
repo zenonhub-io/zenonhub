@@ -23,7 +23,12 @@
                         @endif
                     </span>
                     <span>
-                        <i class="bi bi-star hover-text" data-bs-toggle="tooltip" data-bs-title="Favorite"></i>
+                        <i
+                            class="bi {{ $account->is_favourited ? 'bi-star-fill' : 'bi-star' }} hover-text"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="{{ $account->is_favourited ? 'Edit' : 'Add' }} Favorite"
+                            wire:click="$emit('showModal', 'modals.manage-account-favorite', '{{ $account->address }}')"
+                        ></i>
                         <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $account->address }}" data-bs-toggle="tooltip" data-bs-title="Copy addresses"></i>
                     </span>
                 </div>

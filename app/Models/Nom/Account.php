@@ -351,6 +351,14 @@ class Account extends Model implements Sitemapable
         }
 
         if ($user = auth()->user()) {
+
+            // Check favorites
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return true;
+            }
+
+            // Check verified addresses
             $userAddress = $user->nom_accounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
@@ -378,8 +386,15 @@ class Account extends Model implements Sitemapable
             return $this->name;
         }
 
-        // If the logged-in user owns the address return its nickname
         if ($user = auth()->user()) {
+
+            // Check favorites
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return $favorite->value;
+            }
+
+            // Check verified addresses
             $userAddress = $user->nom_accounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
@@ -472,6 +487,15 @@ class Account extends Model implements Sitemapable
         return $this->sent_blocks()
             ->whereHas('to_account', fn ($q) => $q->where('name', 'STEX Exchange'))
             ->count();
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if (auth()->check()) {
+            return Favorite::findExisting($this, auth()->user());
+        }
+
+        return false;
     }
 
     //
