@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use Cache;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,11 +13,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Account extends Model implements Sitemapable
 {
-    use HasFactory;
+    use HasFactory, Markable;
 
     public const ADDRESS_EMPTY = 'z1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsggv2f';
 
@@ -59,6 +61,10 @@ class Account extends Model implements Sitemapable
         self::ADDRESS_BRIDGE => 'Bridge contract',
         self::ADDRESS_HTLC => 'HTLC contract',
         self::ADDRESS_PTLC => 'PTLC contract',
+    ];
+
+    protected static array $marks = [
+        Favorite::class,
     ];
 
     /**
@@ -345,6 +351,14 @@ class Account extends Model implements Sitemapable
         }
 
         if ($user = auth()->user()) {
+
+            // Check favorites
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return true;
+            }
+
+            // Check verified addresses
             $userAddress = $user->nom_accounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
@@ -372,8 +386,15 @@ class Account extends Model implements Sitemapable
             return $this->name;
         }
 
-        // If the logged-in user owns the address return its nickname
         if ($user = auth()->user()) {
+
+            // Check favorites
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return $favorite->value;
+            }
+
+            // Check verified addresses
             $userAddress = $user->nom_accounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
@@ -466,6 +487,15 @@ class Account extends Model implements Sitemapable
         return $this->sent_blocks()
             ->whereHas('to_account', fn ($q) => $q->where('name', 'STEX Exchange'))
             ->count();
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if (auth()->check()) {
+            return Favorite::findExisting($this, auth()->user());
+        }
+
+        return false;
     }
 
     //

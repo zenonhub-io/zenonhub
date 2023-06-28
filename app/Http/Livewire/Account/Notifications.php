@@ -51,7 +51,7 @@ class Notifications extends Component
         ]);
 
         $user = $request->user();
-        $existingSubscriptions = $user->notification_types()->pluck('type_id');
+        $existingSubscriptions = $user->notification_types()->pluck('type_id')->toArray();
 
         foreach ($validatedData['notifications'] as $typeId => $subscribe) {
             $type = NotificationType::find($typeId);
@@ -61,7 +61,7 @@ class Notifications extends Component
             }
 
             if ($subscribe) {
-                if (! in_array($type->id, $existingSubscriptions->toArray())) {
+                if (! in_array($type->id, $existingSubscriptions)) {
                     $user->notification_types()->attach($type, [
                         'data' => [],
                     ]);

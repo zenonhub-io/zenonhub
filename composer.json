@@ -18,6 +18,7 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
         "maatwebsite/excel": "^3.1",
+        "maize-tech/laravel-markable": "dev-main",
         "marvinlabs/laravel-discord-logger": "^1.3",
         "maxmind-db/reader": "^1.11",
         "orangehill/iseed": "^3.0",
@@ -41,6 +42,12 @@
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-ignition": "^2.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/digitalSloth/laravel-markable"
+        }
+    ],
     "autoload": {
         "files": [
             "app/Helpers/assets.php",

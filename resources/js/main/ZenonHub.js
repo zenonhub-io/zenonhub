@@ -3,6 +3,7 @@ import PluginLoader from '../main/PluginLoader';
 import Singleton from '../abstracts/Singleton';
 
 import Cookie from '../utilities/Cookie';
+import Modal from '../utilities/Modal';
 import Helpers from '../utilities/Helpers';
 import LoadingScreen from '../utilities/LoadingScreen';
 import CustomStorage from '../utilities/Storage';
@@ -74,6 +75,7 @@ export default class ZenonHub {
         this.addPlugin('storage', CustomStorage);
         this.addPlugin('core', Core);
         this.addPlugin('loadingScreen', LoadingScreen);
+        this.addPlugin('modal', Modal);
     }
 
     /**

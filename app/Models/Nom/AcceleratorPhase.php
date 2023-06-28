@@ -3,22 +3,27 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use App\Traits\AzVotes;
 use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Maize\Markable\Markable;
 use Str;
 
 class AcceleratorPhase extends Model
 {
-    use HasFactory;
-    use AzVotes;
+    use AzVotes, HasFactory, Markable;
 
     public const STATUS_OPEN = 0;
 
     public const STATUS_PAID = 2;
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
 
     /**
      * The table associated with the model.
