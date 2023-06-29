@@ -27,6 +27,7 @@ class Login extends PageController
         $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'redirect' => ['nullable', 'url'],
         ]);
 
         $credentials = [
@@ -40,6 +41,10 @@ class Login extends PageController
             $user = auth()->user();
             $user->last_login_at = now();
             auth()->user()->save();
+
+            if ($url = $request->input('redirect')) {
+                return redirect()->to($url);
+            }
 
             return redirect()->route('home');
         }

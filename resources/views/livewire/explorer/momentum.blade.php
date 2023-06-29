@@ -2,7 +2,7 @@
     @if (! $momentum)
     @else
         <div class="card shadow mb-4">
-            <div class="card-header">
+            <div class="card-header border-bottom">
                 <div class="d-block d-sm-flex align-items-center">
                     <div class="flex-grow-1 mb-2 mb-md-0">
                         <div class="text-muted d-flex justify-content-between">
