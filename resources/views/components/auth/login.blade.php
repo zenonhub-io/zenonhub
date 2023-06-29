@@ -15,6 +15,7 @@
         @endif
         <form action="{{ route('login') }}" method="post" class="needs-validation">
             @csrf
+            <input type="hidden" name="redirect" value="{{ old('redirect', request()->input('redirect')) }}">
             <div class="mb-4">
                 <label for="form-email" class="form-label">Email</label>
                 <input
