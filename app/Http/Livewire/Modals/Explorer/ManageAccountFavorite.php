@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Modals;
+namespace App\Http\Livewire\Modals\Explorer;
 
 use App\Actions\Explorer\DeleteFavoriteAccount;
 use App\Actions\Explorer\ManageFavoriteAccount;
@@ -31,7 +31,7 @@ class ManageAccountFavorite extends Component
 
     public function render()
     {
-        return view('livewire.modals.manage-account-favorite');
+        return view('livewire.modals.explorer.manage-account-favorite');
     }
 
     public function onAddFavorite()
