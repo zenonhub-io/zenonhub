@@ -1,14 +1,52 @@
 <div>
-    <div class="card-header border-bottom">
+    <div class="card-header">
         <div class="d-block d-sm-flex align-items-center">
             <div class="flex-grow-1">
-                <h4 class="mb-3 mb-sm-0">
+                <h4 class="mb-3">
                     Accounts
                 </h4>
             </div>
             <div class="d-block d-md-flex justify-content-md-end">
                 {{ ($data ? $data->links('vendor/livewire/top-links') : '') }}
             </div>
+        </div>
+        <div class="d-md-none">
+            <select id="account-sections" class="form-control" wire:change="$set('tab', $event.target.value)">
+                <option value="all" {{ $tab === 'all' ? 'selected' : '' }}>All</option>
+                <option value="contracts" {{ $tab === 'contracts' ? 'selected' : '' }}>Contracts</option>
+                <option value="pillars" {{ $tab === 'pillars' ? 'selected' : '' }}>Pillars</option>
+                <option value="sentinels" {{ $tab === 'sentinels' ? 'selected' : '' }}>Sentinels</option>
+                <option value="favorites" {{ $tab === 'favorites' ? 'selected' : '' }}>Favorites</option>
+            </select>
+        </div>
+        <div class="d-none d-md-block">
+            <ul class="nav nav-tabs-alt card-header-tabs">
+                <li class="nav-item">
+                    <button class="btn nav-link {{ $tab === 'all' ? 'active' : '' }}" wire:click="$set('tab', 'all')">
+                        All
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn nav-link {{ $tab === 'contracts' ? 'active' : '' }}" wire:click="$set('tab', 'contracts')">
+                        Contracts
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn nav-link {{ $tab === 'pillars' ? 'active' : '' }}" wire:click="$set('tab', 'pillars')">
+                        Pillars
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn nav-link {{ $tab === 'sentinels' ? 'active' : '' }}" wire:click="$set('tab', 'sentinels')">
+                        Sentinels
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn nav-link {{ $tab === 'favorites' ? 'active' : '' }}" wire:click="$set('tab', 'favorites')">
+                        Favorites
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="table-responsive">
