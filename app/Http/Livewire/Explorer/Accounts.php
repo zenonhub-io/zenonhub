@@ -42,14 +42,18 @@ class Accounts extends Component
         }
 
         if ($this->tab === 'pillars') {
-            $this->query->whereHas('pillars', function ($query) {
-                $query->whereNull('revoked_at');
+            $this->query->whereIn('id', function ($query) {
+                $query->select('owner_id')
+                    ->from('nom_pillars')
+                    ->whereNull('revoked_at');
             });
         }
 
         if ($this->tab === 'sentinels') {
-            $this->query->whereHas('sentinels', function ($query) {
-                $query->whereNull('revoked_at');
+            $this->query->whereIn('id', function ($query) {
+                $query->select('owner_id')
+                    ->from('nom_sentinels')
+                    ->whereNull('revoked_at');
             });
         }
 
