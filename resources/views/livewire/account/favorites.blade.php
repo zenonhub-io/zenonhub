@@ -45,7 +45,7 @@
                     @endif
 
                     @if ($tab === 'tokens')
-                            <livewire:tables.favourite-tokens key="{{now()}}" />
+                        <livewire:tables.favourite-tokens key="{{now()}}" />
                     @endif
 
                     @if ($tab === 'transactions')
