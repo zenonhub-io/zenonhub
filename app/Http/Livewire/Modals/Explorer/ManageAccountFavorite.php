@@ -25,7 +25,7 @@ class ManageAccountFavorite extends Component
 
         $this->address = $address;
         $this->exists = (bool) $favorite;
-        $this->label = ($favorite ? $favorite->value : $account?->named_address);
+        $this->label = ($favorite ? $favorite->label : $account?->named_address);
         $this->notes = $favorite?->notes;
     }
 

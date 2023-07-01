@@ -7,13 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Favorite extends \Maize\Markable\Models\Favorite
 {
     public $casts = [
-        'notes' => 'encrypted',
+        'label' => 'encrypted',
     ];
-
-    public function scopeWhereUser($query, $user)
-    {
-        $query->where('user_id', $user->getKey());
-    }
 
     public static function findExisting(Model $markable, Model $user)
     {
@@ -26,6 +21,8 @@ class Favorite extends \Maize\Markable\Models\Favorite
 
     public static function change(Model $markable, Model $user, ?string $value = null, ?array $additionalAttributes = null): bool
     {
+        static::validMarkable($markable);
+
         $attributes = [
             'value' => $value,
         ];
@@ -35,20 +32,8 @@ class Favorite extends \Maize\Markable\Models\Favorite
         }
 
         $favorite = static::findExisting($markable, $user);
-
-        foreach ($attributes as $key => $data) {
-            $favorite->{$key} = $data;
-        }
+        $favorite->fill($attributes);
 
         return $favorite->save();
-    }
-
-    public static function remove(Model $markable, Model $user, ?string $value = null)
-    {
-        return static::where([
-            app(static::class)->getUserIdColumn() => $user->getKey(),
-            'markable_id' => $markable->getKey(),
-            'markable_type' => $markable->getMorphClass(),
-        ])->get()->each->delete();
     }
 }
