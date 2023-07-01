@@ -17,12 +17,14 @@ class ManageFavoriteAccount
 
     public function execute(): void
     {
-        if (Favorite::findExisting($this->account, $this->user)) {
-            Favorite::change($this->account, $this->user, $this->data['label'], [
+        if (Favorite::has($this->account, $this->user)) {
+            Favorite::change($this->account, $this->user, null, [
+                'label' => $this->data['label'],
                 'notes' => $this->data['notes'],
             ]);
         } else {
-            Favorite::add($this->account, $this->user, $this->data['label'], [
+            Favorite::add($this->account, $this->user, null, [
+                'label' => $this->data['label'],
                 'notes' => $this->data['notes'],
             ]);
         }
