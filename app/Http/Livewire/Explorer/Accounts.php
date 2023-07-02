@@ -2,21 +2,29 @@
 
 namespace App\Http\Livewire\Explorer;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\Account;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Accounts extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
-    public ?string $tab = 'all';
+    public string $tab = 'all';
 
     protected $queryString = [
         'sort' => ['except' => 'znn_balance'],
         'order' => ['except' => 'desc'],
         'tab' => ['except' => 'all'],
     ];
+
+    public function setTab($tab = 'all')
+    {
+        $this->tab = $tab;
+        $this->resetPage($this->componentName);
+    }
 
     public function mount()
     {
