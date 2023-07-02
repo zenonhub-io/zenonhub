@@ -41,11 +41,13 @@
                         Sentinels
                     </button>
                 </li>
-                <li class="nav-item">
-                    <button class="btn nav-link {{ $tab === 'favorites' ? 'active' : '' }}" wire:click="setTab('favorites')">
-                        Favorites
-                    </button>
-                </li>
+                @if (auth()->check())
+                    <li class="nav-item">
+                        <button class="btn nav-link {{ $tab === 'favorites' ? 'active' : '' }}" wire:click="setTab('favorites')">
+                            Favorites
+                        </button>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
