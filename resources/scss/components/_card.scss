@@ -47,7 +47,7 @@
     &.nav-tabs-alt {
         margin: {
             top: calc(var(--#{$prefix}card-cap-padding-y) * -.625);
-            bottom: calc((var(--#{$prefix}card-cap-padding-y) + .12rem) * -1);
+            bottom: calc((var(--#{$prefix}card-cap-padding-y) + .123rem) * -1);
         }
         border-bottom: 0;
     }

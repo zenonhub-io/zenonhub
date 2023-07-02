@@ -6,7 +6,7 @@
                     Accounts
                 </h4>
             </div>
-            <div class="d-block d-md-flex justify-content-md-end">
+            <div class="d-block d-md-flex justify-content-md-end mb-3">
                 {{ ($data ? $data->links('vendor/livewire/top-links') : '') }}
             </div>
         </div>

@@ -353,7 +353,7 @@ class Account extends Model implements Sitemapable
         if ($user = auth()->user()) {
 
             // Check favorites
-            $favorite = self::whereHasFavorite($user)->first();
+            $favorite = Favorite::findExisting($this, $user);
             if ($favorite) {
                 return true;
             }
@@ -492,7 +492,7 @@ class Account extends Model implements Sitemapable
     public function getIsFavouritedAttribute()
     {
         if ($user = auth()->user()) {
-            return self::whereHasFavorite($user)->first();
+            return Favorite::findExisting($this, $user);
         }
 
         return false;
