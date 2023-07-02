@@ -49,7 +49,7 @@
             </ul>
         </div>
     </div>
-    <div class="w-100" wire:loading.delay>
+    <div class="w-100" wire:loading>
         <div class="m-4">
             <div class="row">
                 <div class="col-24 col-md-8 offset-md-8">
