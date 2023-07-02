@@ -23,7 +23,7 @@ class Accounts extends Component
     public function setTab($tab = 'all')
     {
         $this->tab = $tab;
-        $this->resetPage($this->componentName);
+        $this->resetPage();
     }
 
     public function mount()
