@@ -3,19 +3,19 @@
 namespace App\Actions\Explorer;
 
 use App\Models\Markable\Favorite;
-use App\Models\Nom\Account;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
-class DeleteFavoriteAccount
+class DeleteFavorite
 {
     public function __construct(
-        protected Account $account,
+        protected Model $model,
         protected User $user,
     ) {
     }
 
     public function execute(): void
     {
-        Favorite::remove($this->account, $this->user);
+        Favorite::remove($this->model, $this->user);
     }
 }

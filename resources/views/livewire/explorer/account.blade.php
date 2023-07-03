@@ -36,7 +36,7 @@
                                 class="bi {{ $account->is_favourited ? 'bi-star-fill' : 'bi-star' }} hover-text"
                                 data-bs-toggle="tooltip"
                                 data-bs-title="{{ $account->is_favourited ? 'Edit' : 'Add' }} Favorite"
-                                wire:click="$emit('showModal', 'modals.explorer.manage-account-favorite', '{{ $account->address }}')"
+                                wire:click="$emit('showModal', 'modals.explorer.manage-favorite-account', '{{ $account->address }}')"
                             ></i>
                         @endif
                         <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $account->address }}" data-bs-toggle="tooltip" data-bs-title="Copy addresses"></i>

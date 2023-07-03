@@ -32,11 +32,11 @@
                     @foreach($data as $favourite)
                         <tr>
                             <td><x-address :account="$favourite->markable" :named="false" breakpoint="xl"/></td>
-                            <td>{{ $favourite->value }}</td>
+                            <td>{{ $favourite->label }}</td>
                             <th>
                                 <i
                                     class="bi bi-pencil hover-text"
-                                    wire:click="$emit('showModal', 'modals.manage-account-favorite', '{{ $favourite->markable->address }}')"
+                                    wire:click="$emit('showModal', 'modals.explorer.manage-favorite-account', '{{ $favourite->markable->address }}')"
                                 ></i>
                             </th>
                         </tr>
