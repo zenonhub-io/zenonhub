@@ -287,6 +287,15 @@ class Pillar extends Model implements Sitemapable
         return '-';
     }
 
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
+    }
+
     //
     // Methods
 

@@ -278,6 +278,15 @@ class AccountBlock extends Model
         return ! $this->paired_account_block_id;
     }
 
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
+    }
+
     //
     // Methods
 

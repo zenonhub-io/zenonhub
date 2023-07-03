@@ -306,6 +306,15 @@ class AcceleratorProject extends Model implements Sitemapable
         });
     }
 
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
+    }
+
     //
     // Methods
 
