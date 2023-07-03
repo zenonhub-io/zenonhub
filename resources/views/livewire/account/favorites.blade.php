@@ -40,18 +40,34 @@
         <div class="card-body p-0">
             <div class="tab-content">
                 <div class="tab-pane show active">
-                    @if ($tab === 'addresses')
-                        <livewire:tables.favourite-accounts key="{{now()}}" />
-                    @endif
-                    @if ($tab === 'tokens')
-                        <livewire:tables.favourite-tokens key="{{now()}}" />
-                    @endif
-                    @if ($tab === 'transactions')
-                        <livewire:tables.favourite-transactions key="{{now()}}" />
-                    @endif
-                    @if ($tab === 'momentums')
-                        <livewire:tables.favourite-momentums key="{{now()}}" />
-                    @endif
+                    <div class="w-100" wire:loading>
+                        <div class="m-4">
+                            <div class="row">
+                                <div class="col-24 col-md-12 offset-md-6">
+                                    <x-alert
+                                        message="Processing request..."
+                                        type="info"
+                                        icon="arrow-repeat spin"
+                                        class="d-flex justify-content-center mb-0"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div wire:loading.remove>
+                        @if ($tab === 'addresses')
+                            <livewire:tables.favourite-accounts key="{{now()}}" />
+                        @endif
+                        @if ($tab === 'tokens')
+                            <livewire:tables.favourite-tokens key="{{now()}}" />
+                        @endif
+                        @if ($tab === 'transactions')
+                            <livewire:tables.favourite-transactions key="{{now()}}" />
+                        @endif
+                        @if ($tab === 'momentums')
+                            <livewire:tables.favourite-momentums key="{{now()}}" />
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
