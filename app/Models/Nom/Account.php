@@ -344,7 +344,7 @@ class Account extends Model implements Sitemapable
         return $this->delegations()->whereNull('ended_at')->first();
     }
 
-    public function getIsNamedAddressAttribute()
+    public function getHasCustomLabelAttribute()
     {
         if ($this->name) {
             return true;
@@ -380,7 +380,7 @@ class Account extends Model implements Sitemapable
         return false;
     }
 
-    public function getNamedAddressAttribute()
+    public function getCustomLabelAttribute()
     {
         if ($this->name) {
             return $this->name;

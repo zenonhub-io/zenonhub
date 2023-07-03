@@ -2,9 +2,9 @@
     <a href="{{ route('explorer.account', ['address' => $account->address]) }}">
 @endif
 
-    @if ($named && $account->is_named_address)
+    @if ($named && $account->has_custom_label)
         <span data-bs-toggle="tooltip" data-bs-title="{{ $account->address }}">
-            {{ $account->named_address }}
+            {{ $account->custom_label }}
         </span>
     @else
         @if ($alwaysShort)

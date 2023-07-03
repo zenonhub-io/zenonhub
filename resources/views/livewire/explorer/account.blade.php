@@ -5,7 +5,7 @@
             <div class="card-header border-bottom">
                 <div class="text-muted d-flex justify-content-between">
                     <span>
-                        Account {{ ($account->is_named_address ?  ' | ' . $account->named_address : '') }}
+                        Account {{ ($account->has_custom_label ?  ' | ' . $account->custom_label : '') }}
                         @if ($account->active_pillar)
                             <a class="ms-2" href="{{ route('pillars.detail', ['slug' => $account->pillar->slug]) }}" data-bs-toggle="tooltip" data-bs-title="Pillar">
                                 {!! svg('pillar', '', 'height: 16px') !!}

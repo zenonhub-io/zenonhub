@@ -65,8 +65,8 @@ Tx: $link
 
     private function formatAddressName(Account $account): string
     {
-        if ($account->is_named_address) {
-            return $account->named_address;
+        if ($account->has_custom_label) {
+            return $account->custom_label;
         }
 
         if ($account->is_stex_trader) {

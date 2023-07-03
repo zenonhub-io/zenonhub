@@ -26,7 +26,7 @@ class Accounts extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Account Details'.($account->is_named ? ' | '.$account->named_address : '');
+        $this->page['meta']['title'] = 'Account Details'.($account->has_custom_label ? ' | '.$account->custom_label : '');
         $this->page['meta']['description'] = "The address {$account->address} page shows an overview of the address and detailed list of transactions, rewards, delegations, token holdings, staking, fusions and projects";
         $this->page['data'] = [
             'component' => 'explorer.account',
