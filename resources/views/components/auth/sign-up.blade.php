@@ -2,7 +2,9 @@
     <div class="card-header">
         <div class="text-center">
             <h2>Create your account</h2>
-            <p class="mb-0">Fill out the form to get started.</p>
+            <p class="mb-0">
+                Already have an account? <a class="link" href="{{ route('login') }}">Sign in</a>
+            </p>
         </div>
     </div>
     <div class="card-body">
@@ -86,17 +88,10 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <button class="btn btn-primary btn-lg w-100" type="submit">
-                    <i class="bi bi-person-plus me-2"></i>
-                    Create account
-                </button>
-            </div>
-            <div class="text-center">
-                <p class="pb-0 mb-0">
-                    Already have an account? <a class="link" href="{{ route('login') }}">Sign in</a>
-                </p>
-            </div>
+            <button class="btn btn-primary btn-lg w-100" type="submit">
+                <i class="bi bi-person-plus me-2"></i>
+                Create account
+            </button>
         </form>
     </div>
 </div>

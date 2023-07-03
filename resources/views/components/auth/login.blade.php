@@ -2,7 +2,9 @@
     <div class="card-header">
         <div class="text-center">
             <h2>Welcome back</h2>
-            <p class="mb-0">Login to your account.</p>
+            <p class="mb-0">
+                Don't have an account yet? <a class="link" href="{{ route('sign-up') }}">Sign up</a>
+            </p>
         </div>
     </div>
     <div class="card-body">
@@ -54,17 +56,10 @@
                     </label>
                 </div>
             </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary btn-lg w-100">
-                    <i class="bi bi-unlock me-2"></i>
-                    Log in
-                </button>
-            </div>
-            <div class="text-center">
-                <p class="pb-0 mb-0">
-                    Don't have an account yet? <a class="link" href="{{ route('sign-up') }}">Sign up</a>
-                </p>
-            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100">
+                <i class="bi bi-unlock me-2"></i>
+                Log in
+            </button>
         </form>
     </div>
 </div>
