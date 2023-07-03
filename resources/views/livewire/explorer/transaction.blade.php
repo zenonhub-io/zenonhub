@@ -8,7 +8,22 @@
                         <div class="text-muted d-flex justify-content-between">
                             Transaction
                             <span class="me-3">
-                                <i class="bi bi-star hover-text" data-bs-toggle="tooltip" data-bs-title="Favorite"></i>
+                                @if (! auth()->check())
+                                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">
+                                        <i
+                                            class="bi bi-star"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-title="Add Favorite"
+                                        ></i>
+                                    </a>
+                                @else
+                                    <i
+                                        class="bi {{ $transaction->is_favourited ? 'bi-star-fill' : 'bi-star' }} hover-text"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="{{ $transaction->is_favourited ? 'Edit' : 'Add' }} Favorite"
+                                        wire:click="$emit('showModal', 'modals.explorer.manage-favorite-transaction', '{{ $transaction->hash }}')"
+                                    ></i>
+                                @endif
                                 <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $transaction->hash }}" data-bs-toggle="tooltip" data-bs-title="Copy hash"></i>
                             </span>
                         </div>
