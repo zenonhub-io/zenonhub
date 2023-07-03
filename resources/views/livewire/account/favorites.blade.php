@@ -43,17 +43,14 @@
                     @if ($tab === 'addresses')
                         <livewire:tables.favourite-accounts key="{{now()}}" />
                     @endif
-
                     @if ($tab === 'tokens')
                         <livewire:tables.favourite-tokens key="{{now()}}" />
                     @endif
-
                     @if ($tab === 'transactions')
-
+                        <livewire:tables.favourite-transactions key="{{now()}}" />
                     @endif
-
                     @if ($tab === 'momentums')
-
+                        <livewire:tables.favourite-momentums key="{{now()}}" />
                     @endif
                 </div>
             </div>
