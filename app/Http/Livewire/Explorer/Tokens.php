@@ -28,6 +28,10 @@ class Tokens extends Component
 
     public function mount()
     {
+        if ($this->tab === 'favorites' && ! auth()->check()) {
+            $this->tab = 'all';
+        }
+
         $this->loadResults = true;
         $this->sort = request()->query('sort', 'holders_count');
     }
@@ -55,7 +59,7 @@ class Tokens extends Component
             $this->query->whereHas('owner', fn ($query) => $query->where('is_embedded_contract', '0'));
         }
 
-        if ($this->tab === 'favorites') {
+        if ($this->tab === 'favorites' && auth()->check()) {
             $this->query->whereHasFavorite(auth()->user());
         }
     }

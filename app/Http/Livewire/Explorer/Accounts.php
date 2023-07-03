@@ -28,6 +28,10 @@ class Accounts extends Component
 
     public function mount()
     {
+        if ($this->tab === 'favorites' && ! auth()->check()) {
+            $this->tab = 'all';
+        }
+
         $this->loadResults = true;
         $this->sort = request()->query('sort', 'znn_balance');
     }
@@ -65,7 +69,7 @@ class Accounts extends Component
             });
         }
 
-        if ($this->tab === 'favorites') {
+        if ($this->tab === 'favorites' && auth()->check()) {
             $this->query->whereHasFavorite(auth()->user());
         }
     }
