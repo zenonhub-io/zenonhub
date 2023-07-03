@@ -4,11 +4,11 @@ namespace App\Http\Livewire\Tables;
 
 use App\Http\Livewire\DataTableTrait;
 use App\Models\Markable\Favorite;
-use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class FavouriteAccounts extends Component
+class FavouriteTransactions extends Component
 {
     use WithPagination;
     use DataTableTrait;
@@ -30,7 +30,7 @@ class FavouriteAccounts extends Component
     {
         $this->loadData();
 
-        return view('livewire.tables.favourite-accounts', [
+        return view('livewire.tables.favourite-transactions', [
             'data' => $this->data,
         ]);
     }
@@ -40,7 +40,7 @@ class FavouriteAccounts extends Component
         $user = auth()->user();
         $this->query = Favorite::where('user_id', $user->id)
             ->whereHasMorph('markable', [
-                Account::class,
+                AccountBlock::class,
             ]);
     }
 }

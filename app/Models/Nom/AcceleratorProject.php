@@ -265,7 +265,7 @@ class AcceleratorProject extends Model implements Sitemapable
     public function getDisplayUsdRequestedAttribute()
     {
         if (! $this->znn_price || ! $this->qsr_price) {
-            $znnPrice = App::make('coingeko.api')->historicPrice('zenon', 'usd', $this->created_at->timestamp);
+            $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $this->created_at->timestamp);
             $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $this->created_at->timestamp);
 
             // Projects created before QSR price available

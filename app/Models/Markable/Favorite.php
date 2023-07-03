@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Favorite extends \Maize\Markable\Models\Favorite
 {
     public $casts = [
-        'label' => 'encrypted',
+        //'label' => 'encrypted',
+        'notes' => 'encrypted',
     ];
 
     public static function findExisting(Model $markable, Model $user)

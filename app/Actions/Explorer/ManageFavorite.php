@@ -19,13 +19,13 @@ class ManageFavorite
     {
         if (Favorite::has($this->model, $this->user)) {
             Favorite::change($this->model, $this->user, null, [
-                'label' => $this->data['label'],
-                'notes' => $this->data['notes'],
+                'label' => $this->data['label'] ?? null,
+                'notes' => $this->data['notes'] ?? null,
             ]);
         } else {
             Favorite::add($this->model, $this->user, null, [
-                'label' => $this->data['label'],
-                'notes' => $this->data['notes'],
+                'label' => $this->data['label'] ?? null,
+                'notes' => $this->data['notes'] ?? null,
             ]);
         }
     }
