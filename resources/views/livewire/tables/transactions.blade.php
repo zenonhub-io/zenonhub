@@ -89,7 +89,7 @@
                             <td>
                                 @if ($block->token && $block->amount > 0)
                                     <a href=" {{ route('explorer.token', ['zts' => $block->token->token_standard]) }}">
-                                        {{ $block->token->name }}
+                                        {{ $block->token->custom_label }}
                                     </a>
                                 @else
                                     -

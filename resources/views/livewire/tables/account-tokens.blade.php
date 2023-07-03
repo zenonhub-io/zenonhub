@@ -48,7 +48,7 @@
                         <tr>
                             <td>
                                 <a href=" {{ route('explorer.token', ['zts' => $token->token_standard]) }}">
-                                    {{ $token->name }}
+                                    {{ $token->custom_label }}
                                 </a>
                             </td>
                             <td>{{ $token->getDisplayAmount($token->pivot->balance) }}</td>
