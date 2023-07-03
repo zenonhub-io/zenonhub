@@ -10,11 +10,13 @@
                         'Stats' => [
                             [
                                 'route' => 'stats.nodes',
-                                'title' => 'Nodes',
+                                'title' => 'Public nodes',
+                                'icon' => 'hdd-rack-fill'
                             ],
 							[
                                 'route' => 'stats.accelerator',
-                                'title' => 'Accelerator',
+                                'title' => 'Accelerator Z',
+                                'icon' => 'rocket-takeoff-fill',
                             ],
                         ]
                     ]"/>

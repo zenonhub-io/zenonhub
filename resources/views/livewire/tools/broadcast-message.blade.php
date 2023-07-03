@@ -14,12 +14,12 @@
                 <ul class="nav nav-tabs-alt card-header-tabs">
                     <li class="nav-item">
                         <button class="btn nav-link {{ $tab === 'send' ? 'active' : '' }}" wire:click="$set('tab', 'send')">
-                            <i class="bi bi-send opacity-70 me-2"></i> Send
+                            Send
                         </button>
                     </li>
                     <li class="nav-item">
                         <button class="btn nav-link {{ $tab === 'history' ? 'active' : '' }}" wire:click="$set('tab', 'history')">
-                            <i class="bi bi-clock-history opacity-70 me-2"></i> History
+                            History
                         </button>
                     </li>
                 </ul>
@@ -146,7 +146,7 @@
                             <div class="row mb-0">
                                 <div class="col-24">
                                     <button type="submit" class="btn w-100 btn-outline-primary">
-                                        <i class="bi bi-send-fill me-2"></i>
+                                        <i class="bi bi-broadcast me-2"></i>
                                         Broadcast message
                                     </button>
                                 </div>
