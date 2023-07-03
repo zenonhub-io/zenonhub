@@ -8,7 +8,7 @@ use Log;
 
 class Prices
 {
-    public function currenPrice(string $token = 'zenon', string $currency = 'usd'): ?float
+    public function currentPrice(string $token = 'zenon-2', string $currency = 'usd'): ?float
     {
         $response = Http::get("https://api.coingecko.com/api/v3/simple/price?ids={$token}&vs_currencies={$currency}");
 

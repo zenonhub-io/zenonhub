@@ -19,8 +19,8 @@ class UpdateZnnPrice implements ShouldQueue
     public function handle(): void
     {
         $complete = 0;
-        $znnPrice = App::make('coingeko.api')->currenPrice();
-        $qsrPrice = App::make('coingeko.api')->currenPrice('quasar');
+        $znnPrice = App::make('coingeko.api')->currentPrice();
+        $qsrPrice = App::make('coingeko.api')->currentPrice('quasar');
 
         if ($znnPrice > 0) {
             Cache::forever('znn-price', $znnPrice);
