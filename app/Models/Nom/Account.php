@@ -391,7 +391,7 @@ class Account extends Model implements Sitemapable
             // Check favorites
             $favorite = Favorite::findExisting($this, $user);
             if ($favorite) {
-                return $favorite->value;
+                return $favorite->label;
             }
 
             // Check verified addresses
