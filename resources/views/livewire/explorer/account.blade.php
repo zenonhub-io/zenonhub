@@ -5,7 +5,7 @@
             <div class="card-header border-bottom">
                 <div class="text-muted d-flex justify-content-between">
                     <span>
-                        Account {{ ($account->is_named_address ?  ' | ' . $account->named_address : '') }}
+                        Account {{ ($account->has_custom_label ?  ' | ' . $account->custom_label : '') }}
                         @if ($account->active_pillar)
                             <a class="ms-2" href="{{ route('pillars.detail', ['slug' => $account->pillar->slug]) }}" data-bs-toggle="tooltip" data-bs-title="Pillar">
                                 {!! svg('pillar', '', 'height: 16px') !!}
@@ -36,7 +36,7 @@
                                 class="bi {{ $account->is_favourited ? 'bi-star-fill' : 'bi-star' }} hover-text"
                                 data-bs-toggle="tooltip"
                                 data-bs-title="{{ $account->is_favourited ? 'Edit' : 'Add' }} Favorite"
-                                wire:click="$emit('showModal', 'modals.explorer.manage-account-favorite', '{{ $account->address }}')"
+                                wire:click="$emit('showModal', 'modals.explorer.manage-favorite-account', '{{ $account->address }}')"
                             ></i>
                         @endif
                         <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $account->address }}" data-bs-toggle="tooltip" data-bs-title="Copy addresses"></i>

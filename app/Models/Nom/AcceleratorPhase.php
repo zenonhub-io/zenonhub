@@ -212,6 +212,15 @@ class AcceleratorPhase extends Model
         });
     }
 
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
+    }
+
     //
     // Methods
 

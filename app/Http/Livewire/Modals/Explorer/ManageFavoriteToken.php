@@ -2,15 +2,15 @@
 
 namespace App\Http\Livewire\Modals\Explorer;
 
-use App\Actions\Explorer\DeleteFavoriteAccount;
-use App\Actions\Explorer\ManageFavoriteAccount;
+use App\Actions\Explorer\DeleteFavorite;
+use App\Actions\Explorer\ManageFavorite;
 use App\Models\Markable\Favorite;
-use App\Models\Nom\Account;
+use App\Models\Nom\Token;
 use Livewire\Component;
 
-class ManageAccountFavorite extends Component
+class ManageFavoriteToken extends Component
 {
-    public string $address;
+    public string $zts;
 
     public ?string $label;
 
@@ -18,28 +18,28 @@ class ManageAccountFavorite extends Component
 
     public ?bool $exists;
 
-    public function mount(string $address)
+    public function mount(string $zts)
     {
-        $account = Account::findByAddress($address);
-        $favorite = Favorite::findExisting($account, auth()->user());
+        $token = Token::findByZts($zts);
+        $favorite = Favorite::findExisting($token, auth()->user());
 
-        $this->address = $address;
+        $this->zts = $zts;
         $this->exists = (bool) $favorite;
-        $this->label = ($favorite ? $favorite->label : $account?->named_address);
+        $this->label = ($favorite ? $favorite->label : $token?->name);
         $this->notes = $favorite?->notes;
     }
 
     public function render()
     {
-        return view('livewire.modals.explorer.manage-account-favorite');
+        return view('livewire.modals.explorer.manage-favorite-token');
     }
 
     public function onAddFavorite()
     {
         $validatedData = $this->validate([
-            'address' => [
+            'zts' => [
                 'required',
-                'exists:nom_accounts,address',
+                'exists:nom_tokens,token_standard',
             ],
             'label' => [
                 'required',
@@ -51,9 +51,9 @@ class ManageAccountFavorite extends Component
         ]);
 
         $user = auth()->user();
-        $account = Account::findByAddress($validatedData['address']);
+        $token = Token::findByZts($validatedData['zts']);
 
-        (new ManageFavoriteAccount($account, $user, $validatedData))->execute();
+        (new ManageFavorite($token, $user, $validatedData))->execute();
 
         $this->emit('hideModal');
         $this->emit('refreshPage');
@@ -62,16 +62,16 @@ class ManageAccountFavorite extends Component
     public function onDeleteFavorite()
     {
         $validatedData = $this->validate([
-            'address' => [
+            'zts' => [
                 'required',
-                'exists:nom_accounts,address',
+                'exists:nom_tokens,token_standard',
             ],
         ]);
 
         $user = auth()->user();
-        $account = Account::findByAddress($validatedData['address']);
+        $token = Token::findByZts($validatedData['zts']);
 
-        (new DeleteFavoriteAccount($account, $user))->execute();
+        (new DeleteFavorite($token, $user))->execute();
 
         $this->emit('hideModal');
         $this->emit('refreshPage');

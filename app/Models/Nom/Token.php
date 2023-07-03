@@ -163,6 +163,39 @@ class Token extends Model implements Sitemapable
         return $this->getDisplayAmount($this->burns()->sum('amount'));
     }
 
+    public function getHasCustomLabelAttribute()
+    {
+        if ($user = auth()->user()) {
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getCustomLabelAttribute()
+    {
+        if ($user = auth()->user()) {
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return $favorite->label;
+            }
+        }
+
+        return $this->name;
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
+    }
+
     //
     // Methods
 

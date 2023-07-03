@@ -20,7 +20,7 @@
                     <thead>
                     <tr>
                         <th>
-                            Account
+                            Token
                         </th>
                         <th>
                             Label
@@ -31,12 +31,12 @@
                     <tbody>
                     @foreach($data as $favourite)
                         <tr>
-                            <td><x-address :account="$favourite->markable" :named="false" breakpoint="xl"/></td>
+                            <td>{{ $favourite->markable->name }}</td>
                             <td>{{ $favourite->label }}</td>
                             <th>
                                 <i
                                     class="bi bi-pencil hover-text"
-                                    wire:click="$emit('showModal', 'modals.explorer.manage-favorite-account', '{{ $favourite->markable->address }}')"
+                                    wire:click="$emit('showModal', 'modals.explorer.manage-favorite-token', '{{ $favourite->markable->token_standard }}')"
                                 ></i>
                             </th>
                         </tr>
