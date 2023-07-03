@@ -4,9 +4,24 @@
         <div class="card shadow mb-4">
             <div class="card-header">
                 <div class="text-muted d-flex justify-content-between">
-                    Token | {{ $token->symbol }}
+                    Token | {{ ($token->has_custom_label ? $token->custom_label : $token->symbol) }}
                     <span>
-                        <i class="bi bi-star hover-text" data-bs-toggle="tooltip" data-bs-title="Favorite"></i>
+                        @if (! auth()->check())
+                            <a href="{{ route('login', ['redirect' => url()->current()]) }}">
+                                <i
+                                    class="bi bi-star"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="Add Favorite"
+                                ></i>
+                            </a>
+                        @else
+                            <i
+                                class="bi {{ $token->is_favourited ? 'bi-star-fill' : 'bi-star' }} hover-text"
+                                data-bs-toggle="tooltip"
+                                data-bs-title="{{ $token->is_favourited ? 'Edit' : 'Add' }} Favorite"
+                                wire:click="$emit('showModal', 'modals.explorer.manage-favorite-token', '{{ $token->token_standard }}')"
+                            ></i>
+                        @endif
                         <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $token->token_standard }}" data-bs-toggle="tooltip" data-bs-title="Copy token standard"></i>
                     </span>
                 </div>
