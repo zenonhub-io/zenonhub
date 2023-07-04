@@ -57,14 +57,11 @@
                     <div wire:loading.remove>
                         @if ($tab === 'addresses')
                             <livewire:tables.favourite-accounts key="{{now()}}" />
-                        @endif
-                        @if ($tab === 'tokens')
+                        @elseif ($tab === 'tokens')
                             <livewire:tables.favourite-tokens key="{{now()}}" />
-                        @endif
-                        @if ($tab === 'transactions')
+                        @elseif ($tab === 'transactions')
                             <livewire:tables.favourite-transactions key="{{now()}}" />
-                        @endif
-                        @if ($tab === 'momentums')
+                        @elseif ($tab === 'momentums')
                             <livewire:tables.favourite-momentums key="{{now()}}" />
                         @endif
                     </div>
