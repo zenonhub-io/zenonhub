@@ -39,7 +39,7 @@ class ManageFavoriteMomentum extends Component
                 'exists:nom_momentums,hash',
             ],
             'notes' => [
-                'nullable',
+                'required',
             ],
         ]);
 

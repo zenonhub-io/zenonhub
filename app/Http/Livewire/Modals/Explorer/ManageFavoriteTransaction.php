@@ -39,7 +39,7 @@ class ManageFavoriteTransaction extends Component
                 'exists:nom_account_blocks,hash',
             ],
             'notes' => [
-                'nullable',
+                'required',
             ],
         ]);
 
