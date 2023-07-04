@@ -32,7 +32,9 @@
                     @foreach($data as $favourite)
                         <tr>
                             <td>
-                                <x-hash-tooltip :hash="$favourite->markable->hash" :eitherSide="8" :alwaysShort="true"/>
+                                <a href=" {{ route('explorer.momentum', ['hash' => $favourite->markable->hash]) }}">
+                                    <x-hash-tooltip :hash="$favourite->markable->hash" :eitherSide="8" :alwaysShort="true"/>
+                                </a>
                             </td>
                             <td>
                                 {{ $favourite->notes }}

@@ -31,7 +31,11 @@
                     <tbody>
                     @foreach($data as $favourite)
                         <tr>
-                            <td>{{ $favourite->markable->name }}</td>
+                            <td>
+                                <a href=" {{ route('explorer.token', ['zts' => $favourite->markable->token_standard]) }}">
+                                    {{ $favourite->markable->name }}
+                                </a>
+                            </td>
                             <td>{{ $favourite->label }}</td>
                             <th>
                                 <i
