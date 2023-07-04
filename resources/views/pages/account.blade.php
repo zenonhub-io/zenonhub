@@ -16,7 +16,7 @@
 							[
                                 'route' => 'account.favorites',
                                 'title' => 'Favorites',
-                                'icon' => 'heart-fill'
+                                'icon' => 'star-fill'
                             ],
 							[
                                 'route' => 'account.notifications',

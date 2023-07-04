@@ -21,12 +21,13 @@
                     </div>
                     <div class="form-text">Labels are used throughout the explorer instead of the address</div>
                 </div>
-                <div class="mb-4">
+                <div class="mb-0">
                     <label for="form-email" class="form-label">Private note</label>
                     <textarea
                         id="form-post"
                         name="notes"
                         class="form-control @error('notes')is-invalid @enderror"
+                        rows="4"
                         wire:model.defer="notes"
                     ></textarea>
                     <div class="invalid-feedback">
