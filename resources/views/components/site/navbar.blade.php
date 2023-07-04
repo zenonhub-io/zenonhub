@@ -67,7 +67,7 @@
             @else
                 <li class="nav-item {{ request()->routeIs('login') ? 'active' : '' }}">
                     <a href="{{ route('login') }}" class="nav-link" tabindex="4">
-                        Sign in
+                        <i class="bi bi-person-circle me-2"></i> Sign in
                     </a>
                 </li>
             @endif
