@@ -2,11 +2,30 @@
     @if (! $momentum)
     @else
         <div class="card shadow mb-4">
-            <div class="card-header">
+            <div class="card-header border-bottom">
                 <div class="d-block d-sm-flex align-items-center">
                     <div class="flex-grow-1 mb-2 mb-md-0">
-                        <div class="text-muted fs-sm">
+                        <div class="text-muted d-flex justify-content-between">
                             Momentum
+                            <span class="me-3">
+                                @if (! auth()->check())
+                                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">
+                                        <i
+                                            class="bi bi-star"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-title="Add Favorite"
+                                        ></i>
+                                    </a>
+                                @else
+                                    <i
+                                        class="bi {{ $momentum->is_favourited ? 'bi-star-fill' : 'bi-star' }} hover-text"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="{{ $momentum->is_favourited ? 'Edit' : 'Add' }} Favorite"
+                                        wire:click="$emit('showModal', 'modals.explorer.manage-favorite-momentum', '{{ $momentum->hash }}')"
+                                    ></i>
+                                @endif
+                                <i class="bi bi-clipboard ms-2 hover-text js-copy" data-clipboard-text="{{ $momentum->hash }}" data-bs-toggle="tooltip" data-bs-title="Copy hash"></i>
+                            </span>
                         </div>
                         <h5 class="card-title mb-0 flex-grow-1"># {{ $momentum->display_height }}</h5>
                     </div>

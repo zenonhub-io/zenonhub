@@ -52,7 +52,7 @@ class AddPhase implements ShouldQueue
         $phaseData = $znn->accelerator->getPhaseById($this->block->hash)['data'];
 
         $project = AcceleratorProject::findByHash($phaseData->phase->projectID);
-        $znnPrice = App::make('coingeko.api')->historicPrice('zenon', 'usd', $phaseData->phase->creationTimestamp);
+        $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $phaseData->phase->creationTimestamp);
         $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $phaseData->phase->creationTimestamp);
 
         // Projects created before QSR price available

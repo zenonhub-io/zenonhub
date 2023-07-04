@@ -3,22 +3,28 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Token extends Model implements Sitemapable
 {
-    use HasFactory;
+    use HasFactory, Markable;
 
     public const ZTS_EMPTY = 'zts1qqqqqqqqqqqqqqqqtq587y';
 
     public const ZTS_ZNN = 'zts1znnxxxxxxxxxxxxx9z4ulx';
 
     public const ZTS_QSR = 'zts1qsrxxxxxxxxxxxxxmrhjll';
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
 
     /**
      * The table associated with the model.
@@ -155,6 +161,39 @@ class Token extends Model implements Sitemapable
     public function getDisplayTotalBurnedAttribute()
     {
         return $this->getDisplayAmount($this->burns()->sum('amount'));
+    }
+
+    public function getHasCustomLabelAttribute()
+    {
+        if ($user = auth()->user()) {
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getCustomLabelAttribute()
+    {
+        if ($user = auth()->user()) {
+            $favorite = Favorite::findExisting($this, $user);
+            if ($favorite) {
+                return $favorite->label;
+            }
+        }
+
+        return $this->name;
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
     }
 
     //

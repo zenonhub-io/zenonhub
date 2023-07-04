@@ -107,6 +107,7 @@
             <x-layouts.app-header :pageBreadcrumbs="$pageBreadcrumbs ?? ''"/>
             {{ $slot }}
         </main>
+        <livewire:utilities.modals/>
         <x-layouts.app-footer/>
         <x-site.footer-tags/>
         @stack('scripts')

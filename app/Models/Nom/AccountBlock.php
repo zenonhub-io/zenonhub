@@ -3,16 +3,18 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Maize\Markable\Markable;
 
 class AccountBlock extends Model
 {
-    use HasFactory;
+    use HasFactory, Markable;
 
     public const TYPE_GENESIS = 1;
 
@@ -23,6 +25,10 @@ class AccountBlock extends Model
     public const TYPE_CONTRACT_SEND = 4;
 
     public const TYPE_CONTRACT_RECEIVE = 5;
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
 
     /**
      * The table associated with the model.
@@ -270,6 +276,15 @@ class AccountBlock extends Model
     public function getIsUnReceivedAttribute()
     {
         return ! $this->paired_account_block_id;
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
     }
 
     //

@@ -171,9 +171,9 @@ Breadcrumbs::for('account.addresses', function (BreadcrumbTrail $trail) {
     $trail->push('Addresses', route('account.addresses'));
 });
 
-Breadcrumbs::for('account.security', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('account.favorites', function (BreadcrumbTrail $trail) {
     $trail->parent('account');
-    $trail->push('Security', route('account.security'));
+    $trail->push('Favorites', route('account.favorites'));
 });
 
 Breadcrumbs::for('account.notifications', function (BreadcrumbTrail $trail) {

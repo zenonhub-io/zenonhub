@@ -8,21 +8,25 @@
                 <div class="col-lg-8">
                     <x-site.sidebar :items="[
                         'Tools' => [
-//							[
-//                                'route' => 'tools.plasma-bot',
-//                                'title' => 'Plasma Bot',
-//                            ],
+							[
+                                'route' => 'tools.plasma-bot',
+                                'title' => 'Plasma Bot',
+                                'icon' => 'fire'
+                            ],
                             [
                                 'route' => 'tools.api-playground',
                                 'title' => 'API Playground',
+                                'icon' => 'cloud-fill'
                             ],
                             [
                                 'route' => 'tools.broadcast-message',
                                 'title' => 'Broadcast message',
+                                'icon' => 'broadcast'
                             ],
                             [
                                 'route' => 'tools.verify-signature',
                                 'title' => 'Verify signature',
+                                'icon' => 'check-lg'
                             ],
                         ]
                     ]"/>

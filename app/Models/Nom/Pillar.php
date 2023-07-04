@@ -3,16 +3,22 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
 class Pillar extends Model implements Sitemapable
 {
-    use HasFactory;
+    use HasFactory, Markable;
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
 
     /**
      * The table associated with the model.
@@ -279,6 +285,15 @@ class Pillar extends Model implements Sitemapable
         }
 
         return '-';
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
     }
 
     //

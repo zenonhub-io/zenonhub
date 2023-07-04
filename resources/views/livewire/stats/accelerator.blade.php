@@ -122,38 +122,6 @@
                                         </td>
                                         <td>
                                             {{ number_format($pillar->az_votes()->count()) }}
-{{--                                            <div class="progress bg-dark mb-3" style="height: 4px">--}}
-{{--                                                @php ($yesVotesPercent = (($pillar->az_votes_count * 100) / $pillar->az_votes()->where('is_yes', 1)->count()))--}}
-{{--                                                @php ($noVotesPercent = (($pillar->az_votes_count * 100) / $pillar->az_votes()->where('is_no', 1)->count()))--}}
-{{--                                                @php ($abstainVotesPercent = (($pillar->az_votes_count * 100) / $pillar->az_votes()->where('is_abstain', 1)->count()))--}}
-{{--                                                <div--}}
-{{--                                                    class="progress-bar bg-success"--}}
-{{--                                                    role="progressbar"--}}
-{{--                                                    aria-label="Yes"--}}
-{{--                                                    style="width: {{ $yesVotesPercent }}%"--}}
-{{--                                                    aria-valuenow="{{ $yesVotesPercent }}"--}}
-{{--                                                    aria-valuemin="0"--}}
-{{--                                                    aria-valuemax="100"--}}
-{{--                                                ></div>--}}
-{{--                                                <div--}}
-{{--                                                    class="progress-bar bg-danger"--}}
-{{--                                                    role="progressbar"--}}
-{{--                                                    aria-label="No"--}}
-{{--                                                    style="width: {{ $noVotesPercent }}%"--}}
-{{--                                                    aria-valuenow="{{ $noVotesPercent }}"--}}
-{{--                                                    aria-valuemin="0"--}}
-{{--                                                    aria-valuemax="100"--}}
-{{--                                                ></div>--}}
-{{--                                                <div--}}
-{{--                                                    class="progress-bar bg-secondary"--}}
-{{--                                                    role="progressbar"--}}
-{{--                                                    aria-label="Abstain"--}}
-{{--                                                    style="width: {{ $abstainVotesPercent }}%"--}}
-{{--                                                    aria-valuenow="{{ $abstainVotesPercent }}"--}}
-{{--                                                    aria-valuemin="0"--}}
-{{--                                                    aria-valuemax="100"--}}
-{{--                                                ></div>--}}
-{{--                                            </div>--}}
                                         </td>
                                     </tr>
                                 @endforeach

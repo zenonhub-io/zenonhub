@@ -4,7 +4,7 @@
             <span class="float-end">
                 {!! $phase->display_badge !!}
             </span>
-            <div class="text-muted fs-xs">
+            <div class="text-muted">
                 Phase {{ $phase->phase_number }}
             </div>
             <h4 class="mb-0">

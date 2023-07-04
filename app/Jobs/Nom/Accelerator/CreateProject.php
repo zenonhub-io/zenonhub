@@ -52,7 +52,7 @@ class CreateProject implements ShouldQueue
         $projectData = $znn->accelerator->getProjectById($this->block->hash)['data'];
 
         $project = AcceleratorProject::where('hash', $projectData->id)->first();
-        $znnPrice = App::make('coingeko.api')->historicPrice('zenon', 'usd', $projectData->creationTimestamp);
+        $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $projectData->creationTimestamp);
         $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $projectData->creationTimestamp);
 
         // Projects created before QSR price available

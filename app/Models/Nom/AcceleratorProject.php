@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App;
+use App\Models\Markable\Favorite;
 use App\Traits\AzVotes;
 use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,13 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Str;
 
 class AcceleratorProject extends Model implements Sitemapable
 {
-    use HasFactory;
-    use AzVotes;
+    use AzVotes, HasFactory, Markable;
 
     public const STATUS_NEW = 0;
 
@@ -26,6 +27,10 @@ class AcceleratorProject extends Model implements Sitemapable
     public const STATUS_REJECTED = 3;
 
     public const STATUS_COMPLETE = 4;
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
 
     /**
      * The table associated with the model.
@@ -260,7 +265,7 @@ class AcceleratorProject extends Model implements Sitemapable
     public function getDisplayUsdRequestedAttribute()
     {
         if (! $this->znn_price || ! $this->qsr_price) {
-            $znnPrice = App::make('coingeko.api')->historicPrice('zenon', 'usd', $this->created_at->timestamp);
+            $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $this->created_at->timestamp);
             $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $this->created_at->timestamp);
 
             // Projects created before QSR price available
@@ -299,6 +304,15 @@ class AcceleratorProject extends Model implements Sitemapable
                 return null;
             }
         });
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
     }
 
     //
