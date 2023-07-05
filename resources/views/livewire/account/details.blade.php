@@ -38,9 +38,9 @@
                     @endif
                     @if ($tab === 'details')
                         <form wire:submit.prevent="onUpdateDetails" class="needs-validation">
-                            <div class="row mb-4">
-                                <label for="form-username" class="col-sm-6 col-form-label form-label">Username</label>
-                                <div class="col-sm-18">
+                            <div class="row mb-4 align-items-center">
+                                <label for="form-username" class="form-label col-md-6">Username</label>
+                                <div class="col-md-18">
                                     <input
                                         type="text"
                                         id="form-username"
@@ -52,9 +52,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-4">
-                                <label for="form-email" class="col-sm-6 col-form-label form-label">Email</label>
-                                <div class="col-sm-18">
+                            <div class="row mb-4 align-items-center">
+                                <label for="form-email" class="form-label col-md-6">Email</label>
+                                <div class="col-md-18">
                                     <input
                                         type="email"
                                         id="form-email"
@@ -75,9 +75,9 @@
 
                     @if ($tab === 'password')
                         <form wire:submit.prevent="onChangePassword" class="needs-validation">
-                            <div class="row mb-4">
-                                <label for="form-old-password" class="col-sm-6 col-form-label form-label">Old password</label>
-                                <div class="col-sm-18">
+                            <div class="row mb-4 align-items-center">
+                                <label for="form-old-password" class="form-label col-md-6">Old password</label>
+                                <div class="col-md-18">
                                     <input
                                         type="password"
                                         id="form-old-password"
@@ -89,9 +89,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-4">
-                                <label for="form-new-password" class="col-sm-6 col-form-label form-label">New password</label>
-                                <div class="col-sm-18">
+                            <div class="row mb-4 align-items-center">
+                                <label for="form-new-password" class="form-label col-md-6">New password</label>
+                                <div class="col-md-18">
                                     <input
                                         type="password"
                                         id="form-new-password"
@@ -103,9 +103,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-4">
-                                <label for="form-confirm-new-password" class="col-sm-6 col-form-label form-label">Confirm</label>
-                                <div class="col-sm-18">
+                            <div class="row mb-4 align-items-center">
+                                <label for="form-confirm-new-password" class="form-label col-md-6">Confirm</label>
+                                <div class="col-md-18">
                                     <input
                                         type="password"
                                         id="form-confirm-new-password"

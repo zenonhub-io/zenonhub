@@ -13,16 +13,16 @@
         @endif
         <form wire:submit.prevent="onUpdateNotifications" class="needs-validation">
             @foreach ($notificationTypes as $notificationType)
-                <div class="mb-3">
-                    <div class="form-check form-switch form-switch-success d-flex">
+                <div class="mb-4">
+                    <div class="form-check form-switch form-switch-success d-flex align-items-center">
                         <input
                             type="checkbox"
                             id="notification-{{ $notificationType->id }}"
-                            class="form-check-input flex-shrink-0"
+                            class="form-check-input me-3"
                             wire:model="notifications.{{ $notificationType->id }}"
                         >
-                        <label for="notification-{{ $notificationType->id }}" class="form-check-label ps-3">
-                            <span class="h6 d-block mb-2">{{ $notificationType->name }}</span>
+                        <label class="form-check-label" for="notification-{{ $notificationType->id }}">
+                            <span class="d-block">{{ $notificationType->name }}</span>
                             <span class="fs-sm text-muted">{{ $notificationType->description }}</span>
                         </label>
                     </div>

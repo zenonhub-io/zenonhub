@@ -8,9 +8,9 @@
             </div>
             <div class="modal-body">
                 <div class="mb-0">
-                    <label for="form-email" class="form-label">Private note</label>
+                    <label for="form-notes" class="form-label">Private note</label>
                     <textarea
-                        id="form-post"
+                        id="form-notes"
                         name="notes"
                         class="form-control @error('notes')is-invalid @enderror"
                         rows="4"
