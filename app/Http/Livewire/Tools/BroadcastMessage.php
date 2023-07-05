@@ -28,12 +28,6 @@ class BroadcastMessage extends Component
 
     public ?\Illuminate\Database\Eloquent\Collection $pillars = null;
 
-    public string $tab = 'send';
-
-    protected $queryString = [
-        'tab' => ['except' => 'send'],
-    ];
-
     protected function rules()
     {
         return [
@@ -102,7 +96,7 @@ class BroadcastMessage extends Component
             return;
         }
 
-        if (! $account->pillar) {
+        if (! $account?->pillar) {
             $this->error = 'Address is not a pillar, only pillars can broadcast messages';
             $this->result = false;
 

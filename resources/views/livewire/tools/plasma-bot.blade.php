@@ -80,9 +80,9 @@
                         <p class="mb-4">
                             Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
                         </p>
-                        <div class="row mb-4">
-                            <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
-                            <div class="col-sm-18">
+                        <div class="row mb-4 align-items-center">
+                            <label for="form-address" class="form-label col-md-6">Address</label>
+                            <div class="col-md-18">
                                 <input
                                     type="text"
                                     id="form-address"
@@ -95,9 +95,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-4">
-                            <label for="form-address" class="col-sm-6 col-form-label form-label">Plasma</label>
-                            <div class="col-sm-18 mt-2">
+                        <div class="row mb-4 align-items-center">
+                            <label class="form-label col-md-6">Plasma</label>
+                            <div class="col-md-18">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-low" name="plasma" value="low" wire:model="plasma" checked>
                                     <label class="form-check-label" for="plasma-low">Low</label>
@@ -112,14 +112,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-0">
-                            <div class="col-24">
-                                <button type="submit" class="btn w-100 btn-outline-primary">
-                                    <i class="bi bi-fire me-2"></i>
-                                    Get plasma
-                                </button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn w-100 btn-outline-primary">
+                            <i class="bi bi-fire me-2"></i>
+                            Get plasma
+                        </button>
                     </form>
                 @endif
             @else
