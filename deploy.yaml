@@ -18,7 +18,7 @@ tasks:
   artisan:site:after-deploy:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan site:after-deploy'
   npx:build:production:
-    - run: 'cd {{release_or_current_path}} && npm i && npm run production'
+    - run: 'cd {{release_or_current_path}} && npm ci && npm run production'
   npx:build:cleanup:
     - run: 'cd {{release_or_current_path}} && rm -r node_modules'
 
