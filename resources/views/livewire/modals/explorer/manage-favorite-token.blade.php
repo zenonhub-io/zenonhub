@@ -8,10 +8,10 @@
             </div>
             <div class="modal-body">
                 <div class="mb-4">
-                    <label for="form-email" class="form-label">Custom label</label>
+                    <label for="form-label" class="form-label">Custom label</label>
                     <input
                         type="text"
-                        id="form-email"
+                        id="form-label"
                         name="label"
                         class="form-control @error('label')is-invalid @enderror"
                         wire:model.defer="label"
@@ -22,9 +22,9 @@
                     <div class="form-text">Labels are used throughout the explorer instead of the token</div>
                 </div>
                 <div class="mb-0">
-                    <label for="form-email" class="form-label">Private note</label>
+                    <label for="form-notes" class="form-label">Private note</label>
                     <textarea
-                        id="form-post"
+                        id="form-notes"
                         name="notes"
                         class="form-control @error('notes')is-invalid @enderror"
                         rows="4"

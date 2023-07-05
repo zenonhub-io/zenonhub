@@ -24,9 +24,9 @@
                 />
             @endif
             <form wire:submit.prevent="submit">
-                <div class="row mb-4">
-                    <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
-                    <div class="col-sm-18">
+                <div class="row mb-4 align-items-center">
+                    <label for="form-address" class="form-label col-md-6">Address</label>
+                    <div class="col-md-18">
                         <input
                             type="text"
                             id="form-address"
@@ -39,9 +39,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-4">
-                    <label for="form-public-key" class="col-sm-6 col-form-label form-label">Public key</label>
-                    <div class="col-sm-18">
+                <div class="row mb-4 align-items-center">
+                    <label for="form-public-key" class="form-label col-md-6">Public key</label>
+                    <div class="col-md-18">
                         <input
                             type="text"
                             id="form-public-key"
@@ -54,9 +54,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-4">
-                    <label for="form-message" class="col-sm-6 col-form-label form-label">Message</label>
-                    <div class="col-sm-18">
+                <div class="row mb-4 align-items-center">
+                    <label for="form-message" class="form-label col-md-6">Message</label>
+                    <div class="col-md-18">
                         <input
                             type="text"
                             id="form-message"
@@ -69,9 +69,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-4">
-                    <label for="form-signature" class="col-sm-6 col-form-label form-label">Signature</label>
-                    <div class="col-sm-18">
+                <div class="row mb-4 align-items-center">
+                    <label for="form-signature" class="form-label col-md-6">Signature</label>
+                    <div class="col-md-18">
                         <input
                             type="text"
                             id="form-signature"
@@ -84,14 +84,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-0">
-                    <div class="col-24">
-                        <button type="submit" class="btn w-100 btn-outline-primary">
-                            <i class="bi bi-check-lg me-2"></i>
-                            Verify
-                        </button>
-                    </div>
-                </div>
+                <button type="submit" class="btn w-100 btn-outline-primary">
+                    <i class="bi bi-check-lg me-2"></i>
+                    Verify
+                </button>
             </form>
         </div>
     </div>

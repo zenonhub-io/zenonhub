@@ -75,9 +75,9 @@
                     class="d-flex align-items-center"
                 />
             @endif
-            <div class="row mb-4 mt-4">
-                <label for="form-address" class="col-sm-6 col-form-label form-label">Address</label>
-                <div class="col-sm-18">
+            <div class="row mb-4 align-items-center">
+                <label for="form-address" class="form-label col-md-6">Address</label>
+                <div class="col-md-18">
                     <input
                         type="text"
                         id="form-address"
@@ -90,9 +90,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <label for="form-nickname" class="col-sm-6 col-form-label form-label">Nickname</label>
-                <div class="col-sm-18">
+            <div class="row mb-4 align-items-center">
+                <label for="form-nickname" class="form-label col-md-6">Nickname</label>
+                <div class="col-md-18">
                     <input
                         type="text"
                         id="form-nickname"
@@ -105,18 +105,17 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row mb-4">
-                <label for="form-default" class="col-sm-6 col-form-label form-label">Default</label>
-                <div class="col-sm-18">
+            <div class="row mb-4 align-items-center">
+                <label for="form-default" class="form-label col-md-6">Default</label>
+                <div class="col-md-18">
                     <div class="form-check mt-1">
                         <input class="form-check-input" type="checkbox" name="default" value="1" id="form-default">
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <label for="form-message" class="col-sm-6 col-form-label form-label">Message</label>
-                <div class="col-sm-18">
+            <div class="row mb-4 align-items-center">
+                <label for="form-message" class="form-label col-md-6">Message</label>
+                <div class="col-md-18">
                     <div class="input-group">
                         <input
                             type="text"
@@ -135,9 +134,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <label for="form-signature" class="col-sm-6 col-form-label form-label">Signature</label>
-                <div class="col-sm-18">
+            <div class="row mb-4 align-items-center">
+                <label for="form-signature" class="form-label col-md-6">Signature</label>
+                <div class="col-md-18">
                     <input
                         type="text"
                         id="form-signature"
@@ -149,15 +148,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="card-footer pt-0">
-            <div class="d-flex justify-content-end gap-3">
-                <button class="w-100 btn btn-outline-primary" type="submit">
-                    <i class="bi bi-link-45deg me-2"></i>
-                    Link address
-                </button>
-            </div>
+            <button class="w-100 btn btn-outline-primary" type="submit">
+                <i class="bi bi-link-45deg me-2"></i>
+                Link address
+            </button>
         </div>
     </div>
 </form>
