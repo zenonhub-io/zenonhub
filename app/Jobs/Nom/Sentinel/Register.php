@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Nom\Sentinel;
 
-use App;
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Sentinel;
@@ -31,26 +30,17 @@ class Register implements ShouldQueue
 
     public function handle(): void
     {
-        $znn = App::make('zenon.api');
-        $sentinelData = $znn->sentinel->getByOwner($this->block->account->address)['data'];
-
-        if (! $sentinelData) {
-            return;
-        }
-
-        $sentinel = Sentinel::whereHas('owner', function ($q) {
-            $q->where('address', $this->block->account->address);
-        })->first();
+        $sentinel = Sentinel::where('owner_id', $this->block->account->id)->first();
 
         if (! $sentinel) {
             $sentinel = Sentinel::create([
                 'chain_id' => $this->block->chain->id,
                 'owner_id' => $this->block->account->id,
-                'created_at' => $sentinelData->registrationTimestamp,
+                'created_at' => $this->block->created_at,
             ]);
         }
 
-        $sentinel->created_at = $sentinelData->registrationTimestamp;
+        $sentinel->created_at = $this->block->created_at;
         $sentinel->revoked_at = null;
         $sentinel->save();
 
