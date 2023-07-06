@@ -9,7 +9,7 @@ class Pillars extends PageController
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Network Pillars';
+        $this->page['meta']['title'] = 'Pillars';
         $this->page['meta']['description'] = 'The backbone of Network of Momentum, Pillars participate both in the consensus protocol and in the governance framework';
 
         return $this->render('pages/pillars/overview');
