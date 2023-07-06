@@ -151,6 +151,9 @@ $font-size-sm:                              $font-size-base * .875;
 $font-size-xs:                              $font-size-base * .75;
 
 
+// Icons
+$icons-font-family:                         'bootstrap-icons' !default;
+
 $headings-color:                            rgba($gray-300, 95%);
 $text-muted:                                rgba($gray-300, 45%);
 
@@ -178,10 +181,12 @@ $emphasized-link-hover-darken-percentage:   0%;
 
 // Breadcrumbs
 $breadcrumb-font-size:                      0.75rem;
-$breadcrumb-item-padding-x:                 .425rem;
+$breadcrumb-item-padding-x:                 .225rem;
 $breadcrumb-color:                          $link-color;
 $breadcrumb-hover-color:                    $link-hover-color;
 $breadcrumb-active-color:                   $headings-color;
+$breadcrumb-divider:                        quote("\F135");
+$breadcrumb-divider-flipped:                quote("\F12C");
 
 
 // Navbar
