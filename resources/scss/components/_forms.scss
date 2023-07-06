@@ -156,7 +156,7 @@ label {
       size: 1.25em;
       style: normal;
     }
-    &::before { content: '\ec0d'; }
+    &::before { content: '\F341'; }
     &:hover { color: $gray-800; }
   }
 
@@ -169,7 +169,7 @@ label {
     opacity: 0;
 
     &:checked ~ .password-toggle-indicator::before {
-      content: '\eb0e';
+      content: '\F340';
     }
   }
 }

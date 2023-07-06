@@ -10,12 +10,12 @@
 
 // Bootstrap core
 @import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/variables-dark';
 @import '~bootstrap/scss/utilities';
 @import "bootstrap";
 
 // Bootstrap icons
 @import '~bootstrap-icons/font/bootstrap-icons';
-@import '~boxicons/css/boxicons.css';
 
 // Layout & components
 @import 'silicone/reboot';
