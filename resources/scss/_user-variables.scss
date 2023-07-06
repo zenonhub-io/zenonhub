@@ -44,8 +44,6 @@ $border-radius-xl:    1.2rem;
 $border-radius-2xl:   1.4rem;
 $border-radius-pill:  50rem;
 
-$tooltip-max-width:   1000px;
-
 $btn-border-radius-lg: $border-radius;
 
 
@@ -128,7 +126,7 @@ $button-faded-colors: (
 
 
 // Body
-$body-color:                                rgba($gray-300, 85%);
+$body-color:                                rgba($gray-300, 70%);
 $body-bg:                                   $gray-dark;
 
 $body-dark-mode-color:                      $body-color;
@@ -171,7 +169,7 @@ $box-shadow-inset:                          inset 0 1px 4px rgba($black, 20%) !d
 
 
 // Links
-$link-color:                                rgba($gray-300, 65%);
+$link-color:                                rgba($gray-300, 90%);
 $link-decoration:                           none;
 $link-hover-color:                          $primary;
 $link-hover-decoration:                     none;
@@ -190,7 +188,7 @@ $breadcrumb-divider-flipped:                quote("\F12C");
 
 
 // Navbar
-$navbar-nav-link-padding-x:                 .675rem !default;
+$navbar-nav-link-padding-x:                 .575rem;
 
 
 // Cards
@@ -251,3 +249,17 @@ $form-label-color:                          $gray-900;
 $form-floating-label-opacity:               .7;
 $form-label-dark-mode-color:                $body-dark-mode-color;
 $form-label-dark-mode-focus-color:          $body-dark-mode-color;
+
+
+// Tooltips
+$tooltip-max-width:   1000px;
+$tooltip-color: $body-color;
+
+$primary-text-emphasis:   $primary;
+$secondary-text-emphasis: $secondary;
+$success-text-emphasis:   $success;
+$info-text-emphasis:      $info;
+$warning-text-emphasis:   $warning;
+$danger-text-emphasis:    $danger;
+$light-text-emphasis:     $gray-700;
+$dark-text-emphasis:      $gray-700;

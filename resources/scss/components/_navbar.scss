@@ -102,8 +102,9 @@
 
 .navbar {
     .dropdown-toggle::after {
-        margin-top: .15rem;
-        font-size: 0.875em;
+        margin-top: 0.15rem;
+        font-size: 0.675em;
+        margin-left: 0.55em
     }
     .navbar-nav .dropdown-menu {
         border: 0;

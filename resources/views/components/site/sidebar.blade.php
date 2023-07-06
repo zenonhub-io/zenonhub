@@ -4,7 +4,7 @@
 </button>
 
 <div id="sidebar-menu" class="collapse d-lg-block">
-    <div class="card border-1 shadow mb-4">
+    <div class="card border shadow mb-4">
         <div class="card-body">
             @foreach ($items as $section => $menuItems)
                 <h3 class="h5">{{ $section }}</h3>
