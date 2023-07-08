@@ -12,6 +12,8 @@ class Funding extends Component
 
     public Account $acceleratorContract;
 
+    public bool $readyToLoad = false;
+
     public function render()
     {
         return view('livewire.stats.accelerator.funding');
@@ -19,6 +21,8 @@ class Funding extends Component
 
     public function loadFundingData()
     {
+        $this->readyToLoad = true;
+
         $this->acceleratorContract = Account::findByAddress(Account::ADDRESS_ACCELERATOR);
         $znnToken = znn_token();
         $qsrToken = qsr_token();
