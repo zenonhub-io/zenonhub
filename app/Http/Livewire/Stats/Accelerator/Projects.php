@@ -12,6 +12,8 @@ class Projects extends Component
 
     public array $projectData;
 
+    public bool $readyToLoad = false;
+
     public function render()
     {
         return view('livewire.stats.accelerator.projects');
@@ -19,6 +21,8 @@ class Projects extends Component
 
     public function loadProjectData()
     {
+        $this->readyToLoad = true;
+
         $this->projectData = [
             'labels' => ['New', 'Accepted', 'Completed', 'Rejected'],
             'data' => [
