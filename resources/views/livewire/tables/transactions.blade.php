@@ -66,7 +66,7 @@
                             <td class="pe-0">
                                 @if ($block->is_un_received)
                                     <span data-bs-toggle="tooltip" data-bs-title="Unreceived">
-                                        {!! svg('explorer.unreceived', 'text-danger') !!}
+                                        {!! svg('explorer/unreceived', 'text-danger') !!}
                                     </span>
                                 @endif
                             </td>
@@ -79,7 +79,7 @@
                                 <x-address :account="$block->account" :eitherSide="8" :alwaysShort="true"/>
                             </td>
                             <td class="px-0">
-                                {!! svg('explorer.send', 'text-success', 'transform: rotate(90deg);') !!}
+                                {!! svg('explorer/send', 'text-success', 'transform: rotate(90deg);') !!}
                             </td>
                             <td>
                                 <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>

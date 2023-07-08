@@ -75,8 +75,8 @@
     </div>
     <div class="offcanvas-header border-top">
         @if (auth()->check())
-            <a href="{{ route('account.details') }}" class="btn btn-outline-primary w-100">
-                Account
+            <a href="{{ route('account.overview') }}" class="btn btn-outline-primary w-100">
+                My account
             </a>
         @else
             <a href="{{ route('login') }}" class="btn btn-outline-primary w-100">

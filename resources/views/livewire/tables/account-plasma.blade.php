@@ -54,9 +54,9 @@
                         <tr>
                             <td>
                                 @if ($account->id === $fusion->from_account_id)
-                                    <span data-bs-toggle="tooltip" data-bs-title="To">{!! svg('explorer.send', 'me-2 text-warning') !!}</span> <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                    <span data-bs-toggle="tooltip" data-bs-title="To">{!! svg('explorer/send', 'me-2 text-warning') !!}</span> <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>
                                 @else
-                                    <span data-bs-toggle="tooltip" data-bs-title="From">{!! svg('explorer.receive', 'me-2 text-success') !!}</span> <x-address :account="$fusion->from_account" :eitherSide="8" :alwaysShort="true"/>
+                                    <span data-bs-toggle="tooltip" data-bs-title="From">{!! svg('explorer/receive', 'me-2 text-success') !!}</span> <x-address :account="$fusion->from_account" :eitherSide="8" :alwaysShort="true"/>
                                 @endif
                             </td>
                             <td>{{ $fusion->display_amount }} QSR</td>

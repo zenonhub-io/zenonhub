@@ -108,11 +108,13 @@
     }
     .navbar-nav .dropdown-menu {
         border: 0;
-        //border-left: var(--#{$prefix}dropdown-border-wdth, 1px) solid var(--#{$prefix}border-color);
         @include border-radius(0);
         background-color: transparent;
         background: none;
-        @include box-shadow(none);
+
+        @include media-breakpoint-down(lg) {
+            @include box-shadow(none !important);
+        }
 
         .dropdown-item {
             &.active {
@@ -137,7 +139,6 @@
             }
             font-size: 1em;
         }
-        .dropdown-divider { display: none; }
     }
 }
 

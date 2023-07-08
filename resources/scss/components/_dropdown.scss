@@ -50,6 +50,7 @@
 
 .dropdown-menu {
   --#{$prefix}dropdown-link-font-weight: #{$dropdown-font-weight};
+    @include box-shadow($box-shadow !important);
 
   li {
     &:hover > .dropdown-item {

@@ -62,7 +62,7 @@
                             <td class="pe-0">
                                 @if ($block->is_un_received)
                                     <span data-bs-toggle="tooltip" data-bs-title="Unreceived">
-                                        {!! svg('explorer.unreceived', 'text-danger') !!}
+                                        {!! svg('explorer/unreceived', 'text-danger') !!}
                                     </span>
                                 @endif
                             </td>
@@ -73,9 +73,9 @@
                             </td>
                             <td>
                                 @if ($account->id === $block->account->id)
-                                    <span data-bs-toggle="tooltip" data-bs-title="Outgoing">{!! svg('explorer.send', 'me-2 text-warning') !!}</span> To <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                    <span data-bs-toggle="tooltip" data-bs-title="Outgoing">{!! svg('explorer/send', 'me-2 text-warning') !!}</span> To <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>
                                 @else
-                                    <span data-bs-toggle="tooltip" data-bs-title="Incoming">{!! svg('explorer.receive', 'me-2 text-success') !!}</span> From <x-address :account="$block->account" :eitherSide="8" :alwaysShort="true"/>
+                                    <span data-bs-toggle="tooltip" data-bs-title="Incoming">{!! svg('explorer/receive', 'me-2 text-success') !!}</span> From <x-address :account="$block->account" :eitherSide="8" :alwaysShort="true"/>
                                 @endif
                             </td>
                             <td>{{ ($block->display_type ?: '-') }}</td>
