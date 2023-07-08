@@ -6,8 +6,8 @@
         <div class="card-header">
             <div class="d-md-none">
                 <select id="sections" class="form-control" wire:change="$emit('tabChange', $event.target.value)">
-                    <option value="funding" {{ $tab === 'details' ? 'selected' : '' }}>Details</option>
-                    <option value="projects" {{ $tab === 'password' ? 'selected' : '' }}>Password</option>
+                    <option value="details" {{ $tab === 'details' ? 'selected' : '' }}>Details</option>
+                    <option value="password" {{ $tab === 'password' ? 'selected' : '' }}>Password</option>
                 </select>
             </div>
             <div class="d-none d-md-block">
