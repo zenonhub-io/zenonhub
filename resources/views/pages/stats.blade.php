@@ -18,6 +18,11 @@
                                 'title' => 'Accelerator Z',
                                 'icon' => 'rocket-takeoff-fill',
                             ],
+//                            [
+//                                'route' => 'stats.swaps',
+//                                'title' => 'Swaps',
+//                                'icon' => 'shuffle',
+//                            ],
                         ]
                     ]"/>
                 </div>
