@@ -3,7 +3,7 @@
         <div class="row">
             @foreach($data['stats'] as $stat => $value)
                 <div class="col-8 col-lg-4 mb-1">
-                    <div class="p-1 bg-secondary rounded-2 text-center mb-3">
+                    <div class="p-1 bg-secondary shadow rounded-2 text-center mb-3">
                         <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
                         {{ $value }}
                     </div>
@@ -12,7 +12,7 @@
         </div>
         <div class="row">
             <div class="col-24 col-md-14 col-lg-16">
-                <div class="card shadow card-hover mb-4">
+                <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-24 col-lg-16">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow card-hover mb-4">
+                <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-24 col-lg-16">
@@ -67,14 +67,48 @@
                 </div>
                 <div class="row">
                     <div class="col-24 col-sm-12 mb-4">
-                        <div class="card h-100 shadow card-hover text-center">
+                        <div class="card card-hover h-100 shadow text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
-                                    <a href="{{ route('stats.nodes') }}">
+                                    <a href="{{ route('tools.plasma-bot') }}" class="stretched-link">
                                         <span class="d-block mb-2">
-                                            {!! svg('tools.nodes', 'mb-2', 'height: 2.3rem') !!}
+                                            {!! svg('tools/plasma-bot', 'mb-2', 'height: 2.3rem') !!}
                                         </span>
-                                        <h5>Nodes</h5>
+                                        <h5>Plasma Bot</h5>
+                                    </a>
+                                    <p class="mb-0">
+                                        Generate plasma for an address
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-24 col-sm-12 mb-4">
+                        <div class="card card-hover h-100 shadow text-center">
+                            <div class="card-body d-flex align-items-center justify-content-center">
+                                <div class="d-block">
+                                    <a href="{{ route('tools.api-playground') }}" class="stretched-link">
+                                        <span class="d-block mb-2">
+                                            {!! svg('tools/api-playground', 'mb-2', 'height: 2.3rem') !!}
+                                        </span>
+                                        <h5>API Playground</h5>
+                                    </a>
+                                    <p class="mb-0">
+                                        Explore the networks RPC endpoints
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-24 col-sm-12 mb-4">
+                        <div class="card card-hover h-100 shadow text-center">
+                            <div class="card-body d-flex align-items-center justify-content-center">
+                                <div class="d-block">
+                                    <a href="{{ route('stats.nodes') }}" class="stretched-link">
+                                        <span class="d-block mb-2">
+                                            {!! svg('stats/nodes', 'mb-2', 'height: 2.3rem') !!}
+                                        </span>
+                                        <h5>Public Nodes</h5>
                                     </a>
                                     <p class="mb-0">
                                         View the networks public node stats
@@ -84,51 +118,17 @@
                         </div>
                     </div>
                     <div class="col-24 col-sm-12 mb-4">
-                        <div class="card h-100 shadow text-center">
+                        <div class="card card-hover h-100 shadow text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
-                                    <a href="{{ route('tools.api-playground') }}">
+                                    <a href="{{ route('stats.accelerator') }}" class="stretched-link">
                                         <span class="d-block mb-2">
-                                            {!! svg('tools.api', 'mb-2', 'height: 2.3rem') !!}
+                                            {!! svg('stats/accelerator', 'mb-2', 'height: 2.3rem') !!}
                                         </span>
-                                        <h5>API</h5>
+                                        <h5>Accelerator Z</h5>
                                     </a>
                                     <p class="mb-0">
-                                        Use our API in your own application
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-24 col-sm-12 mb-4">
-                        <div class="card h-100 shadow card-hover text-center">
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <div class="d-block">
-                                    <a href="{{ route('tools.broadcast-message') }}">
-                                        <span class="d-block mb-2">
-                                            {!! svg('tools.broadcast', 'mb-2', 'height: 2.3rem') !!}
-                                        </span>
-                                        <h5>Broadcast</h5>
-                                    </a>
-                                    <p class="mb-0">
-                                        Send a signed message to the forum
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-24 col-sm-12 mb-4">
-                        <div class="card h-100 shadow card-hover text-center">
-                            <div class="card-body d-flex align-items-center justify-content-center">
-                                <div class="d-block">
-                                    <a href="{{ route('tools.verify-signature') }}">
-                                    <span class="d-block">
-                                        {!! svg('tools.validate', 'mb-2', 'height: 2.3rem') !!}
-                                    </span>
-                                        <h5>Validate</h5>
-                                    </a>
-                                    <p class="mb-0">
-                                        Check a message and signature match
+                                        View the Accelerator Z contract stats
                                     </p>
                                 </div>
                             </div>
