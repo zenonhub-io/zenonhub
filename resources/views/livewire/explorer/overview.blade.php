@@ -1,23 +1,14 @@
 <div>
     <div wire:poll.10000ms>
-        <div class="card shadow mb-4">
-            <div class="card-header border-0">
-                <div class="row">
-                    <div class="col-24">
-                        <livewire:explorer.search key="{{now()}}" />
+        <div class="row">
+            @foreach($stats as $stat => $value)
+                <div class="col-12 col-md-8 col-lg-4 mb-4">
+                    <div class="p-1 bg-secondary shadow rounded-2 text-center">
+                        <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
+                        {{ $value }}
                     </div>
                 </div>
-                <div class="row">
-                    @foreach($stats as $stat => $value)
-                        <div class="col-12 col-md-8 col-lg-4 mt-3">
-                            <div class="p-1 bg-secondary rounded-2 text-center">
-                                <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
-                                {{ $value }}
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+            @endforeach
         </div>
         <div class="row">
             <div class="col-24 col-md-12 mb-4">
@@ -87,14 +78,14 @@
                                         </div>
                                         <div class="text-start text-sm-end d-block d-sm-inline mb-2 my-sm-0">
                                             <span class="d-block mb-2">
-                                                <span class="d-inline d-sm-none" data-bs-toggle="tooltip" data-bs-title="Sender">{!! svg('explorer.send', 'text-success') !!}</span>
+                                                <span class="d-inline d-sm-none" data-bs-toggle="tooltip" data-bs-title="Sender">{!! svg('explorer/send', 'text-success') !!}</span>
                                                 <x-address :account="$block->account" :eitherSide="6" :alwaysShort="true" />
-                                                <span class="d-none d-sm-inline" data-bs-toggle="tooltip" data-bs-title="Sender">{!! svg('explorer.send', 'text-success') !!}</span>
+                                                <span class="d-none d-sm-inline" data-bs-toggle="tooltip" data-bs-title="Sender">{!! svg('explorer/send', 'text-success') !!}</span>
                                             </span>
                                             <span class="d-block">
-                                                <span class="d-inline d-sm-none" data-bs-toggle="tooltip" data-bs-title="Receiver">{!! svg('explorer.receive', 'text-warning') !!}</span>
+                                                <span class="d-inline d-sm-none" data-bs-toggle="tooltip" data-bs-title="Receiver">{!! svg('explorer/receive', 'text-warning') !!}</span>
                                                 <x-address :account="$block->to_account" :eitherSide="6" :alwaysShort="true" />
-                                                <span class="d-none d-sm-inline" data-bs-toggle="tooltip" data-bs-title="Receiver">{!! svg('explorer.receive', 'text-warning') !!}</span>
+                                                <span class="d-none d-sm-inline" data-bs-toggle="tooltip" data-bs-title="Receiver">{!! svg('explorer/receive', 'text-warning') !!}</span>
                                             </span>
                                         </div>
                                     </div>

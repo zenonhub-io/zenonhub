@@ -102,16 +102,19 @@
 
 .navbar {
     .dropdown-toggle::after {
-        margin-top: .0625rem;
-        font-size: 1.15em;
+        margin-top: 0.15rem;
+        font-size: 0.675em;
+        margin-left: 0.55em
     }
     .navbar-nav .dropdown-menu {
         border: 0;
-        //border-left: var(--#{$prefix}dropdown-border-wdth, 1px) solid var(--#{$prefix}border-color);
         @include border-radius(0);
         background-color: transparent;
         background: none;
-        @include box-shadow(none);
+
+        @include media-breakpoint-down(lg) {
+            @include box-shadow(none !important);
+        }
 
         .dropdown-item {
             &.active {
@@ -136,7 +139,6 @@
             }
             font-size: 1em;
         }
-        .dropdown-divider { display: none; }
     }
 }
 

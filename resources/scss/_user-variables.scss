@@ -44,8 +44,6 @@ $border-radius-xl:    1.2rem;
 $border-radius-2xl:   1.4rem;
 $border-radius-pill:  50rem;
 
-$tooltip-max-width:   1000px;
-
 $btn-border-radius-lg: $border-radius;
 
 
@@ -151,11 +149,15 @@ $font-size-sm:                              $font-size-base * .875;
 $font-size-xs:                              $font-size-base * .75;
 
 
+// Icons
+$icons-font-family:                         'bootstrap-icons' !default;
+
 $headings-color:                            rgba($gray-300, 95%);
 $text-muted:                                rgba($gray-300, 45%);
 
 $dropdown-bg:                               $gray-light;
 $dropdown-font-weight:                      $font-weight-normal;
+$dropdown-divider-bg:                       $border-light-color;
 
 $list-group-action-font-weight:             $font-weight-normal;
 
@@ -178,14 +180,16 @@ $emphasized-link-hover-darken-percentage:   0%;
 
 // Breadcrumbs
 $breadcrumb-font-size:                      0.75rem;
-$breadcrumb-item-padding-x:                 .425rem;
+$breadcrumb-item-padding-x:                 .225rem;
 $breadcrumb-color:                          $link-color;
 $breadcrumb-hover-color:                    $link-hover-color;
 $breadcrumb-active-color:                   $headings-color;
+$breadcrumb-divider:                        quote("\F135");
+$breadcrumb-divider-flipped:                quote("\F12C");
 
 
 // Navbar
-$navbar-nav-link-padding-x:                 .675rem !default;
+$navbar-nav-link-padding-x:                 .575rem;
 
 
 // Cards
@@ -246,3 +250,17 @@ $form-label-color:                          $gray-900;
 $form-floating-label-opacity:               .7;
 $form-label-dark-mode-color:                $body-dark-mode-color;
 $form-label-dark-mode-focus-color:          $body-dark-mode-color;
+
+
+// Tooltips
+$tooltip-max-width:   1000px;
+$tooltip-color: $body-color;
+
+$primary-text-emphasis:   $primary;
+$secondary-text-emphasis: $secondary;
+$success-text-emphasis:   $success;
+$info-text-emphasis:      $info;
+$warning-text-emphasis:   $warning;
+$danger-text-emphasis:    $danger;
+$light-text-emphasis:     $gray-700;
+$dark-text-emphasis:      $gray-700;

@@ -16,7 +16,7 @@
     <div class="container mb-4">
         <div class="row">
             <div class="col-24">
-                <x-explorer.header/>
+                <livewire:explorer.search key="{{now()}}" />
                 @if (isset($data['component']))
                     @if ($data['component'] === 'explorer.momentum')
                         <livewire:explorer.momentum :key="now()" :hash="$data['momentum']->hash" />

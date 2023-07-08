@@ -9,7 +9,7 @@
   &::before, &::after {
     font: {
       family: $icons-font-family;
-      size: 1.375em;
+      size: 1em;
       weight: normal;
     }
     vertical-align: middle !important;
@@ -18,7 +18,7 @@
   }
   &::after {
     margin-right: -.25rem;
-    content: '\ea4a';
+    content: '\F282';
   }
   &.fs-sm::after {
     margin-top: -.0625rem !important;
@@ -30,15 +30,15 @@
 }
 
 .dropup .dropdown-toggle::after {
-  content: '\ea57';
+  content: '\F286';
 }
 .dropstart .dropdown-toggle::before {
   margin-left: -.3125rem;
-  content: '\ea4d';
+  content: '\F284';
 }
 .dropend .dropdown-toggle::after {
   margin-right: -.3125rem;
-  content: '\ed3b';
+  content: '\F285';
   font-size: 1.15em !important;
 }
 .dropdown-toggle-split {
@@ -50,6 +50,7 @@
 
 .dropdown-menu {
   --#{$prefix}dropdown-link-font-weight: #{$dropdown-font-weight};
+    @include box-shadow($box-shadow !important);
 
   li {
     &:hover > .dropdown-item {
