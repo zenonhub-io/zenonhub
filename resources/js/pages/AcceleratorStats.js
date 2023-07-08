@@ -25,7 +25,6 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
      * Attaches handlers to the window to listen for all request interactions.
      */
     ready() {
-        this.initTab();
         this.attachHandlers();
     }
 
@@ -44,40 +43,22 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
             this.offEngagement();
         });
 
-        window.livewire.hook('message.processed', (message, component) => {
-            if(this.activeTab === 'funding') {
-                this.onFunding();
-            } else if(this.activeTab === 'projects') {
-                this.onProjects();
-            } else if(this.activeTab === 'engagement') {
-                this.onEngagement();
-            }
+        Livewire.on('stats.az.fundingDataLoaded', data => {
+            this.onFunding(data);
+        });
+
+        Livewire.on('stats.az.projectDataLoaded', data => {
+            this.onProjects(data);
         });
     }
 
-    initTab() {
-        this.activeTab = window.zenonHub.getData('initialTab');
-
-        if(this.activeTab === 'funding') {
-            this.onFunding();
-        }
-
-        if(this.activeTab === 'projects') {
-            this.onProjects();
-        }
-
-        if(this.activeTab === 'engagement') {
-            this.onEngagement();
-        }
-    }
-
-    onFunding() {
+    onFunding(data) {
 
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-az-funding-znn"),
             {
-                series: window.zenonHub.getData('azFundingZnn'),
-                labels: window.zenonHub.getData('azFundingZnnLabels'),
+                series: data['znn']['data'],
+                labels: data['znn']['labels'],
                 colors: ['rgba(111, 243, 77, 0.8)', 'rgba(255, 255, 255, 0.14)'],
                 chart: {
                     type: 'donut',
@@ -160,8 +141,8 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-az-funding-qsr"),
             {
-                series: window.zenonHub.getData('azFundingQsr'),
-                labels: window.zenonHub.getData('azFundingQsrLabels'),
+                series: data['qsr']['data'],
+                labels: data['qsr']['labels'],
                 colors: ['rgba(0, 97, 235, 0.8)', 'rgba(255, 255, 255, 0.14)'],
                 chart: {
                     type: 'donut',
@@ -240,7 +221,6 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
             },
             'azFundingQsr',
         );
-
     }
 
     offFunding() {
@@ -248,12 +228,12 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
         window.zenonHub.charts().destroyChart('azFundingQsr');
     }
 
-    onProjects() {
+    onProjects(data) {
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-az-project-totals"),
             {
-                series: window.zenonHub.getData('azProjectTotals'),
-                labels: window.zenonHub.getData('azProjectTotalLabels'),
+                series: data['data'],
+                labels: data['labels'],
                 colors: ['rgba(255, 255, 255, 0.8)', 'rgba(66, 119, 255, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(141, 44, 44, 0.8)'],
                 chart: {
                     type: 'donut',
@@ -341,11 +321,11 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
     }
 
     onEngagement() {
-        console.log('ready');
+
     }
 
     offEngagement() {
-        window.zenonHub.charts().destroyChart('nodeCountries');
+
     }
 }
 
