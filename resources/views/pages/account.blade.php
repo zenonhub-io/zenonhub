@@ -44,7 +44,7 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('account.details') }}">
+                                <a href="{{ route('account.details') }}" class="stretched-link">
                                     <span class="d-block mb-2">
                                         {!! svg('account/details', 'mb-2', 'height: 2.3rem') !!}
                                     </span>
@@ -61,7 +61,7 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('account.favorites') }}">
+                                <a href="{{ route('account.favorites') }}" class="stretched-link">
                                     <span class="d-block mb-2">
                                         {!! svg('account/favourites', 'mb-2', 'height: 2.3rem') !!}
                                     </span>
@@ -78,7 +78,7 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('account.notifications') }}">
+                                <a href="{{ route('account.notifications') }}" class="stretched-link">
                                     <span class="d-block mb-2">
                                         {!! svg('account/notifications', 'mb-2', 'height: 2.3rem') !!}
                                     </span>
@@ -95,7 +95,7 @@
                     <div class="card h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
-                                <a href="{{ route('logout') }}">
+                                <a href="{{ route('logout') }}" class="stretched-link">
                                     <span class="d-block mb-2">
                                         <i class="bi-box-arrow-right opacity-70" style="font-size:2.3rem;"></i>
                                     </span>
