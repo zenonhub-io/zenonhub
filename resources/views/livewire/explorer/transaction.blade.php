@@ -93,7 +93,7 @@
                                     <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->account"/></span>
                                 </div>
                                 <div class="d-none d-md-block text-md-center align-self-center">
-                                    {!! svg('explorer.send', 'text-success', 'transform: rotate(90deg);') !!}
+                                    {!! svg('explorer/send', 'text-success', 'transform: rotate(90deg);') !!}
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block fs-sm text-muted">To</span>
@@ -105,7 +105,7 @@
                                     <div class="text-start text-md-center mb-2 mb-md-0">
                                         <span class="d-inline d-md-block fs-sm text-muted">Unreceived</span>
                                         <span class="float-end float-md-none">
-                                            {!! svg('explorer.unreceived', 'text-danger') !!}
+                                            {!! svg('explorer/unreceived', 'text-danger') !!}
                                         </span>
                                     </div>
                                 @endif

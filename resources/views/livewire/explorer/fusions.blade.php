@@ -44,7 +44,7 @@
                         <x-address :account="$fusion->from_account" :eitherSide="8" :alwaysShort="true"/>
                     </td>
                     <td class="px-0">
-                        {!! svg('explorer.send', 'text-success', 'transform: rotate(90deg);') !!}
+                        {!! svg('explorer/send', 'text-success', 'transform: rotate(90deg);') !!}
                     </td>
                     <td>
                         <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>
