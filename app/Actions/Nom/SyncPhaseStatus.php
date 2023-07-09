@@ -2,9 +2,9 @@
 
 namespace App\Actions\Nom;
 
+use App;
 use App\Models\Nom\AcceleratorPhase;
 use Exception;
-use Illuminate\Support\Facades\App;
 use Log;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -12,7 +12,7 @@ class SyncPhaseStatus
 {
     use QueueableAction;
 
-    protected ?object $projectData;
+    protected ?object $phaseData;
 
     public function __construct(
         protected AcceleratorPhase $phase,
@@ -35,15 +35,16 @@ class SyncPhaseStatus
     private function loadData(): void
     {
         $znn = App::make('zenon.api');
-        $this->projectData = $znn->accelerator->getProjectById($this->phase->hash)['data'];
+        $this->phaseData = $znn->accelerator->getPhaseById($this->phase->hash)['data'];
     }
 
     private function processData(): void
     {
-        $this->phase->vote_total = $this->projectData->votes->total;
-        $this->phase->vote_yes = $this->projectData->votes->yes;
-        $this->phase->vote_no = $this->projectData->votes->no;
-        $this->phase->accepted_at = ($this->projectData->phase->acceptedTimestamp ?: null);
+        $this->phase->vote_total = $this->phaseData->votes->total;
+        $this->phase->vote_yes = $this->phaseData->votes->yes;
+        $this->phase->vote_no = $this->phaseData->votes->no;
+        $this->phase->status = $this->phaseData->status;
+        $this->phase->accepted_at = ($this->phaseData->acceptedTimestamp ?: null);
         $this->phase->save();
     }
 }

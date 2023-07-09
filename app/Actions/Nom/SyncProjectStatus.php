@@ -2,9 +2,9 @@
 
 namespace App\Actions\Nom;
 
+use App;
 use App\Models\Nom\AcceleratorProject;
 use Exception;
-use Illuminate\Support\Facades\App;
 use Log;
 use Spatie\QueueableAction\QueueableAction;
 
