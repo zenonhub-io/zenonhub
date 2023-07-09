@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Nom;
+namespace App\Actions\Nom\Accelerator;
 
 use App;
 use App\Models\Nom\AcceleratorPhase;
@@ -13,6 +13,8 @@ class SyncPhaseStatus
     use QueueableAction;
 
     protected ?object $phaseData;
+
+    protected ?object $projectData;
 
     public function __construct(
         protected AcceleratorPhase $phase,
@@ -36,6 +38,7 @@ class SyncPhaseStatus
     {
         $znn = App::make('zenon.api');
         $this->phaseData = $znn->accelerator->getPhaseById($this->phase->hash)['data'];
+        $this->projectData = $znn->accelerator->getProjectById($this->phase->project->hash)['data'];
     }
 
     private function processData(): void
@@ -46,5 +49,9 @@ class SyncPhaseStatus
         $this->phase->status = $this->phaseData->status;
         $this->phase->accepted_at = ($this->phaseData->acceptedTimestamp ?: null);
         $this->phase->save();
+
+        $this->phase->project->modified_at = $this->projectData->lastUpdateTimestamp;
+        $this->phase->project->updated_at = $this->projectData->lastUpdateTimestamp;
+        $this->phase->project->save();
     }
 }

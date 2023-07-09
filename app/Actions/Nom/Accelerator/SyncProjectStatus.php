@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Nom;
+namespace App\Actions\Nom\Accelerator;
 
 use App;
 use App\Models\Nom\AcceleratorProject;
