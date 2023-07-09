@@ -9,6 +9,7 @@
                     <option value="funding" {{ $tab === 'funding' ? 'selected' : '' }}>Funding</option>
                     <option value="projects" {{ $tab === 'projects' ? 'selected' : '' }}>Projects</option>
                     <option value="engagement" {{ $tab === 'engagement' ? 'selected' : '' }}>Engagement</option>
+                    <option value="contributors" {{ $tab === 'contributors' ? 'selected' : '' }}>Contributors</option>
                 </select>
             </div>
             <div class="d-none d-md-block">
@@ -28,10 +29,15 @@
                             Engagement
                         </button>
                     </li>
+                    <li class="nav-item">
+                        <button class="btn nav-link {{ $tab === 'contributors' ? 'active' : '' }}" wire:click="$emit('tabChange', 'contributors')">
+                            Contributors
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
-        <div class="card-body {{ ($tab === 'engagement' ? 'px-0 pb-0' : '') }}">
+        <div class="card-body {{ (in_array($tab, ['engagement', 'contributors']) ? 'px-0 pb-0' : '') }}">
             <div class="tab-content">
                 <div class="tab-pane show active">
                     @if ($tab === 'funding')
@@ -49,10 +55,5 @@
     </div>
     @push('scripts')
         <script src="{{ mix('js/pages/stats/accelerator.js') }}"></script>
-        <script>
-            ((ZenonHub) => {
-                ZenonHub.addData('initialTab', '{{ $tab }}');
-            })(window.zenonHub);
-        </script>
     @endpush
 </div>
