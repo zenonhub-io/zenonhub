@@ -9,8 +9,8 @@ use Livewire\WithPagination;
 
 class Engagement extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public function mount()
     {
