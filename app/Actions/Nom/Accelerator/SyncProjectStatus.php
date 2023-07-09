@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Actions\Nom;
+namespace App\Actions\Nom\Accelerator;
 
+use App;
 use App\Models\Nom\AcceleratorProject;
 use Exception;
-use Illuminate\Support\Facades\App;
 use Log;
 use Spatie\QueueableAction\QueueableAction;
 

@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Sync;
 
-use App\Actions\Nom\SyncProjectStatus;
+use App\Actions\Nom\Accelerator\SyncProjectStatus;
 use App\Models\Nom\AcceleratorProject;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
