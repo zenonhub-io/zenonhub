@@ -15,7 +15,7 @@ class Contributors extends Component
 
     public function mount()
     {
-        $this->sort = request()->query('sort', 'projects_count');
+        $this->sort = request()->query('sort', 'znn_paid');
     }
 
     public function render()
@@ -31,12 +31,16 @@ class Contributors extends Component
     {
         $this->data = Account::whereHas('projects')
             ->withCount([
-                'projects',
-                'projects as new_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_NEW),
                 'projects as accepted_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_ACCEPTED),
                 'projects as completed_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_COMPLETE),
                 'projects as rejected_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_REJECTED),
             ])
+            ->withSum(
+                'projects as znn_paid', 'znn_paid'
+            )
+            ->withSum(
+                'projects as qsr_paid', 'qsr_paid'
+            )
             ->orderBy($this->sort, $this->order)
             ->simplePaginate(10);
     }
