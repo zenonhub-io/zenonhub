@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class Twitter
 {

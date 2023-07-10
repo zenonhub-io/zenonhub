@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App;
 use App\Classes\Indexer;
 use App\Models\Nom\Momentum;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 
 class Index extends Command
 {

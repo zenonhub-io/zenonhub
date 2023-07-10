@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Tables;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\PillarMessage;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class BroadcastMessages extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
     protected $queryString = [
         'sort' => ['except' => 'id'],

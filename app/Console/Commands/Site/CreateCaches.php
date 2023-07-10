@@ -8,8 +8,8 @@ use App\Models\Nom\Fusion;
 use App\Models\Nom\Momentum;
 use App\Models\Nom\PillarDelegator;
 use App\Models\Nom\Staker;
-use Cache;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class CreateCaches extends Command
 {

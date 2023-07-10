@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use Illuminate\Bus\Batchable;
@@ -12,7 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Log;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
 {

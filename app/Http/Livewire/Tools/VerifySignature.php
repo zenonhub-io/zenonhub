@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Tools;
 
-use App;
 use App\Models\Nom\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
 class VerifySignature extends Component

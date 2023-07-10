@@ -6,13 +6,13 @@ use App\Actions\SetBlockAsProcessed;
 use App\Classes\Utilities;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Fusion;
-use Cache;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 
 class Fuse implements ShouldQueue
 {

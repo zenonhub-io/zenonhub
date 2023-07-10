@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Nom\Accelerator;
 
-use App;
 use App\Actions\SetBlockAsProcessed;
 use App\Actions\UpdatePillarEngagementScores;
 use App\Models\Nom\AcceleratorPhase;
@@ -17,8 +16,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Notification;
-use Str;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class AddPhase implements ShouldQueue
 {

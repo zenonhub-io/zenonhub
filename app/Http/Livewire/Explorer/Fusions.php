@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Explorer;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\Fusion;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Fusions extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
     protected $queryString = [
         'sort' => ['except' => 'started_at'],

@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Nom\Account;
-use Hash;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'email',
         'password',
+        'last_seen_at',
         'privacy_confirmed_at',
         'last_login_at',
     ];
@@ -47,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'last_seen_at' => 'datetime',
         'email_verified_at' => 'datetime',
         'privacy_confirmed_at' => 'datetime',
         'last_login_at' => 'datetime',

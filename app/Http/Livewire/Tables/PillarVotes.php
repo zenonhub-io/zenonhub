@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire\Tables;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class PillarVotes extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
     public Pillar $pillar;
 

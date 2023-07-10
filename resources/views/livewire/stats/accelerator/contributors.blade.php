@@ -7,8 +7,13 @@
                     Account
                 </th>
                 <th>
-                    <button type="button" class="btn btn-sort" wire:click="sortBy('projects_count')">
-                        <x-table-sort-button :sort="$sort" :order="$order" check="projects_count" title="# Projects"/>
+                    <button type="button" class="btn btn-sort" wire:click="sortBy('znn_paid')">
+                        <x-table-sort-button :sort="$sort" :order="$order" check="znn_paid" title="ZNN Paid"/>
+                    </button>
+                </th>
+                <th>
+                    <button type="button" class="btn btn-sort" wire:click="sortBy('qsr_paid')">
+                        <x-table-sort-button :sort="$sort" :order="$order" check="znn_paid" title="QSR Paid"/>
                     </button>
                 </th>
                 <th>
@@ -35,7 +40,10 @@
                         <x-address :account="$contributor" :eitherSide="8" :alwaysShort="true"/>
                     </td>
                     <td>
-                        {{ number_format($contributor->projects_count) }}
+                        {{ znn_token()->getDisplayAmount($contributor->znn_paid) }}
+                    </td>
+                    <td>
+                        {{ qsr_token()->getDisplayAmount($contributor->qsr_paid) }}
                     </td>
                     <td>
                         {{ number_format($contributor->completed_projects_count) }}

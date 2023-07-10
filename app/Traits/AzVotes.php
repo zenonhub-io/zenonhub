@@ -3,8 +3,8 @@
 namespace App\Traits;
 
 use App\Models\Nom\Pillar;
-use Cache;
-use Str;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 trait AzVotes
 {

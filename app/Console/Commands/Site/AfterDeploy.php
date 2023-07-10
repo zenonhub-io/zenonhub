@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Site;
 
 use Illuminate\Console\Command;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class AfterDeploy extends Command
 {

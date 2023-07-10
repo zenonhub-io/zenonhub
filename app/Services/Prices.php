@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use Http;
-use Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Prices
 {

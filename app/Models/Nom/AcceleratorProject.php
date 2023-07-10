@@ -2,19 +2,19 @@
 
 namespace App\Models\Nom;
 
-use App;
 use App\Models\Markable\Favorite;
 use App\Traits\AzVotes;
-use Cache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
-use Str;
 
 class AcceleratorProject extends Model implements Sitemapable
 {

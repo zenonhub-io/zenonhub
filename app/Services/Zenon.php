@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App;
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
+use Illuminate\Support\Facades\App;
 
 class Zenon
 {

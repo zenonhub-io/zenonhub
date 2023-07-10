@@ -5,8 +5,8 @@ namespace App\Http\Livewire\Explorer;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Momentum;
 use App\Models\Nom\Token;
-use Cache;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class Overview extends Component
