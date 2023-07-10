@@ -25,8 +25,8 @@ return new class extends Migration
 
         $acceptedProjects = AcceleratorProject::get();
         $acceptedProjects->each(function ($project) {
-            (new SyncProjectStatus($project))->onQueue()->execute();
-            (new UpdateProjectFunding($project))->onQueue()->execute();
+            (new SyncProjectStatus($project))->execute();
+            (new UpdateProjectFunding($project))->execute();
         });
     }
 
