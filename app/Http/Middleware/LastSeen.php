@@ -22,7 +22,7 @@ class LastSeen
         }
 
         $user = Auth::user();
-        $cacheKey = 'user_last_active_'.$user->id;
+        $cacheKey = 'user_last_seen_'.$user->id;
 
         if (Cache::has($cacheKey)) {
             return $next($request);
