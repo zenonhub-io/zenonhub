@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Models\User;
 use Auth;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +26,7 @@ class Signup extends PageController
         return $this->render('pages/auth');
     }
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'username' => [
@@ -56,6 +57,8 @@ class Signup extends PageController
                 'alert' => 'There was an error, please try again',
             ])->exceptInput('password', 'password-confirmation');
         }
+
+        $user->assignRole('user');
 
         event(new Registered($user));
 
