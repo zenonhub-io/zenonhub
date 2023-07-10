@@ -9,14 +9,14 @@ use App\Models\Nom\Pillar;
 use App\Models\Nom\PillarDelegator;
 use App\Models\NotificationType;
 use App\Models\User;
-use Cache;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Notification;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 
 class Delegate implements ShouldQueue
 {

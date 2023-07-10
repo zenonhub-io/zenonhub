@@ -2,14 +2,16 @@
 
 namespace App\Http\Livewire\Tables;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class PillarDelegators extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
     public Pillar $pillar;
 

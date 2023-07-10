@@ -2,10 +2,10 @@
 
 namespace App\Actions\Nom\Accelerator;
 
-use App;
 use App\Models\Nom\AcceleratorPhase;
 use Exception;
-use Log;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueueableAction\QueueableAction;
 
 class SyncPhaseStatus

@@ -6,7 +6,7 @@ use App\Jobs\Alerts\WhaleAlert;
 use App\Jobs\ProcessAccountBalance;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueueableAction\QueueableAction;
 
 class ProcessBlock

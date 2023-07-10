@@ -2,7 +2,7 @@
 
 namespace App\Actions\PlasmaBot;
 
-use App;
+use Illuminate\Support\Facades\App;
 use Spatie\QueueableAction\QueueableAction;
 
 class Install

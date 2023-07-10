@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App;
 use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Validator;
 
 /**

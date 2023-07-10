@@ -14,8 +14,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Notification;
-use Str;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class Register implements ShouldQueue
 {

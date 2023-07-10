@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Tables;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\Token;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TokenMints extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
     public Token $token;
 

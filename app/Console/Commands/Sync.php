@@ -9,8 +9,8 @@ use App\Jobs\Sync\ProjectStatus as SyncProjectStatus;
 use App\Jobs\Sync\Sentinels as SyncSentinels;
 use App\Jobs\Sync\Tokens as SyncTokens;
 use App\Models\Nom\Account;
-use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class Sync extends Command
 {

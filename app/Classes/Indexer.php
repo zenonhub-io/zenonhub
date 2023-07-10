@@ -12,12 +12,12 @@ use App\Models\Nom\Momentum;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\PillarHistory;
 use App\Models\Nom\Token;
-use Cache;
-use DB;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Support\Collection;
-use Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Indexer
 {

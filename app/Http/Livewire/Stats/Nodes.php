@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\Stats;
 
 use App\Http\Livewire\ChartTrait;
-use Cache;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class Nodes extends Component

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Services;
 
-use App;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\App;
 use Tests\TestCase;
 
 class PriceTest extends TestCase

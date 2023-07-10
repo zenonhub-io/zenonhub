@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App;
 use App\Exceptions\PlasmaBotException;
-use Log;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class PlasmaBot
 {

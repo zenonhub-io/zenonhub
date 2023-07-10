@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Exceptions\PlasmaBotException;
 use Illuminate\Process\ProcessResult;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
-use Log;
 
 class ZnnCli
 {

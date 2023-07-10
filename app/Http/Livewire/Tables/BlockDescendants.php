@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Tables;
 
+use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\AccountBlock;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class BlockDescendants extends Component
 {
-    use \Livewire\WithPagination;
-    use \App\Http\Livewire\DataTableTrait;
+    use WithPagination;
+    use DataTableTrait;
 
     public AccountBlock $transaction;
 

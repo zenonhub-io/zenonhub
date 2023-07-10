@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Charts;
 
 use App\Http\Livewire\ChartTrait;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class NodeCountries extends Component

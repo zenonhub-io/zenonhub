@@ -2,10 +2,10 @@
 
 namespace App\Classes;
 
-use App;
 use App\Models\Nom\Account;
 use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
+use Illuminate\Support\Facades\App;
 
 class Utilities
 {

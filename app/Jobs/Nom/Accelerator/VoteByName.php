@@ -11,14 +11,14 @@ use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AcceleratorVote;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
-use Cache;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class VoteByName implements ShouldQueue
 {

@@ -2,8 +2,8 @@
 
 namespace App\Actions\PlasmaBot;
 
-use App;
 use App\Models\PlasmaBotEntry;
+use Illuminate\Support\Facades\App;
 use Spatie\QueueableAction\QueueableAction;
 
 class CancelExpired

@@ -6,7 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Sentinel;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class Home extends PageController
 {

@@ -14,7 +14,7 @@ use DigitalSloth\ZnnPhp\Providers\Stake;
 use DigitalSloth\ZnnPhp\Providers\Stats;
 use DigitalSloth\ZnnPhp\Providers\Swap;
 use DigitalSloth\ZnnPhp\Providers\Token;
-use Http;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class ApiPlayground extends Component
