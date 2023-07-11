@@ -4,8 +4,8 @@
         <div class="card shadow mb-4">
             <div class="card-header">
                 <div class="text-muted d-flex justify-content-between">
-                    Token | {{ ($token->has_custom_label ? $token->custom_label : $token->symbol) }}
-                    <span>
+                    Token <span class="text-break">| {{ ($token->has_custom_label ? $token->custom_label : $token->symbol) }}</span>
+                    <span class="text-nowrap">
                         @if (! auth()->check())
                             <a href="{{ route('login', ['redirect' => url()->current()]) }}">
                                 <i
