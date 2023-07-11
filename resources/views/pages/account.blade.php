@@ -24,13 +24,14 @@
                                 'icon' => 'bell-fill'
                             ],
 //							[
-//                                'route' => 'account.verified-addresses',
-//                                'title' => 'Verified addresses',
+//                                'route' => 'account.addresses',
+//                                'title' => 'Addresses',
+//                                'icon' => 'wallet2',
 //                            ],
                             [
                                 'route' => 'logout',
                                 'title' => 'Logout',
-                                'icon' => 'lock-fill'
+                                'icon' => 'box-arrow-right'
                             ]
                         ]
                     ]"/>
