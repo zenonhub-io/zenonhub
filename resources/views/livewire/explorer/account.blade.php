@@ -5,7 +5,7 @@
             <div class="card-header border-bottom">
                 <div class="text-muted d-flex justify-content-between">
                     <span>
-                        Account {{ ($account->has_custom_label ?  ' | ' . $account->custom_label : '') }}
+                        Account <span class="text-break">{{ ($account->has_custom_label ?  ' | ' . $account->custom_label : '') }}</span>
                         @if ($account->active_pillar)
                             <a class="ms-2" href="{{ route('pillars.detail', ['slug' => $account->pillar->slug]) }}" data-bs-toggle="tooltip" data-bs-title="Pillar">
                                 {!! svg('pillar', '', 'height: 16px') !!}
@@ -22,7 +22,7 @@
                             </span>
                         @endif
                     </span>
-                    <span>
+                    <span class="text-nowrap">
                         @if (! auth()->check())
                             <a href="{{ route('login', ['redirect' => url()->current()]) }}">
                                 <i
