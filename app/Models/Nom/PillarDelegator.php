@@ -97,9 +97,16 @@ class PillarDelegator extends Model
     public function getDisplayPercentageShareAttribute()
     {
         $znnBalance = $this->account->znn_balance;
+        $weight = $this->pillar->weight;
 
-        if ($znnBalance) {
-            $percentage = ($znnBalance / $this->pillar->weight) * 100;
+        if ($this->pillar->revoked_at) {
+            $weight = $this->pillar->active_delegators->map(function ($delegator) {
+                return $delegator->account->znn_balance;
+            })->sum();
+        }
+
+        if ($znnBalance && $weight) {
+            $percentage = ($znnBalance / $weight) * 100;
 
             return number_format($percentage, 2);
         }
