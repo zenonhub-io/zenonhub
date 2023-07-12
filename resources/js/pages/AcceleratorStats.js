@@ -34,7 +34,6 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
         window.livewire.hook('message.received', (message, component) => {
             this.offFunding();
             this.offProjects();
-            this.offEngagement();
         });
 
         Livewire.on('stats.az.fundingDataLoaded', data => {
