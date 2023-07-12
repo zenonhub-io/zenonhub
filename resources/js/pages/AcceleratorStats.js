@@ -6,8 +6,6 @@ if (window.zenonHub === undefined) {
 
 export default class AcceleratorStats extends window.zenonHub.Singleton {
 
-    activeTab;
-
     /**
      * Listeners.
      *
@@ -32,10 +30,6 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
      * Attaches the necessary handlers for all request interactions.
      */
     attachHandlers() {
-
-        window.livewire.on('tabChange', (tab) => {
-            this.activeTab = tab
-        });
 
         window.livewire.hook('message.received', (message, component) => {
             this.offFunding();
@@ -318,14 +312,6 @@ export default class AcceleratorStats extends window.zenonHub.Singleton {
 
     offProjects() {
         window.zenonHub.charts().destroyChart('azProjectTotals');
-    }
-
-    onEngagement() {
-
-    }
-
-    offEngagement() {
-
     }
 }
 

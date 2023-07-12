@@ -7,8 +7,6 @@ if (window.zenonHub === undefined) {
 
 export default class NodeStats extends window.zenonHub.Singleton {
 
-    activeTab;
-
     /**
      * Listeners.
      *
@@ -26,7 +24,6 @@ export default class NodeStats extends window.zenonHub.Singleton {
      * Attaches handlers to the window to listen for all request interactions.
      */
     ready() {
-        this.initTab();
         this.attachHandlers();
     }
 
@@ -34,9 +31,6 @@ export default class NodeStats extends window.zenonHub.Singleton {
      * Attaches the necessary handlers for all request interactions.
      */
     attachHandlers() {
-        window.livewire.on('tabChange', (tab) => {
-            this.activeTab = tab
-        });
 
         window.livewire.hook('message.received', (message, component) => {
             this.offMap();
@@ -46,60 +40,42 @@ export default class NodeStats extends window.zenonHub.Singleton {
             this.offVersions();
         });
 
-        window.livewire.hook('message.processed', (message, component) => {
-            if(this.activeTab === 'map') {
-                this.onMap();
-            } else if(this.activeTab === 'countries') {
-                this.onCountries();
-            } else if(this.activeTab === 'cities') {
-                this.onCities();
-            } else if(this.activeTab === 'networks') {
-                this.onNetworks();
-            } else if(this.activeTab === 'versions') {
-                this.onVersions();
-            }
+        Livewire.on('stats.nodes.mapDataLoaded', data => {
+            this.onMap(data);
+        });
+
+        Livewire.on('stats.nodes.countriesDataLoaded', data => {
+            this.onCountries(data);
+        });
+
+        Livewire.on('stats.nodes.citiesDataLoaded', data => {
+            this.onCities(data);
+        });
+
+        Livewire.on('stats.nodes.networksDataLoaded', data => {
+            this.onNetworks(data);
+        });
+
+        Livewire.on('stats.nodes.versionsDataLoaded', data => {
+            this.onVersions(data);
         });
     }
 
-    initTab() {
-        this.activeTab = window.zenonHub.getData('initialTab');
-
-        if(this.activeTab === 'map') {
-            this.onMap();
-        }
-
-        if(this.activeTab === 'countries') {
-            this.onCountries();
-        }
-
-        if(this.activeTab === 'cities') {
-            this.onCities();
-        }
-
-        if(this.activeTab === 'networks') {
-            this.onNetworks();
-        }
-
-        if(this.activeTab === 'versions') {
-            this.onVersions();
-        }
-    }
-
-    onMap() {
-        window.zenonHub.globe().init(window.zenonHub.getData('nodeMapCanvasId'), window.zenonHub.getData('nodeMapMarkers'));
+    onMap(data) {
+        window.zenonHub.globe().init('js-node-map', data);
     }
 
     offMap() {
         window.zenonHub.globe().destroyGlobe();
     }
 
-    onCountries() {
+    onCountries(data) {
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-node-countries"),
             {
-                series: window.zenonHub.getData('nodeCountriesSeries'),
-                labels: window.zenonHub.getData('nodeCountriesLabels'),
-                colors: window.zenonHub.charts().getColourGradient(window.zenonHub.getData('nodeCountriesSeries').length),
+                series: data['data'],
+                labels: data['labels'],
+                colors: window.zenonHub.charts().getColourGradient(data['data'].length),
                 chart: {
                     type: 'donut',
                     foreColor: 'rgba(255, 255, 255, .7)'
@@ -192,16 +168,16 @@ export default class NodeStats extends window.zenonHub.Singleton {
         window.zenonHub.charts().destroyChart('nodeCountries');
     }
 
-    onCities() {
+    onCities(data) {
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-node-cities"),
             {
                 series: [{
                     name: "Nodes",
-                    data: window.zenonHub.getData('nodeCitiesSeries')
+                    data: data['data']
                 }],
-                labels: window.zenonHub.getData('nodeCitiesLabels'),
-                colors: window.zenonHub.charts().getColourGradient(window.zenonHub.getData('nodeCitiesSeries').length),
+                labels: data['labels'],
+                colors: window.zenonHub.charts().getColourGradient(data['data'].length),
                 chart: {
                     type: 'bar',
                     foreColor: 'rgba(255, 255, 255, .7)',
@@ -211,7 +187,7 @@ export default class NodeStats extends window.zenonHub.Singleton {
                     }
                 },
                 xaxis: {
-                    categories: window.zenonHub.getData('nodeCitiesLabels'),
+                    categories: data['labels'],
                     labels: {
                         show: false
                     },
@@ -276,13 +252,13 @@ export default class NodeStats extends window.zenonHub.Singleton {
         window.zenonHub.charts().destroyChart('nodeCities');
     }
 
-    onNetworks() {
+    onNetworks(data) {
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-node-networks"),
             {
-                series: window.zenonHub.getData('nodeNetworkSeries'),
-                labels: window.zenonHub.getData('nodeNetworkLabels'),
-                colors: window.zenonHub.charts().getColourGradient(window.zenonHub.getData('nodeNetworkSeries').length),
+                series: data['data'],
+                labels: data['labels'],
+                colors: window.zenonHub.charts().getColourGradient(data['data'].length),
                 chart: {
                     type: 'donut',
                     foreColor: 'rgba(255, 255, 255, .7)'
@@ -375,12 +351,12 @@ export default class NodeStats extends window.zenonHub.Singleton {
         window.zenonHub.charts().destroyChart('nodeNetworks');
     }
 
-    onVersions() {
+    onVersions(data) {
         window.zenonHub.charts().renderChart(
             document.getElementById("chart-node-versions"),
             {
-                series: window.zenonHub.getData('nodeVersionsSeries'),
-                labels: window.zenonHub.getData('nodeVersionsLabels'),
+                series: data['data'],
+                labels: data['labels'],
                 colors: ['rgba(34, 197, 94, 0.94)', 'rgba(66, 119, 255, 0.94)', 'rgba(141, 44, 44, 0.94)'],
                 chart: {
                     type: 'donut',

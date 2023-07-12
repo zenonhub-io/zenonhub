@@ -3,7 +3,7 @@
         <div class="card-header">
             <h4 class="mb-0">Public nodes</h4>
         </div>
-        @if (empty($mapData))
+        @if (! $updated)
             <div class="card-body">
                 <x-alert
                     message="Unable to load node stats, please try again..."
@@ -57,38 +57,17 @@
                 <div class="tab-content">
                     <div class="tab-pane show active">
                         @if ($tab === 'map')
-                            <div class="bg-secondary shadow rounded-2 mb-3 p-3">
-                                <div class="d-block d-md-flex justify-content-md-evenly">
-                                    <div class="text-start text-md-center mb-2 mb-md-0">
-                                        <span class="d-inline d-md-block text-muted">{{ Str::plural('Node', $nodes['total']) }}</span>
-                                        <span class="float-end float-md-none">{{ $nodes['total'] }}</span>
-                                    </div>
-                                    <div class="text-start text-md-center mb-2 mb-md-0">
-                                        <span class="d-inline d-md-block text-muted">{{ Str::plural('City', $nodes['cities']) }}</span>
-                                        <span class="float-end float-md-none">{{ $nodes['cities'] }}</span>
-                                    </div>
-                                    <div class="text-start text-md-center">
-                                        <span class="d-inline d-md-block text-muted">{{ Str::plural('Country', $nodes['countries']) }}</span>
-                                        <span class="float-end float-md-none">{{ $nodes['countries'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <canvas
-                                    id="cobe"
-                                    style="width:min(80vmin, 800px);height:min(80vmin, 800px);"
-                                ></canvas>
-                            </div>
+                            <livewire:stats.nodes.map key="{{now()}}" />
                         @elseif ($tab === 'countries')
-                            <div id="chart-node-countries" class="mb-3"></div>
+                            <livewire:stats.nodes.countries key="{{now()}}" />
                         @elseif ($tab === 'cities')
-                            <div id="chart-node-cities" class="mb-3"></div>
+                            <livewire:stats.nodes.cities key="{{now()}}" />
                         @elseif ($tab === 'networks')
-                            <div id="chart-node-networks" class="mb-3"></div>
+                            <livewire:stats.nodes.networks key="{{now()}}" />
                         @elseif ($tab === 'versions')
-                            <div id="chart-node-versions" class="mb-3"></div>
+                            <livewire:stats.nodes.versions key="{{now()}}" />
                         @endif
-                        <div class="text-center text-md-end">
+                        <div class="text-center text-md-end mt-3">
                             <span class="fs-sm text-muted">Updated: {{ $updated }} | Data provided by <a href="https://github.com/Sol-Sanctum/Zenon-PoCs/tree/main/znn_node_info">Sol Sanctum</a></span>
                         </div>
                     </div>
@@ -97,29 +76,7 @@
         @endif
     </div>
 
-    @if (! empty($mapData))
-        @push('scripts')
-            <script src="{{ mix('js/pages/stats/nodes.js') }}"></script>
-            <script>
-                ((ZenonHub) => {
-                    ZenonHub.addData('nodeMapCanvasId', 'cobe');
-                    ZenonHub.addData('nodeMapMarkers', [@foreach ($mapData as $marker){ location: [{{$marker['lat']}}, {{$marker['lng']}}], size: {{($marker['count']*0.05)}} },@endforeach]);
-
-                    ZenonHub.addData('nodeCountriesSeries', @json($countriesData['data']));
-                    ZenonHub.addData('nodeCountriesLabels', @json($countriesData['labels']));
-
-                    ZenonHub.addData('nodeCitiesSeries', @json($citiesData['data']));
-                    ZenonHub.addData('nodeCitiesLabels', @json($citiesData['labels']));
-
-                    ZenonHub.addData('nodeNetworkSeries', @json($networksData['data']));
-                    ZenonHub.addData('nodeNetworkLabels', @json($networksData['labels']));
-
-                    ZenonHub.addData('nodeVersionsSeries', @json($versionsData['data']));
-                    ZenonHub.addData('nodeVersionsLabels', @json($versionsData['labels']));
-
-                    ZenonHub.addData('initialTab', '{{ $tab }}');
-                })(window.zenonHub);
-            </script>
-        @endpush
-    @endif
+    @push('scripts')
+        <script src="{{ mix('js/pages/stats/nodes.js') }}"></script>
+    @endpush
 </div>
