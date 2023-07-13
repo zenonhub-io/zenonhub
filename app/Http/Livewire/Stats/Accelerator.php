@@ -12,9 +12,9 @@ class Accelerator extends Component
         'tab' => ['except' => 'funding'],
     ];
 
-    protected $listeners = ['tabChange'];
+    protected $listeners = ['showTab'];
 
-    public function tabChange($tab = 'funding')
+    public function showTab($tab)
     {
         $this->tab = $tab;
     }

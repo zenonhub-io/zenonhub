@@ -14,44 +14,13 @@
             </div>
         @else
             <div class="card-header">
-                <div class="d-md-none">
-                    <select id="sections" class="form-control" wire:change="$emit('tabChange', $event.target.value)">
-                        <option value="map" {{ $tab === 'map' ? 'selected' : '' }}>Map</option>
-                        <option value="countries" {{ $tab === 'countries' ? 'selected' : '' }}>Countries</option>
-                        <option value="cities" {{ $tab === 'cities' ? 'selected' : '' }}>Cities</option>
-                        <option value="networks" {{ $tab === 'networks' ? 'selected' : '' }}>Networks</option>
-                        <option value="versions" {{ $tab === 'versions' ? 'selected' : '' }}>Versions</option>
-                    </select>
-                </div>
-                <div class="d-none d-md-block">
-                    <ul class="nav nav-tabs-alt card-header-tabs">
-                        <li class="nav-item">
-                            <button class="btn nav-link {{ $tab === 'map' ? 'active' : '' }}" wire:click="$emit('tabChange', 'map')">
-                                Map
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn nav-link {{ $tab === 'countries' ? 'active' : '' }}" wire:click="$emit('tabChange', 'countries')">
-                                Countries
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn nav-link {{ $tab === 'cities' ? 'active' : '' }}" wire:click="$emit('tabChange', 'cities')">
-                                Cities
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn nav-link {{ $tab === 'networks' ? 'active' : '' }}" wire:click="$emit('tabChange', 'networks')">
-                                Networks
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn nav-link {{ $tab === 'versions' ? 'active' : '' }}" wire:click="$emit('tabChange', 'versions')">
-                                Versions
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
+                    'map' => 'Map',
+                    'countries' => 'Countries',
+                    'cities' => 'Cities',
+                    'networks' => 'Networks',
+                    'versions' => 'Versions',
+                ]" />
             </div>
             <div class="card-body">
                 <div class="tab-content">
