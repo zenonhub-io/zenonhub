@@ -16,9 +16,9 @@ class Nodes extends Component
         'tab' => ['except' => 'map'],
     ];
 
-    protected $listeners = ['tabChange'];
+    protected $listeners = ['showTab'];
 
-    public function tabChange($tab = 'map')
+    public function showTab($tab)
     {
         $this->tab = $tab;
     }

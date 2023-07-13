@@ -4,38 +4,12 @@
             <h4 class="mb-0">Accelerator Z</h4>
         </div>
         <div class="card-header">
-            <div class="d-md-none">
-                <select id="sections" class="form-control" wire:change="$emit('tabChange', $event.target.value)">
-                    <option value="funding" {{ $tab === 'funding' ? 'selected' : '' }}>Funding</option>
-                    <option value="projects" {{ $tab === 'projects' ? 'selected' : '' }}>Projects</option>
-                    <option value="engagement" {{ $tab === 'engagement' ? 'selected' : '' }}>Engagement</option>
-                    <option value="contributors" {{ $tab === 'contributors' ? 'selected' : '' }}>Contributors</option>
-                </select>
-            </div>
-            <div class="d-none d-md-block">
-                <ul class="nav nav-tabs-alt card-header-tabs">
-                    <li class="nav-item">
-                        <button class="btn nav-link {{ $tab === 'funding' ? 'active' : '' }}" wire:click="$emit('tabChange', 'funding')">
-                            Funding
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn nav-link {{ $tab === 'projects' ? 'active' : '' }}" wire:click="$emit('tabChange', 'projects')">
-                            Projects
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn nav-link {{ $tab === 'engagement' ? 'active' : '' }}" wire:click="$emit('tabChange', 'engagement')">
-                            Engagement
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn nav-link {{ $tab === 'contributors' ? 'active' : '' }}" wire:click="$emit('tabChange', 'contributors')">
-                            Contributors
-                        </button>
-                    </li>
-                </ul>
-            </div>
+            <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
+                'funding' => 'Funding',
+                'projects' => 'Projects',
+                'engagement' => 'Engagement',
+                'contributors' => 'Contributors',
+            ]" />
         </div>
         <div class="card-body {{ (in_array($tab, ['engagement', 'contributors']) ? 'px-0 pb-0' : '') }}">
             <div class="tab-content">
