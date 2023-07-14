@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Stats\Accelerator;
 
 use App\Http\Livewire\ChartTrait;
 use App\Models\Nom\Account;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class Funding extends Component
@@ -20,39 +21,43 @@ class Funding extends Component
     public function loadFundingData()
     {
         $this->acceleratorContract = Account::findByAddress(Account::ADDRESS_ACCELERATOR);
-        $znnToken = znn_token();
-        $qsrToken = qsr_token();
-
-        $totalZnnUsed = $this->acceleratorContract
-            ->sent_blocks()
-            ->where('token_id', $znnToken->id)
-            ->sum('amount');
-
-        $totalQsrUsed = $this->acceleratorContract
-            ->sent_blocks()
-            ->where('token_id', $qsrToken->id)
-            ->sum('amount');
-
+        $cacheExpiry = (60 * 60);
         $fundingLabels = [
             'Remaining',
             'Used',
         ];
 
-        $znnFunds = [
-            'labels' => $fundingLabels,
-            'data' => [
-                (float) filter_var($this->acceleratorContract->display_znn_balance, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-                (float) filter_var($znnToken->getDisplayAmount($totalZnnUsed), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-            ],
-        ];
+        $znnFunds = Cache::remember('stats.az.znnFunding', $cacheExpiry, function () use ($fundingLabels) {
+            $znnToken = znn_token();
+            $totalZnnUsed = $this->acceleratorContract
+                ->sent_blocks()
+                ->where('token_id', $znnToken->id)
+                ->sum('amount');
 
-        $qsrFunds = [
-            'labels' => $fundingLabels,
-            'data' => [
-                (float) filter_var($this->acceleratorContract->display_qsr_balance, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-                (float) filter_var($qsrToken->getDisplayAmount($totalQsrUsed), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
-            ],
-        ];
+            return [
+                'labels' => $fundingLabels,
+                'data' => [
+                    (float) filter_var($this->acceleratorContract->display_znn_balance, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                    (float) filter_var($znnToken->getDisplayAmount($totalZnnUsed), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                ],
+            ];
+        });
+
+        $qsrFunds = Cache::remember('stats.az.qsrFunding', $cacheExpiry, function () use ($fundingLabels) {
+            $qsrToken = qsr_token();
+            $totalQsrUsed = $this->acceleratorContract
+                ->sent_blocks()
+                ->where('token_id', $qsrToken->id)
+                ->sum('amount');
+
+            return [
+                'labels' => $fundingLabels,
+                'data' => [
+                    (float) filter_var($this->acceleratorContract->display_qsr_balance, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                    (float) filter_var($qsrToken->getDisplayAmount($totalQsrUsed), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                ],
+            ];
+        });
 
         $this->emit('stats.az.fundingDataLoaded', [
             'znn' => $znnFunds,
