@@ -10,8 +10,6 @@ class Cities extends Component
 {
     use ChartTrait;
 
-    public bool $readyToLoad = false;
-
     public function render()
     {
         return view('livewire.stats.nodes.cities');
@@ -19,8 +17,6 @@ class Cities extends Component
 
     public function loadCitiesData()
     {
-        $this->readyToLoad = true;
-
         $data = collect(Cache::get('node-cities', []))->sortDesc();
 
         $this->emit('stats.nodes.citiesDataLoaded', [

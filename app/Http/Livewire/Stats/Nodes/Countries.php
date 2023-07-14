@@ -10,8 +10,6 @@ class Countries extends Component
 {
     use ChartTrait;
 
-    public bool $readyToLoad = false;
-
     public function render()
     {
         return view('livewire.stats.nodes.countries');
@@ -19,8 +17,6 @@ class Countries extends Component
 
     public function loadCountriesData()
     {
-        $this->readyToLoad = true;
-
         $data = collect(Cache::get('node-countries', []))->sortDesc();
 
         $this->emit('stats.nodes.countriesDataLoaded', [
