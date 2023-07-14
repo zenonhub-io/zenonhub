@@ -22,22 +22,32 @@
                     'versions' => 'Versions',
                 ]" />
             </div>
-            <div class="card-body">
-                <div class="tab-content">
-                    <div class="tab-pane show active">
-                        @if ($tab === 'map')
-                            <livewire:stats.nodes.map key="{{now()}}" />
-                        @elseif ($tab === 'countries')
-                            <livewire:stats.nodes.countries key="{{now()}}" />
-                        @elseif ($tab === 'cities')
-                            <livewire:stats.nodes.cities key="{{now()}}" />
-                        @elseif ($tab === 'networks')
-                            <livewire:stats.nodes.networks key="{{now()}}" />
-                        @elseif ($tab === 'versions')
-                            <livewire:stats.nodes.versions key="{{now()}}" />
-                        @endif
-                        <div class="text-center text-md-end mt-3">
-                            <span class="fs-sm text-muted">Updated: {{ $updated }} | Data provided by <a href="https://github.com/Sol-Sanctum/Zenon-PoCs/tree/main/znn_node_info">Sol Sanctum</a></span>
+            <div class="w-100 p-3" wire:loading>
+                <x-alert
+                    message="Processing request..."
+                    type="info"
+                    icon="arrow-repeat spin"
+                    class="d-flex justify-content-center mb-0"
+                />
+            </div>
+            <div wire:loading.remove>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane show active">
+                            @if ($tab === 'map')
+                                <livewire:stats.nodes.map key="{{now()}}" />
+                            @elseif ($tab === 'countries')
+                                <livewire:stats.nodes.countries key="{{now()}}" />
+                            @elseif ($tab === 'cities')
+                                <livewire:stats.nodes.cities key="{{now()}}" />
+                            @elseif ($tab === 'networks')
+                                <livewire:stats.nodes.networks key="{{now()}}" />
+                            @elseif ($tab === 'versions')
+                                <livewire:stats.nodes.versions key="{{now()}}" />
+                            @endif
+                            <div class="text-center text-md-end mt-3">
+                                <span class="fs-sm text-muted">Updated: {{ $updated }} | Data provided by <a href="https://github.com/Sol-Sanctum/Zenon-PoCs/tree/main/znn_node_info">Sol Sanctum</a></span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -9,8 +9,6 @@ class Map extends Component
 {
     public array $nodes;
 
-    public bool $readyToLoad = false;
-
     public function render()
     {
         return view('livewire.stats.nodes.map');
@@ -18,8 +16,6 @@ class Map extends Component
 
     public function loadMapData()
     {
-        $this->readyToLoad = true;
-
         $this->nodes['total'] = count(Cache::get('node-ips'));
         $this->nodes['countries'] = count(Cache::get('node-countries'));
         $this->nodes['cities'] = count(Cache::get('node-cities'));

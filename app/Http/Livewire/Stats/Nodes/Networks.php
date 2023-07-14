@@ -10,8 +10,6 @@ class Networks extends Component
 {
     use ChartTrait;
 
-    public bool $readyToLoad = false;
-
     public function render()
     {
         return view('livewire.stats.nodes.networks');
@@ -19,8 +17,6 @@ class Networks extends Component
 
     public function loadNetworksData()
     {
-        $this->readyToLoad = true;
-
         $data = collect(Cache::get('node-networks', []))->sortDesc();
 
         $this->emit('stats.nodes.networksDataLoaded', [
