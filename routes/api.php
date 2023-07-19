@@ -111,7 +111,6 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
         });
 
         Route::prefix('stats')->name('Stats.')->group(function () {
-            Route::get('os-info', [App\Http\Controllers\Api\Stats::class, 'osInfo'])->name('osInfo');
             Route::get('runtime-info', [App\Http\Controllers\Api\Stats::class, 'runtimeInfo'])->name('runtimeInfo');
             Route::get('process-info', [App\Http\Controllers\Api\Stats::class, 'processInfo'])->name('processInfo');
             Route::get('sync-info', [App\Http\Controllers\Api\Stats::class, 'syncInfo'])->name('syncInfo');
