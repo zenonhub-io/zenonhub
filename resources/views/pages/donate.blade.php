@@ -9,8 +9,8 @@
                     <div class="card-body">
                         <div class="d-block">
                             <p class="mb-4">Your donation goes towards the ongoing costs of developing and maintaining Zenon Hub</p>
-                            <span class="text-primary fw-bold text-break">
-                                {{ config('zenon.donation_address') }}
+                            <span class="text-primary text-break fs-5 d-block user-select-all">
+                                {{ config('zenon.donation_address') }} <i class="bi bi-clipboard ms-1 hover-text js-copy" data-clipboard-text="{{ config('zenon.donation_address') }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i>
                             </span>
                         </div>
                     </div>
