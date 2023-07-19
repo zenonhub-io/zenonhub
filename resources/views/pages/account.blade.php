@@ -42,7 +42,7 @@
             @else
                 <div class="my-0 my-md-4"></div>
                 <div class="col-24 col-sm-12 col-md-8 offset-md-4 mb-4">
-                    <div class="card h-100 shadow text-center">
+                    <div class="card card-hover h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
                                 <a href="{{ route('account.details') }}" class="stretched-link">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-24 col-sm-12 col-md-8 mb-4">
-                    <div class="card h-100 shadow text-center">
+                    <div class="card card-hover h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
                                 <a href="{{ route('account.favorites') }}" class="stretched-link">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="col-24 col-sm-12 col-md-8 offset-md-4 mb-4">
-                    <div class="card h-100 shadow text-center">
+                    <div class="card card-hover h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
                                 <a href="{{ route('account.notifications') }}" class="stretched-link">
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="col-24 col-sm-12 col-md-8 mb-4">
-                    <div class="card h-100 shadow text-center">
+                    <div class="card card-hover h-100 shadow text-center">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <div class="d-block">
                                 <a href="{{ route('logout') }}" class="stretched-link">
