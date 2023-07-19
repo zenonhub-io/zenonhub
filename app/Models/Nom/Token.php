@@ -22,6 +22,8 @@ class Token extends Model implements Sitemapable
 
     public const ZTS_QSR = 'zts1qsrxxxxxxxxxxxxxmrhjll';
 
+    public const ZTS_LP_ETH = 'zts17d6yr02kh0r9qr566p7tg6';
+
     protected static array $marks = [
         Favorite::class,
     ];
@@ -161,6 +163,44 @@ class Token extends Model implements Sitemapable
     public function getDisplayTotalBurnedAttribute()
     {
         return $this->getDisplayAmount($this->burns()->sum('amount'));
+    }
+
+    public function getTotalLockedAttribute()
+    {
+        $totalLocked = 0;
+
+        if ($this->token_standard === self::ZTS_ZNN) {
+            $pillarLockup = Account::findByAddress(Account::ADDRESS_PILLAR)->znn_balance;
+            $sentinelLockup = Account::findByAddress(Account::ADDRESS_SENTINEL)->znn_balance;
+            $stakingLockup = Account::findByAddress(Account::ADDRESS_STAKE)->znn_balance;
+            $totalLocked = ($pillarLockup + $sentinelLockup + $stakingLockup);
+        }
+
+        if ($this->token_standard === self::ZTS_QSR) {
+            $sentinelLockup = Account::findByAddress(Account::ADDRESS_SENTINEL)->qsr_balance;
+            $plasmaLockup = Account::findByAddress(Account::ADDRESS_PLASMA)->qsr_balance;
+            $totalLocked = ($sentinelLockup + $plasmaLockup);
+        }
+
+        if ($this->token_standard === self::ZTS_LP_ETH) {
+            $liquidityAccount = Account::findByAddress(Account::ADDRESS_LIQUIDITY);
+            $totalLocked = $liquidityAccount->balances()
+                ->where('token_id', $this->id)
+                ->first()?->pivot->balance;
+        }
+
+        return $totalLocked;
+    }
+
+    public function getDisplayTotalLockedAttribute()
+    {
+        return $this->getDisplayAmount($this->total_locked);
+    }
+
+    public function getHasLockedTokensAttribute()
+    {
+        return in_array($this->token_standard, [self::ZTS_ZNN, self::ZTS_QSR]);
+        //return in_array($this->token_standard, [self::ZTS_ZNN, self::ZTS_QSR, self::ZTS_LP_ETH]);
     }
 
     public function getHasCustomLabelAttribute()
