@@ -2,8 +2,8 @@
     <div class="card card-shadow">
         <div class="card-header">
             <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
-                'sync' => 'Sync info',
                 'process' => 'Process info',
+                'sync' => 'Sync info',
                 'network' => 'Network info',
             ]" />
         </div>
