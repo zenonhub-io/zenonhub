@@ -26,6 +26,8 @@ Route::get('donate', [\App\Http\Controllers\Site\Donate::class, 'show'])->name('
 
 Route::get('privacy', [\App\Http\Controllers\Site\Privacy::class, 'show'])->name('privacy');
 
+Route::get('nodes', [\App\Http\Controllers\Site\Nodes::class, 'show'])->name('nodes');
+
 Route::prefix('pillars')->name('pillars.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Pillar\Pillars::class, 'show'])->name('overview');
     Route::get('/{slug}', [\App\Http\Controllers\Pillar\Pillars::class, 'detail'])->name('detail');
