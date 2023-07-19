@@ -35,7 +35,7 @@
                         <div class="bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="d-block d-md-flex justify-content-md-evenly">
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens currently in circulation"></i></span>
+                                    <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens which have been minted"></i></span>
                                     <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
@@ -95,6 +95,18 @@
                                 <li class="list-group-item">
                                     <span class="d-block fs-sm text-muted">Total Burned</span>
                                     {{ $token->display_total_burned }}
+                                </li>
+                            @endif
+                            @if ($token->has_locked_tokens)
+                                <li class="list-group-item">
+                                    <span class="d-block fs-sm text-muted">Total Locked
+                                        @if ($token->token_standard === 'zts1znnxxxxxxxxxxxxx9z4ulx')
+                                            <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Tokens locked in pillars, sentinels and staking"></i>
+                                        @elseif ($token->token_standard === 'zts1qsrxxxxxxxxxxxxxmrhjll')
+                                            <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Tokens locked in sentinels and plasma"></i>
+                                        @endif
+                                    </span>
+                                    {{ $token->display_total_locked }}
                                 </li>
                             @endif
                             <li class="list-group-item">
