@@ -7,10 +7,10 @@ use Livewire\Component;
 
 class PublicNodes extends Component
 {
-    public string $tab = 'sync';
+    public string $tab = 'process';
 
     protected $queryString = [
-        'tab' => ['except' => 'sync'],
+        'tab' => ['except' => 'process'],
     ];
 
     protected $listeners = ['showTab'];
@@ -29,12 +29,12 @@ class PublicNodes extends Component
     {
         $znn = App::make('zenon.api');
 
-        if ($this->tab === 'sync') {
-            return $znn->stats->syncInfo();
-        }
-
         if ($this->tab === 'process') {
             return $znn->stats->processInfo();
+        }
+
+        if ($this->tab === 'sync') {
+            return $znn->stats->syncInfo();
         }
 
         if ($this->tab === 'network') {
