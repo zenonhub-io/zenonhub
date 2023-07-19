@@ -7,7 +7,9 @@
                         <h4 class="mb-0">Public Nodes</h4>
                     </div>
                     <div class="card-body text-center">
-                        <p class="mb-4">We provide public nodes available for anyone to use. These nodes serve secure connections to the Zenon Network are load balances with servers located in Europe and the US.</p>
+                        <p>We provide public nodes available for anyone to use. These nodes serve secure connections to the Zenon Network are load balances with servers located in Europe and the US.</p>
+                    </div>
+                    <div class="card-body text-center px-1 pb-4 pt-0">
                         <span class="text-primary text-break fs-5 d-block mb-4 user-select-all">
                             {{ config('zenon.public_node_https') }} <i class="bi bi-clipboard ms-1 hover-text js-copy" data-clipboard-text="{{ config('zenon.public_node_https') }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i>
                         </span>
