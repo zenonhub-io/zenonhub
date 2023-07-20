@@ -17,6 +17,10 @@ Breadcrumbs::for('privacy', function (BreadcrumbTrail $trail) {
     $trail->push('Privacy', route('privacy'));
 });
 
+Breadcrumbs::for('nodes', function (BreadcrumbTrail $trail) {
+    $trail->push('nodex', route('nodes'));
+});
+
 //
 // Auth
 
