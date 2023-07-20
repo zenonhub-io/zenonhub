@@ -25,11 +25,11 @@ class PlasmaBot
         ]);
     }
 
-    public function install(): bool
+    public function install($mnemonic): bool
     {
         try {
             return $this->cli->walletCreateFromMnemonic(
-                config('plasma-bot.mnemonic'),
+                $mnemonic,
                 $this->keystore,
                 $this->passphrase
             );
