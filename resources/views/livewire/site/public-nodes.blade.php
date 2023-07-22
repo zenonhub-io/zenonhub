@@ -1,5 +1,5 @@
 <div>
-    <div class="card card-shadow">
+    <div class="card shadow">
         <div class="card-header">
             <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
                 'process' => 'Process info',
