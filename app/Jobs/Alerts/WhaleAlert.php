@@ -25,8 +25,8 @@ class WhaleAlert implements ShouldQueue
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
-        $this->znnValue = $this->getFormattedAmount(config('whale-bot.znn_cutoff'));
-        $this->qsrValue = $this->getFormattedAmount(config('whale-bot.qsr_cutoff'));
+        $this->znnValue = $this->getFormattedAmount(config('whale-alerts.znn_cutoff'));
+        $this->qsrValue = $this->getFormattedAmount(config('whale-alerts.qsr_cutoff'));
     }
 
     public function handle(): void

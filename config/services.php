@@ -35,4 +35,19 @@ return [
         'key' => env('DISCOURSE_KEY'),
         'host' => env('DISCOURSE_HOST', 'forum.zenon.org'),
     ],
+
+    'discord' => [
+        'token' => env('DISCORD_BOT_TOKEN'),
+    ],
+
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
+
+    'twitter' => [
+        'consumer_key' => env('TWITTER_BOT_CONSUMER_KEY'),
+        'consumer_secret' => env('TWITTER_BOT_CONSUMER_SECRET'),
+        'access_token' => env('TWITTER_BOT_ACCESS_TOKEN'),
+        'access_secret' => env('TWITTER_BOT_ACCESS_SECRET'),
+    ],
 ];
