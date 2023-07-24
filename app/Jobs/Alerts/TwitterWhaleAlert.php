@@ -29,12 +29,12 @@ class TwitterWhaleAlert implements ShouldQueue
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
-        $this->enabled = config('whale-bot.twitter.enabled');
+        $this->enabled = config('whale-alerts.twitter.enabled');
         $this->twitter = App::make('twitter.api', [
-            'api_key' => config('whale-bot.twitter.api_key'),
-            'api_key_secret' => config('whale-bot.twitter.api_key_secret'),
-            'access_token' => config('whale-bot.twitter.access_token'),
-            'access_token_secret' => config('whale-bot.twitter.access_token_secret'),
+            'api_key' => config('whale-alerts.twitter.api_key'),
+            'api_key_secret' => config('whale-alerts.twitter.api_key_secret'),
+            'access_token' => config('whale-alerts.twitter.access_token'),
+            'access_token_secret' => config('whale-alerts.twitter.access_token_secret'),
         ]);
     }
 

@@ -31,8 +31,8 @@ class DiscordWhaleAlert implements ShouldQueue
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
-        $this->enabled = config('whale-bot.discord.enabled');
-        $this->discordWebhook = config('whale-bot.discord.webhook');
+        $this->enabled = config('whale-alerts.discord.enabled');
+        $this->discordWebhook = config('whale-alerts.discord.webhook');
     }
 
     public function handle(): void
