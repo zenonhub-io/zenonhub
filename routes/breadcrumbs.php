@@ -131,6 +131,11 @@ Breadcrumbs::for('stats.accelerator', function (BreadcrumbTrail $trail) {
     $trail->push('Accelerator', route('stats.accelerator'));
 });
 
+Breadcrumbs::for('stats.bridge', function (BreadcrumbTrail $trail) {
+    $trail->parent('stats');
+    $trail->push('Bridge', route('stats.bridge'));
+});
+
 //
 // Tools
 Breadcrumbs::for('tools', function (BreadcrumbTrail $trail) {
