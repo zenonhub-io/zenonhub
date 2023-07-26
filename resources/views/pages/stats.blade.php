@@ -20,9 +20,9 @@
                             ],
                             [
                                 'route' => 'stats.bridge',
-                                'title' => 'Bridge',
+                                'title' => 'Multichain Bridge',
                                 'svg' => 'bridge',
-                                'style' => 'width: 20px',
+                                'style' => 'width: 18px',
                             ],
                         ]
                     ]"/>

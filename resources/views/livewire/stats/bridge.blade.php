@@ -1,7 +1,7 @@
 <div>
     <div class="card shadow mb-4">
         <div class="card-header">
-            <h4 class="mb-0">Accelerator Z</h4>
+            <h4 class="mb-0">Multichain Bridge</h4>
         </div>
         <div class="card-header">
             <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
