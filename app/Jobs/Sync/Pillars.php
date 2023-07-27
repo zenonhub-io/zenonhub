@@ -19,7 +19,7 @@ class Pillars implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 2;
+    public int $tries = 5;
 
     protected Collection $pillars;
 
