@@ -74,7 +74,7 @@
                                     <span class="d-block mb-2">
                                         {!! svg('stats/bridge', 'mb-2', 'height: 2.3rem') !!}
                                     </span>
-                                    <h5>Bridge</h5>
+                                    <h5>Multichain Bridge</h5>
                                 </a>
                                 <p class="mb-0">
                                     View the multichain bridge stats
