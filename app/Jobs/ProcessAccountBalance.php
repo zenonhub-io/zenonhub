@@ -27,7 +27,7 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
      */
     public function backoff(): array
     {
-        return [20, 150, 10, 10, 10];
+        return [30, 30, 30, 60, 120];
     }
 
     public function __construct(
