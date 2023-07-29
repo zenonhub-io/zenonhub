@@ -39,6 +39,17 @@ class Burn implements ShouldQueue
             'created_at' => $this->block->created_at,
         ]);
 
+        $this->updateTokenSupply();
+
         (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function updateTokenSupply()
+    {
+        $token = $this->block->token;
+        $data = $token->raw_json;
+        $token->total_supply = $data->totalSupply;
+        $token->max_supply = $data->maxSupply;
+        $token->save();
     }
 }

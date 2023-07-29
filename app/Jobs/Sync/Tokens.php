@@ -64,11 +64,11 @@ class Tokens implements ShouldQueue
     private function processTokens()
     {
         $this->tokens->each(function ($data) {
-            $exists = Token::whereZts($data->tokenStandard)->first();
-            if (! $exists) {
+            $token = Token::whereZts($data->tokenStandard)->first();
+            if (! $token) {
                 $chain = Utilities::loadChain();
                 $owner = Utilities::loadAccount($data->owner);
-                Token::create([
+                $token = Token::create([
                     'chain_id' => $chain->id,
                     'owner_id' => $owner->id,
                     'name' => $data->name,
@@ -83,6 +83,13 @@ class Tokens implements ShouldQueue
                     'is_utility' => $data->isUtility,
                 ]);
             }
+
+            $token->total_supply = $data->totalSupply;
+            $token->max_supply = $data->maxSupply;
+            $token->is_burnable = $data->isBurnable;
+            $token->is_mintable = $data->isMintable;
+            $token->is_utility = $data->isUtility;
+            $token->save();
         });
     }
 }
