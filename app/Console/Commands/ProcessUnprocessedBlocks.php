@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Nom\AccountBlock;
 use Illuminate\Console\Command;
 
 class ProcessUnprocessedBlocks extends Command
@@ -26,7 +27,25 @@ class ProcessUnprocessedBlocks extends Command
     public function handle(): int
     {
         $this->info('Process block data');
-        (new \App\Actions\ProcessUnprocessedBlocks())->execute();
+
+        $blockCount = AccountBlock::whereHas('data', fn ($q) => $q->whereNotNull('raw')
+            ->whereNull('decoded')
+            ->where('is_processed', '0')
+        )->count();
+
+        $this->output->progressStart($blockCount);
+
+        AccountBlock::whereHas('data', fn ($q) => $q->whereNotNull('raw')
+            ->whereNull('decoded')
+            ->where('is_processed', '0')
+        )->chunk(200, function ($blocks) {
+            foreach ($blocks as $block) {
+                (new \App\Actions\ProcessUnprocessedBlocks($block))->execute();
+                $this->output->progressAdvance();
+            }
+        });
+
+        $this->output->progressFinish();
 
         return self::SUCCESS;
     }
