@@ -282,9 +282,4 @@ class Token extends Model implements Sitemapable
             return null;
         }
     }
-
-    public function getTotalSupplyAttribute()
-    {
-        return $this->raw_json?->totalSupply;
-    }
 }
