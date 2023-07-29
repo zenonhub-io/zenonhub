@@ -124,17 +124,7 @@ return new class extends Migration
         $burns = TokenBurn::where('token_id', $token->id)->get();
         $burns->each(function ($burn) {
             $block = $burn->account_block;
-            $data = base64_decode($block->data->raw);
-            $embeddedContract = new \DigitalSloth\ZnnPhp\Abi\Contracts\Token;
-            $decoded = $embeddedContract->decode('Burn', $data);
-            $parameters = $embeddedContract->getParameterNames('Burn');
-            $parameters = explode(',', $parameters);
-            $decodedData = array_combine(
-                $parameters,
-                $decoded
-            );
-
-            $burn->amount = $decodedData['amount'];
+            $burn->amount = $block->amount;
             $burn->save();
         });
     }
