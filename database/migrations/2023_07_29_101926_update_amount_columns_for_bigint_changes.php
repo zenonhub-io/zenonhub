@@ -51,11 +51,13 @@ return new class extends Migration
             $table->string('amount')->default(0)->change();
         });
 
-        $this->updateTokens();
-        $this->updateAccountBlocks();
-        $this->updateAccountBalances();
-        $this->updateMints();
-        $this->updateBurns();
+        if (! app()->environment('testing')) {
+            $this->updateTokens();
+            $this->updateAccountBlocks();
+            $this->updateAccountBalances();
+            $this->updateMints();
+            $this->updateBurns();
+        }
     }
 
     /**
