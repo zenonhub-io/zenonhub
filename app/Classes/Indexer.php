@@ -261,10 +261,7 @@ class Indexer
         $decodedData = null;
 
         // Index embedded contracts
-        if (
-            in_array($block->block_type, [AccountBlock::TYPE_SEND, AccountBlock::TYPE_CONTRACT_SEND])
-            && ! in_array($block->account->id, Account::getAllPillarProducerAddresses()->toArray())
-        ) {
+        if (in_array($block->block_type, [AccountBlock::TYPE_SEND, AccountBlock::TYPE_CONTRACT_SEND])) {
 
             $contract = $block->to_account->contract;
             $fingerprint = ZnnUtilities::getDataFingerprint($data);
