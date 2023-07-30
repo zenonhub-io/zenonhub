@@ -25,7 +25,6 @@ CREATE OR REPLACE VIEW view_latest_nom_account_blocks AS
 SELECT *
 FROM nom_account_blocks
 WHERE to_account_id != 1
-AND account_id NOT IN (SELECT producer_id FROM nom_pillars)
 ORDER BY id DESC
 LIMIT 50000;
 ');
