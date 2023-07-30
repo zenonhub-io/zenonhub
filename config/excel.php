@@ -31,7 +31,7 @@ return [
         | When enabling strict null comparison empty cells ('') will
         | be added to the sheet.
         */
-        'strict_null_comparison' => false,
+        'strict_null_comparison' => true,
 
         /*
         |--------------------------------------------------------------------------
