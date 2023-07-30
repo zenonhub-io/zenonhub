@@ -5,10 +5,12 @@ namespace App\Exports;
 use App\Models\Nom\Token;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class TokenMints implements FromQuery, WithHeadings, WithMapping
+class TokenMints extends DefaultValueBinder implements FromQuery, WithHeadings, WithMapping, WithCustomValueBinder
 {
     use Exportable;
 
@@ -20,7 +22,7 @@ class TokenMints implements FromQuery, WithHeadings, WithMapping
 
     public ?string $order;
 
-    public function __construct(Token $token, ?string $search = null, ?string $sort = null, ?string $order = null)
+    public function __construct(Token $token, string $search = null, string $sort = null, string $order = null)
     {
         $this->token = $token;
         $this->search = $search;
@@ -46,10 +48,21 @@ class TokenMints implements FromQuery, WithHeadings, WithMapping
         return [
             $row->issuer->address,
             $row->receiver->address,
-            float_number($token?->getDisplayAmount($row->amount)),
+            $token?->getDisplayAmount($row->amount),
             $row->account_block->hash,
             $row->created_at->format('Y-m-d H:i:s'),
         ];
+    }
+
+    public function bindValue($cell, $value)
+    {
+        if (is_numeric($value)) {
+            $cell->setValueExplicit($value);
+
+            return true;
+        }
+
+        return parent::bindValue($cell, $value);
     }
 
     public function query()
