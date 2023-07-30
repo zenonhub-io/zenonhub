@@ -37,6 +37,7 @@ class Mint implements ShouldQueue
     {
         $this->processMint();
         $this->processRewards();
+        $this->updateTokenSupply();
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
@@ -94,5 +95,14 @@ class Mint implements ShouldQueue
             'amount' => $this->tokenMint->amount,
             'created_at' => $this->block->created_at,
         ]);
+    }
+
+    private function updateTokenSupply()
+    {
+        $token = $this->tokenMint->token;
+        $data = $this->tokenMint->token->raw_json;
+        $token->total_supply = $data->totalSupply;
+        $token->max_supply = $data->maxSupply;
+        $token->save();
     }
 }
