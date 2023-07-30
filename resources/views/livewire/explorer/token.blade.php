@@ -40,7 +40,15 @@
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens that can be minted"></i></span>
-                                    <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->max_supply) }}</span>
+                                    @if ($token->token_standard === 'zts17d6yr02kh0r9qr566p7tg6')
+                                        <span class="float-end float-md-none" data-bs-toggle="tooltip" data-bs-title="{{ $token->getDisplayAmount($token->max_supply) }}">
+                                            {{ short_hash($token->getDisplayAmount($token->max_supply), 14, false) }}
+                                        </span>
+                                    @else
+                                        <span class="float-end float-md-none" >
+                                            {{ $token->getDisplayAmount($token->max_supply) }}
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="text-start text-md-center">
                                     <span class="d-inline d-md-block fs-sm text-muted">Hodlers</span>
@@ -104,6 +112,8 @@
                                             <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Tokens locked in pillars, sentinels and staking"></i>
                                         @elseif ($token->token_standard === 'zts1qsrxxxxxxxxxxxxxmrhjll')
                                             <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Tokens locked in sentinels and plasma"></i>
+                                        @elseif ($token->token_standard === 'zts17d6yr02kh0r9qr566p7tg6')
+                                            <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Tokens locked in liquidity staking"></i>
                                         @endif
                                     </span>
                                     {{ $token->display_total_locked }}

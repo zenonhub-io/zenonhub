@@ -199,8 +199,7 @@ class Token extends Model implements Sitemapable
 
     public function getHasLockedTokensAttribute()
     {
-        return in_array($this->token_standard, [self::ZTS_ZNN, self::ZTS_QSR]);
-        //return in_array($this->token_standard, [self::ZTS_ZNN, self::ZTS_QSR, self::ZTS_LP_ETH]);
+        return in_array($this->token_standard, [self::ZTS_ZNN, self::ZTS_QSR, self::ZTS_LP_ETH]);
     }
 
     public function getHasCustomLabelAttribute()
