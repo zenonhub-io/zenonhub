@@ -22,7 +22,7 @@ function qsr_price(): float
 
 function float_number(mixed $number): float
 {
-    return floatval(preg_replace('/[^\d.]/', '', $number));
+    return (float) preg_replace('/[^\d.]/', '', $number);
 }
 
 function short_number($number): string
@@ -41,12 +41,18 @@ function short_number($number): string
     return round($number, 1).$units[$i];
 }
 
-function short_hash($hash, $eitherSide): string
+function short_hash($hash, $eitherSide, $startAndEnd = true): string
 {
-    $start = mb_substr($hash, 0, $eitherSide);
-    $end = mb_substr($hash, -$eitherSide);
+    if ($startAndEnd) {
+        $start = mb_substr($hash, 0, $eitherSide);
+        $end = mb_substr($hash, -$eitherSide);
 
-    return "{$start}...{$end}";
+        return "{$start}...{$end}";
+    }
+
+    $start = mb_substr($hash, 0, $eitherSide);
+
+    return "{$start}...";
 }
 
 function pretty_json($json): string
