@@ -7,7 +7,7 @@ use App\Models\Nom\ContractMethod;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Spatie\QueueableAction\QueueableAction;
 
-class ProcessUnprocessedBlocks
+class SaveBlockAbi
 {
     use QueueableAction;
 

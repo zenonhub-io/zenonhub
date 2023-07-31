@@ -31,6 +31,7 @@ class ProcessUnprocessedBlocks extends Command
         $blockCount = AccountBlock::whereHas('data', fn ($q) => $q->whereNotNull('raw')
             ->whereNull('decoded')
             ->where('is_processed', '0')
+            ->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
         )->count();
 
         $this->output->progressStart($blockCount);
@@ -38,9 +39,10 @@ class ProcessUnprocessedBlocks extends Command
         AccountBlock::whereHas('data', fn ($q) => $q->whereNotNull('raw')
             ->whereNull('decoded')
             ->where('is_processed', '0')
+            ->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
         )->chunk(200, function ($blocks) {
             foreach ($blocks as $block) {
-                (new \App\Actions\ProcessUnprocessedBlocks($block))->execute();
+                (new \App\Actions\SaveBlockAbi($block))->execute();
                 $this->output->progressAdvance();
             }
         });
