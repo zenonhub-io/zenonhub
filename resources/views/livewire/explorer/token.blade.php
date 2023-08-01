@@ -35,11 +35,11 @@
                         <div class="bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="d-block d-md-flex justify-content-md-evenly">
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens which have been minted"></i></span>
+                                    <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The current amount of tokens that exist"></i></span>
                                     <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total amount of tokens that can be minted"></i></span>
+                                    <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Maximum amount of tokens that can exist"></i></span>
                                     @if ($token->token_standard === 'zts17d6yr02kh0r9qr566p7tg6')
                                         <span class="float-end float-md-none" data-bs-toggle="tooltip" data-bs-title="{{ $token->getDisplayAmount($token->max_supply) }}">
                                             {{ short_hash($token->getDisplayAmount($token->max_supply), 14, false) }}
