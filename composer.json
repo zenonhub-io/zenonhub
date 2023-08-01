@@ -6,7 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-bcmath": "*",
         "abraham/twitteroauth": "^5.0",
+        "brick/math": "^0.11.0",
         "deployer/deployer": "^7.0",
         "digitalsloth/znn-php": "dev-main",
         "diglactic/laravel-breadcrumbs": "^8.0",

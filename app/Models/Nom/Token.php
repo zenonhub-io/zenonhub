@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use Brick\Math\BigDecimal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -256,18 +257,15 @@ class Token extends Model implements Sitemapable
             return '-';
         }
 
-        $decimals = str_pad('1', $this->decimals + 1, '0');
-        $amount = ($amount / (int) $decimals);
+        $outputDecimals = (! is_null($numDecimals) ? $numDecimals : $this->decimals);
+        $number = BigDecimal::of(10)->power($this->decimals);
+        $amount = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
+        $number = $amount->toScale($outputDecimals);
 
-        // If number has 0 decimal places return
-        if (floor($amount) == $amount) {
-            return number_format($amount, ($numDecimals ?: 0));
+        if ($number->isGreaterThan(BigDecimal::of(1))) {
+            $number = number_format($number->toFloat(), $outputDecimals);
         }
 
-        // Format to given number of decimal places or default for token
-        $number = number_format($amount, (! is_null($numDecimals) ? $numDecimals : $this->decimals));
-
-        // Remove any unneeded 0s
         return rtrim(rtrim($number, 0), '.');
     }
 
