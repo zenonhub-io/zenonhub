@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
 use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -260,7 +261,7 @@ class Token extends Model implements Sitemapable
         $outputDecimals = (! is_null($numDecimals) ? $numDecimals : $this->decimals);
         $number = BigDecimal::of(10)->power($this->decimals);
         $amount = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
-        $number = $amount->toScale($outputDecimals);
+        $number = $amount->toScale($outputDecimals, RoundingMode::DOWN);
 
         if ($number->isGreaterThan(BigDecimal::of(1))) {
             $number = number_format($number->toFloat(), $outputDecimals);
