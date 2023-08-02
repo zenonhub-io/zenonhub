@@ -87,7 +87,7 @@
                         <ul class="list-group list-group-flush mb-0">
                             <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">Domain</span>
-                                <a href="{{ $token->domain }}" target="_blank">{{ $token->domain }}</a>
+                                <a href="https://{{ $token->domain }}" target="_blank">{{ $token->domain }}</a>
                             </li>
                             <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">Token Standard (ZTS)</span>
