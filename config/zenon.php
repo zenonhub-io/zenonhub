@@ -96,4 +96,6 @@ return [
 
     'momentums_per_hour' => 360,
     'momentums_per_day' => 8640,
+
+    'bridge_admin' => 'z1qr9vtwsfr2n0nsxl2nfh6l5esqjh2wfj85cfq9',
 ];

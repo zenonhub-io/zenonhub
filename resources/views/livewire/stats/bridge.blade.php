@@ -6,8 +6,9 @@
         <div class="card-header">
             <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
                 'overview' => 'Overview',
-                'liquidity' => 'Liquidity',
                 'actions' => 'Actions',
+                'security' => 'Security',
+                'networks' => 'Networks',
                 'orchestrators' => 'Orchestrators',
             ]" />
         </div>
@@ -20,15 +21,17 @@
             />
         </div>
         <div wire:loading.remove>
-            <div class="card-body {{ (in_array($tab, ['engagement', 'contributors']) ? 'px-0 pb-0' : '') }}">
+            <div class="card-body {{ (in_array($tab, ['actions', 'networks']) ? 'p-0' : '') }}">
                 <div class="tab-content">
                     <div class="tab-pane show active">
                         @if ($tab === 'overview')
                             <livewire:stats.bridge.overview key="{{now()}}" />
-                        @elseif ($tab === 'liquidity')
-                            <livewire:stats.bridge.liquidity key="{{now()}}" />
                         @elseif ($tab === 'actions')
                             <livewire:stats.bridge.actions key="{{now()}}" />
+                        @elseif ($tab === 'security')
+                            <livewire:stats.bridge.security key="{{now()}}" />
+                        @elseif ($tab === 'networks')
+                            <livewire:stats.bridge.networks key="{{now()}}" />
                         @elseif ($tab === 'orchestrators')
                             <livewire:stats.bridge.orchestrators key="{{now()}}" />
                         @endif
