@@ -263,11 +263,15 @@ class Token extends Model implements Sitemapable
         $amount = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
         $number = $amount->toScale($outputDecimals, RoundingMode::DOWN);
 
+        if ($amount->getScale() === 0) {
+            return number_format($amount->toInt(), ($numDecimals ?: 0));
+        }
+
         if ($number->isGreaterThan(BigDecimal::of(1))) {
             $number = number_format($number->toFloat(), $outputDecimals);
         }
 
-        return rtrim(rtrim($number, 0), '.');
+        return rtrim(rtrim((string) $number, '0'), '.');
     }
 
     public function getRawJsonAttribute()
