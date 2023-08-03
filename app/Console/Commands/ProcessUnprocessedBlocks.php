@@ -28,19 +28,17 @@ class ProcessUnprocessedBlocks extends Command
     {
         $this->info('Process block data');
 
-        $blockCount = AccountBlock::whereHas('data', fn ($q) => $q->whereNotNull('raw')
-            ->whereNull('decoded')
-            ->where('is_processed', '0')
-            ->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
-        )->count();
+        $baseQuery = AccountBlock::whereNull('contract_method_id')
+            ->whereHas('data',
+                fn ($q) => $q->whereNotNull('raw')
+                    ->whereNull('decoded')
+                    ->where('is_processed', '0')
+                //->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
+            );
 
-        $this->output->progressStart($blockCount);
+        $this->output->progressStart($baseQuery->count());
 
-        AccountBlock::whereHas('data', fn ($q) => $q->whereNotNull('raw')
-            ->whereNull('decoded')
-            ->where('is_processed', '0')
-            ->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
-        )->chunk(200, function ($blocks) {
+        $baseQuery->chunk(200, function ($blocks) {
             foreach ($blocks as $block) {
                 (new \App\Actions\SaveBlockAbi($block))->execute();
                 $this->output->progressAdvance();

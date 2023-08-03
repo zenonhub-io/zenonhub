@@ -29,7 +29,8 @@ class SaveBlockAbi
                 ->first();
 
             if (! $contractMethod) {
-                $contractMethod = ContractMethod::whereHas('contract', fn ($q) => $q->where('name', 'Common'))
+                $contractMethod = ContractMethod::whereHas('contract',
+                    fn ($q) => $q->where('name', 'Common'))
                     ->where('fingerprint', $fingerprint)
                     ->first();
             }
