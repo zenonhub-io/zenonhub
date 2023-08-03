@@ -7,11 +7,11 @@
             <div class="bg-secondary shadow rounded-3 mb-4 p-3">
                 <div class="d-block d-md-flex justify-content-md-evenly mb-3">
                     <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                        <span class="d-inline d-md-block fs-sm text-muted">Available QSR</span>
+                        <span class="d-inline d-md-block text-muted fs-sm">Available QSR</span>
                         <span class="float-end float-md-none">{{ ($account->display_qsr_balance ?: '-') }}</span>
                     </div>
                     <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                        <span class="d-inline d-md-block fs-sm text-muted">Fused QSR</span>
+                        <span class="d-inline d-md-block text-muted fs-sm">Fused QSR</span>
                         <span class="float-end float-md-none">{{ ($account->display_qsr_fused ?: '-') }}</span>
                     </div>
                 </div>
