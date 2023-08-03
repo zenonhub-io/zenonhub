@@ -261,10 +261,10 @@ class Token extends Model implements Sitemapable
         $outputDecimals = (! is_null($numDecimals) ? $numDecimals : $this->decimals);
         $number = BigDecimal::of(10)->power($this->decimals);
         $amount = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
-        $number = $amount->toScale($outputDecimals, RoundingMode::DOWN);
+        $number = $amount->toScale($outputDecimals, RoundingMode::UNNECESSARY);
 
-        if ($amount->getScale() === 0) {
-            return number_format($amount->toInt(), ($numDecimals ?: 0));
+        if ($this->decimals === 0 || $amount->getScale() === 0) {
+            return number_format((string) $amount->toBigInteger(), ($numDecimals ?: 0));
         }
 
         if ($number->isGreaterThan(BigDecimal::of(1))) {
