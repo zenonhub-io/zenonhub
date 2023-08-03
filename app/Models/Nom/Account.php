@@ -377,6 +377,14 @@ class Account extends Model implements Sitemapable
             return true;
         }
 
+        //        $pillarProducer = Pillar::where('producer_id', $this->id)
+        //            ->whereNull('revoked_at')
+        //            ->first();
+        //
+        //        if ($pillarProducer) {
+        //            return true;
+        //        }
+
         return false;
     }
 
@@ -406,11 +414,23 @@ class Account extends Model implements Sitemapable
         }
 
         // If the address is a pillar return its name
-        $pillarCheck = $this->pillars()
+        $pillar = $this->pillars()
             ->whereNull('revoked_at')
             ->first();
 
-        return $pillarCheck->name ?? $this->address;
+        if ($pillar) {
+            return $pillar->name;
+        }
+
+        //        $pillarProducer = Pillar::where('producer_id', $this->id)
+        //            ->whereNull('revoked_at')
+        //            ->first();
+        //
+        //        if ($pillarProducer) {
+        //            return "Pillar producer";
+        //        }
+
+        return $this->address;
     }
 
     public function getShortAddressAttribute()
