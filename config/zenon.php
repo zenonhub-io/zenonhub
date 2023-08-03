@@ -98,4 +98,5 @@ return [
     'momentums_per_day' => 8640,
 
     'bridge_admin' => 'z1qr9vtwsfr2n0nsxl2nfh6l5esqjh2wfj85cfq9',
+    'bridge_affiliate_link' => 'https://bridge.mainnet.zenon.community/?referral=2f5b37010a3a2224607170251d36010b3179216771262f0f2a04156e2226263a27301a70090f3b21',
 ];

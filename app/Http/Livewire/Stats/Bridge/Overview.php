@@ -16,6 +16,8 @@ class Overview extends Component
 
     public ?array $holders;
 
+    public ?string $affiliateLink;
+
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -24,6 +26,7 @@ class Overview extends Component
 
     public function render()
     {
+        $this->affiliateLink = config('zenon.bridge_affiliate_link');
         $bridgeStats = $this->znn->bridge->getBridgeInfo()['data'];
 
         return view('livewire.stats.bridge.overview', [
@@ -34,23 +37,13 @@ class Overview extends Component
 
     public function loadLiquidityData()
     {
-
         // Orbital Staked ETH = (Orbital’s Balance of ETH-wZNN LP ZTS) / (Total Supply of ETH-wZNN LP ERC20) * (Amount of ETH in the ETH-wZNN Pool)
 
-        // wZNN token: 0xb2e96a63479c2edd2fd62b382c89d5ca79f572d3
-        // pair: 0xdac866a3796f85cb84a914d98faec052e3b5596d
-
-        // Total liquidity
-        // 24h volume
-        // Total Supply
-        // Holders
-
-        // https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev
-
+        // https://github.com/Uniswap/v2-subgraph/blob/master/schema.graphql
         $query = <<<'GQL'
 {
  pair(id: "0xdac866a3796f85cb84a914d98faec052e3b5596d"){
-	token0 {
+  token0 {
   	id
     symbol
     name
@@ -64,36 +57,33 @@ class Overview extends Component
     totalLiquidity
     derivedETH
   }
+  id
   reserveUSD
   reserve0
   reserve1
-  volumeUSD
-  volumeToken0
-  volumeToken1
-  token0Price
-  token1Price
-  txCount
  }
 }
 GQL;
 
-        // reserve0 = pooled wZNN
-        // reserve1 = pooled wETH
-        // reserveUSD = usd liquidity
-        // token0Price = eth = x znn
-        // token1Price = znn = x eth
-
-        $this->liquidityData = Http::withHeaders([
+        $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->post('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev', [
             'query' => $query,
         ])->json('data.pair');
 
+        $this->liquidityData = [
+            'totalLiquidity' => number_format($response['reserveUSD'], 2),
+            'pooledWznn' => number_format($response['reserve0'], 2),
+            'pooledWeth' => number_format($response['reserve1'], 2),
+            'pairId' => $response['id'],
+            'wznnId' => $response['token0']['id'],
+        ];
+
         // total supply & holders
         // https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API#get-token-info
-        $this->holders = Http::get('https://api.ethplorer.io/getTokenInfo/0xb2e96a63479c2edd2fd62b382c89d5ca79f572d3', [
-            'apiKey' => 'freekey',
-        ])->json();
+        //        $this->holders = Http::get('https://api.ethplorer.io/getTokenInfo/0xb2e96a63479c2edd2fd62b382c89d5ca79f572d3', [
+        //            'apiKey' => 'freekey',
+        //        ])->json();
 
     }
 }
