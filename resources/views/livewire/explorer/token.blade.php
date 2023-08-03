@@ -40,9 +40,9 @@
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Maximum amount of tokens that can exist"></i></span>
-                                    @if ($token->token_standard === 'zts17d6yr02kh0r9qr566p7tg6')
+                                    @if ($token->max_supply > 9223372036854775807)
                                         <span class="float-end float-md-none" data-bs-toggle="tooltip" data-bs-title="{{ $token->getDisplayAmount($token->max_supply) }}">
-                                            {{ short_hash($token->getDisplayAmount($token->max_supply), 14, false) }}
+                                            {{ short_hash($token->getDisplayAmount($token->max_supply), 18, false) }}
                                         </span>
                                     @else
                                         <span class="float-end float-md-none" >
