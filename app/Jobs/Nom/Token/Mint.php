@@ -100,7 +100,7 @@ class Mint implements ShouldQueue
     private function updateTokenSupply()
     {
         $token = $this->tokenMint->token;
-        $data = $this->tokenMint->token->raw_json;
+        $data = $token->raw_json;
         $token->total_supply = $data->totalSupply;
         $token->max_supply = $data->maxSupply;
         $token->save();
