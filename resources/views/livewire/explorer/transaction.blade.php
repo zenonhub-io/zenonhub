@@ -89,28 +89,28 @@
                         <div class="bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="d-block d-md-flex justify-content-md-evenly">
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">From</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">From</span>
                                     <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->account"/></span>
                                 </div>
                                 <div class="d-none d-md-block text-md-center align-self-center">
                                     {!! svg('explorer/send', 'text-success', 'transform: rotate(90deg);') !!}
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">To</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">To</span>
                                     <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->to_account"/></span>
                                 </div>
                             </div>
                             <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
                                 @if ($transaction->is_un_received)
                                     <div class="text-start text-md-center mb-2 mb-md-0">
-                                        <span class="d-inline d-md-block fs-sm text-muted">Unreceived</span>
+                                        <span class="d-inline d-md-block text-muted fs-sm">Unreceived</span>
                                         <span class="float-end float-md-none">
                                             {!! svg('explorer/unreceived', 'text-danger') !!}
                                         </span>
                                     </div>
                                 @endif
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Confirmations</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Confirmations</span>
                                     <span class="float-end float-md-none">
                                         @if ($transaction->raw_json?->confirmationDetail?->numConfirmations)
                                             {{ number_format($transaction->raw_json->confirmationDetail->numConfirmations) }}
@@ -120,13 +120,13 @@
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Type</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Type</span>
                                     <span class="float-end float-md-none">
                                         {{ ($transaction->display_type ?: $transaction->display_actual_type) }}
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Amount</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Amount</span>
                                     <span class="float-end float-md-none">
                                         @if ($transaction->token && $transaction->amount > 0)
                                             {{ $transaction->display_amount }}

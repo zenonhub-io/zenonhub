@@ -20,11 +20,11 @@
                 <div class="col-24">
                     <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-3 mb-2 p-3">
                         <div class="text-start text-md-center mb-2 mb-md-0">
-                            <span class="d-inline d-md-block fs-sm text-muted">Weight <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total ZNN delegated to pillar"></i></span>
+                            <span class="d-inline d-md-block text-muted fs-sm">Weight <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Total ZNN delegated to pillar"></i></span>
                             <span class="float-end float-md-none">{{ $pillar->display_weight }}</span>
                         </div>
                         <div class="text-start text-md-center mb-2 mb-md-0">
-                            <span class="d-inline d-md-block fs-sm text-muted">Engagement <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="% of Accelerator projects and phases voted on"></i></span>
+                            <span class="d-inline d-md-block text-muted fs-sm">Engagement <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="% of Accelerator projects and phases voted on"></i></span>
                             <span class="float-end float-md-none">
                                 @if (! is_null($pillar->az_engagement))
                                     <span class="legend-indicator bg-{{ $pillar->az_status_indicator }}"></span>
@@ -35,11 +35,11 @@
                             </span>
                         </div>
                         <div class="text-start text-md-center mb-2 mb-md-0">
-                            <span class="d-inline d-md-block fs-sm text-muted">Rewards <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Momentum / Delegation rewards %"></i></span>
+                            <span class="d-inline d-md-block text-muted fs-sm">Rewards <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Momentum / Delegation rewards %"></i></span>
                             <span class="float-end float-md-none">{{ $pillar->momentum_rewards }} / {{ $pillar->delegate_rewards }}</span>
                         </div>
                         <div class="text-start text-md-center">
-                            <span class="d-inline d-md-block fs-sm text-muted">Momentums <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Produced / Expected momentums"></i></span>
+                            <span class="d-inline d-md-block text-muted fs-sm">Momentums <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Produced / Expected momentums"></i></span>
                             <span class="float-end float-md-none">
                                 @if (! $pillar->is_revoked)
                                     @if ($pillar->is_producing)

@@ -1,15 +1,15 @@
 <div class="bg-secondary shadow rounded-2 mb-4 p-3">
     <div class="d-block d-md-flex justify-content-md-evenly mb-3">
         <div class="text-start text-md-center mb-2 mb-md-0">
-            <span class="d-inline d-md-block text-muted">ZNN</span>
+            <span class="d-inline d-md-block text-muted fs-sm">ZNN</span>
             <span class="float-end float-md-none text-zenon-green">{{ $item->display_znn_requested }}</span>
         </div>
         <div class="text-start text-md-center mb-2 mb-md-0">
-            <span class="d-inline d-md-block text-muted">QSR</span>
+            <span class="d-inline d-md-block text-muted fs-sm">QSR</span>
             <span class="float-end float-md-none text-zenon-blue">{{ $item->display_qsr_requested }}</span>
         </div>
         <div class="text-start text-md-center">
-            <span class="d-inline d-md-block text-muted">USD</span>
+            <span class="d-inline d-md-block text-muted fs-sm">USD</span>
             <span class="float-end float-md-none text-white opacity-80">{{ $item->display_usd_requested }}</span>
         </div>
     </div>

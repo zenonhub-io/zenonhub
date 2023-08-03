@@ -35,11 +35,11 @@
                         <div class="bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="d-block d-md-flex justify-content-md-evenly">
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The current amount of tokens that exist"></i></span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The current amount of tokens that exist"></i></span>
                                     <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Maximum amount of tokens that can exist"></i></span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Maximum amount of tokens that can exist"></i></span>
                                     @if ($token->token_standard === 'zts17d6yr02kh0r9qr566p7tg6')
                                         <span class="float-end float-md-none" data-bs-toggle="tooltip" data-bs-title="{{ $token->getDisplayAmount($token->max_supply) }}">
                                             {{ short_hash($token->getDisplayAmount($token->max_supply), 14, false) }}
@@ -51,31 +51,31 @@
                                     @endif
                                 </div>
                                 <div class="text-start text-md-center">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Hodlers</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Hodlers</span>
                                     <span class="float-end float-md-none">{{ number_format($token->holders_count) }}</span>
                                 </div>
                             </div>
                             <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Decimals</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Decimals</span>
                                     <span class="float-end float-md-none">
                                         {{ $token->decimals }}
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Mintable</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Mintable</span>
                                     <span class="float-end float-md-none">
                                         <span class="legend-indicator bg-{{ ($token->is_mintable ? 'success' : 'danger') }}"></span>
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Burnable</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Burnable</span>
                                     <span class="float-end float-md-none">
                                         <span class="legend-indicator bg-{{ ($token->is_burnable ? 'success' : 'danger') }}"></span>
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Utility</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Utility</span>
                                     <span class="float-end float-md-none">
                                         <span class="legend-indicator bg-{{ ($token->is_utility ? 'success' : 'danger') }}"></span>
                                     </span>
