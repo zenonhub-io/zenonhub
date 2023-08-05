@@ -75,7 +75,7 @@ class Utilities extends ApiController
 
         $accounts = $accounts->map(function ($account) use ($lpToken) {
 
-            $query = $account->stakes()->where('token_id', $lpToken->id);
+            $query = $account->stakes()->where('token_id', $lpToken->id)->whereNull('ended_at');
 
             $balance = $query->sum('amount');
             $count = $query->count();
