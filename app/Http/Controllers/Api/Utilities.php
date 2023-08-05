@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Nom\Account;
+use App\Models\Nom\Token;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,5 +63,26 @@ class Utilities extends ApiController
         } catch (\Exception $exception) {
             return $this->error($exception->getMessage());
         }
+    }
+
+    public function accountLpBalances(Request $request): JsonResponse
+    {
+        $lpToken = Token::findByZts(Token::ZTS_LP_ETH);
+        $accounts = Account::whereHas(
+            'stakes',
+            fn ($q) => $q->where('token_id', $lpToken->id)
+        )->get();
+
+        $accounts = $accounts->map(function ($account) use ($lpToken) {
+            $balance = $account->stakes()->where('token_id', $lpToken->id)->sum('amount');
+
+            return [
+                'address' => $account->address,
+                'balance' => $balance,
+                'display_balance' => $lpToken->getDisplayAmount($balance),
+            ];
+        });
+
+        return $this->success($accounts);
     }
 }
