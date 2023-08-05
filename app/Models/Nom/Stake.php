@@ -87,7 +87,7 @@ class Stake extends Model
 
     public function getDisplayAmountAttribute()
     {
-        return znn_token()->getDisplayAmount($this->amount);
+        return $this->token->getDisplayAmount($this->amount);
     }
 
     public function getEndDateAttribute()
