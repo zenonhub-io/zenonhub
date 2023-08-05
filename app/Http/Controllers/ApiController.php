@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Validator;
 
@@ -26,10 +27,13 @@ class ApiController
      * @param  mixed  $result The result data.
      * @param  string  $message Optional message.
      */
-    protected function success(mixed $result, string $message = ''): JsonResponse
+    protected function success(mixed $result, string $message = ''): JsonResponse|JsonResource
     {
+        if ($result instanceof JsonResource) {
+            return $result;
+        }
+
         $response = [
-            'success' => true,
             'data' => $result,
         ];
 
@@ -47,7 +51,6 @@ class ApiController
     protected function error(string $error, int $code = 404, array $data = [], string $redirect = null): JsonResponse
     {
         $response = [
-            'success' => false,
             'message' => $error,
         ];
 

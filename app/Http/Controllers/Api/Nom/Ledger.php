@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Nom;
 
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;

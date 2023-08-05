@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Nom;
 
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
@@ -8,32 +8,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Token extends ApiController
+class Stake extends ApiController
 {
-    public function getAll(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->input(), [
-            'page' => 'numeric',
-            'per_page' => 'numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
-        try {
-            $response = $this->znn->token->getAll(
-                $request->input('page', 0),
-                $request->input('per_page', 100)
-            );
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getByOwner(Request $request): JsonResponse
+    public function getEntriesByAddress(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
             'address' => 'required|string',
@@ -46,7 +23,7 @@ class Token extends ApiController
         }
 
         try {
-            $response = $this->znn->token->getByOwner(
+            $response = $this->znn->stake->getEntriesByAddress(
                 $request->input('address'),
                 $request->input('page', 0),
                 $request->input('per_page', 100)
@@ -58,10 +35,10 @@ class Token extends ApiController
         }
     }
 
-    public function getByZts(Request $request): JsonResponse
+    public function getUncollectedReward(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'token' => 'required|string',
+            'address' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -69,7 +46,32 @@ class Token extends ApiController
         }
 
         try {
-            $response = $this->znn->token->getByZts($request->input('token'));
+            $response = $this->znn->stake->getUncollectedReward($request->input('address', 0));
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getFrontierRewardByPage(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
+            'address' => 'required|string',
+            'page' => 'numeric',
+            'per_page' => 'numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $response = $this->znn->stake->getFrontierRewardByPage(
+                $request->input('address'),
+                $request->input('page', 0),
+                $request->input('per_page', 100)
+            );
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

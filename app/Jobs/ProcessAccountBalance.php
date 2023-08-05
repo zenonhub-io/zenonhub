@@ -99,6 +99,7 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
     private function saveStakedZnn()
     {
         $this->account->znn_staked = $this->account->stakes()
+            ->where('token_id', znn_token()->id)
             ->whereNull('ended_at')
             ->sum('amount');
     }

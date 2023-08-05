@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Nom;
 
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
@@ -8,34 +8,30 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Liquidity extends ApiController
+class Sentinel extends ApiController
 {
-    public function getLiquidityInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->liquidity->getLiquidityInfo();
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getSecurityInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->liquidity->getSecurityInfo();
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getLiquidityStakeEntriesByAddress(Request $request): JsonResponse
+    public function getByOwner(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
             'address' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $response = $this->znn->sentinel->getByOwner($request->input('address'));
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getAllActive(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
             'page' => 'numeric',
             'per_page' => 'numeric',
         ]);
@@ -45,11 +41,29 @@ class Liquidity extends ApiController
         }
 
         try {
-            $response = $this->znn->liquidity->getLiquidityStakeEntriesByAddress(
-                $request->input('address'),
+            $response = $this->znn->sentinel->getAllActive(
                 $request->input('page', 0),
                 $request->input('per_page', 100)
             );
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getDepositedQsr(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
+            'address' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $response = $this->znn->sentinel->getDepositedQsr($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -68,9 +82,7 @@ class Liquidity extends ApiController
         }
 
         try {
-            $response = $this->znn->liquidity->getUncollectedReward(
-                $request->input('address')
-            );
+            $response = $this->znn->sentinel->getUncollectedReward($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -91,22 +103,11 @@ class Liquidity extends ApiController
         }
 
         try {
-            $response = $this->znn->liquidity->getFrontierRewardByPage(
+            $response = $this->znn->sentinel->getFrontierRewardByPage(
                 $request->input('address'),
                 $request->input('page', 0),
                 $request->input('per_page', 100)
             );
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getTimeChallengesInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->liquidity->getTimeChallengesInfo();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
