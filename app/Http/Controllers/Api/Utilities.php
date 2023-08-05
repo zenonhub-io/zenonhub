@@ -65,7 +65,7 @@ class Utilities extends ApiController
         }
     }
 
-    public function accountLpBalances(Request $request): JsonResponse
+    public function accountLpBalances(): JsonResponse
     {
         $lpToken = Token::findByZts(Token::ZTS_LP_ETH);
         $accounts = Account::whereHas(
@@ -74,12 +74,19 @@ class Utilities extends ApiController
         )->get();
 
         $accounts = $accounts->map(function ($account) use ($lpToken) {
-            $balance = $account->stakes()->where('token_id', $lpToken->id)->sum('amount');
+
+            $query = $account->stakes()->where('token_id', $lpToken->id);
+
+            $balance = $query->sum('amount');
+            $count = $query->count();
+            $hashes = $query->pluck('hash');
 
             return [
                 'address' => $account->address,
+                'count' => $count,
                 'balance' => $balance,
                 'display_balance' => $lpToken->getDisplayAmount($balance),
+                'hashes' => $hashes,
             ];
         });
 
