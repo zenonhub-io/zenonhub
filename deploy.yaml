@@ -12,10 +12,13 @@ tasks:
     - artisan:down
     - artisan:migrate
     - deploy:publish
-    - artisan:queue:restart
     - artisan:horizon:terminate
+    - artisan:queue:restart
+    - artisan:schedule:interrupt
     - artisan:site:after-deploy
     - artisan:up
+  artisan:schedule:interrupt:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan schedule:interrupt'
   artisan:site:after-deploy:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan site:after-deploy'
   npx:build:production:
