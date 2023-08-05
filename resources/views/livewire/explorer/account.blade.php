@@ -134,7 +134,7 @@
         <div class="card shadow">
             <div class="card-header">
                 <div class="d-md-none">
-                    <select id="account-sections" class="form-control" wire:change="$set('tab', $event.target.value)">
+                    <select id="account-sections" class="form-select" wire:change="$set('tab', $event.target.value)">
                         <option value="transactions" {{ $tab === 'transactions' ? 'selected' : '' }}>Transactions</option>
                         <option value="rewards" {{ $tab === 'rewards' ? 'selected' : '' }}>Rewards</option>
                         <option value="delegations" {{ $tab === 'delegations' ? 'selected' : '' }}>Delegations</option>

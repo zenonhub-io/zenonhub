@@ -5,7 +5,7 @@
         </div>
         <div class="card-header">
             <div class="d-md-none">
-                <select id="sections" class="form-control" wire:change="$emit('tabChange', $event.target.value)">
+                <select id="sections" class="form-select" wire:change="$emit('tabChange', $event.target.value)">
                     <option value="addresses" {{ $tab === 'addresses' ? 'selected' : '' }}>Addresses</option>
                     <option value="tokens" {{ $tab === 'tokens' ? 'selected' : '' }}>Tokens</option>
                     <option value="transactions" {{ $tab === 'transactions' ? 'selected' : '' }}>Transactions</option>
