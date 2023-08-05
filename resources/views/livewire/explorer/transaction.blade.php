@@ -205,7 +205,7 @@
         <div class="card shadow">
             <div class="card-header">
                 <div class="d-md-none">
-                    <select id="transaction-sections" class="form-control" wire:change="$set('tab', $event.target.value)">
+                    <select id="transaction-sections" class="form-select" wire:change="$set('tab', $event.target.value)">
                         <option value="descendants" {{ $tab === 'descendants' ? 'selected' : '' }}>Descendants</option>
                         <option value="json" {{ $tab === 'json' ? 'selected' : '' }}>JSON</option>
                     </select>

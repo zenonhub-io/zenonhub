@@ -92,7 +92,7 @@
     <div class="card shadow mb-4">
         <div class="card-header">
             <div class="d-md-none">
-                <select id="pillar-sections" class="form-control" wire:change="$set('tab', $event.target.value)">
+                <select id="pillar-sections" class="form-select" wire:change="$set('tab', $event.target.value)">
                     <option value="delegators" {{ $tab === 'delegators' ? 'selected' : '' }}>Delegators</option>
                     <option value="votes" {{ $tab === 'votes' ? 'selected' : '' }}>Votes</option>
                     <option value="updates" {{ $tab === 'updates' ? 'selected' : '' }}>Updates</option>
