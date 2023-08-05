@@ -12,10 +12,19 @@ class Staking extends Component
     use WithPagination;
     use DataTableTrait;
 
+    public string $tab = 'all';
+
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
         'order' => ['except' => 'desc'],
+        'tab' => ['except' => 'all'],
     ];
+
+    public function setTab($tab = 'all')
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
 
     public function mount()
     {
@@ -35,5 +44,13 @@ class Staking extends Component
     protected function initQuery()
     {
         $this->query = Stake::isActive();
+
+        if ($this->tab === 'znn') {
+            $this->query->where('token_id', znn_token()->id);
+        }
+
+        if ($this->tab === 'lp-eth') {
+            $this->query->where('token_id', lp_eth_token()->id);
+        }
     }
 }

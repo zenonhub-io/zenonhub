@@ -10,6 +10,11 @@ function qsr_token(): App\Models\Nom\Token
     return \App\Models\Nom\Token::findByZts(\App\Models\Nom\Token::ZTS_QSR);
 }
 
+function lp_eth_token(): App\Models\Nom\Token
+{
+    return \App\Models\Nom\Token::findByZts(\App\Models\Nom\Token::ZTS_LP_ETH);
+}
+
 function znn_price(): float
 {
     return (float) Cache::get('znn-price');
