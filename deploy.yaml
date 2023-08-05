@@ -14,6 +14,7 @@ tasks:
     - deploy:publish
     - artisan:queue:restart
     - artisan:horizon:terminate
+    - artisan:schedule:interrupt
     - artisan:site:after-deploy
     - artisan:up
   artisan:site:after-deploy:
