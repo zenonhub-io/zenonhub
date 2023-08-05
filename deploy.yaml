@@ -12,8 +12,8 @@ tasks:
     - artisan:down
     - artisan:migrate
     - deploy:publish
-    - artisan:queue:restart
     - artisan:horizon:terminate
+    - artisan:queue:restart
     - artisan:schedule:interrupt
     - artisan:site:after-deploy
     - artisan:up
