@@ -204,6 +204,9 @@ $offcanvas-dark-mode-bg-color:              $gray-dark;
 
 // Modal
 $modal-inner-padding:                       $spacer * 1.5;
+$modal-fade-transform:                      scale(.9);
+$modal-transition:                          transform .2s ease-out;
+$modal-backdrop-opacity:                    .65;
 
 $modal-content-border-width:                2px;
 $modal-content-box-shadow-xs:               $box-shadow;
@@ -211,13 +214,9 @@ $modal-content-box-shadow-xs:               $box-shadow;
 $modal-header-padding-y:                    $modal-inner-padding * .75;
 $modal-header-border-color:                 $border-color;
 $modal-header-border-width:                 $border-width;
+
 $modal-footer-border-width:                 $border-width;
 $modal-footer-margin-between:               .75rem;
-
-$modal-fade-transform:                      scale(.9);
-$modal-transition:                          transform .2s ease-out;
-
-$modal-backdrop-opacity:                    .65;
 
 $modal-dark-mode-content-border-width:      2px;
 $modal-dark-mode-content-border-color:      $border-light-color;
@@ -264,3 +263,5 @@ $warning-text-emphasis:   $warning;
 $danger-text-emphasis:    $danger;
 $light-text-emphasis:     $gray-700;
 $dark-text-emphasis:      $gray-700;
+
+$form-select-indicator-color: $border-color;

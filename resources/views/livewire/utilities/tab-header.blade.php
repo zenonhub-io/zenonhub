@@ -1,6 +1,6 @@
 <div>
     <div class="d-md-none">
-        <select id="tab-controls" class="form-control" wire:change="$emit('tabChanged', $event.target.value)">
+        <select id="tab-controls" class="form-select" wire:change="$emit('tabChanged', $event.target.value)">
             @foreach($tabs as $tab => $title)
                 <option value="{{ $tab }}" {{ $tab === $activeTab ? 'selected' : '' }}>{{ $title }}</option>
             @endforeach

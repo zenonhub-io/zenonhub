@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="d-md-none">
-                <select id="account-sections" class="form-control" wire:change="setTab($event.target.value)">
+                <select id="account-sections" class="form-select" wire:change="setTab($event.target.value)">
                     <option value="all" {{ $tab === 'all' ? 'selected' : '' }}>All</option>
                     <option value="network" {{ $tab === 'network' ? 'selected' : '' }}>Network</option>
                     <option value="user" {{ $tab === 'user' ? 'selected' : '' }}>User</option>
