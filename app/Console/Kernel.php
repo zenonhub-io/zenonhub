@@ -4,17 +4,13 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Spatie\ShortSchedule\ShortSchedule;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     *
-     * @return void
-     */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
+        $this->runIndexer($schedule);
+
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command('zenon:sync pillars')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
@@ -28,7 +24,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }
 
-    protected function shortSchedule(ShortSchedule $shortSchedule)
+    private function runIndexer(Schedule $schedule): void
     {
         $command = 'zenon:index --auto=true';
 
@@ -40,9 +36,7 @@ class Kernel extends ConsoleKernel
             $command .= ' --alerts=false --balances=true';
         }
 
-        $shortSchedule->command($command)
-            ->everySeconds(10)
-            ->withoutOverlapping();
+        $schedule->command($command)->everyTenSeconds()->withoutOverlapping();
     }
 
     /**
