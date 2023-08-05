@@ -8,8 +8,8 @@ class Staking extends PageController
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'ZNN Staking';
-        $this->page['meta']['description'] = 'A list of all the addresses actively staking ZNN. Staking locks ZNN for a period of time and generates QSR';
+        $this->page['meta']['title'] = 'Staking';
+        $this->page['meta']['description'] = 'A list of all addresses actively staking tokens in the network.';
         $this->page['data'] = [
             'component' => 'explorer.staking',
         ];
