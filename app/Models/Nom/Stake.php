@@ -77,6 +77,11 @@ class Stake extends Model
         return $query->whereNull('ended_at');
     }
 
+    public function scopeIsEnded($query)
+    {
+        return $query->whereNotNull('ended_at');
+    }
+
     public function scopeWhereHash($query, $hash)
     {
         return $query->where('hash', $hash);
@@ -112,6 +117,11 @@ class Stake extends Model
 
     //
     // Methods
+
+    public static function findByHash($hash)
+    {
+        return static::where('hash', $hash)->first();
+    }
 
     public function displayAmount($decimals = null)
     {

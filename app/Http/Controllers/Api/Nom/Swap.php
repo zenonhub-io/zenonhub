@@ -1,18 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Nom;
 
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Validator;
 
-class Stats extends ApiController
+class Swap extends ApiController
 {
-    public function runtimeInfo(Request $request): JsonResponse
+    public function getAssetsByKeyIdHash(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->input(), [
+            'id_key' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
         try {
-            $response = $this->znn->stats->runtimeInfo();
+            $response = $this->znn->swap->getAssetsByKeyIdHash($request->input('id_key'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -20,10 +29,10 @@ class Stats extends ApiController
         }
     }
 
-    public function processInfo(Request $request): JsonResponse
+    public function getAssets(Request $request): JsonResponse
     {
         try {
-            $response = $this->znn->stats->processInfo();
+            $response = $this->znn->swap->getAssets();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -31,21 +40,10 @@ class Stats extends ApiController
         }
     }
 
-    public function syncInfo(Request $request): JsonResponse
+    public function getLegacyPillars(Request $request): JsonResponse
     {
         try {
-            $response = $this->znn->stats->syncInfo();
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function networkInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->stats->networkInfo();
+            $response = $this->znn->swap->getLegacyPillars();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
