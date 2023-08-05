@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Staker extends Model
+class Stake extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class Staker extends Model
      *
      * @var string
      */
-    protected $table = 'nom_stakers';
+    protected $table = 'nom_stakes';
 
     /**
      * Indicates if the model should be timestamped.
@@ -33,6 +33,7 @@ class Staker extends Model
     public $fillable = [
         'chain_id',
         'account_id',
+        'token_id',
         'amount',
         'duration',
         'hash',
@@ -63,6 +64,11 @@ class Staker extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function token(): BelongsTo
+    {
+        return $this->belongsTo(Token::class);
+    }
+
     //
     // Scopes
 
@@ -81,7 +87,7 @@ class Staker extends Model
 
     public function getDisplayAmountAttribute()
     {
-        return znn_token()->getDisplayAmount($this->amount);
+        return $this->token->getDisplayAmount($this->amount);
     }
 
     public function getEndDateAttribute()
@@ -109,6 +115,6 @@ class Staker extends Model
 
     public function displayAmount($decimals = null)
     {
-        return znn_token()->getDisplayAmount($this->amount, $decimals);
+        $this->token->getDisplayAmount($this->amount, $decimals);
     }
 }

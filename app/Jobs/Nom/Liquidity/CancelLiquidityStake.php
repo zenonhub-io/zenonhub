@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Nom\Stake;
+namespace App\Jobs\Nom\Liquidity;
 
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
@@ -11,9 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 
-class Cancel implements ShouldQueue
+class CancelLiquidityStake implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -39,11 +38,6 @@ class Cancel implements ShouldQueue
             $stake->ended_at = $this->block->created_at;
             $stake->save();
         }
-
-        $znnToken = znn_token();
-        $totalZnnStaked = Stake::isActive()->where('token_id', $znnToken->id)->sum('amount');
-        $stakedZnn = $znnToken->getDisplayAmount($totalZnnStaked, 0);
-        Cache::put('staked-znn', $stakedZnn);
 
         (new SetBlockAsProcessed($this->block))->execute();
     }
