@@ -47,7 +47,7 @@ return new class extends Migration
             $table->string('amount')->default(0)->change();
         });
 
-        Schema::table('nom_stakers', function (Blueprint $table) {
+        Schema::table('nom_stakes', function (Blueprint $table) {
             $table->string('amount')->default(0)->change();
         });
 

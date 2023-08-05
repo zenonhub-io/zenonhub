@@ -4,7 +4,7 @@ namespace App\Jobs\Nom\Stake;
 
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Staker;
+use App\Models\Nom\Stake;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,14 +33,14 @@ class Cancel implements ShouldQueue
     {
         $blockData = $this->block->data->decoded;
 
-        $stake = Staker::where('hash', $blockData['id'])->first();
+        $stake = Stake::where('hash', $blockData['id'])->first();
 
         if ($stake) {
             $stake->ended_at = $this->block->created_at;
             $stake->save();
         }
 
-        $stakedZnn = znn_token()->getDisplayAmount(Staker::isActive()->sum('amount'), 0);
+        $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->sum('amount'), 0);
         Cache::put('staked-znn', $stakedZnn);
 
         (new SetBlockAsProcessed($this->block))->execute();
