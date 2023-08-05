@@ -1,27 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Nom;
 
 use App\Http\Controllers\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Validator;
 
-class Swap extends ApiController
+class Stats extends ApiController
 {
-    public function getAssetsByKeyIdHash(Request $request): JsonResponse
+    public function runtimeInfo(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->input(), [
-            'id_key' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
         try {
-            $response = $this->znn->swap->getAssetsByKeyIdHash($request->input('id_key'));
+            $response = $this->znn->stats->runtimeInfo();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -29,10 +20,10 @@ class Swap extends ApiController
         }
     }
 
-    public function getAssets(Request $request): JsonResponse
+    public function processInfo(Request $request): JsonResponse
     {
         try {
-            $response = $this->znn->swap->getAssets();
+            $response = $this->znn->stats->processInfo();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -40,10 +31,21 @@ class Swap extends ApiController
         }
     }
 
-    public function getLegacyPillars(Request $request): JsonResponse
+    public function syncInfo(Request $request): JsonResponse
     {
         try {
-            $response = $this->znn->swap->getLegacyPillars();
+            $response = $this->znn->stats->syncInfo();
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function networkInfo(Request $request): JsonResponse
+    {
+        try {
+            $response = $this->znn->stats->networkInfo();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
