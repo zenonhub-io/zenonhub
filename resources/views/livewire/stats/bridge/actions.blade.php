@@ -18,11 +18,11 @@
             <div class="list-group list-group-flush">
                 @foreach($data as $block)
                     <a href="{{ route('explorer.transaction', ['hash' => $block->hash]) }}" class="list-group-item p-4">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ ($block->display_type ?: '-') }}</h5>
+                        <div class="d-block d-md-flex w-100 justify-content-md-between mb-2">
+                            <h5 class="mb-1 mb-md-0">{{ ($block->display_type ?: '-') }}</h5>
                             <small>{{ $block->created_at->format(config('zenon.short_date_format')) }}</small>
                         </div>
-                        <pre class="line-numbers mt-2"><code class="lang-json">{{ $block->data->json }}</code></pre>
+                        <pre class="line-numbers"><code class="lang-json">{{ $block->data->json }}</code></pre>
                     </a>
                 @endforeach
             </div>

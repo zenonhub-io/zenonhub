@@ -3,11 +3,11 @@
         <div class="list-group list-group-flush">
             @foreach($networkInfo as $network)
                 <div class="list-group-item px-4 pb-4">
-                    <div class="d-flex w-100 justify-content-between align-items-baseline">
-                        <h4 class="mb-2">{{ $network->name }}</h4>
+                    <div class="d-block d-md-flex w-100 justify-content-md-between mb-2">
+                        <h4 class="mb-1 mb-md-0">{{ $network->name }}</h4>
                         <small>
                             <a href="https://etherscan.io/address/{{ $network->contractAddress }}">
-                                {{ $network->contractAddress }}
+                                {{ short_hash($network->contractAddress, 12) }}
                             </a>
                         </small>
                     </div>
