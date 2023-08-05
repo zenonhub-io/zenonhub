@@ -7,7 +7,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Fusion;
 use App\Models\Nom\Momentum;
 use App\Models\Nom\PillarDelegator;
-use App\Models\Nom\Staker;
+use App\Models\Nom\Stake;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
@@ -44,7 +44,7 @@ class CreateCaches extends Command
         $fusedQsr = qsr_token()->getDisplayAmount(Fusion::isActive()->sum('amount'));
         Cache::put('fused-qsr', $fusedQsr);
 
-        $stakedZnn = znn_token()->getDisplayAmount(Staker::isActive()->sum('amount'), 0);
+        $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->sum('amount'), 0);
         Cache::put('staked-znn', $stakedZnn);
 
         return self::SUCCESS;

@@ -153,7 +153,7 @@ class Account extends Model implements Sitemapable
 
     public function stakes(): HasMany
     {
-        return $this->hasMany(Staker::class, 'account_id', 'id');
+        return $this->hasMany(Stake::class, 'account_id', 'id');
     }
 
     public function pillars(): HasMany

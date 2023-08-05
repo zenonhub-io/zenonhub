@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Explorer;
 
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Staker;
+use App\Models\Nom\Stake;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -34,6 +34,6 @@ class Staking extends Component
 
     protected function initQuery()
     {
-        $this->query = Staker::isActive();
+        $this->query = Stake::isActive();
     }
 }

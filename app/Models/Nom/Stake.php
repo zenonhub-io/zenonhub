@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Staker extends Model
+class Stake extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class Staker extends Model
      *
      * @var string
      */
-    protected $table = 'nom_stakers';
+    protected $table = 'nom_stakes';
 
     /**
      * Indicates if the model should be timestamped.
