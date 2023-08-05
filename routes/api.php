@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
 Route::group(['middleware' => ['throttle:60,1']], function () {
     Route::prefix('nom')->group(function () {
         Route::prefix('accelerator')->name('Accelerator.')->group(function () {
@@ -129,8 +125,21 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
         });
     });
 
+    //    Route::group([], function () {
+    //        Route::prefix('accounts')->name('accounts.')->group(function () {
+    //            Route::get('/', [\App\Http\Controllers\Api\Accounts::class, 'get'])->name('get');
+    //            Route::get('{address}', [\App\Http\Controllers\Api\Accounts::class, 'find'])->name('get');
+    //        });
+    //
+    //        Route::prefix('stakes')->name('stakes.')->group(function () {
+    //            Route::get('/', [\App\Http\Controllers\Api\Stakes::class, 'get'])->name('get');
+    //            Route::get('{hash}', [\App\Http\Controllers\Api\Stakes::class, 'find'])->name('get');
+    //        });
+    //    });
+
     Route::prefix('utilities')->name('Utilities.')->group(function () {
         Route::get('address-from-public-key', [App\Http\Controllers\Api\Utilities::class, 'addressFromPublicKey'])->name('addressFromPublicKey');
         Route::post('verify-signed-message', [App\Http\Controllers\Api\Utilities::class, 'verifySignedMessage'])->name('verifySignedMessage');
+        Route::get('account-lp-balances', [App\Http\Controllers\Api\Utilities::class, 'accountLpBalances'])->name('accountLpBalances');
     });
 });
