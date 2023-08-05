@@ -4,7 +4,7 @@ namespace App\Jobs\Nom\Stake;
 
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Stake;
+use App\Models\Nom\Stake as StakeModel;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,16 +33,19 @@ class Stake implements ShouldQueue
     {
         $blockData = $this->block->data->decoded;
 
-        Stake::create([
+        StakeModel::create([
             'chain_id' => $this->block->chain->id,
             'account_id' => $this->block->account_id,
+            'token_id' => $this->block->token_id,
             'amount' => $this->block->amount,
             'duration' => $blockData['durationInSec'],
             'hash' => $this->block->hash,
             'started_at' => $this->block->created_at,
         ]);
 
-        $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->sum('amount'), 0);
+        $znnToken = znn_token();
+        $totalZnnStaked = StakeModel::isActive()->were('token_id', $znnToken->id)->sum('amount');
+        $stakedZnn = $znnToken->getDisplayAmount($totalZnnStaked, 0);
         Cache::put('staked-znn', $stakedZnn);
 
         (new SetBlockAsProcessed($this->block))->execute();

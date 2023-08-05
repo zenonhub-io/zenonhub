@@ -33,6 +33,7 @@ class Stake extends Model
     public $fillable = [
         'chain_id',
         'account_id',
+        'token_id',
         'amount',
         'duration',
         'hash',
@@ -61,6 +62,11 @@ class Stake extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function token(): BelongsTo
+    {
+        return $this->belongsTo(Token::class);
     }
 
     //
@@ -109,6 +115,6 @@ class Stake extends Model
 
     public function displayAmount($decimals = null)
     {
-        return znn_token()->getDisplayAmount($this->amount, $decimals);
+        $this->token->getDisplayAmount($this->amount, $decimals);
     }
 }
