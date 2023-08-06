@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
@@ -31,6 +32,8 @@ class GenerateSitemap implements ShouldQueue
 
         Sitemap::create()
             ->add($this->addItem('home'))
+            ->add($this->addItem('nodes'))
+            ->add($this->addItem('donate'))
 
             ->add($this->addItem('explorer.overview'))
             ->add($this->addItem('explorer.momentums'))
@@ -38,8 +41,7 @@ class GenerateSitemap implements ShouldQueue
             ->add($this->addItem('explorer.accounts'))
             ->add(Account::whereIn('address', array_keys(Account::EMBEDDED_CONTRACTS))->get()->all())
             ->add($this->addItem('explorer.tokens'))
-            ->add(Token::findByZts(Token::ZTS_ZNN))
-            ->add(Token::findByZts(Token::ZTS_QSR))
+            ->add(Token::whereIn('token_standard', [Token::ZTS_ZNN, Token::ZTS_QSR, Token::ZTS_LP_ETH]))
             ->add($this->addItem('explorer.staking'))
             ->add($this->addItem('explorer.fusions'))
 
@@ -48,8 +50,10 @@ class GenerateSitemap implements ShouldQueue
 
             ->add($this->addItem('az.overview'))
             ->add(AcceleratorProject::all())
+            ->add(AcceleratorPhase::all())
 
             ->add($this->addItem('tools.overview'))
+            ->add($this->addItem('tools.plasma-bot'))
             ->add($this->addItem('tools.api-playground'))
             ->add($this->addItem('tools.verify-signature'))
             ->add($this->addItem('tools.broadcast-message'))
