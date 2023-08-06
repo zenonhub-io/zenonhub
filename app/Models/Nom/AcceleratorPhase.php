@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Maize\Markable\Markable;
+use Spatie\Sitemap\Contracts\Sitemapable;
 
-class AcceleratorPhase extends Model
+class AcceleratorPhase extends Model implements Sitemapable
 {
     use AzVotes, HasFactory, Markable;
 
@@ -78,6 +79,14 @@ class AcceleratorPhase extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    //
+    // Config
+
+    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
+    {
+        return route('az.phase', ['hash' => $this->hash]);
+    }
 
     //
     // Relations
