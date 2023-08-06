@@ -41,7 +41,7 @@ class GenerateSitemap implements ShouldQueue
             ->add($this->addItem('explorer.accounts'))
             ->add(Account::whereIn('address', array_keys(Account::EMBEDDED_CONTRACTS))->get()->all())
             ->add($this->addItem('explorer.tokens'))
-            ->add(Token::whereIn('token_standard', [Token::ZTS_ZNN, Token::ZTS_QSR, Token::ZTS_LP_ETH]))
+            ->add(Token::whereIn('token_standard', [Token::ZTS_ZNN, Token::ZTS_QSR, Token::ZTS_LP_ETH])->get()->all())
             ->add($this->addItem('explorer.staking'))
             ->add($this->addItem('explorer.fusions'))
 
