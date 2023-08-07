@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Notifications\Accelerator;
+namespace App\Notifications\Nom\Accelerator;
 
 use App\Models\Nom\AcceleratorProject;
-use App\Notifications\BaseNotification;
+use App\Notifications\Nom\BaseNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;

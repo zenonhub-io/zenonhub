@@ -1,28 +1,32 @@
 <?php
 
-namespace App\Notifications\Pillar;
+namespace App\Notifications\Nom\Pillar;
 
+use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
-use App\Notifications\BaseNotification;
+use App\Notifications\Nom\BaseNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Updated extends BaseNotification implements ShouldQueue
+class LostDelegator extends BaseNotification implements ShouldQueue
 {
     use Queueable;
 
     protected Pillar $pillar;
+
+    protected Account $account;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($type, $pillar)
+    public function __construct($type, $pillar, $account)
     {
         parent::__construct($type);
         $this->pillar = $pillar;
+        $this->account = $account;
     }
 
     /**
@@ -46,9 +50,10 @@ class Updated extends BaseNotification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(get_env_prefix().$this->type->name)
-            ->markdown('mail.notifications.pillar.updated', [
+            ->markdown('mail.notifications.pillar.lost-delegator', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
+                'account' => $this->account,
             ]);
     }
 

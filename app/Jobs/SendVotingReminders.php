@@ -38,7 +38,7 @@ class SendVotingReminders implements ShouldQueue
 
             Notification::send(
                 $subscribedUsers,
-                new \App\Notifications\Accelerator\ProjectVoteReminder($notificationType, $project)
+                new \App\Notifications\Nom\Accelerator\ProjectVoteReminder($notificationType, $project)
             );
 
             $project->send_reminders_at = null;
