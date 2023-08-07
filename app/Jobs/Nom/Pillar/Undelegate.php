@@ -67,7 +67,7 @@ class Undelegate implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Pillar\LostDelegator($notificationType, $pillar, $this->block->account)
+            new \App\Notifications\Nom\Pillar\LostDelegator($notificationType, $pillar, $this->block->account)
         );
     }
 }

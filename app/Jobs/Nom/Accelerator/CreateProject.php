@@ -109,7 +109,7 @@ class CreateProject implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Accelerator\ProjectCreated($notificationType, $this->project)
+            new \App\Notifications\Nom\Accelerator\ProjectCreated($notificationType, $this->project)
         );
     }
 }

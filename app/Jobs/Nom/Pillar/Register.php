@@ -90,7 +90,7 @@ class Register implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Pillar\Registered($notificationType, $pillar)
+            new \App\Notifications\Nom\Pillar\Registered($notificationType, $pillar)
         );
     }
 }

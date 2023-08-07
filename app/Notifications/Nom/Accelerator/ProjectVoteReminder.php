@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Notifications\Pillar;
+namespace App\Notifications\Nom\Accelerator;
 
-use App\Models\Nom\Pillar;
-use App\Notifications\BaseNotification;
+use App\Models\Nom\AcceleratorProject;
+use App\Notifications\Nom\BaseNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Revoked extends BaseNotification implements ShouldQueue
+class ProjectVoteReminder extends BaseNotification implements ShouldQueue
 {
     use Queueable;
 
-    protected Pillar $pillar;
+    protected AcceleratorProject $project;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($type, $pillar)
+    public function __construct($type, $project)
     {
         parent::__construct($type);
-        $this->pillar = $pillar;
+        $this->project = $project;
     }
 
     /**
@@ -44,11 +44,26 @@ class Revoked extends BaseNotification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $accountIds = $notifiable->nom_accounts->pluck('id')->toArray();
+        $allVotes = $this->project->votes()->pluck('owner_id')->toArray();
+        $missingVotes = \App\Models\Nom\Pillar::whereNotIn('owner_id', $allVotes)
+            ->where('created_at', '<', $this->project->created_at)
+            ->get();
+
+        $pillars = $missingVotes->map(function ($pillar) use ($accountIds) {
+            if (in_array($pillar->owner_id, $accountIds)) {
+                return $pillar;
+            }
+
+            return null;
+        })->filter();
+
         return (new MailMessage)
             ->subject(get_env_prefix().$this->type->name)
-            ->markdown('mail.notifications.pillar.revoked', [
+            ->markdown('mail.notifications.az.project-vote-reminder', [
                 'user' => $notifiable,
-                'pillar' => $this->pillar,
+                'project' => $this->project,
+                'pillars' => $pillars,
             ]);
     }
 

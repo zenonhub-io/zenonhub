@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Notifications\Pillar;
+namespace App\Notifications\Nom\Accelerator;
 
-use App\Models\Nom\Pillar;
-use App\Notifications\BaseNotification;
+use App\Models\Nom\AcceleratorPhase;
+use App\Notifications\Nom\BaseNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Registered extends BaseNotification implements ShouldQueue
+class PhaseAdded extends BaseNotification implements ShouldQueue
 {
     use Queueable;
 
-    protected Pillar $pillar;
+    protected AcceleratorPhase $phase;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($type, $pillar)
+    public function __construct($type, $project)
     {
         parent::__construct($type);
-        $this->pillar = $pillar;
+        $this->phase = $project;
     }
 
     /**
@@ -46,9 +46,9 @@ class Registered extends BaseNotification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(get_env_prefix().$this->type->name)
-            ->markdown('mail.notifications.pillar.registered', [
+            ->markdown('mail.notifications.az.phase-added', [
                 'user' => $notifiable,
-                'pillar' => $this->pillar,
+                'phase' => $this->phase,
             ]);
     }
 

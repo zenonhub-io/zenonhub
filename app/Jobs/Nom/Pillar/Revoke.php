@@ -60,7 +60,7 @@ class Revoke implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Pillar\Revoked($notificationType, $pillar)
+            new \App\Notifications\Nom\Pillar\Revoked($notificationType, $pillar)
         );
     }
 }

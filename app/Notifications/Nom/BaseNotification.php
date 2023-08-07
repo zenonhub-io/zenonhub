@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Nom;
 
 use App\Models\NotificationType;
 use Illuminate\Bus\Queueable;
@@ -12,7 +12,7 @@ class BaseNotification extends Notification
 
     protected ?NotificationType $type;
 
-    public function __construct(?NotificationType $type = null)
+    public function __construct(NotificationType $type = null)
     {
         $this->type = $type;
     }
