@@ -115,7 +115,7 @@ class AddPhase implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Accelerator\PhaseAdded($notificationType, $this->phase)
+            new \App\Notifications\Nom\Accelerator\PhaseAdded($notificationType, $this->phase)
         );
     }
 }

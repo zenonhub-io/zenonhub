@@ -85,7 +85,7 @@ class UpdatePillar implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Pillar\Updated($notificationType, $pillar)
+            new \App\Notifications\Nom\Pillar\Updated($notificationType, $pillar)
         );
 
         // delegating pillar updated

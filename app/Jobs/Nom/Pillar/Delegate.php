@@ -85,7 +85,7 @@ class Delegate implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Pillar\NewDelegator($notificationType, $this->pillar, $this->block->account)
+            new \App\Notifications\Nom\Pillar\NewDelegator($notificationType, $this->pillar, $this->block->account)
         );
     }
 }
