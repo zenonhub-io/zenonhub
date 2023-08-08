@@ -9,7 +9,7 @@ return [
     ],
     'telegram' => [
         'enabled' => env('WHALE_BOT_ENABLE_TELEGRAM'),
-        'bot-token' => env('WHALE_BOT_TELEGRAM_BOT_TOKEN'),
+        'bot_token' => env('WHALE_BOT_TELEGRAM_BOT_TOKEN'),
         'chat' => env('WHALE_BOT_TELEGRAM_CHAT_ID'),
     ],
     'twitter' => [

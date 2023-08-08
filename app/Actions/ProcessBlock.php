@@ -2,12 +2,12 @@
 
 namespace App\Actions;
 
-use App\Bots\WhaleAlerts;
+use App\Bots\WhaleAlertBot;
 use App\Jobs\ProcessAccountBalance;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
-use App\Notifications\Bots\WhaleAlertNotification;
+use App\Notifications\Bots\WhaleAlert;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Spatie\QueueableAction\QueueableAction;
@@ -42,7 +42,7 @@ class ProcessBlock
 
         if ($this->fireWhaleAlerts && $this->shouldSendWhaleAlerts()) {
             Log::debug('Fire whale alerts');
-            Notification::send(new WhaleAlerts, (new WhaleAlertNotification($this->block))->delay($jobDelay));
+            Notification::send(new WhaleAlertBot, (new WhaleAlert($this->block))->delay($jobDelay));
         }
 
         if ($this->processAccounts) {

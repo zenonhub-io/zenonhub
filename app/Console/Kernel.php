@@ -26,7 +26,11 @@ class Kernel extends ConsoleKernel
 
     private function runIndexer(Schedule $schedule): void
     {
-        $command = 'zenon:index --auto=true';
+        if (! config('explorer.enable_indexer')) {
+            return;
+        }
+
+        $command = 'zenon:index';
 
         if (app()->environment('production')) {
             $command .= ' --alerts=true --balances=true';
