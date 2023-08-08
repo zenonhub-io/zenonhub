@@ -27,7 +27,6 @@ class Indexer
 
     public function __construct(
         protected Zenon $znn,
-        protected bool $auto,
         protected ?int $startHeight,
         protected ?bool $sendWhaleAlerts,
         protected ?bool $syncAccountBalances,
@@ -36,10 +35,6 @@ class Indexer
 
     public function run(): void
     {
-        if ($this->auto && ! config('explorer.enable_indexer')) {
-            return;
-        }
-
         $momentum = $this->znn->ledger->getFrontierMomentum()['data'];
 
         while ($momentum->height > ($count = Momentum::max('height'))) {
