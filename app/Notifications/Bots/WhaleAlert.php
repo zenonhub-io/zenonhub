@@ -92,19 +92,20 @@ class WhaleAlert extends Notification
         $amount = $this->block->token->getDisplayAmount($this->block->amount);
         $token = $this->block->token->symbol;
 
+        $senderLink = $this->formatMarkdownAddressLink($this->block->account, 'telegram');
+        $receiverLink = $this->formatMarkdownAddressLink($this->block->to_account, 'telegram');
+        $txLink = $this->formatMarkdownTxLink('telegram');
+
         return TelegramMessage::create()
             ->token(config('whale-alerts.telegram.bot_token'))
             ->content('🐋 🚨')
             ->line("\n*{$amount} \${$token}* was sent from {$senderAccount} to {$receiverAccount}\n")
             ->line('*Sender*')
-            ->line("{$this->block->account->address}\n")
+            ->line("{$senderLink}\n")
             ->line('*Receiver*')
-            ->line("{$this->block->to_account->address}\n")
+            ->line("{$receiverLink}\n")
             ->line('*Transaction*')
-            ->line("{$this->block->hash}")
-            ->button('Sender', $this->formatAddressLink($this->block->account, 'telegram'))
-            ->button('Receiver', $this->formatAddressLink($this->block->to_account, 'telegram'))
-            ->button('Transaction', $this->formatTxLink('telegram'));
+            ->line("{$txLink}");
     }
 
     public function toTwitter($notifiable): TwitterMessage
