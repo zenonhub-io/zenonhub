@@ -17,7 +17,7 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class WhaleAlertNotification extends Notification
+class WhaleAlert extends Notification
 {
     use Queueable;
 
@@ -56,7 +56,7 @@ class WhaleAlertNotification extends Notification
     //                Embed::make()
     //                    ->color($this->getDiscordHighlightColour())
     //                    ->title(':whale: :rotating_light:')
-    //                    ->description("**{$amount} {$token}** was sent from {$senderAccount} to {$receiverAccount}")
+    //                    ->description("**{$amount} \${$token}** was sent from {$senderAccount} to {$receiverAccount}")
     //                    ->field('Sender', $this->formatMarkdownAddressLink($this->block->account, 'discord'))
     //                    ->field('Receiver', $this->formatMarkdownAddressLink($this->block->to_account, 'discord'))
     //                    ->field('Transaction', $this->formatMarkdownTxLink('discord'))
@@ -77,7 +77,7 @@ class WhaleAlertNotification extends Notification
                 Embed::make()
                     ->color($this->getDiscordHighlightColour())
                     ->title(':whale: :rotating_light:')
-                    ->description("**{$amount} {$token}** was sent from {$senderAccount} to {$receiverAccount}")
+                    ->description("**{$amount} \${$token}** was sent from {$senderAccount} to {$receiverAccount}")
                     ->field('Sender', $this->formatMarkdownAddressLink($this->block->account, 'discord'))
                     ->field('Receiver', $this->formatMarkdownAddressLink($this->block->to_account, 'discord'))
                     ->field('Transaction', $this->formatMarkdownTxLink('discord'))
@@ -87,15 +87,21 @@ class WhaleAlertNotification extends Notification
 
     public function toTelegram($notifiable): TelegramMessage
     {
-        $senderAccount = $this->formatMarkdownAddressName($this->block->account);
-        $receiverAccount = $this->formatMarkdownAddressName($this->block->to_account);
+        $senderAccount = $this->formatMarkdownAddressName($this->block->account, '*');
+        $receiverAccount = $this->formatMarkdownAddressName($this->block->to_account, '*');
         $amount = $this->block->token->getDisplayAmount($this->block->amount);
         $token = $this->block->token->symbol;
 
         return TelegramMessage::create()
-            //->options(['parse_mode' => 'HTML'])
-            ->content('\xF0\x9F\x90\xB3 \xF0\x9F\x9A\xA8')
-            ->line("*{$amount} {$token}* was sent from {$senderAccount} to {$receiverAccount}")
+            ->token(config('whale-alerts.telegram.bot_token'))
+            ->content('🐋 🚨')
+            ->line("\n*{$amount} \${$token}* was sent from {$senderAccount} to {$receiverAccount}\n")
+            ->line('*Sender*')
+            ->line("{$this->block->account->address}\n")
+            ->line('*Receiver*')
+            ->line("{$this->block->to_account->address}\n")
+            ->line('*Transaction*')
+            ->line("{$this->block->hash}")
             ->button('Sender', $this->formatAddressLink($this->block->account, 'telegram'))
             ->button('Receiver', $this->formatAddressLink($this->block->to_account, 'telegram'))
             ->button('Transaction', $this->formatTxLink('telegram'));
@@ -153,13 +159,13 @@ Tx: $link
         return "[{$this->block->hash}]({$link})";
     }
 
-    private function formatMarkdownAddressName(Account $account): string
+    private function formatMarkdownAddressName(Account $account, $symbol = '**'): string
     {
         if ($account->has_custom_label) {
-            return "**{$account->custom_label}**";
+            return "{$symbol}{$account->custom_label}{$symbol}";
         }
 
-        return 'an **unknown address**';
+        return "an {$symbol}unknown address{$symbol}";
     }
 
     private function formatMarkdownAddressLink(Account $account, string $channel): string

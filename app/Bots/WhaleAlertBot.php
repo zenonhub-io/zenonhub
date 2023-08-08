@@ -4,7 +4,7 @@ namespace App\Bots;
 
 use Illuminate\Notifications\Notifiable;
 
-class WhaleAlerts
+class WhaleAlertBot
 {
     use Notifiable;
 
