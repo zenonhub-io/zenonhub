@@ -31,13 +31,8 @@ class Index extends Command
     public function handle()
     {
         $height = $this->argument('height');
-        $auto = $this->option('auto');
         $whaleAlerts = $this->option('alerts');
         $balances = $this->option('balances');
-
-        if ($auto) {
-            $auto = filter_var($auto, FILTER_VALIDATE_BOOLEAN);
-        }
 
         if ($whaleAlerts) {
             $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
@@ -72,7 +67,7 @@ class Index extends Command
         $this->info("Start height {$startHeight}");
         $this->line('Processing...');
 
-        $indexer = new Indexer($znn, $auto, $height, $whaleAlerts, $balances);
+        $indexer = new Indexer($znn, $height, $whaleAlerts, $balances);
         $indexer->run();
 
         return self::SUCCESS;
