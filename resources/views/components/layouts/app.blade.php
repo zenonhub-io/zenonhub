@@ -105,6 +105,7 @@
         </div>
         <main class="page-wrapper">
             <x-layouts.app-header :pageBreadcrumbs="$pageBreadcrumbs ?? ''"/>
+            <x-site.banner/>
             {{ $slot }}
         </main>
         <livewire:utilities.modals/>
