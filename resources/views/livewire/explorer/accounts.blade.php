@@ -86,18 +86,8 @@
                                 </button>
                             </th>
                             <th>
-                                <button type="button" class="btn btn-sort" wire:click="sortBy('total_znn_balance')">
-                                    <x-table-sort-button :sort="$sort" :order="$order" check="total_znn_balance" title="Total ZNN" tooltip="Includes ZNN locked in staking, pillars and sentinels"/>
-                                </button>
-                            </th>
-                            <th>
                                 <button type="button" class="btn btn-sort" wire:click="sortBy('qsr_balance')">
                                     <x-table-sort-button :sort="$sort" :order="$order" check="qsr_balance" title="QSR"/>
-                                </button>
-                            </th>
-                            <th>
-                                <button type="button" class="btn btn-sort" wire:click="sortBy('total_qsr_balance')">
-                                    <x-table-sort-button :sort="$sort" :order="$order" check="total_qsr_balance" title="Total QSR" tooltip="Includes fused QSR and sentinel lockup"/>
                                 </button>
                             </th>
                             <th>
@@ -141,18 +131,8 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span data-bs-toggle="tooltip" data-bs-title="{{ $account->displayTotalZnnBalance() }}">
-                                        {{ $account->displayTotalZnnBalance(2) }}
-                                    </span>
-                                </td>
-                                <td>
                                     <span data-bs-toggle="tooltip" data-bs-title="{{ $account->displayQsrBalance() }}">
                                         {{ $account->displayQsrBalance(2) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span data-bs-toggle="tooltip" data-bs-title="{{ $account->displayTotalQsrBalance() }}">
-                                        {{ $account->displayTotalQsrBalance(2) }}
                                     </span>
                                 </td>
                                 <td>{{ $account->updated_at?->format(config('zenon.short_date_format')) }}</td>

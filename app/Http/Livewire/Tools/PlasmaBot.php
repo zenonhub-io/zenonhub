@@ -70,7 +70,7 @@ class PlasmaBot extends Component
         $this->result = false;
         $this->message = false;
 
-        $existing = PlasmaBotEntry::isActive()
+        $existing = PlasmaBotEntry::isConfirmed()
             ->whereAddress($data['address'])
             ->first();
 
