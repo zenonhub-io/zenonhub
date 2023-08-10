@@ -5,7 +5,8 @@
 .alert {
   --#{$prefix}alert-link-color: inherit;
   .alert-link {
-    color: var(--#{$prefix}alert-link-color);
+      color: var(--#{$prefix}alert-link-color);
+      font-weight: $font-weight-semibold;
   }
 }
 
