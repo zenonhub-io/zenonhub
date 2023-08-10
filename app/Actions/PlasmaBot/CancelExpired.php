@@ -13,7 +13,7 @@ class CancelExpired
     public function execute(): void
     {
         $plasmaBot = App::make(\App\Services\PlasmaBot::class);
-        $expiredEntries = PlasmaBotEntry::isExpired()->get();
+        $expiredEntries = PlasmaBotEntry::isExpired()->isConfirmed()->get();
         $expiredEntries->each(function ($entry) use ($plasmaBot) {
             if ($plasmaBot->cancel($entry->hash)) {
                 $entry->delete();
