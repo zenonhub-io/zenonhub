@@ -40,7 +40,10 @@ class Kernel extends ConsoleKernel
             $command .= ' --alerts=false --balances=true';
         }
 
-        $schedule->command($command)->everyTenSeconds()->runInBackground();
+        $schedule->command($command)
+            ->everyTenSeconds()
+            ->withoutOverlapping()
+            ->runInBackground();
     }
 
     /**
