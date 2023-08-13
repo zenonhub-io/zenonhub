@@ -7,7 +7,7 @@
                         <h4 class="mb-0">Public Nodes</h4>
                     </div>
                     <div class="card-body text-center">
-                        Our nodes are available for anyone to use. They provide secure connections to the Zenon Network are load balanced with servers in Europe and the US.
+                        Our nodes are available for anyone to use. They provide secure connections to the Zenon Network and are load balanced with servers in Europe and the US.
                     </div>
                     <div class="card-body text-center px-1 pb-4 pt-0">
                         <span class="text-primary text-break fs-5 d-block mb-4 user-select-all">
