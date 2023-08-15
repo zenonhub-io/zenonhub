@@ -57,4 +57,15 @@ return [
     'flagged_accounts' => [
         'z1qrq9g7fauvyts7k97cm6xgj0f872j9h7hl7cwu' => 'Flagged as possible scammer address: <a class="alert-link" target="_blank" href="https://t.me/zenonnetwork/308788">https://t.me/zenonnetwork/308788</a>',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Flagged accounts
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'flagged_accounts' => [
+        'z1qrq9g7fauvyts7k97cm6xgj0f872j9h7hl7cwu' => 'Flagged as possible scammer address: <a class="alert-link" target="_blank" href="https://t.me/zenonnetwork/308788">https://t.me/zenonnetwork/308788</a>',
+    ],
 ];
