@@ -13,7 +13,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Named account
+    | Named accounts
     |--------------------------------------------------------------------------
     |
     */
@@ -26,5 +26,16 @@ return [
         'z1qqw8f3qxx9zg92xgckqdpfws3dw07d26afsj74' => 'Liquidity Program Distributor',
         'z1qqgr9m627e9q6fyqvzd464wa4v2g5edhxrvqfl' => 'STEX Exchange',
         'z1qzzavvq2zywv77ts2e9yntc3y24qetjh0x0aj4' => 'Plasma Bot',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Flagged accounts
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'flagged_accounts' => [
+        'z1qrq9g7fauvyts7k97cm6xgj0f872j9h7hl7cwu' => 'Flagged as possible scammer address: <a class="alert-link" target="_blank" href="https://t.me/zenonnetwork/308788">https://t.me/zenonnetwork/308788</a>',
     ],
 ];

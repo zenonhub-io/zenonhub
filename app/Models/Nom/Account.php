@@ -518,6 +518,18 @@ class Account extends Model implements Sitemapable
         return false;
     }
 
+    public function getIsFlaggedAttribute()
+    {
+        $flaggedAccounts = array_keys(config('explorer.flagged_accounts'));
+
+        return in_array($this->address, $flaggedAccounts);
+    }
+
+    public function getFlaggedDetailsAttribute()
+    {
+        return collect(config('explorer.flagged_accounts'))->where($this->account)->first();
+    }
+
     //
     // Methods
 
