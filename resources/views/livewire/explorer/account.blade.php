@@ -2,6 +2,14 @@
     @if (! $account)
     @else
         <div class="card shadow mb-4">
+            @if ($account->is_flagged)
+                <x-alert
+                    message="{!! $account->flagged_details !!}"
+                    type="danger"
+                    icon="exclamation-triangle"
+                    class="d-flex justify-content-center py-1 mb-0 border-top-0 border-start-0 border-end-0 rounded-bottom-0"
+                />
+            @endif
             <div class="card-header border-bottom">
                 <div class="text-muted d-flex justify-content-between">
                     <span>

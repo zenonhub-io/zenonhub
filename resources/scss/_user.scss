@@ -52,3 +52,23 @@ pre {
         color: #F78C6C;
     }
 }
+
+.rounded-bottom-0 {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.rounded-top-0 {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.rounded-start-0 {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.rounded-end-0 {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
