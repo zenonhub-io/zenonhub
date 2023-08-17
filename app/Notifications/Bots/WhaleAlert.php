@@ -98,7 +98,6 @@ class WhaleAlert extends Notification
 
         return TelegramMessage::create()
             ->token(config('whale-alerts.telegram.bot_token'))
-            ->line("---- 🐋 🚨 ---- \n ")
             ->line("*{$amount} \${$token}* was sent from {$senderAccount} to {$receiverAccount}\n")
             ->line('*Transaction*')
             ->line("{$txLink}\n")
