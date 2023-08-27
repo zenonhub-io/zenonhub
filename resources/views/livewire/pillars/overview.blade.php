@@ -90,6 +90,9 @@
                             </button>
                         </th>
                         <th>
+                            Orchestrator <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Indicates if the pillar runs an orchestrator and its status"></i></span>
+                        </th>
+                        <th>
                             Rewards <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Momentum / Delegation rewards %"></i></span>
                         </th>
                         <th>
@@ -115,6 +118,13 @@
                             @if (! is_null($pillar->az_engagement))
                                 <span class="legend-indicator bg-{{ $pillar->az_status_indicator }}"></span>
                                 {{ number_format($pillar->az_engagement) }}%
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($pillar->orchestrator)
+                                <span class="legend-indicator bg-{{ ($pillar->orchestrator->status ? 'success' : 'danger') }}"></span> {{ ($pillar->orchestrator->status ? 'Online' : 'Offline') }}
                             @else
                                 -
                             @endif

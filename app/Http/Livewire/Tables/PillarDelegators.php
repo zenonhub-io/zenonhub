@@ -16,7 +16,7 @@ class PillarDelegators extends Component
     public Pillar $pillar;
 
     protected $queryString = [
-        'sort' => ['except' => 'started_at'],
+        'sort' => ['except' => 'weight'],
         'order' => ['except' => 'desc'],
         'search',
     ];
@@ -24,7 +24,7 @@ class PillarDelegators extends Component
     public function mount()
     {
         $this->perPage = 10;
-        $this->sort = request()->query('sort', 'started_at');
+        $this->sort = request()->query('sort', 'weight');
         $this->order = request()->query('order', 'desc');
         $this->search = request()->query('search');
     }

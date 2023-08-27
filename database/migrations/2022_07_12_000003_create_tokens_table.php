@@ -22,9 +22,9 @@ return new class extends Migration
             $table->bigInteger('total_supply')->index();
             $table->bigInteger('max_supply')->index();
             $table->integer('decimals');
-            $table->boolean('is_burnable')->default(true);
-            $table->boolean('is_mintable')->default(true);
-            $table->boolean('is_utility')->default(true);
+            $table->boolean('is_burnable')->default(1);
+            $table->boolean('is_mintable')->default(1);
+            $table->boolean('is_utility')->default(1);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

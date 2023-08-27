@@ -42,6 +42,6 @@ class Contributors extends Component
                 'projects as qsr_paid', 'qsr_paid'
             )
             ->orderBy($this->sort, $this->order)
-            ->simplePaginate(10);
+            ->paginate(10);
     }
 }

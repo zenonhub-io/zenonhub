@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Stats\Bridge;
 use App\Models\Nom\Account;
 use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
@@ -32,6 +33,7 @@ class Overview extends Component
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => Account::findByAddress($bridgeStats->administrator),
             'halted' => $bridgeStats->halted,
+            'orchestratorsOnline' => Cache::get('orchestrators-online-percentage'),
         ]);
     }
 

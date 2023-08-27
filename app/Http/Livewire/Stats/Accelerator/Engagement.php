@@ -31,6 +31,6 @@ class Engagement extends Component
         $this->data = Pillar::whereHas('az_votes')
             ->withCount('az_votes')
             ->orderBy($this->sort, $this->order)
-            ->simplePaginate(10);
+            ->paginate(10);
     }
 }

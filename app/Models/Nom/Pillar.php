@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
@@ -103,6 +104,11 @@ class Pillar extends Model implements Sitemapable
     public function withdraw_account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'withdraw_id', 'id');
+    }
+
+    public function orchestrator(): HasOne
+    {
+        return $this->hasOne(Orchestrator::class, 'pillar_id', 'id');
     }
 
     public function history(): HasMany
@@ -302,6 +308,11 @@ class Pillar extends Model implements Sitemapable
     public static function findBySlug(string $slug): ?Pillar
     {
         return static::where('slug', $slug)->first();
+    }
+
+    public static function findByName(string $name): ?Pillar
+    {
+        return static::where('name', $name)->first();
     }
 
     public function updateAzEngagementScores()
