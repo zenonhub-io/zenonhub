@@ -29,11 +29,13 @@ class Overview extends Component
     {
         $this->affiliateLink = config('zenon.bridge_affiliate_link');
         $bridgeStats = $this->znn->bridge->getBridgeInfo()['data'];
+        $adminAccount = Account::findByAddress($bridgeStats->administrator);
+        $orchestratorsOnline = Cache::get('orchestrators-online-percentage');
 
         return view('livewire.stats.bridge.overview', [
-            'adminAddress' => Account::findByAddress($bridgeStats->administrator),
+            'adminAddress' => $adminAccount,
             'halted' => $bridgeStats->halted,
-            'orchestratorsOnline' => Cache::get('orchestrators-online-percentage'),
+            'orchestratorsOnline' => number_format($orchestratorsOnline),
         ]);
     }
 
