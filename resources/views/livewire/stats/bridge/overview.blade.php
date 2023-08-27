@@ -8,6 +8,12 @@
                 </span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Orchestrators</span>
+                <span class="float-end float-md-none">
+                    <span class="legend-indicator bg-{{ ($orchestratorsOnline > 66 ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $orchestratorsOnline }}% Online"></span>
+                </span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
                 <span class="d-inline d-md-block text-muted fs-sm">Admin</span>
                 <span class="float-end float-md-none">
                     <x-address :account="$adminAddress" :eitherSide="10" breakpoint="lg"/>

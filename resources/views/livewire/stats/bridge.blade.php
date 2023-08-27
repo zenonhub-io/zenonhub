@@ -21,7 +21,7 @@
             />
         </div>
         <div wire:loading.remove>
-            <div class="card-body {{ (in_array($tab, ['actions', 'networks']) ? 'p-0' : '') }}">
+            <div class="card-body {{ (in_array($tab, ['actions', 'networks', 'orchestrators']) ? 'p-0' : '') }}">
                 <div class="tab-content">
                     <div class="tab-pane show active">
                         @if ($tab === 'overview')
