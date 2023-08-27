@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class UpdateOrchestratorsList
+class SyncOrchestrators
 {
     private object $json;
 
@@ -20,7 +20,7 @@ class UpdateOrchestratorsList
     public function execute(): void
     {
         $this->loadJson();
-        $this->processOrchestratorList();
+        $this->processOrchestrators();
         $this->calculateOnlinePercentage();
     }
 
@@ -39,7 +39,7 @@ class UpdateOrchestratorsList
         $this->json = json_decode($json, false, 512, JSON_THROW_ON_ERROR);
     }
 
-    private function processOrchestratorList(): void
+    private function processOrchestrators(): void
     {
         $pillarIds = [];
 

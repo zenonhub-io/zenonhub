@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
         $this->runIndexer($schedule);
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
-        $schedule->command('zenon:sync pillars')->everyFiveMinutes();
+        $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
         $schedule->command('plasma-bot:clear-expired')->everyFifteenMinutes();
         $schedule->command('plasma-bot:receive-all')->everyFifteenMinutes();

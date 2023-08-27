@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessAccountBalance;
+use App\Jobs\Sync\Orchestrators as SyncOrchestrators;
 use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Jobs\Sync\Projects as SyncProjects;
 use App\Jobs\Sync\ProjectStatus as SyncProjectStatus;
@@ -47,6 +48,13 @@ class Sync extends Command
             $this->output->newLine();
 
             SyncPillars::dispatch();
+        }
+
+        if (empty($types) || in_array('orchestrators', $types)) {
+            $this->output->write('Saving orchestrators...');
+            $this->output->newLine();
+
+            SyncOrchestrators::dispatch();
         }
 
         if (empty($types) || in_array('sentinels', $types)) {
