@@ -5,6 +5,7 @@ return [
         'z1qr9vtwsfr2n0nsxl2nfh6l5esqjh2wfj85cfq9',
     ],
     'watch_methods' => [
+        // Bridge
         'SetNetwork',
         'RemoveNetwork',
         'SetTokenPair',
@@ -20,6 +21,15 @@ return [
         'SetBridgeMetadata',
         'NominateGuardians',
         'SetOrchestratorInfo',
+
+        // Liquidity
+        'SetTokenTuple',
+        'NominateGuardians',
+        'ProposeAdministrator',
+        'Emergency',
+        'SetIsHalted',
+        'SetAdditionalReward',
+        'ChangeAdministrator',
     ],
     'discord' => [
         'enabled' => env('BRIDGE_BOT_ENABLE_DISCORD', false),
