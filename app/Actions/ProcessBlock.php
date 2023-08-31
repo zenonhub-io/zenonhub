@@ -18,8 +18,8 @@ class ProcessBlock
 
     public function __construct(
         protected AccountBlock $block,
-        protected $fireWhaleAlerts = false,
-        protected $processAccounts = false
+        protected bool $fireAlerts = false,
+        protected bool $processAccounts = false
     ) {
         $this->block->refresh();
     }
@@ -27,7 +27,7 @@ class ProcessBlock
     public function execute(): void
     {
         Log::debug('Processing block '.$this->block->hash, [
-            'alerts' => ($this->fireWhaleAlerts ? 'Yes' : 'No'),
+            'alerts' => ($this->fireAlerts ? 'Yes' : 'No'),
             'balances' => ($this->processAccounts ? 'Yes' : 'No'),
         ]);
 

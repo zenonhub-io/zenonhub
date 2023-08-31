@@ -28,7 +28,7 @@ class Indexer
     public function __construct(
         protected Zenon $znn,
         protected ?int $startHeight,
-        protected ?bool $sendWhaleAlerts,
+        protected ?bool $sendAlerts,
         protected ?bool $syncAccountBalances,
     ) {
     }
@@ -182,11 +182,11 @@ class Indexer
 
             AccountBlockCreated::dispatch(
                 $block,
-                $this->sendWhaleAlerts,
+                $this->sendAlerts,
                 $this->syncAccountBalances
             );
         } else {
-            $block->momentum_id = ($momentum ? $momentum->id : $block->momentum_id);
+            $block->momentum_id = ($momentum->id ?? $block->momentum_id);
             $block->momentum_acknowledged_id = $momentumAcknowledged?->id;
             $block->height = $data->height;
             $block->save();
