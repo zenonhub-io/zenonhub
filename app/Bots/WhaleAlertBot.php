@@ -8,7 +8,7 @@ class WhaleAlertBot
 {
     use Notifiable;
 
-    public function routeNotificationForTwitter($notification)
+    public function routeNotificationForTwitter($notification): array
     {
         return [
             config('whale-alerts.twitter.consumer_key'),

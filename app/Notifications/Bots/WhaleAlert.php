@@ -113,11 +113,11 @@ class WhaleAlert extends Notification
         $receiverAccount = $this->formatAddressName($this->block->to_account);
         $amount = $this->block->token->getDisplayAmount($this->block->amount);
         $token = $this->block->token->symbol;
-        $link = $this->formatTxLink('twitter');
+        $txLink = $this->formatTxLink('twitter');
 
         return new TwitterStatusUpdate("{$amount} \${$token} was sent from {$senderAccount} to {$receiverAccount}
 
-Tx: $link
+Tx: $txLink
 
 #ZenonWhaleAlert #Zenon #Bitcoin #NoM \$ZNN \$QSR \$BTC");
     }
