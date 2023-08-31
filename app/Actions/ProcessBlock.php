@@ -2,11 +2,13 @@
 
 namespace App\Actions;
 
+use App\Bots\BridgeAlertBot;
 use App\Bots\WhaleAlertBot;
 use App\Jobs\ProcessAccountBalance;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
+use App\Notifications\Bots\BridgeAlert;
 use App\Notifications\Bots\WhaleAlert;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -18,8 +20,8 @@ class ProcessBlock
 
     public function __construct(
         protected AccountBlock $block,
-        protected $fireWhaleAlerts = false,
-        protected $processAccounts = false
+        protected bool $fireAlerts = false,
+        protected bool $processAccounts = false
     ) {
         $this->block->refresh();
     }
@@ -27,7 +29,7 @@ class ProcessBlock
     public function execute(): void
     {
         Log::debug('Processing block '.$this->block->hash, [
-            'alerts' => ($this->fireWhaleAlerts ? 'Yes' : 'No'),
+            'alerts' => ($this->fireAlerts ? 'Yes' : 'No'),
             'balances' => ($this->processAccounts ? 'Yes' : 'No'),
         ]);
 
@@ -40,9 +42,14 @@ class ProcessBlock
 
         $jobDelay = now()->addSeconds(30);
 
-        if ($this->fireWhaleAlerts && $this->shouldSendWhaleAlerts()) {
-            Log::debug('Fire whale alerts');
+        if ($this->fireAlerts && $this->shouldSendWhaleAlerts()) {
+            Log::debug('Fire whale alert');
             Notification::send(new WhaleAlertBot, (new WhaleAlert($this->block))->delay($jobDelay));
+        }
+
+        if ($this->fireAlerts && $this->shouldSendBridgeAlerts()) {
+            Log::debug('Fire bridge alert');
+            Notification::send(new BridgeAlertBot(), (new BridgeAlert($this->block))->delay($jobDelay));
         }
 
         if ($this->processAccounts) {
@@ -72,6 +79,26 @@ class ProcessBlock
         }
 
         if ($this->block->token->token_standard === Token::ZTS_QSR && $this->block->amount >= $qsrValue) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function shouldSendBridgeAlerts(): bool
+    {
+        $watchAddresses = config('bridge-alerts.watch_addresses');
+        $watchMethods = config('bridge-alerts.watch_methods');
+
+        if ($this->block->to_account->address !== Account::ADDRESS_BRIDGE) {
+            return false;
+        }
+
+        if (in_array($this->block->account->address, $watchAddresses)) {
+            return true;
+        }
+
+        if (in_array($this->block->contract_method->id, $watchMethods)) {
             return true;
         }
 

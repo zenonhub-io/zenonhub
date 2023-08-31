@@ -26,6 +26,7 @@ return [
         'z1qqw8f3qxx9zg92xgckqdpfws3dw07d26afsj74' => 'Liquidity Program Distributor',
         'z1qqgr9m627e9q6fyqvzd464wa4v2g5edhxrvqfl' => 'STEX Exchange',
         'z1qzzavvq2zywv77ts2e9yntc3y24qetjh0x0aj4' => 'Plasma Bot',
+        'z1qr9vtwsfr2n0nsxl2nfh6l5esqjh2wfj85cfq9' => 'Bridge Admin',
     ],
 
     /*

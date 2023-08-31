@@ -27,12 +27,12 @@ class ProcessBlock extends Command
     public function handle(): int
     {
         $hash = $this->argument('hash');
-        $whaleAlerts = $this->option('alerts');
+        $alerts = $this->option('alerts');
         $balances = $this->option('balances');
         $block = AccountBlock::findByHash($hash);
 
-        if ($whaleAlerts) {
-            $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
+        if ($alerts) {
+            $alerts = filter_var($alerts, FILTER_VALIDATE_BOOLEAN);
         }
 
         if ($balances) {
@@ -44,7 +44,7 @@ class ProcessBlock extends Command
 
             (new \App\Actions\ProcessBlock(
                 $block,
-                $whaleAlerts,
+                $alerts,
                 $balances
             ))->execute();
         }
