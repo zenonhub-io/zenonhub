@@ -90,8 +90,8 @@ class ProcessBlock
         $watchAddresses = config('bridge-alerts.watch_addresses');
         $watchMethods = config('bridge-alerts.watch_methods');
 
-        if ($this->block->to_account->address !== Account::ADDRESS_BRIDGE) {
-            return false;
+        if (in_array($this->block->to_account->address, [Account::ADDRESS_BRIDGE, Account::ADDRESS_LIQUIDITY])) {
+            return true;
         }
 
         if (in_array($this->block->account->address, $watchAddresses)) {
