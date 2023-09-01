@@ -70,7 +70,7 @@ class BridgeAlert extends Notification
         $action = $this->block->contract_method->name;
 
         $adminLink = $this->formatMarkdownAddressLink($this->block->account, 'telegram');
-        $bridgeLink = $this->formatMarkdownAddressLink($this->block->account, 'telegram');
+        $bridgeLink = $this->formatMarkdownAddressLink($this->block->to_account, 'telegram');
         $txLink = $this->formatMarkdownTxLink('telegram');
 
         return TelegramMessage::create()
