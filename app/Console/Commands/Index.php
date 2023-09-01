@@ -14,7 +14,7 @@ class Index extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:index {height?} {--auto=false} {--alerts=false} {--balances=false}';
+    protected $signature = 'zenon:index {height?} {--alerts=false} {--balances=false}';
 
     /**
      * The console command description.
