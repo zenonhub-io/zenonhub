@@ -98,7 +98,7 @@ class ProcessBlock
             return false;
         }
 
-        if (! in_array($this->block->contract_method->id, $watchMethods)) {
+        if (! in_array($this->block->contract_method->name, $watchMethods)) {
             return false;
         }
 
