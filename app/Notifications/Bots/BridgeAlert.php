@@ -108,7 +108,7 @@ Tx: $txLink
     {
         return route('explorer.transaction', [
             'hash' => $this->block->hash,
-            'utm_source' => 'whale_bot',
+            'utm_source' => 'bridge_bot',
             'utm_medium' => $channel,
         ]);
     }
@@ -126,7 +126,7 @@ Tx: $txLink
     {
         return route('explorer.account', [
             'address' => $account->address,
-            'utm_source' => 'whale_bot',
+            'utm_source' => 'bridge_bot',
             'utm_medium' => $channel,
         ]);
     }
