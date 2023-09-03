@@ -77,14 +77,10 @@
                                 </button>
                             </th>
                             <th>
-                                <button type="button" class="btn btn-sort" wire:click="sortBy('total_supply')">
-                                    <x-table-sort-button :sort="$sort" :order="$order" check="total_supply"/>
-                                </button>
+                                Total Supply
                             </th>
                             <th>
-                                <button type="button" class="btn btn-sort" wire:click="sortBy('token_standard')">
-                                    <x-table-sort-button :sort="$sort" :order="$order" check="token_standard" title="Token Standard"/>
-                                </button>
+                                Token Standard (ZTS)
                             </th>
                             <th>
                                 <button type="button" class="btn btn-sort" wire:click="sortBy('created_at')">
