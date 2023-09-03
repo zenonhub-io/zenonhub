@@ -53,4 +53,19 @@ class Staking extends Component
             $this->query->where('token_id', lp_eth_token()->id);
         }
     }
+
+    protected function sortList()
+    {
+        if (! $this->query) {
+            return;
+        }
+
+        if ($this->sort === 'amount') {
+            $this->query
+                ->orderByRaw("{$this->sort} IS NULL ASC")
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+        } else {
+            $this->query->orderBy($this->sort, $this->order);
+        }
+    }
 }
