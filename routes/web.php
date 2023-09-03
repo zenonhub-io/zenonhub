@@ -63,6 +63,7 @@ Route::prefix('stats')->name('stats.')->middleware(['throttle:60,1'])->group(fun
     Route::get('/', [\App\Http\Controllers\Stats\Overview::class, 'show'])->name('overview');
     Route::get('nodes', [\App\Http\Controllers\Stats\Nodes::class, 'show'])->name('nodes');
     Route::get('accelerator', [\App\Http\Controllers\Stats\Accelerator::class, 'show'])->name('accelerator');
+    Route::get('bridge', [\App\Http\Controllers\Stats\Bridge::class, 'show'])->name('bridge');
 });
 
 Route::prefix('tools')->name('tools.')->middleware(['throttle:60,1'])->group(function () {

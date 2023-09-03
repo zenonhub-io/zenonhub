@@ -31,11 +31,12 @@
                     <li><a href="{{ route('explorer.fusions') }}" class="dropdown-item {{ request()->routeIs('explorer.fusions') ? 'active' : '' }}">Fusions</a></li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ request()->routeIs('stats.overview', 'stats.nodes', 'stats.accelerator') ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ request()->routeIs('stats.overview', 'stats.nodes', 'stats.accelerator', 'stats.bridge') ? 'active' : '' }}">
                 <a href="{{ route('stats.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="5">
                     Stats
                 </a>
-                <ul class="dropdown-menu {{ request()->routeIs('stats.overview', 'stats.nodes', 'stats.accelerator') ? 'show' : '' }}">
+                <ul class="dropdown-menu {{ request()->routeIs('stats.overview', 'stats.nodes', 'stats.accelerator', 'stats.bridge') ? 'show' : '' }}">
+                    <li><a href="{{ route('stats.bridge') }}" class="dropdown-item {{ request()->routeIs('stats.bridge') ? 'active' : '' }}">Bridge</a></li>
                     <li><a href="{{ route('stats.nodes') }}" class="dropdown-item {{ request()->routeIs('stats.nodes') ? 'active' : '' }}">Public nodes</a></li>
                     <li><a href="{{ route('stats.accelerator') }}" class="dropdown-item {{ request()->routeIs('stats.accelerator') ? 'active' : '' }}">Accelerator Z</a></li>
                 </ul>

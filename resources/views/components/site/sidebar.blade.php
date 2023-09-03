@@ -17,7 +17,7 @@
                                         <i class="bi-{{$item['icon']}} fs-lg opacity-70 me-3"></i>
                                     @endif
                                     @if (isset($item['svg']))
-                                        {!! svg($item['svg'], 'opacity-70 me-3') !!}
+                                        {!! svg($item['svg'], 'opacity-70 me-3 mt-n1', $item['style']) !!}
                                     @endif
                                     {{ $item['title'] }}
                                 </a>

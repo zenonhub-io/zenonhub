@@ -89,7 +89,7 @@
                     <div class="col-24">
                         <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="text-start text-md-center">
-                                <span class="d-inline d-md-block fs-sm text-muted">Transactions</span>
+                                <span class="d-inline d-md-block text-muted fs-sm">Transactions</span>
                                 <span class="float-end float-md-none">{{ number_format($momentum->account_blocks->count()) }}</span>
                             </div>
                         </div>

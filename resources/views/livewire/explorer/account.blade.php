@@ -60,19 +60,19 @@
                         <div class="bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="d-block d-md-flex justify-content-md-evenly">
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">ZNN</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">ZNN</span>
                                     <span class="float-end float-md-none text-zenon-green pb-2">{{ $account->display_znn_balance }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">QSR</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">QSR</span>
                                     <span class="float-end float-md-none text-zenon-blue pb-2">{{ $account->display_qsr_balance }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">USD</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">USD</span>
                                     <span class="float-end float-md-none">{{ $account->display_usd_balance }}</span>
                                 </div>
                                 <div class="text-start text-md-center">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Plasma</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Plasma</span>
                                     <span class="float-end float-md-none text-zenon-blue pb-2">
                                         @if ($account->plasma_level === 'High')
                                             <span class="legend-indicator bg-success ms-1" data-bs-toggle="tooltip" data-bs-title="High plasma"></span>
@@ -88,21 +88,21 @@
                             </div>
                             <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Fused QSR</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Fused QSR</span>
                                     <span class="float-end float-md-none pb-2">{{ ($account->display_qsr_fused ?: '-') }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">Staked ZNN</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">Staked ZNN</span>
                                     <span class="float-end float-md-none pb-2">{{ ($account->display_znn_staked ?: '-') }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">ZNN rewards</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">ZNN rewards</span>
                                     <span class="float-end float-md-none pb-2">
                                         {{ ($account->display_total_znn_rewards ?: '-') }}
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                                    <span class="d-inline d-md-block fs-sm text-muted">QSR rewards</span>
+                                    <span class="d-inline d-md-block text-muted fs-sm">QSR rewards</span>
                                     <span class="float-end float-md-none pb-2">
                                         {{ ($account->display_total_qsr_rewards ?: '-') }}
                                     </span>

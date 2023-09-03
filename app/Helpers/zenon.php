@@ -46,7 +46,7 @@ function short_number($number): string
     return round($number, 1).$units[$i];
 }
 
-function short_hash($hash, $eitherSide, $startAndEnd = true): string
+function short_hash($hash, $eitherSide = 8, $startAndEnd = true): string
 {
     if ($startAndEnd) {
         $start = mb_substr($hash, 0, $eitherSide);

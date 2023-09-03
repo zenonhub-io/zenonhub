@@ -13,7 +13,7 @@ class AccountBlockCreated
 
     public function __construct(
         public AccountBlock $block,
-        public bool $sendWhaleAlerts,
+        public bool $sendAlerts,
         public bool $syncAccountBalances,
     ) {
     }

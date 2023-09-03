@@ -28,12 +28,12 @@ class ProcessBlockType extends Command
     public function handle(): int
     {
         $blockTypes = $this->argument('type');
-        $whaleAlerts = $this->option('alerts');
+        $alerts = $this->option('alerts');
         $balances = $this->option('balances');
         $methods = ContractMethod::whereIn('id', $blockTypes)->get();
 
-        if ($whaleAlerts) {
-            $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
+        if ($alerts) {
+            $alerts = filter_var($alerts, FILTER_VALIDATE_BOOLEAN);
         }
 
         if ($balances) {
@@ -54,11 +54,11 @@ class ProcessBlockType extends Command
 
             AccountBlock::whereIn('contract_method_id', $blockTypes)
                 ->orderBy('id', 'ASC')
-                ->chunk(100, function ($chunk) use ($bar, $whaleAlerts, $balances) {
+                ->chunk(100, function ($chunk) use ($bar, $alerts, $balances) {
                     foreach ($chunk as $block) {
                         (new \App\Actions\ProcessBlock(
                             $block,
-                            $whaleAlerts,
+                            $alerts,
                             $balances
                         ))->execute();
                         $bar->advance();

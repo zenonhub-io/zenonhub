@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
         $this->runIndexer($schedule);
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
-        $schedule->command('zenon:sync pillars')->everyFiveMinutes();
+        $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
         $schedule->command('plasma-bot:clear-expired')->everyFifteenMinutes();
         $schedule->command('plasma-bot:receive-all')->everyFifteenMinutes();
@@ -30,15 +30,9 @@ class Kernel extends ConsoleKernel
             return;
         }
 
-        $command = 'zenon:index';
-
-        if (app()->environment('production')) {
-            $command .= ' --alerts=true --balances=true';
-        }
-
-        if (app()->environment('staging')) {
-            $command .= ' --alerts=false --balances=true';
-        }
+        $alerts = config('explorer.enable_alerts') ? 'true' : 'false';
+        $balances = config('explorer.enable_balances') ? 'true' : 'false';
+        $command = "zenon:index --alerts={$alerts} --balances={$balances}";
 
         $schedule->command($command)
             ->everyTenSeconds()

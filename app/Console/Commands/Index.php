@@ -14,7 +14,7 @@ class Index extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:index {height?} {--auto=false} {--alerts=false} {--balances=false}';
+    protected $signature = 'zenon:index {height?} {--alerts=false} {--balances=false}';
 
     /**
      * The console command description.
@@ -31,11 +31,11 @@ class Index extends Command
     public function handle()
     {
         $height = $this->argument('height');
-        $whaleAlerts = $this->option('alerts');
+        $alerts = $this->option('alerts');
         $balances = $this->option('balances');
 
-        if ($whaleAlerts) {
-            $whaleAlerts = filter_var($whaleAlerts, FILTER_VALIDATE_BOOLEAN);
+        if ($alerts) {
+            $alerts = filter_var($alerts, FILTER_VALIDATE_BOOLEAN);
         }
 
         if ($balances) {
@@ -67,7 +67,7 @@ class Index extends Command
         $this->info("Start height {$startHeight}");
         $this->line('Processing...');
 
-        $indexer = new Indexer($znn, $height, $whaleAlerts, $balances);
+        $indexer = new Indexer($znn, $height, $alerts, $balances);
         $indexer->run();
 
         return self::SUCCESS;
