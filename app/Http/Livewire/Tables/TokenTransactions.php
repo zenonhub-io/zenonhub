@@ -46,7 +46,9 @@ class TokenTransactions extends Component
 
     protected function initQuery()
     {
-        $this->query = $this->token->transactions();
+        $this->query = $this->token
+            ->transactions()
+            ->where('amount', '>', '0');
     }
 
     protected function filterList()

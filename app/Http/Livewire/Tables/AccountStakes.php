@@ -60,4 +60,19 @@ class AccountStakes extends Component
             $this->query->where('amount', (is_numeric($this->search) ? $this->search * 100000000 : '0'));
         }
     }
+
+    protected function sortList()
+    {
+        if (! $this->query) {
+            return;
+        }
+
+        if ($this->sort === 'amount') {
+            $this->query
+                ->orderByRaw("{$this->sort} IS NULL ASC")
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+        } else {
+            $this->query->orderBy($this->sort, $this->order);
+        }
+    }
 }

@@ -42,9 +42,7 @@
                             Type
                         </th>
                         <th>
-                            <button type="button" class="btn btn-sort" wire:click="sortBy('amount')">
-                                <x-table-sort-button :sort="$sort" :order="$order" check="amount"/>
-                            </button>
+                            Amount
                         </th>
                         <th>
                             Token

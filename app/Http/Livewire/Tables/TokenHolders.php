@@ -65,4 +65,19 @@ class TokenHolders extends Component
             $this->resetPage();
         }
     }
+
+    protected function sortList()
+    {
+        if (! $this->query) {
+            return;
+        }
+
+        if ($this->sort === 'balance') {
+            $this->query
+                ->orderByRaw("{$this->sort} IS NULL ASC")
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+        } else {
+            $this->query->orderBy($this->sort, $this->order);
+        }
+    }
 }
