@@ -3,9 +3,16 @@
         <div class="row">
             @foreach($stats as $stat => $value)
                 <div class="col-12 col-md-8 col-lg-4 mb-4">
-                    <div class="p-1 bg-secondary shadow rounded-2 text-center">
-                        <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
-                        {{ $value }}
+                    <div class="card card-hover p-1 bg-secondary shadow rounded-2 text-center border-0">
+                        @php
+                            $link = $stat;
+                            if($stat === 'staked ZNN') $link = 'staking';
+                            if($stat === 'fused QSR') $link = 'fusions';
+                        @endphp
+                        <a href="{{ route('explorer.'.$link) }}" class="stretched-link">
+                            <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
+                            <span class="text-body">{{ $value }}</span>
+                        </a>
                     </div>
                 </div>
             @endforeach
