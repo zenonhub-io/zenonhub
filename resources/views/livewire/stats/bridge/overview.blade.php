@@ -8,7 +8,7 @@
         />
     @elseif ($orchestrators < 66)
         <x-alert
-            message="Only {{$orchestrators}}% of orchestrators are online, please wait until there are over 66% before interactive with the bridge"
+            message="Only {{$orchestrators}}% of orchestrators are online, please wait until there are over 66% before interacting with the bridge"
             type="warning"
             icon="exclamation-octagon"
             class="d-flex justify-content-center mb-4"
