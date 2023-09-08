@@ -32,11 +32,11 @@ function float_number(mixed $number): float
 
 function short_number($number): string
 {
-    $number = float_number($number);
-
     if ($number < 1 && $number > 0) {
         return $number;
     }
+
+    $number = float_number($number);
 
     $units = ['', 'K', 'M', 'B', 'T'];
     for ($i = 0; $number >= 1000; $i++) {
