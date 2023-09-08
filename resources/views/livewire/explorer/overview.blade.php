@@ -1,17 +1,12 @@
 <div>
     <div wire:poll.10000ms>
         <div class="row">
-            @foreach($stats as $stat => $value)
+            @foreach($stats as $stat => $data)
                 <div class="col-12 col-md-8 col-lg-4 mb-4">
                     <div class="card card-hover p-1 bg-secondary shadow rounded-2 text-center border-0">
-                        @php
-                            $link = $stat;
-                            if($stat === 'staked ZNN') $link = 'staking';
-                            if($stat === 'fused QSR') $link = 'fusions';
-                        @endphp
-                        <a href="{{ route('explorer.'.$link) }}" class="stretched-link">
-                            <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
-                            <span class="text-body">{{ $value }}</span>
+                        <a href="{{ $data['link'] }}" class="stretched-link">
+                            <span class="d-block fs-sm text-muted">{{ $data['name'] }}</span>
+                            <span class="text-body">{{ $data['value'] }}</span>
                         </a>
                     </div>
                 </div>

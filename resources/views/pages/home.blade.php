@@ -1,11 +1,13 @@
 <x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
     <div class="container">
         <div class="row">
-            @foreach($data['stats'] as $stat => $value)
-                <div class="col-8 col-lg-4 mb-1">
-                    <div class="p-1 bg-secondary shadow rounded-2 text-center mb-3">
-                        <span class="d-block fs-sm text-muted">{{ Str::ucfirst($stat) }}</span>
-                        {{ $value }}
+            @foreach($data['stats'] as $stat => $values)
+                <div class="col-12 col-md-8 col-lg-4 mb-4">
+                    <div class="card card-hover p-1 bg-secondary shadow rounded-2 text-center border-0">
+                        <a href="{{ $values['link'] }}" class="stretched-link">
+                            <span class="d-block fs-sm text-muted">{{ $values['name'] }}</span>
+                            <span class="text-body">{{ $values['value'] }}</span>
+                        </a>
                     </div>
                 </div>
             @endforeach
