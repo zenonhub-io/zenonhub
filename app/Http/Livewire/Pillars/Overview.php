@@ -85,9 +85,11 @@ class Overview extends Component
         }
 
         if ($this->sort === 'az_avg_vote_time') {
-            $this->query->orderByRaw('ISNULL(az_avg_vote_time), az_avg_vote_time '.$this->order);
+            $this->query
+                ->orderByRaw('! ISNULL(revoked_at), ISNULL(az_avg_vote_time), az_avg_vote_time '.$this->order);
         } else {
-            $this->query->orderBy($this->sort, $this->order);
+            $this->query
+                ->orderByRaw("! ISNULL(revoked_at), {$this->sort} {$this->order}");
         }
     }
 }
