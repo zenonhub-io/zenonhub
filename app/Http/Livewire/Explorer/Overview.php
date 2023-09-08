@@ -34,12 +34,31 @@ class Overview extends Component
             ->get();
 
         $this->stats = [
-            'momentums' => number_format(Cache::get('momentum-count')),
-            'transactions' => number_format(Cache::get('transaction-count')),
-            'accounts' => number_format(Cache::get('address-count')),
-            'tokens' => Token::count(),
-            'staked ZNN' => Cache::get('staked-znn'),
-            'fused QSR' => Cache::get('fused-qsr'),
+            [
+                'name' => 'momentums',
+                'link' => route('explorer.momentums'),
+                'value' => number_format(Cache::get('momentum-count')),
+            ], [
+                'name' => 'Transactions',
+                'link' => route('explorer.transactions'),
+                'value' => number_format(Cache::get('transaction-count')),
+            ], [
+                'name' => 'Addresses',
+                'link' => route('explorer.accounts'),
+                'value' => number_format(Cache::get('address-count')),
+            ], [
+                'name' => 'Tokens',
+                'link' => route('explorer.tokens'),
+                'value' => Token::count(),
+            ], [
+                'name' => 'Staked ZNN',
+                'link' => route('explorer.staking'),
+                'value' => Cache::get('staked-znn'),
+            ], [
+                'name' => 'Fused QSR',
+                'link' => route('explorer.fusions'),
+                'value' => Cache::get('fused-qsr'),
+            ],
         ];
     }
 }
