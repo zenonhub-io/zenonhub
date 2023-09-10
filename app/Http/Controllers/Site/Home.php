@@ -15,7 +15,7 @@ class Home extends PageController
     {
         $this->page['data']['stats'] = [
             [
-                'name' => 'momentums',
+                'name' => 'Momentums',
                 'link' => route('explorer.momentums'),
                 'value' => short_number(Cache::get('momentum-count')),
             ], [

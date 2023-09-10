@@ -35,7 +35,7 @@ class Overview extends Component
 
         $this->stats = [
             [
-                'name' => 'momentums',
+                'name' => 'Momentums',
                 'link' => route('explorer.momentums'),
                 'value' => number_format(Cache::get('momentum-count')),
             ], [
