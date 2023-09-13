@@ -37,5 +37,9 @@
     </div>
     <div class="m-4 mt-2">
         {{ $data->links() }}
+
+        <div class="text-center text-lg-start mt-3">
+            <span class="fs-sm text-muted">Refreshed every 5 minutes | Data provided by DeeZNNutz</span>
+        </div>
     </div>
 </div>
