@@ -14,8 +14,6 @@ class Overview extends Component
 
     public ?array $holders;
 
-    public ?string $affiliateLink;
-
     public function render()
     {
         $znn = App::make('zenon.api');
@@ -27,6 +25,7 @@ class Overview extends Component
             'adminAddress' => $adminAccount,
             'halted' => $bridgeStats->halted,
             'orchestrators' => number_format($orchestrators),
+            'affiliateLink' => config('zenon.bridge_affiliate_link'),
         ]);
     }
 
