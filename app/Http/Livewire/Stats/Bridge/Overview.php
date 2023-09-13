@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Stats\Bridge;
 
 use App\Models\Nom\Account;
-use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -11,26 +10,19 @@ use Livewire\Component;
 
 class Overview extends Component
 {
-    private Zenon $znn;
-
     public ?array $liquidityData;
 
     public ?array $holders;
 
     public ?string $affiliateLink;
 
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-        $this->znn = App::make('zenon.api');
-    }
-
     public function render()
     {
-        $this->affiliateLink = config('zenon.bridge_affiliate_link');
-        $bridgeStats = $this->znn->bridge->getBridgeInfo()['data'];
+        $znn = App::make('zenon.api');
+        $bridgeStats = $znn->bridge->getBridgeInfo()['data'];
         $adminAccount = Account::findByAddress($bridgeStats->administrator);
         $orchestratorsOnline = Cache::get('orchestrators-online-percentage');
+        $this->affiliateLink = config('zenon.bridge_affiliate_link');
 
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => $adminAccount,
