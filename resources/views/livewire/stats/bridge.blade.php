@@ -7,9 +7,9 @@
             <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
                 'overview' => 'Overview',
                 'actions' => 'Actions',
+                'orchestrators' => 'Orchestrators',
                 'security' => 'Security',
                 'networks' => 'Networks',
-                'orchestrators' => 'Orchestrators',
             ]" />
         </div>
         <div class="w-100 p-3" wire:loading>
@@ -28,12 +28,12 @@
                             <livewire:stats.bridge.overview key="{{now()}}" />
                         @elseif ($tab === 'actions')
                             <livewire:stats.bridge.actions key="{{now()}}" />
+                        @elseif ($tab === 'orchestrators')
+                            <livewire:stats.bridge.orchestrators key="{{now()}}" />
                         @elseif ($tab === 'security')
                             <livewire:stats.bridge.security key="{{now()}}" />
                         @elseif ($tab === 'networks')
                             <livewire:stats.bridge.networks key="{{now()}}" />
-                        @elseif ($tab === 'orchestrators')
-                            <livewire:stats.bridge.orchestrators key="{{now()}}" />
                         @endif
                     </div>
                 </div>
