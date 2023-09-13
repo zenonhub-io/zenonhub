@@ -14,8 +14,6 @@ class Overview extends Component
 
     public ?array $holders;
 
-    public ?string $affiliateLink;
-
     public function render()
     {
         $znn = App::make('zenon.api');
@@ -27,7 +25,8 @@ class Overview extends Component
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => $adminAccount,
             'halted' => $bridgeStats->halted,
-            'orchestratorsOnline' => number_format($orchestratorsOnline),
+            'orchestrators' => number_format($orchestrators),
+            'affiliateLink' => config('zenon.bridge_affiliate_link'),
         ]);
     }
 
