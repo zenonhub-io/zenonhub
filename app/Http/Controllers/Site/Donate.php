@@ -13,10 +13,13 @@ class Donate extends PageController
         $this->page['meta']['title'] = 'Donate';
 
         $donationAccount = Account::findByAddress(config('zenon.donation_address'));
+        $ppToken = Token::findByZts('zts1hz3ys62vnc8tdajnwrz6pp'); // Ignore PP airdrop
+
         $excludeAddresses = Account::isEmbedded() // Exclude AZ + rewards
             ->orWhere('address', config('plasma-bot.address')) // Exclude refund from plasma bot
-            ->pluck('id')->toArray();
-        $ppToken = Token::findByZts('zts1hz3ys62vnc8tdajnwrz6pp'); // Ignore PP airdrop
+            ->pluck('id')
+            ->toArray();
+
         $donations = $donationAccount->received_blocks()
             ->whereNotIn('account_id', $excludeAddresses)
             ->whereNot('token_id', $ppToken->id)
