@@ -32,7 +32,6 @@ class GenerateSitemap implements ShouldQueue
 
         Sitemap::create()
             ->add($this->addItem('home'))
-            ->add($this->addItem('nodes'))
             ->add($this->addItem('donate'))
 
             ->add($this->addItem('explorer.overview'))
@@ -61,6 +60,12 @@ class GenerateSitemap implements ShouldQueue
             ->add($this->addItem('stats.overview'))
             ->add($this->addItem('stats.nodes'))
             ->add($this->addItem('stats.accelerator'))
+
+            ->add($this->addItem('services.overview'))
+            ->add($this->addItem('services.public-nodes'))
+            ->add($this->addItem('services.plasma-bot'))
+            ->add($this->addItem('services.whale-alerts'))
+            ->add($this->addItem('services.bridge-alerts'))
 
             ->writeToFile(storage_path($file));
     }
