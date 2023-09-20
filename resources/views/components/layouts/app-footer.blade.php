@@ -2,7 +2,7 @@
     <div class="container">
         <div class="d-md-flex justify-content-sm-between align-items-sm-center text-center">
             <div class="d-block d-md-flex align-items-md-center order-md-1">
-                <a href="{{ route('nodes') }}" class="btn btn-sm btn-outline-primary order-md-1 me-2">
+                <a href="{{ route('services.public-nodes') }}" class="btn btn-sm btn-outline-primary order-md-1 me-2">
                     <i class="bi-hdd-rack-fill me-2"></i> Nodes
                 </a>
                 <a href="{{ route('donate') }}" class="btn btn-sm btn-outline-primary order-md-1">

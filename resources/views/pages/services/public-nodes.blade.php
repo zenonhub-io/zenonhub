@@ -1,4 +1,7 @@
 <x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+    <x-slot name="pageBreadcrumbs">
+        {{ Breadcrumbs::render('services.public-nodes') }}
+    </x-slot>
     <div class="container">
         <div class="row">
             <div class="col-24 col-md-16 offset-md-4 mb-4">
@@ -18,7 +21,7 @@
                         </span>
                     </div>
                 </div>
-                <livewire:site.public-nodes/>
+                <livewire:services.public-nodes/>
             </div>
         </div>
     </div>

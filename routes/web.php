@@ -26,7 +26,13 @@ Route::get('donate', [\App\Http\Controllers\Site\Donate::class, 'show'])->name('
 
 Route::get('privacy', [\App\Http\Controllers\Site\Privacy::class, 'show'])->name('privacy');
 
-Route::get('nodes', [\App\Http\Controllers\Site\Nodes::class, 'show'])->name('nodes');
+Route::prefix('account')->name('account.')->middleware(['throttle:60,1', 'auth', 'verified'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\Account\Overview::class, 'show'])->name('overview');
+    Route::get('details', [\App\Http\Controllers\Account\Details::class, 'show'])->name('details');
+    Route::get('favorites', [\App\Http\Controllers\Account\Favorites::class, 'show'])->name('favorites');
+    Route::get('notifications', [\App\Http\Controllers\Account\Notifications::class, 'show'])->name('notifications');
+    Route::get('addresses', [\App\Http\Controllers\Account\Addresses::class, 'show'])->name('addresses');
+});
 
 Route::prefix('pillars')->name('pillars.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Pillar\Pillars::class, 'show'])->name('overview');
@@ -74,10 +80,10 @@ Route::prefix('tools')->name('tools.')->middleware(['throttle:60,1'])->group(fun
     Route::get('broadcast-message', [\App\Http\Controllers\Tools\BroadcastMessage::class, 'show'])->name('broadcast-message');
 });
 
-Route::prefix('account')->name('account.')->middleware(['throttle:60,1', 'auth', 'verified'])->group(function () {
-    Route::get('/', [\App\Http\Controllers\Account\Overview::class, 'show'])->name('overview');
-    Route::get('details', [\App\Http\Controllers\Account\Details::class, 'show'])->name('details');
-    Route::get('favorites', [\App\Http\Controllers\Account\Favorites::class, 'show'])->name('favorites');
-    Route::get('notifications', [\App\Http\Controllers\Account\Notifications::class, 'show'])->name('notifications');
-    Route::get('addresses', [\App\Http\Controllers\Account\Addresses::class, 'show'])->name('addresses');
+Route::prefix('services')->name('services.')->middleware(['throttle:60,1'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\Services\Overview::class, 'show'])->name('overview');
+    Route::get('whale-alerts', [\App\Http\Controllers\Services\WhaleAlerts::class, 'show'])->name('whale-alerts');
+    Route::get('bridge-alerts', [\App\Http\Controllers\Services\BridgeAlerts::class, 'show'])->name('bridge-alerts');
+    Route::get('public-nodes', [\App\Http\Controllers\Services\PublicNodes::class, 'show'])->name('public-nodes');
+    Route::get('plasma-bot', [\App\Http\Controllers\Services\PlasmaBot::class, 'show'])->name('plasma-bot');
 });
