@@ -45,6 +45,7 @@ return [
         'z1qqgr9m627e9q6fyqvzd464wa4v2g5edhxrvqfl' => 'STEX Exchange',
         'z1qzzavvq2zywv77ts2e9yntc3y24qetjh0x0aj4' => 'Plasma Bot',
         'z1qr9vtwsfr2n0nsxl2nfh6l5esqjh2wfj85cfq9' => 'Bridge Admin',
+        'z1qrcc2c65w4d3zested2wl00hfyhr7022h92l92' => 'SOS Community Address',
     ],
 
     /*
