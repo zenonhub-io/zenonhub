@@ -17,17 +17,32 @@ Breadcrumbs::for('privacy', function (BreadcrumbTrail $trail) {
     $trail->push('Privacy', route('privacy'));
 });
 
-Breadcrumbs::for('nodes', function (BreadcrumbTrail $trail) {
-    $trail->push('nodex', route('nodes'));
+//
+// Account
+Breadcrumbs::for('account', function (BreadcrumbTrail $trail) {
+    //$trail->parent('home');
+    $trail->push('Account', route('account.overview'));
 });
 
-//
-// Auth
+Breadcrumbs::for('account.details', function (BreadcrumbTrail $trail) {
+    $trail->parent('account');
+    $trail->push('Details', route('account.details'));
+});
 
-//Breadcrumbs::for('auth.login', function (BreadcrumbTrail $trail) {
-//    $trail->parent('home');
-//    $trail->push('Login', route('login'));
-//});
+Breadcrumbs::for('account.addresses', function (BreadcrumbTrail $trail) {
+    $trail->parent('account');
+    $trail->push('Addresses', route('account.addresses'));
+});
+
+Breadcrumbs::for('account.favorites', function (BreadcrumbTrail $trail) {
+    $trail->parent('account');
+    $trail->push('Favorites', route('account.favorites'));
+});
+
+Breadcrumbs::for('account.notifications', function (BreadcrumbTrail $trail) {
+    $trail->parent('account');
+    $trail->push('Notifications', route('account.notifications'));
+});
 
 //
 // Pillars
@@ -164,28 +179,28 @@ Breadcrumbs::for('tools.verify-signature', function (BreadcrumbTrail $trail) {
 });
 
 //
-// Account
-Breadcrumbs::for('account', function (BreadcrumbTrail $trail) {
+// Services
+Breadcrumbs::for('services', function (BreadcrumbTrail $trail) {
     //$trail->parent('home');
-    $trail->push('Account', route('account.overview'));
+    $trail->push('Services', route('services.overview'));
 });
 
-Breadcrumbs::for('account.details', function (BreadcrumbTrail $trail) {
-    $trail->parent('account');
-    $trail->push('Details', route('account.details'));
+Breadcrumbs::for('services.whale-alerts', function (BreadcrumbTrail $trail) {
+    $trail->parent('services');
+    $trail->push('Whale Alerts', route('services.whale-alerts'));
 });
 
-Breadcrumbs::for('account.addresses', function (BreadcrumbTrail $trail) {
-    $trail->parent('account');
-    $trail->push('Addresses', route('account.addresses'));
+Breadcrumbs::for('services.bridge-alerts', function (BreadcrumbTrail $trail) {
+    $trail->parent('services');
+    $trail->push('Bridge Alerts', route('services.bridge-alerts'));
 });
 
-Breadcrumbs::for('account.favorites', function (BreadcrumbTrail $trail) {
-    $trail->parent('account');
-    $trail->push('Favorites', route('account.favorites'));
+Breadcrumbs::for('services.public-nodes', function (BreadcrumbTrail $trail) {
+    $trail->parent('services');
+    $trail->push('Public Nodes', route('services.public-nodes'));
 });
 
-Breadcrumbs::for('account.notifications', function (BreadcrumbTrail $trail) {
-    $trail->parent('account');
-    $trail->push('Notifications', route('account.notifications'));
+Breadcrumbs::for('services.plasma-bot', function (BreadcrumbTrail $trail) {
+    $trail->parent('services');
+    $trail->push('Plasma Bot', route('services.plasma-bot'));
 });
