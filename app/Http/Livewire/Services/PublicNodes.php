@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Site;
+namespace App\Http\Livewire\Services;
 
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
@@ -22,7 +22,7 @@ class PublicNodes extends Component
 
     public function render()
     {
-        return view('livewire.site.public-nodes', $this->loadData());
+        return view('livewire.services.public-nodes', $this->loadData());
     }
 
     private function loadData()
