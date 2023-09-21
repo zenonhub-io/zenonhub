@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-24 col-md-8">
+                    <div class="col-24 col-md-8 mb-4">
                         <div class="card card-hover h-100 shadow text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-24 col-md-8">
+                    <div class="col-24 col-md-8 mb-4">
                         <div class="card card-hover h-100 shadow text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-24 col-md-8">
+                    <div class="col-24 col-md-8 mb-4">
                         <div class="card card-hover h-100 shadow text-center">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="d-block">
