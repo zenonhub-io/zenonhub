@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'znn_cutoff' => env('WHALE_BOT_ZNN_LIMIT', 1000) * 100000000,
-    'qsr_cutoff' => env('WHALE_BOT_qsr_LIMIT', 10000) * 100000000,
+    'znn_cutoff' => env('WHALE_BOT_ZNN_LIMIT', 1000),
+    'qsr_cutoff' => env('WHALE_BOT_QSR_LIMIT', 10000),
     'discord' => [
         'enabled' => env('WHALE_BOT_ENABLE_DISCORD', false),
         'webhook' => env('WHALE_BOT_DISCORD_WEBHOOK'),
