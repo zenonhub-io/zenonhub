@@ -10,8 +10,8 @@ class WhaleAlerts extends PageController
     {
         $this->page['meta']['title'] = 'Whale Alerts';
 
-        $znnCutoff = config('whale-alerts.znn_cutoff') / 100000000;
-        $qsrCutoff = config('whale-alerts.qsr_cutoff') / 100000000;
+        $znnCutoff = config('whale-alerts.znn_cutoff');
+        $qsrCutoff = config('whale-alerts.qsr_cutoff');
 
         return $this->render('pages/services/whale-alerts', [
             'znnCutoff' => number_format($znnCutoff),

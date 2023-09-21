@@ -67,8 +67,8 @@ class ProcessBlock
 
     private function shouldSendWhaleAlerts(): bool
     {
-        $znnValue = config('whale-alerts.znn_cutoff');
-        $qsrValue = config('whale-alerts.qsr_cutoff');
+        $znnValue = config('whale-alerts.znn_cutoff') * 100000000;
+        $qsrValue = config('whale-alerts.qsr_cutoff') * 100000000;
 
         if (! $this->block->token) {
             return false;
