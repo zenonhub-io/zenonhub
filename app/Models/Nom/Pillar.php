@@ -257,7 +257,7 @@ class Pillar extends Model implements Sitemapable
             try {
                 $znn = App::make('zenon.api');
 
-                return $znn->pillar->getByOwner($this->owner->address)['data'];
+                return $znn->pillar->getByOwner($this->owner->address)['data'][0];
             } catch (\Exception $exception) {
                 return null;
             }
@@ -300,6 +300,15 @@ class Pillar extends Model implements Sitemapable
         }
 
         return false;
+    }
+
+    public function getDisplayRevocableInAttribute()
+    {
+        if ($this->raw_json->revokeCooldown > 0) {
+            return now()->addSeconds($this->raw_json->revokeCooldown)->diffForHumans(['parts' => 2], true);
+        }
+
+        return 'Now';
     }
 
     //
