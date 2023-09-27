@@ -90,6 +90,11 @@
                                 <span class="d-block fs-sm text-muted">Revoked</span>
                                 {{ $pillar->revoked_at->format(config('zenon.date_format')) }}
                             </li>
+                        @else
+                            <li class="list-group-item">
+                                <span class="d-block fs-sm text-muted">Revocable in</span>
+                                {{ $pillar->display_revocable_in }}
+                            </li>
                         @endif
                         <li class="list-group-item">
                             <span class="d-block fs-sm text-muted">Owner Address</span>
