@@ -6,7 +6,6 @@ use App\Actions\SetBlockAsProcessed;
 use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\PillarDelegator;
-use App\Models\NotificationType;
 use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -56,10 +55,9 @@ class Undelegate implements ShouldQueue
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
-    private function notifyUsers($pillar)
+    private function notifyUsers($pillar): void
     {
-        $notificationType = NotificationType::findByCode('pillar-delegator-lost');
-        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
+        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-delegator-lost'))
             ->whereHas('nom_accounts', function ($query) use ($pillar) {
                 $query->whereHas('pillars', fn ($query) => $query->where('id', $pillar->id));
             })
@@ -67,7 +65,7 @@ class Undelegate implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\LostDelegator($notificationType, $pillar, $this->block->account)
+            new \App\Notifications\Nom\Pillar\LostDelegator($pillar, $this->block->account)
         );
     }
 }

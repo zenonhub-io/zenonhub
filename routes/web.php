@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test', function () {
+    $block = \App\Models\Nom\AccountBlock::first();
+    Notification::send(new \App\Bots\NetworkAlertBot(), (new \App\Notifications\Bots\NetworkAlert($block)));
+});
+
 include 'redirects.php';
 include 'utilities.php';
 include 'auth.php';

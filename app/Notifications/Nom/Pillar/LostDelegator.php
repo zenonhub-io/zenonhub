@@ -4,12 +4,12 @@ namespace App\Notifications\Nom\Pillar;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
-use App\Notifications\Nom\BaseNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class LostDelegator extends BaseNotification implements ShouldQueue
+class LostDelegator extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -17,56 +17,25 @@ class LostDelegator extends BaseNotification implements ShouldQueue
 
     protected Account $account;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct($type, $pillar, $account)
+    public function __construct(Pillar $pillar, Account $account)
     {
-        parent::__construct($type);
         $this->pillar = $pillar;
         $this->account = $account;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().$this->type->name)
+            ->subject(get_env_prefix().'Lose delegator')
             ->markdown('mail.notifications.pillar.lost-delegator', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
                 'account' => $this->account,
             ]);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 }

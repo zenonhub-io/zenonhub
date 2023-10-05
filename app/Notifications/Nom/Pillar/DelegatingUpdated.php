@@ -3,46 +3,28 @@
 namespace App\Notifications\Nom\Pillar;
 
 use App\Models\Nom\Pillar;
-use App\Notifications\Nom\BaseNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class DelegatingUpdated extends BaseNotification implements ShouldQueue
+class DelegatingUpdated extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected Pillar $pillar;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct($type, $pillar)
+    public function __construct(Pillar $pillar)
     {
-        parent::__construct($type);
         $this->pillar = $pillar;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         $accounts = $notifiable->nom_accounts->map(function ($account) {
             if ($account->active_delegation && $account->active_delegation->pillar->id === $this->pillar->id) {
@@ -53,24 +35,11 @@ class DelegatingUpdated extends BaseNotification implements ShouldQueue
         })->filter();
 
         return (new MailMessage)
-            ->subject(get_env_prefix().$this->type->name)
+            ->subject(get_env_prefix().'Delegating pillar updated')
             ->markdown('mail.notifications.pillar.delegating-updated', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
                 'accounts' => $accounts,
             ]);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 }

@@ -71,11 +71,23 @@ class NotificationType extends Model
     //
     // Attributes
 
+    public function getSubscribedUsersAttribute()
+    {
+        return User::whereHas('notification_types', function ($query) {
+            return $query->where('code', $this->code);
+        })->get();
+    }
+
     //
     // Methods
 
     public static function findByCode(string $code): ?NotificationType
     {
         return static::where('code', $code)->first();
+    }
+
+    public static function getSubscribedUsers(string $code)
+    {
+        return self::findByCode($code)->subscribed_users;
     }
 }

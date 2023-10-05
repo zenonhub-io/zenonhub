@@ -8,7 +8,6 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\PillarHistory;
 use App\Models\NotificationType;
-use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -77,15 +76,14 @@ class UpdatePillar implements ShouldQueue
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
-    private function notifyUsers($pillar)
+    private function notifyUsers($pillar): void
     {
         // any pillar updated
-        $notificationType = NotificationType::findByCode('pillar-updated');
-        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))->get();
+        $subscribedUsers = NotificationType::getSubscribedUsers('pillar-updated');
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\Updated($notificationType, $pillar)
+            new \App\Notifications\Nom\Pillar\Updated($pillar)
         );
 
         // delegating pillar updated
@@ -101,7 +99,7 @@ class UpdatePillar implements ShouldQueue
         //
         //        Notification::send(
         //            $subscribedUsers,
-        //            new \App\Notifications\Pillar\DelegatingUpdated($notificationType, $pillar)
+        //            new \App\Notifications\Pillar\DelegatingUpdated($pillar)
         //        );
     }
 }

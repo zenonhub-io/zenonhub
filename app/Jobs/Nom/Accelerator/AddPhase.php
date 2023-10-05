@@ -8,7 +8,6 @@ use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
 use App\Models\NotificationType;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -108,14 +107,11 @@ class AddPhase implements ShouldQueue
 
     private function notifyUsers(): void
     {
-        $notificationType = NotificationType::findByCode('az-phase-added');
-        $subscribedUsers = User::whereHas('notification_types', function ($query) use ($notificationType) {
-            return $query->where('code', $notificationType->code);
-        })->get();
+        $subscribedUsers = NotificationType::getSubscribedUsers('az-phase-added');
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Accelerator\PhaseAdded($notificationType, $this->phase)
+            new \App\Notifications\Nom\Accelerator\PhaseAdded($this->phase)
         );
     }
 }

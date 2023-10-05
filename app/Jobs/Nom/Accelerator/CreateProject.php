@@ -8,7 +8,6 @@ use App\Classes\Utilities;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
 use App\Models\NotificationType;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -102,14 +101,11 @@ class CreateProject implements ShouldQueue
 
     private function notifyUsers(): void
     {
-        $notificationType = NotificationType::findByCode('az-project-created');
-        $subscribedUsers = User::whereHas('notification_types', function ($query) use ($notificationType) {
-            return $query->where('code', $notificationType->code);
-        })->get();
+        $subscribedUsers = NotificationType::getSubscribedUsers('az-project-created');
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Accelerator\ProjectCreated($notificationType, $this->project)
+            new \App\Notifications\Nom\Accelerator\ProjectCreated($this->project)
         );
     }
 }

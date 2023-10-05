@@ -7,7 +7,6 @@ use App\Classes\Utilities;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
 use App\Models\NotificationType;
-use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -81,16 +80,13 @@ class Register implements ShouldQueue
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
-    private function notifyUsers($pillar)
+    private function notifyUsers($pillar): void
     {
-        $notificationType = NotificationType::findByCode('pillar-registered');
-        $subscribedUsers = User::whereHas('notification_types', function ($query) use ($notificationType) {
-            return $query->where('code', $notificationType->code);
-        })->get();
+        $subscribedUsers = NotificationType::getSubscribedUsers('pillar-registered');
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\Registered($notificationType, $pillar)
+            new \App\Notifications\Nom\Pillar\Registered($pillar)
         );
     }
 }

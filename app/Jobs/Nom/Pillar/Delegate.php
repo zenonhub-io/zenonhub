@@ -7,7 +7,6 @@ use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\PillarDelegator;
-use App\Models\NotificationType;
 use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -43,7 +42,7 @@ class Delegate implements ShouldQueue
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
-    private function processDelegate()
+    private function processDelegate(): void
     {
         $blockData = $this->block->data->decoded;
         $this->pillar = Pillar::where('name', $blockData['name'])->first();
@@ -74,10 +73,9 @@ class Delegate implements ShouldQueue
         Cache::put('delegators-count', $delegators);
     }
 
-    private function notifyUsers()
+    private function notifyUsers(): void
     {
-        $notificationType = NotificationType::findByCode('pillar-delegator-added');
-        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
+        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-delegator-added'))
             ->whereHas('nom_accounts', function ($query) {
                 $query->whereHas('pillars', fn ($query) => $query->where('id', $this->pillar->id));
             })
@@ -85,7 +83,7 @@ class Delegate implements ShouldQueue
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\NewDelegator($notificationType, $this->pillar, $this->block->account)
+            new \App\Notifications\Nom\Pillar\NewDelegator($this->pillar, $this->block->account)
         );
     }
 }
