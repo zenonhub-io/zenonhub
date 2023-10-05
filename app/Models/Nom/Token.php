@@ -238,6 +238,19 @@ class Token extends Model implements Sitemapable
         return false;
     }
 
+    public function getUsdPriceAttribute()
+    {
+        if ($this->token_standard === self::ZTS_ZNN) {
+            return znn_price();
+        }
+
+        if ($this->token_standard === self::ZTS_QSR) {
+            return qsr_price();
+        }
+
+        return 0;
+    }
+
     //
     // Methods
 
@@ -273,6 +286,15 @@ class Token extends Model implements Sitemapable
         }
 
         return rtrim(rtrim((string) $number, '0'), '.');
+    }
+
+    public function getDisplayUsdAmount($amount)
+    {
+        $amount = $this->getDisplayAmount($amount);
+        $amount = (float) preg_replace('/[^\d.]/', '', $amount);
+        $price = $this->usd_price;
+
+        return $amount * $price;
     }
 
     public function getRawJsonAttribute()
