@@ -8,10 +8,10 @@ class Transaction extends Component
 {
     public string $hash;
 
-    public string $tab = 'data';
+    public string $tab = 'descendants';
 
     protected $queryString = [
-        'tab' => ['except' => 'data'],
+        'tab' => ['except' => 'descendants'],
     ];
 
     protected $listeners = ['transactionChanged' => 'setTransaction'];
