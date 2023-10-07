@@ -153,6 +153,19 @@
                         <x-hash-tooltip :hash="$transaction->hash"/>
                     </li>
                     <li class="list-group-item">
+                        <span class="d-block fs-sm text-muted">Data</span>
+                        @if ($transaction->data)
+                            @if ($transaction->contract_method_id)
+                                {{ $transaction->contract_method->name }} ({{ $transaction->contract_method->contract->name }})
+                                <pre class="line-numbers mt-2 mb-3"><code class="lang-json">{{ $transaction->data->json }}</code></pre>
+                            @endif
+                            Raw
+                            <pre class="line-numbers mt-2">{{ $transaction->data->raw }}</pre>
+                        @else
+                            -
+                        @endif
+                    </li>
+                    <li class="list-group-item">
                         <span class="d-block fs-sm text-muted">Momentum</span>
                         @if ($transaction->momentum)
                             <a href="{{ route('explorer.momentum', ['hash' => $transaction->momentum->hash]) }}">
@@ -189,18 +202,12 @@
             <div class="card-header">
                 <div class="d-md-none">
                     <select id="transaction-sections" class="form-select" wire:change="$set('tab', $event.target.value)">
-                        <option value="data" {{ $tab === 'data' ? 'selected' : '' }}>Data</option>
                         <option value="descendants" {{ $tab === 'descendants' ? 'selected' : '' }}>Descendants</option>
                         <option value="json" {{ $tab === 'json' ? 'selected' : '' }}>JSON</option>
                     </select>
                 </div>
                 <div class="d-none d-md-block">
                     <ul class="nav nav-tabs-alt card-header-tabs">
-                        <li class="nav-item">
-                            <button class="btn nav-link {{ $tab === 'data' ? 'active' : '' }}" wire:click="$set('tab', 'data')">
-                                Data
-                            </button>
-                        </li>
                         <li class="nav-item">
                             <button class="btn nav-link {{ $tab === 'descendants' ? 'active' : '' }}" wire:click="$set('tab', 'descendants')">
                                 Descendants
@@ -216,25 +223,7 @@
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade show active">
-                    @if ($tab === 'data')
-                        <div class="p-4">
-                            @if ($transaction->data)
-                                @if ($transaction->contract_method_id)
-                                    {{ $transaction->contract_method->name }} ({{ $transaction->contract_method->contract->name }})
-                                    <pre class="line-numbers mt-2 mb-3"><code class="lang-json">{{ $transaction->data->json }}</code></pre>
-                                @endif
-                                Raw
-                                <pre class="line-numbers mt-2">{{ $transaction->data->raw }}</pre>
-                            @else
-                                <x-alert
-                                    message="No data with transaction"
-                                    type="info"
-                                    icon="info-circle-fill"
-                                    class="d-flex mb-0"
-                                />
-                            @endif
-                        </div>
-                    @elseif ($tab === 'descendants')
+                    @if ($tab === 'descendants')
                         <livewire:tables.block-descendants :transaction="$transaction" key="{{now()}}" />
                     @elseif ($tab === 'json')
                         <div class="p-4">
