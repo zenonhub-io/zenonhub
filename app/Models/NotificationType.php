@@ -28,10 +28,8 @@ class NotificationType extends Model
     public $fillable = [
         'name',
         'code',
-        'type',
+        'category',
         'description',
-        'content',
-        'link',
         'data',
         'is_active',
     ];
@@ -51,21 +49,6 @@ class NotificationType extends Model
     public function scopeIsActive($query)
     {
         return $query->where('is_active', '1');
-    }
-
-    public function scopeIsGeneral($query)
-    {
-        return $query->where('type', 'general');
-    }
-
-    public function scopeIsDelegator($query)
-    {
-        return $query->where('type', 'delegator');
-    }
-
-    public function scopeIsPillar($query)
-    {
-        return $query->where('type', 'pillar');
     }
 
     //
@@ -89,5 +72,16 @@ class NotificationType extends Model
     public static function getSubscribedUsers(string $code)
     {
         return self::findByCode($code)->subscribed_users;
+    }
+
+    public static function getAllCategories()
+    {
+        return self::select('category')->groupBy('category')->pluck('category')->sortBy(function ($item, $key) {
+            if ($item === 'network') {
+                return -1;
+            }
+
+            return $key;
+        });
     }
 }

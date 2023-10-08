@@ -101,7 +101,7 @@ class CreateProject implements ShouldQueue
 
     private function notifyUsers(): void
     {
-        $subscribedUsers = NotificationType::getSubscribedUsers('az-project-created');
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
 
         Notification::send(
             $subscribedUsers,

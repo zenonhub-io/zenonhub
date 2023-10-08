@@ -107,7 +107,7 @@ class AddPhase implements ShouldQueue
 
     private function notifyUsers(): void
     {
-        $subscribedUsers = NotificationType::getSubscribedUsers('az-phase-added');
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
 
         Notification::send(
             $subscribedUsers,

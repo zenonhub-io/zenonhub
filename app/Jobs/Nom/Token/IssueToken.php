@@ -5,6 +5,7 @@ namespace App\Jobs\Nom\Token;
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
+use App\Models\NotificationType;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Notification;
 
 class IssueToken implements ShouldQueue
 {
@@ -63,6 +65,17 @@ class IssueToken implements ShouldQueue
         $token->created_at = $this->block->created_at;
         $token->save();
 
+        $this->notifyUsers($token);
         (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function notifyUsers($token): void
+    {
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-token');
+
+        Notification::send(
+            $subscribedUsers,
+            new \App\Notifications\Nom\Token\Issued($token)
+        );
     }
 }

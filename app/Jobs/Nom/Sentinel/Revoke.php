@@ -5,12 +5,14 @@ namespace App\Jobs\Nom\Sentinel;
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Sentinel;
+use App\Models\NotificationType;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Notification;
 
 class Revoke implements ShouldQueue
 {
@@ -37,6 +39,17 @@ class Revoke implements ShouldQueue
             $sentinel->save();
         }
 
+        $this->notifyUsers($sentinel);
         (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function notifyUsers($sentinel): void
+    {
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-sentinel');
+
+        Notification::send(
+            $subscribedUsers,
+            new \App\Notifications\Nom\Sentinel\Revoked($sentinel)
+        );
     }
 }

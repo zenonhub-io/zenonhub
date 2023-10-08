@@ -45,7 +45,7 @@ class ProjectCreated extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(get_env_prefix().'New project')
-            ->markdown('mail.notifications.az.project-created', [
+            ->markdown('mail.notifications.nom.az.project-created', [
                 'user' => $notifiable,
                 'project' => $this->project,
             ]);

@@ -45,7 +45,7 @@ class Updated extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(get_env_prefix().'Pillar updated')
-            ->markdown('mail.notifications.pillar.updated', [
+            ->markdown('mail.notifications.nom.pillar.updated', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
             ]);

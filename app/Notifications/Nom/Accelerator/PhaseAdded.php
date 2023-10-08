@@ -45,7 +45,7 @@ class PhaseAdded extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(get_env_prefix().'New phase')
-            ->markdown('mail.notifications.az.phase-added', [
+            ->markdown('mail.notifications.nom.az.phase-added', [
                 'user' => $notifiable,
                 'phase' => $this->phase,
             ]);

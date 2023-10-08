@@ -45,7 +45,7 @@ class Registered extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(get_env_prefix().'New pillar')
-            ->markdown('mail.notifications.pillar.registered', [
+            ->markdown('mail.notifications.nom.pillar.registered', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
             ]);

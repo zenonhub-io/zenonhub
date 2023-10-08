@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Notifications\Nom\Pillar;
+namespace App\Notifications\Nom\Sentinel;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Pillar;
+use App\Models\Nom\Sentinel;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,15 +13,15 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Revoked extends Notification implements ShouldQueue
+class Registered extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Pillar $pillar;
+    protected Sentinel $sentinel;
 
-    public function __construct(Pillar $pillar)
+    public function __construct(Sentinel $sentinel)
     {
-        $this->pillar = $pillar;
+        $this->sentinel = $sentinel;
     }
 
     public function via($notifiable): array
@@ -44,10 +44,10 @@ class Revoked extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'Pillar revoked')
-            ->markdown('mail.notifications.nom.pillar.revoked', [
+            ->subject(get_env_prefix().'New sentinel')
+            ->markdown('mail.notifications.nom.sentinel.registered', [
                 'user' => $notifiable,
-                'pillar' => $this->pillar,
+                'sentinel' => $this->sentinel,
             ]);
     }
 

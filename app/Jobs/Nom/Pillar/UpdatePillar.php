@@ -79,7 +79,7 @@ class UpdatePillar implements ShouldQueue
     private function notifyUsers($pillar): void
     {
         // any pillar updated
-        $subscribedUsers = NotificationType::getSubscribedUsers('pillar-updated');
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
 
         Notification::send(
             $subscribedUsers,

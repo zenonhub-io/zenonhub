@@ -82,7 +82,7 @@ class Register implements ShouldQueue
 
     private function notifyUsers($pillar): void
     {
-        $subscribedUsers = NotificationType::getSubscribedUsers('pillar-registered');
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
 
         Notification::send(
             $subscribedUsers,

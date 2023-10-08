@@ -27,8 +27,12 @@ class Notifications extends Component
 
     public function mount()
     {
-        $types = NotificationType::isActive()->isGeneral()->get();
-        $userSubscriptions = auth()->user()->notification_types()->pluck('type_id')->toArray();
+        $types = NotificationType::isActive()->get();
+        $userSubscriptions = auth()
+            ->user()
+            ->notification_types()
+            ->pluck('type_id')
+            ->toArray();
 
         $this->notifications = $types->mapWithKeys(function ($type) use ($userSubscriptions) {
             return [$type->id => in_array($type->id, $userSubscriptions)];
@@ -38,7 +42,8 @@ class Notifications extends Component
     public function render()
     {
         return view('livewire.account.notifications', [
-            'notificationTypes' => NotificationType::isActive()->isGeneral()->get(),
+            'notificationTabs' => NotificationType::getAllCategories(),
+            'notificationTypes' => NotificationType::isActive()->get(),
         ]);
     }
 
@@ -51,7 +56,9 @@ class Notifications extends Component
         ]);
 
         $user = $request->user();
-        $existingSubscriptions = $user->notification_types()->pluck('type_id')->toArray();
+        $existingSubscriptions = $user->notification_types()
+            ->pluck('type_id')
+            ->toArray();
 
         foreach ($validatedData['notifications'] as $typeId => $subscribe) {
             $type = NotificationType::find($typeId);

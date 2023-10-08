@@ -52,7 +52,7 @@ class Revoke implements ShouldQueue
 
     private function notifyUsers($pillar): void
     {
-        $subscribedUsers = NotificationType::getSubscribedUsers('pillar-revoked');
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
 
         Notification::send(
             $subscribedUsers,
