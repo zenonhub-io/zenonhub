@@ -3,6 +3,7 @@
 namespace App\Notifications\Nom\Token;
 
 use App\Bots\NetworkAlertBot;
+use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -53,6 +54,26 @@ class Issued extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $accountName = $this->formatAddressName($this->token->owner);
+        $link = route('explorer.token', [
+            'zts' => $this->token->token_standard,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("A new token has been created! {$this->token->name} was issued by {$accountName}
+
+Token: $link
+
+#ZenonNetworkAlert #Zenon");
+    }
+
+    private function formatAddressName(Account $account): string
+    {
+        if ($account->has_custom_label) {
+            return $account->custom_label;
+        }
+
+        return short_hash($account->address);
     }
 }
