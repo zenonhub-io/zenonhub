@@ -150,18 +150,15 @@ class AcceleratorProject extends Model implements Sitemapable
         return $query->where('status', self::STATUS_COMPLETE);
     }
 
-    public function scopeNeedsVotes($query)
-    {
-        return $query->whereIn('status', [self::STATUS_NEW, self::STATUS_ACCEPTED])
-            ->whereHas('phases', function ($q) {
-                $q->where('status', AcceleratorPhase::STATUS_OPEN);
-            });
-    }
-
     public function scopeIsOpen($query)
     {
-        return $query->whereIn('status', [self::STATUS_NEW, self::STATUS_ACCEPTED])
-            ->whereHas('phases');
+        return $query->where('status', self::STATUS_NEW)
+            ->orWhere(function ($q) {
+                $q->where('status', self::STATUS_ACCEPTED)
+                    ->whereHas('phases', function ($q2) {
+                        $q2->where('status', AcceleratorPhase::STATUS_OPEN);
+                    });
+            });
     }
 
     public function scopeAwaitingPhases($query)
@@ -182,7 +179,9 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function scopeOrderByLatest($query)
     {
-        return $query->orderBy('modified_at', 'desc');
+        return $query->orderByRaw('(status = 0) DESC')
+            ->orderBy('modified_at', 'desc')
+            ->orderBy('slug', 'desc');
     }
 
     public function scopeReminderDue($query)
