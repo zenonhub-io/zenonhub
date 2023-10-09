@@ -83,9 +83,10 @@ class Register implements ShouldQueue
     private function notifyUsers($pillar): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
+        $networkBot = new \App\Bots\NetworkAlertBot();
 
         Notification::send(
-            $subscribedUsers,
+            $subscribedUsers->prepend($networkBot),
             new \App\Notifications\Nom\Pillar\Registered($pillar)
         );
     }

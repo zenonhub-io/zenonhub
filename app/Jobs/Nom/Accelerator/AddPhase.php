@@ -108,9 +108,10 @@ class AddPhase implements ShouldQueue
     private function notifyUsers(): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
+        $networkBot = new \App\Bots\NetworkAlertBot();
 
         Notification::send(
-            $subscribedUsers,
+            $subscribedUsers->prepend($networkBot),
             new \App\Notifications\Nom\Accelerator\PhaseAdded($this->phase)
         );
     }

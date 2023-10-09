@@ -38,8 +38,8 @@ class IssueToken implements ShouldQueue
         $zts = Utilities::ztsFromHash($this->block->hash);
         $tokenData = $znn->token->getByZts($zts)['data'];
         $token = Token::whereZts($tokenData->tokenStandard)->first();
-        $totalSupply = preg_replace('/[^0-9]/', '', $tokenData->totalSupply);
-        $maxSupply = preg_replace('/[^0-9]/', '', $tokenData->maxSupply);
+        $totalSupply = $tokenData->totalSupply;
+        $maxSupply = $tokenData->maxSupply;
 
         if (! $token) {
             $token = Token::create([
@@ -72,9 +72,10 @@ class IssueToken implements ShouldQueue
     private function notifyUsers($token): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-token');
+        $networkBot = new \App\Bots\NetworkAlertBot();
 
         Notification::send(
-            $subscribedUsers,
+            $subscribedUsers->prepend($networkBot),
             new \App\Notifications\Nom\Token\Issued($token)
         );
     }

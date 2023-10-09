@@ -46,9 +46,10 @@ class Revoke implements ShouldQueue
     private function notifyUsers($sentinel): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-sentinel');
+        $networkBot = new \App\Bots\NetworkAlertBot();
 
         Notification::send(
-            $subscribedUsers,
+            $subscribedUsers->prepend($networkBot),
             new \App\Notifications\Nom\Sentinel\Revoked($sentinel)
         );
     }
