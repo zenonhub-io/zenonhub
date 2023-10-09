@@ -253,7 +253,7 @@ class Pillar extends Model implements Sitemapable
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("pillar-{$this->id}-json", 10, function () {
+        return Cache::remember("pillar-{$this->id}-json", 60, function () {
             try {
                 $znn = App::make('zenon.api');
 
@@ -304,7 +304,11 @@ class Pillar extends Model implements Sitemapable
 
     public function getDisplayRevocableInAttribute()
     {
-        if ($this->raw_json->revokeCooldown > 0) {
+        if (! $this->raw_json) {
+            return '-';
+        }
+
+        if ($this->raw_json?->revokeCooldown > 0) {
             return now()->addSeconds($this->raw_json->revokeCooldown)->diffForHumans(['parts' => 2], true);
         }
 
