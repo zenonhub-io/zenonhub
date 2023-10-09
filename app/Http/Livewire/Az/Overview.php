@@ -9,14 +9,14 @@ use Livewire\WithPagination;
 
 class Overview extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public $list = 'all';
 
     public $availableLists = [
         'all',
-        'new',
+        'open',
         'accepted',
         'complete',
         'rejected',
@@ -64,8 +64,8 @@ class Overview extends Component
 
     private function filterList()
     {
-        if ($this->list === 'new') {
-            $this->query->isNew();
+        if ($this->list === 'open') {
+            $this->query->isOpen();
         } elseif ($this->list === 'accepted') {
             $this->query->isAccepted();
         } elseif ($this->list === 'complete') {
@@ -82,7 +82,6 @@ class Overview extends Component
 
     private function sortList()
     {
-        $this->query->orderByRaw('(status = 0) DESC');
         $this->query->orderByLatest();
     }
 

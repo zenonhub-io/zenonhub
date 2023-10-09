@@ -14,12 +14,12 @@
                                 >All</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ $list === 'new' ? 'active' : '' }}"
-                                   wire:click="setList('new')"
+                                <a class="nav-link {{ $list === 'open' ? 'active' : '' }}"
+                                   wire:click="setList('open')"
                                    href="javascript:;"
                                    data-bs-toggle="tab"
                                    role="tab"
-                                >New</a>
+                                >Open</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $list === 'accepted' ? 'active' : '' }}"
