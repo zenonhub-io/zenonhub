@@ -5,6 +5,8 @@ namespace App\Models\Nom;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 
 class Sentinel extends Model
 {
@@ -64,5 +66,30 @@ class Sentinel extends Model
     public function scopeIsActive($query)
     {
         return $query->whereNull('revoked_at');
+    }
+
+    //
+    // Attributes
+
+    public function getRawJsonAttribute()
+    {
+        return Cache::remember("sentinel-{$this->id}-json", 10, function () {
+            try {
+                $znn = App::make('zenon.api');
+
+                return $znn->sentinel->getByOwner($this->owner->address)['data'][0];
+            } catch (\Exception $exception) {
+                return null;
+            }
+        });
+    }
+
+    public function getDisplayRevocableInAttribute()
+    {
+        if ($this->raw_json->revokeCooldown > 0) {
+            return now()->addSeconds($this->raw_json->revokeCooldown)->diffForHumans(['parts' => 2], true);
+        }
+
+        return 'Now';
     }
 }
