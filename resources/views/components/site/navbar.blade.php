@@ -7,21 +7,21 @@
     </div>
     <div class="offcanvas-body">
         <ul class="navbar-nav d-flex justify-content-end">
-            <li class="nav-item {{ request()->routeIs('pillars.overview', 'pillars.detail') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->routeIs('pillars.*') ? 'active' : '' }}">
                 <a href="{{ route('pillars.overview') }}" class="nav-link" tabindex="3">
                     Pillars
                 </a>
             </li>
-            <li class="nav-item {{ request()->routeIs('az.overview', 'az.project', 'az.phase') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->routeIs('az.*') ? 'active' : '' }}">
                 <a href="{{ route('az.overview') }}" class="nav-link" tabindex="4">
                     Accelerator Z
                 </a>
             </li>
-            <li class="nav-item dropdown {{ request()->routeIs('explorer.overview', 'explorer.momentums', 'explorer.transactions', 'explorer.accounts', 'explorer.tokens', 'explorer.momentum', 'explorer.transaction', 'explorer.account', 'explorer.token', 'explorer.staking', 'explorer.fusions') ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ request()->routeIs('explorer.*') ? 'active' : '' }}">
                 <a href="{{ route('explorer.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="2">
                     Explorer
                 </a>
-                <ul class="dropdown-menu {{ request()->routeIs('explorer.overview', 'explorer.momentums', 'explorer.transactions', 'explorer.accounts', 'explorer.tokens', 'explorer.momentum', 'explorer.transaction', 'explorer.account', 'explorer.token', 'explorer.staking', 'explorer.fusions') ? 'active show' : '' }}">
+                <ul class="dropdown-menu {{ request()->routeIs('explorer.*') ? 'active show' : '' }}">
                     <li><a href="{{ route('explorer.overview') }}" class="dropdown-item {{ request()->routeIs('explorer.overview') ? 'active' : '' }}">Overview</a></li>
                     <li><a href="{{ route('explorer.momentums') }}" class="dropdown-item {{ request()->routeIs('explorer.momentums', 'explorer.momentum') ? 'active' : '' }}">Momentums</a></li>
                     <li><a href="{{ route('explorer.transactions') }}" class="dropdown-item {{ request()->routeIs('explorer.transactions', 'explorer.transaction') ? 'active' : '' }}">Transactions</a></li>
@@ -31,21 +31,21 @@
                     <li><a href="{{ route('explorer.fusions') }}" class="dropdown-item {{ request()->routeIs('explorer.fusions') ? 'active' : '' }}">Fusions</a></li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ request()->routeIs('stats.overview', 'stats.nodes', 'stats.accelerator', 'stats.bridge') ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ request()->routeIs('stats.*') ? 'active' : '' }}">
                 <a href="{{ route('stats.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="5">
                     Stats
                 </a>
-                <ul class="dropdown-menu {{ request()->routeIs('stats.overview', 'stats.nodes', 'stats.accelerator', 'stats.bridge') ? 'show' : '' }}">
+                <ul class="dropdown-menu {{ request()->routeIs('stats.*') ? 'show' : '' }}">
                     <li><a href="{{ route('stats.bridge') }}" class="dropdown-item {{ request()->routeIs('stats.bridge') ? 'active' : '' }}">Bridge</a></li>
                     <li><a href="{{ route('stats.nodes') }}" class="dropdown-item {{ request()->routeIs('stats.nodes') ? 'active' : '' }}">Public nodes</a></li>
                     <li><a href="{{ route('stats.accelerator') }}" class="dropdown-item {{ request()->routeIs('stats.accelerator') ? 'active' : '' }}">Accelerator Z</a></li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ request()->routeIs('tools.overview', 'tools.plasma-bot', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ request()->routeIs('tools.*') ? 'active' : '' }}">
                 <a href="{{ route('tools.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="5">
                     Tools
                 </a>
-                <ul class="dropdown-menu {{ request()->routeIs('tools.overview', 'tools.plasma-bot', 'tools.api-playground', 'tools.verify-signature', 'tools.broadcast-message') ? 'show' : '' }}">
+                <ul class="dropdown-menu {{ request()->routeIs('tools.*') ? 'show' : '' }}">
                     <li><a href="{{ route('tools.plasma-bot') }}" class="dropdown-item {{ request()->routeIs('tools.plasma-bot') ? 'active' : '' }}">Plasma bot</a></li>
                     <li><a href="{{ route('tools.api-playground') }}" class="dropdown-item {{ request()->routeIs('tools.api-playground') ? 'active' : '' }}">API playground</a></li>
                     <li><a href="{{ route('tools.broadcast-message') }}" class="dropdown-item {{ request()->routeIs('tools.broadcast-message') ? 'active' : '' }}">Broadcast message</a></li>
@@ -53,11 +53,11 @@
                 </ul>
             </li>
             @if (auth()->check())
-                <li class="nav-item dropdown {{ request()->routeIs('account.overview', 'account.details', 'account.addresses', 'account.favorites', 'account.notifications') ? 'active' : '' }}">
+                <li class="nav-item dropdown {{ request()->routeIs('account.*') ? 'active' : '' }}">
                     <a href="{{ route('account.overview') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" tabindex="5">
                         <i class="bi bi-person-circle me-2"></i> {{ auth()->user()->username }}
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end {{ request()->routeIs('account.overview', 'account.details', 'account.addresses', 'account.favorites', 'account.notifications') ? 'show' : '' }}">
+                    <ul class="dropdown-menu dropdown-menu-end {{ request()->routeIs('account.*') ? 'show' : '' }}">
                         <li><a href="{{ route('account.details') }}" class="dropdown-item {{ request()->routeIs('account.details') ? 'active' : '' }}">Details</a></li>
                         <li><a href="{{ route('account.favorites') }}" class="dropdown-item {{ request()->routeIs('account.favorites') ? 'active' : '' }}">Favorites</a></li>
                         <li><a href="{{ route('account.notifications') }}" class="dropdown-item {{ request()->routeIs('account.notifications') ? 'active' : '' }}">Notifications</a></li>
