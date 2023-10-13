@@ -92,3 +92,9 @@ Route::prefix('services')->name('services.')->middleware(['throttle:60,1'])->gro
     Route::get('public-nodes', [\App\Http\Controllers\Services\PublicNodes::class, 'show'])->name('public-nodes');
     Route::get('plasma-bot', [\App\Http\Controllers\Services\PlasmaBot::class, 'show'])->name('plasma-bot');
 });
+
+if (! app()->isProduction()) {
+    Route::prefix('utilities')->name('utilities.')->middleware(['throttle:60,1'])->group(function () {
+        Route::get('missing-votes', [\App\Http\Controllers\Utilities\MissingVotes::class, 'show']);
+    });
+}
