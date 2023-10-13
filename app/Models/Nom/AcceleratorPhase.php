@@ -115,6 +115,16 @@ class AcceleratorPhase extends Model implements Sitemapable
             ->where('send_reminders_at', '<', now());
     }
 
+    public function scopeIsOpen($query)
+    {
+        return $query->where('status', self::STATUS_OPEN);
+    }
+
+    public function scopeIsPaid($query)
+    {
+        return $query->where('status', self::STATUS_PAID);
+    }
+
     //
     // Attributes
 

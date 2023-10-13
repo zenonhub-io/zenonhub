@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\Nom\AcceleratorPhase;
+use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -33,7 +35,16 @@ trait AzVotes
     public function getVotesNeededAttribute()
     {
         return Cache::remember("{$this->getCachePrefix()}-votes-needed", 60 * 10, function () {
+
             $totalPillars = Pillar::isActive()->where('created_at', '<=', $this->created_at)->count();
+
+            // New projects or open phases can be voted on by all pillars so creation date shouldnt be accounted for
+            if (
+                ($this instanceof AcceleratorProject && $this->status === AcceleratorProject::STATUS_NEW)
+                || ($this instanceof AcceleratorPhase && $this->status === AcceleratorPhase::STATUS_OPEN)
+            ) {
+                $totalPillars = Pillar::isActive()->count();
+            }
 
             return ceil($totalPillars * .33);
         });
