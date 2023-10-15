@@ -53,6 +53,16 @@ class Registered extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $link = route('explorer.account', [
+            'address' => $this->sentinel->owner->address,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A new sentinel has been registered!
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon");
     }
 }

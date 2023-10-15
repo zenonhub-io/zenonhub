@@ -53,6 +53,16 @@ class Updated extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $link = route('pillars.detail', [
+            'slug' => $this->pillar->slug,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A pillar has been updated! {$this->pillar->name} changed their rewards to M:{$this->pillar->momentum_rewards }% / D:{$this->pillar->delegate_rewards}%
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon");
     }
 }

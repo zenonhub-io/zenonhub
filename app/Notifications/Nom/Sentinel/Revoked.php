@@ -53,6 +53,16 @@ class Revoked extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $link = route('explorer.account', [
+            'address' => $this->sentinel->owner->address,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A sentinel has been revoked!
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon");
     }
 }

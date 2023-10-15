@@ -53,6 +53,17 @@ class ProjectCreated extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $accountName = short_address($this->token->owner);
+        $link = route('az.project', [
+            'hash' => $this->project->hash,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A new project has been submitted! {$this->project->name} was created by {$accountName}
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon #AcceleratorZ");
     }
 }

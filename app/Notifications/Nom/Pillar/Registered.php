@@ -53,6 +53,16 @@ class Registered extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $link = route('pillars.detail', [
+            'slug' => $this->pillar->slug,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A new pillar has been registered! Welcome to the network {$this->pillar->name}!
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon");
     }
 }

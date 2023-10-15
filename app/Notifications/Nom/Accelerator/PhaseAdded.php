@@ -53,6 +53,16 @@ class PhaseAdded extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $link = route('az.phase', [
+            'hash' => $this->phase->hash,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A new phase has been created! {$this->phase->name} was added to the {$this->phase->project->name} project
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon #AcceleratorZ");
     }
 }

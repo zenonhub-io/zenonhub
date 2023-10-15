@@ -53,6 +53,17 @@ class Revoked extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        return new TwitterStatusUpdate('Testing Twitter network alerts');
+        $accountName = short_address($this->pillar->owner);
+        $link = route('pillars.detail', [
+            'slug' => $this->pillar->slug,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A pillar has been revoked! {$this->pillar->name} was dismantled by {$accountName}
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon");
     }
 }
