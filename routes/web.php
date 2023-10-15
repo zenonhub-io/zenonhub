@@ -13,13 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('test', function () {
-    $block = \App\Models\Nom\AccountBlock::first();
-    Notification::send(new \App\Bots\NetworkAlertBot(), (new \App\Notifications\Bots\NetworkAlert($block)));
-});
-
 include 'redirects.php';
-include 'utilities.php';
 include 'auth.php';
 
 //
@@ -98,3 +92,13 @@ if (! app()->isProduction()) {
         Route::get('missing-votes', [\App\Http\Controllers\Utilities\MissingVotes::class, 'show']);
     });
 }
+
+//
+// Sitemap
+Route::get('/sitemap.xml', function () {
+    $file = storage_path('app/sitemap/sitemap.xml');
+
+    return response()->file($file, [
+        'Content-Type' => 'application/xml',
+    ]);
+})->name('sitemap');
