@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Notifications\Nom\Accelerator;
+namespace App\Notifications\Nom\Sentinel;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\Sentinel;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,15 +13,15 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class ProjectCreated extends Notification implements ShouldQueue
+class Revoked extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected AcceleratorProject $project;
+    protected Sentinel $sentinel;
 
-    public function __construct(AcceleratorProject $project)
+    public function __construct(Sentinel $sentinel)
     {
-        $this->project = $project;
+        $this->sentinel = $sentinel;
     }
 
     public function via($notifiable): array
@@ -44,26 +44,25 @@ class ProjectCreated extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'New project')
-            ->markdown('mail.notifications.nom.az.project-created', [
+            ->subject(get_env_prefix().'Sentinel revoked')
+            ->markdown('mail.notifications.nom.sentinel.revoked', [
                 'user' => $notifiable,
-                'project' => $this->project,
+                'sentinel' => $this->sentinel,
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $accountName = short_address($this->token->owner);
-        $link = route('az.project', [
-            'hash' => $this->project->hash,
+        $link = route('explorer.account', [
+            'address' => $this->sentinel->owner->address,
             'utm_source' => 'network_bot',
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new project has been submitted! {$this->project->name} was created by {$accountName}
+        return new TwitterStatusUpdate("ℹ️ - A sentinel has been revoked!
 
 🔗 $link
 
-#ZenonNetworkAlert #Zenon #AcceleratorZ");
+#ZenonNetworkAlert #Zenon");
     }
 }

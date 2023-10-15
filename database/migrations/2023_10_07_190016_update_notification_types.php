@@ -1,54 +1,72 @@
 <?php
 
-namespace Database\Seeders;
-
 use App\Models\NotificationType;
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
-class NotificationTypesSeeder extends Seeder
+return new class extends Migration
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function up(): void
     {
+        Schema::table('notification_types', function (Blueprint $table) {
+            $table->dropColumn('content');
+            $table->dropColumn('link');
+            $table->renameColumn('type', 'category');
+        });
+
+        Schema::disableForeignKeyConstraints();
+        DB::table('notification_subscriptions')->truncate();
+        DB::table('notification_types')->truncate();
+        Schema::enableForeignKeyConstraints();
+
         NotificationType::insert([
             [
                 'name' => 'Accelerator Z',
                 'code' => 'network-az',
-                'type' => 'network',
+                'category' => 'network',
                 'description' => 'A new project or phase is created',
                 'is_configurable' => false,
                 'is_active' => true,
             ], [
                 'name' => 'Pillar',
                 'code' => 'network-pillar',
-                'type' => 'network',
+                'category' => 'network',
                 'description' => 'A pillar is registered, updated or revoked',
                 'is_configurable' => false,
                 'is_active' => true,
             ], [
                 'name' => 'Sentinel',
                 'code' => 'network-sentinel',
-                'type' => 'network',
+                'category' => 'network',
                 'description' => 'A sentinel is registered or revoked',
                 'is_configurable' => false,
                 'is_active' => true,
             ], [
                 'name' => 'Token',
                 'code' => 'network-token',
-                'type' => 'network',
+                'category' => 'network',
                 'description' => 'A new token is registered',
                 'is_configurable' => false,
                 'is_active' => true,
             ], [
                 'name' => 'Bridge',
                 'code' => 'network-bridge',
-                'type' => 'network',
+                'category' => 'network',
                 'description' => 'The bridge status changes or admin commands are issued',
                 'is_configurable' => false,
-                'is_active' => true,
+                'is_active' => false,
             ],
         ]);
     }
-}
+
+    public function down(): void
+    {
+        Schema::table('notification_types', function (Blueprint $table) {
+            $table->string('link')->nullable()->after('description');
+            $table->tinyText('content')->nullable()->after('description');
+            $table->renameColumn('category', 'type');
+        });
+    }
+};

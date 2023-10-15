@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Notifications\Nom\Accelerator;
+namespace App\Notifications\Nom\Token;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\Token;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,15 +13,15 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class ProjectCreated extends Notification implements ShouldQueue
+class Issued extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected AcceleratorProject $project;
+    protected Token $token;
 
-    public function __construct(AcceleratorProject $project)
+    public function __construct(Token $token)
     {
-        $this->project = $project;
+        $this->token = $token;
     }
 
     public function via($notifiable): array
@@ -44,26 +44,26 @@ class ProjectCreated extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'New project')
-            ->markdown('mail.notifications.nom.az.project-created', [
+            ->subject(get_env_prefix().'New token issued')
+            ->markdown('mail.notifications.nom.token.issued', [
                 'user' => $notifiable,
-                'project' => $this->project,
+                'token' => $this->token,
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
         $accountName = short_address($this->token->owner);
-        $link = route('az.project', [
-            'hash' => $this->project->hash,
+        $link = route('explorer.token', [
+            'zts' => $this->token->token_standard,
             'utm_source' => 'network_bot',
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new project has been submitted! {$this->project->name} was created by {$accountName}
+        return new TwitterStatusUpdate("ℹ️ - A new token has been issued! {$this->token->name} was created by {$accountName}
 
 🔗 $link
 
-#ZenonNetworkAlert #Zenon #AcceleratorZ");
+#ZenonNetworkAlert #Zenon");
     }
 }

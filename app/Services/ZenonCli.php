@@ -7,7 +7,7 @@ use Illuminate\Process\ProcessResult;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
 
-class ZnnCli
+class ZenonCli
 {
     public function __construct(
         protected string $nodeUrl,

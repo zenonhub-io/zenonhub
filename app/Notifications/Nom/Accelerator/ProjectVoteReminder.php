@@ -2,47 +2,46 @@
 
 namespace App\Notifications\Nom\Accelerator;
 
+use App\Bots\NetworkAlertBot;
 use App\Models\Nom\AcceleratorProject;
-use App\Notifications\Nom\BaseNotification;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use NotificationChannels\Twitter\TwitterChannel;
+use NotificationChannels\Twitter\TwitterMessage;
+use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class ProjectVoteReminder extends BaseNotification implements ShouldQueue
+class ProjectVoteReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected AcceleratorProject $project;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct($type, $project)
+    public function __construct(AcceleratorProject $project)
     {
-        parent::__construct($type);
         $this->project = $project;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
-        return ['mail'];
+        $channels = [];
+
+        if ($notifiable instanceof NetworkAlertBot) {
+            if (config('network-alerts.twitter.enabled')) {
+                $channels[] = TwitterChannel::class;
+            }
+        }
+
+        if ($notifiable instanceof User) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         $accountIds = $notifiable->nom_accounts->pluck('id')->toArray();
         $allVotes = $this->project->votes()->pluck('owner_id')->toArray();
@@ -59,7 +58,7 @@ class ProjectVoteReminder extends BaseNotification implements ShouldQueue
         })->filter();
 
         return (new MailMessage)
-            ->subject(get_env_prefix().$this->type->name)
+            ->subject(get_env_prefix().'Voting reminders')
             ->markdown('mail.notifications.az.project-vote-reminder', [
                 'user' => $notifiable,
                 'project' => $this->project,
@@ -67,16 +66,8 @@ class ProjectVoteReminder extends BaseNotification implements ShouldQueue
             ]);
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
+    public function toTwitter($notifiable): TwitterMessage
     {
-        return [
-            //
-        ];
+        return new TwitterStatusUpdate('Testing Twitter network alerts');
     }
 }

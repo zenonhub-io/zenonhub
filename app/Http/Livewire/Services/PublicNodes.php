@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Services;
 
+use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
@@ -27,7 +28,7 @@ class PublicNodes extends Component
 
     private function loadData()
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
 
         if ($this->tab === 'process') {
             return $znn->stats->processInfo();

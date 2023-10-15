@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Tools;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
-use Illuminate\Support\Facades\App;
+use App\Services\Zenon;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -86,8 +86,7 @@ class BroadcastMessage extends Component
     {
         $data = $this->validate();
         $account = Account::findByAddress($data['address']);
-        $zenonService = App::make('zenon.services');
-        $validated = $zenonService->verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
+        $validated = Zenon::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
 
         if (! $validated) {
             $this->error = 'Invalid signature';
@@ -103,6 +102,6 @@ class BroadcastMessage extends Component
             return;
         }
 
-        $this->result = $zenonService->broadcastSignedMessage($account, $data['title'], $data['post'], $data['message'], $data['signature']);
+        $this->result = Zenon::broadcastSignedMessage($account, $data['title'], $data['post'], $data['message'], $data['signature']);
     }
 }

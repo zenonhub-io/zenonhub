@@ -10,7 +10,7 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 
-class GuzzleWebHook
+class DiscordWebHook
 {
     protected Client $http;
 

@@ -2,66 +2,68 @@
 
 namespace App\Notifications\Nom\Pillar;
 
+use App\Bots\NetworkAlertBot;
 use App\Models\Nom\Pillar;
-use App\Notifications\Nom\BaseNotification;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use NotificationChannels\Twitter\TwitterChannel;
+use NotificationChannels\Twitter\TwitterMessage;
+use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Revoked extends BaseNotification implements ShouldQueue
+class Revoked extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected Pillar $pillar;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct($type, $pillar)
+    public function __construct(Pillar $pillar)
     {
-        parent::__construct($type);
         $this->pillar = $pillar;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
-        return ['mail'];
+        $channels = [];
+
+        if ($notifiable instanceof NetworkAlertBot) {
+            if (config('network-alerts.twitter.enabled')) {
+                $channels[] = TwitterChannel::class;
+            }
+        }
+
+        if ($notifiable instanceof User) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().$this->type->name)
-            ->markdown('mail.notifications.pillar.revoked', [
+            ->subject(get_env_prefix().'Pillar revoked')
+            ->markdown('mail.notifications.nom.pillar.revoked', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
             ]);
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
+    public function toTwitter($notifiable): TwitterMessage
     {
-        return [
-            //
-        ];
+        $accountName = short_address($this->pillar->owner);
+        $link = route('pillars.detail', [
+            'slug' => $this->pillar->slug,
+            'utm_source' => 'network_bot',
+            'utm_medium' => 'twitter',
+        ]);
+
+        return new TwitterStatusUpdate("ℹ️ - A pillar has been revoked! {$this->pillar->name} was dismantled by {$accountName}
+
+🔗 $link
+
+#ZenonNetworkAlert #Zenon");
     }
 }

@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
-use App\Models\NotificationType;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,21 +23,20 @@ class SendVotingReminders implements ShouldQueue
     public function handle(): void
     {
         $projects = AcceleratorProject::reminderDue()->get();
-        $notificationType = NotificationType::findByCode('pillar-project-vote-reminder');
 
-        $projects->each(function ($project) use ($notificationType) {
+        $projects->each(function ($project) {
             $allVotes = $project->votes()->pluck('owner_id')->toArray();
             $missingVotes = Pillar::whereNotIn('owner_id', $allVotes)
                 ->where('created_at', '<', $project->created_at)
                 ->pluck('owner_id');
 
-            $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
+            $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-project-vote-reminder'))
                 ->whereHas('nom_accounts', fn ($query) => $query->whereIn('account_id', $missingVotes))
                 ->get();
 
             Notification::send(
                 $subscribedUsers,
-                new \App\Notifications\Nom\Accelerator\ProjectVoteReminder($notificationType, $project)
+                new \App\Notifications\Nom\Accelerator\ProjectVoteReminder($project)
             );
 
             $project->send_reminders_at = null;

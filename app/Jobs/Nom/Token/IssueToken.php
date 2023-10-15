@@ -5,6 +5,8 @@ namespace App\Jobs\Nom\Token;
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
+use App\Models\NotificationType;
+use App\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -13,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Notification;
 
 class IssueToken implements ShouldQueue
 {
@@ -32,12 +35,12 @@ class IssueToken implements ShouldQueue
 
     public function handle(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $zts = Utilities::ztsFromHash($this->block->hash);
         $tokenData = $znn->token->getByZts($zts)['data'];
         $token = Token::whereZts($tokenData->tokenStandard)->first();
-        $totalSupply = preg_replace('/[^0-9]/', '', $tokenData->totalSupply);
-        $maxSupply = preg_replace('/[^0-9]/', '', $tokenData->maxSupply);
+        $totalSupply = $tokenData->totalSupply;
+        $maxSupply = $tokenData->maxSupply;
 
         if (! $token) {
             $token = Token::create([
@@ -63,6 +66,18 @@ class IssueToken implements ShouldQueue
         $token->created_at = $this->block->created_at;
         $token->save();
 
+        $this->notifyUsers($token);
         (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function notifyUsers($token): void
+    {
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-token');
+        $networkBot = new \App\Bots\NetworkAlertBot();
+
+        Notification::send(
+            $subscribedUsers->prepend($networkBot),
+            new \App\Notifications\Nom\Token\Issued($token)
+        );
     }
 }

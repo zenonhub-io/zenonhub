@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -131,7 +132,7 @@ class Momentum extends Model
     {
         return Cache::rememberForever("momentum-{$this->id}", function () {
             try {
-                $znn = App::make('zenon.api');
+                $znn = App::make(ZenonSdk::class);
 
                 return $znn->ledger->getMomentumByHash($this->hash)['data'];
             } catch (\Exception $exception) {

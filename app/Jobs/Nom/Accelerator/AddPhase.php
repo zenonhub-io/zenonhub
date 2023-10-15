@@ -8,7 +8,8 @@ use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
 use App\Models\NotificationType;
-use App\Models\User;
+use App\Services\CoinGecko;
+use App\Services\ZenonSdk;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -48,12 +49,12 @@ class AddPhase implements ShouldQueue
 
     private function savePhase(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $phaseData = $znn->accelerator->getPhaseById($this->block->hash)['data'];
 
         $project = AcceleratorProject::findByHash($phaseData->phase->projectID);
-        $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $phaseData->phase->creationTimestamp);
-        $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $phaseData->phase->creationTimestamp);
+        $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $phaseData->phase->creationTimestamp);
+        $qsrPrice = App::make(CoinGecko::class)->historicPrice('quasar', 'usd', $phaseData->phase->creationTimestamp);
 
         // Projects created before QSR price available
         if (is_null($qsrPrice) && $znnPrice) {
@@ -108,14 +109,12 @@ class AddPhase implements ShouldQueue
 
     private function notifyUsers(): void
     {
-        $notificationType = NotificationType::findByCode('az-phase-added');
-        $subscribedUsers = User::whereHas('notification_types', function ($query) use ($notificationType) {
-            return $query->where('code', $notificationType->code);
-        })->get();
+        $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
+        $networkBot = new \App\Bots\NetworkAlertBot();
 
         Notification::send(
-            $subscribedUsers,
-            new \App\Notifications\Nom\Accelerator\PhaseAdded($notificationType, $this->phase)
+            $subscribedUsers->prepend($networkBot),
+            new \App\Notifications\Nom\Accelerator\PhaseAdded($this->phase)
         );
     }
 }

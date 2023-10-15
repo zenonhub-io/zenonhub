@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Services\ZenonSdk;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -299,7 +300,7 @@ class Token extends Model implements Sitemapable
     public function getRawJsonAttribute()
     {
         try {
-            $znn = App::make('zenon.api');
+            $znn = App::make(ZenonSdk::class);
 
             return $znn->token->getByZts($this->token_standard)['data'];
         } catch (\Exception $exception) {

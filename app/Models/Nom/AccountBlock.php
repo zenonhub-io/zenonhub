@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Services\ZenonSdk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -240,7 +241,7 @@ class AccountBlock extends Model
     public function getRawDataAttribute()
     {
         return Cache::rememberForever("account-block-{$this->id}", function () {
-            $znn = App::make('zenon.api');
+            $znn = App::make(ZenonSdk::class);
 
             return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
         });
@@ -264,7 +265,7 @@ class AccountBlock extends Model
     {
         return Cache::remember("block-{$this->id}", 60 * 5, function () {
             try {
-                $znn = App::make('zenon.api');
+                $znn = App::make(ZenonSdk::class);
 
                 return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
             } catch (\Exception $exception) {

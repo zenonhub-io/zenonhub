@@ -60,6 +60,15 @@ function short_hash($hash, $eitherSide = 8, $startAndEnd = true): string
     return "{$start}...";
 }
 
+function short_address(App\Models\Nom\Account $account)
+{
+    if ($account->has_custom_label) {
+        return $account->custom_label;
+    }
+
+    return short_hash($account->address);
+}
+
 function pretty_json($json): string
 {
     return json_encode($json, JSON_PRETTY_PRINT);

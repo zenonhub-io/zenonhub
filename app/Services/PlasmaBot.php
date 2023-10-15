@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class PlasmaBot
 {
-    private ?ZnnCli $cli;
+    private ?ZenonCli $cli;
 
     private ?string $keystore;
 
@@ -18,7 +18,7 @@ class PlasmaBot
     {
         $this->keystore = config('plasma-bot.keystore');
         $this->passphrase = config('plasma-bot.passphrase');
-        $this->cli = App::make(ZnnCli::class, [
+        $this->cli = App::make(ZenonCli::class, [
             'node_url' => config('plasma-bot.node_url'),
             'keystore' => $this->keystore,
             'passphrase' => $this->passphrase,
