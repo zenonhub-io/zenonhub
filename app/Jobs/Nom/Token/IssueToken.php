@@ -6,6 +6,7 @@ use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
 use App\Models\NotificationType;
+use App\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -34,7 +35,7 @@ class IssueToken implements ShouldQueue
 
     public function handle(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $zts = Utilities::ztsFromHash($this->block->hash);
         $tokenData = $znn->token->getByZts($zts)['data'];
         $token = Token::whereZts($tokenData->tokenStandard)->first();

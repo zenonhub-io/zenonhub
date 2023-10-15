@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Services\ZenonSdk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -255,7 +256,7 @@ class Pillar extends Model implements Sitemapable
     {
         return Cache::remember("pillar-{$this->id}-json", 10, function () {
             try {
-                $znn = App::make('zenon.api');
+                $znn = App::make(ZenonSdk::class);
 
                 return $znn->pillar->getByOwner($this->owner->address)['data'][0];
             } catch (\Exception $exception) {

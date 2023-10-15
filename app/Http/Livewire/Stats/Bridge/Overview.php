@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Stats\Bridge;
 
 use App\Models\Nom\Account;
+use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -16,7 +17,7 @@ class Overview extends Component
 
     public function render()
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $bridgeStats = $znn->bridge->getBridgeInfo()['data'];
         $adminAccount = Account::findByAddress($bridgeStats->administrator);
         $orchestrators = Cache::get('orchestrators-online-percentage');

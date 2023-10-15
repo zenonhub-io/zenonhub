@@ -3,6 +3,7 @@
 namespace App\Actions\Nom\Accelerator;
 
 use App\Models\Nom\AcceleratorPhase;
+use App\Services\ZenonSdk;
 use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +37,7 @@ class SyncPhaseStatus
 
     private function loadData(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $this->phaseData = $znn->accelerator->getPhaseById($this->phase->hash)['data'];
     }
 

@@ -4,6 +4,7 @@ namespace App\Jobs\Sync;
 
 use App\Classes\Utilities;
 use App\Models\Nom\Pillar;
+use App\Services\ZenonSdk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -42,7 +43,7 @@ class Pillars implements ShouldQueue
 
     private function loadPillars(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $total = null;
         $results = [];
         $page = 0;

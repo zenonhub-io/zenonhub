@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\App;
 
 class Zenon
 {
-    public function verifySignature(string $publicKey, string $address, string $message, string $signature): bool
+    public static function verifySignature(string $publicKey, string $address, string $message, string $signature): bool
     {
         $validated = false;
         $validSignature = ZnnUtilities::verifySignedMessage(
@@ -33,7 +33,7 @@ class Zenon
         return $validated;
     }
 
-    public function broadcastSignedMessage(Account $account, string $title, string $post, string $message, string $signature): bool
+    public static function broadcastSignedMessage(Account $account, string $title, string $post, string $message, string $signature): bool
     {
         $discourseApi = App::make('discourse.api');
         $pillar = Pillar::where('owner_id', $account->id)->first();

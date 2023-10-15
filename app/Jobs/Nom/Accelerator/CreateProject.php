@@ -8,6 +8,8 @@ use App\Classes\Utilities;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
 use App\Models\NotificationType;
+use App\Services\CoinGecko;
+use App\Services\ZenonSdk;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -47,12 +49,12 @@ class CreateProject implements ShouldQueue
 
     private function saveProject(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $projectData = $znn->accelerator->getProjectById($this->block->hash)['data'];
 
         $project = AcceleratorProject::where('hash', $projectData->id)->first();
-        $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $projectData->creationTimestamp);
-        $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $projectData->creationTimestamp);
+        $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $projectData->creationTimestamp);
+        $qsrPrice = App::make(CoinGecko::class)->historicPrice('quasar', 'usd', $projectData->creationTimestamp);
 
         // Projects created before QSR price available
         if (is_null($qsrPrice) && $znnPrice) {

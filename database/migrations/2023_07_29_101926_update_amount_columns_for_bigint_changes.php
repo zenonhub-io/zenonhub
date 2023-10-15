@@ -6,6 +6,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
 use App\Models\Nom\TokenBurn;
 use App\Models\Nom\TokenMint;
+use App\Services\ZenonSdk;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\App;
@@ -78,7 +79,7 @@ return new class extends Migration
 
     private function updateAccountBlocks(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $token = Token::findByZts(Token::ZTS_LP_ETH);
         $blocks = AccountBlock::where('token_id', $token->id)->where('amount', '>', 0)->get();
         $blocks->each(function ($block) use ($znn) {
