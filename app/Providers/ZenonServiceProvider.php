@@ -5,8 +5,8 @@ namespace App\Providers;
 use App\Services\CoinGecko;
 use App\Services\Discord\DiscordWebHook;
 use App\Services\PlasmaBot;
+use App\Services\ZenonCli;
 use App\Services\ZenonSdk;
-use App\Services\ZnnCli;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use pnoeric\DiscourseAPI;
@@ -29,8 +29,8 @@ class ZenonServiceProvider extends ServiceProvider
             return (new ZenonSdk($node))->getZenon();
         });
 
-        $this->app->singleton(ZnnCli::class, function ($app, $params) {
-            return new ZnnCli($params['node_url'], $params['keystore'], $params['passphrase']);
+        $this->app->singleton(ZenonCli::class, function ($app, $params) {
+            return new ZenonCli($params['node_url'], $params['keystore'], $params['passphrase']);
         });
 
         $this->app->singleton(PlasmaBot::class, function ($app, $params) {
