@@ -11,8 +11,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('notification_types', function (Blueprint $table) {
-            $table->dropColumn('content');
-            $table->dropColumn('link');
+            $table->dropColumn('content', 'link');
+        });
+
+        Schema::table('notification_types', function (Blueprint $table) {
             $table->renameColumn('type', 'category');
         });
 
@@ -66,6 +68,9 @@ return new class extends Migration
         Schema::table('notification_types', function (Blueprint $table) {
             $table->string('link')->nullable()->after('description');
             $table->tinyText('content')->nullable()->after('description');
+        });
+
+        Schema::table('notification_types', function (Blueprint $table) {
             $table->renameColumn('category', 'type');
         });
     }
