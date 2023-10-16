@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
-use DigitalSloth\ZnnPhp\Zenon as ZenonApi;
+use App\Services\ZenonSdk;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -66,7 +66,7 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
 
     private function saveCurrentBalance()
     {
-        $znn = App::make(ZenonApi::class);
+        $znn = App::make(ZenonSdk::class);
         $apiData = $znn->ledger->getAccountInfoByAddress($this->account->address);
 
         foreach ($apiData['data']->balanceInfoMap as $tokenStandard => $holdings) {

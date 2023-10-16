@@ -26,7 +26,7 @@ class ZenonServiceProvider extends ServiceProvider
         $this->app->singleton(ZenonSdk::class, function ($app, $params) {
             $node = $params['node'] ?? config('zenon.node_url');
 
-            return (new ZenonSdk($node))->getZenon();
+            return (new ZenonSdk($node))->getSdk();
         });
 
         $this->app->singleton(ZenonCli::class, function ($app, $params) {
