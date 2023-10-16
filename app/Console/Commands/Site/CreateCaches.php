@@ -44,7 +44,7 @@ class CreateCaches extends Command
         $fusedQsr = qsr_token()->getDisplayAmount(Fusion::isActive()->sum('amount'));
         Cache::put('fused-qsr', $fusedQsr);
 
-        $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->sum('amount'), 0);
+        $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->isZnn()->sum('amount'), 0);
         Cache::put('staked-znn', $stakedZnn);
 
         return self::SUCCESS;
