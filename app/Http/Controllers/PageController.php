@@ -11,7 +11,7 @@ class PageController
     protected array $page = [
         'meta' => [
             'title' => 'Zenon Network Explorer',
-            'description' => 'Zenon Hub is an explorer for the Zenon Network blockchain, providing a range of tools for interacting with and building on-top of the Network of Momentum',
+            'description' => 'Zenon Hub is an explorer for the Zenon Network blockchain, allowing you to search for transactions, addresses, tokens and other activities taking place on the Network of Momentum.',
         ],
         'active' => null,
         'data' => null,
