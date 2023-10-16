@@ -26,9 +26,8 @@ class ApiController
      * Returns a successful response to the client
      *
      * @param  mixed  $result The result data.
-     * @param  string  $message Optional message.
      */
-    protected function success(mixed $result, string $message = ''): JsonResponse|JsonResource
+    protected function success(mixed $result): JsonResponse|JsonResource
     {
         if ($result instanceof JsonResource) {
             return $result;
@@ -70,7 +69,6 @@ class ApiController
     protected function validationError(Validator $validator): JsonResponse
     {
         $response = [
-            'success' => false,
             'message' => 'Validation error',
             'data' => $validator->errors()->getMessages(),
         ];
