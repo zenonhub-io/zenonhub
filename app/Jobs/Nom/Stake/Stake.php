@@ -43,9 +43,8 @@ class Stake implements ShouldQueue
             'started_at' => $this->block->created_at,
         ]);
 
-        $znnToken = znn_token();
-        $totalZnnStaked = StakeModel::isActive()->where('token_id', $znnToken->id)->sum('amount');
-        $stakedZnn = $znnToken->getDisplayAmount($totalZnnStaked, 0);
+        $totalZnnStaked = StakeModel::isActive()->isZnn()->sum('amount');
+        $stakedZnn = znn_token()->getDisplayAmount($totalZnnStaked, 0);
         Cache::put('staked-znn', $stakedZnn);
 
         (new SetBlockAsProcessed($this->block))->execute();
