@@ -26,11 +26,6 @@ class Projects implements ShouldQueue
 
     protected Collection $projects;
 
-    public function __construct()
-    {
-        $this->onQueue('indexer');
-    }
-
     public function handle()
     {
         try {

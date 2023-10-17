@@ -23,11 +23,6 @@ class Sentinels implements ShouldQueue
 
     protected Collection $sentinels;
 
-    public function __construct()
-    {
-        $this->onQueue('indexer');
-    }
-
     public function handle(): void
     {
         try {

@@ -23,11 +23,6 @@ class Tokens implements ShouldQueue
 
     protected Collection $tokens;
 
-    public function __construct()
-    {
-        $this->onQueue('indexer');
-    }
-
     public function handle(): void
     {
         try {
