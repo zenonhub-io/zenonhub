@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Bots\BridgeAlertBot;
 use App\Bots\WhaleAlertBot;
-use App\Jobs\ProcessAccountBalance;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
@@ -20,8 +19,7 @@ class ProcessBlock
 
     public function __construct(
         protected AccountBlock $block,
-        protected bool $fireAlerts = false,
-        protected bool $processAccounts = false
+        protected bool $fireAlerts = false
     ) {
         $this->block->refresh();
     }
@@ -30,7 +28,6 @@ class ProcessBlock
     {
         Log::debug('Processing block '.$this->block->hash, [
             'alerts' => ($this->fireAlerts ? 'Yes' : 'No'),
-            'balances' => ($this->processAccounts ? 'Yes' : 'No'),
         ]);
 
         if ($this->block->data && $this->block->contract_method) {
@@ -50,18 +47,6 @@ class ProcessBlock
         if ($this->fireAlerts && $this->shouldSendBridgeAlerts()) {
             Log::debug('Fire bridge alert');
             Notification::send(new BridgeAlertBot(), (new BridgeAlert($this->block))->delay($jobDelay));
-        }
-
-        if ($this->processAccounts) {
-            if ($this->block->account->address !== Account::ADDRESS_EMPTY) {
-                Log::debug('Dispatch account balances job '.$this->block->account->address);
-                ProcessAccountBalance::dispatch($this->block->account)->delay($jobDelay);
-            }
-
-            if ($this->block->to_account->address !== Account::ADDRESS_EMPTY) {
-                Log::debug('Dispatch account balances job '.$this->block->to_account->address);
-                ProcessAccountBalance::dispatch($this->block->to_account)->delay($jobDelay);
-            }
         }
     }
 

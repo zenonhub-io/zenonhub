@@ -13,7 +13,7 @@ class ProcessBlockType extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:process-block-type {type*} {--alerts=false} {--balances=false}';
+    protected $signature = 'zenon:process-block-type {type*} {--alerts=false}';
 
     /**
      * The console command description.
@@ -29,15 +29,10 @@ class ProcessBlockType extends Command
     {
         $blockTypes = $this->argument('type');
         $alerts = $this->option('alerts');
-        $balances = $this->option('balances');
         $methods = ContractMethod::whereIn('id', $blockTypes)->get();
 
         if ($alerts) {
             $alerts = filter_var($alerts, FILTER_VALIDATE_BOOLEAN);
-        }
-
-        if ($balances) {
-            $balances = filter_var($balances, FILTER_VALIDATE_BOOLEAN);
         }
 
         $this->info('Processing block types...');
@@ -54,12 +49,11 @@ class ProcessBlockType extends Command
 
             AccountBlock::whereIn('contract_method_id', $blockTypes)
                 ->orderBy('id', 'ASC')
-                ->chunk(100, function ($chunk) use ($bar, $alerts, $balances) {
+                ->chunk(100, function ($chunk) use ($bar, $alerts) {
                     foreach ($chunk as $block) {
                         (new \App\Actions\ProcessBlock(
                             $block,
-                            $alerts,
-                            $balances
+                            $alerts
                         ))->execute();
                         $bar->advance();
                     }
