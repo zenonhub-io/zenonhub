@@ -14,7 +14,6 @@ class AccountBlockCreated
     public function __construct(
         public AccountBlock $block,
         public bool $sendAlerts,
-        public bool $syncAccountBalances,
     ) {
     }
 }

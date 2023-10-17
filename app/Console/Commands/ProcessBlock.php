@@ -12,7 +12,7 @@ class ProcessBlock extends Command
      *
      * @var string
      */
-    protected $signature = 'zenon:process-block {hash} {--alerts=false} {--balances=false}';
+    protected $signature = 'zenon:process-block {hash} {--alerts=false}';
 
     /**
      * The console command description.
@@ -28,24 +28,17 @@ class ProcessBlock extends Command
     {
         $hash = $this->argument('hash');
         $alerts = $this->option('alerts');
-        $balances = $this->option('balances');
         $block = AccountBlock::findByHash($hash);
 
         if ($alerts) {
             $alerts = filter_var($alerts, FILTER_VALIDATE_BOOLEAN);
         }
-
-        if ($balances) {
-            $balances = filter_var($balances, FILTER_VALIDATE_BOOLEAN);
-        }
-
         if ($block) {
             $this->info('Process block data job dispatched');
 
             (new \App\Actions\ProcessBlock(
                 $block,
-                $alerts,
-                $balances
+                $alerts
             ))->execute();
         }
 

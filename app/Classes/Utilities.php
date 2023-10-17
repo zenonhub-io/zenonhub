@@ -7,6 +7,7 @@ use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
 use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 
 class Utilities
 {
@@ -34,9 +35,11 @@ class Utilities
         return false;
     }
 
-    public static function loadChain(): ?Chain
+    public static function loadChain(): Chain
     {
-        return Chain::getCurrentChainId();
+        return Cache::rememberForever('chain', function () {
+            return Chain::getCurrentChainId();
+        });
     }
 
     public static function loadAccount(string $address): Account

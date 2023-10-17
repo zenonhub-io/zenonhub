@@ -24,11 +24,6 @@ class Pillars implements ShouldQueue
 
     protected Collection $pillars;
 
-    public function __construct()
-    {
-        $this->onQueue('indexer');
-    }
-
     public function handle()
     {
         try {

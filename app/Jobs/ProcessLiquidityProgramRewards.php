@@ -24,7 +24,6 @@ class ProcessLiquidityProgramRewards implements ShouldQueue
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
-        $this->onQueue('indexer');
     }
 
     public function handle(): void

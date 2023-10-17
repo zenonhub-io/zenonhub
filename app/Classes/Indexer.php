@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Events\Nom\AccountBlockCreated;
+use App\Jobs\ProcessAccountBalance;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountBlockData;
@@ -56,7 +57,12 @@ class Indexer
             $height = $count;
         }
 
-        $momentums = $this->znn->ledger->getMomentumsByHeight($height);
+        $znn = $this->znn;
+
+        $momentums = retry(5, function () use (&$znn, $height) {
+            return $znn->ledger->getMomentumsByHeight($height);
+        }, 1000);
+
         $this->momentums = collect($momentums['data']->list);
         $this->totalMomentums = $momentums['data']->count;
     }
@@ -77,7 +83,7 @@ class Indexer
             }
 
             if (! $momentum) {
-                Momentum::create([
+                $momentum = Momentum::create([
                     'chain_id' => $chain->id,
                     'producer_account_id' => $producer?->id,
                     'producer_pillar_id' => $pillar?->id,
@@ -97,11 +103,29 @@ class Indexer
                     DB::commit();
                 } catch (\Exception $exception) {
                     Log::warning('Could not process block '.$data->hash);
+                    Log::warning($exception->getMessage());
                     Log::debug($exception);
                     DB::rollBack();
                     exit;
                 }
             });
+
+            if ($this->syncAccountBalances) {
+                $accounts = $momentum->account_blocks()
+                    ->select('account_id', 'to_account_id')
+                    ->get();
+
+                // Loop each account that transacted in the momentum
+                $accounts->pluck('account_id')
+                    ->merge($accounts->pluck('to_account_id'))
+                    ->unique()
+                    ->reject(fn ($id) => $id === 1) // Remove empty address
+                    ->each(function ($accountId) {
+                        $account = Account::find($accountId);
+                        Log::debug('Dispatch account balances job '.$account->address);
+                        ProcessAccountBalance::dispatch($account);
+                    });
+            }
         });
 
         Cache::put('momentum-count', Momentum::count());
@@ -180,11 +204,7 @@ class Indexer
                 $this->createBlockData($block, $data);
             }
 
-            AccountBlockCreated::dispatch(
-                $block,
-                $this->sendAlerts,
-                $this->syncAccountBalances
-            );
+            AccountBlockCreated::dispatch($block, $this->sendAlerts);
         } else {
             $block->momentum_id = ($momentum->id ?? $block->momentum_id);
             $block->momentum_acknowledged_id = $momentumAcknowledged?->id;
