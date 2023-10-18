@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Tools;
 
 use App\Models\Nom\Account;
-use App\Services\Zenon;
+use App\Services\ZenonSdk;
 use Illuminate\Http\Request;
 use Livewire\Component;
 
@@ -70,6 +70,6 @@ class VerifySignature extends Component
     public function submit()
     {
         $data = $this->validate();
-        $this->result = Zenon::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
+        $this->result = ZenonSdk::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
     }
 }
