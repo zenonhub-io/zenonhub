@@ -4,6 +4,7 @@ namespace App\Jobs\Sync;
 
 use App\Classes\Utilities;
 use App\Models\Nom\Sentinel;
+use App\Services\ZenonSdk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,11 +23,6 @@ class Sentinels implements ShouldQueue
 
     protected Collection $sentinels;
 
-    public function __construct()
-    {
-        $this->onQueue('indexer');
-    }
-
     public function handle(): void
     {
         try {
@@ -41,7 +37,7 @@ class Sentinels implements ShouldQueue
 
     private function loadSentinels(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $total = null;
         $results = [];
         $page = 0;

@@ -11,8 +11,7 @@ class ProcessAccountBlock
     {
         (new ProcessBlock(
             $event->block,
-            $event->sendAlerts,
-            $event->syncAccountBalances
+            $event->sendAlerts
         ))->execute();
     }
 }

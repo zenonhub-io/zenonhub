@@ -3,6 +3,8 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Services\CoinGecko;
+use App\Services\ZenonSdk;
 use App\Traits\AzVotes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -268,8 +270,8 @@ class AcceleratorProject extends Model implements Sitemapable
     public function getDisplayUsdRequestedAttribute()
     {
         if (! $this->znn_price || ! $this->qsr_price) {
-            $znnPrice = App::make('coingeko.api')->historicPrice('zenon-2', 'usd', $this->created_at->timestamp);
-            $qsrPrice = App::make('coingeko.api')->historicPrice('quasar', 'usd', $this->created_at->timestamp);
+            $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $this->created_at->timestamp);
+            $qsrPrice = App::make(CoinGecko::class)->historicPrice('quasar', 'usd', $this->created_at->timestamp);
 
             // Projects created before QSR price available
             if (is_null($qsrPrice) && $znnPrice > 0) {
@@ -300,7 +302,7 @@ class AcceleratorProject extends Model implements Sitemapable
     {
         return Cache::remember("project-{$this->id}-json", 10, function () {
             try {
-                $znn = App::make('zenon.api');
+                $znn = App::make(ZenonSdk::class);
 
                 return $znn->accelerator->getProjectById($this->hash)['data'];
             } catch (\Exception $exception) {

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Nom\Momentum;
+use App\Services\ZenonSdk;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 
@@ -29,7 +30,7 @@ class CheckHeight extends Command
      */
     public function handle()
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
 
         $dbHeight = Momentum::count();
         $momentum = $znn->ledger->getFrontierMomentum()['data'];

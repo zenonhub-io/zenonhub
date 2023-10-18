@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Tools;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
+use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -86,8 +87,7 @@ class BroadcastMessage extends Component
     {
         $data = $this->validate();
         $account = Account::findByAddress($data['address']);
-        $zenonService = App::make('zenon.services');
-        $validated = $zenonService->verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
+        $validated = ZenonSdk::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
 
         if (! $validated) {
             $this->error = 'Invalid signature';
@@ -96,13 +96,56 @@ class BroadcastMessage extends Component
             return;
         }
 
-        if (! $account?->pillar) {
+        if (! $account || ! $account?->pillar) {
             $this->error = 'Address is not a pillar, only pillars can broadcast messages';
             $this->result = false;
 
             return;
         }
 
-        $this->result = $zenonService->broadcastSignedMessage($account, $data['title'], $data['post'], $data['message'], $data['signature']);
+        $this->result = $this->broadcastSignedMessage($account, $data['title'], $data['post'], $data['message'], $data['signature']);
+    }
+
+    private function broadcastSignedMessage(Account $account, string $title, string $post, string $message, string $signature): bool
+    {
+        $discourseApi = App::make('discourse.api');
+        $pillar = Pillar::where('owner_id', $account->id)->first();
+        $pillarMessage = $pillar->messages()->create([
+            'title' => $title,
+            'post' => $post,
+            'message' => $message,
+            'signature' => $signature,
+            'is_public' => true,
+            'created_at' => now()->format('Y-m-d H:i:s'),
+        ]);
+
+        $verificationLink = route('tools.verify-signature', [
+            'address' => $account->address,
+            'public_key' => $account->public_key,
+            'message' => $message,
+            'signature' => $signature,
+        ]);
+        $messageMarkdown = "{$post}
+---
+```
+# Proof of Pillar
+Pillar: {$pillar->name}
+Address: {$account->address}
+Public Key: {$account->public_key}
+Message: {$message}
+Signature: {$signature}
+```
+[Verify this message]({$verificationLink})";
+
+        $forumPost = $discourseApi->createTopic($title, $messageMarkdown, 20, 'system', 0, now());
+
+        if ($forumPost && $forumPost->http_code === 200) {
+            $pillarMessage->is_broadcast = true;
+            $pillarMessage->save();
+
+            return true;
+        }
+
+        return false;
     }
 }

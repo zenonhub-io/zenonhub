@@ -5,13 +5,15 @@ namespace App\Classes;
 use App\Models\Nom\Account;
 use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
+use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 
 class Utilities
 {
     public static function isPillar(string $account): bool
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $result = $znn->pillar->getByOwner($account);
 
         if (! empty($result['data'])) {
@@ -23,7 +25,7 @@ class Utilities
 
     public static function isSentinel(string $account): bool
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $result = $znn->sentinel->getByOwner($account);
 
         if (! empty($result['data'])) {
@@ -33,9 +35,11 @@ class Utilities
         return false;
     }
 
-    public static function loadChain(): ?Chain
+    public static function loadChain(): Chain
     {
-        return Chain::getCurrentChainId();
+        return Cache::rememberForever('chain', function () {
+            return Chain::getCurrentChainId();
+        });
     }
 
     public static function loadAccount(string $address): Account
@@ -43,7 +47,7 @@ class Utilities
         $account = Account::findByAddress($address);
 
         if (! $account) {
-            $znn = App::make('zenon.api');
+            $znn = App::make(ZenonSdk::class);
             $block = $znn->ledger->getFrontierAccountBlock($address)['data'];
             $chain = self::loadChain();
             $account = Account::create([
@@ -65,7 +69,7 @@ class Utilities
         $token = Token::findByZts($zts);
 
         if (! $token) {
-            $znn = App::make('zenon.api');
+            $znn = App::make(ZenonSdk::class);
             $data = $znn->token->getByZts($zts)['data'];
             $chain = self::loadChain();
             $owner = self::loadAccount($data->owner);

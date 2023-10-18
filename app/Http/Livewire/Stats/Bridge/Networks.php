@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Stats\Bridge;
 
+use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
@@ -16,7 +17,7 @@ class Networks extends Component
 
     public function loadNetworkData()
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $this->networkInfo = $znn->bridge->getAllNetworks()['data']->list;
     }
 }

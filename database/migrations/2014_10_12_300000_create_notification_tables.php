@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('code')->index();
             $table->string('type')->index();
             $table->tinyText('description')->nullable();
-            $table->tinyText('content');
-            $table->string('link');
+            $table->tinyText('content')->nullable();
+            $table->string('link')->nullable();
             $table->text('data')->nullable();
             $table->boolean('is_configurable')->default(0);
             $table->boolean('is_active')->default(0);

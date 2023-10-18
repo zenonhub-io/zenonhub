@@ -5,6 +5,7 @@ namespace App\Jobs\Sync;
 use App\Classes\Utilities;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
+use App\Services\ZenonSdk;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,11 +26,6 @@ class Projects implements ShouldQueue
 
     protected Collection $projects;
 
-    public function __construct()
-    {
-        $this->onQueue('indexer');
-    }
-
     public function handle()
     {
         try {
@@ -43,7 +39,7 @@ class Projects implements ShouldQueue
 
     private function loadProjects(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $total = null;
         $results = [];
         $page = 0;

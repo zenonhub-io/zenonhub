@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class Prices
+class CoinGecko
 {
     public function currentPrice(string $token = 'zenon-2', string $currency = 'usd'): ?float
     {

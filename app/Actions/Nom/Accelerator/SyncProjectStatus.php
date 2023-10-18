@@ -3,6 +3,7 @@
 namespace App\Actions\Nom\Accelerator;
 
 use App\Models\Nom\AcceleratorProject;
+use App\Services\ZenonSdk;
 use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -33,7 +34,7 @@ class SyncProjectStatus
 
     private function loadData(): void
     {
-        $znn = App::make('zenon.api');
+        $znn = App::make(ZenonSdk::class);
         $this->projectData = $znn->accelerator->getProjectById($this->project->hash)['data'];
     }
 

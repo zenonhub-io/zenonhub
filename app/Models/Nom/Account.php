@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -257,7 +258,7 @@ class Account extends Model implements Sitemapable
     public function getLiveBalancesAttribute()
     {
         return Cache::remember("address-{$this->id}-balances", 60, function () {
-            $znn = App::make('zenon.api');
+            $znn = App::make(ZenonSdk::class);
             $apiData = $znn->ledger->getAccountInfoByAddress($this->address);
             $balances = [];
 
@@ -473,7 +474,7 @@ class Account extends Model implements Sitemapable
     {
         return Cache::remember("account-{$this->id}-json", 10, function () {
             try {
-                $znn = App::make('zenon.api');
+                $znn = App::make(ZenonSdk::class);
 
                 return $znn->ledger->getAccountInfoByAddress($this->address)['data'];
             } catch (\Exception $exception) {

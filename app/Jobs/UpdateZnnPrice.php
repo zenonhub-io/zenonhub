@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\CoinGecko;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,8 +20,8 @@ class UpdateZnnPrice implements ShouldQueue
     public function handle(): void
     {
         $complete = 0;
-        $znnPrice = App::make('coingeko.api')->currentPrice();
-        $qsrPrice = App::make('coingeko.api')->currentPrice('quasar-2');
+        $znnPrice = App::make(CoinGecko::class)->currentPrice();
+        $qsrPrice = App::make(CoinGecko::class)->currentPrice('quasar-2');
 
         if ($znnPrice > 0) {
             Cache::forever('znn-price', $znnPrice);

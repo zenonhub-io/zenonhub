@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,7 +19,7 @@ class ApiController
 
     public function __construct()
     {
-        $this->znn = App::make('zenon.api');
+        $this->znn = App::make(ZenonSdk::class);
     }
 
     /**
