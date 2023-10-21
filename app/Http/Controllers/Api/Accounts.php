@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ApiController;
 use App\Http\Resources\AccountCollection;
 use App\Http\Resources\AccountResource;
 use App\Models\Nom\Account;

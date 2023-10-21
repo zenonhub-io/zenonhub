@@ -19,11 +19,11 @@ include 'auth.php';
 //
 // Pages
 
-Route::get('/', [\App\Http\Controllers\Site\Home::class, 'show'])->name('home');
+Route::get('/', [\App\Http\Controllers\Home::class, 'show'])->name('home');
 
-Route::get('donate', [\App\Http\Controllers\Site\Donate::class, 'show'])->name('donate');
+Route::get('donate', [\App\Http\Controllers\Donate::class, 'show'])->name('donate');
 
-Route::get('privacy', [\App\Http\Controllers\Site\Privacy::class, 'show'])->name('privacy');
+Route::get('privacy', [\App\Http\Controllers\Privacy::class, 'show'])->name('privacy');
 
 Route::prefix('account')->name('account.')->middleware(['throttle:60,1', 'auth', 'verified'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Account\Overview::class, 'show'])->name('overview');
