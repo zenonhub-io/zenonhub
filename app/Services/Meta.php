@@ -5,13 +5,11 @@ namespace App\Services;
 use App\Services\Seo\MetaTag;
 use App\Services\Seo\OpenGraph;
 use App\Services\Seo\Twitter;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
-use JsonSerializable;
 
-class Meta implements Arrayable, JsonSerializable
+class Meta
 {
     use OpenGraph;
     use Twitter;
@@ -230,25 +228,5 @@ class Meta implements Arrayable, JsonSerializable
     public function renderTags(): Htmlable
     {
         return new HtmlString($this->renderTitle().PHP_EOL.$this->renderMeta());
-    }
-
-    /**
-     * Returns an array with the title and meta tags.
-     */
-    public function toArray(): array
-    {
-        return [
-            'canonical' => $this->canonical,
-            'meta' => $this->meta->map->toArray()->values()->all(),
-            'title' => $this->title,
-        ];
-    }
-
-    /**
-     * Returns the array from the 'toArray' method.
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }
