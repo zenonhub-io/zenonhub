@@ -6,7 +6,7 @@
         <div class="row">
             @if (isset($data['component']))
                 <div class="col-lg-8">
-                    <x-site.sidebar :items="[
+                    <x-includes.sidebar :items="[
                         'Stats' => [
                             [
                                 'route' => 'stats.bridge',
