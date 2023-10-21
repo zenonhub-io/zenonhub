@@ -1,5 +1,5 @@
 <x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
-    <x-slot name="pageBreadcrumbs">
+    <x-slot name="breadcrumbs">
         {{ Breadcrumbs::render($data['component'] ?? 'tools') }}
     </x-slot>
     <div class="container">

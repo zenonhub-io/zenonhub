@@ -1,5 +1,5 @@
 <x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
-    <x-slot name="pageBreadcrumbs">
+    <x-slot name="breadcrumbs">
         @if (isset($data['component']))
             @if ($data['component'] === 'explorer.momentum')
                 {{ Breadcrumbs::render($data['component'], $data['momentum']) }}
