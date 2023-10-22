@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\PageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Meta;
 
-class ForgotPassword extends PageController
+class ForgotPassword
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Forgot your password?';
-        $this->page['data'] = [
-            'component' => 'auth.forgot-password',
-        ];
+        Meta::title('Forgot your password?', false);
 
-        return $this->render('pages/auth');
+        return view('pages/auth', [
+            'view' => 'auth.forgot-password',
+        ]);
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse

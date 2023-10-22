@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\PageController;
 use Illuminate\Http\Request;
 
-class SendVerification extends PageController
+class SendVerification
 {
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\PageController;
 use App\Models\User;
 use Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Meta;
 
-class Signup extends PageController
+class Signup
 {
     public function show()
     {
@@ -18,12 +18,11 @@ class Signup extends PageController
             return redirect()->route('account.details');
         }
 
-        $this->page['meta']['title'] = 'Sign Up';
-        $this->page['data'] = [
-            'component' => 'auth.sign-up',
-        ];
+        Meta::title('Sign up to Zenon Hub', false);
 
-        return $this->render('pages/auth');
+        return view('pages/auth', [
+            'view' => 'auth.sign-up',
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
