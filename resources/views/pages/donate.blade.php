@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <div class="container">
         <div class="row">
             <div class="col-24 col-md-16 offset-md-4 mb-4">
@@ -24,7 +24,7 @@
                     <div class="table-responsive">
                         <table class="table table-nowrap table-striped table-hover top-border">
                             <tbody>
-                            @foreach($data['donations'] as $donation)
+                            @foreach($donations as $donation)
                                 <tr>
                                     <td>
                                         <div class="text-start">

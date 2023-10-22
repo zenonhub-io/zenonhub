@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <div class="container">
         <div class="row">
             <div class="col-24 col-md-16 offset-md-4 mb-4">
