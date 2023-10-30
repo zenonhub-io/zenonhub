@@ -1,12 +1,12 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
-    <x-slot name="pageBreadcrumbs">
-        {{ Breadcrumbs::render($data['component'] ?? 'tools') }}
+<x-layouts.app>
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render($view ?? 'tools') }}
     </x-slot>
     <div class="container">
         <div class="row">
-            @if (isset($data['component']))
+            @if (isset($view))
                 <div class="col-lg-8">
-                    <x-site.sidebar :items="[
+                    <x-includes.sidebar :items="[
                         'Tools' => [
 							[
                                 'route' => 'tools.plasma-bot',
@@ -32,7 +32,7 @@
                     ]"/>
                 </div>
                 <div class="col-lg-16">
-                    <livewire:is :component="$data['component']" />
+                    <livewire:is :component="$view" />
                 </div>
             @else
                 <div class="my-0 my-md-4"></div>

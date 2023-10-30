@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Services;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class BridgeAlerts extends PageController
+class BridgeAlerts
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Bridge Alerts';
+        Meta::title('Bridge Alerts');
 
-        return $this->render('pages/services/bridge-alerts');
+        return view('pages/services/bridge-alerts');
     }
 }

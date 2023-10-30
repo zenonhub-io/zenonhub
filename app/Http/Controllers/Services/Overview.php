@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Services;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Overview extends PageController
+class Overview
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Zenon Hub Services';
+        Meta::title('Services');
 
-        return $this->render('pages/services');
+        return view('pages/services');
     }
 }

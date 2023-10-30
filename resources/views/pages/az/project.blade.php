@@ -1,11 +1,11 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
-    <x-slot name="pageBreadcrumbs">
-        {{ Breadcrumbs::render('project', $data['project']) }}
+<x-layouts.app>
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('project', $project) }}
     </x-slot>
     <div class="container">
         <div class="row">
             <div class="col-24">
-                <livewire:az.project :hash="$data['project']->hash"/>
+                <livewire:az.project :hash="$project->hash"/>
             </div>
         </div>
     </div>

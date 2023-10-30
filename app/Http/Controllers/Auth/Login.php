@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\PageController;
 use Auth;
 use Illuminate\Http\Request;
+use Meta;
 
-class Login extends PageController
+class Login
 {
     public function show()
     {
@@ -14,12 +14,11 @@ class Login extends PageController
             return redirect()->route('account.details');
         }
 
-        $this->page['meta']['title'] = 'Login';
-        $this->page['data'] = [
-            'component' => 'auth.login',
-        ];
+        Meta::title('Login to Zenon Hub', false);
 
-        return $this->render('pages/auth');
+        return view('pages/auth', [
+            'view' => 'auth.login',
+        ]);
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse

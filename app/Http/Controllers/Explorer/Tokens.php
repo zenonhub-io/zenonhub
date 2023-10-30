@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\Token;
+use Meta;
 
-class Tokens extends PageController
+class Tokens
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Tokens';
-        $this->page['meta']['description'] = 'The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum';
-        $this->page['data'] = [
-            'component' => 'explorer.tokens',
-        ];
+        Meta::title('Tokens')
+            ->description('The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum');
 
-        return $this->render('pages/explorer/overview');
+        return view('pages/explorer/overview', [
+            'view' => 'explorer.tokens',
+        ]);
     }
 
     public function detail($zts)
@@ -26,13 +25,12 @@ class Tokens extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Token Detail | '.$token->name;
-        $this->page['meta']['description'] = "{$token->name} ({$token->symbol}) Token Details shows total and current supply information and list of holders, transactions, mints and burns";
-        $this->page['data'] = [
-            'component' => 'explorer.token',
-            'token' => $token,
-        ];
+        Meta::title("{$token->name} ({$token->symbol}) - Token details")
+            ->description("The {$token->name} ({$token->symbol}) token detail page shows total and current supply information, holder count and detailed lists of holders, transactions, mints and burns");
 
-        return $this->render('pages/explorer/detail');
+        return view('pages/explorer/detail', [
+            'view' => 'explorer.token',
+            'token' => $token,
+        ]);
     }
 }

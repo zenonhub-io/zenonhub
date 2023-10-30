@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Stats;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Bridge extends PageController
+class Bridge
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Bridge Stats';
-        $this->page['data'] = [
-            'component' => 'stats.bridge',
-        ];
+        Meta::title('Bridge Stats')
+            ->description('The Bridge Stats page shows a detailed overview of the Multi-Chain Bridge including its status, admin actions, security info and supoorted networks');
 
-        return $this->render('pages/stats');
+        return view('pages/stats', [
+            'view' => 'stats.bridge',
+        ]);
     }
 }

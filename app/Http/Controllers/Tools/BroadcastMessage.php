@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Tools;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class BroadcastMessage extends PageController
+class BroadcastMessage
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Broadcast Message';
-        $this->page['meta']['description'] = 'Send a signed and verified message to the community forum';
-        $this->page['data'] = [
-            'component' => 'tools.broadcast-message',
-        ];
+        Meta::title('Broadcast Message')
+            ->description('Pillar owners can use the broadcasting tool to send a signed and verified message to the community forum');
 
-        return $this->render('pages/tools');
+        return view('pages/tools', [
+            'view' => 'tools.broadcast-message',
+        ]);
     }
 }

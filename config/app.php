@@ -199,7 +199,6 @@ return [
         /*
          * Custom Service Providers...
          */
-        App\Providers\ZenonServiceProvider::class,
     ],
 
     /*
@@ -214,7 +213,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Meta' => \App\Services\Seo\MetaFacade::class,
     ])->toArray(),
 
 ];

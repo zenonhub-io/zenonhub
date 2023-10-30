@@ -1,7 +1,7 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <div class="container">
         <div class="row">
-            @foreach($data['stats'] as $stat => $values)
+            @foreach($stats as $stat => $values)
                 <div class="col-12 col-md-8 col-lg-4 mb-4">
                     <div class="card card-hover p-1 bg-secondary shadow rounded-2 text-center border-0">
                         <a href="{{ $values['link'] }}" class="stretched-link">
@@ -145,7 +145,7 @@
                             {!! svg('az', 'me-2', 'height: 18px') !!} Latest projects
                         </h5>
                         <ul class="list-group list-group-flush mb-0">
-                            @foreach ($data['accelerator'] as $project)
+                            @foreach ($accelerator as $project)
                                 <li class="list-group-item d-flex align-items-start justify-content-between">
                                     <div class="d-block">
                                         <a class="fw-bold" href="{{ route('az.project', ['hash' => $project->hash]) }}">

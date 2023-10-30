@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Services;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class WhaleAlerts extends PageController
+class WhaleAlerts
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Whale Alerts';
+        Meta::title('Whale Alerts');
 
         $znnCutoff = config('whale-alerts.znn_cutoff');
         $qsrCutoff = config('whale-alerts.qsr_cutoff');
 
-        return $this->render('pages/services/whale-alerts', [
+        return view('pages/services/whale-alerts', [
             'znnCutoff' => number_format($znnCutoff),
             'qsrCutoff' => number_format($qsrCutoff),
         ]);

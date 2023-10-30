@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Accelerator;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\AcceleratorPhase;
+use Meta;
 
-class Phases extends PageController
+class Phases
 {
     public function detail($hash)
     {
@@ -15,12 +15,11 @@ class Phases extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Accelerator Project Phase | '.$phase->name;
-        $this->page['meta']['description'] = "A detailed overview of project phase {$phase->hash} see the funding request, description and voting status";
-        $this->page['data'] = [
-            'phase' => $phase,
-        ];
+        Meta::title("{$phase->name} - Phase details")
+            ->description("Discover {$phase->name} phase of the {$phase->project->name} project, a venture powered by Accelerator-Z within the Network of Momentum ecosystem. Explore its funding status, votes and more");
 
-        return $this->render('pages/az/phase');
+        return view('pages/az/phase', [
+            'phase' => $phase,
+        ]);
     }
 }

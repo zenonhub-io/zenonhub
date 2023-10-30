@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Staking extends PageController
+class Staking
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Staking';
-        $this->page['meta']['description'] = 'A list of all addresses actively staking tokens in the network.';
-        $this->page['data'] = [
-            'component' => 'explorer.staking',
-        ];
+        Meta::title('Staking')
+            ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order');
 
-        return $this->render('pages/explorer/overview');
+        return view('pages/explorer/overview', [
+            'view' => 'explorer.staking',
+        ]);
     }
 }

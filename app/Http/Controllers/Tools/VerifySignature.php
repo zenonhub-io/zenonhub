@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Tools;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class VerifySignature extends PageController
+class VerifySignature
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Verify Signed Message';
-        $this->page['meta']['description'] = 'Check a signed messages signature is valid for the given address';
-        $this->page['data'] = [
-            'component' => 'tools.verify-signature',
-        ];
+        Meta::title('Verify Signed Message')
+            ->description('Use the verification tool to check a signed messages signature is valid for the given address');
 
-        return $this->render('pages/tools');
+        return view('pages/tools', [
+            'view' => 'tools.verify-signature',
+        ]);
     }
 }

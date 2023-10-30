@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ApiController;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;

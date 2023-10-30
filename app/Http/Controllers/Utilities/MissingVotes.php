@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Utilities;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 
-class MissingVotes extends PageController
+class MissingVotes
 {
     public function show()
     {
@@ -45,7 +44,7 @@ class MissingVotes extends PageController
             ];
         }
 
-        return $this->render('pages/az/missing-votes', [
+        return view('pages/az/missing-votes', [
             'projectData' => $projectData,
             'phaseData' => $phaseData,
         ]);

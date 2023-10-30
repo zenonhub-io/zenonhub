@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\PageController;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Meta;
 
-class ResetPassword extends PageController
+class ResetPassword
 {
     public function show($token)
     {
-        $this->page['meta']['title'] = 'Reset your password';
-        $this->page['data'] = [
-            'component' => 'auth.reset-password',
-            'token' => $token,
-        ];
+        Meta::title('Reset your password', false);
 
-        return $this->render('pages/auth');
+        return view('pages/auth', [
+            'view' => 'auth.reset-password',
+            'data' => [
+                'token' => $token,
+            ],
+        ]);
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse

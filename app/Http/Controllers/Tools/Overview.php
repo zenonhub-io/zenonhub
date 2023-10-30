@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Tools;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Overview extends PageController
+class Overview
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Network Tools';
+        Meta::title('Zenon Network Tools');
 
-        return $this->render('pages/tools');
+        return view('pages/tools');
     }
 }

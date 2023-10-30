@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\Momentum;
+use Meta;
 
-class Momentums extends PageController
+class Momentums
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Momentums';
-        $this->page['meta']['description'] = 'Momentums that have been confirmed on the Zenon Network. These are the network blocks and contain the transactions';
-        $this->page['data'] = [
-            'component' => 'explorer.momentums',
-        ];
+        Meta::title('Zenon Network Momentums (blocks)')
+            ->description('Momentums that have been confirmed on the Zenon Network. The timestamp, producer, number of transactions and hash are shown in the list');
 
-        return $this->render('pages/explorer/overview');
+        return view('pages/explorer/overview', [
+            'view' => 'explorer.momentums',
+        ]);
     }
 
     public function detail($hash)
@@ -26,13 +25,12 @@ class Momentums extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Momentum Detail';
-        $this->page['meta']['description'] = "Zenon detailed momentum info for hash {$momentum->hash}. Displays the momentum height, and a list of all its transactions";
-        $this->page['data'] = [
-            'component' => 'explorer.momentum',
-            'momentum' => $momentum,
-        ];
+        Meta::title("Zenon Momentum #{$momentum->height}")
+            ->description("Zenon Momentum Height {$momentum->height}. Detailed momentum info showing the network height, producing pillar and a list of transactions");
 
-        return $this->render('pages/explorer/detail');
+        return view('pages/explorer/detail', [
+            'view' => 'explorer.momentum',
+            'momentum' => $momentum,
+        ]);
     }
 }

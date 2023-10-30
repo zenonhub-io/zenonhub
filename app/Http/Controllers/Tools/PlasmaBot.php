@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Tools;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class PlasmaBot extends PageController
+class PlasmaBot
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Plasma Bot';
-        $this->page['meta']['description'] = 'Fuse some plasma to you address to speed up transactions';
-        $this->page['data'] = [
-            'component' => 'tools.plasma-bot',
-        ];
+        Meta::title('Plasma Bot')
+            ->description('Use the plasma bot tool to fuse some plasma to you address allowing for faster feeless transactions');
 
-        return $this->render('pages/tools');
+        return view('pages/tools', [
+            'view' => 'tools.plasma-bot',
+        ]);
     }
 }

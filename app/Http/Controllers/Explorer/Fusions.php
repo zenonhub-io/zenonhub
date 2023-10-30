@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Fusions extends PageController
+class Fusions
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'QSR Fusions';
-        $this->page['meta']['description'] = 'A list of all the addresses currently fusing QSR into plasma. Plasma is used to speed up transactions by bypassing the POW';
-        $this->page['data'] = [
-            'component' => 'explorer.fusions',
-        ];
+        Meta::title('QSR (Plasma) Fusions')
+            ->description('A list of all the addresses in the Zenon Network actively fusing QSR into plasma sorted by creation timestamp in descending order');
 
-        return $this->render('pages/explorer/overview');
+        return view('pages/explorer/overview', [
+            'view' => 'explorer.fusions',
+        ]);
     }
 }

@@ -158,6 +158,9 @@
                             @if ($transaction->contract_method_id)
                                 {{ $transaction->contract_method->name }} ({{ $transaction->contract_method->contract->name }})
                                 <pre class="line-numbers mt-2 mb-3"><code class="lang-json">{{ $transaction->data->json }}</code></pre>
+                            @else
+                                Parsed
+                                <pre class="line-numbers mt-2">{{ $transaction->data->parsed }}</pre>
                             @endif
                             Raw
                             <pre class="line-numbers mt-2">{{ $transaction->data->raw }}</pre>

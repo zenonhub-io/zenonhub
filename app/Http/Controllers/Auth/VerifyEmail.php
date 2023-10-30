@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\PageController;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Meta;
 
-class VerifyEmail extends PageController
+class VerifyEmail
 {
     public function show()
     {
@@ -16,12 +16,11 @@ class VerifyEmail extends PageController
             return redirect()->route('account.details');
         }
 
-        $this->page['meta']['title'] = 'Verify your email';
-        $this->page['data'] = [
-            'component' => 'auth.verify-email',
-        ];
+        Meta::title('Verify your email');
 
-        return $this->render('pages/auth');
+        return view('pages/auth', [
+            'view' => 'auth.verify-email',
+        ]);
     }
 
     /**

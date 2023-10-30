@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\AccountBlock;
+use Meta;
 
-class Transactions extends PageController
+class Transactions
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Transactions';
-        $this->page['meta']['description'] = 'Transactions that have been confirmed on the Zenon Network. The list consists of transactions from sending and receiving tokens and the transactions for interacting with a smart contract';
-        $this->page['data'] = [
-            'component' => 'explorer.transactions',
-        ];
+        Meta::title('Zenon Transaction Information')
+            ->description('Transactions that have been confirmed on the Zenon Network. The list consists of transactions from sending and receiving tokens and the interactions with embedded smart contracts');
 
-        return $this->render('pages/explorer/overview');
+        return view('pages/explorer/overview', [
+            'view' => 'explorer.transactions',
+        ]);
     }
 
     public function detail($hash)
@@ -26,13 +25,12 @@ class Transactions extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Transaction Detail';
-        $this->page['meta']['description'] = "Detailed transaction info for hash {$transaction->hash}. The transaction status, block confirmation and token transfer are shown";
-        $this->page['data'] = [
-            'component' => 'explorer.transaction',
-            'transaction' => $transaction,
-        ];
+        Meta::title('Zenon Transaction Details')
+            ->description("Detailed transaction info for hash {$transaction->hash}. The transaction status, block type, confirmation and token transfer are shown");
 
-        return $this->render('pages/explorer/detail');
+        return view('pages/explorer/detail', [
+            'view' => 'explorer.transaction',
+            'transaction' => $transaction,
+        ]);
     }
 }

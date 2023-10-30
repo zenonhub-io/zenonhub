@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Stats;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Overview extends PageController
+class Overview
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Network Stats';
+        Meta::title('Zenon Network Stats');
 
-        return $this->render('pages/stats');
+        return view('pages/stats');
     }
 }

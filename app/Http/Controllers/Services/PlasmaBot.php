@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Services;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class PlasmaBot extends PageController
+class PlasmaBot
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Plasma Bot';
+        Meta::title('Plasma Bot');
 
-        return $this->render('pages/services/plasma-bot');
+        return view('pages/services/plasma-bot');
     }
 }

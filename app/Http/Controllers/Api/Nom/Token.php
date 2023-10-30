@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Nom;
 
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Api\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

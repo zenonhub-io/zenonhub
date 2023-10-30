@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ApiController;
 use App\Http\Resources\StakeCollection;
 use App\Http\Resources\StakeResource;
 use App\Models\Nom\Stake;
