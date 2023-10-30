@@ -8,7 +8,7 @@ class Overview
 {
     public function show()
     {
-        Meta::title('Network Stats');
+        Meta::title('Zenon Network Stats');
 
         return view('pages/stats');
     }

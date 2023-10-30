@@ -9,7 +9,7 @@ class PlasmaBot
     public function show()
     {
         Meta::title('Plasma Bot')
-            ->description('Fuse some plasma to you address to speed up transactions');
+            ->description('Use the plasma bot tool to fuse some plasma to you address allowing for faster feeless transactions');
 
         return view('pages/tools', [
             'view' => 'tools.plasma-bot',

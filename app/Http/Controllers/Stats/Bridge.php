@@ -9,7 +9,7 @@ class Bridge
     public function show()
     {
         Meta::title('Bridge Stats')
-            ->description('View the Multi-chain Bridge status, orchestrators, actions and more');
+            ->description('The Bridge Stats page shows a detailed overview of the Multi-Chain Bridge including its status, admin actions, security info and supoorted networks');
 
         return view('pages/stats', [
             'view' => 'stats.bridge',

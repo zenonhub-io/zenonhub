@@ -9,7 +9,7 @@ class BroadcastMessage
     public function show()
     {
         Meta::title('Broadcast Message')
-            ->description('Send a signed and verified message to the community forum');
+            ->description('Pillar owners can use the broadcasting tool to send a signed and verified message to the community forum');
 
         return view('pages/tools', [
             'view' => 'tools.broadcast-message',

@@ -8,7 +8,7 @@ class Overview
 {
     public function show()
     {
-        Meta::title('Tools');
+        Meta::title('Zenon Network Tools');
 
         return view('pages/tools');
     }
