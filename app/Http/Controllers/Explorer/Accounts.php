@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\Account;
+use Meta;
 
-class Accounts extends PageController
+class Accounts
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Accounts';
-        $this->page['meta']['description'] = 'A list of all addresses on the Network of Momentum, this includes embedded contracts, pillars, sentinels and wallets';
-        $this->page['data'] = [
-            'component' => 'explorer.accounts',
-        ];
+        Meta::title('Zenon Network Top Accounts')
+            ->description('The top account addresses in the Zenon Network in descending order by the amount of Zenon (ZNN) each account holds');
 
-        return $this->render('pages/explorer/overview');
+        return view('pages/explorer/overview', [
+            'view' => 'explorer.accounts',
+        ]);
     }
 
     public function detail($address)
@@ -26,13 +25,17 @@ class Accounts extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Account Details'.($account->has_custom_label ? ' | '.$account->custom_label : '');
-        $this->page['meta']['description'] = "The address {$account->address} page shows an overview of the address and detailed list of transactions, rewards, delegations, token holdings, staking, fusions and projects";
-        $this->page['data'] = [
-            'component' => 'explorer.account',
-            'account' => $account,
-        ];
+        $metaTitle = collect([
+            ($account->has_custom_label ? $account->custom_label : null),
+            'Address '.$account->address.' details',
+        ])->filter()->implode(' | ');
 
-        return $this->render('pages/explorer/detail');
+        Meta::title($metaTitle)
+            ->description("The Address {$account->address} page shows key account details including balances, staking, plasma as well as detailed lists of transactions, rewards, delegations, token holdings, stakes, fusions and projects");
+
+        return view('pages/explorer/detail', [
+            'view' => 'explorer.account',
+            'account' => $account,
+        ]);
     }
 }

@@ -1,13 +1,13 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <x-slot name="breadcrumbs">
-        {{ Breadcrumbs::render($data['component'] ?? 'explorer') }}
+        {{ Breadcrumbs::render($view ?? 'explorer') }}
     </x-slot>
     <div class="container mb-4">
         <div class="row">
             <div class="col-24">
                 <livewire:explorer.search key="{{now()}}" />
-                @if (isset($data['component']))
-                    <livewire:is :component="$data['component']" key="{{now()}}" />
+                @if (isset($view))
+                    <livewire:is :component="$view" key="{{now()}}" />
                 @else
                     <livewire:explorer.overview key="{{now()}}" />
                 @endif

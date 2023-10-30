@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Pillar;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\Pillar;
+use Meta;
 
-class Pillars extends PageController
+class Pillars
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Pillars';
-        $this->page['meta']['description'] = 'The backbone of Network of Momentum, Pillars participate both in the consensus protocol and in the governance framework';
+        Meta::title('Zenon Network Pillars: Explore the Backbone of the Network of Momentum')
+            ->description("Discover the complete list of Zenon Network's pillars and delve into essential statistical insights. Explore key data on transactions, consensus, and network stability");
 
-        return $this->render('pages/pillars/overview');
+        return view('pages/pillars/overview');
     }
 
     public function detail($slug)
@@ -23,12 +23,11 @@ class Pillars extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Pillar | '.$pillar->name;
-        $this->page['meta']['description'] = 'The pillar page shows an overview of the pillars on-chain stats and activity including lists of delegators, votes, updates and messages';
-        $this->page['data'] = [
-            'pillar' => $pillar,
-        ];
+        Meta::title("{$pillar->name} - Pillar details")
+            ->description("Explore the on-chain activity of {$pillar->name} in the Zenon Network. Discover information about its delegators, votes and updates");
 
-        return $this->render('pages/pillars/pillar');
+        return view('pages/pillars/pillar', [
+            'pillar' => $pillar,
+        ]);
     }
 }

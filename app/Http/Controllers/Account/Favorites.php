@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Http\Controllers\PageController;
-use Illuminate\Http\Request;
+use Meta;
 
-class Favorites extends PageController
+class Favorites
 {
-    public function show(Request $request)
+    public function show()
     {
-        $this->page['meta']['title'] = 'Account Favorites';
-        $this->page['data'] = [
-            'component' => 'account.favorites',
-        ];
+        Meta::title('Manage your favourites');
 
-        return $this->render('pages/account');
+        return view('pages/account', [
+            'view' => 'account.favorites',
+        ]);
     }
 }

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Stats;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Nodes extends PageController
+class Nodes
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Node Stats';
-        $this->page['meta']['description'] = 'View the networks public node distribution and statistics';
-        $this->page['data'] = [
-            'component' => 'stats.nodes',
-        ];
+        Meta::title('Node Stats')
+            ->description('View the networks public node distribution and statistics');
 
-        return $this->render('pages/stats');
+        return view('pages/stats', [
+            'view' => 'stats.nodes',
+        ]);
     }
 }

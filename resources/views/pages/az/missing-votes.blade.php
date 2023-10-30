@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <div class="container mb-4 js-scroll-to">
         <div class="row">
             <div class="col-24">

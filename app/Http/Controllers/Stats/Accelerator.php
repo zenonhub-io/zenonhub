@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Stats;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class Accelerator extends PageController
+class Accelerator
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Accelerator Z Stats';
-        $this->page['meta']['description'] = 'Get an overview of the Accelerator Z projects and phases';
-        $this->page['data'] = [
-            'component' => 'stats.accelerator',
-        ];
+        Meta::title('Accelerator Z Stats')
+            ->description('Get an overview of the Accelerator Z contract, projects, engagement and contributors');
 
-        return $this->render('pages/stats');
+        return view('pages/stats', [
+            'view' => 'stats.accelerator',
+        ]);
     }
 }

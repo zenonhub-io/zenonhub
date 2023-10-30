@@ -1,10 +1,10 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <x-slot name="breadcrumbs">
-        {{ Breadcrumbs::render($data['component'] ?? 'account') }}
+        {{ Breadcrumbs::render($view ?? 'account') }}
     </x-slot>
     <div class="container">
         <div class="row">
-            @if (isset($data['component']))
+            @if (isset($view))
                 <div class="col-lg-8">
                     <x-includes.sidebar :items="[
                         'Account' => [
@@ -37,7 +37,7 @@
                     ]"/>
                 </div>
                 <div class="col-lg-16">
-                    <livewire:is :component="$data['component']" />
+                    <livewire:is :component="$view" />
                 </div>
             @else
                 <div class="my-0 my-md-4"></div>

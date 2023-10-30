@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Http\Controllers\PageController;
-use Illuminate\Http\Request;
+use Meta;
 
-class Notifications extends PageController
+class Notifications
 {
-    public function show(Request $request)
+    public function show()
     {
-        $this->page['meta']['title'] = 'Account Notifications';
-        $this->page['data'] = [
-            'component' => 'account.notifications',
-        ];
+        Meta::title('Manage your notifications');
 
-        return $this->render('pages/account');
+        return view('pages/account', [
+            'view' => 'account.notifications',
+        ]);
     }
 }

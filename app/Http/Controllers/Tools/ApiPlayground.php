@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Tools;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class ApiPlayground extends PageController
+class ApiPlayground
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'API Playground';
-        $this->page['meta']['description'] = 'Explore the public RPC endpoints of the Zenon Network and see the results';
-        $this->page['data'] = [
-            'component' => 'tools.api-playground',
-        ];
+        Meta::title('API Playground')
+            ->description('Explore the public RPC endpoints of the Zenon Network and see the results');
 
-        return $this->render('pages/tools');
+        return view('pages/tools', [
+            'view' => 'tools.api-playground',
+        ]);
     }
 }

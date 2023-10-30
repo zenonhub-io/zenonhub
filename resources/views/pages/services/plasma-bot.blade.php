@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="{{ $meta['title'] }}" pageDescription="{{ $meta['description'] }}">
+<x-layouts.app>
     <x-slot name="breadcrumbs">
         {{ Breadcrumbs::render('services.plasma-bot') }}
     </x-slot>

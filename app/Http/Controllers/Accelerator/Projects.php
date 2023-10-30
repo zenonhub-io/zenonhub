@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Accelerator;
 
-use App\Http\Controllers\PageController;
 use App\Models\Nom\AcceleratorProject;
+use Meta;
 
-class Projects extends PageController
+class Projects
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Accelerator Z Projects';
-        $this->page['meta']['description'] = 'An overview of all Accelerator Z projects submitted to date. Each project has a two week voting window to be voted on by pillars';
+        Meta::title('Accelerator-Z Projects: Fueling Innovation in the Network of Momentum')
+            ->description('Explore the diverse array of innovative projects supported by Accelerator-Z within the Network of Momentum ecosystem. Discover the cutting-edge developments and groundbreaking initiatives driving the future of blockchain and Web3 technology.');
 
-        return $this->render('pages/az/overview');
+        return view('pages/az/overview');
     }
 
     public function detail($hash)
@@ -23,12 +23,11 @@ class Projects extends PageController
             abort(404);
         }
 
-        $this->page['meta']['title'] = 'Accelerator Project | '.$project->name;
-        $this->page['meta']['description'] = "A detailed overview of project {$project->hash} see the funding request, description, voting status and phases";
-        $this->page['data'] = [
-            'project' => $project,
-        ];
+        Meta::title("{$project->name} - Project details")
+            ->description("Discover {$project->name}, a venture powered by Accelerator-Z within the Network of Momentum ecosystem. Explore its status, phases votes and more.");
 
-        return $this->render('pages/az/project');
+        return view('pages/az/project', [
+            'project' => $project,
+        ]);
     }
 }

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Http\Controllers\PageController;
-use Illuminate\Http\Request;
+use Meta;
 
-class Overview extends PageController
+class Overview
 {
-    public function show(Request $request)
+    public function show()
     {
-        $this->page['meta']['title'] = 'Mange your account';
+        Meta::title('Manage your account');
 
-        return $this->render('pages/account');
+        return view('pages/account');
     }
 }

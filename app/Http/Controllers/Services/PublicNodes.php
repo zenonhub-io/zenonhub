@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Services;
 
-use App\Http\Controllers\PageController;
+use Meta;
 
-class PublicNodes extends PageController
+class PublicNodes
 {
     public function show()
     {
-        $this->page['meta']['title'] = 'Public Nodes';
+        Meta::title('Public Nodes');
 
-        return $this->render('pages/services/public-nodes');
+        return view('pages/services/public-nodes');
     }
 }

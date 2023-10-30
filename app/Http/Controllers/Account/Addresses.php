@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Account;
 
 use App\Classes\Utilities;
-use App\Http\Controllers\PageController;
 use App\Models\Nom\Account;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Http\Request;
 
-class Addresses extends PageController
+class Addresses
 {
     public function show(Request $request)
     {
         $this->page['meta']['title'] = 'Account Addresses';
         $this->page['data'] = [
-            'component' => 'account.addresses',
+            'view' => 'account.addresses',
         ];
 
-        return $this->render('pages/account');
+        return view('pages/account');
     }
 
     public function store(Request $request)
