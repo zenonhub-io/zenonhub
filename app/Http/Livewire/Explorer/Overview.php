@@ -26,9 +26,16 @@ class Overview extends Component
 
     private function loadData()
     {
-        $this->momentums = Momentum::withCount('account_blocks')->limit(9)->orderBy('id', 'DESC')->get();
+        $this->momentums = Momentum::withCount('account_blocks')
+            ->limit(9)
+            ->orderBy('id', 'DESC')
+            ->get();
+
         $this->transactions = AccountBlock::notToEmpty()
-            ->notFromPillarProducer()
+            ->where(function ($q) {
+                $q->whereNotIn('contract_method_id', [36, 68]) // Ignore update contract calls
+                    ->orWhereNull('contract_method_id');
+            })
             ->orderBy('id', 'DESC')
             ->limit(6)
             ->get();
