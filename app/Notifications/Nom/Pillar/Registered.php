@@ -59,7 +59,7 @@ class Registered extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new pillar has been registered! Welcome to the network {$this->pillar->name}!
+        return new TwitterStatusUpdate("ℹ️ A new pillar has been registered! Welcome to the network {$this->pillar->name}!
 
 🔗 $link
 

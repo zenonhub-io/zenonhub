@@ -60,7 +60,7 @@ class Revoked extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A pillar has been revoked! {$this->pillar->name} was dismantled by {$accountName}
+        return new TwitterStatusUpdate("ℹ️ A pillar has been revoked! {$this->pillar->name} was dismantled by {$accountName}
 
 🔗 $link
 

@@ -60,7 +60,7 @@ class ProjectCreated extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new project has been submitted! {$this->project->name} was created by {$accountName}
+        return new TwitterStatusUpdate("ℹ️ A new project has been submitted! {$this->project->name} was created by {$accountName}
 
 🔗 $link
 

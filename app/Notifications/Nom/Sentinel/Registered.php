@@ -59,7 +59,7 @@ class Registered extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new sentinel has been registered!
+        return new TwitterStatusUpdate("ℹ️ A new sentinel has been registered!
 
 🔗 $link
 

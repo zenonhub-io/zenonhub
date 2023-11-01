@@ -59,7 +59,7 @@ class PhaseAdded extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new phase has been created! {$this->phase->name} was added to the {$this->phase->project->name} project
+        return new TwitterStatusUpdate("ℹ️ A new phase has been created! {$this->phase->name} was added to the {$this->phase->project->name} project
 
 🔗 $link
 
