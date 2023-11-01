@@ -10,7 +10,7 @@ class Pillars
     public function show()
     {
         Meta::title('Zenon Network Pillars: Explore the Backbone of the Network of Momentum')
-            ->description("Discover the complete list of Zenon Network's pillars and delve into essential statistical insights. Explore key data on transactions, consensus, and network stability");
+            ->description("Discover the complete list of Zenon Network's pillars and delve into essential statistics. Explore key data on weight, engagement, reward sharing, and network stability");
 
         return view('pages/pillars/overview');
     }

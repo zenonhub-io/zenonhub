@@ -31,7 +31,7 @@ class Accounts
         ])->filter()->implode(' | ');
 
         Meta::title($metaTitle)
-            ->description("The Address {$account->address} page shows key account details including balances, staking, plasma as well as detailed lists of transactions, rewards, delegations, token holdings, stakes, fusions and projects");
+            ->description("The Address {$account->address} page shows key account details including balances, total rewards, plasma as well as detailed lists of transactions, rewards, delegations, token holdings, stakes, fusions and projects");
 
         return view('pages/explorer/detail', [
             'view' => 'explorer.account',

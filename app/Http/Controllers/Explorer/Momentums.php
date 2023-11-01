@@ -10,7 +10,7 @@ class Momentums
     public function show()
     {
         Meta::title('Zenon Network Momentums (blocks)')
-            ->description('Momentums that have been confirmed on the Zenon Network. The timestamp, producer, number of transactions and hash are shown in the list');
+            ->description('A list of the latest confirmed Momentums on the Zenon Network. The timestamp, producer, number of transactions and hash are shown in the list');
 
         return view('pages/explorer/overview', [
             'view' => 'explorer.momentums',

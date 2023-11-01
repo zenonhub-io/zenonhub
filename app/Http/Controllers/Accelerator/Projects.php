@@ -10,7 +10,7 @@ class Projects
     public function show()
     {
         Meta::title('Accelerator-Z Projects: Fueling Innovation in the Network of Momentum')
-            ->description('Explore the diverse array of innovative projects supported by Accelerator-Z within the Network of Momentum ecosystem. Discover the cutting-edge developments and groundbreaking initiatives driving the future of blockchain and Web3 technology.');
+            ->description('Explore the diverse array of innovative projects funded by Accelerator-Z within the Network of Momentum ecosystem. A list of all Accelerator-Z projects showing their phases, votes and funding request.');
 
         return view('pages/az/overview');
     }
