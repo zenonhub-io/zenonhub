@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Meta;
 
@@ -21,7 +22,7 @@ class Login
         ]);
     }
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -34,26 +35,26 @@ class Login
             'password' => $request->input('password'),
         ];
 
-        if (Auth::attempt($credentials, $request->input('remember'))) {
-            $request->session()->regenerate();
-
-            $user = auth()->user();
-            $user->last_login_at = now();
-            auth()->user()->save();
-
-            if ($url = $request->input('redirect')) {
-                return redirect()->to($url);
-            }
-
-            return redirect()->route('home');
+        if (! Auth::attempt($credentials, $request->input('remember'))) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        $request->session()->regenerate();
+
+        $user = auth()->user();
+        $user->last_login_at = now();
+        $user->save();
+
+        if ($url = $request->input('redirect')) {
+            return redirect()->to($url);
+        }
+
+        return redirect()->route('home');
     }
 
-    public function destroy(Request $request): \Illuminate\Http\RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
         Auth::logout();
         $request->session()->invalidate();

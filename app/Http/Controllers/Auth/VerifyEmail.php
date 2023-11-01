@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Meta;
 
@@ -23,10 +24,7 @@ class VerifyEmail
         ]);
     }
 
-    /**
-     * @throws AuthorizationException
-     */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
             throw new AuthorizationException;

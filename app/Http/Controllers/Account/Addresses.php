@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class Addresses
 {
-    public function show(Request $request)
+    public function show()
     {
         $this->page['meta']['title'] = 'Account Addresses';
         $this->page['data'] = [
@@ -49,44 +49,43 @@ class Addresses
             $request->input('signature')
         );
 
-        if ($verified) {
-            $user = $request->user();
-
-            if ($request->input('default')) {
-                $user->nom_accounts()->each(function ($account) {
-                    $account->pivot->is_default = false;
-                    $account->pivot->save();
-                });
-            }
-
-            $accountIds = $user->nom_accounts()->pluck('account_id')->toArray();
-
-            if (! in_array($account->id, $accountIds)) {
-                $user->nom_accounts()->attach($account, [
-                    'nickname' => $request->input('nickname'),
-                    'is_pillar' => Utilities::isPillar($account->address),
-                    'is_sentinel' => Utilities::isSentinel($account->address),
-                    'is_default' => $request->input('default', false),
-                    'verified_at' => now(),
-                ]);
-            } else {
-                $user->nom_accounts()->updateExistingPivot($account->id, [
-                    'nickname' => $request->input('nickname'),
-                    'is_pillar' => Utilities::isPillar($account->address),
-                    'is_sentinel' => Utilities::isSentinel($account->address),
-                    'is_default' => $request->input('default', false),
-                ]);
-            }
-
-            return redirect()->route('account.addresses')
-                ->with('alert', [
-                    'type' => 'success',
-                    'message' => 'Address verified!',
-                    'icon' => 'check-circle-fill',
-                ]);
-        } else {
+        if (! $verified) {
             return back()
                 ->withErrors(['signature' => 'Invalid signature provided']);
         }
+        $user = $request->user();
+
+        if ($request->input('default')) {
+            $user->nom_accounts()->each(function ($account) {
+                $account->pivot->is_default = false;
+                $account->pivot->save();
+            });
+        }
+
+        $accountIds = $user->nom_accounts()->pluck('account_id')->toArray();
+
+        if (! in_array($account->id, $accountIds)) {
+            $user->nom_accounts()->attach($account, [
+                'nickname' => $request->input('nickname'),
+                'is_pillar' => Utilities::isPillar($account->address),
+                'is_sentinel' => Utilities::isSentinel($account->address),
+                'is_default' => $request->input('default', false),
+                'verified_at' => now(),
+            ]);
+        } else {
+            $user->nom_accounts()->updateExistingPivot($account->id, [
+                'nickname' => $request->input('nickname'),
+                'is_pillar' => Utilities::isPillar($account->address),
+                'is_sentinel' => Utilities::isSentinel($account->address),
+                'is_default' => $request->input('default', false),
+            ]);
+        }
+
+        return redirect()->route('account.addresses')
+            ->with('alert', [
+                'type' => 'success',
+                'message' => 'Address verified!',
+                'icon' => 'check-circle-fill',
+            ]);
     }
 }
