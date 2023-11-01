@@ -59,7 +59,7 @@ class Revoked extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A sentinel has been revoked!
+        return new TwitterStatusUpdate("ℹ️ A sentinel has been revoked!
 
 🔗 $link
 

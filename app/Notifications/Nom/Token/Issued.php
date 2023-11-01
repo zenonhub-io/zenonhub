@@ -60,7 +60,7 @@ class Issued extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A new token has been issued! {$this->token->name} was created by {$accountName}
+        return new TwitterStatusUpdate("ℹ️ A new token has been issued! {$this->token->name} was created by {$accountName}
 
 🔗 $link
 

@@ -59,7 +59,7 @@ class Updated extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ - A pillar has been updated! {$this->pillar->name} changed their rewards to M:{$this->pillar->momentum_rewards }% / D:{$this->pillar->delegate_rewards}%
+        return new TwitterStatusUpdate("ℹ️ A pillar has been updated! {$this->pillar->name} changed their rewards to {$this->pillar->momentum_rewards }% / {$this->pillar->delegate_rewards}%
 
 🔗 $link
 
