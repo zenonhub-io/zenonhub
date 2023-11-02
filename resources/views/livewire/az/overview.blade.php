@@ -112,7 +112,7 @@
                                         <div class="d-flex align-items-center w-100">
                                             <div class="me-auto mb-0">
                                                 <div class="text-muted fs-xs">
-                                                    Phase #{{ $phase->phase_number }}
+                                                    Phase {{ $phase->phase_number }}
                                                 </div>
                                                 {{ $phase->name }}
                                             </div>
