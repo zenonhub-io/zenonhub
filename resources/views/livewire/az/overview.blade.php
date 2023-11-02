@@ -105,37 +105,35 @@
                         {{ $project->description }}
                     </div>
                     @if ($project->phases->count())
-                        <div class="accordion mx-4 mb-4" id="phases-{{ $project->hash }}">
-                            @foreach ($project->phases->reverse() as $phase)
-                                <div class="accordion-item">
-                                    <div class="accordion-header" id="phase-heading-{{ $phase->hash }}">
-                                        <a class="accordion-button collapsed shadow-none rounded-3" role="button" data-bs-toggle="collapse" data-bs-target="#phase-collapse-{{ $phase->hash }}" aria-expanded="false" aria-controls="phase-collapse-{{ $phase->hash }}">
-                                            <div class="d-flex align-items-center">
-                                                <div class="me-3">{!! $phase->display_badge !!}</div>
+                        <ul class="list-group list-group-flush mb-0" id="phases-{{ $project->hash }}">
+                            @foreach ($project->phases as $phase)
+                                <li class="list-group-item px-4 py-3">
+                                    <div class="accordion-button collapsed" role="button" data-bs-toggle="collapse" data-bs-target="#phase-collapse-{{ $phase->hash }}" aria-expanded="false" aria-controls="phase-collapse-{{ $phase->hash }}">
+                                        <div class="d-flex align-items-center w-100">
+                                            <div class="me-auto mb-0">
+                                                <div class="text-muted fs-xs">
+                                                    Phase #{{ $phase->phase_number }}
+                                                </div>
                                                 {{ $phase->name }}
                                             </div>
-                                        </a>
+                                            <div class="ps-3">
+                                                {!! $phase->display_badge !!}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div id="phase-collapse-{{ $phase->hash }}" class="accordion-collapse collapse" aria-labelledby="phase-heading-{{ $phase->hash }}" data-bs-parent="#phases-{{ $project->hash }}">
-                                        <div class="accordion-body">
+                                    <div id="phase-collapse-{{ $phase->hash }}" class="accordion-collapse collapse" data-bs-parent="#phases-{{ $project->hash }}">
+                                        <div class="mt-4">
                                             <a href="{{ route('az.phase', ['hash' => $phase->hash]) }}">
                                                 <x-az-card-header :item="$phase"/>
                                             </a>
-                                            <p>
+                                            <p class="mb-0">
                                                 {{ $phase->description }}
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </li>
                             @endforeach
-                        </div>
-                    @else
-                        <x-alert
-                            message="No phases submitted"
-                            type="info"
-                            icon="info-circle-fill"
-                            class="mx-4 mb-4"
-                        />
+                        </ul>
                     @endif
                 </div>
             </div>
