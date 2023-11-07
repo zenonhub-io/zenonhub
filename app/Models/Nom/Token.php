@@ -266,7 +266,7 @@ class Token extends Model implements Sitemapable
         }])->where('token_standard', $zts)->first();
     }
 
-    public function getDisplayAmount($amount, $numDecimals = null)
+    public function getDisplayAmount($amount, $numDecimals = null, ?string $decimalsSeparator = '.', ?string $thousandsSeparator = ',')
     {
         if (is_null($amount)) {
             return '-';
@@ -278,11 +278,11 @@ class Token extends Model implements Sitemapable
         $number = $amount->toScale($outputDecimals, RoundingMode::DOWN);
 
         if ($this->decimals === 0 || $amount->getScale() === 0) {
-            return number_format((string) $amount->toBigInteger(), ($numDecimals ?: 0));
+            return number_format((string) $amount->toBigInteger(), ($numDecimals ?: 0), $decimalsSeparator, $thousandsSeparator);
         }
 
         if ($number->isGreaterThan(BigDecimal::of(1))) {
-            $number = number_format($number->toFloat(), $outputDecimals);
+            $number = number_format($number->toFloat(), $outputDecimals, $decimalsSeparator, $thousandsSeparator);
         }
 
         return rtrim(rtrim((string) $number, '0'), '.');
