@@ -141,9 +141,6 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
         Route::get('address-from-public-key', [App\Http\Controllers\Api\Utilities::class, 'addressFromPublicKey'])->name('addressFromPublicKey');
         Route::post('verify-signed-message', [App\Http\Controllers\Api\Utilities::class, 'verifySignedMessage'])->name('verifySignedMessage');
         Route::get('account-lp-balances', [App\Http\Controllers\Api\Utilities::class, 'accountLpBalances'])->name('accountLpBalances');
-        Route::get('token/total-supply-znn', [App\Http\Controllers\Api\Utilities::class, 'znnTotalSupply'])->name('znnTotalSupply');
-        Route::get('token/max-supply-znn', [App\Http\Controllers\Api\Utilities::class, 'znnMaxSupply'])->name('znnMaxSupply');
-        Route::get('token/total-supply-qsr', [App\Http\Controllers\Api\Utilities::class, 'qsrTotalSupply'])->name('qsrTotalSupply');
-        Route::get('token/max-supply-qsr', [App\Http\Controllers\Api\Utilities::class, 'qsrMaxSupply'])->name('qsrMaxSupply');
+        Route::get('token-supply/{token}/{value?}', [App\Http\Controllers\Api\Utilities::class, 'tokenSupply'])->name('tokenSupply');
     });
 });

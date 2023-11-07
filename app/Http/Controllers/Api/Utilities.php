@@ -94,35 +94,32 @@ class Utilities extends ApiController
         return $this->success($accounts);
     }
 
-    public function znnTotalSupply(): string
+    public function tokenSupply(string $zts, ?string $value = 'total'): string
     {
-        $znnToken = Token::findByZts(Token::ZTS_ZNN);
-        $totalSupply = $znnToken->raw_json->totalSupply;
+        $allowedValues = [
+            'total',
+            'max',
+            'circulating',
+        ];
 
-        return $znnToken->getDisplayAmount($totalSupply, $znnToken->decimals, '.', '');
-    }
+        if (! $zts || ! in_array($value, $allowedValues)) {
+            abort(404);
+        }
 
-    public function znnMaxSupply(): string
-    {
-        $znnToken = Token::findByZts(Token::ZTS_ZNN);
-        $maxSupply = $znnToken->raw_json->maxSupply;
+        $token = Token::findByZts($zts);
 
-        return $znnToken->getDisplayAmount($maxSupply, $znnToken->decimals, '.', '');
-    }
+        if (! $token) {
+            abort(404);
+        }
 
-    public function qsrTotalSupply(): string
-    {
-        $qsrToken = Token::findByZts(Token::ZTS_QSR);
-        $totalSupply = $qsrToken->raw_json->totalSupply;
+        if ($value === 'total' || $value === 'circulating') {
+            $supply = $token->raw_json->totalSupply;
+        }
 
-        return $qsrToken->getDisplayAmount($totalSupply, $qsrToken->decimals, '.', '');
-    }
+        if ($value === 'max') {
+            $supply = $token->raw_json->maxSupply;
+        }
 
-    public function qsrMaxSupply(): string
-    {
-        $qsrToken = Token::findByZts(Token::ZTS_QSR);
-        $maxSupply = $qsrToken->raw_json->maxSupply;
-
-        return $qsrToken->getDisplayAmount($maxSupply, $qsrToken->decimals, '.', '');
+        return $token->getDisplayAmount($supply, $token->decimals, '.', '');
     }
 }
