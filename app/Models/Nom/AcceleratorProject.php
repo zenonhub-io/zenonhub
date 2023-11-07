@@ -300,15 +300,17 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("project-{$this->id}-json", 10, function () {
-            try {
-                $znn = App::make(ZenonSdk::class);
+        $cacheKey = "nom.acceleratorProject.rawJson.{$this->id}";
 
-                return $znn->accelerator->getProjectById($this->hash)['data'];
-            } catch (\Exception $exception) {
-                return null;
-            }
-        });
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->accelerator->getProjectById($this->hash)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function getIsFavouritedAttribute()

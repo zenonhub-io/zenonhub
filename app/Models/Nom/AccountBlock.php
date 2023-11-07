@@ -263,15 +263,17 @@ class AccountBlock extends Model
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("block-{$this->id}", 60 * 5, function () {
-            try {
-                $znn = App::make(ZenonSdk::class);
+        $cacheKey = "nom.accountBlock.rawJson.{$this->id}";
 
-                return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
-            } catch (\Exception $exception) {
-                return null;
-            }
-        });
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->ledger->getAccountBlockByHash($this->hash)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function getIsUnReceivedAttribute()

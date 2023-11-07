@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
@@ -299,12 +300,16 @@ class Token extends Model implements Sitemapable
 
     public function getRawJsonAttribute()
     {
+        $cacheKey = "nom.token.rawJson.{$this->id}";
+
         try {
             $znn = App::make(ZenonSdk::class);
-
-            return $znn->token->getByZts($this->token_standard)['data'];
-        } catch (\Exception $exception) {
-            return null;
+            $data = $znn->token->getByZts($this->token_standard)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
         }
+
+        return $data;
     }
 }

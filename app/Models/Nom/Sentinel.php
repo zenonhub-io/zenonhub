@@ -2,6 +2,7 @@
 
 namespace App\Models\Nom;
 
+use App\Services\ZenonSdk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -73,15 +74,17 @@ class Sentinel extends Model
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("sentinel-{$this->id}-json", 60, function () {
-            try {
-                $znn = App::make('zenon.api');
+        $cacheKey = "nom.sentinel.rawJson.{$this->id}";
 
-                return $znn->sentinel->getByOwner($this->owner->address)['data'][0];
-            } catch (\Exception $exception) {
-                return null;
-            }
-        });
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->sentinel->getByOwner($this->owner->address)['data'][0];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function getDisplayRevocableInAttribute()
