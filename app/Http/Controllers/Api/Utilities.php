@@ -93,4 +93,36 @@ class Utilities extends ApiController
 
         return $this->success($accounts);
     }
+
+    public function znnTotalSupply(): string
+    {
+        $znnToken = Token::findByZts(Token::ZTS_ZNN);
+        $totalSupply = $znnToken->raw_json->totalSupply;
+
+        return $znnToken->getDisplayAmount($totalSupply, $znnToken->decimals, '.', '');
+    }
+
+    public function znnMaxSupply(): string
+    {
+        $znnToken = Token::findByZts(Token::ZTS_ZNN);
+        $maxSupply = $znnToken->raw_json->maxSupply;
+
+        return $znnToken->getDisplayAmount($maxSupply, $znnToken->decimals, '.', '');
+    }
+
+    public function qsrTotalSupply(): string
+    {
+        $qsrToken = Token::findByZts(Token::ZTS_QSR);
+        $totalSupply = $qsrToken->raw_json->totalSupply;
+
+        return $qsrToken->getDisplayAmount($totalSupply, $qsrToken->decimals, '.', '');
+    }
+
+    public function qsrMaxSupply(): string
+    {
+        $qsrToken = Token::findByZts(Token::ZTS_QSR);
+        $maxSupply = $qsrToken->raw_json->maxSupply;
+
+        return $qsrToken->getDisplayAmount($maxSupply, $qsrToken->decimals, '.', '');
+    }
 }
