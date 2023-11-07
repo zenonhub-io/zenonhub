@@ -20,7 +20,7 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
             Route::get('get-project-by-id', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getProjectById'])->name('getProjectById');
             Route::get('get-phase-by-id', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getPhaseById'])->name('getPhaseById');
             Route::get('get-pillar-votes', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getPillarVotes'])->name('getPillarVotes');
-            Route::get('get-vote-breakdown', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getPillarVotes'])->name('getPillarVotes');
+            Route::get('get-vote-breakdown', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getVoteBreakdown'])->name('getVoteBreakdown');
         });
 
         Route::prefix('bridge')->name('Bridge.')->group(function () {
