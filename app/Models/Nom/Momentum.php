@@ -130,15 +130,17 @@ class Momentum extends Model
 
     public function getRawJsonAttribute()
     {
-        return Cache::rememberForever("momentum-{$this->id}", function () {
-            try {
-                $znn = App::make(ZenonSdk::class);
+        $cacheKey = "nom.momentum.rawJson.{$this->id}";
 
-                return $znn->ledger->getMomentumByHash($this->hash)['data'];
-            } catch (\Exception $exception) {
-                return null;
-            }
-        });
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->ledger->getMomentumByHash($this->hash)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function getIsFavouritedAttribute()

@@ -8,7 +8,6 @@ tasks:
     - npx:build:production
     - npx:build:cleanup
     - artisan:storage:link
-    - artisan:view:cache
     - artisan:down
     - artisan:migrate
     - deploy:publish

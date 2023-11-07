@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 
@@ -266,7 +267,7 @@ class Token extends Model implements Sitemapable
         }])->where('token_standard', $zts)->first();
     }
 
-    public function getDisplayAmount($amount, $numDecimals = null)
+    public function getDisplayAmount($amount, $numDecimals = null, ?string $decimalsSeparator = '.', ?string $thousandsSeparator = ',')
     {
         if (is_null($amount)) {
             return '-';
@@ -278,11 +279,11 @@ class Token extends Model implements Sitemapable
         $number = $amount->toScale($outputDecimals, RoundingMode::DOWN);
 
         if ($this->decimals === 0 || $amount->getScale() === 0) {
-            return number_format((string) $amount->toBigInteger(), ($numDecimals ?: 0));
+            return number_format((string) $amount->toBigInteger(), ($numDecimals ?: 0), $decimalsSeparator, $thousandsSeparator);
         }
 
         if ($number->isGreaterThan(BigDecimal::of(1))) {
-            $number = number_format($number->toFloat(), $outputDecimals);
+            $number = number_format($number->toFloat(), $outputDecimals, $decimalsSeparator, $thousandsSeparator);
         }
 
         return rtrim(rtrim((string) $number, '0'), '.');
@@ -299,12 +300,16 @@ class Token extends Model implements Sitemapable
 
     public function getRawJsonAttribute()
     {
+        $cacheKey = "nom.token.rawJson.{$this->id}";
+
         try {
             $znn = App::make(ZenonSdk::class);
-
-            return $znn->token->getByZts($this->token_standard)['data'];
-        } catch (\Exception $exception) {
-            return null;
+            $data = $znn->token->getByZts($this->token_standard)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
         }
+
+        return $data;
     }
 }

@@ -472,15 +472,17 @@ class Account extends Model implements Sitemapable
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("account-{$this->id}-json", 10, function () {
-            try {
-                $znn = App::make(ZenonSdk::class);
+        $cacheKey = "nom.account.rawJson.{$this->id}";
 
-                return $znn->ledger->getAccountInfoByAddress($this->address)['data'];
-            } catch (\Exception $exception) {
-                return null;
-            }
-        });
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->ledger->getAccountInfoByAddress($this->address)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function getFusedQsrAttribute()

@@ -254,15 +254,17 @@ class Pillar extends Model implements Sitemapable
 
     public function getRawJsonAttribute()
     {
-        return Cache::remember("pillar-{$this->id}-json", 60, function () {
-            try {
-                $znn = App::make(ZenonSdk::class);
+        $cacheKey = "nom.pillar.rawJson.{$this->id}";
 
-                return $znn->pillar->getByOwner($this->owner->address)['data'][0];
-            } catch (\Exception $exception) {
-                return null;
-            }
-        });
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->pillar->getByOwner($this->owner->address)['data'][0];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function getIsProducingAttribute()

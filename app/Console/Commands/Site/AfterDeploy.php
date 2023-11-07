@@ -29,8 +29,10 @@ class AfterDeploy extends Command
     public function handle()
     {
         $this->info('Running deployment scripts');
-        $this->call('optimize:clear');
+        $this->call('config:cache');
         $this->call('event:cache');
+        $this->call('route:cache');
+        $this->call('view:cache');
         $this->call('zenon:update-contract-methods');
         $this->call('zenon:update-named-addresses');
         $this->call('zenon:update-node-list');
