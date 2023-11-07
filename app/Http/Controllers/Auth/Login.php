@@ -15,7 +15,8 @@ class Login
             return redirect()->route('account.details');
         }
 
-        Meta::title('Login to Zenon Hub', false);
+        Meta::title('Login to Zenon Hub', false)
+            ->canonical(request()->url());
 
         return view('pages/auth', [
             'view' => 'auth.login',
