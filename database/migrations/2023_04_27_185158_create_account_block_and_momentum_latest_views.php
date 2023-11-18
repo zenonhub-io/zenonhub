@@ -24,7 +24,7 @@ LIMIT 50000;
 CREATE OR REPLACE VIEW view_latest_nom_account_blocks AS
 SELECT *
 FROM nom_account_blocks
-WHERE to_account_id != 1
+WHERE to_account_id != 1 AND (contract_method_id NOT IN (36, 68) OR contract_method_id IS null)
 ORDER BY id DESC
 LIMIT 50000;
 ');
