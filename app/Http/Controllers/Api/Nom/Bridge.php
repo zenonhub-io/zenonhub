@@ -304,7 +304,7 @@ class Bridge extends ApiController
         }
 
         try {
-            $response = $this->znn->bridge->getUnwrapTokenRequestByHashAndLog(
+            $response = $this->znn->bridge->getAllUnwrapTokenRequests(
                 $request->input('page', 0),
                 $request->input('per_page', 100),
             );
