@@ -4,8 +4,6 @@ namespace App\Actions;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
-use App\Services\ZenonSdk;
-use Illuminate\Support\Facades\App;
 
 class ProcessAccountBalance
 {
@@ -29,10 +27,9 @@ class ProcessAccountBalance
 
     private function saveCurrentBalance(): void
     {
-        $znn = App::make(ZenonSdk::class);
-        $apiData = $znn->ledger->getAccountInfoByAddress($this->account->address);
+        $apiData = $this->account->raw_json;
 
-        foreach ($apiData['data']->balanceInfoMap as $tokenStandard => $holdings) {
+        foreach ($apiData->balanceInfoMap as $tokenStandard => $holdings) {
             if ($tokenStandard === Token::ZTS_ZNN) {
                 $this->account->znn_balance = $holdings->balance;
             }
