@@ -41,7 +41,7 @@ class Home
                     'value' => Pillar::isActive()->count(),
                 ], [
                     'name' => 'Sentinels',
-                    'link' => route('explorer.accounts', ['tab' => 'sentiensl']),
+                    'link' => route('explorer.accounts', ['tab' => 'sentinels']),
                     'value' => Sentinel::isActive()->count(),
                 ],
             ],
