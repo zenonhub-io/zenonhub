@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Actions\Nom\Accelerator\SendPhaseVotingReminders;
+use App\Actions\Nom\Accelerator\SendProjectVotingReminders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,6 +22,14 @@ class Kernel extends ConsoleKernel
         $schedule->command('zenon:update-znn-price')->hourly();
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();
+
+        $schedule->call(function () {
+            (new SendProjectVotingReminders())->execute();
+        })->dailyAt('16:05')->environments('production');
+
+        $schedule->call(function () {
+            (new SendPhaseVotingReminders())->execute();
+        })->dailyAt('17:05')->environments('production');
 
         $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }

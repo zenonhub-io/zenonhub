@@ -127,6 +127,11 @@ class AcceleratorPhase extends Model implements Sitemapable
         return $query->where('status', self::STATUS_PAID);
     }
 
+    public function scopeCreatedAfter($query, $date)
+    {
+        return $query->where('created_at', '>=', $date);
+    }
+
     //
     // Attributes
 
