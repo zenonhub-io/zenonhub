@@ -64,7 +64,6 @@ class AcceleratorPhase extends Model implements Sitemapable
         'vote_total',
         'vote_yes',
         'vote_no',
-        'send_reminders_at',
         'accepted_at',
         'created_at',
         'updated_at',
@@ -76,7 +75,6 @@ class AcceleratorPhase extends Model implements Sitemapable
      * @var array
      */
     protected $casts = [
-        'send_reminders_at' => 'datetime',
         'accepted_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -110,12 +108,6 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     //
     // Scopes
-
-    public function scopeReminderDue($query)
-    {
-        return $query->whereNotNull('send_reminders_at')
-            ->where('send_reminders_at', '<', now());
-    }
 
     public function scopeIsOpen($query)
     {

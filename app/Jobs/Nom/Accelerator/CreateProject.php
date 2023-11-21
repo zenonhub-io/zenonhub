@@ -10,7 +10,6 @@ use App\Models\Nom\AccountBlock;
 use App\Models\NotificationType;
 use App\Services\CoinGecko;
 use App\Services\ZenonSdk;
-use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -79,7 +78,6 @@ class CreateProject implements ShouldQueue
                 'vote_total' => $projectData->votes->total,
                 'vote_yes' => $projectData->votes->yes,
                 'vote_no' => $projectData->votes->no,
-                'send_reminders_at' => Carbon::createFromTimestamp($projectData->creationTimestamp)->addDays(13),
                 'modified_at' => $projectData->creationTimestamp,
                 'updated_at' => $projectData->lastUpdateTimestamp,
                 'created_at' => $projectData->creationTimestamp,
