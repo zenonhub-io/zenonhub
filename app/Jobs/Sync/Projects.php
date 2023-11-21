@@ -6,7 +6,6 @@ use App\Classes\Utilities;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Services\ZenonSdk;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -80,7 +79,6 @@ class Projects implements ShouldQueue
                     'vote_total' => $data->votes->total,
                     'vote_yes' => $data->votes->yes,
                     'vote_no' => $data->votes->no,
-                    'send_reminders_at' => Carbon::createFromTimestamp($data->creationTimestamp)->addDays(13),
                     'modified_at' => $data->creationTimestamp,
                     'created_at' => $data->creationTimestamp,
                     'updated_at' => $data->lastUpdateTimestamp,
@@ -121,7 +119,6 @@ class Projects implements ShouldQueue
                     'vote_total' => $data->votes->total,
                     'vote_yes' => $data->votes->yes,
                     'vote_no' => $data->votes->no,
-                    'send_reminders_at' => Carbon::createFromTimestamp($data->phase->creationTimestamp)->addDays(13),
                     'accepted_at' => ($data->phase->acceptedTimestamp ?: null),
                     'created_at' => $data->phase->creationTimestamp,
                 ]);

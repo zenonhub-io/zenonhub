@@ -2,6 +2,10 @@
 
 namespace App\Console;
 
+use App\Actions\Nom\Accelerator\SendPhaseVotingReminders;
+use App\Actions\Nom\Accelerator\SendProjectVotingReminders;
+use App\Actions\PlasmaBot\CancelExpired;
+use App\Actions\PlasmaBot\ReceiveAll;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -11,15 +15,26 @@ class Kernel extends ConsoleKernel
     {
         $this->runIndexer($schedule);
 
-        $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        $schedule->command('horizon:snapshot')->everyFiveMinutes()->environments('production');
         $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
-        $schedule->command('plasma-bot:clear-expired')->everyFifteenMinutes();
-        $schedule->command('plasma-bot:receive-all')->everyFifteenMinutes();
         $schedule->command('zenon:sync az-status')->hourly();
         $schedule->command('zenon:update-znn-price')->hourly();
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();
+
+        $schedule->call(function () {
+            (new CancelExpired())->execute();
+            (new ReceiveAll())->execute();
+        })->everyFifteenMinutes()->environments('production');
+
+        $schedule->call(function () {
+            (new SendProjectVotingReminders())->execute();
+        })->dailyAt('16:05')->environments('production');
+
+        $schedule->call(function () {
+            (new SendPhaseVotingReminders())->execute();
+        })->dailyAt('17:05')->environments('production');
 
         $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }

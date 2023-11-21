@@ -28,7 +28,6 @@ return new class extends Migration
             $table->integer('vote_total')->default(0)->index();
             $table->integer('vote_yes')->default(0)->index();
             $table->integer('vote_no')->default(0)->index();
-            $table->timestamp('send_reminders_at')->nullable();
             $table->timestamp('modified_at')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
@@ -51,7 +50,6 @@ return new class extends Migration
             $table->integer('vote_total')->default(0)->index();
             $table->integer('vote_yes')->default(0)->index();
             $table->integer('vote_no')->default(0)->index();
-            $table->timestamp('send_reminders_at')->nullable();
             $table->timestamp('accepted_at')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

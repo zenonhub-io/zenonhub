@@ -2,7 +2,7 @@
 
 namespace App\Notifications\Nom\Accelerator;
 
-use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\AcceleratorPhase;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -11,11 +11,11 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class ProjectVoteReminder extends Notification implements ShouldQueue
+class PhaseVoteReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected AcceleratorProject $project)
+    public function __construct(protected AcceleratorPhase $phase)
     {
     }
 
@@ -32,20 +32,20 @@ class ProjectVoteReminder extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $totalYes = $this->project->votes()->where('is_yes', '1')->count();
-        $totalNo = $this->project->votes()->where('is_no', '1')->count();
-        $totalAbstain = $this->project->votes()->where('is_abstain', '1')->count();
-        $totalVotesNeeded = $this->project->total_more_votes_needed;
+        $totalYes = $this->phase->votes()->where('is_yes', '1')->count();
+        $totalNo = $this->phase->votes()->where('is_no', '1')->count();
+        $totalAbstain = $this->phase->votes()->where('is_abstain', '1')->count();
+        $totalVotesNeeded = $this->phase->total_more_votes_needed;
         $votesText = Str::plural('vote', $totalVotesNeeded);
-        $progressBar = $this->generateProgressBar($this->project->votes_percentage);
+        $progressBar = $this->generateProgressBar($this->phase->votes_percentage);
 
-        $link = route('az.project', [
-            'hash' => $this->project->hash,
+        $link = route('az.phase', [
+            'hash' => $this->phase->hash,
             'utm_source' => 'network_bot',
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("🗳 {$this->project->name} needs {$totalVotesNeeded} more {$votesText}!
+        return new TwitterStatusUpdate("🗳 {$this->phase->name} needs {$totalVotesNeeded} more {$votesText}!
 
 ✅ $totalYes | ❌ $totalNo | ⚫️ $totalAbstain
 
