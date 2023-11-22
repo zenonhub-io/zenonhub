@@ -143,6 +143,11 @@ class AcceleratorProject extends Model implements Sitemapable
         return $query->where('status', self::STATUS_REJECTED);
     }
 
+    public function scopeIsNotRejected($query)
+    {
+        return $query->where('status', '!=', self::STATUS_REJECTED);
+    }
+
     public function scopeIsCompleted($query)
     {
         return $query->where('status', self::STATUS_COMPLETE);
@@ -180,6 +185,14 @@ class AcceleratorProject extends Model implements Sitemapable
         return $query->orderByRaw('(status = 0) DESC')
             ->orderBy('modified_at', 'desc')
             ->orderBy('slug', 'desc');
+    }
+
+    public function scopeHasRemainingFunds($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('znn_remaining', '>', 0)
+                ->orWhere('qsr_remaining', '>', 0);
+        });
     }
 
     //

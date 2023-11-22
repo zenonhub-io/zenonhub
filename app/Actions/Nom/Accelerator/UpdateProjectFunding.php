@@ -10,18 +10,20 @@ class UpdateProjectFunding
 {
     use QueueableAction;
 
-    public function __construct(
-        protected AcceleratorProject $project,
-    ) {
-    }
-
     public function execute(): void
     {
-        $this->project->refresh();
-        $this->project->znn_paid = $this->project->phases()->where('status', AcceleratorPhase::STATUS_PAID)->sum('znn_requested');
-        $this->project->qsr_paid = $this->project->phases()->where('status', AcceleratorPhase::STATUS_PAID)->sum('qsr_requested');
-        $this->project->znn_remaining = ($this->project->znn_requested - $this->project->znn_paid);
-        $this->project->qsr_remaining = ($this->project->qsr_requested - $this->project->qsr_paid);
-        $this->project->save();
+        $projects = AcceleratorProject::hasRemainingFunds()
+            ->isNotRejected()
+            ->whereHas('phases')
+            ->get();
+
+        $projects->each(function ($project) {
+            $project->refresh();
+            $project->znn_paid = $project->phases()->where('status', AcceleratorPhase::STATUS_PAID)->sum('znn_requested');
+            $project->qsr_paid = $project->phases()->where('status', AcceleratorPhase::STATUS_PAID)->sum('qsr_requested');
+            $project->znn_remaining = ($project->znn_requested - $project->znn_paid);
+            $project->qsr_remaining = ($project->qsr_requested - $project->qsr_paid);
+            $project->save();
+        });
     }
 }
