@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Actions\Nom\Accelerator\SendPhaseVotingReminders;
 use App\Actions\Nom\Accelerator\SendProjectVotingReminders;
+use App\Actions\Nom\Accelerator\UpdateProjectFunding;
 use App\Actions\PlasmaBot\CancelExpired;
 use App\Actions\PlasmaBot\ReceiveAll;
 use Illuminate\Console\Scheduling\Schedule;
@@ -29,12 +30,16 @@ class Kernel extends ConsoleKernel
         })->everyFifteenMinutes()->environments('production');
 
         $schedule->call(function () {
+            (new UpdateProjectFunding())->execute();
+        })->hourly();
+
+        $schedule->call(function () {
             (new SendProjectVotingReminders())->execute();
-        })->dailyAt('16:05')->environments('production');
+        })->dailyAt('05 16 */2 * *')->environments('production');
 
         $schedule->call(function () {
             (new SendPhaseVotingReminders())->execute();
-        })->dailyAt('17:05')->environments('production');
+        })->dailyAt('05 17 */4 * *')->environments('production');
 
         $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }

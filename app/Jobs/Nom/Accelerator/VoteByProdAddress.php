@@ -4,7 +4,6 @@ namespace App\Jobs\Nom\Accelerator;
 
 use App\Actions\Nom\Accelerator\SyncPhaseStatus;
 use App\Actions\Nom\Accelerator\SyncProjectStatus;
-use App\Actions\Nom\Accelerator\UpdateProjectFunding;
 use App\Actions\SetBlockAsProcessed;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
@@ -81,7 +80,6 @@ class VoteByProdAddress implements ShouldQueue
             Cache::forget("accelerator_phase-{$item->id}-total-no-votes");
             Cache::forget("accelerator_phase-{$item->id}-total-abstain-votes");
             (new SyncPhaseStatus($item))->execute();
-            (new UpdateProjectFunding($item->project))->execute();
         }
 
         $vote = $item
