@@ -45,7 +45,7 @@ class PhaseVoteReminder extends Notification implements ShouldQueue
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("🗳 {$this->phase->name} needs {$totalVotesNeeded} more {$votesText}!
+        return new TwitterStatusUpdate("🗳 {$this->phase->name} of {$this->phase->project->name} needs {$totalVotesNeeded} more {$votesText}!
 
 ✅ $totalYes | ❌ $totalNo | ⚫️ $totalAbstain
 
