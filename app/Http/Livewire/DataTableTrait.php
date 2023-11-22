@@ -35,7 +35,7 @@ trait DataTableTrait
     {
         $this->order = $this->sort === $field
             ? $this->reverseSort()
-            : 'asc';
+            : 'desc';
 
         $this->sort = $field;
 
