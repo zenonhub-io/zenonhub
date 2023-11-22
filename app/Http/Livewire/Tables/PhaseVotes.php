@@ -10,8 +10,8 @@ use Livewire\WithPagination;
 
 class PhaseVotes extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public AcceleratorPhase $phase;
 
@@ -49,7 +49,7 @@ class PhaseVotes extends Component
 
         if ($this->sort === 'pillar') {
             $this->query->orderBy(
-                Pillar::select('name')->whereColumn('nom_pillars.owner_id', 'nom_accelerator_phase_votes.owner_id'),
+                Pillar::select('name')->whereColumn('nom_pillars.owner_id', 'nom_accelerator_votes.owner_id'),
                 $this->order
             );
         } else {

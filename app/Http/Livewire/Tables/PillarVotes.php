@@ -11,8 +11,8 @@ use Livewire\WithPagination;
 
 class PillarVotes extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Pillar $pillar;
 
@@ -75,13 +75,6 @@ class PillarVotes extends Component
             return;
         }
 
-        if ($this->sort === 'project') {
-            $this->query->orderBy(
-                AcceleratorProject::select('name')->whereColumn('nom_accelerator_projects.id', 'nom_accelerator_project_votes.accelerator_project_id'),
-                $this->order
-            );
-        } else {
-            $this->query->orderBy($this->sort, $this->order);
-        }
+        $this->query->orderBy($this->sort, $this->order);
     }
 }

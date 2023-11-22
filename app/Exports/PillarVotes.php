@@ -22,7 +22,7 @@ class PillarVotes implements FromQuery, WithHeadings, WithMapping
 
     public ?string $order;
 
-    public function __construct(Pillar $pillar, ?string $search = null, ?string $sort = null, ?string $order = null)
+    public function __construct(Pillar $pillar, string $search = null, string $sort = null, string $order = null)
     {
         $this->pillar = $pillar;
         $this->search = $search;
@@ -72,14 +72,7 @@ class PillarVotes implements FromQuery, WithHeadings, WithMapping
             });
         }
 
-        if ($this->sort === 'project') {
-            $query->orderBy(
-                AcceleratorProject::select('name')->whereColumn('nom_accelerator_projects.id', 'nom_accelerator_project_votes.accelerator_project_id'),
-                $this->order
-            );
-        } else {
-            $query->orderBy($this->sort, $this->order);
-        }
+        $query->orderBy($this->sort, $this->order);
 
         return $query;
     }
