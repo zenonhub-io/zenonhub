@@ -5,14 +5,13 @@ namespace App\Jobs;
 use App\Models\Nom\Account;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
+class ProcessAccountBalance implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,11 +30,6 @@ class ProcessAccountBalance implements ShouldBeUnique, ShouldQueue
     public function __construct(
         protected Account $account
     ) {
-    }
-
-    public function uniqueId(): string
-    {
-        return $this->account->id;
     }
 
     public function handle(): void
