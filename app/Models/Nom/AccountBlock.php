@@ -187,6 +187,14 @@ class AccountBlock extends Model
         return $query->whereNotIn('account_id', $producerIds);
     }
 
+    public function scopeNotContractUpdate($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNotIn('contract_method_id', [36, 68]) // Ignore update contract calls
+                ->orWhereNull('contract_method_id');
+        });
+    }
+
     //
     // Attributes
 
