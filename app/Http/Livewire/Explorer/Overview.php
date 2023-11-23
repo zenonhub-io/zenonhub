@@ -32,10 +32,7 @@ class Overview extends Component
             ->get();
 
         $this->transactions = AccountBlock::notToEmpty()
-            ->where(function ($q) {
-                $q->whereNotIn('contract_method_id', [36, 68]) // Ignore update contract calls
-                    ->orWhereNull('contract_method_id');
-            })
+            ->notContractUpdate()
             ->orderBy('id', 'DESC')
             ->limit(6)
             ->get();
