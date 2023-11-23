@@ -35,11 +35,17 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             (new SendProjectVotingReminders())->execute();
-        })->dailyAt('05 16 */2 * *')->environments('production');
+        })
+            ->at('16:05')
+            ->days(Schedule::MONDAY, Schedule::WEDNESDAY, Schedule::FRIDAY)
+            ->environments('production');
 
         $schedule->call(function () {
             (new SendPhaseVotingReminders())->execute();
-        })->dailyAt('05 17 */4 * *')->environments('production');
+        })
+            ->at('16:05')
+            ->days(Schedule::TUESDAY, Schedule::THURSDAY)
+            ->environments('production');
 
         $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }
