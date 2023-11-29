@@ -53,7 +53,7 @@ class ProjectCreated extends Notification implements ShouldQueue
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $accountName = short_address($this->token->owner);
+        $accountName = short_address($this->project->owner);
         $link = route('az.project', [
             'hash' => $this->project->hash,
             'utm_source' => 'network_bot',
