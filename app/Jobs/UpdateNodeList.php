@@ -17,7 +17,7 @@ class UpdateNodeList implements ShouldQueue
 
     public int $tries = 5;
 
-    protected string $nodesJsonUrl = 'https://github.com/Sol-Sanctum/Zenon-PoCs/releases/download/znn_node_info/output_nodes.json';
+    protected string $nodesJsonUrl = 'https://github.com/sol-znn/znn-node-parser/releases/download/public_nodes/output_nodes.json';
 
     /**
      * @var ?Collection
