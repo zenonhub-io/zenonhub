@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
             ->days(Schedule::TUESDAY, Schedule::THURSDAY)
             ->environments('production');
 
-        //$schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
+        $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
     }
 
     private function runIndexer(Schedule $schedule): void
