@@ -46,7 +46,7 @@
                                 <livewire:stats.nodes.versions key="{{now()}}" />
                             @endif
                             <div class="text-center text-md-end mt-3">
-                                <span class="fs-sm text-muted">Updated: {{ $updated }} | Data provided by <a href="https://github.com/Sol-Sanctum/Zenon-PoCs/tree/main/znn_node_info">Sol Sanctum</a></span>
+                                <span class="fs-sm text-muted">Updated: {{ $updated }} | Data provided by <a href="https://github.com/sol-znn/znn-node-parser">Sol Sanctum</a></span>
                             </div>
                         </div>
                     </div>
