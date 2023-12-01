@@ -31,7 +31,22 @@ class Overview extends Component
         ]);
     }
 
-    public function loadOverviewData(): void
+    private function loadBridgeStats()
+    {
+        $cacheKey = 'nom.bridgeStats.bridgeInfo';
+
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->bridge->getBridgeInfo()['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
+    }
+
+    public function loadLiquidityData()
     {
         $this->loadLiquidityData();
     }
