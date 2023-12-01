@@ -17,8 +17,7 @@ class Overview extends Component
 
     public function render()
     {
-        $znn = App::make(ZenonSdk::class);
-        $bridgeStats = $znn->bridge->getBridgeInfo()['data'];
+        $bridgeStats = $this->loadBridgeStats();
         $adminAccount = Account::findByAddress($bridgeStats->administrator);
         $orchestrators = Cache::get('orchestrators-online-percentage');
 
@@ -28,6 +27,21 @@ class Overview extends Component
             'orchestrators' => number_format($orchestrators),
             'affiliateLink' => config('zenon.bridge_affiliate_link'),
         ]);
+    }
+
+    private function loadBridgeStats()
+    {
+        $cacheKey = 'nom.bridgeStats.bridgeInfo';
+
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->bridge->getBridgeInfo()['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
     }
 
     public function loadLiquidityData()

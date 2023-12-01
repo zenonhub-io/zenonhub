@@ -4,12 +4,11 @@ namespace App\Http\Livewire\Stats\Bridge;
 
 use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class Security extends Component
 {
-    public bool $shouldLoad = false;
-
     public ?array $guardians;
 
     public ?array $timeChallenges;
@@ -21,9 +20,20 @@ class Security extends Component
 
     public function loadSecurityData()
     {
-        $znn = App::make(ZenonSdk::class);
-        $this->shouldLoad = true;
-        $this->guardians = (array) $znn->bridge->getSecurityInfo()['data'];
-        $this->timeChallenges = $znn->bridge->getTimeChallengesInfo()['data']->list;
+        $cacheKey = 'nom.bridgeStats.securityData';
+
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = [
+                'guardians' => (array) $znn->bridge->getSecurityInfo()['data'],
+                'timeChallenges' => $znn->bridge->getTimeChallengesInfo()['data']->list,
+            ];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        $this->guardians = $data['guardians'];
+        $this->timeChallenges = $data['timeChallenges'];
     }
 }
