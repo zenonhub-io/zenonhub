@@ -62,7 +62,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command($command)
             ->everyTenSeconds()
-            ->withoutOverlapping()
+            ->withoutOverlapping(3)
             ->runInBackground();
     }
 
