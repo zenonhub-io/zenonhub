@@ -42,7 +42,7 @@ class Utilities
         });
     }
 
-    public static function loadAccount(string $address): Account
+    public static function loadAccount(string $address, string $name = null): Account
     {
         $account = Account::findByAddress($address);
 
@@ -53,6 +53,7 @@ class Utilities
             $account = Account::create([
                 'chain_id' => $chain->id,
                 'address' => $address,
+                'name' => $name,
                 'public_key' => $block?->publicKey,
             ]);
         }
