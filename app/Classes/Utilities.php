@@ -3,6 +3,8 @@
 namespace App\Classes;
 
 use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
+use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
 use App\Services\ZenonSdk;
@@ -94,5 +96,12 @@ class Utilities
         }
 
         return $token;
+    }
+
+    public static function validateBridgeTx(AccountBlock $block): bool
+    {
+        $bridgeAdmin = BridgeAdmin::getActiveAdmin();
+
+        return $block->account_id === $bridgeAdmin->account_id;
     }
 }

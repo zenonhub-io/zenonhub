@@ -32,4 +32,20 @@ class BridgeAdmin extends Model
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');
     }
+
+    //
+    // Scopes
+
+    public function scopeGetActive($query)
+    {
+        return $query->whereNotNull('accepted_at')->whereNull('revoked_at');
+    }
+
+    //
+    // Methods
+
+    public static function getActiveAdmin(): BridgeAdmin
+    {
+        return static::getActive()->sole();
+    }
 }
