@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('token_address');
             $table->string('signature');
             $table->string('amount');
-            $table->boolean('is_redeemed');
-            $table->boolean('is_transferred');
+            $table->timestamp('redeemed_at');
+            $table->timestamp('transferred_at');
             $table->timestamps();
         });
     }

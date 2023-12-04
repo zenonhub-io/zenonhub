@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('nom_bridge_network_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('network_id')->nullable()->references('id')->on('nom_bridge_networks')->cascadeOnDelete();
+            $table->foreignId('bridge_network_id')->nullable()->references('id')->on('nom_bridge_networks')->cascadeOnDelete();
             $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->cascadeOnDelete();
             $table->string('token_address');
-            $table->boolean('is_bridgeable')->index();
-            $table->boolean('is_redeemable')->index();
-            $table->boolean('is_owned')->index();
-            $table->bigInteger('min_amount')->index();
-            $table->integer('fee_percentage')->index();
+            $table->string('min_amount');
+            $table->integer('fee_percentage');
             $table->integer('redeem_delay');
-            $table->text('metadata');
+            $table->text('metadata')->nullable();
+            $table->boolean('is_bridgeable')->default(0);
+            $table->boolean('is_redeemable')->default(0);
+            $table->boolean('is_owned')->default(0);
             $table->timestamps();
         });
     }

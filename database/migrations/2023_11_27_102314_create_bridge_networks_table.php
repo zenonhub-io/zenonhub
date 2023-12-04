@@ -14,8 +14,9 @@ return new class extends Migration
             $table->bigInteger('network_class');
             $table->string('name')->index();
             $table->string('contract_address');
-            $table->text('meta_data');
+            $table->text('meta_data')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

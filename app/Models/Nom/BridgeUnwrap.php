@@ -3,6 +3,7 @@
 namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BridgeUnwrap extends Model
 {
@@ -20,9 +21,38 @@ class BridgeUnwrap extends Model
         'token_address',
         'signature',
         'amount',
-        'is_redeemed',
-        'is_transferred',
+        'redeemed_at',
+        'transferred_at',
         'created_at',
         'updated_at',
     ];
+
+    protected $casts = [
+        'transferred_at' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    //
+    // Relations
+
+    public function network(): BelongsTo
+    {
+        return $this->belongsTo(BridgeNetwork::class, 'bridge_network_id', 'id');
+    }
+
+    public function to_account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'to_account_id', 'id');
+    }
+
+    public function token(): BelongsTo
+    {
+        return $this->belongsTo(Token::class, 'token_id', 'id');
+    }
+
+    public function account_block(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+    }
 }

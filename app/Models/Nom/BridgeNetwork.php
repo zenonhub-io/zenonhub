@@ -3,6 +3,8 @@
 namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BridgeNetwork extends Model
 {
@@ -18,5 +20,26 @@ class BridgeNetwork extends Model
         'meta_data',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
+
+    protected $casts = [
+        'meta_data' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
+    //
+    // Relations
+
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class);
+    }
+
+    public function tokens(): HasMany
+    {
+        return $this->hasMany(BridgeNetworkToken::class, 'token_id', 'id');
+    }
 }
