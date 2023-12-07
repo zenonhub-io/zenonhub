@@ -41,6 +41,11 @@ class BridgeAdmin extends Model
         return $query->whereNotNull('accepted_at')->whereNull('revoked_at');
     }
 
+    public function scopeIsProposed($query)
+    {
+        return $query->whereNull('accepted_at');
+    }
+
     //
     // Methods
 
