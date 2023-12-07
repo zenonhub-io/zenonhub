@@ -17,4 +17,3 @@ Route::redirect('tools/node-map', '/tools/node-statistics', 301);
 Route::redirect('tools/api', '/tools/api-playground', 301);
 Route::redirect('tools/node-statistics', '/stats/nodes', 301);
 Route::redirect('nodes', '/services/public-nodes', 301);
-Route::redirect('accelerator-z/missing-votes', '/utilities/missing-votes', 301);

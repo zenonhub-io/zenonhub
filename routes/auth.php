@@ -33,31 +33,29 @@ Route::get('sign-up', [\App\Http\Controllers\Auth\Signup::class, 'show'])
 Route::post('sign-up', [\App\Http\Controllers\Auth\Signup::class, 'store'])
     ->middleware('guest');
 
-Route::prefix('auth')->group(function () {
-    Route::get('forgot-password', [\App\Http\Controllers\Auth\ForgotPassword::class, 'show'])
-        ->middleware('guest')
-        ->name('password.request');
+Route::get('auth/forgot-password', [\App\Http\Controllers\Auth\ForgotPassword::class, 'show'])
+    ->middleware('guest')
+    ->name('password.request');
 
-    Route::post('forgot-password', [\App\Http\Controllers\Auth\ForgotPassword::class, 'store'])
-        ->middleware('guest');
+Route::post('auth/forgot-password', [\App\Http\Controllers\Auth\ForgotPassword::class, 'store'])
+    ->middleware('guest');
 
-    Route::get('reset-password/{token}', [\App\Http\Controllers\Auth\ResetPassword::class, 'show'])
-        ->middleware('guest')
-        ->name('password.reset');
+Route::get('auth/reset-password/{token}', [\App\Http\Controllers\Auth\ResetPassword::class, 'show'])
+    ->middleware('guest')
+    ->name('password.reset');
 
-    Route::post('reset-password', [\App\Http\Controllers\Auth\ResetPassword::class, 'store'])
-        ->middleware('guest')
-        ->name('password.update');
+Route::post('auth/reset-password', [\App\Http\Controllers\Auth\ResetPassword::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');
 
-    Route::post('resend-verification', [\App\Http\Controllers\Auth\SendVerification::class, 'store'])
-        ->middleware('auth')
-        ->name('verification.send');
+Route::post('auth/resend-verification', [\App\Http\Controllers\Auth\SendVerification::class, 'store'])
+    ->middleware('auth')
+    ->name('verification.send');
 
-    Route::get('verify-email', [\App\Http\Controllers\Auth\VerifyEmail::class, 'show'])
-        ->middleware('auth')
-        ->name('verification.notice');
+Route::get('auth/verify-email', [\App\Http\Controllers\Auth\VerifyEmail::class, 'show'])
+    ->middleware('auth')
+    ->name('verification.notice');
 
-    Route::get('verify-email/{id}/{hash}', [\App\Http\Controllers\Auth\VerifyEmail::class, 'store'])
-        ->middleware('auth')
-        ->name('verification.verify');
-});
+Route::get('auth/verify-email/{id}/{hash}', [\App\Http\Controllers\Auth\VerifyEmail::class, 'store'])
+    ->middleware('auth')
+    ->name('verification.verify');
