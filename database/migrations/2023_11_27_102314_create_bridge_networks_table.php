@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('nom_bridge_networks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
+            $table->bigInteger('chain_identifier');
             $table->bigInteger('network_class');
             $table->string('name')->index();
             $table->string('contract_address');

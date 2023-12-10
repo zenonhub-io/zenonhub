@@ -5,15 +5,19 @@ namespace App\Models\Nom;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BridgeNetwork extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'nom_bridge_networks';
 
     public $timestamps = false;
 
     protected $fillable = [
         'chain_id',
+        'chain_identifier',
         'network_class',
         'name',
         'contract_address',
@@ -40,6 +44,6 @@ class BridgeNetwork extends Model
 
     public function tokens(): HasMany
     {
-        return $this->hasMany(BridgeNetworkToken::class, 'token_id', 'id');
+        return $this->hasMany(BridgeNetworkToken::class, 'bridge_network_id', 'id');
     }
 }
