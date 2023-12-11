@@ -39,23 +39,21 @@ class SetTokenPair implements ShouldQueue
             return;
         }
 
-        $tokenData = $this->block->data->decoded;
-        $token = Token::findByZts($tokenData['tokenStandard']);
-        $network = BridgeNetwork::where('chain_identifier', $tokenData['chainId'])
-            ->where('network_class', $tokenData['networkClass'])
-            ->first();
+        $data = $this->block->data->decoded;
+        $token = Token::findByZts($data['tokenStandard']);
+        $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
 
         $network->tokens()->updateOrCreate([
             'token_id' => $token->id,
         ], [
-            'token_address' => $tokenData['tokenAddress'],
-            'min_amount' => $tokenData['minAmount'],
-            'fee_percentage' => $tokenData['feePercentage'],
-            'redeem_delay' => $tokenData['redeemDelay'],
-            'metadata' => json_decode($tokenData['metadata']),
-            'is_bridgeable' => $tokenData['bridgeable'],
-            'is_redeemable' => $tokenData['redeemable'],
-            'is_owned' => $tokenData['owned'],
+            'token_address' => $data['tokenAddress'],
+            'min_amount' => $data['minAmount'],
+            'fee_percentage' => $data['feePercentage'],
+            'redeem_delay' => $data['redeemDelay'],
+            'metadata' => json_decode($data['metadata']),
+            'is_bridgeable' => $data['bridgeable'],
+            'is_redeemable' => $data['redeemable'],
+            'is_owned' => $data['owned'],
             'created_at' => $this->block->created_at,
         ]);
 

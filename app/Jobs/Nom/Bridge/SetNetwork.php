@@ -40,25 +40,25 @@ class SetNetwork implements ShouldQueue
             return;
         }
 
-        $networkData = $this->block->data->decoded;
+        $data = $this->block->data->decoded;
 
         try {
-            $chain = Chain::where('chain_identifier', $networkData['chainId'])->sole();
+            $chain = Chain::where('chain_identifier', $data['chainId'])->sole();
         } catch (ModelNotFoundException $exception) {
-            Log::error("Set bridge network error, unknown chainId: {$networkData['chainId']}");
+            Log::error("Set bridge network error, unknown chainId: {$data['chainId']}");
 
             return;
         }
 
         $bridgeNetwork = BridgeNetwork::firstOrNew([
             'chain_id' => $chain->id,
-            'network_class' => $networkData['networkClass'],
-            'chain_identifier' => $networkData['chainId'],
+            'network_class' => $data['networkClass'],
+            'chain_identifier' => $data['chainId'],
         ]);
 
-        $bridgeNetwork->name = $networkData['name'];
-        $bridgeNetwork->contract_address = $networkData['contractAddress'];
-        $bridgeNetwork->meta_data = json_decode($networkData['metadata']);
+        $bridgeNetwork->name = $data['name'];
+        $bridgeNetwork->contract_address = $data['contractAddress'];
+        $bridgeNetwork->meta_data = json_decode($data['metadata']);
         $bridgeNetwork->updated_at = $this->block->created_at;
 
         if (! $bridgeNetwork->created_at) {

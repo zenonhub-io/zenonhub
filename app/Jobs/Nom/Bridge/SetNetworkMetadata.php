@@ -38,13 +38,10 @@ class SetNetworkMetadata implements ShouldQueue
             return;
         }
 
-        $networkData = $this->block->data->decoded;
-        $bridgeNetwork = BridgeNetwork::where([
-            'network_class' => $networkData['networkClass'],
-            'chain_identifier' => $networkData['chainId'],
-        ])->sole();
+        $data = $this->block->data->decoded;
+        $bridgeNetwork = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
 
-        $bridgeNetwork->meta_data = json_decode($networkData['metadata']);
+        $bridgeNetwork->meta_data = json_decode($data['metadata']);
         $bridgeNetwork->save();
 
         (new SetBlockAsProcessed($this->block))->execute();

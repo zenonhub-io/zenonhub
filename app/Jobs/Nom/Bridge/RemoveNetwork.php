@@ -9,7 +9,6 @@ use App\Models\Nom\BridgeNetwork;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -39,19 +38,8 @@ class RemoveNetwork implements ShouldQueue
             return;
         }
 
-        $networkData = $this->block->data->decoded;
-
-        try {
-            $bridgeNetwork = BridgeNetwork::where([
-                'network_class' => $networkData['networkClass'],
-                'chain_identifier' => $networkData['chainId'],
-            ])->sole();
-        } catch (ModelNotFoundException $exception) {
-            Log::error('Remove bridge network error, unknown network', $networkData);
-
-            return;
-        }
-
+        $data = $this->block->data->decoded;
+        $bridgeNetwork = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
         $bridgeNetwork->delete();
 
         (new SetBlockAsProcessed($this->block))->execute();

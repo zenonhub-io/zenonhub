@@ -46,4 +46,11 @@ class BridgeNetwork extends Model
     {
         return $this->hasMany(BridgeNetworkToken::class, 'bridge_network_id', 'id');
     }
+
+    public static function findByNetworkChain(int $networkClass, int $chainId): BridgeNetwork
+    {
+        return static::where('network_class', $networkClass)
+            ->where('chain_identifier', $chainId)
+            ->sole();
+    }
 }

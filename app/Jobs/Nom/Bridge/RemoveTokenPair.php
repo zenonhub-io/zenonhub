@@ -44,9 +44,7 @@ class RemoveTokenPair implements ShouldQueue
         try {
             $data = $this->block->data->decoded;
             $token = Token::findByZts($data['tokenStandard']);
-            $network = BridgeNetwork::where('network_class', $data['networkClass'])
-                ->where('chain_identifier', $data['chainId'])
-                ->first();
+            $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
 
             $networkToken = BridgeNetworkToken::where('bridge_network_id', $network->id)
                 ->where('token_id', $token->id)
