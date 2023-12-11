@@ -1,6 +1,6 @@
 <?php
 
-use Database\Seeders\Bridge\BridgeNetworkSeeder;
+use Database\Seeders\Bridge\BridgeNetworkTokenSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        $seeder = new BridgeNetworkSeeder();
+        $seeder = new BridgeNetworkTokenSeeder();
         $seeder->run();
     }
 
