@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\Bridge\BridgeNetworkSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +23,9 @@ return new class extends Migration
             $table->boolean('is_owned')->default(0);
             $table->timestamps();
         });
+
+        $seeder = new BridgeNetworkSeeder();
+        $seeder->run();
     }
 
     public function down(): void
