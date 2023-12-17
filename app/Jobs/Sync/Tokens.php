@@ -61,9 +61,9 @@ class Tokens implements ShouldQueue
     {
         $this->tokens->each(function ($data) {
             $token = Token::whereZts($data->tokenStandard)->first();
+            $owner = Utilities::loadAccount($data->owner);
             if (! $token) {
                 $chain = Utilities::loadChain();
-                $owner = Utilities::loadAccount($data->owner);
                 $token = Token::create([
                     'chain_id' => $chain->id,
                     'owner_id' => $owner->id,
@@ -80,6 +80,7 @@ class Tokens implements ShouldQueue
                 ]);
             }
 
+            $token->owner_id = $owner->id;
             $token->total_supply = $data->totalSupply;
             $token->max_supply = $data->maxSupply;
             $token->is_burnable = $data->isBurnable;
