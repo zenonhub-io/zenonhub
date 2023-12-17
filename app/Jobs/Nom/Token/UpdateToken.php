@@ -3,6 +3,7 @@
 namespace App\Jobs\Nom\Token;
 
 use App\Actions\SetBlockAsProcessed;
+use App\Classes\Utilities;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
 use Illuminate\Bus\Batchable;
@@ -31,10 +32,11 @@ class UpdateToken implements ShouldQueue
     public function handle(): void
     {
         $blockData = $this->block->data->decoded;
-
         $token = Token::whereZts($blockData['tokenStandard'])->first();
 
         if ($token) {
+            $owner = Utilities::loadAccount($blockData['owner']);
+            $token->owner_id = $owner->id;
             $token->is_burnable = $blockData['isBurnable'];
             $token->is_mintable = $blockData['isMintable'];
             $token->updated_at = $this->block->created_at;
