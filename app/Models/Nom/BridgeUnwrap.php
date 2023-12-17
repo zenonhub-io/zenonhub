@@ -13,6 +13,7 @@ class BridgeUnwrap extends Model
 
     protected $fillable = [
         'bridge_network_id',
+        'bridge_network_token_id',
         'to_account_id',
         'token_id',
         'account_block_id',
@@ -36,9 +37,14 @@ class BridgeUnwrap extends Model
     //
     // Relations
 
-    public function network(): BelongsTo
+    public function bridge_network(): BelongsTo
     {
         return $this->belongsTo(BridgeNetwork::class, 'bridge_network_id', 'id');
+    }
+
+    public function bridge_network_token(): BelongsTo
+    {
+        return $this->belongsTo(BridgeNetworkToken::class, 'bridge_network_token_id', 'id');
     }
 
     public function to_account(): BelongsTo
