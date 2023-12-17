@@ -32,12 +32,14 @@ class Revoke implements ShouldQueue
 
     public function handle(): void
     {
-        $sentinel = Sentinel::where('owner_id', $this->block->account->id)->first();
+        $sentinel = Sentinel::where('owner_id', $this->block->account->id)->isActive()->first();
 
-        if ($sentinel) {
-            $sentinel->revoked_at = $this->block->created_at;
-            $sentinel->save();
+        if (! $sentinel) {
+            return;
         }
+
+        $sentinel->revoked_at = $this->block->created_at;
+        $sentinel->save();
 
         $this->notifyUsers($sentinel);
         (new SetBlockAsProcessed($this->block))->execute();
