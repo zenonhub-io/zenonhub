@@ -70,7 +70,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href=" {{ route('explorer.transaction', ['hash' => $block->hash]) }}">
+                                <a href="{{ route('explorer.transaction', ['hash' => $block->hash]) }}">
                                     <x-hash-tooltip :hash="$block->hash" :eitherSide="8" :alwaysShort="true"/>
                                 </a>
                             </td>
@@ -87,7 +87,7 @@
                             <td>{{ ($block->display_amount ?: '-')  }}</td>
                             <td>
                                 @if ($block->token && $block->amount > 0)
-                                    <a href=" {{ route('explorer.token', ['zts' => $block->token->token_standard]) }}">
+                                    <a href="{{ route('explorer.token', ['zts' => $block->token->token_standard]) }}">
                                         {{ $block->token->custom_label }}
                                     </a>
                                 @else

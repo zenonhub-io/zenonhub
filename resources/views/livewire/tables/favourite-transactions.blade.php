@@ -32,7 +32,7 @@
                     @foreach($data as $favourite)
                         <tr>
                             <td>
-                                <a href=" {{ route('explorer.transaction', ['hash' => $favourite->markable->hash]) }}">
+                                <a href="{{ route('explorer.transaction', ['hash' => $favourite->markable->hash]) }}">
                                     <x-hash-tooltip :hash="$favourite->markable->hash" :eitherSide="8" :alwaysShort="true"/>
                                 </a>
                             </td>
