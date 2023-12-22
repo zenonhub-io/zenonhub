@@ -6,6 +6,8 @@ trait DataTableTrait
 {
     public $search;
 
+    public $filters;
+
     public $sort = 'id';
 
     public $order = 'desc';
@@ -65,6 +67,12 @@ trait DataTableTrait
     {
         $this->search = $query;
         $this->resetPage($this->componentName);
+    }
+
+    public function applyFilters()
+    {
+        $this->resetPage($this->getComponentName(! $this->namedComponent));
+        $this->loadData();
     }
 
     public function shouldLoadResults()
