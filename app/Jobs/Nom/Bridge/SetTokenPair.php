@@ -6,7 +6,6 @@ use App\Actions\SetBlockAsProcessed;
 use App\Classes\Utilities;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeNetwork;
-use App\Models\Nom\Token;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,9 +24,14 @@ class SetTokenPair implements ShouldQueue
 
     public AccountBlock $block;
 
+    public BridgeNetwork $network;
+
+    public array $blockData;
+
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
+        $this->blockData = $this->block->data->decoded;
         $this->onQueue('indexer');
     }
 
@@ -39,24 +43,39 @@ class SetTokenPair implements ShouldQueue
             return;
         }
 
-        $data = $this->block->data->decoded;
-        $token = Token::findByZts($data['tokenStandard']);
-        $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
+        try {
+            $this->loadNetwork();
+            $this->setTokenPair();
+        } catch (\Throwable $throwable) {
+            Log::error('Unable to set token pair: '.$this->block->hash);
+            Log::error($throwable->getMessage());
 
-        $network->tokens()->updateOrCreate([
-            'token_id' => $token->id,
-        ], [
-            'token_address' => $data['tokenAddress'],
-            'min_amount' => $data['minAmount'],
-            'fee_percentage' => $data['feePercentage'],
-            'redeem_delay' => $data['redeemDelay'],
-            'metadata' => json_decode($data['metadata']),
-            'is_bridgeable' => $data['bridgeable'],
-            'is_redeemable' => $data['redeemable'],
-            'is_owned' => $data['owned'],
-            'created_at' => $this->block->created_at,
-        ]);
+            return;
+        }
 
         (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function loadNetwork(): void
+    {
+        $this->network = BridgeNetwork::findByNetworkChain($this->blockData['networkClass'], $this->blockData['chainId']);
+    }
+
+    private function setTokenPair(): void
+    {
+        $token = Utilities::loadToken($this->blockData['tokenStandard']);
+        $this->network->tokens()->updateOrCreate([
+            'token_id' => $token->id,
+        ], [
+            'token_address' => $this->blockData['tokenAddress'],
+            'min_amount' => $this->blockData['minAmount'],
+            'fee_percentage' => $this->blockData['feePercentage'],
+            'redeem_delay' => $this->blockData['redeemDelay'],
+            'metadata' => json_decode($this->blockData['metadata']),
+            'is_bridgeable' => $this->blockData['bridgeable'],
+            'is_redeemable' => $this->blockData['redeemable'],
+            'is_owned' => $this->blockData['owned'],
+            'created_at' => $this->block->created_at,
+        ]);
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class WrapToken implements ShouldQueue
 {
@@ -31,6 +32,20 @@ class WrapToken implements ShouldQueue
 
     public function handle(): void
     {
+        try {
+            $this->processWrap();
+        } catch (\Throwable $throwable) {
+            Log::error('Unable to process wrap: '.$this->block->hash);
+            Log::error($throwable->getMessage());
+
+            return;
+        }
+
+        (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function processWrap(): void
+    {
         $data = $this->block->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
 
@@ -43,7 +58,5 @@ class WrapToken implements ShouldQueue
             'amount' => $this->block->amount,
             'created_at' => $this->block->created_at,
         ]);
-
-        (new SetBlockAsProcessed($this->block))->execute();
     }
 }

@@ -38,6 +38,13 @@ class ChangeAdministrator implements ShouldQueue
             return;
         }
 
+        $this->changeAdmin();
+
+        (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function changeAdmin(): void
+    {
         $adminAddress = $this->block->data->decoded['administrator'];
         $oldAdmin = BridgeAdmin::getActiveAdmin();
         $newAdmin = BridgeAdmin::whereHas('account', fn ($q) => $q->where('address', $adminAddress))
@@ -45,8 +52,6 @@ class ChangeAdministrator implements ShouldQueue
             ->sole();
 
         $this->revokeOldAndAcceptNewAdmin($oldAdmin, $newAdmin);
-
-        (new SetBlockAsProcessed($this->block))->execute();
     }
 
     private function revokeOldAndAcceptNewAdmin(BridgeAdmin $oldAdmin, BridgeAdmin $newAdmin): void

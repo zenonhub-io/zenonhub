@@ -23,15 +23,16 @@ class BridgeUnwrap extends Model
         'signature',
         'amount',
         'redeemed_at',
-        'transferred_at',
         'created_at',
         'updated_at',
+        'revoked_at',
     ];
 
     protected $casts = [
-        'transferred_at' => 'boolean',
+        'redeemed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'revoked_at' => 'datetime',
     ];
 
     //
@@ -60,5 +61,13 @@ class BridgeUnwrap extends Model
     public function account_block(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+    }
+
+    //
+    // Attributes
+
+    public function getIsAffiliateRewardAttribute(): bool
+    {
+        return $this->log_index > 4000000000;
     }
 }

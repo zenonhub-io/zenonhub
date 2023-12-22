@@ -7,11 +7,9 @@ use App\Classes\Utilities;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeNetwork;
 use App\Models\Nom\BridgeNetworkToken;
-use App\Models\Nom\Token;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -42,22 +40,22 @@ class RemoveTokenPair implements ShouldQueue
         }
 
         try {
-            $data = $this->block->data->decoded;
-            $token = Token::findByZts($data['tokenStandard']);
-            $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
-
-            $networkToken = BridgeNetworkToken::where('bridge_network_id', $network->id)
-                ->where('token_id', $token->id)
-                ->where('token_address', $data['tokenAddress'])
-                ->sole();
-        } catch (ModelNotFoundException $exception) {
+            $this->removeTokenPair();
+        } catch (\Throwable $exception) {
             Log::error('Remove token pair error');
+            Log::error($exception->getMessage());
 
             return;
         }
 
-        $networkToken->delete();
-
         (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function removeTokenPair(): void
+    {
+        $data = $this->block->data->decoded;
+        $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
+        $networkToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
+        $networkToken->delete();
     }
 }

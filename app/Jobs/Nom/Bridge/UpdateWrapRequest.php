@@ -3,9 +3,8 @@
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
 use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeNetwork;
+use App\Models\Nom\BridgeWrap;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class RemoveNetwork implements ShouldQueue
+class UpdateWrapRequest implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -24,29 +23,42 @@ class RemoveNetwork implements ShouldQueue
 
     public AccountBlock $block;
 
+    public array $blockData;
+
+    public BridgeWrap $wrap;
+
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
+        $this->blockData = $this->block->data->decoded;
         $this->onQueue('indexer');
     }
 
     public function handle(): void
     {
-        if (! Utilities::validateBridgeTx($this->block)) {
-            Log::error('Bridge action sent from non-admin');
+        try {
+            $this->loadWrap();
+            $this->processUpdate();
+        } catch (\Throwable $exception) {
+            Log::error('Error updating wrap request '.$this->block->hash);
+            Log::error($exception->getMessage());
 
             return;
         }
 
-        $this->removeNetwork();
-
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
-    private function removeNetwork(): void
+    private function loadWrap(): void
     {
-        $data = $this->block->data->decoded;
-        $bridgeNetwork = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
-        $bridgeNetwork->delete();
+        $this->wrap = BridgeWrap::whereHas('account_block', fn ($q) => $q->where('hash', $this->blockData['id']))
+            ->sole();
+    }
+
+    private function processUpdate(): void
+    {
+        $this->wrap->signature = $this->blockData['signature'];
+        $this->wrap->updated_at = $this->block->created_at;
+        $this->wrap->save();
     }
 }

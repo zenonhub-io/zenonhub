@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class UnwrapToken implements ShouldQueue
 {
@@ -33,23 +34,37 @@ class UnwrapToken implements ShouldQueue
 
     public function handle(): void
     {
+        try {
+            $this->processUnwrap();
+        } catch (\Throwable $throwable) {
+            Log::error('Unable to process unwrap: '.$this->block->hash);
+            Log::error($throwable->getMessage());
+
+            return;
+        }
+
+        (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function processUnwrap(): void
+    {
         $data = $this->block->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
         $account = Utilities::loadAccount($data['toAddress']);
-        $bridgeToken = BridgeNetworkToken::where('token_address', $data['tokenAddress'])->first();
+        $bridgeToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
 
-        BridgeUnwrap::create([
+        BridgeUnwrap::updateOrCreate([
+            'transaction_hash' => $data['transactionHash'],
+            'log_index' => $data['logIndex'],
+        ], [
             'bridge_network_id' => $network->id,
             'bridge_network_token_id' => $bridgeToken->id,
             'to_account_id' => $account->id,
             'token_id' => $bridgeToken->token->id,
             'account_block_id' => $this->block->id,
-            'transaction_hash' => $data['transactionHash'],
-            'log_index' => $data['logIndex'],
+            'signature' => $data['signature'],
             'amount' => $data['amount'],
             'created_at' => $this->block->created_at,
         ]);
-
-        (new SetBlockAsProcessed($this->block))->execute();
     }
 }

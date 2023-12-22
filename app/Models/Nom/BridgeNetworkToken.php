@@ -47,4 +47,14 @@ class BridgeNetworkToken extends Model
     {
         return $this->belongsTo(Token::class, 'token_id', 'id');
     }
+
+    //
+    // Methods
+
+    public static function findByTokenAddress(int $networkId, string $address): BridgeNetworkToken
+    {
+        return static::whereHas('network', fn ($q) => $q->where('id', $networkId))
+            ->where('token_address', $address)
+            ->sole();
+    }
 }

@@ -38,12 +38,17 @@ class ProposeAdministrator implements ShouldQueue
             return;
         }
 
+        $this->proposeAdmin();
+
+        (new SetBlockAsProcessed($this->block))->execute();
+    }
+
+    private function proposeAdmin(): void
+    {
         $proposedAccount = Utilities::loadAccount($this->block->data->decoded['address']);
         BridgeAdmin::create([
             'account_id' => $proposedAccount->id,
             'nominated_at' => $this->block->created_at,
         ]);
-
-        (new SetBlockAsProcessed($this->block))->execute();
     }
 }

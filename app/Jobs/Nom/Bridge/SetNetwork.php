@@ -10,7 +10,6 @@ use App\Models\Nom\Chain;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -44,8 +43,9 @@ class SetNetwork implements ShouldQueue
 
         try {
             $chain = Chain::where('chain_identifier', $data['chainId'])->sole();
-        } catch (ModelNotFoundException $exception) {
+        } catch (\Throwable $exception) {
             Log::error("Set bridge network error, unknown chainId: {$data['chainId']}");
+            Log::error($exception->getMessage());
 
             return;
         }
