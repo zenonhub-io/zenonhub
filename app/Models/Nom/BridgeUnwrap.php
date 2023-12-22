@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Http;
 
 class BridgeUnwrap extends Model
 {
@@ -17,6 +18,7 @@ class BridgeUnwrap extends Model
         'to_account_id',
         'token_id',
         'account_block_id',
+        'from_address',
         'transaction_hash',
         'log_index',
         'token_address',
@@ -69,5 +71,40 @@ class BridgeUnwrap extends Model
     public function getIsAffiliateRewardAttribute(): bool
     {
         return $this->log_index > 4000000000;
+    }
+
+    public function getFromAddressLinkAttribute(): string
+    {
+        if ($this->bridge_network->name === 'Ethereum') {
+            return 'https://etherscan.io/address/'.$this->from_address;
+        }
+    }
+
+    public function getTxHashLinkAttribute(): string
+    {
+        if ($this->bridge_network->name === 'Ethereum') {
+            return 'https://etherscan.io/tx/0x'.$this->transaction_hash;
+        }
+    }
+
+    public function getDisplayAmountAttribute(): string
+    {
+        return $this->token?->getDisplayAmount($this->amount);
+    }
+
+    public function setFromAddress(): void
+    {
+        if ($this->from_address) {
+            return;
+        }
+
+        $this->from_address = Http::get('https://api.etherscan.io/api', [
+            'module' => 'proxy',
+            'action' => 'eth_getTransactionByHash',
+            'txhash' => '0x'.$this->transaction_hash,
+            'apikey' => config('etherscan.api_key'),
+        ])->json('result.from');
+
+        $this->save();
     }
 }

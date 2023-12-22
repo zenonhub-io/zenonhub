@@ -31,14 +31,14 @@ class BridgeWrap extends Model
     //
     // Relations
 
-    public function network(): BelongsTo
+    public function bridge_network(): BelongsTo
     {
         return $this->belongsTo(BridgeNetwork::class, 'bridge_network_id', 'id');
     }
 
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'to_account_id', 'id');
+        return $this->belongsTo(Account::class, 'account_id', 'id');
     }
 
     public function token(): BelongsTo
@@ -49,5 +49,20 @@ class BridgeWrap extends Model
     public function account_block(): BelongsTo
     {
         return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+    }
+
+    //
+    // Attributes
+
+    public function getDisplayAmountAttribute()
+    {
+        return $this->token?->getDisplayAmount($this->amount);
+    }
+
+    public function getToAddressLinkAttribute()
+    {
+        if ($this->bridge_network->name === 'Ethereum') {
+            return 'https://etherscan.io/address/'.$this->to_address;
+        }
     }
 }

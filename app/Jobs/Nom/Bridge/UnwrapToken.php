@@ -53,7 +53,7 @@ class UnwrapToken implements ShouldQueue
         $account = Utilities::loadAccount($data['toAddress']);
         $bridgeToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
 
-        BridgeUnwrap::updateOrCreate([
+        $unwrap = BridgeUnwrap::updateOrCreate([
             'transaction_hash' => $data['transactionHash'],
             'log_index' => $data['logIndex'],
         ], [
@@ -66,5 +66,7 @@ class UnwrapToken implements ShouldQueue
             'amount' => $data['amount'],
             'created_at' => $this->block->created_at,
         ]);
+
+        $unwrap->setFromAddress();
     }
 }
