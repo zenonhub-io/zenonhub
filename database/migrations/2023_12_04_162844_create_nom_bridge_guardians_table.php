@@ -17,8 +17,10 @@ return new class extends Migration
             $table->timestamp('revoked_at')->nullable();
         });
 
-        $seeder = new BridgeGuardianSeeder();
-        $seeder->run();
+        if (! app()->environment('testing')) {
+            $seeder = new BridgeGuardianSeeder();
+            $seeder->run();
+        }
     }
 
     public function down(): void
