@@ -1,6 +1,5 @@
 <?php
 
-use Database\Seeders\Bridge\BridgeNetworkSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,9 +19,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        $seeder = new BridgeNetworkSeeder();
-        $seeder->run();
     }
 
     public function down(): void

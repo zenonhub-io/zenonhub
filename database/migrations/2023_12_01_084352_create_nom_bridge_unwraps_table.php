@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('account_block_id')->nullable()->references('id')->on('nom_account_blocks')->nullOnDelete();
             $table->string('transaction_hash');
             $table->string('log_index');
-            $table->string('signature');
+            $table->string('signature')->nullable();
             $table->string('amount');
-            $table->timestamp('redeemed_at');
-            $table->timestamp('transferred_at');
+            $table->timestamp('redeemed_at')->nullable();
+            $table->timestamp('revoked_at')->nullable();
             $table->timestamps();
         });
     }
