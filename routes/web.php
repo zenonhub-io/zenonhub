@@ -49,6 +49,7 @@ Route::get('explorer/accounts', [\App\Http\Controllers\Explorer\Accounts::class,
 Route::get('explorer/account/{address}', [\App\Http\Controllers\Explorer\Accounts::class, 'detail'])->name('explorer.account');
 Route::get('explorer/tokens', [\App\Http\Controllers\Explorer\Tokens::class, 'show'])->name('explorer.tokens');
 Route::get('explorer/token/{zts}', [\App\Http\Controllers\Explorer\Tokens::class, 'detail'])->name('explorer.token');
+Route::get('explorer/bridge', [\App\Http\Controllers\Explorer\Bridge::class, 'show'])->name('explorer.bridge');
 Route::get('explorer/staking', [\App\Http\Controllers\Explorer\Staking::class, 'show'])->name('explorer.staking');
 Route::get('explorer/fusions', [\App\Http\Controllers\Explorer\Fusions::class, 'show'])->name('explorer.fusions');
 
@@ -70,9 +71,7 @@ Route::get('services/public-nodes', [\App\Http\Controllers\Services\PublicNodes:
 Route::get('services/plasma-bot', [\App\Http\Controllers\Services\PlasmaBot::class, 'show'])->name('services.plasma-bot');
 
 if (! app()->isProduction()) {
-    Route::prefix('utilities')->name('utilities.')->middleware(['throttle:60,1'])->group(function () {
-        Route::get('missing-votes', [\App\Http\Controllers\Utilities\MissingVotes::class, 'show']);
-    });
+    Route::get('utilities/missing-votes', [\App\Http\Controllers\Utilities\MissingVotes::class, 'show'])->name('utilities.missing-votes');
 }
 
 //

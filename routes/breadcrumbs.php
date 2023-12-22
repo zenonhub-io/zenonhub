@@ -120,6 +120,11 @@ Breadcrumbs::for('explorer.token', function (BreadcrumbTrail $trail, App\Models\
     $trail->push('Details', route('explorer.token', ['zts' => $token->token_standard]));
 });
 
+Breadcrumbs::for('explorer.bridge', function (BreadcrumbTrail $trail) {
+    $trail->parent('explorer');
+    $trail->push('Bridge', route('explorer.bridge'));
+});
+
 Breadcrumbs::for('explorer.staking', function (BreadcrumbTrail $trail) {
     $trail->parent('explorer');
     $trail->push('Staking', route('explorer.staking'));

@@ -27,6 +27,7 @@
                     <li><a href="{{ route('explorer.transactions') }}" class="dropdown-item {{ request()->routeIs('explorer.transactions', 'explorer.transaction') ? 'active' : '' }}">Transactions</a></li>
                     <li><a href="{{ route('explorer.accounts') }}" class="dropdown-item {{ request()->routeIs('explorer.accounts', 'explorer.account') ? 'active' : '' }}">Accounts</a></li>
                     <li><a href="{{ route('explorer.tokens') }}" class="dropdown-item {{ request()->routeIs('explorer.tokens', 'explorer.token') ? 'active' : '' }}">Tokens</a></li>
+                    <li><a href="{{ route('explorer.bridge') }}" class="dropdown-item {{ request()->routeIs('explorer.bridge') ? 'active' : '' }}">Bridge</a></li>
                     <li><a href="{{ route('explorer.staking') }}" class="dropdown-item {{ request()->routeIs('explorer.staking') ? 'active' : '' }}">Staking</a></li>
                     <li><a href="{{ route('explorer.fusions') }}" class="dropdown-item {{ request()->routeIs('explorer.fusions') ? 'active' : '' }}">Fusions</a></li>
                 </ul>
