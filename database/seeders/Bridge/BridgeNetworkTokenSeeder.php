@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\Bridge;
 
+use App\Classes\Utilities;
 use App\Models\Nom\BridgeNetwork;
-use App\Models\Nom\Token;
 use App\Services\ZenonSdk;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -25,7 +25,7 @@ class BridgeNetworkTokenSeeder extends Seeder
                 ->first();
 
             foreach ($bridgeNetwork->tokenPairs as $tokenPair) {
-                $token = Token::findByZts($tokenPair->tokenStandard);
+                $token = Utilities::loadToken($tokenPair->tokenStandard);
                 $network->tokens()->updateOrCreate([
                     'token_id' => $token->id,
                 ], [
