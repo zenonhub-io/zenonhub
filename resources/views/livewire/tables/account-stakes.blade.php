@@ -61,7 +61,7 @@
                     @foreach($data as $stake)
                         <tr>
                             <td>
-                                {{ $stake->display_amount }} <a href=" {{ route('explorer.token', ['zts' => $stake->token->token_standard]) }}">
+                                {{ $stake->display_amount }} <a href="{{ route('explorer.token', ['zts' => $stake->token->token_standard]) }}">
                                     {{ $stake->token->custom_label }}
                                 </a>
                             </td>
@@ -70,7 +70,7 @@
                             <td>{{ $stake->end_date->format(config('zenon.short_date_format')) }}</td>
                             <td>{{ $stake->started_at->diffForHumans(['parts' => 2], true) }}</td>
                             <td>
-                                <a href=" {{ route('explorer.transaction', ['hash' => $stake->hash]) }}">
+                                <a href="{{ route('explorer.transaction', ['hash' => $stake->hash]) }}">
                                     <x-hash-tooltip :hash="$stake->hash" :eitherSide="8" :alwaysShort="true"/>
                                 </a>
                             </td>

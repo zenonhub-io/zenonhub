@@ -130,7 +130,7 @@
                                     <span class="float-end float-md-none">
                                         @if ($transaction->token && $transaction->amount > 0)
                                             {{ $transaction->display_amount }}
-                                            <a href=" {{ route('explorer.token', ['zts' => $transaction->token->token_standard]) }}">
+                                            <a href="{{ route('explorer.token', ['zts' => $transaction->token->token_standard]) }}">
                                                 {{ $transaction->token->symbol }}
                                             </a>
                                         @else
@@ -181,7 +181,7 @@
                     <li class="list-group-item">
                         <span class="d-block fs-sm text-muted">Paired account block</span>
                         @if ($transaction->paired_account_block)
-                            <a href=" {{ route('explorer.transaction', ['hash' => $transaction->paired_account_block->hash]) }}">
+                            <a href="{{ route('explorer.transaction', ['hash' => $transaction->paired_account_block->hash]) }}">
                                 <x-hash-tooltip :hash="$transaction->paired_account_block->hash"/>
                             </a>
                         @else
@@ -191,7 +191,7 @@
                     <li class="list-group-item">
                         <span class="d-block fs-sm text-muted">Parent</span>
                         @if ($transaction->parent)
-                            <a href=" {{ route('explorer.transaction', ['hash' => $transaction->parent->hash]) }}">
+                            <a href="{{ route('explorer.transaction', ['hash' => $transaction->parent->hash]) }}">
                                 <x-hash-tooltip :hash="$transaction->parent->hash"/>
                             </a>
                         @else

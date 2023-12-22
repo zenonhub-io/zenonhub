@@ -4,13 +4,14 @@ namespace App\Http\Livewire\Tables;
 
 use App\Http\Livewire\DataTableTrait;
 use App\Models\Nom\Account;
+use App\Models\Nom\AccountReward;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class AccountRewards extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Account $account;
 
@@ -59,17 +60,31 @@ class AccountRewards extends Component
             $searchTerm = strtolower($this->search);
 
             if ($searchTerm === 'delegate') {
-                $this->query->where('type', '1');
-            } elseif ($searchTerm === 'stake') {
-                $this->query->where('type', '2');
-            } elseif ($searchTerm === 'pillar') {
-                $this->query->where('type', '3');
-            } elseif ($searchTerm === 'sentinel') {
-                $this->query->where('type', '4');
-            } elseif ($searchTerm === 'liquidity') {
-                $this->query->where('type', '5');
-            } elseif ($searchTerm === 'liquidity program') {
-                $this->query->where('type', '6');
+                $this->query->where('type', AccountReward::TYPE_DELEGATE);
+            }
+
+            if ($searchTerm === 'stake') {
+                $this->query->where('type', AccountReward::TYPE_STAKE);
+            }
+
+            if ($searchTerm === 'pillar') {
+                $this->query->where('type', AccountReward::TYPE_PILLAR);
+            }
+
+            if ($searchTerm === 'sentinel') {
+                $this->query->where('type', AccountReward::TYPE_SENTINEL);
+            }
+
+            if ($searchTerm === 'liquidity') {
+                $this->query->where('type', AccountReward::TYPE_LIQUIDITY);
+            }
+
+            if ($searchTerm === 'liquidity program') {
+                $this->query->where('type', AccountReward::TYPE_LIQUIDITY_PROGRAM);
+            }
+
+            if ($searchTerm === 'bridge') {
+                $this->query->where('type', AccountReward::TYPE_BRIDGE_AFFILIATE);
             }
         }
     }

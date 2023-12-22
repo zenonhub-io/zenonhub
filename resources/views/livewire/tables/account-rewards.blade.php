@@ -56,7 +56,7 @@
                         <tr>
                             <td>{{ $reward->display_type }}</td>
                             <td>
-                                <a href=" {{ route('explorer.token', ['zts' => $reward->token->token_standard]) }}">
+                                <a href="{{ route('explorer.token', ['zts' => $reward->token->token_standard]) }}">
                                     {{ $reward->token->custom_label }}
                                 </a>
                             </td>

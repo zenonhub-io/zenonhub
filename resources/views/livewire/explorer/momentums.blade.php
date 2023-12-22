@@ -59,14 +59,14 @@
                         <tr>
                             <td>{{ $momentum->display_height }}</td>
                             <td>
-                                <a href=" {{ route('explorer.momentum', ['hash' => $momentum->hash]) }}">
+                                <a href="{{ route('explorer.momentum', ['hash' => $momentum->hash]) }}">
                                     <x-hash-tooltip :hash="$momentum->hash" :eitherSide="8" :alwaysShort="true"/>
                                 </a>
                             </td>
                             <td>{{ $momentum->created_at->diffForHumans(['parts' => 2]) }}</td>
                             <td>
                                 @if ($momentum->producer_pillar)
-                                    <a href=" {{ route('pillars.detail', ['slug' => $momentum->producer_pillar->slug]) }}">
+                                    <a href="{{ route('pillars.detail', ['slug' => $momentum->producer_pillar->slug]) }}">
                                         {{ $momentum->producer_pillar->name }}
                                     </a>
                                 @else
