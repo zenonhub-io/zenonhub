@@ -33,7 +33,7 @@ class ChangeAdministrator implements ShouldQueue
     public function handle(): void
     {
         if (! Utilities::validateBridgeTx($this->block)) {
-            Log::error('Bridge action sent from non-admin');
+            Log::warning('Bridge action sent from non-admin');
 
             return;
         }

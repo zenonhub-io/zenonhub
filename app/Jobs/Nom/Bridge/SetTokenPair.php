@@ -38,7 +38,7 @@ class SetTokenPair implements ShouldQueue
     public function handle(): void
     {
         if (! Utilities::validateBridgeTx($this->block)) {
-            Log::error('Bridge action sent from non-admin');
+            Log::warning('Bridge action sent from non-admin');
 
             return;
         }
@@ -46,9 +46,9 @@ class SetTokenPair implements ShouldQueue
         try {
             $this->loadNetwork();
             $this->setTokenPair();
-        } catch (\Throwable $throwable) {
-            Log::error('Unable to set token pair: '.$this->block->hash);
-            Log::error($throwable->getMessage());
+        } catch (\Throwable $exception) {
+            Log::warning('Unable to set token pair: '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }

@@ -36,9 +36,9 @@ class UnwrapToken implements ShouldQueue
     {
         try {
             $this->processUnwrap();
-        } catch (\Throwable $throwable) {
-            Log::error('Unable to process unwrap: '.$this->block->hash);
-            Log::error($throwable->getMessage());
+        } catch (\Throwable $exception) {
+            Log::warning('Unable to process unwrap: '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }

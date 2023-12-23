@@ -37,8 +37,8 @@ class RevokeUnwrapRequest implements ShouldQueue
             $this->loadUnwrap();
             $this->processRevokeUnwrap();
         } catch (\Throwable $exception) {
-            Log::error('Error revoking unwrap request '.$this->block->hash);
-            Log::error($exception->getMessage());
+            Log::warning('Error revoking unwrap request '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }

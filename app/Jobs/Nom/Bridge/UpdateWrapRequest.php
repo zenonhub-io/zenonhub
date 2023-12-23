@@ -40,8 +40,8 @@ class UpdateWrapRequest implements ShouldQueue
             $this->loadWrap();
             $this->processUpdate();
         } catch (\Throwable $exception) {
-            Log::error('Error updating wrap request '.$this->block->hash);
-            Log::error($exception->getMessage());
+            Log::warning('Error updating wrap request '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }
