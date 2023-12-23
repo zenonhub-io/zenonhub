@@ -53,6 +53,7 @@ class Redeem implements ShouldQueue
         $data = $this->block->data->decoded;
         $this->unwrap = BridgeUnwrap::where('transaction_hash', $data['transactionHash'])
             ->where('log_index', $data['logIndex'])
+            ->whereNull('redeemed_at')
             ->sole();
     }
 
