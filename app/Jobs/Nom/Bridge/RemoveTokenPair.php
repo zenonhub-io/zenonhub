@@ -34,7 +34,7 @@ class RemoveTokenPair implements ShouldQueue
     public function handle(): void
     {
         if (! Utilities::validateBridgeTx($this->block)) {
-            Log::error('Bridge action sent from non-admin');
+            Log::warning('Bridge action sent from non-admin');
 
             return;
         }
@@ -42,8 +42,8 @@ class RemoveTokenPair implements ShouldQueue
         try {
             $this->removeTokenPair();
         } catch (\Throwable $exception) {
-            Log::error('Remove token pair error');
-            Log::error($exception->getMessage());
+            Log::warning('Remove token pair error '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }

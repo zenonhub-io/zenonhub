@@ -34,9 +34,9 @@ class WrapToken implements ShouldQueue
     {
         try {
             $this->processWrap();
-        } catch (\Throwable $throwable) {
-            Log::error('Unable to process wrap: '.$this->block->hash);
-            Log::error($throwable->getMessage());
+        } catch (\Throwable $exception) {
+            Log::warning('Unable to process wrap: '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }

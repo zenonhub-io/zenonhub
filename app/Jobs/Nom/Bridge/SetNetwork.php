@@ -34,7 +34,7 @@ class SetNetwork implements ShouldQueue
     public function handle(): void
     {
         if (! Utilities::validateBridgeTx($this->block)) {
-            Log::error('Bridge action sent from non-admin');
+            Log::warning('Bridge action sent from non-admin');
 
             return;
         }
@@ -44,8 +44,8 @@ class SetNetwork implements ShouldQueue
         try {
             $chain = Chain::where('chain_identifier', $data['chainId'])->sole();
         } catch (\Throwable $exception) {
-            Log::error("Set bridge network error, unknown chainId: {$data['chainId']}");
-            Log::error($exception->getMessage());
+            Log::warning("Set bridge network error, unknown chainId: {$data['chainId']}");
+            Log::debug($exception);
 
             return;
         }

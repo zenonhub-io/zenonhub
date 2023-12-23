@@ -39,8 +39,8 @@ class Redeem implements ShouldQueue
             $this->processRedeem();
             $this->processReward();
         } catch (\Throwable $exception) {
-            Log::error('Error processing redeem '.$this->block->hash);
-            Log::error($exception->getMessage());
+            Log::warning('Error processing redeem '.$this->block->hash);
+            Log::debug($exception);
 
             return;
         }
