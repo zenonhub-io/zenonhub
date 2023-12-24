@@ -54,15 +54,13 @@ class BridgeWrap extends Model
     //
     // Attributes
 
-    public function getDisplayAmountAttribute()
+    public function getDisplayAmountAttribute(): string
     {
-        return $this->token?->getDisplayAmount($this->amount);
+        return $this->token->getDisplayAmount($this->amount);
     }
 
-    public function getToAddressLinkAttribute()
+    public function getToAddressLinkAttribute(): ?string
     {
-        if ($this->bridge_network->name === 'Ethereum') {
-            return 'https://etherscan.io/address/'.$this->to_address;
-        }
+        return $this->bridge_network->explorer_url.'address/'.$this->to_address;
     }
 }

@@ -20,7 +20,14 @@ class Bridge extends Component
         'sort' => ['except' => 'created_at'],
         'order' => ['except' => 'desc'],
         'tab' => ['except' => 'wraps'],
-        'filters',
+        'filters' => ['except' => [
+            'tokens' => [
+                'ZNN',
+                'QSR',
+                'ZNNETHLP',
+                'WBTC',
+            ],
+        ]],
     ];
 
     public function setTab($tab = 'wraps')

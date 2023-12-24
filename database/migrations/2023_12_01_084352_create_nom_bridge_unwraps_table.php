@@ -15,9 +15,9 @@ return new class extends Migration
             $table->foreignId('to_account_id')->references('id')->on('nom_accounts')->cascadeOnDelete();
             $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->cascadeOnDelete();
             $table->foreignId('account_block_id')->nullable()->references('id')->on('nom_account_blocks')->nullOnDelete();
+            $table->bigInteger('log_index');
             $table->string('from_address')->nullable();
             $table->string('transaction_hash');
-            $table->string('log_index');
             $table->string('signature')->nullable();
             $table->string('amount');
             $table->timestamp('redeemed_at')->nullable();

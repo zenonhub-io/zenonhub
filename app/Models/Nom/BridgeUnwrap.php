@@ -73,18 +73,14 @@ class BridgeUnwrap extends Model
         return $this->log_index > 4000000000;
     }
 
-    public function getFromAddressLinkAttribute(): string
+    public function getFromAddressLinkAttribute(): ?string
     {
-        if ($this->bridge_network->name === 'Ethereum') {
-            return 'https://etherscan.io/address/'.$this->from_address;
-        }
+        return $this->bridge_network->explorer_url.'address/'.$this->from_address;
     }
 
-    public function getTxHashLinkAttribute(): string
+    public function getTxHashLinkAttribute(): ?string
     {
-        if ($this->bridge_network->name === 'Ethereum') {
-            return 'https://etherscan.io/tx/0x'.$this->transaction_hash;
-        }
+        return $this->bridge_network->explorer_url.'tx/0x'.$this->transaction_hash;
     }
 
     public function getDisplayAmountAttribute(): string
