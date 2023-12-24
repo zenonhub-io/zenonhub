@@ -47,6 +47,21 @@ class BridgeNetwork extends Model
         return $this->hasMany(BridgeNetworkToken::class, 'bridge_network_id', 'id');
     }
 
+    //
+    // Attributes
+
+    public function getExplorerUrlAttribute(): ?string
+    {
+        if ($this->name === 'Ethereum') {
+            return 'https://etherscan.io/';
+        }
+
+        return null;
+    }
+
+    //
+    // Methods
+
     public static function findByNetworkChain(int $networkClass, int $chainId): BridgeNetwork
     {
         return static::where('network_class', $networkClass)
