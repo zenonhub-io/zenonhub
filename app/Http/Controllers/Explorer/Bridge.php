@@ -8,8 +8,8 @@ class Bridge
 {
     public function show()
     {
-        Meta::title('Bridge wraps & unwraps')
-            ->description('A list of all bridge wraps and unwraps sorted by datetime order');
+        Meta::title('Bridge inbound & outbound transactions')
+            ->description('A list of all incoming and outgoing bridge transactions, showing sender and receiver addresses, amount and network');
 
         return view('pages/explorer/overview', [
             'view' => 'explorer.bridge',
