@@ -14,12 +14,12 @@ class Bridge extends Component
     use DataTableTrait;
     use WithPagination;
 
-    public string $tab = 'wraps';
+    public string $tab = 'inbound';
 
     protected $queryString = [
         'sort' => ['except' => 'created_at'],
         'order' => ['except' => 'desc'],
-        'tab' => ['except' => 'wraps'],
+        'tab' => ['except' => 'inbound'],
         'filters' => ['except' => [
             'tokens' => [
                 'ZNN',
@@ -30,7 +30,7 @@ class Bridge extends Component
         ]],
     ];
 
-    public function setTab($tab = 'wraps')
+    public function setTab($tab = 'inbound')
     {
         $this->tab = $tab;
         $this->resetPage();
@@ -62,12 +62,12 @@ class Bridge extends Component
 
     protected function initQuery()
     {
-        if ($this->tab === 'wraps') {
-            $this->query = BridgeWrap::query();
+        if ($this->tab === 'inbound') {
+            $this->query = BridgeUnwrap::query();
         }
 
-        if ($this->tab === 'unwraps') {
-            $this->query = BridgeUnwrap::query();
+        if ($this->tab === 'outbound') {
+            $this->query = BridgeWrap::query();
         }
     }
 

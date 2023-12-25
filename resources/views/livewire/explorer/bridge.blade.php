@@ -16,20 +16,20 @@
                 <div class="p-0 flex-grow-1">
                     <div class="d-md-none">
                         <select id="account-sections" class="form-select" wire:change="setTab($event.target.value)">
-                            <option value="wraps" {{ $tab === 'wraps' ? 'selected' : '' }}>Wraps</option>
-                            <option value="unwraps" {{ $tab === 'unwraps' ? 'selected' : '' }}>Unwraps</option>
+                            <option value="inbound" {{ $tab === 'inbound' ? 'selected' : '' }}>Inbound</option>
+                            <option value="outbound" {{ $tab === 'unwraps' ? 'selected' : '' }}>Outbound</option>
                         </select>
                     </div>
                     <div class="d-none d-md-block">
                         <ul class="nav nav-tabs-alt card-header-tabs">
                             <li class="nav-item">
-                                <button class="btn nav-link {{ $tab === 'wraps' ? 'active' : '' }}" wire:click="setTab('wraps')">
-                                    Wraps
+                                <button class="btn nav-link {{ $tab === 'inbound' ? 'active' : '' }}" wire:click="setTab('inbound')">
+                                    Inbound
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="btn nav-link {{ $tab === 'unwraps' ? 'active' : '' }}" wire:click="setTab('unwraps')">
-                                    Unwraps
+                                <button class="btn nav-link {{ $tab === 'outbound' ? 'active' : '' }}" wire:click="setTab('outbound')">
+                                    Outbound
                                 </button>
                             </li>
                         </ul>
@@ -112,40 +112,7 @@
                     </thead>
                     <tbody>
 
-
-                    @if($tab === 'wraps')
-                        @foreach($data as $wrap)
-                            <tr>
-                                <td>
-                                    <x-address :account="$wrap->account" :eitherSide="8" :alwaysShort="true"/>
-                                </td>
-                                <td>
-                                    <a href="{{$wrap->to_address_link}}" target="_blank">
-                                        <x-hash-tooltip :hash="$wrap->to_address" :eitherSide="8" :alwaysShort="true"/>
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ $wrap->display_amount }}
-                                </td>
-                                <td>
-                                    <a href="{{ route('explorer.token', ['zts' => $wrap->token->token_standard]) }}">
-                                        {{ $wrap->token->custom_label }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="{{ route('explorer.transaction', ['hash' => $wrap->account_block->hash]) }}">
-                                        <x-hash-tooltip :hash="$wrap->account_block->hash" :eitherSide="8" :alwaysShort="true"/>
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ $wrap->bridge_network->name }}
-                                </td>
-                                <td>{{ $wrap->created_at->format(config('zenon.short_date_format')) }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
-
-                    @if($tab === 'unwraps')
+                    @if($tab === 'inbound')
                         @foreach($data as $unwrap)
                             <tr>
                                 <td>
@@ -173,6 +140,38 @@
                                     {{ $unwrap->bridge_network->name }}
                                 </td>
                                 <td>{{ $unwrap->created_at->format(config('zenon.short_date_format')) }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+
+                    @if($tab === 'outbound')
+                        @foreach($data as $wrap)
+                            <tr>
+                                <td>
+                                    <x-address :account="$wrap->account" :eitherSide="8" :alwaysShort="true"/>
+                                </td>
+                                <td>
+                                    <a href="{{$wrap->to_address_link}}" target="_blank">
+                                        <x-hash-tooltip :hash="$wrap->to_address" :eitherSide="8" :alwaysShort="true"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ $wrap->display_amount }}
+                                </td>
+                                <td>
+                                    <a href="{{ route('explorer.token', ['zts' => $wrap->token->token_standard]) }}">
+                                        {{ $wrap->token->custom_label }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ route('explorer.transaction', ['hash' => $wrap->account_block->hash]) }}">
+                                        <x-hash-tooltip :hash="$wrap->account_block->hash" :eitherSide="8" :alwaysShort="true"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ $wrap->bridge_network->name }}
+                                </td>
+                                <td>{{ $wrap->created_at->format(config('zenon.short_date_format')) }}</td>
                             </tr>
                         @endforeach
                     @endif
