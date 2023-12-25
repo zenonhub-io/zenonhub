@@ -64,8 +64,13 @@ class UnwrapToken implements ShouldQueue
             'account_block_id' => $this->block->id,
             'signature' => $data['signature'],
             'amount' => $data['amount'],
-            'created_at' => $this->block->created_at,
+            'updated_at' => $this->block->created_at,
         ]);
+
+        if (! $unwrap->created_at) {
+            $unwrap->created_at = $this->block->created_at;
+            $unwrap->save();
+        }
 
         $unwrap->setFromAddress();
     }
