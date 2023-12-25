@@ -83,6 +83,7 @@
                 <table class="table table-nowrap align-middle table-striped table-hover">
                     <thead>
                     <tr>
+                        <th style="min-width:32px"></th>
                         <th>
                             From
                         </th>
@@ -115,6 +116,13 @@
                     @if($tab === 'inbound')
                         @foreach($data as $unwrap)
                             <tr>
+                                <td class="pe-0">
+                                    @if (! $unwrap->redeemed_at)
+                                        <span data-bs-toggle="tooltip" data-bs-title="Unredeemed">
+                                            {!! svg('explorer/unreceived', 'text-danger') !!}
+                                        </span>
+                                    @endif
+                                </td>
                                 <td>
                                     <a href="{{$unwrap->from_address_link}}" target="_blank">
                                         <x-hash-tooltip :hash="$unwrap->from_address" :eitherSide="8" :alwaysShort="true"/>
@@ -147,6 +155,7 @@
                     @if($tab === 'outbound')
                         @foreach($data as $wrap)
                             <tr>
+                                <td class="pe-0"></td>
                                 <td>
                                     <x-address :account="$wrap->account" :eitherSide="8" :alwaysShort="true"/>
                                 </td>
