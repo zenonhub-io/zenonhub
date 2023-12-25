@@ -17,7 +17,7 @@
                     <div class="d-md-none">
                         <select id="account-sections" class="form-select" wire:change="setTab($event.target.value)">
                             <option value="inbound" {{ $tab === 'inbound' ? 'selected' : '' }}>Inbound</option>
-                            <option value="outbound" {{ $tab === 'unwraps' ? 'selected' : '' }}>Outbound</option>
+                            <option value="outbound" {{ $tab === 'outbound' ? 'selected' : '' }}>Outbound</option>
                         </select>
                     </div>
                     <div class="d-none d-md-block">
