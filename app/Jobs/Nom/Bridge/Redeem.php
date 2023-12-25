@@ -3,6 +3,7 @@
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
+use App\Jobs\ProcessAccountBalance;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountReward;
 use App\Models\Nom\BridgeUnwrap;
@@ -77,5 +78,7 @@ class Redeem implements ShouldQueue
             'amount' => $this->unwrap->amount,
             'created_at' => $this->block->created_at,
         ]);
+
+        ProcessAccountBalance::dispatch($this->unwrap->to_account);
     }
 }
