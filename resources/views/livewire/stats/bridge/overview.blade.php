@@ -48,21 +48,21 @@
             <div class="text-start text-md-center mb-2 mb-md-0">
                 <span class="d-inline d-md-block text-muted fs-sm">Admin <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The admin address allowed to issue commands to the bridge"></i></span></span>
                 <span class="float-end float-md-none">
-                    <x-address :account="$adminAddress" :eitherSide="10" breakpoint="lg" :named="false"/>
+                    <x-address :account="$adminAddress" :eitherSide="8" breakpoint="lg" :named="false"/>
                 </span>
             </div>
         </div>
         <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
             <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Total Unwraps</span>
+                <span class="d-inline d-md-block text-muted fs-sm">Total Inbound</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['totalUnwraps'] ?? '' }}</span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Total Wraps</span>
+                <span class="d-inline d-md-block text-muted fs-sm">Total Outbound</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['totalWraps'] ?? '' }}</span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Past 24h Tx</span>
+                <span class="d-inline d-md-block text-muted fs-sm">Tx Past 24h</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['dailyTxCount'] ?? '' }}</span>
             </div>
         </div>
