@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\BitQuery;
 use App\Services\CoinGecko;
 use App\Services\Discord\DiscordWebHook;
 use App\Services\Meta;
@@ -44,6 +45,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(CoinGecko::class, function ($app, $params) {
             return new CoinGecko();
+        });
+
+        $this->app->singleton(BitQuery::class, function ($app, $params) {
+            return new BitQuery(config('services.bitquery.api_key'));
         });
 
         $this->app->singleton(DiscordWebHook::class, function ($app, $params) {
