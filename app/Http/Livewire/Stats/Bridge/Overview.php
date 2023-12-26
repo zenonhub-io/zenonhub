@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Stats\Bridge;
 
-use App\Models\Nom\Account;
+use App\Models\Nom\BridgeAdmin;
+use App\Services\BitQuery;
 use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Number;
 use Livewire\Component;
 
 class Overview extends Component
@@ -18,14 +19,14 @@ class Overview extends Component
     public function render()
     {
         $bridgeStats = $this->loadBridgeStats();
-        $adminAccount = Account::findByAddress($bridgeStats->administrator);
+        $adminAccount = BridgeAdmin::getActiveAdmin()->account;
         $orchestrators = Cache::get('orchestrators-online-percentage');
 
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => $adminAccount,
             'halted' => $bridgeStats->halted,
             'orchestrators' => number_format($orchestrators),
-            'affiliateLink' => config('zenon.bridge_affiliate_link'),
+            'affiliateLink' => config('zenon.bridge.affiliate_link'),
         ]);
     }
 
@@ -44,55 +45,41 @@ class Overview extends Component
         return $data;
     }
 
-    public function loadLiquidityData()
+    public function loadOverviewData()
     {
-        // Orbital Staked ETH = (Orbital’s Balance of ETH-wZNN LP ZTS) / (Total Supply of ETH-wZNN LP ERC20) * (Amount of ETH in the ETH-wZNN Pool)
+        $this->loadLiquidityData();
+    }
 
-        // https://github.com/Uniswap/v2-subgraph/blob/master/schema.graphql
-        $query = <<<'GQL'
-{
- pair(id: "0xdac866a3796f85cb84a914d98faec052e3b5596d"){
-  token0 {
-  	id
-    symbol
-    name
-    totalLiquidity
-    derivedETH
-  }
-  token1 {
-  	id
-    symbol
-    name
-    totalLiquidity
-    derivedETH
-  }
-  id
-  reserveUSD
-  reserve0
-  reserve1
- }
-}
-GQL;
+    private function loadLiquidityData(): void
+    {
+        $bitQuery = App::make(BitQuery::class);
+        $data = $bitQuery->getLiquidityData();
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev', [
-            'query' => $query,
-        ])->json('data.pair');
+        $poolData = collect($data['address'][0]['balances']);
+        $pooledZnn = $poolData->where('currency.symbol', 'wZNN')->pluck('value')->first();
+        $pooledEth = $poolData->where('currency.symbol', 'WETH')->pluck('value')->first();
+        $pooledZnnValue = ($pooledZnn * znn_price());
+        $pooledEthValue = ($pooledEth * eth_price());
+        $totalLiquidity = ($pooledZnnValue + $pooledEthValue);
+
+        $znnFormatter = $ethFormatter = $liquidityFormatter = 'format';
+
+        if ($totalLiquidity > 100000) {
+            $liquidityFormatter = 'abbreviate';
+        }
+
+        if ($pooledZnn > 10000) {
+            $znnFormatter = 'abbreviate';
+        }
+
+        if ($pooledEth > 10000) {
+            $ethFormatter = 'abbreviate';
+        }
 
         $this->liquidityData = [
-            'totalLiquidity' => number_format($response['reserveUSD'], 2),
-            'pooledWznn' => number_format($response['reserve0'], 2),
-            'pooledWeth' => number_format($response['reserve1'], 2),
-            'pairId' => $response['id'],
-            'wznnId' => $response['token0']['id'],
+            'totalLiquidity' => Number::{$liquidityFormatter}($totalLiquidity, 2),
+            'pooledWznn' => Number::{$znnFormatter}($pooledZnn, 2),
+            'pooledWeth' => Number::{$ethFormatter}($pooledEth, 2),
         ];
-
-        // total supply & holders
-        // https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API#get-token-info
-        //        $this->holders = Http::get('https://api.ethplorer.io/getTokenInfo/0xb2e96a63479c2edd2fd62b382c89d5ca79f572d3', [
-        //            'apiKey' => 'freekey',
-        //        ])->json();
-
     }
 }

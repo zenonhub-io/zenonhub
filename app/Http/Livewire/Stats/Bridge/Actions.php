@@ -3,14 +3,14 @@
 namespace App\Http\Livewire\Stats\Bridge;
 
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Account;
+use App\Models\Nom\BridgeAdmin;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Actions extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public function mount()
     {
@@ -28,7 +28,7 @@ class Actions extends Component
 
     protected function initQuery()
     {
-        $account = Account::findByAddress(config('zenon.bridge_admin'));
-        $this->query = $account->sent_blocks()->whereNotNull('contract_method_id');
+        $admin = BridgeAdmin::getActiveAdmin();
+        $this->query = $admin->account->sent_blocks()->whereNotNull('contract_method_id');
     }
 }

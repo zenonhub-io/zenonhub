@@ -1,4 +1,4 @@
-<div>
+<div wire:init="loadOverviewData">
     @if ($halted)
         <x-alert
             message="The bridge is currently halted, please wait until it is back online before interacting with it"
@@ -36,20 +36,20 @@
                 </span>
             </div>
         </div>
-{{--        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">--}}
-{{--            <div class="text-start text-md-center mb-2 mb-md-0 order-0">--}}
-{{--                <span class="d-inline d-md-block text-muted fs-sm">Total Liquidity</span>--}}
-{{--                <span class="float-end float-md-none pb-2">${{ $liquidityData['totalLiquidity'] ?? '' }}</span>--}}
-{{--            </div>--}}
-{{--            <div class="text-start text-md-center mb-2 mb-md-0 order-0">--}}
-{{--                <span class="d-inline d-md-block text-muted fs-sm">Pooled ZNN</span>--}}
-{{--                <span class="float-end float-md-none pb-2">{{ $liquidityData['pooledWznn'] ?? '' }}</span>--}}
-{{--            </div>--}}
-{{--            <div class="text-start text-md-center mb-2 mb-md-0 order-0">--}}
-{{--                <span class="d-inline d-md-block text-muted fs-sm">Pooled ETH</span>--}}
-{{--                <span class="float-end float-md-none pb-2">{{ $liquidityData['pooledWeth'] ?? '' }}</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Total Liquidity</span>
+                <span class="float-end float-md-none pb-2">${{ $liquidityData['totalLiquidity'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Pooled ZNN</span>
+                <span class="float-end float-md-none pb-2">{{ $liquidityData['pooledWznn'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Pooled ETH</span>
+                <span class="float-end float-md-none pb-2">{{ $liquidityData['pooledWeth'] ?? '' }}</span>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-24 text-center">

@@ -11,20 +11,20 @@ class BridgeAlertBot
     public function routeNotificationForTwitter($notification): array
     {
         return [
-            config('bridge-alerts.twitter.consumer_key'),
-            config('bridge-alerts.twitter.consumer_secret'),
-            config('bridge-alerts.twitter.access_token'),
-            config('bridge-alerts.twitter.access_token_secret'),
+            config('bots.bridge-alerts.twitter.consumer_key'),
+            config('bots.bridge-alerts.twitter.consumer_secret'),
+            config('bots.bridge-alerts.twitter.access_token'),
+            config('bots.bridge-alerts.twitter.access_token_secret'),
         ];
     }
 
     public function routeNotificationForTelegram()
     {
-        return config('bridge-alerts.telegram.chat');
+        return config('bots.bridge-alerts.telegram.chat');
     }
 
     public function routeNotificationForDiscordWebhook()
     {
-        return config('bridge-alerts.discord.webhook');
+        return config('bots.bridge-alerts.discord.webhook');
     }
 }

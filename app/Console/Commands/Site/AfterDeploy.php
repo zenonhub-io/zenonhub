@@ -36,7 +36,7 @@ class AfterDeploy extends Command
         $this->call('zenon:update-contract-methods');
         $this->call('zenon:update-named-addresses');
         $this->call('zenon:update-node-list');
-        $this->call('zenon:update-znn-price');
+        $this->call('zenon:update-token-prices');
         $this->call('zenon:sync', [
             'orchestrators',
         ]);

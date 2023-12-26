@@ -50,4 +50,12 @@ return [
         'access_token' => env('TWITTER_BOT_ACCESS_TOKEN'),
         'access_secret' => env('TWITTER_BOT_ACCESS_SECRET'),
     ],
+
+    'etherscan' => [
+        'api_key' => env('ETHERSCAN_API_KEY'),
+    ],
+
+    'bitquery' => [
+        'api_key' => env('BITQUERY_API_KEY'),
+    ],
 ];

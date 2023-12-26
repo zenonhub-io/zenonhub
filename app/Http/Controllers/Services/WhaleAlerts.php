@@ -10,8 +10,8 @@ class WhaleAlerts
     {
         Meta::title('Whale Alerts');
 
-        $znnCutoff = config('whale-alerts.znn_cutoff');
-        $qsrCutoff = config('whale-alerts.qsr_cutoff');
+        $znnCutoff = config('bots.whale-alerts.znn_cutoff');
+        $qsrCutoff = config('bots.whale-alerts.qsr_cutoff');
 
         return view('pages/services/whale-alerts', [
             'znnCutoff' => number_format($znnCutoff),

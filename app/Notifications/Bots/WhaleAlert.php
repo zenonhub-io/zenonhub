@@ -29,15 +29,15 @@ class WhaleAlert extends Notification
     {
         $channels = [];
 
-        if (config('whale-alerts.discord.enabled')) {
+        if (config('bots.whale-alerts.discord.enabled')) {
             $channels[] = DiscordWebhookChannel::class;
         }
 
-        if (config('whale-alerts.telegram.enabled')) {
+        if (config('bots.whale-alerts.telegram.enabled')) {
             $channels[] = TelegramChannel::class;
         }
 
-        if (config('whale-alerts.twitter.enabled')) {
+        if (config('bots.whale-alerts.twitter.enabled')) {
             $channels[] = TwitterChannel::class;
         }
 
@@ -97,7 +97,7 @@ class WhaleAlert extends Notification
         $txLink = $this->formatMarkdownTxLink('telegram');
 
         return TelegramMessage::create()
-            ->token(config('whale-alerts.telegram.bot_token'))
+            ->token(config('bots.whale-alerts.telegram.bot_token'))
             ->line("*{$amount} \${$token}* was sent from {$senderAccount} to {$receiverAccount}\n")
             ->line('*Transaction*')
             ->line("{$txLink}\n")
