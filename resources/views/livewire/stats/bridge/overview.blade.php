@@ -1,4 +1,4 @@
-<div wire:init="loadLiquidityData">
+<div wire:init="loadOverviewData">
     @if ($halted)
         <x-alert
             message="The bridge is currently halted, please wait until it is back online before interacting with it"
