@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Stats\Bridge;
 
 use App\Models\Nom\BridgeAdmin;
+use App\Models\Nom\BridgeUnwrap;
+use App\Models\Nom\BridgeWrap;
 use App\Services\BitQuery;
 use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
@@ -14,12 +16,11 @@ class Overview extends Component
 {
     public ?array $liquidityData;
 
-    public ?array $holders;
+    public ?array $overview;
 
     public function render()
     {
-        $znn = App::make(ZenonSdk::class);
-        $bridgeStats = $znn->bridge->getBridgeInfo()['data'];
+        $bridgeStats = $this->loadBridgeStats();
         $adminAccount = BridgeAdmin::getActiveAdmin()->account;
         $orchestrators = Cache::get('orchestrators-online-percentage');
 
@@ -31,7 +32,7 @@ class Overview extends Component
         ]);
     }
 
-    private function loadBridgeStats()
+    private function loadBridgeStats(): object
     {
         $cacheKey = 'nom.bridgeStats.bridgeInfo';
 
@@ -46,9 +47,31 @@ class Overview extends Component
         return $data;
     }
 
-    public function loadLiquidityData()
+    public function loadOverviewData(): void
     {
-        $this->loadLiquidityData();
+        $totalWraps = BridgeWrap::count();
+        $totalUnwraps = BridgeUnwrap::count();
+        $dailyWraps = BridgeWrap::whereToday()->count();
+        $dailyUnwraps = BridgeUnwrap::whereToday()->count();
+        $dailyTx = $dailyWraps + $dailyUnwraps;
+
+        if ($totalWraps > 10000) {
+            $totalWraps = Number::abbreviate($totalWraps, 2);
+        }
+
+        if ($totalUnwraps > 10000) {
+            $totalUnwraps = Number::abbreviate($totalUnwraps, 2);
+        }
+
+        if ($dailyTx > 10000) {
+            $dailyTx = Number::abbreviate($dailyTx, 2);
+        }
+
+        $this->overview = [
+            'totalUnwraps' => $totalUnwraps,
+            'totalWraps' => $totalWraps,
+            'dailyTxCount' => $dailyTx,
+        ];
     }
 
     private function loadLiquidityData(): void

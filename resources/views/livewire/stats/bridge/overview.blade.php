@@ -15,6 +15,22 @@
         />
     @endif
 
+    @if (! $halted && $orchestrators > 66)
+        <x-alert
+            type="success"
+            class="mb-4 justify-content-center"
+        >
+            <div class="d-block d-md-flex justify-content-between align-items-center">
+                <i class="bi bi-check-circle-fill lead me-3"></i>
+                The bridge and orchestrators are online.
+                <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-outline-success ms-0 ms-md-3 d-block mt-3 mt-md-0">
+                    Bridge tokens now
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </x-alert>
+    @endif
+
     <div class="bg-secondary shadow rounded-2 p-3">
         <div class="d-block d-md-flex justify-content-md-evenly">
             <div class="text-start text-md-center mb-2 mb-md-0">
@@ -36,6 +52,21 @@
                 </span>
             </div>
         </div>
+        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Total Unwraps</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['totalUnwraps'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Total Wraps</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['totalWraps'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Past 24h Tx</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['dailyTxCount'] ?? '' }}</span>
+            </div>
+        </div>
+
 {{--        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">--}}
 {{--            <div class="text-start text-md-center mb-2 mb-md-0 order-0">--}}
 {{--                <span class="d-inline d-md-block text-muted fs-sm">Total Liquidity</span>--}}
@@ -50,15 +81,5 @@
 {{--                <span class="float-end float-md-none pb-2">{{ $liquidityData['pooledWeth'] ?? '' }}</span>--}}
 {{--            </div>--}}
 {{--        </div>--}}
-    </div>
-    <div class="row">
-        <div class="col-24 text-center">
-            @if (! $halted && $orchestrators > 66)
-                <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-lg btn-outline-primary mt-4">
-                    Bridge tokens now
-                    <i class="bi bi-arrow-right ms-2"></i>
-                </a>
-            @endif
-        </div>
     </div>
 </div>
