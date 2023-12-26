@@ -94,9 +94,20 @@ return [
 
     'pillar_missed_momentum_limit' => 15,
 
-    'momentums_per_hour' => 360,
-    'momentums_per_day' => 8640,
+    /*
+    |--------------------------------------------------------------------------
+    | Bridge info
+    |--------------------------------------------------------------------------
+    |
+    */
 
-    'bridge_admin' => 'z1qr9vtwsfr2n0nsxl2nfh6l5esqjh2wfj85cfq9',
-    'bridge_affiliate_link' => 'https://bridge.mainnet.zenon.community/?referral=2f5b37010a3a2224607170251d36010b3179216771262f0f2a04156e2226263a27301a70090f3b21',
+    'bridge' => [
+        'affiliate_link' => 'https://bridge.mainnet.zenon.community/?referral=2f5b37010a3a2224607170251d36010b3179216771262f0f2a04156e2226263a27301a70090f3b21',
+
+        'ethereum' => [
+            'weth-address' => '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+            'wznn-address' => '0xb2e96a63479c2edd2fd62b382c89d5ca79f572d3',
+            'znn-eth-pool' => '0xdac866A3796F85Cb84A914d98fAeC052E3b5596D',
+        ],
+    ],
 ];

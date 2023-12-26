@@ -29,7 +29,7 @@ class Updated extends Notification implements ShouldQueue
         $channels = [];
 
         if ($notifiable instanceof NetworkAlertBot) {
-            if (config('network-alerts.twitter.enabled')) {
+            if (config('bots.network-alerts.twitter.enabled')) {
                 $channels[] = TwitterChannel::class;
             }
         }

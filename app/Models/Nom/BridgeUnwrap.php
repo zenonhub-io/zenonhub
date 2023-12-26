@@ -98,7 +98,7 @@ class BridgeUnwrap extends Model
             'module' => 'proxy',
             'action' => 'eth_getTransactionByHash',
             'txhash' => '0x'.$this->transaction_hash,
-            'apikey' => config('etherscan.api_key'),
+            'apikey' => config('services.etherscan.api_key'),
         ])->json('result.from');
 
         $this->save();

@@ -11,20 +11,20 @@ class WhaleAlertBot
     public function routeNotificationForTwitter($notification): array
     {
         return [
-            config('whale-alerts.twitter.consumer_key'),
-            config('whale-alerts.twitter.consumer_secret'),
-            config('whale-alerts.twitter.access_token'),
-            config('whale-alerts.twitter.access_token_secret'),
+            config('bots.whale-alerts.twitter.consumer_key'),
+            config('bots.whale-alerts.twitter.consumer_secret'),
+            config('bots.whale-alerts.twitter.access_token'),
+            config('bots.whale-alerts.twitter.access_token_secret'),
         ];
     }
 
     public function routeNotificationForTelegram()
     {
-        return config('whale-alerts.telegram.chat');
+        return config('bots.whale-alerts.telegram.chat');
     }
 
     public function routeNotificationForDiscordWebhook()
     {
-        return config('whale-alerts.discord.webhook');
+        return config('bots.whale-alerts.discord.webhook');
     }
 }
