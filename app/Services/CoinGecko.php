@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -25,17 +26,9 @@ class CoinGecko
     {
         $date = Carbon::createFromTimestamp($timestamp)->format('d-m-Y');
 
-        try {
-            $response = Http::get("https://api.coingecko.com/api/v3/coins/{$token}/history?date={$date}");
-            if ($response->successful()) {
-                return $response->json("market_data.current_price.{$currency}");
-            }
-        } catch (\Illuminate\Http\Client\ConnectionException) {
-            return false;
-        }
-
-        Log::warning('Unable to load historic price from coingeko');
-
-        return false;
+        return Cache::rememberForever("coingecko-price-{$token}-{$currency}-{$date}", function () use ($token, $date, $currency) {
+            return Http::get("https://api.coingecko.com/api/v3/coins/{$token}/history?date={$date}")
+                ->json("market_data.current_price.{$currency}");
+        });
     }
 }
