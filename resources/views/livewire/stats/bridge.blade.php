@@ -9,7 +9,6 @@
                 'actions' => 'Actions',
                 'orchestrators' => 'Orchestrators',
                 'security' => 'Security',
-                'networks' => 'Networks',
             ]" />
         </div>
         <div class="w-100 p-3" wire:loading>
@@ -21,7 +20,7 @@
             />
         </div>
         <div wire:loading.remove>
-            <div class="card-body {{ (in_array($tab, ['actions', 'networks', 'orchestrators']) ? 'p-0' : '') }}">
+            <div class="card-body {{ (in_array($tab, ['actions', 'orchestrators']) ? 'p-0' : '') }}">
                 <div class="tab-content">
                     <div class="tab-pane show active">
                         @if ($tab === 'overview')
@@ -32,8 +31,6 @@
                             <livewire:stats.bridge.orchestrators key="{{now()}}" />
                         @elseif ($tab === 'security')
                             <livewire:stats.bridge.security key="{{now()}}" />
-                        @elseif ($tab === 'networks')
-                            <livewire:stats.bridge.networks key="{{now()}}" />
                         @endif
                     </div>
                 </div>
