@@ -15,11 +15,6 @@ class BitQuery
 
     public function getLiquidityData()
     {
-        // $liquidity;
-        // $pooledEth;
-        // $pooledWznn;
-        // $DailyVolume;
-
         $weekAgo = now()->subWeek()->toISOString();
         $poolAddress = config('zenon.bridge.ethereum.znn-eth-pool');
         $request = <<<GQL

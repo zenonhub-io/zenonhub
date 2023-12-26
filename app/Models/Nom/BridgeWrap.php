@@ -52,6 +52,14 @@ class BridgeWrap extends Model
     }
 
     //
+    // Scopes
+
+    public function scopeWhereToday($query)
+    {
+        return $query->where('created_at', '>=', now()->subHours(24));
+    }
+
+    //
     // Attributes
 
     public function getDisplayAmountAttribute(): string

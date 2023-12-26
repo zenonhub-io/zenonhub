@@ -9,7 +9,7 @@ class Alert extends Component
     /**
      * The alert message.
      */
-    public string $message;
+    public ?string $message;
 
     /**
      * The alert type.
@@ -37,7 +37,7 @@ class Alert extends Component
      * @param  ?string  $icon
      * @return void
      */
-    public function __construct(string $message, string $type = null, string $icon = null, bool $closeButton = false)
+    public function __construct(?string $message = null, ?string $type = null, ?string $icon = null, bool $closeButton = false)
     {
         $this->message = $message;
         $this->type = $type;
