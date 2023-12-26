@@ -35,10 +35,10 @@ class AfterDeploy extends Command
         $this->call('view:cache');
         $this->call('zenon:update-contract-methods');
         $this->call('zenon:update-named-addresses');
-        $this->call('zenon:update-node-list');
         $this->call('zenon:update-token-prices');
         $this->call('zenon:sync', [
             'orchestrators',
+            'nodes',
         ]);
         $this->call('site:create-caches');
         $this->call('site:generate-sitemap');
