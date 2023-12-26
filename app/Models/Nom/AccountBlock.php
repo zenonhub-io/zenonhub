@@ -4,6 +4,7 @@ namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -155,6 +156,17 @@ class AccountBlock extends Model
         return $query->whereHas('momentum', function ($q) use ($start) {
             $q->where('height', $start);
         });
+    }
+
+    public function scopeCreatedBetweenDates($query, array $dates)
+    {
+        $start = ($dates[0] instanceof Carbon) ? $dates[0] : Carbon::parse($dates[0]);
+        $end = ($dates[1] instanceof Carbon) ? $dates[1] : Carbon::parse($dates[1]);
+
+        return $query->whereBetween('created_at', [
+            $start->startOfDay(),
+            $end->endOfDay(),
+        ]);
     }
 
     public function scopeInvolvingAccount($query, $account)
