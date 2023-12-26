@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class UpdateZnnPrice extends Command
+class UpdateTokenPrices extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'zenon:update-znn-price';
+    protected $signature = 'zenon:update-token-prices';
 
     /**
      * The console command description.
@@ -28,7 +28,7 @@ class UpdateZnnPrice extends Command
     public function handle()
     {
         $this->info('Update znn price job queued');
-        \App\Jobs\UpdateZnnPrice::dispatch();
+        \App\Jobs\UpdateTokenPrices::dispatch();
 
         return self::SUCCESS;
     }

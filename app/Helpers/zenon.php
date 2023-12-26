@@ -25,6 +25,16 @@ function qsr_price(): float
     return (float) Cache::get('qsr-price');
 }
 
+function eth_price(): float
+{
+    return (float) Cache::get('eth-price');
+}
+
+function btc_price(): float
+{
+    return (float) Cache::get('btc-price');
+}
+
 function float_number(mixed $number): float
 {
     return (float) preg_replace('/[^\d.]/', '', $number);
