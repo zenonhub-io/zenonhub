@@ -8,7 +8,7 @@ class Bridge
 {
     public function show()
     {
-        Meta::title('Bridge inbound & outbound transactions')
+        Meta::title('Bridge Inbound & Outbound Transactions')
             ->description('A list of all incoming and outgoing bridge transactions, showing sender and receiver addresses, amount and network');
 
         return view('pages/explorer/overview', [
