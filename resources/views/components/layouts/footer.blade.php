@@ -13,16 +13,10 @@
                         <i class="bi-github" style="font-size: 1.35rem;"></i>
                     </a>
                     <a target="_blank" href="https://twitter.com/zenonhub" class="me-4">
-                        <i class="bi-twitter" style="font-size: 1.35rem;"></i>
-                    </a>
-                    <a target="_blank" href="https://discordapp.com/users/638703929965674496" class="me-4">
-                        <i class="bi-discord" style="font-size: 1.35rem;"></i>
+                        <i class="bi-twitter-x" style="font-size: 1.35rem;"></i>
                     </a>
                     <a target="_blank" href="https://t.me/digitalSloth" class="me-4">
                         <i class="bi-telegram" style="font-size: 1.35rem;"></i>
-                    </a>
-                    <a target="_blank" href="mailto:digitals1oth@proton.me" class="me-0 me-md-4">
-                        <i class="bi-envelope" style="font-size: 1.35rem;"></i>
                     </a>
                 </div>
             </div>
