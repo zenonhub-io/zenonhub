@@ -144,6 +144,15 @@ class AccountBlock extends Model
         });
     }
 
+    public function scopeCreatedLast($query, ?string $limit)
+    {
+        if ($limit) {
+            return $query->where('created_at', '>=', $limit);
+        }
+
+        return $query;
+    }
+
     public function scopeBetweenMomentums($query, $start, $end = false)
     {
         if ($end) {
