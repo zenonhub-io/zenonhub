@@ -44,8 +44,8 @@
             class="mb-4 justify-content-center"
         >
             <div class="d-block d-md-flex justify-content-between align-items-center">
-                <i class="bi bi-check-circle-fill lead me-3"></i>
-                The bridge and orchestrators are online.
+                <i class="bi bi-check-circle-fill lead me-2 me-md-3"></i>
+                The bridge and orchestrators are online
                 <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-outline-success ms-0 ms-md-3 d-block mt-3 mt-md-0">
                     Bridge tokens now
                     <i class="bi bi-arrow-right ms-2"></i>
@@ -84,7 +84,7 @@
                 <span class="float-end float-md-none pb-2">{{ $overview['outboundTx'] ?? '' }}</span>
             </div>
         </div>
-        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-2 border-1 border-top mt-md-4 pt-md-4">
             <div class="text-start text-md-center mb-2 mb-md-0">
                 <span class="d-inline d-md-block text-muted fs-sm">Inbound ZNN</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['inboundZnn'] ?? '' }}</span>
@@ -94,11 +94,11 @@
                 <span class="float-end float-md-none pb-2">{{ $overview['outboundZnn'] ?? '' }}</span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Net Flow</span>
+                <span class="d-inline d-md-block text-muted fs-sm">Net ZNN Flow</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['netFlowZnn'] ?? '' }}</span>
             </div>
         </div>
-        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-2 border-1 border-top mt-md-4 pt-md-4">
             <div class="text-start text-md-center mb-2 mb-md-0">
                 <span class="d-inline d-md-block text-muted fs-sm">Inbound QSR</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['inboundQsr'] ?? '' }}</span>
@@ -108,7 +108,7 @@
                 <span class="float-end float-md-none pb-2">{{ $overview['outboundQsr'] ?? '' }}</span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Net Flow</span>
+                <span class="d-inline d-md-block text-muted fs-sm">Net QSR Flow</span>
                 <span class="float-end float-md-none pb-2">{{ $overview['netFlowQsr'] ?? '' }}</span>
             </div>
         </div>
