@@ -175,7 +175,7 @@ class Overview extends Component
 
     private function numberAbbreviator($number, int $limit = 10000)
     {
-        if ($number > $limit || $number < 0) {
+        if ($number > $limit || ($number < 0 && abs($number) > $limit)) {
             $number = Number::abbreviate($number, 2);
         }
 
