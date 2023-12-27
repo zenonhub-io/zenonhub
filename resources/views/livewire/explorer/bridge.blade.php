@@ -90,6 +90,9 @@
                         <th>
                             To
                         </th>
+                        @if($tab === 'inbound')
+                            <th style="min-width:32px"></th>
+                        @endif
                         <th>
                             <button type="button" class="btn btn-sort" wire:click="sortBy('amount')">
                                 <x-table-sort-button :sort="$sort" :order="$order" check="amount"/>
@@ -130,6 +133,11 @@
                                 </td>
                                 <td>
                                     <x-address :account="$unwrap->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                </td>
+                                <td>
+                                    @if ($unwrap->is_affiliate_reward)
+                                        <i class="bi bi-plus-circle text-info" data-bs-toggle="tooltip" data-bs-title="Affiliate reward"></i>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $unwrap->display_amount }}
