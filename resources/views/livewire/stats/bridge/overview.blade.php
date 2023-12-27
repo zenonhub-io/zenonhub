@@ -1,4 +1,27 @@
 <div wire:init="loadOverviewData">
+    <div class="bg-secondary shadow rounded-2 p-3 mb-4">
+        <div class="d-block d-md-flex justify-content-md-evenly">
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Bridge <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Indicates if the bridge is online or has been halted"></i></span></span>
+                <span class="float-end float-md-none">
+                    <span class="legend-indicator bg-{{ (! $halted ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ (! $halted ? 'Active' : 'Halted') }}"></span>
+                </span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Orchestrators <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Over 66% of orchestrators need to be online for the bridge to function"></i></span></span>
+                <span class="float-end float-md-none">
+                    <span class="legend-indicator bg-{{ ($orchestrators > 66 ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $orchestrators }}% Online"></span>
+                </span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Admin <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The admin address allowed to issue commands to the bridge"></i></span></span>
+                <span class="float-end float-md-none">
+                    <x-address :account="$adminAddress" :eitherSide="8" breakpoint="lg" :named="false"/>
+                </span>
+            </div>
+        </div>
+    </div>
+
     @if ($halted)
         <x-alert
             message="The bridge is currently halted, please wait until it is back online before interacting with it"
@@ -32,38 +55,61 @@
     @endif
 
     <div class="bg-secondary shadow rounded-2 p-3">
+
+        <div class="form-group mb-4">
+            <select id="form-request" class="form-select" wire:change="setDateRange($event.target.value)">
+                <option value="all">All time</option>
+                <option value="day">Past day</option>
+                <option value="week">Past 7 days</option>
+                <option value="month">Past 30 days</option>
+                <option value="year">Past year</option>
+            </select>
+        </div>
+
         <div class="d-block d-md-flex justify-content-md-evenly">
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Bridge <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Indicates if the bridge is online or has been halted"></i></span></span>
-                <span class="float-end float-md-none">
-                    <span class="legend-indicator bg-{{ (! $halted ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ (! $halted ? 'Active' : 'Halted') }}"></span>
-                </span>
+                <span class="d-inline d-md-block text-muted fs-sm">ZNN Volume</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['znnVolume'] ?? '' }}</span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Orchestrators <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Over 66% of orchestrators need to be online for the bridge to function"></i></span></span>
-                <span class="float-end float-md-none">
-                    <span class="legend-indicator bg-{{ ($orchestrators > 66 ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $orchestrators }}% Online"></span>
-                </span>
+                <span class="d-inline d-md-block text-muted fs-sm">QSR Volume</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['qsrVolume'] ?? '' }}</span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Admin <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The admin address allowed to issue commands to the bridge"></i></span></span>
-                <span class="float-end float-md-none">
-                    <x-address :account="$adminAddress" :eitherSide="8" breakpoint="lg" :named="false"/>
-                </span>
+                <span class="d-inline d-md-block text-muted fs-sm">Inbound Tx</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['inboundTx'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Outbound Tx</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['outboundTx'] ?? '' }}</span>
             </div>
         </div>
         <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
-            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Total Inbound Tx</span>
-                <span class="float-end float-md-none pb-2">{{ $overview['totalUnwraps'] ?? '' }}</span>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Inbound ZNN</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['inboundZnn'] ?? '' }}</span>
             </div>
-            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Total Outbound Tx</span>
-                <span class="float-end float-md-none pb-2">{{ $overview['totalWraps'] ?? '' }}</span>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Outbound ZNN</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['outboundZnn'] ?? '' }}</span>
             </div>
-            <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Tx Past 24h</span>
-                <span class="float-end float-md-none pb-2">{{ $overview['dailyTxCount'] ?? '' }}</span>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Net Flow</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['netFlowZnn'] ?? '' }}</span>
+            </div>
+        </div>
+        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Inbound QSR</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['inboundQsr'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Outbound QSR</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['outboundQsr'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Net Flow</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['netFlowQsr'] ?? '' }}</span>
             </div>
         </div>
     </div>

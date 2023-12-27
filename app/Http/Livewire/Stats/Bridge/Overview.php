@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Stats\Bridge;
 
+use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\BridgeUnwrap;
 use App\Models\Nom\BridgeWrap;
@@ -18,6 +20,8 @@ class Overview extends Component
 
     public ?array $overview;
 
+    public ?string $dateRange = null;
+
     public function render()
     {
         $bridgeStats = $this->loadBridgeStats();
@@ -30,6 +34,29 @@ class Overview extends Component
             'orchestrators' => number_format($orchestrators),
             'affiliateLink' => config('zenon.bridge.affiliate_link'),
         ]);
+    }
+
+    public function setDateRange($range)
+    {
+        $this->dateRange = null;
+
+        if ($range === 'day') {
+            $this->dateRange = now()->subDay();
+        }
+
+        if ($range === 'week') {
+            $this->dateRange = now()->subWeek();
+        }
+
+        if ($range === 'month') {
+            $this->dateRange = now()->subDays(30);
+        }
+
+        if ($range === 'year') {
+            $this->dateRange = now()->subYear();
+        }
+
+        $this->loadOverviewData();
     }
 
     private function loadBridgeStats(): object
@@ -49,28 +76,67 @@ class Overview extends Component
 
     public function loadOverviewData(): void
     {
-        $totalWraps = BridgeWrap::count();
-        $totalUnwraps = BridgeUnwrap::count();
-        $dailyWraps = BridgeWrap::whereToday()->count();
-        $dailyUnwraps = BridgeUnwrap::whereToday()->count();
-        $dailyTx = $dailyWraps + $dailyUnwraps;
+        $znnToken = znn_token();
+        $qsrToken = qsr_token();
+        $bridgeAccount = Account::findByAddress(Account::ADDRESS_BRIDGE);
 
-        if ($totalWraps > 10000) {
-            $totalWraps = Number::abbreviate($totalWraps, 2);
-        }
+        //
+        // Totals
 
-        if ($totalUnwraps > 10000) {
-            $totalUnwraps = Number::abbreviate($totalUnwraps, 2);
-        }
+        $znnVolume = AccountBlock::involvingAccount($bridgeAccount)
+            ->createdLast($this->dateRange)
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $znnVolume = $znnToken->getDisplayAmount($znnVolume, 2, '.', '');
 
-        if ($dailyTx > 10000) {
-            $dailyTx = Number::abbreviate($dailyTx, 2);
-        }
+        $qsrVolume = AccountBlock::involvingAccount($bridgeAccount)
+            ->createdLast($this->dateRange)
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $qsrVolume = $qsrToken->getDisplayAmount($qsrVolume, 2, '.', '');
+
+        $totalInbound = BridgeUnwrap::createdLast($this->dateRange)->count();
+        $totalOutbound = BridgeWrap::createdLast($this->dateRange)->count();
+
+        //
+        // Znn
+
+        $inboundZnn = BridgeUnwrap::createdLast($this->dateRange)
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $inboundZnn = $znnToken->getDisplayAmount($inboundZnn, 2, '.', '');
+
+        $outboundZnn = BridgeWrap::createdLast($this->dateRange)
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $outboundZnn = $znnToken->getDisplayAmount($outboundZnn, 2, '.', '');
+
+        //
+        // QSR
+
+        $inboundQsr = BridgeUnwrap::createdLast($this->dateRange)
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $inboundQsr = $qsrToken->getDisplayAmount($inboundQsr, 2, '.', '');
+
+        $outboundQsr = BridgeWrap::createdLast($this->dateRange)
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $outboundQsr = $qsrToken->getDisplayAmount($outboundQsr, 2, '.', '');
 
         $this->overview = [
-            'totalUnwraps' => $totalUnwraps,
-            'totalWraps' => $totalWraps,
-            'dailyTxCount' => $dailyTx,
+            'znnVolume' => $this->numberAbbreviator($znnVolume),
+            'qsrVolume' => $this->numberAbbreviator($qsrVolume),
+            'inboundTx' => $this->numberAbbreviator($totalInbound),
+            'outboundTx' => $this->numberAbbreviator($totalOutbound),
+
+            'inboundZnn' => $this->numberAbbreviator($inboundZnn),
+            'outboundZnn' => $this->numberAbbreviator($outboundZnn),
+            'netFlowZnn' => $this->numberAbbreviator($inboundZnn - $outboundZnn),
+
+            'inboundQsr' => $this->numberAbbreviator($inboundQsr),
+            'outboundQsr' => $this->numberAbbreviator($outboundQsr),
+            'netFlowQsr' => $this->numberAbbreviator($inboundQsr - $outboundQsr),
         ];
     }
 
@@ -105,5 +171,14 @@ class Overview extends Component
             'pooledWznn' => Number::{$znnFormatter}($pooledZnn, 2),
             'pooledWeth' => Number::{$ethFormatter}($pooledEth, 2),
         ];
+    }
+
+    private function numberAbbreviator($number, int $limit = 10000)
+    {
+        if ($number > $limit || $number < 0) {
+            $number = Number::abbreviate($number, 2);
+        }
+
+        return $number;
     }
 }
