@@ -55,9 +55,13 @@ class BridgeWrap extends Model
     //
     // Scopes
 
-    public function scopeWhereToday($query)
+    public function scopeCreatedLast($query, ?string $limit)
     {
-        return $query->where('created_at', '>=', now()->subHours(24));
+        if ($limit) {
+            return $query->where('created_at', '>=', $limit);
+        }
+
+        return $query;
     }
 
     public function scopeCreatedBetweenDates($query, array $dates)
