@@ -32,4 +32,12 @@ class BridgeGuardian extends Model
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');
     }
+
+    //
+    // Scopes
+
+    public function scopeAllActive($query)
+    {
+        return $query->whereNull('revoked_at');
+    }
 }
