@@ -6,9 +6,9 @@
         <div class="card-header">
             <livewire:utilities.tab-header activeTab="{{ $tab }}" :tabs="[
                 'overview' => 'Overview',
+                'security' => 'Security',
                 'actions' => 'Actions',
                 'orchestrators' => 'Orchestrators',
-                'security' => 'Security',
             ]" />
         </div>
         <div class="w-100 p-3" wire:loading>
@@ -25,12 +25,12 @@
                     <div class="tab-pane show active">
                         @if ($tab === 'overview')
                             <livewire:stats.bridge.overview key="{{now()}}" />
+                        @elseif ($tab === 'security')
+                            <livewire:stats.bridge.security key="{{now()}}" />
                         @elseif ($tab === 'actions')
                             <livewire:stats.bridge.actions key="{{now()}}" />
                         @elseif ($tab === 'orchestrators')
                             <livewire:stats.bridge.orchestrators key="{{now()}}" />
-                        @elseif ($tab === 'security')
-                            <livewire:stats.bridge.security key="{{now()}}" />
                         @endif
                     </div>
                 </div>
