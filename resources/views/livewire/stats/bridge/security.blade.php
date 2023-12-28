@@ -2,20 +2,25 @@
     <div class="bg-secondary shadow rounded-2 p-3 mb-4">
         <div class="d-block d-md-flex justify-content-md-evenly">
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Admin Delay <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Delay upon which the new administrator or guardians will be active"></i></span></span>
+                <span class="d-inline d-md-block text-muted fs-sm">Admin Delay <span class="text-muted"><i
+                            class="bi-question-circle" data-bs-toggle="tooltip"
+                            data-bs-title="Delay upon which the new administrator or guardians will be active"></i></span></span>
                 <span class="float-end float-md-none">
                     {{  number_format($adminDelay) }}
                 </span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Soft Delay <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Delay upon which all other time challenges will expire"></i></span></span>
+                <span class="d-inline d-md-block text-muted fs-sm">Soft Delay <span class="text-muted"><i
+                            class="bi-question-circle" data-bs-toggle="tooltip"
+                            data-bs-title="Delay upon which all other time challenges will expire"></i></span></span>
                 <span class="float-end float-md-none">
                     {{  number_format($softDelay) }}
                 </span>
             </div>
-
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Admin <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The admin address allowed to issue commands to the bridge"></i></span></span>
+                <span class="d-inline d-md-block text-muted fs-sm">Admin <span class="text-muted"><i
+                            class="bi-question-circle" data-bs-toggle="tooltip"
+                            data-bs-title="The admin address allowed to issue commands to the bridge"></i></span></span>
                 <span class="float-end float-md-none">
                     <x-address :account="$admin->account" :eitherSide="8" breakpoint="lg" :named="false"/>
                 </span>
@@ -87,7 +92,7 @@
                             <x-address :account="$guardian->account" :eitherSide="8" :named="false"/>
                         </td>
                         <td>
-                            {{ ($guardian->account->latest_block ? $guardian->account->latest_block->created_at->format(config('zenon.date_format')) : '-') }}
+                            {{ ($guardian->account->updated_at ?  : '-') }}
                         </td>
                     </tr>
                 @endforeach
