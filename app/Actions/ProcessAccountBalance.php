@@ -21,7 +21,7 @@ class ProcessAccountBalance
         $this->saveTotals();
         $this->saveRewardTotals();
 
-        $this->account->updated_at = now();
+        $this->account->updated_at = $this->account->latest_block?->created_at ?? null;
         $this->account->save();
     }
 
