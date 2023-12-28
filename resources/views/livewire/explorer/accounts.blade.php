@@ -133,7 +133,7 @@
                                         {{ $account->displayQsrBalance(2) }}
                                     </span>
                                 </td>
-                                <td>{{ ($account->latest_block ? $account->latest_block->created_at->format(config('zenon.date_format')) : '-') }}</td>
+                                <td>{{ ($account->updated_at ? $account->updated_at->format(config('zenon.date_format')) : '-') }}</td>
                             </tr>
                         @endforeach
                         </tbody>
