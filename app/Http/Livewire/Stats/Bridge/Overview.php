@@ -173,12 +173,16 @@ class Overview extends Component
         ];
     }
 
-    private function numberAbbreviator($number, int $limit = 10000)
+    private function numberAbbreviator(mixed $number, int $limit = 10000, int $prevision = 0)
     {
         if ($number > $limit || ($number < 0 && abs($number) > $limit)) {
             $number = Number::abbreviate($number, 2);
         }
 
-        return $number;
+        if (is_string($number)) {
+            return $number;
+        }
+
+        return Number::format($number, $prevision);
     }
 }
