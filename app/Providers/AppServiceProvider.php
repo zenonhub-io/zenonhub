@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\BitQuery;
+use App\Services\BridgeStatus;
 use App\Services\CoinGecko;
 use App\Services\Discord\DiscordWebHook;
 use App\Services\Meta;
@@ -42,6 +43,10 @@ class AppServiceProvider extends ServiceProvider
 
         //
         // Integrations
+
+        $this->app->singleton(BridgeStatus::class, function ($app, $params) {
+            return new BridgeStatus();
+        });
 
         $this->app->singleton(CoinGecko::class, function ($app, $params) {
             return new CoinGecko();

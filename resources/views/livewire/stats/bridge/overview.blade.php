@@ -24,11 +24,15 @@
 
     @if ($halted)
         <x-alert
-            message="The bridge is currently halted, please wait until it is back online before interacting with it"
             type="warning"
             icon="exclamation-octagon"
-            class="d-flex justify-content-center mb-4"
-        />
+            class="d-flex justify-content-center mb-4">
+            The bridge is currently halted
+            @if($estimatedUnhaltMonemtum)
+                for another {{ now()->addSeconds($estimatedUnhaltMonemtum * 10)->diffForHumans(['parts' => 2], true) }} ({{ number_format($estimatedUnhaltMonemtum) }} momentums)
+            @endif
+            please wait until it is back online before interacting with it.
+        </x-alert>
     @elseif ($orchestrators < 66)
         <x-alert
             message="Only {{$orchestrators}}% of orchestrators are online, please wait until there are over 66% before interacting with the bridge"
@@ -53,6 +57,15 @@
             </div>
         </x-alert>
     @endif
+
+    @foreach($timeChallenges as $challenge)
+        <x-alert
+            message="A time challenge is in place for {{  $challenge['name'] }}. The challenge will expire in {{  number_format($challenge['endsIn']) }} momentums, {{ now()->addSeconds($challenge['endsIn'] * 10)->diffForHumans() }}"
+            type="warning"
+            icon="exclamation-octagon"
+            class="d-flex justify-content-center mb-4"
+        />
+    @endforeach
 
     <div class="bg-secondary shadow rounded-2 p-3">
 
