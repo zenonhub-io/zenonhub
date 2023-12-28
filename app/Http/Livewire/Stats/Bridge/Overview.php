@@ -8,7 +8,7 @@ use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\BridgeUnwrap;
 use App\Models\Nom\BridgeWrap;
 use App\Services\BitQuery;
-use App\Services\ZenonSdk;
+use App\Services\BridgeStatus;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
@@ -24,15 +24,17 @@ class Overview extends Component
 
     public function render()
     {
-        $bridgeStats = $this->loadBridgeStats();
+        $bridgeStatus = App::make(BridgeStatus::class);
         $adminAccount = BridgeAdmin::getActiveAdmin()->account;
         $orchestrators = Cache::get('orchestrators-online-percentage');
 
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => $adminAccount,
-            'halted' => $bridgeStats->halted,
+            'halted' => $bridgeStatus->getIsHalted(),
+            'estimatedUnhaltMonemtum' => $bridgeStatus->getEstimatedUnhaltMonemtum(),
             'orchestrators' => number_format($orchestrators),
             'affiliateLink' => config('zenon.bridge.affiliate_link'),
+            'timeChallenges' => collect($bridgeStatus->getTimeChallenges())->where('isActive', true),
         ]);
     }
 
@@ -57,21 +59,6 @@ class Overview extends Component
         }
 
         $this->loadOverviewData();
-    }
-
-    private function loadBridgeStats(): object
-    {
-        $cacheKey = 'nom.bridgeStats.bridgeInfo';
-
-        try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->bridge->getBridgeInfo()['data'];
-            Cache::forever($cacheKey, $data);
-        } catch (\Throwable $throwable) {
-            $data = Cache::get($cacheKey);
-        }
-
-        return $data;
     }
 
     public function loadOverviewData(): void
