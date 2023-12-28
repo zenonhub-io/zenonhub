@@ -6,6 +6,7 @@ use App\Exceptions\ApplicationException;
 use App\Models\Nom\Momentum;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class BridgeStatus
 {
@@ -28,10 +29,21 @@ class BridgeStatus
 
     public function clearCache(): void
     {
-        Cache::forget('service.bridgeStatus.bridgeInfoJson');
-        Cache::forget('service.bridgeStatus.timeChallengesJson');
-        Cache::forget('service.bridgeStatus.bridgeSecurityJson');
-        $this->loadCaches();
+        $bridgeInfoJson = $this->bridgeInfoJson;
+        $timeChallengesJson = $this->timeChallengesJson;
+        $bridgeSecurityJson = $this->bridgeSecurityJson;
+
+        try {
+            Cache::forget('service.bridgeStatus.bridgeInfoJson');
+            Cache::forget('service.bridgeStatus.timeChallengesJson');
+            Cache::forget('service.bridgeStatus.bridgeSecurityJson');
+            $this->loadCaches();
+        } catch (\Throwable $exception) {
+            Log::warning($exception->getMessage());
+            Cache::forever('service.bridgeStatus.bridgeInfoJson', $bridgeInfoJson);
+            Cache::forever('service.bridgeStatus.timeChallengesJson', $timeChallengesJson);
+            Cache::forever('service.bridgeStatus.bridgeSecurityJson', $bridgeSecurityJson);
+        }
     }
 
     public function getAdministrator(): string
