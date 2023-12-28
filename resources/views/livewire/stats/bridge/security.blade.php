@@ -87,7 +87,7 @@
                             <x-address :account="$guardian->account" :eitherSide="8" :named="false"/>
                         </td>
                         <td>
-                            {{ $guardian->account->updated_at?->format(config('zenon.short_date_format')) }}
+                            {{ ($guardian->account->latest_block ? $guardian->account->latest_block->created_at->format(config('zenon.date_format')) : '-') }}
                         </td>
                     </tr>
                 @endforeach
