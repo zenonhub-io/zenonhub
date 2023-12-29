@@ -90,9 +90,6 @@
                         <th>
                             To
                         </th>
-                        @if($tab === 'inbound')
-                            <th style="min-width:32px"></th>
-                        @endif
                         <th>
                             <button type="button" class="btn btn-sort" wire:click="sortBy('amount')">
                                 <x-table-sort-button :sort="$sort" :order="$order" check="amount"/>
@@ -101,6 +98,9 @@
                         <th>
                             Token
                         </th>
+                        @if($tab === 'inbound')
+                            <th>Type</th>
+                        @endif
                         <th>
                             Hash
                         </th>
@@ -135,17 +135,19 @@
                                     <x-address :account="$unwrap->to_account" :eitherSide="8" :alwaysShort="true"/>
                                 </td>
                                 <td>
-                                    @if ($unwrap->is_affiliate_reward)
-                                        <i class="bi bi-plus-circle text-info" data-bs-toggle="tooltip" data-bs-title="Affiliate reward"></i>
-                                    @endif
-                                </td>
-                                <td>
                                     {{ $unwrap->display_amount }}
                                 </td>
                                 <td>
                                     <a href="{{ route('explorer.token', ['zts' => $unwrap->token->token_standard]) }}">
                                         {{ $unwrap->token->custom_label }}
                                     </a>
+                                </td>
+                                <td>
+                                    @if ($unwrap->is_affiliate_reward)
+                                        Affilate
+                                    @else
+                                        Redeem
+                                    @endif
                                 </td>
                                 <td>
                                     <a href="{{ $unwrap->tx_hash_link }}" target="_blank">
