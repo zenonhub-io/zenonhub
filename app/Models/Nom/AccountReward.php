@@ -22,6 +22,8 @@ class AccountReward extends Model
 
     public const TYPE_LIQUIDITY_PROGRAM = 6;
 
+    public const TYPE_BRIDGE_AFFILIATE = 7;
+
     /**
      * The table associated with the model.
      *
@@ -106,6 +108,10 @@ class AccountReward extends Model
 
         if ($this->type === self::TYPE_LIQUIDITY_PROGRAM) {
             return 'Liquidity Program';
+        }
+
+        if ($this->type === self::TYPE_BRIDGE_AFFILIATE) {
+            return 'Bridge Affiliate';
         }
 
         return null;

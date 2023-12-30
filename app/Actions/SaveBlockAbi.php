@@ -31,24 +31,25 @@ class SaveBlockAbi
             $block->contract_method_id = $contractMethod->id;
             $block->save();
 
-            //                $contractName = ucfirst(strtolower($contractMethod->contract->name));
-            //                $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\".$contractName;
-            //
-            //                if (class_exists($embeddedContract)) {
-            //                    $embeddedContract = new $embeddedContract();
-            //                    $decoded = $embeddedContract->decode($contractMethod->name, $data);
-            //                    $parameters = $embeddedContract->getParameterNames($contractMethod->name);
-            //
-            //                    if ($decoded && $parameters) {
-            //                        $parameters = explode(',', $parameters);
-            //
-            //                        $block->data->decoded = array_combine(
-            //                            $parameters,
-            //                            $decoded
-            //                        );
-            //                        $block->data->save();
-            //                    }
-            //                }
+            $contractName = ucfirst(strtolower($contractMethod->contract->name));
+            $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\".$contractName;
+
+            if (class_exists($embeddedContract)) {
+                $embeddedContract = new $embeddedContract();
+                $decoded = $embeddedContract->decode($contractMethod->name, $data);
+                $parameters = $embeddedContract->getParameterNames($contractMethod->name);
+
+                if ($decoded && $parameters) {
+                    $parameters = explode(',', $parameters);
+
+                    $block->data->decoded = array_combine(
+                        $parameters,
+                        $decoded
+                    );
+                    $block->data->is_processed = true;
+                    $block->data->save();
+                }
+            }
         }
     }
 }

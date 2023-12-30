@@ -124,6 +124,11 @@ class Token extends Model implements Sitemapable
         return $this->hasMany(AccountBlock::class, 'token_id', 'id');
     }
 
+    public function bridge_network_tokens(): HasMany
+    {
+        return $this->hasMany(BridgeNetworkToken::class, 'token_id', 'id');
+    }
+
     //
     // Scopes
 

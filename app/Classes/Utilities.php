@@ -3,6 +3,8 @@
 namespace App\Classes;
 
 use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
+use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
 use App\Services\ZenonSdk;
@@ -42,7 +44,7 @@ class Utilities
         });
     }
 
-    public static function loadAccount(string $address): Account
+    public static function loadAccount(string $address, ?string $name = null): Account
     {
         $account = Account::findByAddress($address);
 
@@ -53,6 +55,7 @@ class Utilities
             $account = Account::create([
                 'chain_id' => $chain->id,
                 'address' => $address,
+                'name' => $name,
                 'public_key' => $block?->publicKey,
             ]);
         }
@@ -93,5 +96,12 @@ class Utilities
         }
 
         return $token;
+    }
+
+    public static function validateBridgeTx(AccountBlock $block): bool
+    {
+        $bridgeAdmin = BridgeAdmin::getActiveAdmin();
+
+        return $block->account_id === $bridgeAdmin->account_id;
     }
 }

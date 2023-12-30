@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessAccountBalance;
+use App\Jobs\Sync\Nodes as SyncNodes;
 use App\Jobs\Sync\Orchestrators as SyncOrchestrators;
 use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Jobs\Sync\Projects as SyncProjects;
@@ -93,6 +94,13 @@ class Sync extends Command
             });
 
             $this->output->newLine();
+        }
+
+        if (in_array('nodes', $types)) {
+            $this->output->write('Saving nodes...');
+            $this->output->newLine();
+
+            SyncNodes::dispatch();
         }
 
         return self::SUCCESS;

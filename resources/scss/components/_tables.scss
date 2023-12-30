@@ -3,9 +3,15 @@
 // --------------------------------------------------
 
 .table {
+    --#{$prefix}table-color: #{$table-th-color};
     --#{$prefix}table-th-color: #{$table-th-color};
     --#{$prefix}table-dark-color: #{$body-dark-mode-color};
     white-space: nowrap !important;
+
+    > :not(caption) > * > * {
+        color: var(--#{$prefix}table-th-color);
+    }
+
     &:not(.table-dark) {
         thead:not(.thead-dark) th,
         tbody th {

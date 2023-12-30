@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Sync;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use MaxMind\Db\Reader;
 
-class UpdateNodeList implements ShouldQueue
+class Nodes implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -19,9 +19,6 @@ class UpdateNodeList implements ShouldQueue
 
     protected string $nodesJsonUrl = 'https://github.com/sol-znn/znn-node-parser/releases/download/public_nodes/output_nodes.json';
 
-    /**
-     * @var ?Collection
-     */
     protected ?Collection $data;
 
     public function handle(): void

@@ -47,7 +47,7 @@
                     @foreach($data as $token)
                         <tr>
                             <td>
-                                <a href=" {{ route('explorer.token', ['zts' => $token->token_standard]) }}">
+                                <a href="{{ route('explorer.token', ['zts' => $token->token_standard]) }}">
                                     {{ $token->custom_label }}
                                 </a>
                             </td>

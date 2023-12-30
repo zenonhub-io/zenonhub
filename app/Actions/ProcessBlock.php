@@ -52,8 +52,8 @@ class ProcessBlock
 
     private function shouldSendWhaleAlerts(): bool
     {
-        $znnValue = config('whale-alerts.znn_cutoff') * 100000000;
-        $qsrValue = config('whale-alerts.qsr_cutoff') * 100000000;
+        $znnValue = config('bots.whale-alerts.znn_cutoff') * 100000000;
+        $qsrValue = config('bots.whale-alerts.qsr_cutoff') * 100000000;
 
         if (! $this->block->token) {
             return false;
@@ -72,8 +72,8 @@ class ProcessBlock
 
     private function shouldSendBridgeAlerts(): bool
     {
-        $watchAddresses = config('bridge-alerts.watch_addresses');
-        $watchMethods = config('bridge-alerts.watch_methods');
+        $watchAddresses = config('bots.bridge-alerts.watch_addresses');
+        $watchMethods = config('bots.bridge-alerts.watch_methods');
 
         if (! in_array($this->block->to_account->address, [Account::ADDRESS_BRIDGE, Account::ADDRESS_LIQUIDITY])) {
             return false;

@@ -61,7 +61,7 @@
                             </td>
                             <td>{{ $mint->display_amount }}</td>
                             <td>
-                                <a href=" {{ route('explorer.transaction', ['hash' => $mint->account_block->hash]) }}">
+                                <a href="{{ route('explorer.transaction', ['hash' => $mint->account_block->hash]) }}">
                                     <x-hash-tooltip :hash="$mint->account_block->hash" :eitherSide="8" :alwaysShort="true"/>
                                 </a>
                             </td>

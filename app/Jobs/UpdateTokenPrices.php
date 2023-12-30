@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
-class UpdateZnnPrice implements ShouldQueue
+class UpdateTokenPrices implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -20,8 +20,11 @@ class UpdateZnnPrice implements ShouldQueue
     public function handle(): void
     {
         $complete = 0;
-        $znnPrice = App::make(CoinGecko::class)->currentPrice();
-        $qsrPrice = App::make(CoinGecko::class)->currentPrice('quasar-2');
+        $coinGecko = App::make(CoinGecko::class);
+        $znnPrice = $coinGecko->currentPrice();
+        $qsrPrice = $coinGecko->currentPrice('quasar-2');
+        $ethPrice = $coinGecko->currentPrice('ethereum');
+        $btcPrice = $coinGecko->currentPrice('bitcoin');
 
         if ($znnPrice > 0) {
             Cache::forever('znn-price', $znnPrice);
@@ -33,7 +36,17 @@ class UpdateZnnPrice implements ShouldQueue
             $complete++;
         }
 
-        if ($complete === 2) {
+        if ($ethPrice > 0) {
+            Cache::forever('eth-price', $ethPrice);
+            $complete++;
+        }
+
+        if ($btcPrice > 0) {
+            Cache::forever('btc-price', $btcPrice);
+            $complete++;
+        }
+
+        if ($complete === 4) {
             $this->delete();
         } else {
             $this->release(20);

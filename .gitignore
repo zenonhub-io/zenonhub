@@ -15,6 +15,7 @@ yarn-error.log
 .Ds_Store
 .phpstorm.meta.php
 _ide_helper.php
+.phpunit.cache
 
 /public/*
 !/public/.htaccess

@@ -28,12 +28,12 @@ class ProcessUnprocessedBlocks extends Command
     {
         $this->info('Process block data');
 
-        $baseQuery = AccountBlock::whereNull('contract_method_id')
+        $baseQuery = AccountBlock::whereNotNull('contract_method_id')
             ->where('block_type', [AccountBlock::TYPE_SEND, AccountBlock::TYPE_CONTRACT_SEND])
             ->whereHas('data',
                 fn ($q) => $q->whereNotNull('raw')
                     ->whereNull('decoded')
-                //->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
+                    ->whereNotIn('raw', ['AAAAAAAAAAE=', 'AAAAAAAAAAI=', 'IAk+pg==', 'y3+LKg==', 's9ZY/Q==', 'r0PT8A==', 'OhbyDg==', '+kuhXw=='])
             );
 
         $this->output->progressStart($baseQuery->count());

@@ -3,96 +3,169 @@
 namespace App\Http\Livewire\Stats\Bridge;
 
 use App\Models\Nom\Account;
-use App\Services\ZenonSdk;
+use App\Models\Nom\AccountBlock;
+use App\Models\Nom\BridgeAdmin;
+use App\Models\Nom\BridgeUnwrap;
+use App\Models\Nom\BridgeWrap;
+use App\Services\BitQuery;
+use App\Services\BridgeStatus;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Number;
 use Livewire\Component;
 
 class Overview extends Component
 {
     public ?array $liquidityData;
 
-    public ?array $holders;
+    public ?array $overview;
+
+    public ?string $dateRange = null;
 
     public function render()
     {
-        $bridgeStats = $this->loadBridgeStats();
-        $adminAccount = Account::findByAddress($bridgeStats->administrator);
+        $bridgeStatus = App::make(BridgeStatus::class);
+        $adminAccount = BridgeAdmin::getActiveAdmin()->account;
         $orchestrators = Cache::get('orchestrators-online-percentage');
 
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => $adminAccount,
-            'halted' => $bridgeStats->halted,
+            'halted' => $bridgeStatus->getIsHalted(),
+            'estimatedUnhaltMonemtum' => $bridgeStatus->getEstimatedUnhaltMonemtum(),
             'orchestrators' => number_format($orchestrators),
-            'affiliateLink' => config('zenon.bridge_affiliate_link'),
+            'affiliateLink' => config('zenon.bridge.affiliate_link'),
+            'timeChallenges' => collect($bridgeStatus->getTimeChallenges())->where('isActive', true),
         ]);
     }
 
-    private function loadBridgeStats()
+    public function setDateRange($range)
     {
-        $cacheKey = 'nom.bridgeStats.bridgeInfo';
+        $this->dateRange = null;
 
-        try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->bridge->getBridgeInfo()['data'];
-            Cache::forever($cacheKey, $data);
-        } catch (\Throwable $throwable) {
-            $data = Cache::get($cacheKey);
+        if ($range === 'day') {
+            $this->dateRange = now()->subDay();
         }
 
-        return $data;
+        if ($range === 'week') {
+            $this->dateRange = now()->subWeek();
+        }
+
+        if ($range === 'month') {
+            $this->dateRange = now()->subDays(30);
+        }
+
+        if ($range === 'year') {
+            $this->dateRange = now()->subYear();
+        }
+
+        $this->loadOverviewData();
     }
 
-    public function loadLiquidityData()
+    public function loadOverviewData(): void
     {
-        // Orbital Staked ETH = (Orbital’s Balance of ETH-wZNN LP ZTS) / (Total Supply of ETH-wZNN LP ERC20) * (Amount of ETH in the ETH-wZNN Pool)
+        $znnToken = znn_token();
+        $qsrToken = qsr_token();
+        $bridgeAccount = Account::findByAddress(Account::ADDRESS_BRIDGE);
 
-        // https://github.com/Uniswap/v2-subgraph/blob/master/schema.graphql
-        $query = <<<'GQL'
-{
- pair(id: "0xdac866a3796f85cb84a914d98faec052e3b5596d"){
-  token0 {
-  	id
-    symbol
-    name
-    totalLiquidity
-    derivedETH
-  }
-  token1 {
-  	id
-    symbol
-    name
-    totalLiquidity
-    derivedETH
-  }
-  id
-  reserveUSD
-  reserve0
-  reserve1
- }
-}
-GQL;
+        //
+        // Totals
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev', [
-            'query' => $query,
-        ])->json('data.pair');
+        $znnVolume = AccountBlock::involvingAccount($bridgeAccount)
+            ->createdLast($this->dateRange)
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $znnVolume = $znnToken->getDisplayAmount($znnVolume, 2, '.', '');
+
+        $qsrVolume = AccountBlock::involvingAccount($bridgeAccount)
+            ->createdLast($this->dateRange)
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $qsrVolume = $qsrToken->getDisplayAmount($qsrVolume, 2, '.', '');
+
+        $totalInbound = BridgeUnwrap::createdLast($this->dateRange)->count();
+        $totalOutbound = BridgeWrap::createdLast($this->dateRange)->count();
+
+        //
+        // Znn
+
+        $inboundZnn = BridgeUnwrap::createdLast($this->dateRange)
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $inboundZnn = $znnToken->getDisplayAmount($inboundZnn, 2, '.', '');
+
+        $outboundZnn = BridgeWrap::createdLast($this->dateRange)
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $outboundZnn = $znnToken->getDisplayAmount($outboundZnn, 2, '.', '');
+
+        //
+        // QSR
+
+        $inboundQsr = BridgeUnwrap::createdLast($this->dateRange)
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $inboundQsr = $qsrToken->getDisplayAmount($inboundQsr, 2, '.', '');
+
+        $outboundQsr = BridgeWrap::createdLast($this->dateRange)
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $outboundQsr = $qsrToken->getDisplayAmount($outboundQsr, 2, '.', '');
+
+        $this->overview = [
+            'znnVolume' => $this->numberAbbreviator($znnVolume),
+            'qsrVolume' => $this->numberAbbreviator($qsrVolume),
+            'inboundTx' => $this->numberAbbreviator($totalInbound),
+            'outboundTx' => $this->numberAbbreviator($totalOutbound),
+
+            'inboundZnn' => $this->numberAbbreviator($inboundZnn),
+            'outboundZnn' => $this->numberAbbreviator($outboundZnn),
+            'netFlowZnn' => $this->numberAbbreviator($inboundZnn - $outboundZnn),
+
+            'inboundQsr' => $this->numberAbbreviator($inboundQsr),
+            'outboundQsr' => $this->numberAbbreviator($outboundQsr),
+            'netFlowQsr' => $this->numberAbbreviator($inboundQsr - $outboundQsr),
+        ];
+    }
+
+    private function loadLiquidityData(): void
+    {
+        $bitQuery = App::make(BitQuery::class);
+        $data = $bitQuery->getLiquidityData();
+
+        $poolData = collect($data['address'][0]['balances']);
+        $pooledZnn = $poolData->where('currency.symbol', 'wZNN')->pluck('value')->first();
+        $pooledEth = $poolData->where('currency.symbol', 'WETH')->pluck('value')->first();
+        $pooledZnnValue = ($pooledZnn * znn_price());
+        $pooledEthValue = ($pooledEth * eth_price());
+        $totalLiquidity = ($pooledZnnValue + $pooledEthValue);
+
+        $znnFormatter = $ethFormatter = $liquidityFormatter = 'format';
+
+        if ($totalLiquidity > 100000) {
+            $liquidityFormatter = 'abbreviate';
+        }
+
+        if ($pooledZnn > 10000) {
+            $znnFormatter = 'abbreviate';
+        }
+
+        if ($pooledEth > 10000) {
+            $ethFormatter = 'abbreviate';
+        }
 
         $this->liquidityData = [
-            'totalLiquidity' => number_format($response['reserveUSD'], 2),
-            'pooledWznn' => number_format($response['reserve0'], 2),
-            'pooledWeth' => number_format($response['reserve1'], 2),
-            'pairId' => $response['id'],
-            'wznnId' => $response['token0']['id'],
+            'totalLiquidity' => Number::{$liquidityFormatter}($totalLiquidity, 2),
+            'pooledWznn' => Number::{$znnFormatter}($pooledZnn, 2),
+            'pooledWeth' => Number::{$ethFormatter}($pooledEth, 2),
         ];
+    }
 
-        // total supply & holders
-        // https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API#get-token-info
-        //        $this->holders = Http::get('https://api.ethplorer.io/getTokenInfo/0xb2e96a63479c2edd2fd62b382c89d5ca79f572d3', [
-        //            'apiKey' => 'freekey',
-        //        ])->json();
+    private function numberAbbreviator(mixed $number, int $limit = 10000, int $prevision = 0)
+    {
+        if ($number > $limit || ($number < 0 && abs($number) > $limit)) {
+            return Number::abbreviate($number, 2);
+        }
 
+        return Number::format($number, $prevision);
     }
 }

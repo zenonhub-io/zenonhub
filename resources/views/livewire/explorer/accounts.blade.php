@@ -91,9 +91,7 @@
                                 </button>
                             </th>
                             <th>
-                                <button type="button" class="btn btn-sort" wire:click="sortBy('updated_at')">
-                                    <x-table-sort-button :sort="$sort" :order="$order" check="updated_at" title="Last active"/>
-                                </button>
+                                Last active
                             </th>
                         </tr>
                         </thead>
@@ -135,7 +133,7 @@
                                         {{ $account->displayQsrBalance(2) }}
                                     </span>
                                 </td>
-                                <td>{{ $account->updated_at?->format(config('zenon.short_date_format')) }}</td>
+                                <td>{{ ($account->updated_at ? $account->updated_at->format(config('zenon.date_format')) : '-') }}</td>
                             </tr>
                         @endforeach
                         </tbody>

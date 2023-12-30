@@ -27,15 +27,15 @@ class BridgeAlert extends Notification
     {
         $channels = [];
 
-        if (config('bridge-alerts.discord.enabled')) {
+        if (config('bots.bridge-alerts.discord.enabled')) {
             $channels[] = DiscordWebhookChannel::class;
         }
 
-        if (config('bridge-alerts.telegram.enabled')) {
+        if (config('bots.bridge-alerts.telegram.enabled')) {
             $channels[] = TelegramChannel::class;
         }
 
-        if (config('bridge-alerts.twitter.enabled')) {
+        if (config('bots.bridge-alerts.twitter.enabled')) {
             $channels[] = TwitterChannel::class;
         }
 
@@ -80,7 +80,7 @@ class BridgeAlert extends Notification
         $contractLink = $this->formatMarkdownAddressLink($this->block->to_account, 'telegram');
 
         return TelegramMessage::create()
-            ->token(config('bridge-alerts.telegram.bot_token'))
+            ->token(config('bots.bridge-alerts.telegram.bot_token'))
             ->line("*{$action}* was issued by {$adminAccount}\n")
             ->line('*Data*')
             ->line("```

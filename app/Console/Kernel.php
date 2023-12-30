@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Actions\ClearBridgeStatusCache;
 use App\Actions\Nom\Accelerator\SendPhaseVotingReminders;
 use App\Actions\Nom\Accelerator\SendProjectVotingReminders;
 use App\Actions\Nom\Accelerator\UpdateProjectFunding;
@@ -20,34 +21,31 @@ class Kernel extends ConsoleKernel
         $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
         $schedule->command('zenon:sync az-status')->hourly();
-        $schedule->command('zenon:update-znn-price')->hourly();
+        $schedule->command('zenon:update-token-prices')->hourly();
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();
+
+        $schedule->call(fn () => (new ClearBridgeStatusCache())->execute())->everyFiveMinutes();
 
         $schedule->call(function () {
             (new CancelExpired())->execute();
             (new ReceiveAll())->execute();
         })->everyFifteenMinutes()->environments('production');
 
-        $schedule->call(function () {
-            (new UpdateProjectFunding())->execute();
-        })->hourly();
+        $schedule->call(fn () => (new UpdateProjectFunding())->execute())
+            ->hourly();
 
-        $schedule->call(function () {
-            (new SendProjectVotingReminders())->execute();
-        })
+        $schedule->call(fn () => (new SendProjectVotingReminders())->execute())
             ->at('16:05')
             ->days(Schedule::MONDAY, Schedule::WEDNESDAY, Schedule::FRIDAY)
             ->environments('production');
 
-        $schedule->call(function () {
-            (new SendPhaseVotingReminders())->execute();
-        })
+        $schedule->call(fn () => (new SendPhaseVotingReminders())->execute())
             ->at('16:05')
             ->days(Schedule::TUESDAY, Schedule::THURSDAY)
             ->environments('production');
 
-        $schedule->command('zenon:update-node-list')->cron('5 */6 * * *');
+        $schedule->command('zenon:sync nodes')->cron('5 */6 * * *');
     }
 
     private function runIndexer(Schedule $schedule): void
