@@ -14,8 +14,8 @@ class Home
     public function show()
     {
         Meta::title('Zenon Hub | Explore the Zenon Network Blockchain with Ease', false)
-            ->twitterImage('/img/meta-big.png')
-            ->openGraphImage('/img/meta-big.png');
+            ->twitterImage(url('img/meta-big.png'))
+            ->openGraphImage(url('img/meta-big.png'));
 
         return view('pages/home', [
             'stats' => [
