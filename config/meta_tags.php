@@ -25,7 +25,7 @@ return [
 
     'open_graph' => [
         'auto_fill' => true,
-        'image' => '/img/meta-small.png',
+        'image' => env('APP_URL').'/img/meta-small.png',
         'site_name' => env('APP_NAME', 'Zenon Hub'),
         'title' => null,
         'type' => 'website', // 'WebPage'
@@ -36,7 +36,7 @@ return [
         'auto_fill' => true,
         'card' => 'summary',
         'description' => null,
-        'image' => '/img/meta-small.png',
+        'image' => env('APP_URL').'/img/meta-small.png',
         'site' => '@zenonhub',
         'title' => null,
     ],
