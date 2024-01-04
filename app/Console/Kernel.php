@@ -19,9 +19,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes()->environments('production');
         $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
+        $schedule->command('zenon:update-token-prices')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
         $schedule->command('zenon:sync az-status')->hourly();
-        $schedule->command('zenon:update-token-prices')->hourly();
         $schedule->command('queue:prune-batches')->daily();
         $schedule->command('site:generate-sitemap')->daily();
 
