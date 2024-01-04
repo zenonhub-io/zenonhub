@@ -37,23 +37,23 @@ class UpdateTokenPrices implements ShouldQueue
             $complete++;
         }
 
-        Sleep::for(1)->second();
-        $ethPrice = $coinGecko->currentPrice('ethereum');
+        //        Sleep::for(1)->second();
+        //        $ethPrice = $coinGecko->currentPrice('ethereum');
+        //
+        //        if ($ethPrice > 0) {
+        //            Cache::forever('eth-price', $ethPrice);
+        //            $complete++;
+        //        }
+        //
+        //        Sleep::for(1)->second();
+        //        $btcPrice = $coinGecko->currentPrice('bitcoin');
+        //
+        //        if ($btcPrice > 0) {
+        //            Cache::forever('btc-price', $btcPrice);
+        //            $complete++;
+        //        }
 
-        if ($ethPrice > 0) {
-            Cache::forever('eth-price', $ethPrice);
-            $complete++;
-        }
-
-        Sleep::for(1)->second();
-        $btcPrice = $coinGecko->currentPrice('bitcoin');
-
-        if ($btcPrice > 0) {
-            Cache::forever('btc-price', $btcPrice);
-            $complete++;
-        }
-
-        if ($complete === 4) {
+        if ($complete === 2) {
             $this->delete();
         } else {
             $this->release(20);
