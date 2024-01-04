@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Sleep;
 
 class UpdateTokenPrices implements ShouldQueue
 {
@@ -21,25 +22,31 @@ class UpdateTokenPrices implements ShouldQueue
     {
         $complete = 0;
         $coinGecko = App::make(CoinGecko::class);
-        $znnPrice = $coinGecko->currentPrice();
-        $qsrPrice = $coinGecko->currentPrice('quasar-2');
-        $ethPrice = $coinGecko->currentPrice('ethereum');
-        $btcPrice = $coinGecko->currentPrice('bitcoin');
 
+        $znnPrice = $coinGecko->currentPrice();
         if ($znnPrice > 0) {
             Cache::forever('znn-price', $znnPrice);
             $complete++;
         }
+
+        Sleep::for(1)->second();
+        $qsrPrice = $coinGecko->currentPrice('quasar-2');
 
         if ($qsrPrice > 0) {
             Cache::forever('qsr-price', $qsrPrice);
             $complete++;
         }
 
+        Sleep::for(1)->second();
+        $ethPrice = $coinGecko->currentPrice('ethereum');
+
         if ($ethPrice > 0) {
             Cache::forever('eth-price', $ethPrice);
             $complete++;
         }
+
+        Sleep::for(1)->second();
+        $btcPrice = $coinGecko->currentPrice('bitcoin');
 
         if ($btcPrice > 0) {
             Cache::forever('btc-price', $btcPrice);
