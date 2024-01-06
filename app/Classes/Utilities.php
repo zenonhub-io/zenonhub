@@ -44,7 +44,7 @@ class Utilities
         });
     }
 
-    public static function loadAccount(string $address, string $name = null): Account
+    public static function loadAccount(string $address, ?string $name = null): Account
     {
         $account = Account::findByAddress($address);
 
