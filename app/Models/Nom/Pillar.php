@@ -162,6 +162,12 @@ class Pillar extends Model implements Sitemapable
             ->limit(30);
     }
 
+    public function scopeIsNotTop30($query)
+    {
+        return $query->orderBy('weight', 'desc')
+            ->skip(30);
+    }
+
     public function scopeWhereListSearch($query, $search)
     {
         return $query->where('name', 'LIKE', "%{$search}%");

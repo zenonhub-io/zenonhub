@@ -10,8 +10,10 @@ use App\Actions\Nom\Accelerator\UpdateProjectFunding;
 use App\Actions\PlasmaBot\CancelExpired;
 use App\Actions\PlasmaBot\ReceiveAll;
 use App\Actions\UpdateTokenPrices;
+use App\Exceptions\ApplicationException;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -20,23 +22,29 @@ class Kernel extends ConsoleKernel
         $this->runIndexer($schedule);
 
         //
-        // All envs
+        // All environments
 
         $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
         $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
         $schedule->command('zenon:sync az-status')->hourly();
         $schedule->command('queue:prune-batches')->daily();
+        $schedule->command('zenon:sync nodes')->cron('5 */6 * * *');
 
-        $schedule->call(fn () => (new GenerateSitemap())->execute())->daily();
         $schedule->call(fn () => (new ClearBridgeStatusCache())->execute())->everyFiveMinutes();
         $schedule->call(fn () => (new UpdateProjectFunding())->execute())->hourly();
-
-        $schedule->command('zenon:sync nodes')->cron('5 */6 * * *');
+        $schedule->call(fn () => (new GenerateSitemap())->execute())->daily();
 
         //
         // Production
+
         $schedule->command('horizon:snapshot')->everyFiveMinutes()->environments('production');
-        $schedule->call(fn () => (new UpdateTokenPrices())->execute())->everyFiveMinutes()->environments('production');
+        $schedule->call(function () {
+            try {
+                (new UpdateTokenPrices())->execute();
+            } catch (ApplicationException $exception) {
+                Log::warning($exception);
+            }
+        })->everyFiveMinutes()->environments('production');
 
         $schedule->call(function () {
             (new CancelExpired())->execute();
