@@ -2,6 +2,10 @@
 
 namespace App\Console\Commands\Site;
 
+use App\Actions\CreateCaches;
+use App\Actions\GenerateSitemap;
+use App\Actions\UpdateContractMethods;
+use App\Actions\UpdateTokenPrices;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -33,15 +37,16 @@ class AfterDeploy extends Command
         $this->call('event:cache');
         $this->call('route:cache');
         $this->call('view:cache');
-        $this->call('zenon:update-contract-methods');
         $this->call('zenon:update-named-addresses');
-        $this->call('zenon:update-token-prices');
         $this->call('zenon:sync', [
             'orchestrators',
             'nodes',
         ]);
-        $this->call('site:create-caches');
-        $this->call('site:generate-sitemap');
+
+        (new CreateCaches())->execute();
+        (new UpdateContractMethods())->execute();
+        (new UpdateTokenPrices())->execute();
+        (new GenerateSitemap())->execute();
 
         Log::debug('Running after deploy scripts');
 

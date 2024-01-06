@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Actions;
 
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
@@ -8,24 +8,13 @@ use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Token;
 use Carbon\Carbon;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
-class GenerateSitemap implements ShouldQueue
+class GenerateSitemap
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public int $tries = 2;
-
-    public int $backoff = 30;
-
-    public function handle(): void
+    public function execute(): void
     {
         $file = 'app/sitemap/sitemap.xml';
         $this->checkFileExists($file);
@@ -70,14 +59,14 @@ class GenerateSitemap implements ShouldQueue
             ->writeToFile(storage_path($file));
     }
 
-    private function addItem($route)
+    private function addItem($route): Url
     {
         return Url::create(route($route))
             ->setLastModificationDate(Carbon::yesterday())
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY);
     }
 
-    private function checkFileExists($file)
+    private function checkFileExists($file): void
     {
         $file = storage_path($file);
         if (! file_exists($file)) {

@@ -27,8 +27,7 @@ class GenerateSitemap extends Command
      */
     public function handle()
     {
-        \App\Jobs\GenerateSitemap::dispatch();
-        $this->info('Sitemap job queued');
+        (new \App\Actions\GenerateSitemap())->execute();
 
         return self::SUCCESS;
     }

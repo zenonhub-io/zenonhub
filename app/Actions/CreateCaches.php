@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Site;
+namespace App\Actions;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
@@ -8,31 +8,11 @@ use App\Models\Nom\Fusion;
 use App\Models\Nom\Momentum;
 use App\Models\Nom\PillarDelegator;
 use App\Models\Nom\Stake;
-use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
-class CreateCaches extends Command
+class CreateCaches
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'site:create-caches';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Creates the main caches used by the explorer';
-
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function execute()
     {
         Cache::put('transaction-count', AccountBlock::count());
         Cache::put('address-count', Account::count());
@@ -46,7 +26,5 @@ class CreateCaches extends Command
 
         $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->isZnn()->sum('amount'), 0);
         Cache::put('staked-znn', $stakedZnn);
-
-        return self::SUCCESS;
     }
 }
