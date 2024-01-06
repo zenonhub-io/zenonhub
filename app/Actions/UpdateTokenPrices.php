@@ -37,7 +37,7 @@ class UpdateTokenPrices
 
     private function updateQsrPrice(): void
     {
-        $qsrPrice = $this->coinGecko->currentPrice('ethereum');
+        $qsrPrice = $this->coinGecko->currentPrice('quasar-2');
 
         if (! $qsrPrice) {
             throw new ApplicationException('Unable to update QSR price');
@@ -48,7 +48,7 @@ class UpdateTokenPrices
 
     private function updateEthPrice(): void
     {
-        $ethPrice = $this->coinGecko->currentPrice('quasar-2');
+        $ethPrice = $this->coinGecko->currentPrice('ethereum');
 
         if (! $ethPrice) {
             throw new ApplicationException('Unable to update ETH price');
