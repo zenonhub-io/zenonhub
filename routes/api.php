@@ -142,5 +142,6 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
         Route::post('verify-signed-message', [App\Http\Controllers\Api\Utilities::class, 'verifySignedMessage'])->name('verifySignedMessage');
         Route::get('account-lp-balances', [App\Http\Controllers\Api\Utilities::class, 'accountLpBalances'])->name('accountLpBalances');
         Route::get('token-supply/{token}/{value?}', [App\Http\Controllers\Api\Utilities::class, 'tokenSupply'])->name('tokenSupply');
+        Route::get('prices', [App\Http\Controllers\Api\Utilities::class, 'tokenPrice'])->name('tokenPrice');
     });
 });

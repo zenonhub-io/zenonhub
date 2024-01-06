@@ -122,4 +122,26 @@ class Utilities extends ApiController
 
         return $token->getDisplayAmount($supply, $token->decimals, '.', '');
     }
+
+    public function tokenPrice(): JsonResponse
+    {
+        return $this->success([
+            'znn' => [
+                'timestamp' => now(),
+                'usd' => znn_price(),
+            ],
+            'qsr' => [
+                'timestamp' => now(),
+                'usd' => qsr_price(),
+            ],
+            'eth' => [
+                'timestamp' => now(),
+                'usd' => eth_price(),
+            ],
+            'btc' => [
+                'timestamp' => now(),
+                'usd' => btc_price(),
+            ],
+        ]);
+    }
 }
