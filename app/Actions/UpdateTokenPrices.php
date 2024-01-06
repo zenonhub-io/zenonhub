@@ -65,6 +65,6 @@ class UpdateTokenPrices
             throw new ApplicationException('Unable to update BTC price');
         }
 
-        Cache::forever('eth-price', $btcPrice);
+        Cache::forever('btc-price', $btcPrice);
     }
 }
