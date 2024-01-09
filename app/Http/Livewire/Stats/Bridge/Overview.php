@@ -82,13 +82,14 @@ class Overview extends Component
             ->sum('amount');
         $qsrVolume = $qsrToken->getDisplayAmount($qsrVolume, 2, '.', '');
 
-        $totalInbound = BridgeUnwrap::createdLast($this->dateRange)->count();
+        $totalInbound = BridgeUnwrap::whereNotAffiliateReward()->createdLast($this->dateRange)->count();
         $totalOutbound = BridgeWrap::createdLast($this->dateRange)->count();
 
         //
         // Znn
 
         $inboundZnn = BridgeUnwrap::createdLast($this->dateRange)
+            ->whereNotAffiliateReward()
             ->where('token_id', $znnToken->id)
             ->sum('amount');
         $inboundZnn = $znnToken->getDisplayAmount($inboundZnn, 2, '.', '');
@@ -102,6 +103,7 @@ class Overview extends Component
         // QSR
 
         $inboundQsr = BridgeUnwrap::createdLast($this->dateRange)
+            ->whereNotAffiliateReward()
             ->where('token_id', $qsrToken->id)
             ->sum('amount');
         $inboundQsr = $qsrToken->getDisplayAmount($inboundQsr, 2, '.', '');
@@ -183,7 +185,7 @@ class Overview extends Component
         ];
     }
 
-    private function numberAbbreviator(mixed $number, int $limit = 10000, int $prevision = 0)
+    private function numberAbbreviator(mixed $number, int $limit = 10000, int $prevision = 0): string
     {
         if ($number > $limit || ($number < 0 && abs($number) > $limit)) {
             return Number::abbreviate($number, 2);

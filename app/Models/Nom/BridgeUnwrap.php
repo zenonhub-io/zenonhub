@@ -94,6 +94,11 @@ class BridgeUnwrap extends Model
         return $query->where('log_index', '>=', '4000000000');
     }
 
+    public function scopeWhereNotAffiliateReward($query)
+    {
+        return $query->where('log_index', '<', '4000000000');
+    }
+
     //
     // Attributes
 
