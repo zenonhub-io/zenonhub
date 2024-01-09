@@ -164,8 +164,9 @@ class Pillar extends Model implements Sitemapable
 
     public function scopeIsNotTop30($query)
     {
-        return $query->orderBy('weight', 'desc')
-            ->skip(30);
+        $top30 = self::isActive()->isTop30()->pluck('id');
+
+        return $query->whereNotIn('id', $top30);
     }
 
     public function scopeWhereListSearch($query, $search)

@@ -89,6 +89,11 @@ class BridgeUnwrap extends Model
         ]);
     }
 
+    public function scopeWhereAffiliateReward($query)
+    {
+        return $query->where('log_index', '>=', '4000000000');
+    }
+
     //
     // Attributes
 

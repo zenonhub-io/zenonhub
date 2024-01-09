@@ -177,6 +177,11 @@ class AcceleratorProject extends Model implements Sitemapable
                 ->orWhere('description', 'LIKE', "%{$search}%")
                 ->orWhere('url', 'LIKE', "%{$search}%")
                 ->orWhere('hash', '=', "{$search}");
+        })->orWhereHas('phases', function ($q) use ($search) {
+            $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('description', 'LIKE', "%{$search}%")
+                ->orWhere('url', 'LIKE', "%{$search}%")
+                ->orWhere('hash', '=', "{$search}");
         });
     }
 
