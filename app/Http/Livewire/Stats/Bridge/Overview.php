@@ -111,6 +111,25 @@ class Overview extends Component
             ->sum('amount');
         $outboundQsr = $qsrToken->getDisplayAmount($outboundQsr, 2, '.', '');
 
+        //
+        // Affiliate
+
+        $affiliateTxCount = BridgeUnwrap::createdLast($this->dateRange)
+            ->whereAffiliate()
+            ->count();
+
+        $affiliateZnn = BridgeUnwrap::createdLast($this->dateRange)
+            ->whereAffiliate()
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+        $affiliateZnn = $znnToken->getDisplayAmount($affiliateZnn, 2, '.', '');
+
+        $affiliateQsr = BridgeUnwrap::createdLast($this->dateRange)
+            ->whereAffiliate()
+            ->where('token_id', $qsrToken->id)
+            ->sum('amount');
+        $affiliateQsr = $qsrToken->getDisplayAmount($affiliateQsr, 2, '.', '');
+
         $this->overview = [
             'znnVolume' => $this->numberAbbreviator($znnVolume),
             'qsrVolume' => $this->numberAbbreviator($qsrVolume),
@@ -124,6 +143,10 @@ class Overview extends Component
             'inboundQsr' => $this->numberAbbreviator($inboundQsr),
             'outboundQsr' => $this->numberAbbreviator($outboundQsr),
             'netFlowQsr' => $this->numberAbbreviator($inboundQsr - $outboundQsr),
+
+            'affiliateTx' => $this->numberAbbreviator($affiliateTxCount),
+            'affiliateZnn' => $this->numberAbbreviator($affiliateZnn),
+            'affiliateQsr' => $this->numberAbbreviator($affiliateQsr),
         ];
     }
 

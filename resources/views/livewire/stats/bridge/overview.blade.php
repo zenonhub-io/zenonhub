@@ -125,5 +125,19 @@
                 <span class="float-end float-md-none pb-2">{{ $overview['netFlowQsr'] ?? '' }}</span>
             </div>
         </div>
+        <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-2 border-1 border-top mt-md-4 pt-md-4">
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Affiliate Payouts</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['affiliateTx'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Affiliate ZNN</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['affiliateZnn'] ?? '' }}</span>
+            </div>
+            <div class="text-start text-md-center mb-2 mb-md-0">
+                <span class="d-inline d-md-block text-muted fs-sm">Affiliate QSR</span>
+                <span class="float-end float-md-none pb-2">{{ $overview['affiliateQsr'] ?? '' }}</span>
+            </div>
+        </div>
     </div>
 </div>
