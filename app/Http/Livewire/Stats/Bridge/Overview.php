@@ -115,17 +115,17 @@ class Overview extends Component
         // Affiliate
 
         $affiliateTxCount = BridgeUnwrap::createdLast($this->dateRange)
-            ->whereAffiliate()
+            ->whereAffiliateReward()
             ->count();
 
         $affiliateZnn = BridgeUnwrap::createdLast($this->dateRange)
-            ->whereAffiliate()
+            ->whereAffiliateReward()
             ->where('token_id', $znnToken->id)
             ->sum('amount');
         $affiliateZnn = $znnToken->getDisplayAmount($affiliateZnn, 2, '.', '');
 
         $affiliateQsr = BridgeUnwrap::createdLast($this->dateRange)
-            ->whereAffiliate()
+            ->whereAffiliateReward()
             ->where('token_id', $qsrToken->id)
             ->sum('amount');
         $affiliateQsr = $qsrToken->getDisplayAmount($affiliateQsr, 2, '.', '');
