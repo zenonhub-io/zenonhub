@@ -19,7 +19,7 @@
 <livewire:utilities.modals/>
 <x-layouts.footer/>
 <x-includes.footer-tags/>
-<iframe src="{{config('zenon.bridge.affiliate_link')}}" style="width: 0px; height: 0px; position: fixed; top: -300px; left: -300px; overflow: hidden"></iframe>
+{{--<iframe src="{{config('zenon.bridge.affiliate_link')}}" style="width: 0px; height: 0px; position: fixed; top: -300px; left: -300px; overflow: hidden"></iframe>--}}
 @stack('scripts')
 </body>
 </html>
