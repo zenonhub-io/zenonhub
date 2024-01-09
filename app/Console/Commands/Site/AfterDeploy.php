@@ -43,10 +43,14 @@ class AfterDeploy extends Command
             'nodes',
         ]);
 
-        (new CreateCaches())->execute();
-        (new UpdateContractMethods())->execute();
-        (new UpdateTokenPrices())->execute();
-        (new GenerateSitemap())->execute();
+        try {
+            (new CreateCaches())->execute();
+            (new UpdateContractMethods())->execute();
+            (new UpdateTokenPrices())->execute();
+            (new GenerateSitemap())->execute();
+        } catch (\Throwable $throwable) {
+            Log::error($throwable);
+        }
 
         Log::debug('Running after deploy scripts');
 
