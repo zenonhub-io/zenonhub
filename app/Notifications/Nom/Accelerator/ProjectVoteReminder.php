@@ -37,7 +37,7 @@ class ProjectVoteReminder extends Notification implements ShouldQueue
         $totalAbstain = $this->project->votes()->where('is_abstain', '1')->count();
         $totalVotesNeeded = $this->project->total_more_votes_needed;
         $votesText = Str::plural('vote', $totalVotesNeeded);
-        $progressBar = $this->generateProgressBar($this->project->votes_percentage);
+        $progressBar = progress_bar($this->project->votes_percentage);
 
         $link = route('az.project', [
             'hash' => $this->project->hash,
@@ -54,17 +54,5 @@ $progressBar
 🔗 $link
 
 #Zenon #AcceleratorZ");
-    }
-
-    private function generateProgressBar(int $percentage): string
-    {
-        $empty = '□';
-        $full = '■';
-        $barTotalLength = 10;
-
-        $fullBars = round($percentage / 10);
-        $emptyBars = $barTotalLength - $fullBars;
-
-        return str_repeat($full, $fullBars).str_repeat($empty, $emptyBars)." {$percentage}%";
     }
 }

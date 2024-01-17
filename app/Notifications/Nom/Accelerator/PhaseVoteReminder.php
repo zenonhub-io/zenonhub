@@ -37,7 +37,7 @@ class PhaseVoteReminder extends Notification implements ShouldQueue
         $totalAbstain = $this->phase->votes()->where('is_abstain', '1')->count();
         $totalVotesNeeded = $this->phase->total_more_votes_needed;
         $votesText = Str::plural('vote', $totalVotesNeeded);
-        $progressBar = $this->generateProgressBar($this->phase->votes_percentage);
+        $progressBar = progress_bar($this->phase->votes_percentage);
 
         $link = route('az.phase', [
             'hash' => $this->phase->hash,
@@ -54,17 +54,5 @@ $progressBar
 🔗 $link
 
 #Zenon #AcceleratorZ");
-    }
-
-    private function generateProgressBar(int $percentage): string
-    {
-        $empty = '□';
-        $full = '■';
-        $barTotalLength = 10;
-
-        $fullBars = round($percentage / 10);
-        $emptyBars = $barTotalLength - $fullBars;
-
-        return str_repeat($full, $fullBars).str_repeat($empty, $emptyBars)." {$percentage}%";
     }
 }

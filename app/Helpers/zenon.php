@@ -92,3 +92,15 @@ function get_env_prefix(): ?string
 
     return null;
 }
+
+function progress_bar(int $percentage)
+{
+    $empty = '□';
+    $full = '■';
+    $barTotalLength = 10;
+
+    $fullBars = round($percentage / 10);
+    $emptyBars = $barTotalLength - $fullBars;
+
+    return str_repeat($full, max(0, $fullBars)).str_repeat($empty, max(0, $emptyBars))." {$percentage}%";
+}
