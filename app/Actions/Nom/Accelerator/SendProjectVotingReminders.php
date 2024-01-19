@@ -11,13 +11,15 @@ class SendProjectVotingReminders
 {
     public function execute()
     {
-        $projects = AcceleratorProject::isNew()->get();
         $networkBot = new NetworkAlertBot();
+        $projects = AcceleratorProject::isNew()
+            ->shouldSendVotingReminder()
+            ->get();
 
-        $projects->each(function ($project, int $index) use ($networkBot) {
+        $projects->each(function ($project) use ($networkBot) {
             Notification::send(
                 $networkBot,
-                (new ProjectVoteReminder($project))->delay(now()->addMinutes($index))
+                new ProjectVoteReminder($project)
             );
         });
     }

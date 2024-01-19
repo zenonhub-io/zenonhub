@@ -52,13 +52,11 @@ class Kernel extends ConsoleKernel
         })->everyFifteenMinutes()->environments('production');
 
         $schedule->call(fn () => (new SendProjectVotingReminders())->execute())
-            ->at('16:05')
-            ->days(Schedule::MONDAY, Schedule::WEDNESDAY, Schedule::FRIDAY)
+            ->hourly()
             ->environments('production');
 
         $schedule->call(fn () => (new SendPhaseVotingReminders())->execute())
-            ->at('16:05')
-            ->days(Schedule::TUESDAY, Schedule::THURSDAY)
+            ->hourly()
             ->environments('production');
 
         //
