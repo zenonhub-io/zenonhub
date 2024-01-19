@@ -11,14 +11,15 @@ class SendPhaseVotingReminders
 {
     public function execute()
     {
-        $cutoff = now()->subMonths(3);
-        $phases = AcceleratorPhase::isOpen()->createdAfter($cutoff)->get();
         $networkBot = new NetworkAlertBot();
+        $phases = AcceleratorPhase::isOpen()
+            ->shouldSendVotingReminder()
+            ->get();
 
-        $phases->each(function ($phase, int $index) use ($networkBot) {
+        $phases->each(function ($phase) use ($networkBot) {
             Notification::send(
                 $networkBot,
-                (new PhaseVoteReminder($phase))->delay(now()->addMinutes($index))
+                new PhaseVoteReminder($phase)
             );
         });
     }
