@@ -51,13 +51,13 @@ class Kernel extends ConsoleKernel
             (new ReceiveAll())->execute();
         })->everyFifteenMinutes()->environments('production');
 
-        $schedule->call(fn () => (new SendProjectVotingReminders())->execute())
-            ->hourly()
-            ->environments('production');
-
-        $schedule->call(fn () => (new SendPhaseVotingReminders())->execute())
-            ->hourly()
-            ->environments('production');
+        //        $schedule->call(fn () => (new SendProjectVotingReminders())->execute())
+        //            ->hourly()
+        //            ->environments('production');
+        //
+        //        $schedule->call(fn () => (new SendPhaseVotingReminders())->execute())
+        //            ->hourly()
+        //            ->environments('production');
 
         //
         // Staging

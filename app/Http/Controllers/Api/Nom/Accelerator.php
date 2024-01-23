@@ -74,16 +74,18 @@ class Accelerator extends ApiController
     public function getPillarVotes(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'pillar' => 'required|string',
-            'hashes' => 'required|array',
+            'pillar_name' => 'required|string',
+            'project_hashes' => 'required|array',
         ]);
+
+        //dd($request->input('project_hashes'));
 
         if ($validator->fails()) {
             return $this->validationError($validator);
         }
 
         try {
-            $response = $this->znn->accelerator->getPillarVotes($request->input('pillar'), $request->input('hashes'));
+            $response = $this->znn->accelerator->getPillarVotes($request->input('pillar_name'), $request->input('project_hashes'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
