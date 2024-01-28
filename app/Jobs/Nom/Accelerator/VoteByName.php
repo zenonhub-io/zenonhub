@@ -48,7 +48,7 @@ class VoteByName implements ShouldQueue
         // Load the pillar that voted
         $pillar = Pillar::where('name', $blockData['name'])->first();
 
-        if (! $pillar) {
+        if (! $pillar || $pillar->owner->address !== $this->block->account->address) {
             return;
         }
 
