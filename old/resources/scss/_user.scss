@@ -1,0 +1,74 @@
+//
+// Theme Components
+// --------------------------------------------------
+//
+html {
+    scroll-behavior: smooth;
+}
+body {
+    background: #181819;
+}
+
+.svg-icon {
+    display: inline-block;
+
+    svg {
+        display: inline-block;
+    }
+
+    use,
+    path,
+    g {
+        fill: inherit;
+    }
+}
+
+// Select bg fix
+.dark-mode .form-select { background-color: #1E1D1D; }
+
+
+.input-group-lg {
+    .input-group-text {
+        border-width: 2px;
+    }
+    .form-control {
+        border-width: 2px;
+    }
+}
+
+pre {
+
+    @include box-shadow($input-focus-box-shadow);
+
+    .json-key {
+        color: #C792EA;
+    }
+
+    .json-string {
+        color: #C3E88D;
+    }
+
+    .json-number, .json-boolean, .json-null {
+        color: #F78C6C;
+    }
+}
+
+.rounded-bottom-0 {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.rounded-top-0 {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.rounded-start-0 {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.rounded-end-0 {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}

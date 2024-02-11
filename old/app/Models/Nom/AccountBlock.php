@@ -1,0 +1,334 @@
+<?php
+
+namespace App\Models\Nom;
+
+use App\Models\Markable\Favorite;
+use App\Services\ZenonSdk;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Maize\Markable\Markable;
+
+class AccountBlock extends Model
+{
+    use HasFactory, Markable;
+
+    public const TYPE_GENESIS = 1;
+
+    public const TYPE_SEND = 2;
+
+    public const TYPE_RECEIVE = 3;
+
+    public const TYPE_CONTRACT_SEND = 4;
+
+    public const TYPE_CONTRACT_RECEIVE = 5;
+
+    protected static array $marks = [
+        Favorite::class,
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_account_blocks';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    public $fillable = [
+        'chain_id',
+        'account_id',
+        'to_account_id',
+        'momentum_id',
+        'parent_block_id',
+        'paired_account_block_id',
+        'token_id',
+        'contract_method_id',
+        'version',
+        'block_type',
+        'height',
+        'amount',
+        'fused_plasma',
+        'base_plasma',
+        'used_plasma',
+        'difficulty',
+        'hash',
+        'created_at',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
+    //
+    // Relations
+
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class);
+    }
+
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'account_id', 'id');
+    }
+
+    public function to_account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'to_account_id', 'id');
+    }
+
+    public function momentum(): BelongsTo
+    {
+        return $this->belongsTo(Momentum::class);
+    }
+
+    public function paired_account_block(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class, 'paired_account_block_id', 'id');
+    }
+
+    public function descendants(): HasMany
+    {
+        return $this->hasMany(AccountBlock::class, 'parent_block_id', 'id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class, 'parent_block_id', 'id');
+    }
+
+    public function token(): HasOne
+    {
+        return $this->hasOne(Token::class, 'id', 'token_id');
+    }
+
+    public function contract_method(): HasOne
+    {
+        return $this->hasOne(ContractMethod::class, 'id', 'contract_method_id');
+    }
+
+    public function data(): HasOne
+    {
+        return $this->hasOne(AccountBlockData::class, 'account_block_id', 'id');
+    }
+
+    //
+    // Scopes
+
+    public function scopeWhereListSearch($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('hash', $search);
+        });
+    }
+
+    public function scopeCreatedLast($query, ?string $limit)
+    {
+        if ($limit) {
+            return $query->where('created_at', '>=', $limit);
+        }
+
+        return $query;
+    }
+
+    public function scopeBetweenMomentums($query, $start, $end = false)
+    {
+        if ($end) {
+            return $query->whereHas('momentum', function ($q) use ($start, $end) {
+                $q->where('height', '>=', $start)
+                    ->where('height', '<', $end);
+            });
+        }
+
+        return $query->whereHas('momentum', function ($q) use ($start) {
+            $q->where('height', $start);
+        });
+    }
+
+    public function scopeCreatedBetweenDates($query, array $dates)
+    {
+        $start = ($dates[0] instanceof Carbon) ? $dates[0] : Carbon::parse($dates[0]);
+        $end = ($dates[1] instanceof Carbon) ? $dates[1] : Carbon::parse($dates[1]);
+
+        return $query->whereBetween('created_at', [
+            $start->startOfDay(),
+            $end->endOfDay(),
+        ]);
+    }
+
+    public function scopeInvolvingAccount($query, $account)
+    {
+        return $query->where(function ($q) use ($account) {
+            $q->where('account_id', $account->id)
+                ->orWhere('to_account_id', $account->id);
+        });
+    }
+
+    public function scopeIsReceived($query)
+    {
+        return $query->whereNotNull('paired_account_block_id');
+    }
+
+    public function scopeIsUnreceived($query)
+    {
+        return $query->whereNull('paired_account_block_id');
+    }
+
+    public function scopeNotToEmpty($query)
+    {
+        return $query->where('to_account_id', '!=', '1');
+    }
+
+    public function scopeNotFromPillarProducer($query)
+    {
+        $producerIds = Account::getAllPillarProducerAddresses();
+
+        return $query->whereNotIn('account_id', $producerIds);
+    }
+
+    public function scopeNotContractUpdate($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNotIn('contract_method_id', [36, 68]) // Ignore update contract calls
+                ->orWhereNull('contract_method_id');
+        });
+    }
+
+    //
+    // Attributes
+
+    public function getDisplayActualTypeAttribute()
+    {
+        if ($this->block_type === self::TYPE_GENESIS) {
+            return 'Genesis';
+        }
+
+        if ($this->block_type === self::TYPE_SEND) {
+            return 'Send';
+        }
+
+        if ($this->block_type === self::TYPE_RECEIVE) {
+            return 'Receive';
+        }
+
+        if ($this->block_type === self::TYPE_CONTRACT_SEND) {
+            return 'Contract Send';
+        }
+
+        if ($this->block_type === self::TYPE_CONTRACT_RECEIVE) {
+            return 'Contract Receive';
+        }
+
+        return null;
+    }
+
+    public function getDisplayTypeAttribute()
+    {
+        if ($this->contract_method) {
+            return $this->contract_method->name;
+        }
+
+        if ($this->amount > 0) {
+            return 'Transfer';
+        }
+
+        return null;
+    }
+
+    public function getDisplayAmountAttribute()
+    {
+        return $this->token?->getDisplayAmount($this->amount);
+    }
+
+    public function getDisplayHeightAttribute()
+    {
+        return number_format($this->height);
+    }
+
+    public function getRawDataAttribute()
+    {
+        return Cache::rememberForever("account-block-{$this->id}", function () {
+            $znn = App::make(ZenonSdk::class);
+
+            return $znn->ledger->getAccountBlockByHash($this->hash)['data'];
+        });
+    }
+
+    public function getNextBlockAttribute()
+    {
+        return self::where('account_id', $this->account_id)
+            ->where('height', ($this->height + 1))
+            ->first();
+    }
+
+    public function getPreviousBlockAttribute()
+    {
+        return self::where('account_id', $this->account_id)
+            ->where('height', ($this->height - 1))
+            ->first();
+    }
+
+    public function getRawJsonAttribute()
+    {
+        $cacheKey = "nom.accountBlock.rawJson.{$this->id}";
+
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->ledger->getAccountBlockByHash($this->hash)['data'];
+            Cache::forever($cacheKey, $data);
+        } catch (\Throwable $throwable) {
+            $data = Cache::get($cacheKey);
+        }
+
+        return $data;
+    }
+
+    public function getIsUnReceivedAttribute()
+    {
+        return ! $this->paired_account_block_id;
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        if ($user = auth()->user()) {
+            return Favorite::findExisting($this, $user);
+        }
+
+        return false;
+    }
+
+    //
+    // Methods
+
+    public static function findByHash($hash)
+    {
+        return static::where('hash', $hash)->first();
+    }
+
+    public function displayAmount($decimals = null)
+    {
+        return $this->token?->getDisplayAmount($this->amount, $decimals);
+    }
+}

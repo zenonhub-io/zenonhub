@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /auth/*
+Disallow: /api/*
+
+Sitemap: https://zenonhub.io/sitemap.xml

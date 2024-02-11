@@ -1,0 +1,267 @@
+// user-variables.scss
+// Use this to overwrite Bootstrap and Front variables
+//
+
+
+
+// General
+$prefix:              zn-;
+$grid-columns:        24;
+$grid-gutter-width:   1.5rem;
+$spacer:              1rem;
+
+$zenon-green:         #6FF34D;
+$zenon-blue:          #0061EB;
+$zenon-pink:          #F91690;
+$syrius-green:        #00D557;
+$intergalactic-black: #151515;
+$zenon-orange:        #CE7C4E;
+$zenon-red:           #8D2C2C;
+
+$white:               #fff;
+$gray-100:            #f3f6ff;
+$gray-200:            #eff2fc;
+$gray-300:            #e2e5f1;
+$gray-400:            #d4d7e5;
+$gray-500:            #b4b7c9;
+$gray-600:            #9397ad;
+$gray-700:            #9b9b9b;
+$gray-800:            #33354d;
+$gray-900:            #0b0f19;
+$black:               #000;
+
+$gray-light:          #292829;
+$gray-dark:           #191919;
+
+$border-width:        2px;
+$border-color:        $gray-300;
+$border-light-color:  rgba($white, .14);
+
+$border-radius-sm:    .4rem;
+$border-radius:       .4rem;
+$border-radius-lg:    1rem;
+$border-radius-xl:    1.2rem;
+$border-radius-2xl:   1.4rem;
+$border-radius-pill:  50rem;
+
+$btn-border-radius-lg: $border-radius;
+
+
+// Grid breakpoints
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px
+);
+
+
+// Theme colors
+//$primary:       #6366f1;
+$primary:       #4277FF;
+$secondary:     $gray-200;
+$info:	        #4c82f7;
+$success:       #22c55e;
+$warning:       $zenon-orange;
+$danger:        $zenon-red;
+$light:         $white;
+$dark:          $intergalactic-black;
+
+$theme-colors: (
+    'primary':      $primary,
+    'secondary':    $secondary,
+    'success':      $success,
+    'info':         $info,
+    'warning':      $warning,
+    'danger':       $danger,
+    'light':        $light,
+    'dark':         $dark,
+    'zenon-green':  $zenon-green,
+    'zenon-blue':   $zenon-blue,
+    'zenon-pink':   $zenon-pink,
+);
+
+$theme-faded-colors: (
+    'primary':      rgba($primary, .12),
+    'success':      rgba($success, .12),
+    'info':         rgba($info, .12),
+    'warning':      rgba($warning, .12),
+    'danger':       rgba($danger, .12),
+    'light':        rgba($light, .05),
+    'dark':         rgba($dark, .12),
+    'zenon-green':  rgba($zenon-green, .12),
+    'zenon-blue':   rgba($zenon-blue, .12),
+    'zenon-pink':   rgba($zenon-pink, .12)
+);
+
+$border-colors: (
+    'primary': rgba($primary, .35),
+    'success': rgba($success, .35),
+    'info':    rgba($info, .35),
+    'warning': rgba($warning, .35),
+    'danger':  rgba($danger, .35),
+    'light':   rgba($white, .14),
+    'dark':    rgba($dark, .35),
+    'white':   rgba($white, .35),
+    'zenon-green':  rgba($zenon-green, .35),
+    'zenon-blue':   rgba($zenon-blue, .35),
+    'zenon-pink':   rgba($zenon-pink, .35)
+);
+
+$button-faded-colors: (
+    'primary': darken($primary, 20%),
+    'success': darken($success, 20%),
+    'info':    darken($info, 20%),
+    'warning': darken($warning, 20%),
+    'danger':  darken($danger, 20%),
+    'light':   darken($white, 20%),
+    'dark':    darken($dark, 20%),
+    'white':   darken($white, 20%),
+    'zenon-green':  darken($zenon-green, 20%),
+    'zenon-blue':   darken($zenon-blue, 20%),
+    'zenon-pink':   darken($zenon-pink, 20%)
+);
+
+
+// Body
+$body-color:                                rgba($gray-300, 85%);
+$body-bg:                                   $gray-dark;
+
+$body-dark-mode-color:                      $body-color;
+$body-dark-mode-bg:                         $body-bg;
+
+
+// Fonts
+$path-to-fonts:                             'https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap';
+$font-family-sans-serif:                    'Montserrat', sans-serif;
+
+$font-weight-normal:                        600;
+$font-weight-medium:                        700;
+$font-weight-semibold:                      800;
+$font-weight-bold:                          900;
+
+$font-size-base:                            1rem;
+$font-size-xl:                              $font-size-base * 1.25;
+$font-size-lg:                              $font-size-base * 1.125;
+$font-size-sm:                              $font-size-base * .875;
+$font-size-xs:                              $font-size-base * .75;
+
+
+// Icons
+$icons-font-family:                         'bootstrap-icons' !default;
+
+$headings-color:                            rgba($gray-300, 95%);
+$text-muted:                                rgba($gray-300, 45%);
+
+$dropdown-bg:                               $gray-light;
+$dropdown-font-weight:                      $font-weight-normal;
+$dropdown-divider-bg:                       $border-light-color;
+
+$list-group-action-font-weight:             $font-weight-normal;
+
+
+// Shadows
+$box-shadow:                                0 .5rem 1rem rgba($black, 20%) !default;
+$box-shadow-sm:                             0 .125rem .25rem rgba($black, 20%) !default;
+$box-shadow-lg:                             0 1rem 3rem rgba($black, 20%) !default;
+$box-shadow-inset:                          inset 0 1px 4px rgba($black, 20%) !default;
+
+
+// Links
+$link-color:                                rgba($gray-300, 65%);
+$link-decoration:                           none;
+$link-hover-color:                          $primary;
+$link-hover-decoration:                     none;
+$link-transition:                           color .2s ease-in-out;
+$emphasized-link-hover-darken-percentage:   0%;
+
+
+// Breadcrumbs
+$breadcrumb-font-size:                      0.75rem;
+$breadcrumb-item-padding-x:                 .225rem;
+$breadcrumb-color:                          $link-color;
+$breadcrumb-hover-color:                    $link-hover-color;
+$breadcrumb-active-color:                   $headings-color;
+$breadcrumb-divider:                        quote("\F135");
+$breadcrumb-divider-flipped:                quote("\F12C");
+
+
+// Navbar
+$navbar-nav-link-padding-x:                 .575rem;
+
+
+// Cards
+$card-dark-mode-color:                      $body-color;
+$card-dark-mode-bg:                         $gray-dark;
+$card-border-width:                         2px;
+
+
+// Offcanvas
+$offcanvas-dark-mode-bg-color:              $gray-dark;
+
+
+// Modal
+$modal-inner-padding:                       $spacer * 1.5;
+$modal-fade-transform:                      scale(.9);
+$modal-transition:                          transform .2s ease-out;
+$modal-backdrop-opacity:                    .65;
+
+$modal-content-border-width:                2px;
+$modal-content-box-shadow-xs:               $box-shadow;
+
+$modal-header-padding-y:                    $modal-inner-padding * .75;
+$modal-header-border-color:                 $border-color;
+$modal-header-border-width:                 $border-width;
+
+$modal-footer-border-width:                 $border-width;
+$modal-footer-margin-between:               .75rem;
+
+$modal-dark-mode-content-border-width:      2px;
+$modal-dark-mode-content-border-color:      $border-light-color;
+$modal-dark-mode-content-bg:                $gray-dark;
+
+
+// List groups
+$list-group-item-sm-padding-y:              $spacer * .5;
+$list-group-item-sm-padding-x:              $spacer;
+
+
+// Accordion
+$accordion-dark-mode-bg:                    $gray-dark;
+$accordion-dark-mode-button-color:          $link-color;
+
+
+// Legend indicator
+$legend-indicator-bg-color:                 $gray-400;
+$legend-indicator-border-radius:            $border-radius;
+$legend-indicator-width:                    .5rem;
+$legend-indicator-height:                   $legend-indicator-width;
+$legend-indicator-margin-y:                 .5rem;
+$legend-indicator-margin-x:                 .4375rem;
+
+// Form labels
+$form-label-margin-bottom:                  .3125rem;
+$form-label-font-size:                      $font-size-base;
+$form-label-font-weight:                    $font-weight-normal;
+$form-label-color:                          $gray-900;
+$form-floating-label-opacity:               .7;
+$form-label-dark-mode-color:                $body-dark-mode-color;
+$form-label-dark-mode-focus-color:          $body-dark-mode-color;
+
+
+// Tooltips
+$tooltip-max-width:   1000px;
+$tooltip-color: $body-color;
+
+$primary-text-emphasis:   $primary;
+$secondary-text-emphasis: $secondary;
+$success-text-emphasis:   $success;
+$info-text-emphasis:      $info;
+$warning-text-emphasis:   $warning;
+$danger-text-emphasis:    $danger;
+$light-text-emphasis:     $gray-700;
+$dark-text-emphasis:      $gray-700;
+
+$form-select-indicator-color: $border-color;
