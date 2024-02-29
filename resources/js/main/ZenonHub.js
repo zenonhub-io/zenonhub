@@ -4,6 +4,7 @@ import Singleton from '../abstracts/Singleton';
 
 import Cookie from '../utilities/Cookie';
 import Modal from '../utilities/Modal';
+import Offcanvas from '../utilities/Offcanvas';
 import Helpers from '../utilities/Helpers';
 import LoadingScreen from '../utilities/LoadingScreen';
 import CustomStorage from '../utilities/Storage';
@@ -74,8 +75,9 @@ export default class ZenonHub {
         this.addPlugin('url', Url);
         this.addPlugin('storage', CustomStorage);
         this.addPlugin('core', Core);
-        this.addPlugin('loadingScreen', LoadingScreen);
+        //this.addPlugin('loadingScreen', LoadingScreen);
         this.addPlugin('modal', Modal);
+        this.addPlugin('offcanvas', Offcanvas);
     }
 
     /**
@@ -134,7 +136,7 @@ export default class ZenonHub {
             throw new Error(`A plugin called "${name}" is already registered.`);
         }
 
-        if (typeof instance !== 'function' && instance instanceof PluginBase === false) {
+        if (typeof instance !== 'function' && !(instance instanceof PluginBase)) {
             throw new Error('The provided plugin must extend the PluginBase class, or must be a callback function.');
         }
 

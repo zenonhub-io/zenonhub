@@ -1,0 +1,40 @@
+//@import "bootstrap/scss/functions";
+//@import "bootstrap/scss/maps";
+//@import "bootstrap/scss/mixins";
+//@import "bootstrap/scss/utilities";
+
+//$utilities: (
+//    "border-width": (
+//        property: border-width,
+//        class: border,
+//        responsive: true,
+//        values: $border-widths
+//    ),
+//);
+
+//$utilities: map-merge(
+//        $utilities, (
+//        "border-width": map-merge(
+//                map-get($utilities, "border-width"),
+//                ( responsive: true ),
+//        ),
+//    )
+//);
+//
+//$utilities: map-merge(
+//        $utilities, (
+//        "subtle-border-color": map-merge(
+//                map-get($utilities, "subtle-border-color"),
+//                ( responsive: true ),
+//        ),
+//    )
+//);
+//
+//$utilities: map-merge(
+//        $utilities, (
+//        "border-start": map-merge(
+//                map-get($utilities, "border-start"),
+//                ( responsive: true ),
+//        ),
+//    )
+//);

@@ -1,0 +1,15 @@
+.card-hover {
+    &:hover {
+        border-color: rgba($white, .3);
+        background-color: var(--#{$prefix}card-bg);
+    }
+    &.border-0:not(.bg-transparent):not(.bg-light) {
+        border: var(--#{$prefix}border-width) solid transparent !important;
+        &:hover {
+            border-color: var(--#{$prefix}card-border-color) !important;
+        }
+    }
+    &.bg-light:hover {
+        background-color: var(--#{$prefix}secondary-bg) !important;
+    }
+}

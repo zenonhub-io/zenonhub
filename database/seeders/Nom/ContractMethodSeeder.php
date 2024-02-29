@@ -12,7 +12,7 @@ class ContractMethodSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         Schema::disableForeignKeyConstraints();
         ContractMethod::truncate();
@@ -34,7 +34,7 @@ class ContractMethodSeeder extends Seeder
         ];
 
         foreach ($contracts as $contract => $abiClass) {
-            $abi = new $abiClass();
+            $abi = new $abiClass;
             $methods = $abi->getMethods();
 
             $blockContract = Contract::create([

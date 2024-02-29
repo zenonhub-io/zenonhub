@@ -1,10 +1,7 @@
 @livewireScripts
 
 @if(app()->isProduction())
-    <script src="{{ mix('js/app.js') }}"></script>
+    @vite(['resources/js/app.js'])
 @else
-    <script src="{{ mix('js/app.debug.js') }}"></script>
+    @vite(['resources/js/app.debug.js'])
 @endif
-
-
-

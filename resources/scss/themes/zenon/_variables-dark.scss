@@ -1,0 +1,15 @@
+// Borders
+$border-color-dark:                             lighten($gray-900, 22%);
+
+// Body
+$body-tertiary-bg-dark:        lighten($gray-900, 2%);
+$body-tertiary-bg:             lighten($gray-900, 2%);
+
+// Borders
+$primary-border-subtle-dark:  shade-color($primary, 45%);
+
+// Link
+$link-color-dark:                              $primary;
+$link-hover-color-dark:                        shade-color($link-color-dark, 15%);
+// Darken percentage for links with `.text-*` class (e.g. `.text-success`)
+$emphasized-link-hover-darken-percentage: 15%;

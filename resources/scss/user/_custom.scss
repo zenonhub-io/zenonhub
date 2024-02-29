@@ -1,0 +1,79 @@
+// Custom styles
+//
+// This is the place where you should place all additional styles and imports.
+// This will allow you to take advantage of future updates with lower time consumed on the upgrade process.
+
+@import "components/cards";
+@import "components/inputs";
+
+// Load custom font
+@if variable-exists(path-to-fonts) {
+    @import url($path-to-fonts);
+}
+
+// Scrollbar
+
+/* Firefox */
+.scrollbar {
+    scrollbar-color: $gray-300 transparent;
+    scrollbar-width: thin;
+}
+
+/* WebKit and Chromiums */
+.scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: none;
+    background-color: $gray-300;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: shade-color($gray-300, 5%);
+}
+
+a {
+    transition: $link-transition;
+}
+
+.nav-tabs .nav-link.active {
+    background: transparent;
+}
+
+.svg-icon {
+    display: inline-block;
+
+    svg {
+        display: block;
+        height: inherit;
+        width: inherit;
+    }
+}
+
+.app-content-wrapper {
+    border-top: 2px solid $primary-border-subtle-dark;
+    border-left: none;
+    @include media-breakpoint-up(lg) {
+        border-top: 2px solid $border-color-dark;
+        border-left: 2px solid $border-color-dark;
+    }
+}
+
+.auth-content-wrapper {
+    border-top: 2px solid $primary-border-subtle-dark;
+    @include media-breakpoint-up(md) {
+        border: 2px solid $border-color-dark;
+    }
+}
+
+
+

@@ -1,33 +1,28 @@
 <?php
 
-namespace Tests\Feature\Auth;
+use Laravel\Fortify\Features;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+test('registration screen can be rendered', function () {
+    $response = $this->get('/register');
 
-class RegistrationTest extends TestCase
-{
-    use RefreshDatabase;
+    $response->assertStatus(200);
+})->skip(fn () => ! Features::enabled(Features::registration()), 'Registration support is not enabled.')->group('auth', 'registration');
 
-    public function test_registration_screen_can_be_rendered()
-    {
-        $response = $this->get('/sign-up');
+test('registration screen cannot be rendered if support is disabled', function () {
+    $response = $this->get('/register');
 
-        $response->assertStatus(200);
-    }
+    $response->assertStatus(404);
+})->skip(fn () => Features::enabled(Features::registration()), 'Registration support is enabled.')->group('auth', 'registration');
 
-    public function test_new_users_can_register()
-    {
-        $response = $this->post('/sign-up', [
-            'name' => 'Test User',
-            'username' => 'test_user',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-            'terms' => true,
-        ]);
+test('new users can register', function () {
+    $response = $this->post('/register', [
+        'username' => 'Username',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'terms' => '1',
+    ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect('auth/verify-email');
-    }
-}
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('home', absolute: false));
+})->skip(fn () => ! Features::enabled(Features::registration()), 'Registration support is not enabled.')->group('auth', 'registration');

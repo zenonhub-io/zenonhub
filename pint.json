@@ -1,0 +1,24 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "storage",
+        "bootstrap/cache",
+        "bin",
+        "old"
+    ],
+    "rules": {
+        "concat_space": {
+            "spacing": "one"
+        },
+        "new_with_braces": {
+            "anonymous_class": false,
+            "named_class": false
+        },
+        "ordered_traits": true,
+        "return_type_declaration": {
+            "space_before": "one"
+        },
+        "yoda_style": true,
+        "use_arrow_functions": true
+    }
+}

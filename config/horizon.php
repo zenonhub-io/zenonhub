@@ -56,7 +56,7 @@ return [
 
     'prefix' => env(
         'HORIZON_PREFIX',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_horizon:'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'
     ),
 
     /*
@@ -180,23 +180,14 @@ return [
     */
 
     'defaults' => [
-        'queue-default' => [
+        'supervisor-1' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
-            'maxProcesses' => 3,
-            'memory' => 128,
-            'tries' => 1,
-            'timeout' => 60,
-            'nice' => 0,
-        ],
-        'queue-indexer' => [
-            'connection' => 'redis',
-            'queue' => ['indexer'],
-            'balance' => 'auto',
-            'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 0,
             'memory' => 128,
             'tries' => 1,
             'timeout' => 60,
@@ -205,12 +196,18 @@ return [
     ],
 
     'environments' => [
-        'production' => [],
-        'staging' => [
-            'queue-default' => [
-                'maxProcesses' => 1,
+        'production' => [
+            'supervisor-1' => [
+                'maxProcesses' => 10,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
             ],
         ],
-        'local' => [],
+
+        'local' => [
+            'supervisor-1' => [
+                'maxProcesses' => 3,
+            ],
+        ],
     ],
 ];

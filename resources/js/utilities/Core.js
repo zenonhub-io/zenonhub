@@ -22,16 +22,19 @@ export default class Core extends Singleton {
 
         this.onPageGlobals();
 
-        window.livewire.hook('message.received', (message, component) => {
-            this.offPageGlobals();
-        });
-        window.livewire.hook('message.processed', (message, component) => {
-            this.onPageGlobals();
-        });
+        Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
+            succeed(({ snapshot, effect }) => {
+                this.offPageGlobals();
 
-        window.livewire.on('refreshPage', refresh => {
-            window.location.reload();
-        });
+                queueMicrotask(() => {
+                    this.onPageGlobals();
+                })
+            })
+        })
+
+        // window.livewire.on('refreshPage', refresh => {
+        //     window.location.reload();
+        // });
     }
 
     onPageGlobals() {
@@ -138,7 +141,7 @@ export default class Core extends Singleton {
     onSyntaxHighlight() {
         const highlight = document.querySelectorAll('pre > code.lang-json');
         [...highlight].map(function (highlightEl) {
-            if(! highlightEl.classList.contains('highlighted')) {
+            if (! highlightEl.classList.contains('highlighted')) {
                 highlightEl.innerHTML = window.zenonHub.helpers().syntaxHighlight(highlightEl.innerHTML);
                 highlightEl.classList.add('highlighted');
             }

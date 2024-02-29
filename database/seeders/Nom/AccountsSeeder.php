@@ -11,7 +11,7 @@ class AccountsSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         // Empty address
         Account::insert([

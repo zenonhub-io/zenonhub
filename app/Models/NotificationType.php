@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\FindByColumnTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationType extends Model
 {
+    use FindByColumnTrait;
+
     /**
      * The table associated with the model.
      *
@@ -31,6 +35,7 @@ class NotificationType extends Model
         'category',
         'description',
         'data',
+        'is_configurable',
         'is_active',
     ];
 
@@ -54,34 +59,21 @@ class NotificationType extends Model
     //
     // Attributes
 
-    public function getSubscribedUsersAttribute()
+    public function getSubscribedUsersAttribute() : Collection
     {
-        return User::whereHas('notification_types', function ($query) {
-            return $query->where('code', $this->code);
-        })->get();
+        return User::whereRelation('notification_types', 'code', $this->code)->get();
     }
 
     //
     // Methods
 
-    public static function findByCode(string $code): ?NotificationType
-    {
-        return static::where('code', $code)->first();
-    }
-
     public static function getSubscribedUsers(string $code)
     {
-        return self::findByCode($code)->subscribed_users;
+        return self::findBy('code', $code)->subscribed_users;
     }
 
-    public static function getAllCategories()
+    public function checkUserSubscribed(User $user) : bool
     {
-        return self::select('category')->groupBy('category')->pluck('category')->sortBy(function ($item, $key) {
-            if ($item === 'network') {
-                return -1;
-            }
-
-            return $key;
-        });
+        return $user->notificationTypes->contains('id', $this->id);
     }
 }

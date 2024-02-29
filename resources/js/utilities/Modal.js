@@ -10,30 +10,46 @@ export default class Modal extends Singleton {
     }
 
     ready() {
-        window.zenonHub.debug('modals ready');
 
-        let modalsElement = document.getElementById('laravel-livewire-modals');
+        //
+        // Livewire modal
 
-        modalsElement.addEventListener('hidden.bs.modal', () => {
-            Livewire.emit('resetModal');
+        let livewireModalElement = document.getElementById('livewire-modal');
+
+        livewireModalElement.addEventListener('hidden.bs.modal', (event) => {
+            Livewire.dispatch('reset-livewire-modal');
         });
 
-        Livewire.on('showBootstrapModal', () => {
-            let modal = BSModal.getInstance(modalsElement);
-
-            if (!modal) {
-                modal = new BSModal(modalsElement);
-            }
-
+        Livewire.on('show-livewire-modal', (e) => {
+            let modal = BSModal.getOrCreateInstance(livewireModalElement);
             window.zenonHub.debug('show modal');
             modal.show();
         });
 
-        Livewire.on('hideModal', () => {
-            let modal = BSModal.getInstance(modalsElement);
-
+        Livewire.on('hide-livewire-modal', ({}) => {
+            let modal = BSModal.getInstance(livewireModalElement);
             window.zenonHub.debug('hide modal');
             modal.hide();
+            Livewire.dispatch('reset-livewire-modal');
         });
+
+        //
+        // Inline modal
+
+        Livewire.on('show-inline-modal', params => {
+            let modalElement = document.getElementById(params.id);
+            let modal = BSModal.getOrCreateInstance(modalElement);
+            window.zenonHub.debug('show inline modal');
+            modal.show();
+        });
+
+        Livewire.on('hide-inline-modal', params => {
+            let modalElement = document.getElementById(params.id);
+            let modal = BSModal.getInstance(modalElement);
+            window.zenonHub.debug('hide inline modal');
+            modal.hide();
+        });
+
+        window.zenonHub.debug('modals ready');
     }
 }

@@ -10,10 +10,17 @@ class NotificationTypesSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         NotificationType::insert([
             [
+                'name' => 'Site News',
+                'code' => 'zenonhub-updates',
+                'category' => 'zenonhub',
+                'description' => 'Important Zenon Hub updates and news',
+                'is_configurable' => false,
+                'is_active' => true,
+            ], [
                 'name' => 'Accelerator Z',
                 'code' => 'network-az',
                 'category' => 'network',
@@ -47,7 +54,7 @@ class NotificationTypesSeeder extends Seeder
                 'category' => 'network',
                 'description' => 'The bridge status changes or admin commands are issued',
                 'is_configurable' => false,
-                'is_active' => true,
+                'is_active' => false,
             ],
         ]);
     }

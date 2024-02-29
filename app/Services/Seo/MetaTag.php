@@ -19,7 +19,7 @@ class MetaTag implements Arrayable, JsonSerializable
     /**
      * Renders the meta tag with all attributes.
      */
-    public function render(): string
+    public function render() : string
     {
         $attributes = collect($this->attributes)->map(function ($value, $key) {
             $value = e($value);
@@ -33,7 +33,7 @@ class MetaTag implements Arrayable, JsonSerializable
     /**
      * Returns a boolean whether the given attributes match.
      */
-    public function hasAllAttributes(array $attributes): bool
+    public function hasAllAttributes(array $attributes) : bool
     {
         foreach ($attributes as $key => $value) {
             if (! array_key_exists($key, $this->attributes)) {
@@ -51,19 +51,17 @@ class MetaTag implements Arrayable, JsonSerializable
     /**
      * Returns an array with all attributes.
      */
-    public function toArray(): array
+    public function toArray() : array
     {
         return Collection::make($this->attributes)
-            ->mapWithKeys(function ($value, $key) {
-                return [$key => e($value)];
-            })
+            ->mapWithKeys(fn ($value, $key) => [$key => e($value)])
             ->all();
     }
 
     /**
      * Returns the array from the 'toArray' method.
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize() : array
     {
         return $this->toArray();
     }

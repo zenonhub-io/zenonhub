@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
-use App\Models\Nom\Account;
-use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use CanResetPasswordTrait, HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -27,9 +27,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'email',
         'password',
+        'registration_ip',
         'last_seen_at',
         'privacy_confirmed_at',
-        'last_login_at',
     ];
 
     /**
@@ -40,34 +40,35 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'registration_ip',
+        'login_ip',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
+        'two_factor_confirmed_at',
+        'email_verified_at',
+        'privacy_confirmed_at',
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'last_seen_at' => 'datetime',
-        'email_verified_at' => 'datetime',
-        'privacy_confirmed_at' => 'datetime',
-        'last_login_at' => 'datetime',
-    ];
+    protected function casts() : array
+    {
+        return [
+            'password' => 'hashed',
+            'email_verified_at' => 'datetime',
+            'privacy_confirmed_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+        ];
+    }
 
     //
     // Relations
 
-    public function nom_accounts(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Account::class,
-            'user_nom_accounts_pivot',
-            'user_id',
-            'account_id'
-        )->withPivot('nickname', 'is_pillar', 'is_sentinel', 'is_default', 'verified_at');
-    }
-
-    public function notification_types(): BelongsToMany
+    public function notificationTypes() : BelongsToMany
     {
         return $this->belongsToMany(
             NotificationType::class,
@@ -79,19 +80,4 @@ class User extends Authenticatable implements MustVerifyEmail
 
     //
     // Attributes
-
-    public function getIsPillarOwnerAttribute()
-    {
-        return $this->nom_accounts()->wherePivot('is_pillar', '1')->exists();
-    }
-
-    public function getIsSentinelOwnerAttribute()
-    {
-        return $this->nom_accounts()->wherePivot('is_sentinel', '1')->exists();
-    }
-
-    public function setPasswordAttribute($value): void
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
 }

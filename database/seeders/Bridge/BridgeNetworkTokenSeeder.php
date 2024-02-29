@@ -13,7 +13,7 @@ class BridgeNetworkTokenSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         $znn = App::make(ZenonSdk::class);
         $bridgeNetworks = $znn->bridge->getAllNetworks()['data']->list;

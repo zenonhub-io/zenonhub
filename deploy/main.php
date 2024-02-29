@@ -2,8 +2,8 @@
 
 namespace Deployer;
 
-require_once __DIR__.'/../vendor/deployer/deployer/recipe/laravel.php';
-require __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/deployer/deployer/recipe/laravel.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 \Dotenv\Dotenv::createMutable(__DIR__)->load();
 

@@ -10,7 +10,7 @@ class ChainsSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         Chain::create([
             'chain_identifier' => 1,

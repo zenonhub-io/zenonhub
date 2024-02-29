@@ -1,0 +1,171 @@
+$min-contrast-ratio: 3;
+$prefix: x-;
+
+//$white:    #FFF;
+//$gray-50:  #f8fafc;
+//$gray-100: #f1f5f9;
+//$gray-200: #e2e8f0;
+//$gray-300: #cbd5e1;
+//$gray-400: #94a3b8;
+//$gray-500: #64748b;
+//$gray-600: #475569;
+//$gray-700: #334155; // Used for text color
+//$gray-800: #1e293b; // Used for headings color
+//$gray-900: #0f172a;
+
+$white:    #FFF;
+$black:    #000;
+$gray-900: #151515;
+$gray-800: lighten($gray-900, 15%); // Used for headings color
+$gray-700: lighten($gray-900, 25%); // Used for text color
+$gray-600: lighten($gray-900, 35%);
+$gray-500: lighten($gray-900, 45%);
+$gray-400: lighten($gray-900, 55%);
+$gray-300: lighten($gray-900, 65%);
+$gray-200: lighten($gray-900, 75%);
+$gray-100: lighten($gray-900, 85%);
+$gray-50:  lighten($gray-900, 95%);
+
+// Theme colors
+
+$blue:    #0099FF;
+$indigo:  #5C60F5;
+$purple:  #8957FF;
+$magenta: #EE33FF;
+$pink:    #FF579A;
+$red:     #FF3366;
+$orange:  #FF8C00;
+$yellow:  #FFBB00;
+$lime:    #84cc16;
+$green:   #00CC88;
+$teal:    #22DDDD;
+$cyan:    #00D4FF;
+
+$zenon-green: #00D557;
+$zenon-blue: #0061EB;
+$zenon-pink: #F91690;
+$zenon-black: #151515;
+
+$primary: 		$zenon-green;
+$secondary:  	$zenon-blue;
+$tertiary: 		$zenon-pink;
+
+//$primary: 		$zenon-green;
+//$secondary:  	$blue;
+//$tertiary: 		$lime;
+
+$success:       $green;
+$info:          $cyan;
+$warning:       $orange;
+$danger:        $red;
+
+$light: 		lighten($gray-100, 1%);
+$dark: 			$zenon-black; //$zenon-black;
+
+// Body
+$body-bg-dark: $dark;
+
+// Grid
+$grid-columns: 24;
+
+
+// Typography
+//$path-to-fonts:                         '//fonts.googleapis.com/css2?family=Figtree:wght@900,700,500,300,400&display=swap';
+$font-display: 				'Satoshi', sans-serif;
+$headings-font-family: 		$font-display;
+$headings-font-weight:      700;
+
+$font-weight-lighter:       lighter;
+$font-weight-light:         300;
+$font-weight-normal:        400;
+$font-weight-semibold:      500;
+$font-weight-bold:          700;
+$font-weight-bolder:        900;
+$font-weight-black:         900;
+
+$font-weight-base:          $font-weight-normal;
+
+// Link
+$link-color:                              $primary;
+$link-decoration:                         none;
+$link-hover-color:                        shade-color($link-color, 15%);
+$link-hover-decoration:                   none;
+// Darken percentage for links with `.text-*` class (e.g. `.text-success`)
+$emphasized-link-hover-darken-percentage: 15%;
+
+
+// Box shadow
+//$box-shadow-sm:             0px 1px 1px 0px rgba($black, 50%), 0px 0px 1px 0px rgb($black, 12%);
+//$box-shadow:                  0px 3px 3px -1px rgba($black, 50%), 0px 0px 1px 0px rgb($black, 12%);
+//$box-shadow-lg:             0px 6px 6px -1px rgba($black, 50%), 0px 0px 1px 0px rgb($black, 12%);
+
+$box-shadow:                  0 .5rem 1rem rgba($black, 20%);
+$box-shadow-sm:               0 .125rem .25rem rgba($black, 20%);
+$box-shadow-lg:               0 .75rem 2rem rgba($black, 20%);
+
+$box-shadow-1:                $box-shadow-sm;
+$box-shadow:                  $box-shadow;
+$box-shadow-2:                $box-shadow-lg;
+$box-shadow-3:                0px 9px 9px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%);
+$box-shadow-4:                0px 16px 16px -1px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%);
+$box-shadow-5:                0px 32px 40px -2px rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%);
+$box-shadow-6:                0px 36px 50px 0 rgba(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%);
+
+$box-soft-shadow-1:           0px 1px 1px 0px rgba(10 22 70 / 4%);
+$box-soft-shadow:             0px 3px 3px -1px rgba(10 22 70 / 4%);
+$box-soft-shadow-2:           0px 6px 6px -1px rgba(10 22 70 / 4%);
+$box-soft-shadow-3:           0px 9px 9px -1px rgba(10 22 70 / 4%);
+$box-soft-shadow-4:           0px 16px 16px -1px rgba(10 22 70 / 4%);
+$box-soft-shadow-5:           0px 32px 40px -2px rgba(10 22 70 / 4%);
+$box-soft-shadow-6:           0px 36px 50px 0 rgba(10 22 70 / 4%);
+
+//$box-shadow-inset:            inset 0 1px 2px rgba($black, 50%);
+$box-shadow-inset:            inset 0px 1px 6px rgba($black, 60%);
+$box-shadow-outline:          0 0 0 3px rgba(66, 153, 225, 0.5);
+$box-shadow-focus:            0 0 0 3px rgba(66, 153, 225, 0.5);
+$box-shadow-transparent:      0 0 0 0 rgba(0, 0, 0, 0);
+
+// Borders
+$border-width:              1px;
+$border-color:              $gray-900;
+
+// Icons
+//$bootstrap-icons-font-dir:              '/build/fonts';
+
+// Navbar
+$navbar-nav-link-padding-x:             1rem;
+$navbar-nav-link-padding-y:             .375rem;
+
+$navbar-vertical-nav-link-padding-x:    1rem;
+$navbar-vertical-nav-link-padding-y:    .5rem;
+
+// Table
+$table-border-color: 		            var(--#{$prefix}border-color);
+$table-light-th-bg: 		            var(--#{$prefix}body-bg);
+$table-light-th-color: 	                var(--#{$prefix}body-color);
+
+// Tooltips
+//$tooltip-bg:                            var(--#{$prefix}body-bg);
+//$tooltip-color:                         var(--#{$prefix}body-color);
+
+// Modals
+$modal-backdrop-bg:         rgba($zenon-black, .65);
+$modal-backdrop-opacity:    0;
+
+
+// Transitions
+$link-transition:           color .30s ease-in-out;
+$input-transition:          border-color .30s ease-in-out,
+                            box-shadow .30s ease-in-out;
+$btn-transition:            color .30s ease-in-out,
+                            background-color .30s ease-in-out,
+                            border-color .30s ease-in-out,
+                            box-shadow .30s ease-in-out;
+$nav-link-transition:       color .30s ease-in-out,
+                            background-color .30s ease-in-out,
+                            border-color .30s ease-in-out;
+$modal-transition:          transform .30s ease-out;
+$card-transition:           transform .30s ease-in-out,
+                            border-color .30s ease-in-out,
+                            background-color .30s ease-in-out,
+                            box-shadow .30s ease-in-out;

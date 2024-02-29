@@ -13,7 +13,7 @@ class BridgeNetworkSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         $chain = Utilities::loadChain();
         $znn = App::make(ZenonSdk::class);
