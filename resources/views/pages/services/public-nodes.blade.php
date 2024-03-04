@@ -7,7 +7,7 @@
             <div class="col-24 col-md-16 offset-md-4 mb-4">
                 <div class="card shadow mb-4">
                     <div class="card-header text-center">
-                        <h4 class="mb-0">Public Nodes</h4>
+                        <h4 class="mb-0">Public RPC Nodes</h4>
                     </div>
                     <div class="card-body text-center">
                         Our nodes are available for anyone to use. They provide secure connections to the Zenon Network and are load balanced with servers in Europe and the US.
