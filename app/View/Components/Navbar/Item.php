@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 
 class Item extends BaseItem
 {
-    public function render() : View
+    public function render(): View
     {
         return view('components.navbar.item');
     }

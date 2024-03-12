@@ -21,7 +21,7 @@ class Carbon extends Component
         $this->date = CarbonAlias::instance($date);
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.date-time.carbon');
     }

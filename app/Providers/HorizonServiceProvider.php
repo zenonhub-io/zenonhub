@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
@@ -11,7 +13,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot() : void
+    public function boot(): void
     {
         parent::boot();
 
@@ -25,7 +27,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      *
      * This gate determines who can access Horizon in non-local environments.
      */
-    protected function gate() : void
+    protected function gate(): void
     {
         Gate::define('viewHorizon', function ($user) {
             return in_array($user->email, [

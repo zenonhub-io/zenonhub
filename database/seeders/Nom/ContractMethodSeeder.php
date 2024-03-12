@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders\Nom;
 
 use App\Models\Nom\Contract;
@@ -12,7 +14,7 @@ class ContractMethodSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run() : void
+    public function run(): void
     {
         Schema::disableForeignKeyConstraints();
         ContractMethod::truncate();

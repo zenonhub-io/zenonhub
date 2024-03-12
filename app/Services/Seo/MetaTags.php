@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Seo;
 
 use Illuminate\Contracts\Support\Htmlable;
@@ -39,22 +41,11 @@ class MetaTags
     }
 
     /**
-     * Use the traits the fill the meta properties with the default data.
-     */
-    private function autoFill() : self
-    {
-        $this->autoFillOpenGraph($this->autoFillOverwrite);
-        $this->autoFillTwitter($this->autoFillOverwrite);
-
-        return $this;
-    }
-
-    /**
      * Setter for the title.
      *
      * @return $this
      */
-    public function title(string $title, bool $withSuffix = true) : self
+    public function title(string $title, bool $withSuffix = true): self
     {
         $title = trim($title);
         $suffix = trim(config('meta-tags.title_suffix'));
@@ -72,7 +63,7 @@ class MetaTags
     /**
      * Setter for the canonical URL.
      */
-    public function canonical(string $url) : self
+    public function canonical(string $url): self
     {
         $this->canonical = $url;
 
@@ -82,7 +73,7 @@ class MetaTags
     /**
      * Setter for the description.
      */
-    public function description(string $description) : self
+    public function description(string $description): self
     {
         $this->metaByName('description', trim($description));
 
@@ -92,7 +83,7 @@ class MetaTags
     /**
      * Setter for the keywords.
      */
-    public function keywords(mixed $keywords) : self
+    public function keywords(mixed $keywords): self
     {
         if (is_string($keywords)) {
             $keywords = trim($keywords);
@@ -111,7 +102,7 @@ class MetaTags
     /**
      * Sets a meta tag by its name attribute.
      */
-    public function metaByName(string $name, string $content, bool $replace = true) : self
+    public function metaByName(string $name, string $content, bool $replace = true): self
     {
         if ($replace) {
             $this->removeMeta(['name' => $name]);
@@ -129,7 +120,7 @@ class MetaTags
     /**
      * Sets a meta tag by its property attribute.
      */
-    public function metaByProperty(string $property, string $content, bool $replace = true) : self
+    public function metaByProperty(string $property, string $content, bool $replace = true): self
     {
         if ($replace) {
             $this->removeMeta(['property' => $property]);
@@ -147,7 +138,7 @@ class MetaTags
     /**
      * Adds a meta tag by the given attributes.
      */
-    public function meta(array $attributes) : self
+    public function meta(array $attributes): self
     {
         $this->meta->push(new MetaTag($attributes));
 
@@ -157,7 +148,7 @@ class MetaTags
     /**
      * Remove a meta tag that matches the given attributes
      */
-    public function removeMeta(array $attributes) : self
+    public function removeMeta(array $attributes): self
     {
         $this->meta = $this->meta->reject(fn (MetaTag $meta) => $meta->hasAllAttributes($attributes));
 
@@ -167,7 +158,7 @@ class MetaTags
     /**
      * Get a Meta instance by name.
      */
-    public function getMetaByName(string $name) : Collection
+    public function getMetaByName(string $name): Collection
     {
         return $this->meta->filter(fn (MetaTag $meta) => $meta->name === $name);
     }
@@ -175,7 +166,7 @@ class MetaTags
     /**
      * Get a Meta instance by property.
      */
-    public function getMetaByProperty(string $property) : Collection
+    public function getMetaByProperty(string $property): Collection
     {
         return $this->meta->filter(fn (MetaTag $meta) => $meta->property === $property);
     }
@@ -183,15 +174,34 @@ class MetaTags
     /**
      * Getter for the title.
      */
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
 
     /**
+     * Returns a HtmlString with the title and the meta tags.
+     */
+    public function renderTags(): Htmlable
+    {
+        return new HtmlString($this->renderTitle() . PHP_EOL . $this->renderMeta());
+    }
+
+    /**
+     * Use the traits the fill the meta properties with the default data.
+     */
+    private function autoFill(): self
+    {
+        $this->autoFillOpenGraph($this->autoFillOverwrite);
+        $this->autoFillTwitter($this->autoFillOverwrite);
+
+        return $this;
+    }
+
+    /**
      * Renders a Title tag with the title.
      */
-    private function renderTitle() : string
+    private function renderTitle(): string
     {
         $title = e($this->title);
 
@@ -201,7 +211,7 @@ class MetaTags
     /**
      * Renders all meta tags.
      */
-    private function renderMeta() : string
+    private function renderMeta(): string
     {
         return $this->meta
             ->map(fn (MetaTag $meta) => $meta->render())
@@ -211,13 +221,5 @@ class MetaTags
                 );
             })
             ->implode(PHP_EOL);
-    }
-
-    /**
-     * Returns a HtmlString with the title and the meta tags.
-     */
-    public function renderTags() : Htmlable
-    {
-        return new HtmlString($this->renderTitle() . PHP_EOL . $this->renderMeta());
     }
 }

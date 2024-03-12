@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Utilities;
 
 use Illuminate\Contracts\View\View;
@@ -14,13 +16,13 @@ class Modal extends Component
 
     public string $activeModal;
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.utilities.modal');
     }
 
     #[On('open-livewire-modal')]
-    public function showModal($alias, $params = []) : void
+    public function showModal($alias, $params = []): void
     {
         $this->alias = $alias;
         $this->params = $params;
@@ -30,7 +32,7 @@ class Modal extends Component
     }
 
     #[On('reset-livewire-modal')]
-    public function resetModal() : void
+    public function resetModal(): void
     {
         $this->reset();
     }

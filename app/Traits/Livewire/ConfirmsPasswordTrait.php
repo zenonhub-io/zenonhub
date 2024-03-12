@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits\Livewire;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -15,7 +17,7 @@ trait ConfirmsPasswordTrait
 
     public string $confirmablePassword = '';
 
-    public function startConfirmingPassword(string $confirmableId) : void
+    public function startConfirmingPassword(string $confirmableId): void
     {
         $this->resetErrorBag();
 
@@ -34,7 +36,7 @@ trait ConfirmsPasswordTrait
         $this->dispatch('confirming-password');
     }
 
-    public function stopConfirmingPassword() : void
+    public function stopConfirmingPassword(): void
     {
         $this->confirmingPassword = false;
         $this->confirmableId = null;
@@ -43,7 +45,7 @@ trait ConfirmsPasswordTrait
         $this->dispatch('stop-confirming-password');
     }
 
-    public function confirmPassword() : void
+    public function confirmPassword(): void
     {
         if (! app(ConfirmPassword::class)(app(StatefulGuard::class), Auth::user(), $this->confirmablePassword)) {
             throw ValidationException::withMessages([
@@ -60,14 +62,14 @@ trait ConfirmsPasswordTrait
         $this->stopConfirmingPassword();
     }
 
-    protected function ensurePasswordIsConfirmed(?int $maximumSecondsSinceConfirmation = null) : void
+    protected function ensurePasswordIsConfirmed(?int $maximumSecondsSinceConfirmation = null): void
     {
         $maximumSecondsSinceConfirmation = $maximumSecondsSinceConfirmation ?: config('auth.password_timeout', 900);
 
         $this->passwordIsConfirmed($maximumSecondsSinceConfirmation) ? null : abort(403);
     }
 
-    protected function passwordIsConfirmed(?int $maximumSecondsSinceConfirmation = null) : bool
+    protected function passwordIsConfirmed(?int $maximumSecondsSinceConfirmation = null): bool
     {
         $maximumSecondsSinceConfirmation = $maximumSecondsSinceConfirmation ?: config('auth.password_timeout', 900);
 

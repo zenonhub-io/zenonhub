@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Utilities;
 
 use Illuminate\Contracts\View\View;
@@ -16,13 +18,13 @@ class Offcanvas extends Component
 
     public string $activeOffcanvas;
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.utilities.offcanvas');
     }
 
     #[On('open-livewire-offcanvas')]
-    public function showOffcanvas($alias, $title, $params = []) : void
+    public function showOffcanvas($alias, $title, $params = []): void
     {
         $this->alias = $alias;
         $this->title = $title;
@@ -33,7 +35,7 @@ class Offcanvas extends Component
     }
 
     #[On('reset-livewire-offcanvas')]
-    public function resetOffcanvas() : void
+    public function resetOffcanvas(): void
     {
         $this->reset();
     }

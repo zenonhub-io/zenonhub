@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Traits\FindByColumnTrait;
@@ -9,13 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 class NotificationType extends Model
 {
     use FindByColumnTrait;
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'notification_types';
 
     /**
      * Indicates if the model should be timestamped.
@@ -40,6 +35,13 @@ class NotificationType extends Model
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'notification_types';
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -47,6 +49,14 @@ class NotificationType extends Model
     protected $casts = [
         'data' => 'array',
     ];
+
+    //
+    // Methods
+
+    public static function getSubscribedUsers(string $code)
+    {
+        return self::findBy('code', $code)->subscribed_users;
+    }
 
     //
     // Scopes
@@ -59,20 +69,12 @@ class NotificationType extends Model
     //
     // Attributes
 
-    public function getSubscribedUsersAttribute() : Collection
+    public function getSubscribedUsersAttribute(): Collection
     {
         return User::whereRelation('notification_types', 'code', $this->code)->get();
     }
 
-    //
-    // Methods
-
-    public static function getSubscribedUsers(string $code)
-    {
-        return self::findBy('code', $code)->subscribed_users;
-    }
-
-    public function checkUserSubscribed(User $user) : bool
+    public function checkUserSubscribed(User $user): bool
     {
         return $user->notificationTypes->contains('id', $this->id);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders\Nom;
 
 use App\Models\Nom\Chain;
@@ -10,7 +12,7 @@ class ChainsSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run() : void
+    public function run(): void
     {
         Chain::create([
             'chain_identifier' => 1,

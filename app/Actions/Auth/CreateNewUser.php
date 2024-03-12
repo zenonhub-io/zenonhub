@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Auth;
 
 use App\Models\User;
@@ -18,7 +20,7 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input) : User
+    public function create(array $input): User
     {
         Validator::make($input, [
             'username' => ['required', 'string', 'max:255', 'unique:users'],

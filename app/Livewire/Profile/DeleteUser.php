@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Profile;
 
 use App\Actions\Profile\DeleteUser as DeleteUserAction;
@@ -15,7 +17,7 @@ class DeleteUser extends Component
 {
     use ConfirmsPasswordTrait;
 
-    public function deleteUser(Request $request, DeleteUserAction $deleter, StatefulGuard $auth) : Redirector
+    public function deleteUser(Request $request, DeleteUserAction $deleter, StatefulGuard $auth): Redirector
     {
         $this->ensurePasswordIsConfirmed();
 
@@ -31,7 +33,7 @@ class DeleteUser extends Component
         return redirect(config('fortify.redirects.logout') ?? '/');
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.profile.delete-user');
     }

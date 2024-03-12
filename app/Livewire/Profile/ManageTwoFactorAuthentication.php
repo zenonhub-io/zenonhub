@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Profile;
 
 use App\Traits\Livewire\ConfirmsPasswordTrait;
@@ -25,7 +27,7 @@ class ManageTwoFactorAuthentication extends Component
 
     public ?string $code = null;
 
-    public function mount() : void
+    public function mount(): void
     {
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') &&
             is_null(Auth::user()->two_factor_confirmed_at)) {
@@ -33,7 +35,7 @@ class ManageTwoFactorAuthentication extends Component
         }
     }
 
-    public function enableTwoFactorAuthentication(EnableTwoFactorAuthentication $enable) : void
+    public function enableTwoFactorAuthentication(EnableTwoFactorAuthentication $enable): void
     {
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
             $this->ensurePasswordIsConfirmed();
@@ -50,7 +52,7 @@ class ManageTwoFactorAuthentication extends Component
         }
     }
 
-    public function confirmTwoFactorAuthentication(ConfirmTwoFactorAuthentication $confirm) : void
+    public function confirmTwoFactorAuthentication(ConfirmTwoFactorAuthentication $confirm): void
     {
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
             $this->ensurePasswordIsConfirmed();
@@ -63,7 +65,7 @@ class ManageTwoFactorAuthentication extends Component
         $this->showingRecoveryCodes = true;
     }
 
-    public function showRecoveryCodes() : void
+    public function showRecoveryCodes(): void
     {
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
             $this->ensurePasswordIsConfirmed();
@@ -72,7 +74,7 @@ class ManageTwoFactorAuthentication extends Component
         $this->showingRecoveryCodes = true;
     }
 
-    public function regenerateRecoveryCodes(GenerateNewRecoveryCodes $generate) : void
+    public function regenerateRecoveryCodes(GenerateNewRecoveryCodes $generate): void
     {
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
             $this->ensurePasswordIsConfirmed();
@@ -83,7 +85,7 @@ class ManageTwoFactorAuthentication extends Component
         $this->showingRecoveryCodes = true;
     }
 
-    public function disableTwoFactorAuthentication(DisableTwoFactorAuthentication $disable) : void
+    public function disableTwoFactorAuthentication(DisableTwoFactorAuthentication $disable): void
     {
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
             $this->ensurePasswordIsConfirmed();
@@ -96,17 +98,17 @@ class ManageTwoFactorAuthentication extends Component
         $this->showingRecoveryCodes = false;
     }
 
-    public function getUserProperty() : ?Authenticatable
+    public function getUserProperty(): ?Authenticatable
     {
         return Auth::user();
     }
 
-    public function getEnabledProperty() : bool
+    public function getEnabledProperty(): bool
     {
         return ! empty($this->user->two_factor_secret);
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.profile.manage-two-factor-authentication');
     }

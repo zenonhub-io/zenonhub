@@ -18,12 +18,12 @@ class Svg extends Component
         $this->path = public_path("build/svg/{$file}.svg");
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.svg');
     }
 
-    public function svg() : string
+    public function svg(): string
     {
         if (! file_exists($this->path)) {
             return 'Error';

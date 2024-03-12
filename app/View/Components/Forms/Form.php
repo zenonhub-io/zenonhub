@@ -17,7 +17,7 @@ class Form extends Component
         $this->method = strtoupper($method);
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.form');
     }

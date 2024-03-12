@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders\Nom;
 
 use App\Classes\Utilities;
@@ -12,7 +14,7 @@ class TokensSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run() : void
+    public function run(): void
     {
         // ZNN
         Token::insert([

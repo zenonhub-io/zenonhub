@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Profile;
 
 use App\Actions\Profile\UpdateUserNotificationSubscriptions;
@@ -16,7 +18,7 @@ class ManageNotifications extends Component
 {
     public array $notifications = [];
 
-    public function mount() : void
+    public function mount(): void
     {
         $user = Auth::user();
 
@@ -25,7 +27,7 @@ class ManageNotifications extends Component
             ->mapWithKeys(fn ($notificationType) => [$notificationType->id => $notificationType->checkUserSubscribed($user)])->toArray();
     }
 
-    public function updateNotificationSubscriptions(UpdateUserNotificationSubscriptions $updater) : void
+    public function updateNotificationSubscriptions(UpdateUserNotificationSubscriptions $updater): void
     {
         $this->resetErrorBag();
 
@@ -34,17 +36,17 @@ class ManageNotifications extends Component
         $this->dispatch('profile.notifications.saved');
     }
 
-    public function getUserProperty() : ?Authenticatable
+    public function getUserProperty(): ?Authenticatable
     {
         return Auth::user();
     }
 
-    public function getNotificationTypesProperty($category) : Collection
+    public function getNotificationTypesProperty($category): Collection
     {
         return NotificationType::isActive()->where('category', $category)->get();
     }
 
-    public function getNotificationCategoriesProperty() : array
+    public function getNotificationCategoriesProperty(): array
     {
         return [
             'zenonhub' => 'Zenon Hub',
@@ -52,7 +54,7 @@ class ManageNotifications extends Component
         ];
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.profile.manage-notifications');
     }

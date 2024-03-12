@@ -1,13 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Seo;
 
 trait OpenGraph
 {
     /**
+     * Setter for the 'og:type' Meta Property.
+     */
+    public function openGraphType(string $value): self
+    {
+        return $this->metaByProperty('og:type', $value);
+    }
+
+    /**
+     * Setter for the 'og:site_name' Meta Property.
+     */
+    public function openGraphSiteName(string $value): self
+    {
+        return $this->metaByProperty('og:site_name', $value);
+    }
+
+    /**
+     * Setter for the 'og:title' Meta Property.
+     */
+    public function openGraphTitle(string $value): self
+    {
+        return $this->metaByProperty('og:title', $value);
+    }
+
+    /**
+     * Setter for the 'og:url' Meta Property.
+     */
+    public function openGraphUrl(string $value): self
+    {
+        return $this->metaByProperty('og:url', $value);
+    }
+
+    /**
+     * Setter for the 'og:image' Meta Property.
+     */
+    public function openGraphImage(string $value, bool $replace = true): self
+    {
+        return $this->metaByProperty('og:image', $value, $replace);
+    }
+
+    /**
      * Fill the Open Graph meta tags from the configuration.
      */
-    protected function fillOpenGraphDefaults() : void
+    protected function fillOpenGraphDefaults(): void
     {
         $this
             ->openGraphType(config('meta-tags.open_graph.type') ?: '')
@@ -20,7 +62,7 @@ trait OpenGraph
     /**
      * Update the Open Graph Title based on the regular title.
      */
-    protected function autoFillOpenGraph(bool $overwrite = false) : void
+    protected function autoFillOpenGraph(bool $overwrite = false): void
     {
         if (! config('meta-tags.open_graph.auto_fill')) {
             return;
@@ -33,45 +75,5 @@ trait OpenGraph
         }
 
         $this->openGraphUrl(url()->current());
-    }
-
-    /**
-     * Setter for the 'og:type' Meta Property.
-     */
-    public function openGraphType(string $value) : self
-    {
-        return $this->metaByProperty('og:type', $value);
-    }
-
-    /**
-     * Setter for the 'og:site_name' Meta Property.
-     */
-    public function openGraphSiteName(string $value) : self
-    {
-        return $this->metaByProperty('og:site_name', $value);
-    }
-
-    /**
-     * Setter for the 'og:title' Meta Property.
-     */
-    public function openGraphTitle(string $value) : self
-    {
-        return $this->metaByProperty('og:title', $value);
-    }
-
-    /**
-     * Setter for the 'og:url' Meta Property.
-     */
-    public function openGraphUrl(string $value) : self
-    {
-        return $this->metaByProperty('og:url', $value);
-    }
-
-    /**
-     * Setter for the 'og:image' Meta Property.
-     */
-    public function openGraphImage(string $value, bool $replace = true) : self
-    {
-        return $this->metaByProperty('og:image', $value, $replace);
     }
 }

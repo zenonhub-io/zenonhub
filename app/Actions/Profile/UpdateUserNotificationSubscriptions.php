@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Profile;
 
 use App\Models\User;
@@ -9,7 +11,7 @@ class UpdateUserNotificationSubscriptions
     public function update(
         User $user,
         array $subscriptions
-    ) : void {
+    ): void {
         $existingSubscriptions = $user->notificationTypes
             ->pluck('id');
 

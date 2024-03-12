@@ -22,7 +22,7 @@ class Group extends Component
         $this->value = old($name, $value ?? '');
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.group');
     }

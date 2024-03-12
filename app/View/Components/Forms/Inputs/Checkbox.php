@@ -24,7 +24,7 @@ class Checkbox extends Input
         $this->checked = (bool) old($name, $checked);
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.inputs.checkbox');
     }

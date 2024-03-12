@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Actions\Auth\AuthenticateLoginAttempt;
@@ -19,7 +21,7 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register() : void
+    public function register(): void
     {
         //
     }
@@ -27,7 +29,7 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot() : void
+    public function boot(): void
     {
         Fortify::viewPrefix('auth.');
         Fortify::authenticateUsing([new AuthenticateLoginAttempt, '__invoke']);

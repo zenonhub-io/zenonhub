@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Profile;
 
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -14,7 +16,7 @@ class UpdateDetails extends Component
 
     public bool $verificationLinkSent = false;
 
-    public function mount() : void
+    public function mount(): void
     {
         $user = Auth::user();
 
@@ -23,7 +25,7 @@ class UpdateDetails extends Component
         ], $user?->withoutRelations()->toArray());
     }
 
-    public function updateProfileInformation(UpdatesUserProfileInformation $updater) : void
+    public function updateProfileInformation(UpdatesUserProfileInformation $updater): void
     {
         $this->resetErrorBag();
 
@@ -32,19 +34,19 @@ class UpdateDetails extends Component
         $this->dispatch('profile.details.saved');
     }
 
-    public function sendEmailVerification() : void
+    public function sendEmailVerification(): void
     {
         Auth::user()?->sendEmailVerificationNotification();
 
         $this->verificationLinkSent = true;
     }
 
-    public function getUserProperty() : ?Authenticatable
+    public function getUserProperty(): ?Authenticatable
     {
         return Auth::user();
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.profile.update-details');
     }

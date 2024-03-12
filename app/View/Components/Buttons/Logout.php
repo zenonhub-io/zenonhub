@@ -16,7 +16,7 @@ class Logout extends Component
         $this->action = $action ?? route('logout');
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.buttons.logout');
     }

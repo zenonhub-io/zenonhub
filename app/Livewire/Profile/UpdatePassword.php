@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Profile;
 
 use Illuminate\Contracts\View\View;
@@ -15,7 +17,7 @@ class UpdatePassword extends Component
         'password_confirmation' => '',
     ];
 
-    public function updatePassword(UpdatesUserPasswords $updater) : void
+    public function updatePassword(UpdatesUserPasswords $updater): void
     {
         $this->resetErrorBag();
 
@@ -36,7 +38,7 @@ class UpdatePassword extends Component
         $this->dispatch('profile.password.saved');
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('livewire.profile.update-password');
     }

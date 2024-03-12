@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 test('alert component can be rendered', function () {
 
     $view = $this->blade('<x-alerts.alert :message="$message" />', [

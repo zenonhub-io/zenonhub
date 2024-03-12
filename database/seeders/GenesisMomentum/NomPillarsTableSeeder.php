@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders\GenesisMomentum;
 
+use DB;
 use Illuminate\Database\Seeder;
 
 class NomPillarsTableSeeder extends Seeder
@@ -13,9 +16,9 @@ class NomPillarsTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('nom_pillars')->truncate();
+        DB::table('nom_pillars')->truncate();
 
-        \DB::table('nom_pillars')->insert([
+        DB::table('nom_pillars')->insert([
             0 => [
                 'id' => 1,
                 'chain_id' => 1,

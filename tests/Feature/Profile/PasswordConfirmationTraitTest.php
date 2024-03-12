@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Livewire\Livewire;
 
 $testComponent = new class extends \Livewire\Component
 {
-    use \App\Traits\Livewire\ConfirmsPasswordTrait;
+    use App\Traits\Livewire\ConfirmsPasswordTrait;
 
     public function render()
     {

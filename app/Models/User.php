@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -49,12 +51,25 @@ class User extends Authenticatable implements MustVerifyEmail
         'privacy_confirmed_at',
     ];
 
+    //
+    // Relations
+
+    public function notificationTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            NotificationType::class,
+            'notification_subscriptions',
+            'user_id',
+            'type_id'
+        )->using(NotificationSubscription::class)->withPivot('data', 'created_at', 'updated_at');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
             'password' => 'hashed',
@@ -63,19 +78,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'last_login_at' => 'datetime',
             'last_seen_at' => 'datetime',
         ];
-    }
-
-    //
-    // Relations
-
-    public function notificationTypes() : BelongsToMany
-    {
-        return $this->belongsToMany(
-            NotificationType::class,
-            'notification_subscriptions',
-            'user_id',
-            'type_id'
-        )->using(NotificationSubscription::class)->withPivot('data', 'created_at', 'updated_at');
     }
 
     //

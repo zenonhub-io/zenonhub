@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 test('button component can be rendered', function () {
 
     $view = $this->blade('<x-buttons.button :text="$text" />', [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Deployer;
 
 require_once __DIR__ . '/../vendor/deployer/deployer/recipe/laravel.php';

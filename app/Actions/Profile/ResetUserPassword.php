@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Profile;
 
 use App\Models\User;
@@ -17,7 +19,7 @@ class ResetUserPassword implements ResetsUserPasswords
      *
      * @param  array<string, string>  $input
      */
-    public function reset(User $user, array $input) : void
+    public function reset(User $user, array $input): void
     {
         Validator::make($input, [
             'password' => $this->passwordRules(),

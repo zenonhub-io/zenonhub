@@ -16,12 +16,12 @@ class Error extends Component
     ) {
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.error');
     }
 
-    public function messages(ViewErrorBag $errors) : array
+    public function messages(ViewErrorBag $errors): array
     {
         $bag = $errors->getBag($this->bag);
 

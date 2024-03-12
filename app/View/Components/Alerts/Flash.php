@@ -15,27 +15,27 @@ class Flash extends Component
 
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.alerts.flash');
     }
 
-    public function message() : string
+    public function message(): string
     {
         return (string) Arr::first($this->messages());
     }
 
-    public function messages() : array
+    public function messages(): array
     {
         return (array) session()->get($this->type);
     }
 
-    public function exists() : bool
+    public function exists(): bool
     {
         return session()->has($this->type) && ! empty($this->messages());
     }
 
-    public function class() : string
+    public function class(): string
     {
         return match ($this->type) {
             'success' => 'success',

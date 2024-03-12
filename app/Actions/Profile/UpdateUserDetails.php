@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Profile;
 
 use App\Models\User;
@@ -14,7 +16,7 @@ class UpdateUserDetails implements UpdatesUserProfileInformation
      *
      * @param  array<string, mixed>  $input
      */
-    public function update(User $user, array $input) : void
+    public function update(User $user, array $input): void
     {
         Validator::make($input, [
             'name' => ['nullable', 'string', 'max:255'],
@@ -38,7 +40,7 @@ class UpdateUserDetails implements UpdatesUserProfileInformation
      *
      * @param  array<string, string>  $input
      */
-    protected function updateVerifiedUser(User $user, array $input) : void
+    private function updateVerifiedUser(User $user, array $input): void
     {
         $user->forceFill([
             'name' => $input['name'],

@@ -15,7 +15,7 @@ class Label extends Component
     ) {
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.label');
     }

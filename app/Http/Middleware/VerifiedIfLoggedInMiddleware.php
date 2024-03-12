@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\URL;
 
 class VerifiedIfLoggedInMiddleware
 {
-    public function handle(Request $request, Closure $next) : mixed
+    public function handle(Request $request, Closure $next): mixed
     {
         if (
             $request->user() &&

@@ -16,7 +16,7 @@ class Hidden extends Input
         parent::__construct($name, 'hidden', $id, $value);
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.inputs.hidden');
     }

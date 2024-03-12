@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Livewire\Profile\ManageNotifications;
 use App\Models\User;
 use Livewire\Livewire;
 
 test('component displays notification subscriptions', function () {
-    $this->seed(\Database\Seeders\NotificationTypesSeeder::class);
+    $this->seed(Database\Seeders\NotificationTypesSeeder::class);
     $this->actingAs(User::factory()->create());
 
     Livewire::test(ManageNotifications::class)
@@ -15,7 +17,7 @@ test('component displays notification subscriptions', function () {
 })->group('profile', 'manage-notifications');
 
 test('user can subscribe to notifications', function () {
-    $this->seed(\Database\Seeders\NotificationTypesSeeder::class);
+    $this->seed(Database\Seeders\NotificationTypesSeeder::class);
     $this->actingAs($user = User::factory()->create());
 
     expect($user->fresh()->notificationTypes)->toHaveCount(0);
@@ -32,7 +34,7 @@ test('user can subscribe to notifications', function () {
 })->group('profile', 'manage-notifications');
 
 test('user can unsubscribe from notifications', function () {
-    $this->seed(\Database\Seeders\NotificationTypesSeeder::class);
+    $this->seed(Database\Seeders\NotificationTypesSeeder::class);
     $this->actingAs($user = User::factory()->withNotificationSubscription(2)->create());
 
     expect($user->fresh()->notificationTypes)->toHaveCount(2);
@@ -50,7 +52,7 @@ test('user can unsubscribe from notifications', function () {
 })->group('profile', 'manage-notifications');
 
 test('user can modify notification subscriptions', function () {
-    $this->seed(\Database\Seeders\NotificationTypesSeeder::class);
+    $this->seed(Database\Seeders\NotificationTypesSeeder::class);
     $this->actingAs($user = User::factory()->withNotificationSubscription(2)->create());
 
     expect($user->fresh()->notificationTypes)->toHaveCount(2);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 test('flash component can be rendered', function () {
 
     session()->flash('alert', 'Info alert');

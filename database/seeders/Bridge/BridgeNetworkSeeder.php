@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders\Bridge;
 
 use App\Classes\Utilities;
@@ -13,7 +15,7 @@ class BridgeNetworkSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run() : void
+    public function run(): void
     {
         $chain = Utilities::loadChain();
         $znn = App::make(ZenonSdk::class);

@@ -23,7 +23,7 @@ class Radio extends Input
         $this->selected = (bool) old($name, $selected);
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.forms.inputs.radio');
     }

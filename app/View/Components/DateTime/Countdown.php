@@ -22,32 +22,32 @@ class Countdown extends Component
         $this->expires = $expires;
     }
 
-    public function render() : View
+    public function render(): View
     {
         return view('components.date-time.countdown');
     }
 
-    public function days() : string
+    public function days(): string
     {
         return sprintf('%02d', $this->difference()->d);
     }
 
-    public function hours() : string
+    public function hours(): string
     {
         return sprintf('%02d', $this->difference()->h);
     }
 
-    public function minutes() : string
+    public function minutes(): string
     {
         return sprintf('%02d', $this->difference()->i);
     }
 
-    public function seconds() : string
+    public function seconds(): string
     {
         return sprintf('%02d', $this->difference()->s);
     }
 
-    public function difference() : DateInterval
+    public function difference(): DateInterval
     {
         return $this->expires->diff(now());
     }
