@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -9,7 +12,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
         Schema::create('nom_account_blocks', function (Blueprint $table) {
             $table->id();
@@ -23,9 +26,9 @@ return new class extends Migration
             $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->nullOnDelete();
             $table->foreignId('contract_method_id')->nullable()->references('id')->on('nom_contract_methods')->nullOnDelete();
             $table->integer('version');
-            $table->integer('block_type')->index();
+            $table->integer('block_type')->unique();
             $table->bigInteger('height')->index();
-            $table->bigInteger('amount')->default(0);
+            $table->string('amount')->default(0);
             $table->bigInteger('fused_plasma')->default(0);
             $table->bigInteger('base_plasma')->default(0);
             $table->bigInteger('used_plasma')->default(0);
@@ -41,12 +44,14 @@ return new class extends Migration
             $table->text('decoded')->nullable();
             $table->boolean('is_processed')->default(0);
         });
+
+        Artisan::call('db:create-or-update-latest-account-blocks-view');
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down() : void
+    public function down(): void
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('nom_account_block_data');

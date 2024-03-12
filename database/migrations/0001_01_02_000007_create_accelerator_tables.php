@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,7 +11,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
         Schema::create('nom_accelerator_projects', function (Blueprint $table) {
             $table->id();
@@ -23,6 +25,10 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->bigInteger('znn_requested')->default(0);
             $table->bigInteger('qsr_requested')->default(0);
+            $table->bigInteger('znn_paid')->default(0);
+            $table->bigInteger('qsr_paid')->default(0);
+            $table->bigInteger('znn_remaining')->default(0);
+            $table->bigInteger('qsr_remaining')->default(0);
             $table->decimal('znn_price', 12, 4)->nullable()->index();
             $table->decimal('qsr_price', 12, 4)->nullable()->index();
             $table->integer('vote_total')->default(0)->index();
@@ -70,7 +76,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down() : void
+    public function down(): void
     {
         Schema::dropIfExists('nom_accelerator_votes');
         Schema::dropIfExists('nom_accelerator_phases');

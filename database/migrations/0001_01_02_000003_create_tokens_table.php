@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,7 +11,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
         Schema::create('nom_tokens', function (Blueprint $table) {
             $table->id();
@@ -19,8 +21,8 @@ return new class extends Migration
             $table->string('symbol')->index();
             $table->string('domain');
             $table->string('token_standard')->index();
-            $table->bigInteger('total_supply')->index();
-            $table->bigInteger('max_supply')->index();
+            $table->string('total_supply')->default(0)->index();
+            $table->string('max_supply')->default(0)->index();
             $table->integer('decimals');
             $table->boolean('is_burnable')->default(1);
             $table->boolean('is_mintable')->default(1);
@@ -33,7 +35,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down() : void
+    public function down(): void
     {
         Schema::dropIfExists('nom_tokens');
     }
