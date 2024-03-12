@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -64,6 +66,14 @@ class User extends Authenticatable implements MustVerifyEmail
         )->using(NotificationSubscription::class)->withPivot('data', 'created_at', 'updated_at');
     }
 
+    //
+    // Attributes
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasRole('admin');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -79,7 +89,4 @@ class User extends Authenticatable implements MustVerifyEmail
             'last_seen_at' => 'datetime',
         ];
     }
-
-    //
-    // Attributes
 }
