@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use Database\Seeders\GenesisMomentum\NomAccountBlocksTableSeeder;
+use Database\Seeders\GenesisMomentum\NomAccountsTableSeeder;
 use Database\Seeders\GenesisMomentum\NomChainsTableSeeder;
 use Database\Seeders\GenesisMomentum\NomContractMethodsTableSeeder;
 use Database\Seeders\GenesisMomentum\NomContractsTableSeeder;
@@ -23,12 +25,12 @@ class GenesisSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
 
         $this->call([
-            NomAccountBlocksTableSeeder::class,
-            NomAccountsTableSeeder::class,
+            //NomAccountBlocksTableSeeder::class,
+            //NomAccountsTableSeeder::class,
             NomChainsTableSeeder::class,
             NomContractMethodsTableSeeder::class,
             NomContractsTableSeeder::class,
-            NomMomentumsTableSeeder::class,
+            //NomMomentumsTableSeeder::class,
             NomPillarsTableSeeder::class,
             NomTokensTableSeeder::class,
         ]);

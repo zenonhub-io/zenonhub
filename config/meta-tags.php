@@ -4,16 +4,6 @@ declare(strict_types=1);
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Title and meta tags (SEO)
-    |--------------------------------------------------------------------------
-    |
-    | You may use the SEO facade to set your page's title, description, and keywords.
-    | @see https://splade.dev/docs/title-meta
-    |
-    */
-
     'defaults' => [
         'title' => env('APP_NAME', 'Zenon Hub'),
         'description' => 'Explore the Zenon Network with Zenon Hub. Track transactions, addresses, tokens, and discover all the activity on the cutting-edge Network of Momentum',

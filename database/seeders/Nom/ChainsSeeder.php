@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom;
 
-use App\Models\Nom\Chain;
+use App\Domains\Nom\Models\Chain;
 use Illuminate\Database\Seeder;
 
 class ChainsSeeder extends Seeder

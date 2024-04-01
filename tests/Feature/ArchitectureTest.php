@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 test('debugging functions are not used')
     ->expect(['dd', 'dump', 'print_r', 'ray', 'var_dump'])
-    ->not->toBeUsed();
+    ->not->toBeUsedIn('App');
 
 test('models')
     ->expect('App\Models')

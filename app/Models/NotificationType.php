@@ -24,7 +24,7 @@ class NotificationType extends Model
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'name',
         'code',
         'category',

@@ -28,13 +28,13 @@ class CreateOrUpdateLatestMomentumsView extends Command
      */
     public function handle()
     {
+        DB::statement('DROP VIEW IF EXISTS view_latest_nom_momentums');
         DB::statement('
-            DROP VIEW IF EXISTS view_latest_nom_momentums;
             CREATE VIEW view_latest_nom_momentums AS
                 SELECT *
                 FROM nom_momentums
                 ORDER BY id DESC
-                LIMIT 50000;
+                LIMIT 50000
         ');
     }
 }

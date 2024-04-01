@@ -42,7 +42,7 @@ return new class extends Migration
         Schema::create('nom_accelerator_phases', function (Blueprint $table) {
             $table->id();
             $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('accelerator_project_id')->nullable()->references('id')->on('nom_accelerator_projects')->cascadeOnDelete();
+            $table->foreignId('project_id')->nullable()->references('id')->on('nom_accelerator_projects')->cascadeOnDelete();
             $table->string('hash')->unique();
             $table->string('name')->index();
             $table->string('slug')->index();

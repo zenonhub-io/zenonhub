@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
             $table->foreignId('producer_pillar_id')->nullable()->references('id')->on('nom_pillars')->nullOnDelete();
             $table->integer('version');
-            $table->bigInteger('height')->index();
+            $table->bigInteger('height')->unique();
             $table->string('hash')->unique();
             $table->text('data')->nullable();
             $table->timestamp('created_at')->nullable();
@@ -34,6 +35,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::statement('DROP VIEW IF EXISTS view_latest_nom_momentums');
         Schema::dropIfExists('nom_momentums');
     }
 };

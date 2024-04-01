@@ -33,4 +33,8 @@ return [
         ],
     ],
 
+    'zenon' => [
+        'node_url' => env('ZNN_NODE_URL', '127.0.0.1:35997'),
+        'throw_errors' => env('ZNN_NODE_THROW_ERRORS', true),
+    ],
 ];

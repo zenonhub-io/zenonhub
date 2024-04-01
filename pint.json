@@ -35,6 +35,7 @@
                 "property_public",
                 "property_protected",
                 "property_private",
+                "method:casts",
                 "construct",
                 "destruct",
                 "magic",
@@ -51,9 +52,7 @@
         },
         "ordered_interfaces": true,
         "ordered_traits": true,
-        "protected_to_private": true,
         "strict_comparison": true,
-        "use_arrow_functions": true,
-        "yoda_style": true
+        "use_arrow_functions": true
     }
 }

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Bridge;
 
-use App\Classes\Utilities;
-use App\Models\Nom\BridgeNetwork;
+use App\Domains\Nom\Models\BridgeNetwork;
 use App\Services\ZenonSdk;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -17,7 +16,7 @@ class BridgeNetworkSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = Utilities::loadChain();
+        $chain = load_chain();
         $znn = App::make(ZenonSdk::class);
         $bridgeNetworks = $znn->bridge->getAllNetworks()['data']->list;
 

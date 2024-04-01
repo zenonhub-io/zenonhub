@@ -6,7 +6,7 @@ test('flash component can be rendered', function () {
 
     session()->flash('alert', 'Info alert');
 
-    $view = $this->blade('<x-alerts.flash />');
+    $view = (string) $this->blade('<x-alerts.flash />');
 
     $expected = <<<'HTML'
 <div role="alert" class="alert alert-info shadow">
@@ -22,7 +22,7 @@ test('flash component success can be rendered', function () {
 
     session()->flash('success', 'Success alert');
 
-    $viewSuccess = $this->blade('<x-alerts.flash type="success" />');
+    $viewSuccess = (string) $this->blade('<x-alerts.flash type="success" />');
     $expectedSuccess = <<<'HTML'
                     <div role="alert" class="alert alert-success shadow">
                         Success alert
@@ -37,7 +37,7 @@ test('flash component error can be rendered', function () {
 
     session()->flash('error', 'Error alert');
 
-    $viewError = $this->blade('<x-alerts.flash type="error" />');
+    $viewError = (string) $this->blade('<x-alerts.flash type="error" />');
     $expectedError = <<<'HTML'
                     <div role="alert" class="alert alert-danger shadow">
                         Error alert

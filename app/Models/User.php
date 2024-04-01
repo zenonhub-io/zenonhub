@@ -53,6 +53,22 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'privacy_confirmed_at',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+            'email_verified_at' => 'datetime',
+            'privacy_confirmed_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+        ];
+    }
+
     //
     // Relations
 
@@ -72,21 +88,5 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasRole('admin');
-    }
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-            'email_verified_at' => 'datetime',
-            'privacy_confirmed_at' => 'datetime',
-            'last_login_at' => 'datetime',
-            'last_seen_at' => 'datetime',
-        ];
     }
 }

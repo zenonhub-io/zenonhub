@@ -24,9 +24,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
             $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->nullOnDelete();
-            $table->integer('type')->index();
+            $table->string('type')->index();
             $table->string('amount')->default(0)->index();
-            $table->timestamp('created_at')->index()->nullable();
+            $table->timestamp('created_at')->index();
         });
     }
 

@@ -21,6 +21,9 @@ return Application::configure()
         // channels: __DIR__.'/../routes/channels.php',
         // health: '/up',
     )
+    ->withEvents(discover: [
+        __DIR__ . '/../app/Domains/Nom/Listeners',
+    ])
     ->withMiddleware(function (Middleware $middleware) {
         //
     })

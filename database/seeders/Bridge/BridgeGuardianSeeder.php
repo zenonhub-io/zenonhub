@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Bridge;
 
-use App\Classes\Utilities;
-use App\Models\Nom\BridgeGuardian;
+use App\Domains\Nom\Models\BridgeGuardian;
 use App\Services\ZenonSdk;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -21,7 +20,7 @@ class BridgeGuardianSeeder extends Seeder
         $bridgeInfo = $znn->bridge->getSecurityInfo()['data'];
 
         foreach ($bridgeInfo->guardians as $guardianAddress) {
-            $guardian = Utilities::loadAccount($guardianAddress);
+            $guardian = load_account($guardianAddress);
 
             BridgeGuardian::query()
                 ->updateOrInsert([

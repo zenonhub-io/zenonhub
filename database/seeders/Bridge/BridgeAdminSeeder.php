@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Bridge;
 
-use App\Classes\Utilities;
-use App\Models\Nom\BridgeAdmin;
+use App\Domains\Nom\Models\BridgeAdmin;
 use App\Services\ZenonSdk;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -19,7 +18,7 @@ class BridgeAdminSeeder extends Seeder
     {
         $znn = App::make(ZenonSdk::class);
         $bridgeInfo = $znn->bridge->getBridgeInfo()['data'];
-        $adminAccount = Utilities::loadAccount($bridgeInfo->administrator, 'Bridge admin');
+        $adminAccount = load_account($bridgeInfo->administrator, 'Bridge admin');
 
         BridgeAdmin::query()
             ->updateOrInsert([
