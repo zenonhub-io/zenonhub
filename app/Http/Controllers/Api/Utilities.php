@@ -149,10 +149,8 @@ class Utilities extends ApiController
 
     public function plasmaBotFuse(Request $request): JsonResponse
     {
-        $token = $request->bearerToken();
-
         try {
-            (new AccessKeyValidator())->execute($token);
+            (new AccessKeyValidator())->execute($request->bearerToken());
         } catch (\RuntimeException) {
             return $this->error(
                 'Invalid access token',
@@ -184,7 +182,7 @@ class Utilities extends ApiController
         if (! $result) {
             return $this->error(
                 'Error fusing QSR',
-                'An error occured while fusing QSR, please try again',
+                'An error occurred while fusing QSR, please try again',
                 400
             );
         }
