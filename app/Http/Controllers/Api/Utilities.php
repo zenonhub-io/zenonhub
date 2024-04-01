@@ -172,7 +172,7 @@ class Utilities extends ApiController
         if ($plasmaBotAccount->qsr_balance < 20) {
             return $this->error(
                 'Unable to fuse QSR',
-                'Not enough QSR available in the bot',
+                'Not enough QSR available in the bot, try again later',
                 400
             );
         }
