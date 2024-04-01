@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\PlasmaBot\AccessKeyValidator;
+use App\Actions\PlasmaBot\Fuse;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
@@ -143,5 +145,50 @@ class Utilities extends ApiController
                 'usd' => btc_price(),
             ],
         ]);
+    }
+
+    public function plasmaBotFuse(Request $request): JsonResponse
+    {
+        $token = $request->bearerToken();
+
+        try {
+            (new AccessKeyValidator())->execute($token);
+        } catch (\RuntimeException) {
+            $this->error(
+                'Invalid access token',
+                'Your API token is invalid',
+                403
+            );
+        }
+
+        $validator = Validator::make($request->input(), [
+            'address' => 'required|string|size:40',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        $plasmaBotAccount = Account::findByAddress(config('plasma-bot.address'));
+
+        if ($plasmaBotAccount->qsr_balance < 20) {
+            return $this->error(
+                'Unable to fuse QSR',
+                'Not enough QSR available in the bot',
+                400
+            );
+        }
+
+        $result = (new Fuse)->execute($request->input('address'), 20, null);
+
+        if (! $result) {
+            return $this->error(
+                'Error fusing QSR',
+                'An error occured while fusing QSR, please try again',
+                400
+            );
+        }
+
+        return $this->success('Success');
     }
 }
