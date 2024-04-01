@@ -43,20 +43,18 @@ class ApiController
     /**
      * Returns errors to the client
      *
-     * @param  string  $error Custom error message.
      * @param  ?string  $detail Detailed error message
      * @param  int  $code HTTP Error code, defaults to 404.
      * @param  array  $data Custom data to include with the response.
-     * @param  string|null  $redirect Redirect route for frontend.
      */
-    protected function error(string $title, ?string $detail = null, int $code = 404, array $data = [], ?string $redirect = null): JsonResponse
+    protected function error(string $title, ?string $detail = null, int $code = 404, array $data = []): JsonResponse
     {
-        $response = [
-            'type' => null,
+        $response = array_filter([
             'title' => $title,
             'detail' => $detail,
+            'type' => null,
             'instance' => null,
-        ];
+        ]);
 
         if (! empty($data)) {
             $response = array_merge($response, $data);
@@ -72,11 +70,13 @@ class ApiController
      */
     protected function validationError(Validator $validator): JsonResponse
     {
-        $response = [
-            'message' => 'Validation error',
-            'data' => $validator->errors()->getMessages(),
-        ];
-
-        return response()->json($response, 422);
+        return $this->error(
+            'Validation error',
+            'The data sent did not pass validation, see the errors in this response',
+            422,
+            [
+                'errors' => $validator->errors()->getMessages(),
+            ]
+        );
     }
 }

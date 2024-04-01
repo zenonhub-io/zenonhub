@@ -154,7 +154,7 @@ class Utilities extends ApiController
         try {
             (new AccessKeyValidator())->execute($token);
         } catch (\RuntimeException) {
-            $this->error(
+            return $this->error(
                 'Invalid access token',
                 'Your API token is invalid',
                 403
