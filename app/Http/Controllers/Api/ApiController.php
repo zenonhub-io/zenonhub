@@ -44,18 +44,22 @@ class ApiController
      * Returns errors to the client
      *
      * @param  string  $error Custom error message.
+     * @param  ?string  $detail Detailed error message
      * @param  int  $code HTTP Error code, defaults to 404.
      * @param  array  $data Custom data to include with the response.
      * @param  string|null  $redirect Redirect route for frontend.
      */
-    protected function error(string $error, int $code = 404, array $data = [], string $redirect = null): JsonResponse
+    protected function error(string $title, ?string $detail = null, int $code = 404, array $data = [], ?string $redirect = null): JsonResponse
     {
         $response = [
-            'message' => $error,
+            'type' => null,
+            'title' => $title,
+            'detail' => $detail,
+            'instance' => null,
         ];
 
         if (! empty($data)) {
-            $response['data'] = $data;
+            $response = array_merge($response, $data);
         }
 
         return response()->json($response, $code);

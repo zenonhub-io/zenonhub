@@ -107,6 +107,6 @@ class PlasmaBot extends Component
 
         $duration = now()->timestamp - $expires->timestamp;
         $this->expires = now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
-        $this->result = (new Fuse($data['address'], $plasma, $expires))->execute();
+        $this->result = (new Fuse)->execute($data['address'], $plasma, $expires);
     }
 }
