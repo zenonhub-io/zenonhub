@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Bots;
 
 use App\Channels\DiscordWebhookChannel;
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Services\Discord\Embed;
 use App\Services\Discord\Message as DiscordWebhookMessage;
 use Illuminate\Bus\Queueable;
@@ -45,12 +47,12 @@ class BridgeAlert extends Notification
     public function toDiscordWebhook($notifiable): DiscordWebhookMessage
     {
         $issuerAccount = $this->formatMarkdownAddressName($this->block->account);
-        $action = $this->block->contract_method->name;
-        $contract = $this->block->to_account->custom_label;
+        $action = $this->block->contractMethod->name;
+        $contract = $this->block->toAccount->custom_label;
 
         $txLink = $this->formatMarkdownTxLink('discord');
         $adminLink = $this->formatMarkdownAddressLink($this->block->account, 'discord');
-        $contractLink = $this->formatMarkdownAddressLink($this->block->to_account, 'discord');
+        $contractLink = $this->formatMarkdownAddressLink($this->block->toAccount, 'discord');
 
         return DiscordWebhookMessage::make()
             ->from('Zenon Bridge Alerts')
@@ -72,12 +74,12 @@ class BridgeAlert extends Notification
     public function toTelegram($notifiable): TelegramMessage
     {
         $adminAccount = $this->formatMarkdownAddressName($this->block->account, '*');
-        $action = $this->block->contract_method->name;
-        $contract = $this->block->to_account->custom_label;
+        $action = $this->block->contractMethod->name;
+        $contract = $this->block->toAccount->custom_label;
 
         $txLink = $this->formatMarkdownTxLink('telegram');
         $adminLink = $this->formatMarkdownAddressLink($this->block->account, 'telegram');
-        $contractLink = $this->formatMarkdownAddressLink($this->block->to_account, 'telegram');
+        $contractLink = $this->formatMarkdownAddressLink($this->block->toAccount, 'telegram');
 
         return TelegramMessage::create()
             ->token(config('bots.bridge-alerts.telegram.bot_token'))
@@ -97,7 +99,7 @@ class BridgeAlert extends Notification
     public function toTwitter($notifiable): TwitterMessage
     {
         $adminAccount = $this->formatMarkdownAddressName($this->block->account);
-        $action = $this->block->contract_method->name;
+        $action = $this->block->contractMethod->name;
         $txLink = $this->formatMarkdownTxLink('twitter');
 
         return new TwitterStatusUpdate("{$action} was issued by {$adminAccount}
@@ -162,15 +164,15 @@ Tx: $txLink
 
     private function getDiscordHighlightColour(): int
     {
-        if (in_array($this->block->contract_method->name, ['Emergency'])) {
+        if (in_array($this->block->contractMethod->name, ['Emergency'])) {
             return 0x8D2C2C; // Red
         }
 
-        if (in_array($this->block->contract_method->name, ['Halt'])) {
+        if (in_array($this->block->contractMethod->name, ['Halt'])) {
             return 0xCE7C4E; // Orange
         }
 
-        if (in_array($this->block->contract_method->name, ['Unhalt'])) {
+        if (in_array($this->block->contractMethod->name, ['Unhalt'])) {
             return 0x22C55E; // Green
         }
 

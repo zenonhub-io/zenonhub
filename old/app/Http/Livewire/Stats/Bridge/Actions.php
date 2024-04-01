@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Bridge;
 
+use App\Domains\Nom\Models\BridgeAdmin;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\BridgeAdmin;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -29,6 +31,6 @@ class Actions extends Component
     protected function initQuery()
     {
         $admin = BridgeAdmin::getActiveAdmin();
-        $this->query = $admin->account->sent_blocks()->whereNotNull('contract_method_id');
+        $this->query = $admin->account->sentBlocks()->whereNotNull('contract_method_id');
     }
 }

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Modals\Explorer;
 
 use App\Actions\Explorer\DeleteFavorite;
 use App\Actions\Explorer\ManageFavorite;
+use App\Domains\Nom\Models\Account;
 use App\Models\Markable\Favorite;
-use App\Models\Nom\Account;
 use Livewire\Component;
 
 class ManageFavoriteAccount extends Component
@@ -20,7 +22,7 @@ class ManageFavoriteAccount extends Component
 
     public function mount(string $address)
     {
-        $account = Account::findByAddress($address);
+        $account = Account::findBy('address', $address);
         $favorite = Favorite::findExisting($account, auth()->user());
 
         $this->address = $address;
@@ -51,7 +53,7 @@ class ManageFavoriteAccount extends Component
         ]);
 
         $user = auth()->user();
-        $account = Account::findByAddress($validatedData['address']);
+        $account = Account::findBy('address', $validatedData['address']);
 
         (new ManageFavorite($account, $user, $validatedData))->execute();
 
@@ -69,7 +71,7 @@ class ManageFavoriteAccount extends Component
         ]);
 
         $user = auth()->user();
-        $account = Account::findByAddress($validatedData['address']);
+        $account = Account::findBy('address', $validatedData['address']);
 
         (new DeleteFavorite($account, $user))->execute();
 

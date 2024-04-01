@@ -15,7 +15,7 @@
     </div>
     <div class="text-start text-md-center">
         <div class="text-muted fs-sm text-center mb-2">
-            {{ $item->quorum_stauts }}
+            {{ $item->quorum_status }}
         </div>
         <div class="progress bg-dark mb-3" style="height: 4px">
             <div

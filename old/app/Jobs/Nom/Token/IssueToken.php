@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Token;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Token;
 use App\Models\NotificationType;
 use App\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Utilities;
@@ -73,7 +75,7 @@ class IssueToken implements ShouldQueue
     private function notifyUsers($token): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-token');
-        $networkBot = new \App\Bots\NetworkAlertBot();
+        $networkBot = new \App\Bots\NetworkAlertBot;
 
         Notification::send(
             $subscribedUsers->prepend($networkBot),

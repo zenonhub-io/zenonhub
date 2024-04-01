@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Token;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\TokenBurn;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\TokenBurn;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

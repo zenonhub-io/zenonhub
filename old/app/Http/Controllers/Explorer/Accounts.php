@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Explorer;
 
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
 use Meta;
 
 class Accounts
@@ -19,7 +21,7 @@ class Accounts
 
     public function detail($address)
     {
-        $account = Account::findByAddress($address);
+        $account = Account::findBy('address', $address);
 
         if (! $account) {
             abort(404);
@@ -27,7 +29,7 @@ class Accounts
 
         $metaTitle = collect([
             ($account->has_custom_label ? $account->custom_label : null),
-            'Address '.$account->address.' details',
+            'Address ' . $account->address . ' details',
         ])->filter()->implode(' | ');
 
         Meta::title($metaTitle)

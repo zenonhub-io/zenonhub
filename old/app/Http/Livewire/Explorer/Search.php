@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Momentum;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Momentum;
+use App\Domains\Nom\Models\Token;
 use Livewire\Component;
 
 class Search extends Component
 {
     public $search;
 
-    protected $results;
-
     public bool $error = false;
+
+    protected $results;
 
     public function render()
     {

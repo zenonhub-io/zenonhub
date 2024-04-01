@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\ContractMethod;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\ContractMethod;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 
 class SaveBlockAbi
@@ -17,7 +19,7 @@ class SaveBlockAbi
         $block = $this->block;
         $data = base64_decode($block->data->raw);
         $fingerprint = ZnnUtilities::getDataFingerprint($data);
-        $contractMethod = ContractMethod::where('contract_id', $block->to_account->contract?->id)
+        $contractMethod = ContractMethod::where('contract_id', $block->toAccount->contract?->id)
             ->where('fingerprint', $fingerprint)
             ->first();
 
@@ -32,10 +34,10 @@ class SaveBlockAbi
             $block->save();
 
             $contractName = ucfirst(strtolower($contractMethod->contract->name));
-            $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\".$contractName;
+            $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\" . $contractName;
 
             if (class_exists($embeddedContract)) {
-                $embeddedContract = new $embeddedContract();
+                $embeddedContract = new $embeddedContract;
                 $decoded = $embeddedContract->decode($contractMethod->name, $data);
                 $parameters = $embeddedContract->getParameterNames($contractMethod->name);
 

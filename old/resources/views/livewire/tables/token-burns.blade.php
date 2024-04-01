@@ -55,8 +55,8 @@
                             </td>
                             <td>{{ $burn->token->getDisplayAmount($burn->amount) }}</td>
                             <td>
-                                <a href="{{ route('explorer.transaction', ['hash' => $burn->account_block->hash]) }}">
-                                    <x-hash-tooltip :hash="$burn->account_block->hash" :eitherSide="8" :alwaysShort="true"/>
+                                <a href="{{ route('explorer.transaction', ['hash' => $burn->accountBlock->hash]) }}">
+                                    <x-hash-tooltip :hash="$burn->accountBlock->hash" :eitherSide="8" :alwaysShort="true"/>
                                 </a>
                             </td>
                             <td>{{ $burn->created_at->format(config('zenon.short_date_format')) }}</td>

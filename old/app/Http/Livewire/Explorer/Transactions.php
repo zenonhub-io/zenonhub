@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
+use App\Domains\Nom\Models\Views\ViewLatestAccountBlock;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Views\ViewLatestAccountBlock;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Transactions extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     protected $queryString = [
         'sort' => ['except' => 'created_at'],

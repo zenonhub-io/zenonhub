@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Sync;
 
 use App\Actions\Nom\Accelerator\SyncProjectStatus;
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
+use App\Domains\Nom\Models\AcceleratorProject;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,8 +20,8 @@ class ProjectStatus implements ShouldQueue
     public function handle(): void
     {
         $projects = AcceleratorProject::whereIn('status', [
-            AcceleratorProject::STATUS_NEW,
-            AcceleratorProject::STATUS_ACCEPTED,
+            AcceleratorProjectStatusEnum::NEW->value,
+            AcceleratorProjectStatusEnum::ACCEPTED->value,
         ])->get();
 
         $projects->each(function ($project) {

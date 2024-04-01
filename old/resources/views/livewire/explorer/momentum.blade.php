@@ -90,7 +90,7 @@
                         <div class="d-block d-md-flex justify-content-md-evenly bg-secondary shadow rounded-3 mb-2 p-3">
                             <div class="text-start text-md-center">
                                 <span class="d-inline d-md-block text-muted fs-sm">Transactions</span>
-                                <span class="float-end float-md-none">{{ number_format($momentum->account_blocks->count()) }}</span>
+                                <span class="float-end float-md-none">{{ number_format($momentum->accountBlocks->count()) }}</span>
                             </div>
                         </div>
                     </div>
@@ -106,12 +106,12 @@
                     </li>
                     <li class="list-group-item">
                         <span class="d-block fs-sm text-muted">Producer</span>
-                        @if ($momentum->producer_account)
-                            <x-address :account="$momentum->producer_account"/>
+                        @if ($momentum->producerAccount)
+                            <x-address :account="$momentum->producerAccount"/>
                         @endif
-                        @if ($momentum->producer_pillar)
-                            | <a href="{{ route('pillars.detail', ['slug' => $momentum->producer_pillar->slug]) }}">
-                                {{ $momentum->producer_pillar->name }}
+                        @if ($momentum->producerPillar)
+                            | <a href="{{ route('pillars.detail', ['slug' => $momentum->producerPillar->slug]) }}">
+                                {{ $momentum->producerPillar->name }}
                             </a>
                         @endif
                     </li>
@@ -148,7 +148,7 @@
                     @elseif ($tab === 'json')
                         <div class="p-4">
                             @if ($momentum->raw_json)
-                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($momentum->raw_json) }}</code></pre>
+                                <pre class="line-numbers"><code class="lang-json">{{ json_encode($momentum->raw_json, JSON_PRETTY_PRINT) }}</code></pre>
                             @else
                                 <x-alert
                                     message="Unable to load JSON data"

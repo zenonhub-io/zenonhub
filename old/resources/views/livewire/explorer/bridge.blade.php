@@ -132,7 +132,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <x-address :account="$unwrap->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                    <x-address :account="$unwrap->toAccount" :eitherSide="8" :alwaysShort="true"/>
                                 </td>
                                 <td>
                                     {{ $unwrap->display_amount }}
@@ -155,7 +155,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {{ $unwrap->bridge_network->name }}
+                                    {{ $unwrap->bridgeNetwork->name }}
                                 </td>
                                 <td>{{ $unwrap->created_at->format(config('zenon.short_date_format')) }}</td>
                             </tr>
@@ -183,12 +183,12 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ route('explorer.transaction', ['hash' => $wrap->account_block->hash]) }}">
-                                        <x-hash-tooltip :hash="$wrap->account_block->hash" :eitherSide="8" :alwaysShort="true"/>
+                                    <a href="{{ route('explorer.transaction', ['hash' => $wrap->accountBlock->hash]) }}">
+                                        <x-hash-tooltip :hash="$wrap->accountBlock->hash" :eitherSide="8" :alwaysShort="true"/>
                                     </a>
                                 </td>
                                 <td>
-                                    {{ $wrap->bridge_network->name }}
+                                    {{ $wrap->bridgeNetwork->name }}
                                 </td>
                                 <td>{{ $wrap->created_at->format(config('zenon.short_date_format')) }}</td>
                             </tr>

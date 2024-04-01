@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Nom\Accelerator;
 
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
+use App\Domains\Nom\Models\AcceleratorProject;
 use Spatie\QueueableAction\QueueableAction;
 
 class UpdateProjectFunding
@@ -19,8 +21,8 @@ class UpdateProjectFunding
 
         $projects->each(function ($project) {
             $project->refresh();
-            $project->znn_paid = $project->phases()->where('status', AcceleratorPhase::STATUS_PAID)->sum('znn_requested');
-            $project->qsr_paid = $project->phases()->where('status', AcceleratorPhase::STATUS_PAID)->sum('qsr_requested');
+            $project->znn_paid = $project->phases()->where('status', AcceleratorPhaseStatusEnum::PAID->value)->sum('znn_requested');
+            $project->qsr_paid = $project->phases()->where('status', AcceleratorPhaseStatusEnum::PAID->value)->sum('qsr_requested');
             $project->znn_remaining = ($project->znn_requested - $project->znn_paid);
             $project->qsr_remaining = ($project->qsr_requested - $project->qsr_paid);
             $project->save();

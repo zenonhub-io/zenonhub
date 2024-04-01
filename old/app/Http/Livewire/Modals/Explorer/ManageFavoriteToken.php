@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Modals\Explorer;
 
 use App\Actions\Explorer\DeleteFavorite;
 use App\Actions\Explorer\ManageFavorite;
+use App\Domains\Nom\Models\Token;
 use App\Models\Markable\Favorite;
-use App\Models\Nom\Token;
 use Livewire\Component;
 
 class ManageFavoriteToken extends Component
@@ -20,7 +22,7 @@ class ManageFavoriteToken extends Component
 
     public function mount(string $zts)
     {
-        $token = Token::findByZts($zts);
+        $token = Token::findBy('token_standard', $zts);
         $favorite = Favorite::findExisting($token, auth()->user());
 
         $this->zts = $zts;
@@ -51,7 +53,7 @@ class ManageFavoriteToken extends Component
         ]);
 
         $user = auth()->user();
-        $token = Token::findByZts($validatedData['zts']);
+        $token = Token::findBy('token_standard', $validatedData['zts']);
 
         (new ManageFavorite($token, $user, $validatedData))->execute();
 
@@ -69,7 +71,7 @@ class ManageFavoriteToken extends Component
         ]);
 
         $user = auth()->user();
-        $token = Token::findByZts($validatedData['zts']);
+        $token = Token::findBy('token_standard', $validatedData['zts']);
 
         (new DeleteFavorite($token, $user))->execute();
 

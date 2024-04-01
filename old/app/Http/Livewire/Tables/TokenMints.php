@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\Token;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Token;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class TokenMints extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Token $token;
 
@@ -77,7 +79,7 @@ class TokenMints extends Component
         if ($this->sort === 'amount') {
             $this->query
                 ->orderByRaw("{$this->sort} IS NULL ASC")
-                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)" . $this->order);
         } else {
             $this->query->orderBy($this->sort, $this->order);
         }

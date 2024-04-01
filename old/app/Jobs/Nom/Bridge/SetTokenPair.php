@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeNetwork;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeNetwork;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SetTokenPair implements ShouldQueue
 {
@@ -37,7 +39,7 @@ class SetTokenPair implements ShouldQueue
 
     public function handle(): void
     {
-        if (! Utilities::validateBridgeTx($this->block)) {
+        if (! validate_bridge_tx($this->block)) {
             Log::warning('Bridge action sent from non-admin');
 
             return;
@@ -46,8 +48,8 @@ class SetTokenPair implements ShouldQueue
         try {
             $this->loadNetwork();
             $this->setTokenPair();
-        } catch (\Throwable $exception) {
-            Log::warning('Unable to set token pair: '.$this->block->hash);
+        } catch (Throwable $exception) {
+            Log::warning('Unable to set token pair: ' . $this->block->hash);
             Log::debug($exception);
 
             return;
@@ -63,7 +65,7 @@ class SetTokenPair implements ShouldQueue
 
     private function setTokenPair(): void
     {
-        $token = Utilities::loadToken($this->blockData['tokenStandard']);
+        $token = load_token($this->blockData['tokenStandard']);
         $this->network->tokens()->updateOrCreate([
             'token_id' => $token->id,
         ], [

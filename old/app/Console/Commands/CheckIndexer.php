@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\Momentum;
+use App\Domains\Nom\Models\Momentum;
 use Illuminate\Console\Command;
+use Log;
 
 class CheckIndexer extends Command
 {
@@ -32,7 +35,7 @@ class CheckIndexer extends Command
         if ($latestMomentum->created_at < now()->subMinutes(15)) {
             $this->error('Indexer NOT running');
 
-            \Log::critical('Indexer has stopped running, last momentum:', [
+            Log::critical('Indexer has stopped running, last momentum:', [
                 'height' => $latestMomentum->height,
                 'date' => $latestMomentum->created_at->format('Y-m-d H:i:s'),
             ]);

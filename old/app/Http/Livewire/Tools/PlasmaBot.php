@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tools;
 
 use App\Actions\PlasmaBot\Fuse;
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
 use App\Models\PlasmaBotEntry;
 use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Component;
@@ -26,29 +28,14 @@ class PlasmaBot extends Component
 
     public HoneypotData $extraFields;
 
-    protected function rules()
-    {
-        return [
-            'address' => [
-                'required',
-                'string',
-                'size:40',
-            ],
-            'plasma' => [
-                'required',
-                'in:low,medium,high',
-            ],
-        ];
-    }
-
     public function mount()
     {
-        $this->extraFields = new HoneypotData();
+        $this->extraFields = new HoneypotData;
     }
 
     public function render()
     {
-        $account = Account::findByAddress(config('plasma-bot.address'));
+        $account = Account::findBy('address', config('plasma-bot.address'));
         $totalQsrAvailable = $account->qsr_balance;
         $fusedQsr = $account->fusions()->isActive()->sum('amount');
         $percentageAvailable = ($fusedQsr / $totalQsrAvailable) * 100;
@@ -77,12 +64,12 @@ class PlasmaBot extends Component
         if ($existing) {
             $duration = now()->timestamp - $existing->expires_at->timestamp;
             $remainingTime = now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
-            $this->message = 'This address already has plasma fused for '.$remainingTime;
+            $this->message = 'This address already has plasma fused for ' . $remainingTime;
 
             return;
         }
 
-        $rateLimitKey = 'plasma-bot-fuse:'.request()->ip();
+        $rateLimitKey = 'plasma-bot-fuse:' . request()->ip();
         if (RateLimiter::tooManyAttempts($rateLimitKey, 1)) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
             $this->result = false;
@@ -108,5 +95,20 @@ class PlasmaBot extends Component
         $duration = now()->timestamp - $expires->timestamp;
         $this->expires = now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
         $this->result = (new Fuse($data['address'], $plasma, $expires))->execute();
+    }
+
+    protected function rules()
+    {
+        return [
+            'address' => [
+                'required',
+                'string',
+                'size:40',
+            ],
+            'plasma' => [
+                'required',
+                'in:low,medium,high',
+            ],
+        ];
     }
 }

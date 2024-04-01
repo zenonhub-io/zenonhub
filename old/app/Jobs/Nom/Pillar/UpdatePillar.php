@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Pillar;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Pillar;
-use App\Models\Nom\PillarHistory;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Pillar;
+use App\Domains\Nom\Models\PillarHistory;
 use App\Models\NotificationType;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -49,8 +50,8 @@ class UpdatePillar implements ShouldQueue
             $rewardsChanged = true;
         }
 
-        $producerAddress = Utilities::loadAccount($blockData['producerAddress']);
-        $rewardAddress = Utilities::loadAccount($blockData['rewardAddress']);
+        $producerAddress = load_account($blockData['producerAddress']);
+        $rewardAddress = load_account($blockData['rewardAddress']);
 
         PillarHistory::create([
             'pillar_id' => $pillar->id,
@@ -80,7 +81,7 @@ class UpdatePillar implements ShouldQueue
     {
         // any pillar updated
         $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
-        $networkBot = new \App\Bots\NetworkAlertBot();
+        $networkBot = new \App\Bots\NetworkAlertBot;
 
         Notification::send(
             $subscribedUsers->prepend($networkBot),

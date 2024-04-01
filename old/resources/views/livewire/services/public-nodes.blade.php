@@ -9,7 +9,7 @@
         </div>
         <div class="tab-content">
             <div class="tab-pane show active p-4">
-                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($data) }}</code></pre>
+                <pre class="line-numbers"><code class="lang-json">{{ json_encode($data, JSON_PRETTY_PRINT) }}</code></pre>
             </div>
         </div>
     </div>

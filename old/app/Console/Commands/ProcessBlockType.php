@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\ContractMethod;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\ContractMethod;
 use Illuminate\Console\Command;
 
 class ProcessBlockType extends Command

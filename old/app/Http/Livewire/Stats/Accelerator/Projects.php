@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Accelerator;
 
+use App\Domains\Nom\Models\AcceleratorProject;
 use App\Http\Livewire\ChartTrait;
-use App\Models\Nom\AcceleratorProject;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 

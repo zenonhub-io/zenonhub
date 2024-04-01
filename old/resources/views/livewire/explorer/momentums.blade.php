@@ -65,15 +65,15 @@
                             </td>
                             <td>{{ $momentum->created_at->diffForHumans(['parts' => 2]) }}</td>
                             <td>
-                                @if ($momentum->producer_pillar)
-                                    <a href="{{ route('pillars.detail', ['slug' => $momentum->producer_pillar->slug]) }}">
-                                        {{ $momentum->producer_pillar->name }}
+                                @if ($momentum->producerPillar)
+                                    <a href="{{ route('pillars.detail', ['slug' => $momentum->producerPillar->slug]) }}">
+                                        {{ $momentum->producerPillar->name }}
                                     </a>
                                 @else
-                                    <x-address :account="$momentum->producer_account"/>
+                                    <x-address :account="$momentum->producerAccount"/>
                                 @endif
                             </td>
-                            <td>{{ $momentum->account_blocks_count }}</td>
+                            <td>{{ $momentum->accountBlocks_count }}</td>
                             <td>{{ $momentum->created_at->format(config('zenon.short_date_format')) }}</td>
                         </tr>
                     @endforeach

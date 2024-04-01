@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Pillar;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Account;
-use App\Models\Nom\Pillar;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class PillarDelegators extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Pillar $pillar;
 

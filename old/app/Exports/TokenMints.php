@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Token;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
@@ -10,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class TokenMints extends DefaultValueBinder implements FromQuery, WithHeadings, WithMapping, WithCustomValueBinder
+class TokenMints extends DefaultValueBinder implements FromQuery, WithCustomValueBinder, WithHeadings, WithMapping
 {
     use Exportable;
 
@@ -22,7 +24,7 @@ class TokenMints extends DefaultValueBinder implements FromQuery, WithHeadings, 
 
     public ?string $order;
 
-    public function __construct(Token $token, string $search = null, string $sort = null, string $order = null)
+    public function __construct(Token $token, ?string $search = null, ?string $sort = null, ?string $order = null)
     {
         $this->token = $token;
         $this->search = $search;
@@ -49,7 +51,7 @@ class TokenMints extends DefaultValueBinder implements FromQuery, WithHeadings, 
             $row->issuer->address,
             $row->receiver->address,
             $token?->getDisplayAmount($row->amount),
-            $row->account_block->hash,
+            $row->accountBlock->hash,
             $row->created_at->format('Y-m-d H:i:s'),
         ];
     }

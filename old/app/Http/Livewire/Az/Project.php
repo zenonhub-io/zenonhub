@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Az;
 
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorProject;
 use Livewire\Component;
 
 class Project extends Component
@@ -18,7 +20,7 @@ class Project extends Component
     public function render()
     {
         return view('livewire.az.project', [
-            'project' => AcceleratorProject::findByHash($this->hash),
+            'project' => AcceleratorProject::findBy('hash', $this->hash),
         ]);
     }
 }

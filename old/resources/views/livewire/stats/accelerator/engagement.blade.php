@@ -38,7 +38,7 @@
                         {{ $pillar->display_az_avg_vote_time }}<br>
                     </td>
                     <td>
-                        {{ number_format($pillar->az_votes()->count()) }}
+                        {{ number_format($pillar->azVotes()->count()) }}
                     </td>
                 </tr>
             @endforeach

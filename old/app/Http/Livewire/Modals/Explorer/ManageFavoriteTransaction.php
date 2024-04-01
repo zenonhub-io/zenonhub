@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Modals\Explorer;
 
 use App\Actions\Explorer\DeleteFavorite;
 use App\Actions\Explorer\ManageFavorite;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Models\Markable\Favorite;
-use App\Models\Nom\AccountBlock;
 use Livewire\Component;
 
 class ManageFavoriteTransaction extends Component
@@ -18,7 +20,7 @@ class ManageFavoriteTransaction extends Component
 
     public function mount(string $hash)
     {
-        $block = AccountBlock::findByHash($hash);
+        $block = AccountBlock::findBy('hash', $hash);
         $favorite = Favorite::findExisting($block, auth()->user());
 
         $this->hash = $hash;
@@ -44,7 +46,7 @@ class ManageFavoriteTransaction extends Component
         ]);
 
         $user = auth()->user();
-        $block = AccountBlock::findByHash($validatedData['hash']);
+        $block = AccountBlock::findBy('hash', $validatedData['hash']);
 
         (new ManageFavorite($block, $user, $validatedData))->execute();
 
@@ -62,7 +64,7 @@ class ManageFavoriteTransaction extends Component
         ]);
 
         $user = auth()->user();
-        $account = AccountBlock::findByHash($validatedData['hash']);
+        $account = AccountBlock::findBy('hash', $validatedData['hash']);
 
         (new DeleteFavorite($account, $user))->execute();
 

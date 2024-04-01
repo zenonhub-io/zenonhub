@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Enums\AccountBlockTypesEnum;
+use App\Domains\Nom\Models\AccountBlock;
 use Illuminate\Console\Command;
 
 class ProcessUnprocessedBlocks extends Command
@@ -29,7 +32,7 @@ class ProcessUnprocessedBlocks extends Command
         $this->info('Process block data');
 
         $baseQuery = AccountBlock::whereNotNull('contract_method_id')
-            ->where('block_type', [AccountBlock::TYPE_SEND, AccountBlock::TYPE_CONTRACT_SEND])
+            ->where('block_type', [AccountBlockTypesEnum::SEND->value, AccountBlockTypesEnum::CONTRACT_SEND->value])
             ->whereHas('data',
                 fn ($q) => $q->whereNotNull('raw')
                     ->whereNull('decoded')

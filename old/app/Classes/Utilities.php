@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Classes;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeAdmin;
-use App\Models\Nom\Chain;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeAdmin;
+use App\Domains\Nom\Models\Chain;
+use App\Domains\Nom\Models\Token;
 use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -39,14 +41,12 @@ class Utilities
 
     public static function loadChain(): Chain
     {
-        return Cache::rememberForever('chain', function () {
-            return Chain::getCurrentChainId();
-        });
+        return Cache::rememberForever('chain', fn () => Chain::getCurrentChainId());
     }
 
     public static function loadAccount(string $address, ?string $name = null): Account
     {
-        $account = Account::findByAddress($address);
+        $account = Account::findBy('address', $address);
 
         if (! $account) {
             $znn = App::make(ZenonSdk::class);
@@ -69,7 +69,7 @@ class Utilities
             return null;
         }
 
-        $token = Token::findByZts($zts);
+        $token = Token::findBy('token_standard', $zts);
 
         if (! $token) {
             $znn = App::make(ZenonSdk::class);

@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
+use App\Domains\Nom\Models\Views\ViewLatestMomentum;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Views\ViewLatestMomentum;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Momentums extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     protected $queryString = [
         'sort' => ['except' => 'height'],
@@ -34,6 +36,6 @@ class Momentums extends Component
 
     protected function initQuery()
     {
-        $this->query = ViewLatestMomentum::withCount('account_blocks');
+        $this->query = ViewLatestMomentum::withCount('accountBlocks');
     }
 }

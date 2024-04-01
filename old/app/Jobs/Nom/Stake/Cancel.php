@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Stake;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Stake;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Stake;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,7 +43,7 @@ class Cancel implements ShouldQueue
         }
 
         $totalZnnStaked = Stake::isActive()->isZnn()->sum('amount');
-        $stakedZnn = znn_token()->getDisplayAmount($totalZnnStaked, 0);
+        $stakedZnn = znn_token()->getFormattedAmount($totalZnnStaked, 0);
         Cache::put('staked-znn', $stakedZnn);
 
         (new SetBlockAsProcessed($this->block))->execute();

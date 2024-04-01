@@ -101,7 +101,7 @@
                                     </span>
                                 </td>
                                 <td>{{ number_format($token->holders_count) }}</td>
-                                <td>{{ $token->getDisplayAmount($token->total_supply) }}</td>
+                                <td>{{ $token->getFormattedAmount($token->total_supply) }}</td>
                                 <td>{{ short_hash($token->token_standard, 8) }}</td>
                                 <td>{{ ($token->created_at ? $token->created_at?->format(config('zenon.short_date_format')) : '-') }}</td>
                             </tr>

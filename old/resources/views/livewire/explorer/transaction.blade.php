@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block text-muted fs-sm">To</span>
-                                    <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->to_account"/></span>
+                                    <span class="float-end float-md-none"><x-address :eitherSide="8" :alwaysShort="true" :account="$transaction->toAccount"/></span>
                                 </div>
                             </div>
                             <div class="d-block d-md-flex justify-content-md-evenly mt-2 pt-0 border-1 border-top-md mt-md-4 pt-md-4">
@@ -156,7 +156,7 @@
                         <span class="d-block fs-sm text-muted">Data</span>
                         @if ($transaction->data)
                             @if ($transaction->contract_method_id)
-                                {{ $transaction->contract_method->name }} ({{ $transaction->contract_method->contract->name }})
+                                {{ $transaction->contractMethod->name }} ({{ $transaction->contractMethod->contract->name }})
                                 <pre class="line-numbers mt-2 mb-3"><code class="lang-json">{{ $transaction->data->json }}</code></pre>
                             @else
                                 Parsed
@@ -180,9 +180,9 @@
                     </li>
                     <li class="list-group-item">
                         <span class="d-block fs-sm text-muted">Paired account block</span>
-                        @if ($transaction->paired_account_block)
-                            <a href="{{ route('explorer.transaction', ['hash' => $transaction->paired_account_block->hash]) }}">
-                                <x-hash-tooltip :hash="$transaction->paired_account_block->hash"/>
+                        @if ($transaction->pairedAccountBlock)
+                            <a href="{{ route('explorer.transaction', ['hash' => $transaction->pairedAccountBlock->hash]) }}">
+                                <x-hash-tooltip :hash="$transaction->pairedAaccountBlock->hash"/>
                             </a>
                         @else
                             -
@@ -231,7 +231,7 @@
                     @elseif ($tab === 'json')
                         <div class="p-4">
                             @if ($transaction->raw_json)
-                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($transaction->raw_json) }}</code></pre>
+                                <pre class="line-numbers"><code class="lang-json">{{ json_encode($transaction->raw_json, JSON_PRETTY_PRINT) }}</code></pre>
                             @else
                                 <x-alert
                                     message="Unable to load JSON data"

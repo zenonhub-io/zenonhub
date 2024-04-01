@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Common;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\AccountBlock;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

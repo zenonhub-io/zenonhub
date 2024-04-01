@@ -80,7 +80,7 @@
                                 {!! svg('explorer/send', 'text-success', 'transform: rotate(90deg);') !!}
                             </td>
                             <td>
-                                <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                <x-address :account="$block->toAccount" :eitherSide="8" :alwaysShort="true"/>
                             </td>
                             <td>{{ ($block->display_type ?: '-') }}</td>
                             <td>{{ ($block->display_amount ?: '-')  }}</td>

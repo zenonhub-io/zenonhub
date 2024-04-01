@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
+use App\Domains\Nom\Models\Momentum;
 use App\Exceptions\ApplicationException;
-use App\Models\Nom\Momentum;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class BridgeStatus
 {
@@ -38,7 +41,7 @@ class BridgeStatus
             Cache::forget('service.bridgeStatus.timeChallengesJson');
             Cache::forget('service.bridgeStatus.bridgeSecurityJson');
             $this->loadCaches();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             Log::warning($exception->getMessage());
             Cache::forever('service.bridgeStatus.bridgeInfoJson', $bridgeInfoJson);
             Cache::forever('service.bridgeStatus.timeChallengesJson', $timeChallengesJson);
@@ -116,29 +119,11 @@ class BridgeStatus
         return $activeChallenges;
     }
 
-    //
-    // Private
-
-    private function loadCaches(): void
-    {
-        $this->bridgeInfoJson = Cache::rememberForever('service.bridgeStatus.bridgeInfoJson', function () {
-            return $this->getBridgeInfo();
-        });
-
-        $this->timeChallengesJson = Cache::rememberForever('service.bridgeStatus.timeChallengesJson', function () {
-            return $this->getBridgeTimeChallenges();
-        });
-
-        $this->bridgeSecurityJson = Cache::rememberForever('service.bridgeStatus.bridgeSecurityJson', function () {
-            return $this->getSecurityInfo();
-        });
-    }
-
     protected function getBridgeInfo()
     {
         try {
             return $this->sdk->bridge->getBridgeInfo()['data'];
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new ApplicationException('Unable to call getBridgeInfo');
         }
     }
@@ -147,7 +132,7 @@ class BridgeStatus
     {
         try {
             return $this->sdk->bridge->getTimeChallengesInfo()['data']->list;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new ApplicationException('Unable to call getTimeChallengesInfo');
         }
     }
@@ -156,8 +141,20 @@ class BridgeStatus
     {
         try {
             return $this->sdk->bridge->getSecurityInfo()['data'];
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new ApplicationException('Unable to call getSecurityInfo');
         }
+    }
+
+    //
+    // Private
+
+    private function loadCaches(): void
+    {
+        $this->bridgeInfoJson = Cache::rememberForever('service.bridgeStatus.bridgeInfoJson', fn () => $this->getBridgeInfo());
+
+        $this->timeChallengesJson = Cache::rememberForever('service.bridgeStatus.timeChallengesJson', fn () => $this->getBridgeTimeChallenges());
+
+        $this->bridgeSecurityJson = Cache::rememberForever('service.bridgeStatus.bridgeSecurityJson', fn () => $this->getSecurityInfo());
     }
 }

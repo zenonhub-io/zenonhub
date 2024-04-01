@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Accelerator;
 
+use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
+use App\Domains\Nom\Models\Account;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Account;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -31,9 +33,9 @@ class Contributors extends Component
     {
         $this->data = Account::whereHas('projects')
             ->withCount([
-                'projects as accepted_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_ACCEPTED),
-                'projects as completed_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_COMPLETE),
-                'projects as rejected_projects_count' => fn ($query) => $query->where('status', AcceleratorProject::STATUS_REJECTED),
+                'projects as accepted_projects_count' => fn ($query) => $query->where('status', AcceleratorProjectStatusEnum::ACCEPTED->value),
+                'projects as completed_projects_count' => fn ($query) => $query->where('status', AcceleratorProjectStatusEnum::COMPLETE->value),
+                'projects as rejected_projects_count' => fn ($query) => $query->where('status', AcceleratorProjectStatusEnum::REJECTED->value),
             ])
             ->withSum(
                 'projects as znn_paid', 'znn_paid'

@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Bridge;
 
+use App\Domains\Nom\Models\Orchestrator;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Orchestrator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Orchestrators extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public function mount()
     {

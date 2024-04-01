@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Nom\Token;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Token;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,7 +46,7 @@ class Issued extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'New token issued')
+            ->subject(get_env_prefix() . 'New token issued')
             ->markdown('mail.notifications.nom.token.issued', [
                 'user' => $notifiable,
                 'token' => $this->token,

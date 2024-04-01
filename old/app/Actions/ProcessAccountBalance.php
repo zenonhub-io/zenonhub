@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Token;
 
 class ProcessAccountBalance
 {
@@ -21,7 +24,7 @@ class ProcessAccountBalance
         $this->saveTotals();
         $this->saveRewardTotals();
 
-        $this->account->updated_at = $this->account->latest_block?->created_at ?? null;
+        $this->account->updated_at = $this->account->latestBlock?->created_at ?? null;
         $this->account->save();
     }
 
@@ -30,11 +33,11 @@ class ProcessAccountBalance
         $apiData = $this->account->raw_json;
 
         foreach ($apiData->balanceInfoMap as $tokenStandard => $holdings) {
-            if ($tokenStandard === Token::ZTS_ZNN) {
+            if ($tokenStandard === NetworkTokensEnum::ZNN->value) {
                 $this->account->znn_balance = $holdings->balance;
             }
 
-            if ($tokenStandard === Token::ZTS_QSR) {
+            if ($tokenStandard === NetworkTokensEnum::QSR->value) {
                 $this->account->qsr_balance = $holdings->balance;
             }
 

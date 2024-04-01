@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Models\Account;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountReward;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -60,31 +62,31 @@ class AccountRewards extends Component
             $searchTerm = strtolower($this->search);
 
             if ($searchTerm === 'delegate') {
-                $this->query->where('type', AccountReward::TYPE_DELEGATE);
+                $this->query->where('type', AccountRewardTypesEnum::DELEGATE->value);
             }
 
             if ($searchTerm === 'stake') {
-                $this->query->where('type', AccountReward::TYPE_STAKE);
+                $this->query->where('type', AccountRewardTypesEnum::STAKE->value);
             }
 
             if ($searchTerm === 'pillar') {
-                $this->query->where('type', AccountReward::TYPE_PILLAR);
+                $this->query->where('type', AccountRewardTypesEnum::PILLAR->value);
             }
 
             if ($searchTerm === 'sentinel') {
-                $this->query->where('type', AccountReward::TYPE_SENTINEL);
+                $this->query->where('type', AccountRewardTypesEnum::SENTINEL->value);
             }
 
             if ($searchTerm === 'liquidity') {
-                $this->query->where('type', AccountReward::TYPE_LIQUIDITY);
+                $this->query->where('type', AccountRewardTypesEnum::LIQUIDITY->value);
             }
 
             if ($searchTerm === 'liquidity program') {
-                $this->query->where('type', AccountReward::TYPE_LIQUIDITY_PROGRAM);
+                $this->query->where('type', AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value);
             }
 
             if ($searchTerm === 'bridge') {
-                $this->query->where('type', AccountReward::TYPE_BRIDGE_AFFILIATE);
+                $this->query->where('type', AccountRewardTypesEnum::BRIDGE_AFFILIATE->value);
             }
         }
     }
@@ -98,7 +100,7 @@ class AccountRewards extends Component
         if ($this->sort === 'amount') {
             $this->query
                 ->orderByRaw("{$this->sort} IS NULL ASC")
-                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)" . $this->order);
         } else {
             $this->query->orderBy($this->sort, $this->order);
         }

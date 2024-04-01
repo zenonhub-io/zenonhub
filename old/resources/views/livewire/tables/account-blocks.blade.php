@@ -71,7 +71,7 @@
                             </td>
                             <td>
                                 @if ($account->id === $block->account->id)
-                                    <span data-bs-toggle="tooltip" data-bs-title="Outgoing">{!! svg('explorer/send', 'me-2 text-warning') !!}</span> To <x-address :account="$block->to_account" :eitherSide="8" :alwaysShort="true"/>
+                                    <span data-bs-toggle="tooltip" data-bs-title="Outgoing">{!! svg('explorer/send', 'me-2 text-warning') !!}</span> To <x-address :account="$block->toAccount" :eitherSide="8" :alwaysShort="true"/>
                                 @else
                                     <span data-bs-toggle="tooltip" data-bs-title="Incoming">{!! svg('explorer/receive', 'me-2 text-success') !!}</span> From <x-address :account="$block->account" :eitherSide="8" :alwaysShort="true"/>
                                 @endif

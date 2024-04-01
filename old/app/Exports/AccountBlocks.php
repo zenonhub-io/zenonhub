@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -48,7 +50,7 @@ class AccountBlocks implements FromQuery, WithHeadings, WithMapping
             $row->height,
             $row->hash,
             $row->account?->address,
-            $row->to_account?->address,
+            $row->toAccount?->address,
             $row->display_type,
             float_number($row->display_amount),
             $row->token?->name,
@@ -60,7 +62,7 @@ class AccountBlocks implements FromQuery, WithHeadings, WithMapping
     {
         $query = $this->account->blocks();
 
-        if ($this->account->address !== Account::ADDRESS_EMPTY) {
+        if ($this->account->address !== config('explorer.empty_address')) {
             $query->notToEmpty();
         }
 
@@ -70,7 +72,7 @@ class AccountBlocks implements FromQuery, WithHeadings, WithMapping
                     ->orWhere('hash', $this->search)
                     ->orWhereHas('token', fn ($q2) => $q2->where('name', $this->search))
                     ->orWhereHas('account', fn ($q3) => $q3->where('address', $this->search))
-                    ->orWhereHas('to_account', fn ($q4) => $q4->where('address', $this->search));
+                    ->orWhereHas('toAccount', fn ($q4) => $q4->where('address', $this->search));
             });
         }
 

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Explorer;
 
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\AccountBlock;
 use Meta;
 
 class Transactions
@@ -19,7 +21,7 @@ class Transactions
 
     public function detail($hash)
     {
-        $transaction = AccountBlock::findByHash($hash);
+        $transaction = AccountBlock::findBy('hash', $hash);
 
         if (! $transaction) {
             abort(404);

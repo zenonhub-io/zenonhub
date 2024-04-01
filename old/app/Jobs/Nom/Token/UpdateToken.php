@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Token;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Token;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +36,7 @@ class UpdateToken implements ShouldQueue
         $token = Token::whereZts($blockData['tokenStandard'])->first();
 
         if ($token) {
-            $owner = Utilities::loadAccount($blockData['owner']);
+            $owner = load_account($blockData['owner']);
             $token->owner_id = $owner->id;
             $token->is_burnable = $blockData['isBurnable'];
             $token->is_mintable = $blockData['isMintable'];

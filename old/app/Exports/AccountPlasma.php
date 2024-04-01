@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -41,8 +43,8 @@ class AccountPlasma implements FromQuery, WithHeadings, WithMapping
     public function map($row): array
     {
         return [
-            $row->to_account->address,
-            $row->from_account->address,
+            $row->toAccount->address,
+            $row->fromAccount->address,
             float_number($row->display_amount),
             $row->started_at->format('Y-m-d H:i:s'),
         ];
@@ -55,7 +57,7 @@ class AccountPlasma implements FromQuery, WithHeadings, WithMapping
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->orWhereHas('to_account', function ($q2) {
+                $q->orWhereHas('toAccount', function ($q2) {
                     $q2->where('address', 'LIKE', "%{$this->search}%")
                         ->orWhere('name', 'LIKE', "%{$this->search}%");
                 });

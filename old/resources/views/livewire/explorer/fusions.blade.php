@@ -42,13 +42,13 @@
                 @foreach($data as $fusion)
                     <tr>
                         <td>
-                            <x-address :account="$fusion->from_account" :eitherSide="8" :alwaysShort="true"/>
+                            <x-address :account="$fusion->fromAccount" :eitherSide="8" :alwaysShort="true"/>
                         </td>
                         <td class="px-0">
                             {!! svg('explorer/send', 'text-success', 'transform: rotate(90deg);') !!}
                         </td>
                         <td>
-                            <x-address :account="$fusion->to_account" :eitherSide="8" :alwaysShort="true"/>
+                            <x-address :account="$fusion->toAccount" :eitherSide="8" :alwaysShort="true"/>
                         </td>
                         <td>{{ $fusion->display_amount }} QSR</td>
                         <td>{{ $fusion->started_at->format(config('zenon.short_date_format')) }}</td>

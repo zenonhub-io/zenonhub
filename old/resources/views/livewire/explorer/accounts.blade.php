@@ -124,13 +124,13 @@
                                     {{ number_format($account->sent_blocks_count) }}
                                 </td>
                                 <td>
-                                    <span data-bs-toggle="tooltip" data-bs-title="{{ $account->displayZnnBalance() }}">
-                                        {{ $account->displayZnnBalance(2) }}
+                                    <span data-bs-toggle="tooltip" data-bs-title="{{ $account->display_znn_balance }}">
+                                        {{ $account->getDisplayZnnBalanceAttribute(2) }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span data-bs-toggle="tooltip" data-bs-title="{{ $account->displayQsrBalance() }}">
-                                        {{ $account->displayQsrBalance(2) }}
+                                    <span data-bs-toggle="tooltip" data-bs-title="{{ $account->display_qsr_balance }}">
+                                        {{ $account->getDisplayQsrBalanceAttribute(2) }}
                                     </span>
                                 </td>
                                 <td>{{ ($account->updated_at ? $account->updated_at->format(config('zenon.date_format')) : '-') }}</td>

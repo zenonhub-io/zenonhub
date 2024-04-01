@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\Contract;
+use App\Domains\Nom\Models\Contract;
 use Spatie\QueueableAction\QueueableAction;
 
 class UpdateContractMethods
@@ -31,7 +33,7 @@ class UpdateContractMethods
     public function execute(): void
     {
         foreach ($this->contracts as $contractName => $abiClass) {
-            $abi = new $abiClass();
+            $abi = new $abiClass;
             $methods = $abi->getMethods();
 
             $contract = Contract::updateOrCreate([

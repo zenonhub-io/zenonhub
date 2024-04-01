@@ -22,15 +22,15 @@
             </div>
             <div>
                 <span class="text-muted">Momentum height:</span>
-                <span class="text-primary">{{ number_format(\App\Models\Nom\Momentum::max('height')) }}</span>
-{{--                <div class="d-block text-muted fs-sm">--}}
-{{--                    <span class="text-break">--}}
-{{--                        {{ config('zenon.public_node_https') }}--}}
-{{--                    </span>--}}
-{{--                    <span class="text-break">--}}
-{{--                        {{ config('zenon.public_node_wss') }}--}}
-{{--                    </span>--}}
-{{--                </div>--}}
+                <span class="text-primary">{{ number_format(\App\Domains\Nom\Models\Momentum::max('height')) }}</span>
+                {{--                <div class="d-block text-muted fs-sm">--}}
+                {{--                    <span class="text-break">--}}
+                {{--                        {{ config('zenon.public_node_https') }}--}}
+                {{--                    </span>--}}
+                {{--                    <span class="text-break">--}}
+                {{--                        {{ config('zenon.public_node_wss') }}--}}
+                {{--                    </span>--}}
+                {{--                </div>--}}
             </div>
         </div>
     </div>

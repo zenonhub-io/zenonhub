@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Nom\Sentinel;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Sentinel;
+use App\Domains\Nom\Models\Sentinel;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,7 +46,7 @@ class Registered extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'New sentinel')
+            ->subject(get_env_prefix() . 'New sentinel')
             ->markdown('mail.notifications.nom.sentinel.registered', [
                 'user' => $notifiable,
                 'sentinel' => $this->sentinel,

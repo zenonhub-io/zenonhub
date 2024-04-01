@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
 use Livewire\Component;
@@ -17,7 +19,7 @@ class Token extends Component
     public function render()
     {
         return view('livewire.explorer.token', [
-            'token' => \App\Models\Nom\Token::findByZtsWithHolders($this->zts),
+            'token' => \App\Domains\Nom\Models\Token::findByZtsWithHolders($this->zts),
         ]);
     }
 }

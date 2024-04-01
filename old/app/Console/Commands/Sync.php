@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use App\Domains\Nom\Models\Account;
 use App\Jobs\ProcessAccountBalance;
 use App\Jobs\Sync\Nodes as SyncNodes;
 use App\Jobs\Sync\Orchestrators as SyncOrchestrators;
@@ -10,7 +13,6 @@ use App\Jobs\Sync\Projects as SyncProjects;
 use App\Jobs\Sync\ProjectStatus as SyncProjectStatus;
 use App\Jobs\Sync\Sentinels as SyncSentinels;
 use App\Jobs\Sync\Tokens as SyncTokens;
-use App\Models\Nom\Account;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -87,7 +89,7 @@ class Sync extends Command
 
             DB::table('nom_accounts')->orderBy('id')->chunk(100, function ($accounts) {
                 foreach ($accounts as $account) {
-                    $account = Account::findByAddress($account->address);
+                    $account = Account::findBy('address', $account->address);
                     ProcessAccountBalance::dispatch($account);
                     $this->output->progressAdvance();
                 }

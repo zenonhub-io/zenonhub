@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountReward;
+use App\Domains\Nom\Models\BridgeUnwrap;
 use App\Jobs\ProcessAccountBalance;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\AccountReward;
-use App\Models\Nom\BridgeUnwrap;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class Redeem implements ShouldQueue
 {
@@ -39,8 +43,8 @@ class Redeem implements ShouldQueue
             $this->loadUnwrap();
             $this->processRedeem();
             $this->processReward();
-        } catch (\Throwable $exception) {
-            Log::warning('Error processing redeem '.$this->block->hash);
+        } catch (Throwable $exception) {
+            Log::warning('Error processing redeem ' . $this->block->hash);
             Log::debug($exception);
 
             return;
@@ -74,11 +78,11 @@ class Redeem implements ShouldQueue
             'chain_id' => $this->block->chain_id,
             'account_id' => $this->unwrap->to_account_id,
             'token_id' => $this->unwrap->token_id,
-            'type' => AccountReward::TYPE_BRIDGE_AFFILIATE,
+            'type' => AccountRewardTypesEnum::BRIDGE_AFFILIATE->value,
             'amount' => $this->unwrap->amount,
             'created_at' => $this->block->created_at,
         ]);
 
-        ProcessAccountBalance::dispatch($this->unwrap->to_account);
+        ProcessAccountBalance::dispatch($this->unwrap->toAccount);
     }
 }

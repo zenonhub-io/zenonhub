@@ -43,7 +43,7 @@
                                                 # {{ $momentum->display_height }}
                                             </span>
                                             <span class="fs-xs text-muted">
-                                                {{ $momentum->account_blocks_count }} account {{ Str::plural('block', $momentum->account_blocks_count) }}
+                                                {{ $momentum->accountBlocks_count }} account {{ Str::plural('block', $momentum->accountBlocks_count) }}
                                             </span>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                             </span>
                                             <span class="d-block">
                                                 <span class="d-inline d-sm-none" data-bs-toggle="tooltip" data-bs-title="Receiver">{!! svg('explorer/receive', 'text-warning') !!}</span>
-                                                <x-address :account="$block->to_account" :eitherSide="6" :alwaysShort="true" />
+                                                <x-address :account="$block->toAccount" :eitherSide="6" :alwaysShort="true" />
                                                 <span class="d-none d-sm-inline" data-bs-toggle="tooltip" data-bs-title="Receiver">{!! svg('explorer/receive', 'text-warning') !!}</span>
                                             </span>
                                         </div>

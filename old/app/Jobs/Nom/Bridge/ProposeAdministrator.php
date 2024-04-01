@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeAdmin;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeAdmin;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,7 +33,7 @@ class ProposeAdministrator implements ShouldQueue
 
     public function handle(): void
     {
-        if (! Utilities::validateBridgeTx($this->block)) {
+        if (! validate_bridge_tx($this->block)) {
             Log::warning('Bridge action sent from non-admin');
 
             return;
@@ -45,7 +46,7 @@ class ProposeAdministrator implements ShouldQueue
 
     private function proposeAdmin(): void
     {
-        $proposedAccount = Utilities::loadAccount($this->block->data->decoded['address']);
+        $proposedAccount = load_account($this->block->data->decoded['address']);
         BridgeAdmin::create([
             'account_id' => $proposedAccount->id,
             'nominated_at' => $this->block->created_at,

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\Pillar;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Pillar;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -49,7 +51,7 @@ class PillarVotes extends Component
 
     protected function initQuery()
     {
-        $this->query = $this->pillar->az_votes();
+        $this->query = $this->pillar->azVotes();
     }
 
     protected function filterList()

@@ -11,7 +11,7 @@
                                 Project: <strong>{{$data['phase']->project->name}}</strong><br>
                                 Phase: <strong>{{$data['phase']->name}}</strong><br>
                                 Hash: <strong>{{$data['phase']->hash}}</strong><br>
-                                Progress: <strong>{{$data['phase']->quorum_stauts}}</strong><br>
+                                Progress: <strong>{{$data['phase']->quorum_status}}</strong><br>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-nowrap align-middle table-striped table-hover top-border">
@@ -53,7 +53,7 @@
                             <div class="p-4">
                                 Project: <strong>{{$data['project']->name}}</strong><br>
                                 Hash: <strong>{{$data['project']->hash}}</strong><br>
-                                Progress: <strong>{{$data['project']->quorum_stauts}}</strong><br>
+                                Progress: <strong>{{$data['project']->quorum_status}}</strong><br>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-nowrap align-middle table-striped table-hover top-border">

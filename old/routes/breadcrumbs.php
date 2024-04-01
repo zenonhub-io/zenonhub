@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // routes/breadcrumbs.php
 
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -51,7 +53,7 @@ Breadcrumbs::for('pillars', function (BreadcrumbTrail $trail) {
     $trail->push('Pillars', route('pillars.overview'));
 });
 
-Breadcrumbs::for('pillar', function (BreadcrumbTrail $trail, App\Models\Nom\Pillar $pillar) {
+Breadcrumbs::for('pillar', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\Pillar $pillar) {
     $trail->parent('pillars');
     $trail->push('Details', route('pillars.detail', ['slug' => $pillar->slug]));
 });
@@ -63,12 +65,12 @@ Breadcrumbs::for('az', function (BreadcrumbTrail $trail) {
     $trail->push('Accelerator-Z', route('az.overview'));
 });
 
-Breadcrumbs::for('project', function (BreadcrumbTrail $trail, App\Models\Nom\AcceleratorProject $project) {
+Breadcrumbs::for('project', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\AcceleratorProject $project) {
     $trail->parent('az');
     $trail->push('Project', route('az.project', ['hash' => $project->hash]));
 });
 
-Breadcrumbs::for('phase', function (BreadcrumbTrail $trail, App\Models\Nom\AcceleratorPhase $phase) {
+Breadcrumbs::for('phase', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\AcceleratorPhase $phase) {
     $trail->parent('project', $phase->project);
     $trail->push('Phase', route('az.phase', ['hash' => $phase->hash]));
 });
@@ -85,7 +87,7 @@ Breadcrumbs::for('explorer.momentums', function (BreadcrumbTrail $trail) {
     $trail->push('Momentums', route('explorer.momentums'));
 });
 
-Breadcrumbs::for('explorer.momentum', function (BreadcrumbTrail $trail, App\Models\Nom\Momentum $momentum) {
+Breadcrumbs::for('explorer.momentum', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\Momentum $momentum) {
     $trail->parent('explorer.momentums');
     $trail->push('Details', route('explorer.momentum', ['hash' => $momentum->hash]));
 });
@@ -95,7 +97,7 @@ Breadcrumbs::for('explorer.transactions', function (BreadcrumbTrail $trail) {
     $trail->push('Transactions', route('explorer.transactions'));
 });
 
-Breadcrumbs::for('explorer.transaction', function (BreadcrumbTrail $trail, App\Models\Nom\AccountBlock $accountBlock) {
+Breadcrumbs::for('explorer.transaction', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\AccountBlock $accountBlock) {
     $trail->parent('explorer.transactions');
     $trail->push('Details', route('explorer.transaction', ['hash' => $accountBlock->hash]));
 });
@@ -105,7 +107,7 @@ Breadcrumbs::for('explorer.accounts', function (BreadcrumbTrail $trail) {
     $trail->push('Accounts', route('explorer.accounts'));
 });
 
-Breadcrumbs::for('explorer.account', function (BreadcrumbTrail $trail, App\Models\Nom\Account $account) {
+Breadcrumbs::for('explorer.account', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\Account $account) {
     $trail->parent('explorer.accounts');
     $trail->push('Details', route('explorer.account', ['address' => $account->address]));
 });
@@ -115,7 +117,7 @@ Breadcrumbs::for('explorer.tokens', function (BreadcrumbTrail $trail) {
     $trail->push('Tokens', route('explorer.tokens'));
 });
 
-Breadcrumbs::for('explorer.token', function (BreadcrumbTrail $trail, App\Models\Nom\Token $token) {
+Breadcrumbs::for('explorer.token', function (BreadcrumbTrail $trail, App\Domains\Nom\Models\Token $token) {
     $trail->parent('explorer.tokens');
     $trail->push('Details', route('explorer.token', ['zts' => $token->token_standard]));
 });

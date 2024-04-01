@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Explorer;
 
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Token;
 use Meta;
 
 class Tokens
@@ -19,7 +21,7 @@ class Tokens
 
     public function detail($zts)
     {
-        $token = Token::findByZts($zts);
+        $token = Token::findBy('token_standard', $zts);
 
         if (! $token) {
             abort(404);

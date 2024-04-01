@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="row">
             <div class="col-24 col-md-16 mb-3 mb-md-0 align-self-center">
-                <livewire:tables.toolbar :enableExport="true" :search="$search" />
+                <livewire:tables.toolbar :enableExport="true" :search="$search"/>
             </div>
             <div class="col-24 col-md-8">
                 <div class="d-flex justify-content-center justify-content-md-end">
@@ -16,10 +16,10 @@
             <div class="row">
                 <div class="col-24 col-md-8 offset-md-8">
                     <x-alert
-                        message="Processing request..."
-                        type="info"
-                        icon="arrow-repeat spin"
-                        class="d-flex justify-content-center mb-0"
+                            message="Processing request..."
+                            type="info"
+                            icon="arrow-repeat spin"
+                            class="d-flex justify-content-center mb-0"
                     />
                 </div>
             </div>
@@ -39,7 +39,8 @@
                         </th>
                         <th>
                             <button type="button" class="btn btn-sort" wire:click="sortBy('created_at')">
-                                <x-table-sort-button :sort="$sort" :order="$order" check="created_at" title="Timestamp"/>
+                                <x-table-sort-button :sort="$sort" :order="$order" check="created_at"
+                                                     title="Timestamp"/>
                             </button>
                         </th>
                     </tr>
@@ -48,7 +49,7 @@
                     @foreach($data as $vote)
                         <tr>
                             <td>
-                                @if ($vote->votable instanceof \App\Models\Nom\AcceleratorProject)
+                                @if ($vote->votable instanceof \App\Domains\Nom\Models\AcceleratorProject)
                                     <div class="text-muted fs-xs mb-n1">
                                         Project
                                     </div>
@@ -56,7 +57,7 @@
                                         {{ $vote->votable->name }}
                                     </a>
                                 @endif
-                                @if ($vote->votable instanceof \App\Models\Nom\AcceleratorPhase)
+                                @if ($vote->votable instanceof \App\Domains\Nom\Models\AcceleratorPhase)
                                     <div class="text-muted fs-xs mb-n1">
                                         {{ $vote->votable->project->name }}
                                     </div>
@@ -86,10 +87,10 @@
         @elseif($data)
             <div class="m-4 mt-0">
                 <x-alert
-                    message="No votes found"
-                    type="info"
-                    icon="info-circle-fill"
-                    class="mb-0"
+                        message="No votes found"
+                        type="info"
+                        icon="info-circle-fill"
+                        class="mb-0"
                 />
             </div>
         @endif

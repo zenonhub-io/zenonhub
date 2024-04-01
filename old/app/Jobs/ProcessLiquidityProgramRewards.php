@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\AccountReward;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountReward;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,13 +30,11 @@ class ProcessLiquidityProgramRewards implements ShouldQueue
 
     public function handle(): void
     {
-        $liquidityProgramDistributor = Account::where('name', 'Liquidity Program Distributor')->first();
-
-        if ($this->block->account->id === $liquidityProgramDistributor->id && $this->block->token->token_standard === Token::ZTS_QSR) {
+        if ($this->block->account->address === config('explorer.liquidity_program_distributor') && $this->block->token->token_standard === NetworkTokensEnum::QSR->value) {
             AccountReward::create([
-                'account_id' => $this->block->to_account->id,
+                'account_id' => $this->block->toAccount->id,
                 'token_id' => $this->block->token->id,
-                'type' => AccountReward::TYPE_LIQUIDITY_PROGRAM,
+                'type' => AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value,
                 'amount' => $this->block->amount,
                 'created_at' => $this->block->created_at,
             ]);

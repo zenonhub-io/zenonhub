@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -213,7 +215,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Meta' => \App\Services\Seo\MetaFacade::class,
+        'Meta' => App\Services\Seo\MetaFacade::class,
     ])->toArray(),
 
 ];

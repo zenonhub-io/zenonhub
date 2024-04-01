@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\Account;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Account;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class AccountStakes extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Account $account;
 
@@ -70,7 +72,7 @@ class AccountStakes extends Component
         if ($this->sort === 'amount') {
             $this->query
                 ->orderByRaw("{$this->sort} IS NULL ASC")
-                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)" . $this->order);
         } else {
             $this->query->orderBy($this->sort, $this->order);
         }

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
+use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,6 +20,11 @@ class ProcessAccountBalance implements ShouldQueue
 
     public int $tries = 5;
 
+    public function __construct(
+        protected Account $account
+    ) {
+    }
+
     /**
      * Calculate the number of seconds to wait before retrying the job.
      *
@@ -27,16 +35,11 @@ class ProcessAccountBalance implements ShouldQueue
         return [30, 30, 30, 60, 120];
     }
 
-    public function __construct(
-        protected Account $account
-    ) {
-    }
-
     public function handle(): void
     {
         try {
             (new \App\Actions\ProcessAccountBalance($this->account))->execute();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::warning('Sync balances error');
             Log::debug($exception);
             $this->release(30);

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Pillar;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -53,7 +55,7 @@ class Revoke implements ShouldQueue
     private function notifyUsers($pillar): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
-        $networkBot = new \App\Bots\NetworkAlertBot();
+        $networkBot = new \App\Bots\NetworkAlertBot;
 
         Notification::send(
             $subscribedUsers->prepend($networkBot),

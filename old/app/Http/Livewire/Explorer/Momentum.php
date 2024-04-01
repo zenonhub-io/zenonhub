@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
 use Livewire\Component;
@@ -19,7 +21,7 @@ class Momentum extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.explorer.momentum', [
-            'momentum' => \App\Models\Nom\Momentum::findByHash($this->hash),
+            'momentum' => \App\Domains\Nom\Models\Momentum::findBy('hash', $this->hash),
         ]);
     }
 

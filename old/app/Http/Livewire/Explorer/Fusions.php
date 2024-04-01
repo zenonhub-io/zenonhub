@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
+use App\Domains\Nom\Models\Plasma;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Fusion;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Fusions extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     protected $queryString = [
         'sort' => ['except' => 'started_at'],
@@ -34,7 +36,7 @@ class Fusions extends Component
 
     protected function initQuery()
     {
-        $this->query = Fusion::isActive();
+        $this->query = Plasma::isActive();
     }
 
     protected function sortList()
@@ -46,7 +48,7 @@ class Fusions extends Component
         if ($this->sort === 'amount') {
             $this->query
                 ->orderByRaw("{$this->sort} IS NULL ASC")
-                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)" . $this->order);
         } else {
             $this->query->orderBy($this->sort, $this->order);
         }

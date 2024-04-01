@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
 use Illuminate\View\Component;
 
 class AzCardHeader extends Component

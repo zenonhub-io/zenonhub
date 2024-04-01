@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Accelerator;
 
+use App\Domains\Nom\Models\Pillar;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Pillar;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -28,8 +30,8 @@ class Engagement extends Component
 
     private function loadEngagementData()
     {
-        $this->data = Pillar::whereHas('az_votes')
-            ->withCount('az_votes')
+        $this->data = Pillar::whereHas('azVotes')
+            ->withCount('azVotes')
             ->orderBy($this->sort, $this->order)
             ->paginate(10);
     }

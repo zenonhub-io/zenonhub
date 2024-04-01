@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Liquidity;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Stake as StakeModel;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Stake as StakeModel;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

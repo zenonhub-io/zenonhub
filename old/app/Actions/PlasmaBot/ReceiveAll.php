@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\PlasmaBot;
 
 use Illuminate\Support\Facades\App;
@@ -11,7 +13,7 @@ class ReceiveAll
 
     public function execute(): void
     {
-        $plasmaBot = App::make(\App\Services\PlasmaBot::class);
+        $plasmaBot = App::make(\App\Domains\Nom\Services\PlasmaBot::class);
         $plasmaBot->receiveAll();
     }
 }

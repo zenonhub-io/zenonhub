@@ -60,7 +60,7 @@
                 @elseif ($tab === 'json')
                     <div class="p-4">
                         @if ($project->raw_json)
-                            <pre class="line-numbers"><code class="lang-json">{{ pretty_json($project->raw_json) }}</code></pre>
+                            <pre class="line-numbers"><code class="lang-json">{{ json_encode($project->raw_json, JSON_PRETTY_PRINT) }}</code></pre>
                         @else
                             <x-alert
                                 message="Unable to load JSON data"

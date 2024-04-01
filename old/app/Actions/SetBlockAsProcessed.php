@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\AccountBlock;
 use Spatie\QueueableAction\QueueableAction;
 
 class SetBlockAsProcessed

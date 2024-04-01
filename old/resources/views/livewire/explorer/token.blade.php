@@ -36,17 +36,17 @@
                             <div class="d-block d-md-flex justify-content-md-evenly">
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block fs-sm text-muted">Total Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="The current amount of tokens that exist"></i></span>
-                                    <span class="float-end float-md-none">{{ $token->getDisplayAmount($token->total_supply) }}</span>
+                                    <span class="float-end float-md-none">{{ $token->getFormattedAmount($token->total_supply) }}</span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0">
                                     <span class="d-inline d-md-block fs-sm text-muted">Max Supply <i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Maximum amount of tokens that can exist"></i></span>
                                     @if ($token->max_supply > 9223372036854775807)
-                                        <span class="float-end float-md-none" data-bs-toggle="tooltip" data-bs-title="{{ $token->getDisplayAmount($token->max_supply) }}">
-                                            {{ short_hash($token->getDisplayAmount($token->max_supply), 18, false) }}
+                                        <span class="float-end float-md-none" data-bs-toggle="tooltip" data-bs-title="{{ $token->getFormattedAmount($token->max_supply) }}">
+                                            {{ short_hash($token->getFormattedAmount($token->max_supply), 18, false) }}
                                         </span>
                                     @else
                                         <span class="float-end float-md-none" >
-                                            {{ $token->getDisplayAmount($token->max_supply) }}
+                                            {{ $token->getFormattedAmount($token->max_supply) }}
                                         </span>
                                     @endif
                                 </div>
@@ -186,7 +186,7 @@
                     @elseif ($tab === 'json')
                         <div class="p-4">
                             @if ($token->raw_json)
-                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($token->raw_json) }}</code></pre>
+                                <pre class="line-numbers"><code class="lang-json">{{ json_encode($token->raw_json, JSON_PRETTY_PRINT) }}</code></pre>
                             @else
                                 <x-alert
                                     message="Unable to load JSON data"

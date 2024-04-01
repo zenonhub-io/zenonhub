@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Nom\Pillar;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Pillar;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -31,7 +33,7 @@ class NewDelegator extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'New delegator')
+            ->subject(get_env_prefix() . 'New delegator')
             ->markdown('mail.notifications.pillar.new-delegator', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,

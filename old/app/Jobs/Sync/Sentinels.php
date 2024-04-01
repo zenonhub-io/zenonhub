@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Sync;
 
-use App\Classes\Utilities;
-use App\Models\Nom\Sentinel;
+use App\Domains\Nom\Models\Sentinel;
 use App\Services\ZenonSdk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -65,8 +66,8 @@ class Sentinels implements ShouldQueue
             })->first();
 
             if (! $exists) {
-                $chain = Utilities::loadChain();
-                $owner = Utilities::loadAccount($data->owner);
+                $chain = load_chain();
+                $owner = load_account($data->owner);
 
                 Sentinel::create([
                     'chain_id' => $chain->id,

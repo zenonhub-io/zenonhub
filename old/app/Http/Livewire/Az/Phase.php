@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Az;
 
-use App\Models\Nom\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorPhase;
 use Livewire\Component;
 
 class Phase extends Component
@@ -18,7 +20,7 @@ class Phase extends Component
     public function render()
     {
         return view('livewire.az.phase', [
-            'phase' => AcceleratorPhase::findByHash($this->hash),
+            'phase' => AcceleratorPhase::findBy('hash', $this->hash),
         ]);
     }
 }

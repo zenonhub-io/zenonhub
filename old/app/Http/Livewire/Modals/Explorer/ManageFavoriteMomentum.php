@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Modals\Explorer;
 
 use App\Actions\Explorer\DeleteFavorite;
 use App\Actions\Explorer\ManageFavorite;
+use App\Domains\Nom\Models\Momentum;
 use App\Models\Markable\Favorite;
-use App\Models\Nom\Momentum;
 use Livewire\Component;
 
 class ManageFavoriteMomentum extends Component
@@ -18,7 +20,7 @@ class ManageFavoriteMomentum extends Component
 
     public function mount(string $hash)
     {
-        $momentum = Momentum::findByHash($hash);
+        $momentum = Momentum::findBy('hash', $hash);
         $favorite = Favorite::findExisting($momentum, auth()->user());
 
         $this->hash = $hash;
@@ -44,7 +46,7 @@ class ManageFavoriteMomentum extends Component
         ]);
 
         $user = auth()->user();
-        $momentum = Momentum::findByHash($validatedData['hash']);
+        $momentum = Momentum::findBy('hash', $validatedData['hash']);
 
         (new ManageFavorite($momentum, $user, $validatedData))->execute();
 
@@ -62,7 +64,7 @@ class ManageFavoriteMomentum extends Component
         ]);
 
         $user = auth()->user();
-        $momentum = Momentum::findByHash($validatedData['hash']);
+        $momentum = Momentum::findBy('hash', $validatedData['hash']);
 
         (new DeleteFavorite($momentum, $user))->execute();
 

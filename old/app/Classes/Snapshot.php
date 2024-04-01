@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Classes;
 
-use App\Models\Nom\Momentum;
+use App\Domains\Nom\Models\Momentum;
 use Illuminate\Console\OutputStyle;
 
 class Snapshot

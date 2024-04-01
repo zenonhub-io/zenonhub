@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Sync;
 
-use App\Classes\Utilities;
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
 use App\Services\ZenonSdk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,7 +32,7 @@ class Projects implements ShouldQueue
             $this->loadProjects();
             $this->processProjects();
         } catch (Throwable $exception) {
-            Log::debug('Sync projects error - '.$exception->getMessage());
+            Log::debug('Sync projects error - ' . $exception->getMessage());
             $this->release(30);
         }
     }
@@ -63,8 +64,8 @@ class Projects implements ShouldQueue
         $this->projects->each(function ($data) {
             $project = AcceleratorProject::where('hash', $data->id)->first();
             if (! $project) {
-                $chain = Utilities::loadChain();
-                $owner = Utilities::loadAccount($data->owner);
+                $chain = load_chain();
+                $owner = load_account($data->owner);
 
                 $project = AcceleratorProject::create([
                     'owner_id' => $owner->id,
@@ -104,10 +105,10 @@ class Projects implements ShouldQueue
         foreach ($phases as $data) {
             $phase = AcceleratorPhase::where('hash', $data->phase->id)->first();
             if (! $phase) {
-                $chain = Utilities::loadChain();
+                $chain = load_chain();
                 $phase = AcceleratorPhase::create([
                     'chain_id' => $chain->id,
-                    'accelerator_project_id' => $project->id,
+                    'project_id' => $project->id,
                     'hash' => $data->phase->id,
                     'name' => $data->phase->name,
                     'slug' => Str::slug($data->phase->name),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
 use Livewire\Component;
@@ -19,7 +21,7 @@ class Transaction extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.explorer.transaction', [
-            'transaction' => \App\Models\Nom\AccountBlock::findByHash($this->hash),
+            'transaction' => \App\Domains\Nom\Models\AccountBlock::findBy('hash', $this->hash),
         ]);
     }
 

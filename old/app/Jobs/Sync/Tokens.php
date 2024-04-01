@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Sync;
 
-use App\Classes\Utilities;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Token;
 use App\Services\ZenonSdk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -61,9 +62,9 @@ class Tokens implements ShouldQueue
     {
         $this->tokens->each(function ($data) {
             $token = Token::whereZts($data->tokenStandard)->first();
-            $owner = Utilities::loadAccount($data->owner);
+            $owner = load_account($data->owner);
             if (! $token) {
-                $chain = Utilities::loadChain();
+                $chain = load_chain();
                 $token = Token::create([
                     'chain_id' => $chain->id,
                     'owner_id' => $owner->id,

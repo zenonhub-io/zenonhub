@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
+use App\Domains\Nom\Models\Account;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Account;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Accounts extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public string $tab = 'all';
 
@@ -47,7 +49,7 @@ class Accounts extends Component
 
     protected function initQuery()
     {
-        $this->query = Account::withCount('sent_blocks');
+        $this->query = Account::withCount('sentBlocks');
 
         if ($this->tab === 'contracts') {
             $this->query->where('is_embedded_contract', '1');

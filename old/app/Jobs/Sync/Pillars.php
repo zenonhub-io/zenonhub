@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Sync;
 
-use App\Classes\Utilities;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\Pillar;
 use App\Services\ZenonSdk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -63,10 +64,10 @@ class Pillars implements ShouldQueue
         $this->pillars->each(function ($data) {
             $pillar = Pillar::where('name', $data->name)->first();
 
-            $chain = Utilities::loadChain();
-            $ownerAddress = Utilities::loadAccount($data->ownerAddress);
-            $producerAddress = Utilities::loadAccount($data->producerAddress);
-            $withdrawAddress = Utilities::loadAccount($data->withdrawAddress);
+            $chain = load_chain();
+            $ownerAddress = load_account($data->ownerAddress);
+            $producerAddress = load_account($data->producerAddress);
+            $withdrawAddress = load_account($data->withdrawAddress);
 
             if (! $pillar) {
                 $pillar = Pillar::create([

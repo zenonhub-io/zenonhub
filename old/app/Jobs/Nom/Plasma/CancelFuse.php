@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Plasma;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Fusion;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Plasma;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,14 +34,14 @@ class CancelFuse implements ShouldQueue
     public function handle(): void
     {
         $blockData = $this->block->data->decoded;
-        $fusion = Fusion::whereHash($blockData['id'])->first();
+        $fusion = Plasma::whereHash($blockData['id'])->first();
 
         if ($fusion) {
             $fusion->ended_at = $this->block->created_at;
             $fusion->save();
         }
 
-        $fusedQsr = qsr_token()->getDisplayAmount(Fusion::isActive()->sum('amount'), 0);
+        $fusedQsr = qsr_token()->getFormattedAmount(Plasma::isActive()->sum('amount'), 0);
         Cache::put('fused-qsr', $fusedQsr);
 
         (new SetBlockAsProcessed($this->block))->execute();

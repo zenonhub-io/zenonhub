@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\Momentum;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Momentum;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class MomentumBlocks extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Momentum $momentum;
 
@@ -46,7 +48,7 @@ class MomentumBlocks extends Component
 
     protected function initQuery()
     {
-        $this->query = $this->momentum->account_blocks();
+        $this->query = $this->momentum->accountBlocks();
     }
 
     protected function filterList()
@@ -61,7 +63,7 @@ class MomentumBlocks extends Component
                     ->orWhere('hash', $this->search)
                     ->orWhereHas('token', fn ($q2) => $q2->where('name', $this->search))
                     ->orWhereHas('account', fn ($q3) => $q3->where('address', $this->search))
-                    ->orWhereHas('to_account', fn ($q4) => $q4->where('address', $this->search));
+                    ->orWhereHas('toAccount', fn ($q4) => $q4->where('address', $this->search));
             });
         }
     }

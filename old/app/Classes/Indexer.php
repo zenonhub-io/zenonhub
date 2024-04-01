@@ -1,20 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Classes;
 
+use App\Domains\Nom\Enums\AccountBlockTypesEnum;
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountBlockData;
+use App\Domains\Nom\Models\AccountReward;
+use App\Domains\Nom\Models\ContractMethod;
+use App\Domains\Nom\Models\Momentum;
+use App\Domains\Nom\Models\Pillar;
+use App\Domains\Nom\Models\PillarHistory;
+use App\Domains\Nom\Models\Token;
 use App\Events\Nom\AccountBlockCreated;
 use App\Jobs\ProcessAccountBalance;
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\AccountBlockData;
-use App\Models\Nom\AccountReward;
-use App\Models\Nom\ContractMethod;
-use App\Models\Nom\Momentum;
-use App\Models\Nom\Pillar;
-use App\Models\Nom\PillarHistory;
-use App\Models\Nom\Token;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use DigitalSloth\ZnnPhp\Zenon;
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +48,7 @@ class Indexer
             try {
                 $this->loadMomentums($count);
                 $this->processMomentums();
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 Log::error($exception);
             }
         }
@@ -70,9 +76,9 @@ class Indexer
     private function processMomentums(): void
     {
         $this->momentums->each(function ($data) {
-            $chain = Utilities::loadChain();
+            $chain = load_chain();
             $momentum = Momentum::where('hash', $data->hash)->first();
-            $producer = Utilities::loadAccount($data->producer);
+            $producer = load_account($data->producer);
             $pillar = Pillar::where('producer_id', $producer?->id)->first();
 
             if (! $pillar) {
@@ -101,8 +107,8 @@ class Indexer
                 try {
                     $this->processBlock($data->hash);
                     DB::commit();
-                } catch (\Exception $exception) {
-                    Log::warning('Could not process block '.$data->hash);
+                } catch (Exception $exception) {
+                    Log::warning('Could not process block ' . $data->hash);
                     Log::warning($exception->getMessage());
                     Log::debug($exception);
                     DB::rollBack();
@@ -111,7 +117,7 @@ class Indexer
             });
 
             if ($this->syncAccountBalances) {
-                $accounts = $momentum->account_blocks()
+                $accounts = $momentum->accountBlocks()
                     ->select('account_id', 'to_account_id')
                     ->get();
 
@@ -122,7 +128,7 @@ class Indexer
                     ->reject(fn ($id) => $id === 1) // Remove empty address
                     ->each(function ($accountId) {
                         $account = Account::find($accountId);
-                        Log::debug('Dispatch account balances job '.$account->address);
+                        Log::debug('Dispatch account balances job ' . $account->address);
                         ProcessAccountBalance::dispatch($account);
                     });
             }
@@ -150,10 +156,10 @@ class Indexer
         $momentumAcknowledged = Momentum::where('hash', $data->momentumAcknowledged?->hash)->first();
 
         if (! $block) {
-            $chain = Utilities::loadChain();
-            $account = Utilities::loadAccount($data->address);
-            $toAccount = Utilities::loadAccount($data->toAddress);
-            $token = Utilities::loadToken($data->token?->tokenStandard);
+            $chain = load_chain();
+            $account = load_account($data->address);
+            $toAccount = load_account($data->toAddress);
+            $token = load_token($data->token?->tokenStandard);
 
             if (! $account->public_key) {
                 $account->public_key = $data->publicKey;
@@ -196,7 +202,7 @@ class Indexer
                 $this->updateTokenTransferTotals($account, $toAccount, $token, $data);
             }
 
-            if ($block->token?->id === 2 && $data->address === Account::ADDRESS_LIQUIDITY_PROGRAM_DISTRIBUTOR) {
+            if ($block->token?->id === 2 && $data->address === config('explorer.liquidity_program_distributor')) {
                 $this->processLiquidityProgramRewards($block);
             }
 
@@ -219,7 +225,7 @@ class Indexer
     {
         foreach ($data as $descendant) {
             $descendantBlock = $this->processBlock($descendant->hash);
-            $descendantBlock->parent_block_id = $block->id;
+            $descendantBlock->parent_id = $block->id;
             $descendantBlock->save();
         }
     }
@@ -240,13 +246,13 @@ class Indexer
     {
         $save = false;
 
-        if ($token->token_standard === Token::ZTS_ZNN) {
+        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
             $account->total_znn_sent += $data->amount;
             $toAccount->total_znn_received += $data->amount;
             $save = true;
         }
 
-        if ($token->token_standard === Token::ZTS_QSR) {
+        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
             $account->total_qsr_sent += $data->amount;
             $toAccount->total_qsr_received += $data->amount;
             $save = true;
@@ -262,9 +268,9 @@ class Indexer
     {
         AccountReward::create([
             'chain_id' => $block->chain->id,
-            'account_id' => $block->to_account->id,
+            'account_id' => $block->toAccount->id,
             'token_id' => $block->token->id,
-            'type' => AccountReward::TYPE_LIQUIDITY_PROGRAM,
+            'type' => AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value,
             'amount' => $block->amount,
             'created_at' => $block->created_at,
         ]);
@@ -276,9 +282,12 @@ class Indexer
         $decodedData = null;
 
         // Index embedded contracts
-        if (in_array($block->block_type, [AccountBlock::TYPE_SEND, AccountBlock::TYPE_CONTRACT_SEND])) {
+        if (in_array($block->block_type, [
+            AccountBlockTypesEnum::SEND->value,
+            AccountBlockTypesEnum::CONTRACT_SEND->value,
+        ])) {
 
-            $contract = $block->to_account->contract;
+            $contract = $block->toAccount->contract;
             $fingerprint = ZnnUtilities::getDataFingerprint($data);
             $contractMethod = ContractMethod::where('contract_id', $contract?->id)
                 ->where('fingerprint', $fingerprint)
@@ -296,10 +305,10 @@ class Indexer
                 $block->save();
 
                 $contractName = ucfirst(strtolower($contractMethod->contract->name));
-                $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\".$contractName;
+                $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\" . $contractName;
 
                 if (class_exists($embeddedContract)) {
-                    $embeddedContract = new $embeddedContract();
+                    $embeddedContract = new $embeddedContract;
                     $decoded = $embeddedContract->decode($contractMethod->name, $data);
                     $parameters = $embeddedContract->getParameterNames($contractMethod->name);
 

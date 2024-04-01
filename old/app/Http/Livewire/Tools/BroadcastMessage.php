@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tools;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Pillar;
 use App\Services\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
@@ -28,6 +30,52 @@ class BroadcastMessage extends Component
     public ?string $error = null;
 
     public ?\Illuminate\Database\Eloquent\Collection $pillars = null;
+
+    public function mount()
+    {
+        $this->message = Str::upper(Str::random(8));
+        $this->pillars = Pillar::isActive()->orderBy('name')->get();
+    }
+
+    public function render()
+    {
+        return view('livewire.tools.broadcast-message');
+    }
+
+    public function updated($propertyName)
+    {
+        if ($propertyName === 'address') {
+            $accountCheck = Account::findBy('address', $this->address);
+            if ($accountCheck) {
+                $this->public_key = $accountCheck->decoded_public_key;
+            }
+        }
+
+        $this->validateOnly($propertyName);
+    }
+
+    public function submit()
+    {
+        $data = $this->validate();
+        $account = Account::findBy('address', $data['address']);
+        $validated = ZenonSdk::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
+
+        if (! $validated) {
+            $this->error = 'Invalid signature';
+            $this->result = false;
+
+            return;
+        }
+
+        if (! $account || ! $account?->pillar) {
+            $this->error = 'Address is not a pillar, only pillars can broadcast messages';
+            $this->result = false;
+
+            return;
+        }
+
+        $this->result = $this->broadcastSignedMessage($account, $data['title'], $data['post'], $data['message'], $data['signature']);
+    }
 
     protected function rules()
     {
@@ -58,52 +106,6 @@ class BroadcastMessage extends Component
                 'string',
             ],
         ];
-    }
-
-    public function mount()
-    {
-        $this->message = Str::upper(Str::random(8));
-        $this->pillars = Pillar::isActive()->orderBy('name')->get();
-    }
-
-    public function render()
-    {
-        return view('livewire.tools.broadcast-message');
-    }
-
-    public function updated($propertyName)
-    {
-        if ($propertyName === 'address') {
-            $accountCheck = Account::findByAddress($this->address);
-            if ($accountCheck) {
-                $this->public_key = $accountCheck->decoded_public_key;
-            }
-        }
-
-        $this->validateOnly($propertyName);
-    }
-
-    public function submit()
-    {
-        $data = $this->validate();
-        $account = Account::findByAddress($data['address']);
-        $validated = ZenonSdk::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
-
-        if (! $validated) {
-            $this->error = 'Invalid signature';
-            $this->result = false;
-
-            return;
-        }
-
-        if (! $account || ! $account?->pillar) {
-            $this->error = 'Address is not a pillar, only pillars can broadcast messages';
-            $this->result = false;
-
-            return;
-        }
-
-        $this->result = $this->broadcastSignedMessage($account, $data['title'], $data['post'], $data['message'], $data['signature']);
     }
 
     private function broadcastSignedMessage(Account $account, string $title, string $post, string $message, string $signature): bool

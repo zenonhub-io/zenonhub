@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Accelerator;
 
+use App\Domains\Nom\Enums\EmbeddedContractsEnum;
+use App\Domains\Nom\Models\Account;
 use App\Http\Livewire\ChartTrait;
-use App\Models\Nom\Account;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
@@ -20,7 +23,7 @@ class Funding extends Component
 
     public function loadFundingData()
     {
-        $this->acceleratorContract = Account::findByAddress(Account::ADDRESS_ACCELERATOR);
+        $this->acceleratorContract = Account::findBy('address', EmbeddedContractsEnum::ACCELERATOR->value);
         $cacheExpiry = (60 * 60);
         $fundingLabels = [
             'Remaining',
@@ -30,7 +33,7 @@ class Funding extends Component
         $znnFunds = Cache::remember('stats.az.znnFunding', $cacheExpiry, function () use ($fundingLabels) {
             $znnToken = znn_token();
             $totalZnnUsed = $this->acceleratorContract
-                ->sent_blocks()
+                ->sentBlocks()
                 ->where('token_id', $znnToken->id)
                 ->sum('amount');
 
@@ -46,7 +49,7 @@ class Funding extends Component
         $qsrFunds = Cache::remember('stats.az.qsrFunding', $cacheExpiry, function () use ($fundingLabels) {
             $qsrToken = qsr_token();
             $totalQsrUsed = $this->acceleratorContract
-                ->sent_blocks()
+                ->sentBlocks()
                 ->where('token_id', $qsrToken->id)
                 ->sum('amount');
 

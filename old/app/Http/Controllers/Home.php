@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Pillar;
-use App\Models\Nom\Sentinel;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\Pillar;
+use App\Domains\Nom\Models\Sentinel;
+use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Number;
 use Meta;
 
 class Home
@@ -22,15 +25,15 @@ class Home
                 [
                     'name' => 'Momentums',
                     'link' => route('explorer.momentums'),
-                    'value' => short_number(Cache::get('momentum-count')),
+                    'value' => Number::abbreviate(Cache::get('momentum-count')),
                 ], [
                     'name' => 'Transactions',
                     'link' => route('explorer.transactions'),
-                    'value' => short_number(Cache::get('transaction-count')),
+                    'value' => Number::abbreviate(Cache::get('transaction-count')),
                 ], [
                     'name' => 'Addresses',
                     'link' => route('explorer.accounts'),
-                    'value' => short_number(Cache::get('address-count')),
+                    'value' => Number::abbreviate(Cache::get('address-count')),
                 ], [
                     'name' => 'Tokens',
                     'link' => route('explorer.tokens'),

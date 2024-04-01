@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\PillarMessage;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\PillarMessage;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class BroadcastMessages extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     protected $queryString = [
         'sort' => ['except' => 'id'],

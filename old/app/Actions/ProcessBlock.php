@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
 use App\Bots\BridgeAlertBot;
 use App\Bots\WhaleAlertBot;
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Enums\EmbeddedContractsEnum;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Notifications\Bots\BridgeAlert;
 use App\Notifications\Bots\WhaleAlert;
 use Illuminate\Support\Facades\Log;
@@ -26,12 +28,12 @@ class ProcessBlock
 
     public function execute(): void
     {
-        Log::debug('Processing block '.$this->block->hash, [
+        Log::debug('Processing block ' . $this->block->hash, [
             'alerts' => ($this->fireAlerts ? 'Yes' : 'No'),
         ]);
 
-        if ($this->block->data && $this->block->contract_method) {
-            $jobClassName = $this->block->contract_method?->job_class_name;
+        if ($this->block->data && $this->block->contractMethod) {
+            $jobClassName = $this->block->contractMethod->job_class_name;
             if ($jobClassName && class_exists($jobClassName)) {
                 $jobClassName::dispatch($this->block);
             }
@@ -46,7 +48,7 @@ class ProcessBlock
 
         if ($this->fireAlerts && $this->shouldSendBridgeAlerts()) {
             Log::debug('Fire bridge alert');
-            Notification::send(new BridgeAlertBot(), (new BridgeAlert($this->block))->delay($jobDelay));
+            Notification::send(new BridgeAlertBot, (new BridgeAlert($this->block))->delay($jobDelay));
         }
     }
 
@@ -59,11 +61,11 @@ class ProcessBlock
             return false;
         }
 
-        if ($this->block->token->token_standard === Token::ZTS_ZNN && $this->block->amount >= $znnValue) {
+        if ($this->block->token->token_standard === NetworkTokensEnum::ZNN->value && $this->block->amount >= $znnValue) {
             return true;
         }
 
-        if ($this->block->token->token_standard === Token::ZTS_QSR && $this->block->amount >= $qsrValue) {
+        if ($this->block->token->token_standard === NetworkTokensEnum::QSR->value && $this->block->amount >= $qsrValue) {
             return true;
         }
 
@@ -75,7 +77,10 @@ class ProcessBlock
         $watchAddresses = config('bots.bridge-alerts.watch_addresses');
         $watchMethods = config('bots.bridge-alerts.watch_methods');
 
-        if (! in_array($this->block->to_account->address, [Account::ADDRESS_BRIDGE, Account::ADDRESS_LIQUIDITY])) {
+        if (! in_array($this->block->toAccount->address, [
+            EmbeddedContractsEnum::BRIDGE->value,
+            EmbeddedContractsEnum::LIQUIDITY->value,
+        ])) {
             return false;
         }
 
@@ -83,7 +88,7 @@ class ProcessBlock
             return false;
         }
 
-        if (! in_array($this->block->contract_method->name, $watchMethods)) {
+        if (! in_array($this->block->contractMethod->name, $watchMethods)) {
             return false;
         }
 

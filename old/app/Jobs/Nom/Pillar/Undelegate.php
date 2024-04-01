@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Pillar;
 
 use App\Actions\SetBlockAsProcessed;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\PillarDelegator;
 use App\Jobs\Sync\Pillars as SyncPillars;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\PillarDelegator;
 use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;

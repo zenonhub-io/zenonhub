@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Tables;
 
+use App\Domains\Nom\Models\Account;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Account;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class AccountBlocks extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public Account $account;
 
@@ -48,7 +50,7 @@ class AccountBlocks extends Component
     {
         $query = $this->account->blocks();
 
-        if ($this->account->address !== Account::ADDRESS_EMPTY) {
+        if ($this->account->address !== config('explorer.empty_address')) {
             $query->notToEmpty();
         }
 
@@ -67,7 +69,7 @@ class AccountBlocks extends Component
                     ->orWhere('hash', $this->search)
                     ->orWhereHas('token', fn ($q2) => $q2->where('name', $this->search))
                     ->orWhereHas('account', fn ($q3) => $q3->where('address', $this->search))
-                    ->orWhereHas('to_account', fn ($q4) => $q4->where('address', $this->search));
+                    ->orWhereHas('toAccount', fn ($q4) => $q4->where('address', $this->search));
             });
         }
     }

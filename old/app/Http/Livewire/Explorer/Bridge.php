@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
+use App\Domains\Nom\Models\BridgeUnwrap;
+use App\Domains\Nom\Models\BridgeWrap;
+use App\Domains\Nom\Models\Token;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\BridgeUnwrap;
-use App\Models\Nom\BridgeWrap;
-use App\Models\Nom\Token;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -56,7 +58,7 @@ class Bridge extends Component
 
         return view('livewire.explorer.bridge', [
             'data' => $this->data,
-            'tokens' => Token::whereHas('bridge_network_tokens')->get(),
+            'tokens' => Token::whereHas('bridgeNetworkTokens')->get(),
         ]);
     }
 
@@ -89,7 +91,7 @@ class Bridge extends Component
         if ($this->sort === 'amount') {
             $this->query
                 ->orderByRaw("{$this->sort} IS NULL ASC")
-                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)".$this->order);
+                ->orderByRaw("CAST({$this->sort} AS UNSIGNED)" . $this->order);
         } else {
             $this->query->orderBy($this->sort, $this->order);
         }

@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Pillars;
 
+use App\Domains\Nom\Models\Pillar;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Pillar;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Overview extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public string $list = 'all';
 
@@ -51,6 +53,21 @@ class Overview extends Component
         }
     }
 
+    protected function sortList()
+    {
+        if (! $this->query) {
+            return;
+        }
+
+        if ($this->sort === 'az_avg_vote_time') {
+            $this->query
+                ->orderByRaw('! ISNULL(revoked_at), ISNULL(az_avg_vote_time), az_avg_vote_time ' . $this->order);
+        } else {
+            $this->query
+                ->orderByRaw("! ISNULL(revoked_at), {$this->sort} {$this->order}");
+        }
+    }
+
     private function initQuery()
     {
         $this->query = Pillar::withCount(['delegators' => function ($q) {
@@ -75,21 +92,6 @@ class Overview extends Component
         if ($this->search) {
             $this->query->whereListSearch($this->search);
             $this->resetPage();
-        }
-    }
-
-    protected function sortList()
-    {
-        if (! $this->query) {
-            return;
-        }
-
-        if ($this->sort === 'az_avg_vote_time') {
-            $this->query
-                ->orderByRaw('! ISNULL(revoked_at), ISNULL(az_avg_vote_time), az_avg_vote_time '.$this->order);
-        } else {
-            $this->query
-                ->orderByRaw("! ISNULL(revoked_at), {$this->sort} {$this->order}");
         }
     }
 }

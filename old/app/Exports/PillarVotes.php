@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\Pillar;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -22,7 +24,7 @@ class PillarVotes implements FromQuery, WithHeadings, WithMapping
 
     public ?string $order;
 
-    public function __construct(Pillar $pillar, string $search = null, string $sort = null, string $order = null)
+    public function __construct(Pillar $pillar, ?string $search = null, ?string $sort = null, ?string $order = null)
     {
         $this->pillar = $pillar;
         $this->search = $search;
@@ -61,7 +63,7 @@ class PillarVotes implements FromQuery, WithHeadings, WithMapping
     public function query()
     {
         $query = $this->pillar
-            ->az_votes();
+            ->azVotes();
 
         if ($this->search) {
             $query->whereHasMorph('votable', [

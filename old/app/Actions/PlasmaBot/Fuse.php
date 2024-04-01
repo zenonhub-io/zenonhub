@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\PlasmaBot;
 
 use App\Models\PlasmaBotEntry;
@@ -20,7 +22,7 @@ class Fuse
 
     public function execute(): bool
     {
-        $plasmaBot = App::make(\App\Services\PlasmaBot::class);
+        $plasmaBot = App::make(\App\Domains\Nom\Services\PlasmaBot::class);
         $result = $plasmaBot->fuse($this->address, $this->amount);
 
         if (! $result) {

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\AccountBlock;
 use Illuminate\Console\Command;
 
 class ProcessBlock extends Command
@@ -28,7 +30,7 @@ class ProcessBlock extends Command
     {
         $hash = $this->argument('hash');
         $alerts = $this->option('alerts');
-        $block = AccountBlock::findByHash($hash);
+        $block = AccountBlock::findBy('hash', $hash);
 
         if ($alerts) {
             $alerts = filter_var($alerts, FILTER_VALIDATE_BOOLEAN);

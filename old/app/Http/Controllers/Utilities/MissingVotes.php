@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Utilities;
 
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\Pillar;
 
 class MissingVotes
 {
@@ -23,7 +25,7 @@ class MissingVotes
             $votingPillars = $phase->votes()->pluck('pillar_id');
             $phaseData[] = [
                 'phase' => $phase,
-                'pillars' => Pillar::whereHas('az_votes')
+                'pillars' => Pillar::whereHas('azVotes')
                     ->whereNotIn('id', $votingPillars)
                     ->orderByDesc('az_engagement')
                     ->get(),
@@ -37,7 +39,7 @@ class MissingVotes
             $votingPillars = $project->votes()->pluck('pillar_id');
             $projectData[] = [
                 'project' => $project,
-                'pillars' => Pillar::whereHas('az_votes')
+                'pillars' => Pillar::whereHas('azVotes')
                     ->whereNotIn('id', $votingPillars)
                     ->orderByDesc('az_engagement')
                     ->get(),

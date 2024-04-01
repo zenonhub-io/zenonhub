@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Pillar;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -39,8 +40,8 @@ class Register implements ShouldQueue
         $pillar = Pillar::where('name', $blockData['name'])->first();
 
         if (! $pillar) {
-            $producerAddress = Utilities::loadAccount($blockData['producerAddress']);
-            $withdrawAddress = Utilities::loadAccount(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
+            $producerAddress = load_account($blockData['producerAddress']);
+            $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
 
             $pillar = Pillar::create([
                 'chain_id' => $this->block->chain->id,
@@ -58,8 +59,8 @@ class Register implements ShouldQueue
             ]);
         }
 
-        $qsrBurnData = $this->block->paired_account_block?->descendants()
-            ->whereHas('contract_method', function ($q) {
+        $qsrBurnData = $this->block->pairedAccountBlock?->descendants()
+            ->whereHas('contractMethod', function ($q) {
                 $q->whereHas('contract', fn ($q) => $q->where('name', 'Token'))
                     ->where('name', ' Burn');
             })
@@ -83,7 +84,7 @@ class Register implements ShouldQueue
     private function notifyUsers($pillar): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
-        $networkBot = new \App\Bots\NetworkAlertBot();
+        $networkBot = new \App\Bots\NetworkAlertBot;
 
         Notification::send(
             $subscribedUsers->prepend($networkBot),

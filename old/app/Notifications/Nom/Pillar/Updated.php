@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Nom\Pillar;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\Pillar;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,7 +46,7 @@ class Updated extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'Pillar updated')
+            ->subject(get_env_prefix() . 'Pillar updated')
             ->markdown('mail.notifications.nom.pillar.updated', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,

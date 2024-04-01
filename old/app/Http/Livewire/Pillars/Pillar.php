@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Pillars;
 
-use App\Models\Nom\Pillar as PillarModel;
+use App\Domains\Nom\Models\Pillar as PillarModel;
 use Livewire\Component;
 
 class Pillar extends Component
@@ -18,7 +20,7 @@ class Pillar extends Component
     public function render()
     {
         return view('livewire.pillars.pillar', [
-            'pillar' => PillarModel::findBySlug($this->slug),
+            'pillar' => PillarModel::findBy('slug', $this->slug),
         ]);
     }
 }

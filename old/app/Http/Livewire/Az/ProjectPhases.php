@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Az;
 
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorProject;
 use Livewire\Component;
 
 class ProjectPhases extends Component
 {
-    use \Livewire\WithPagination;
     use \App\Http\Livewire\DataTableTrait;
+    use \Livewire\WithPagination;
 
     public AcceleratorProject $project;
 

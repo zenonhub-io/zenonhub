@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\Orchestrator;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Orchestrator;
+use App\Domains\Nom\Models\Pillar;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SyncOrchestrators
 {
@@ -32,7 +35,7 @@ class SyncOrchestrators
             $response = Http::get('http://137.184.138.90:8080/api');
             $json = $response->body();
             Cache::forever('orchestrators-list', $json);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             Log::info('Unable to load orchestrators list');
         }
 
@@ -45,8 +48,8 @@ class SyncOrchestrators
 
         foreach ($this->json->pillars as $data) {
 
-            $pillar = Pillar::findByName($data->pillar_name);
-            $account = Account::findByAddress($data->stake_address);
+            $pillar = Pillar::findBy('name', $data->pillar_name);
+            $account = Account::findBy('address', $data->stake_address);
 
             if (! $pillar || ! $account) {
                 continue;

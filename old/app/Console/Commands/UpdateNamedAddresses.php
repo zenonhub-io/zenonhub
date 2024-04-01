@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
 use Illuminate\Console\Command;
 
 class UpdateNamedAddresses extends Command
@@ -32,7 +34,7 @@ class UpdateNamedAddresses extends Command
         $namedAccounts = config('explorer.named_accounts');
 
         foreach ($namedAccounts as $address => $name) {
-            $address = Account::findByAddress($address);
+            $address = Account::findBy('address', $address);
             if ($address) {
                 $address->name = $name;
                 $address->save();

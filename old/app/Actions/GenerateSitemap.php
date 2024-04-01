@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Account;
-use App\Models\Nom\Pillar;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Pillar;
+use App\Domains\Nom\Models\Token;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Sitemap\Sitemap;
@@ -27,9 +29,9 @@ class GenerateSitemap
             ->add($this->addItem('explorer.momentums'))
             ->add($this->addItem('explorer.transactions'))
             ->add($this->addItem('explorer.accounts'))
-            ->add(Account::whereIn('address', array_keys(Account::EMBEDDED_CONTRACTS))->get()->all())
+            ->add(Account::isEmbedded()->get()->all())
             ->add($this->addItem('explorer.tokens'))
-            ->add(Token::whereIn('token_standard', [Token::ZTS_ZNN, Token::ZTS_QSR, Token::ZTS_LP_ETH])->get()->all())
+            ->add(Token::isNetwork()->get()->all())
             ->add($this->addItem('explorer.staking'))
             ->add($this->addItem('explorer.fusions'))
 

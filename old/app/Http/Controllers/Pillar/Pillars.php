@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Pillar;
 
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\Pillar;
 use Meta;
 
 class Pillars
@@ -17,7 +19,7 @@ class Pillars
 
     public function detail($slug)
     {
-        $pillar = Pillar::findBySlug($slug);
+        $pillar = Pillar::findBy('slug', $slug);
 
         if (! $pillar) {
             abort(404);

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\Token;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -45,7 +47,7 @@ class TokenBurns implements FromQuery, WithHeadings, WithMapping
         return [
             $row->account->address,
             float_number($token?->getDisplayAmount($row->amount)),
-            $row->account_block->hash,
+            $row->accountBlock->hash,
             $row->created_at->format('Y-m-d H:i:s'),
         ];
     }

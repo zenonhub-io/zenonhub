@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Accelerator;
 
 use App\Actions\SetBlockAsProcessed;
 use App\Actions\UpdatePillarEngagementScores;
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Models\NotificationType;
 use App\Services\CoinGecko;
 use App\Services\ZenonSdk;
@@ -42,7 +44,7 @@ class AddPhase implements ShouldQueue
     {
         $this->savePhase();
         $this->notifyUsers();
-        (new UpdatePillarEngagementScores())->execute();
+        (new UpdatePillarEngagementScores)->execute();
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
@@ -51,7 +53,7 @@ class AddPhase implements ShouldQueue
         $znn = App::make(ZenonSdk::class);
         $phaseData = $znn->accelerator->getPhaseById($this->block->hash)['data'];
 
-        $project = AcceleratorProject::findByHash($phaseData->phase->projectID);
+        $project = AcceleratorProject::findBy('hash', $phaseData->phase->projectID);
         $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $phaseData->phase->creationTimestamp);
         $qsrPrice = App::make(CoinGecko::class)->historicPrice('quasar', 'usd', $phaseData->phase->creationTimestamp);
 
@@ -67,7 +69,7 @@ class AddPhase implements ShouldQueue
         if (! $phase) {
             $phase = AcceleratorPhase::create([
                 'chain_id' => $this->block->chain->id,
-                'accelerator_project_id' => $project->id,
+                'project_id' => $project->id,
                 'hash' => $phaseData->phase->id,
                 'name' => $phaseData->phase->name,
                 'slug' => Str::slug($phaseData->phase->name),
@@ -108,7 +110,7 @@ class AddPhase implements ShouldQueue
     private function notifyUsers(): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
-        $networkBot = new \App\Bots\NetworkAlertBot();
+        $networkBot = new \App\Bots\NetworkAlertBot;
 
         Notification::send(
             $subscribedUsers->prepend($networkBot),

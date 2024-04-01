@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Nom\Accelerator;
 
-use App\Models\Nom\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorPhase;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;

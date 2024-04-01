@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Explorer;
 
-use App\Models\Nom\Momentum;
+use App\Domains\Nom\Models\Momentum;
 use Meta;
 
 class Momentums
@@ -19,7 +21,7 @@ class Momentums
 
     public function detail($hash)
     {
-        $momentum = Momentum::findByHash($hash);
+        $momentum = Momentum::findBy('hash', $hash);
 
         if (! $momentum) {
             abort(404);

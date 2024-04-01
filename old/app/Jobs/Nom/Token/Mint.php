@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Token;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\AccountReward;
-use App\Models\Nom\TokenMint;
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Enums\EmbeddedContractsEnum;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountReward;
+use App\Domains\Nom\Models\TokenMint;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,8 +46,8 @@ class Mint implements ShouldQueue
     private function processMint()
     {
         $data = $this->block->data->decoded;
-        $account = Utilities::loadAccount($data['receiveAddress']);
-        $token = Utilities::loadToken($data['tokenStandard']);
+        $account = load_account($data['receiveAddress']);
+        $token = load_token($data['tokenStandard']);
 
         $this->tokenMint = TokenMint::create([
             'chain_id' => $this->block->chain_id,
@@ -64,22 +66,22 @@ class Mint implements ShouldQueue
             return;
         }
 
-        if ($this->tokenMint->receiver->address === Account::ADDRESS_LIQUIDITY) {
+        if ($this->tokenMint->receiver->address === EmbeddedContractsEnum::LIQUIDITY->value) {
             return;
         }
 
         $rewardType = null;
-        if ($this->block->account->address === Account::ADDRESS_SENTINEL) {
-            $rewardType = AccountReward::TYPE_SENTINEL;
-        } elseif ($this->block->account->address === Account::ADDRESS_STAKE) {
-            $rewardType = AccountReward::TYPE_STAKE;
-        } elseif ($this->block->account->address === Account::ADDRESS_LIQUIDITY) {
-            $rewardType = AccountReward::TYPE_LIQUIDITY;
-        } elseif ($this->block->account->address === Account::ADDRESS_PILLAR) {
+        if ($this->block->account->address === EmbeddedContractsEnum::SENTINEL->value) {
+            $rewardType = AccountRewardTypesEnum::SENTINEL->value;
+        } elseif ($this->block->account->address === EmbeddedContractsEnum::STAKE->value) {
+            $rewardType = AccountRewardTypesEnum::STAKE->value;
+        } elseif ($this->block->account->address === EmbeddedContractsEnum::LIQUIDITY->value) {
+            $rewardType = AccountRewardTypesEnum::LIQUIDITY->value;
+        } elseif ($this->block->account->address === EmbeddedContractsEnum::PILLAR->value) {
             if ($this->tokenMint->receiver->is_pillar_withdraw_address) {
-                $rewardType = AccountReward::TYPE_PILLAR;
+                $rewardType = AccountRewardTypesEnum::PILLAR->value;
             } else {
-                $rewardType = AccountReward::TYPE_DELEGATE;
+                $rewardType = AccountRewardTypesEnum::DELEGATE->value;
             }
         }
 

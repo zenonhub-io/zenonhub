@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\AccountReward;
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountReward;
 use Illuminate\Console\Command;
 
 class ProcessLiquidityProgramRewards extends Command
@@ -32,7 +34,7 @@ class ProcessLiquidityProgramRewards extends Command
         $this->newLine();
 
         $query = AccountBlock::where('token_id', 2)->whereHas('account',
-            fn ($q) => $q->where('address', Account::ADDRESS_LIQUIDITY_PROGRAM_DISTRIBUTOR)
+            fn ($q) => $q->where('address', config('explorer.liquidity_program_distributor'))
         );
 
         if ($this->confirm('Do you wish to continue?')) {
@@ -49,7 +51,7 @@ class ProcessLiquidityProgramRewards extends Command
                             'chain_id' => $block->chain_id,
                             'account_id' => $block->to_account_id,
                             'token_id' => $block->token_id,
-                            'type' => AccountReward::TYPE_LIQUIDITY_PROGRAM,
+                            'type' => AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value,
                             'amount' => $block->amount,
                             'created_at' => $block->created_at,
                         ]);

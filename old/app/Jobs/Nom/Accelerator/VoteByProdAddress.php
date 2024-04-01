@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Accelerator;
 
 use App\Actions\Nom\Accelerator\SyncPhaseStatus;
 use App\Actions\Nom\Accelerator\SyncProjectStatus;
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AcceleratorPhase;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\AcceleratorVote;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Pillar;
+use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorVote;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Pillar;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -59,7 +61,7 @@ class VoteByProdAddress implements ShouldQueue
         }
 
         if (! $item) {
-            Log::debug('VOTE ERROR - No item found for vote '.$blockData['id']);
+            Log::debug('VOTE ERROR - No item found for vote ' . $blockData['id']);
 
             return;
         }

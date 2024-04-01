@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
+use Closure;
 use Illuminate\View\Component;
 
 class Address extends Component
@@ -43,7 +46,7 @@ class Address extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return \Illuminate\Contracts\View\View|Closure|string
      */
     public function render()
     {

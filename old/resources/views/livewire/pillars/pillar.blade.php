@@ -102,11 +102,11 @@
                         </li>
                         <li class="list-group-item">
                             <span class="d-block fs-sm text-muted">Producer Address</span>
-                            <x-address :account="$pillar->producer_account" :named="false"/>
+                            <x-address :account="$pillar->producerAccount" :named="false"/>
                         </li>
                         <li class="list-group-item">
                             <span class="d-block fs-sm text-muted">Rewards Address</span>
-                            <x-address :account="$pillar->withdraw_account" :named="false"/>
+                            <x-address :account="$pillar->withdrawAccount" :named="false"/>
                         </li>
                     </ul>
                 </div>
@@ -167,7 +167,7 @@
                 @elseif ($tab === 'json')
                     <div class="p-4">
                         @if ($pillar->raw_json)
-                            <pre class="line-numbers"><code class="lang-json">{{ pretty_json($pillar->raw_json) }}</code></pre>
+                            <pre class="line-numbers"><code class="lang-json">{{ json_encode($pillar->raw_json, JSON_PRETTY_PRINT) }}</code></pre>
                         @else
                             <x-alert
                                 message="Unable to load JSON data"

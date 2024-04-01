@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use App\Domains\Nom\Models\Account;
 use App\Jobs\ProcessAccountBalance;
-use App\Models\Nom\Account;
 use Illuminate\Console\Command;
 
 class UpdateAccountBalance extends Command
@@ -30,7 +32,7 @@ class UpdateAccountBalance extends Command
     public function handle()
     {
         $address = $this->argument('address');
-        $account = Account::findByAddress($address);
+        $account = Account::findBy('address', $address);
 
         if ($account) {
             $this->info('Update account balance job queued');

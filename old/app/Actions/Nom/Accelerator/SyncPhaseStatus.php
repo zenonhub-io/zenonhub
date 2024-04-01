@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Nom\Accelerator;
 
-use App\Models\Nom\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Services\ZenonSdk;
 use Exception;
 use Illuminate\Support\Facades\App;
@@ -28,7 +30,7 @@ class SyncPhaseStatus
             $this->loadData();
             $this->processData();
         } catch (Exception $exception) {
-            Log::warning('Unable to sync AZ phase status '.$this->phase->hash);
+            Log::warning('Unable to sync AZ phase status ' . $this->phase->hash);
             Log::debug($exception->getMessage());
 
             return;

@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Bridge;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeAdmin;
-use App\Models\Nom\BridgeUnwrap;
-use App\Models\Nom\BridgeWrap;
+use App\Domains\Nom\Enums\EmbeddedContractsEnum;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeAdmin;
+use App\Domains\Nom\Models\BridgeUnwrap;
+use App\Domains\Nom\Models\BridgeWrap;
 use App\Services\BitQuery;
 use App\Services\BridgeStatus;
 use Illuminate\Support\Facades\App;
@@ -65,7 +68,7 @@ class Overview extends Component
     {
         $znnToken = znn_token();
         $qsrToken = qsr_token();
-        $bridgeAccount = Account::findByAddress(Account::ADDRESS_BRIDGE);
+        $bridgeAccount = Account::findBy('address', EmbeddedContractsEnum::BRIDGE->value);
 
         //
         // Totals
@@ -74,13 +77,13 @@ class Overview extends Component
             ->createdLast($this->dateRange)
             ->where('token_id', $znnToken->id)
             ->sum('amount');
-        $znnVolume = $znnToken->getDisplayAmount($znnVolume, 2, '.', '');
+        $znnVolume = $znnToken->getFormattedAmount($znnVolume, 2, '.', '');
 
         $qsrVolume = AccountBlock::involvingAccount($bridgeAccount)
             ->createdLast($this->dateRange)
             ->where('token_id', $qsrToken->id)
             ->sum('amount');
-        $qsrVolume = $qsrToken->getDisplayAmount($qsrVolume, 2, '.', '');
+        $qsrVolume = $qsrToken->getFormattedAmount($qsrVolume, 2, '.', '');
 
         $totalInbound = BridgeUnwrap::whereNotAffiliateReward()->createdLast($this->dateRange)->count();
         $totalOutbound = BridgeWrap::createdLast($this->dateRange)->count();
@@ -92,12 +95,12 @@ class Overview extends Component
             ->whereNotAffiliateReward()
             ->where('token_id', $znnToken->id)
             ->sum('amount');
-        $inboundZnn = $znnToken->getDisplayAmount($inboundZnn, 2, '.', '');
+        $inboundZnn = $znnToken->getFormattedAmount($inboundZnn, 2, '.', '');
 
         $outboundZnn = BridgeWrap::createdLast($this->dateRange)
             ->where('token_id', $znnToken->id)
             ->sum('amount');
-        $outboundZnn = $znnToken->getDisplayAmount($outboundZnn, 2, '.', '');
+        $outboundZnn = $znnToken->getFormattedAmount($outboundZnn, 2, '.', '');
 
         //
         // QSR
@@ -106,12 +109,12 @@ class Overview extends Component
             ->whereNotAffiliateReward()
             ->where('token_id', $qsrToken->id)
             ->sum('amount');
-        $inboundQsr = $qsrToken->getDisplayAmount($inboundQsr, 2, '.', '');
+        $inboundQsr = $qsrToken->getFormattedAmount($inboundQsr, 2, '.', '');
 
         $outboundQsr = BridgeWrap::createdLast($this->dateRange)
             ->where('token_id', $qsrToken->id)
             ->sum('amount');
-        $outboundQsr = $qsrToken->getDisplayAmount($outboundQsr, 2, '.', '');
+        $outboundQsr = $qsrToken->getFormattedAmount($outboundQsr, 2, '.', '');
 
         //
         // Affiliate
@@ -124,13 +127,13 @@ class Overview extends Component
             ->whereAffiliateReward()
             ->where('token_id', $znnToken->id)
             ->sum('amount');
-        $affiliateZnn = $znnToken->getDisplayAmount($affiliateZnn, 2, '.', '');
+        $affiliateZnn = $znnToken->getFormattedAmount($affiliateZnn, 2, '.', '');
 
         $affiliateQsr = BridgeUnwrap::createdLast($this->dateRange)
             ->whereAffiliateReward()
             ->where('token_id', $qsrToken->id)
             ->sum('amount');
-        $affiliateQsr = $qsrToken->getDisplayAmount($affiliateQsr, 2, '.', '');
+        $affiliateQsr = $qsrToken->getFormattedAmount($affiliateQsr, 2, '.', '');
 
         $this->overview = [
             'znnVolume' => $this->numberAbbreviator($znnVolume),

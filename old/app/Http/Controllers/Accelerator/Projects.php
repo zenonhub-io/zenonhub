@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Accelerator;
 
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorProject;
 use Meta;
 
 class Projects
@@ -17,7 +19,7 @@ class Projects
 
     public function detail($hash)
     {
-        $project = AcceleratorProject::findByHash($hash);
+        $project = AcceleratorProject::findBy('hash', $hash);
 
         if (! $project) {
             abort(404);

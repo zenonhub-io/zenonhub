@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ class AccountResource extends JsonResource
             'display_znn_balance' => $this->display_znn_balance,
             'display_qsr_balance' => $this->display_qsr_balance,
             'first_active_at' => $this->first_active_at,
-            'last_active_at' => $this->latest_block ? $this->latest_block->created_at : null,
+            'last_active_at' => $this->latestBlock ? $this->latestBlock->created_at : null,
         ];
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeUnwrap;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeUnwrap;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class RevokeUnwrapRequest implements ShouldQueue
 {
@@ -36,8 +39,8 @@ class RevokeUnwrapRequest implements ShouldQueue
         try {
             $this->loadUnwrap();
             $this->processRevokeUnwrap();
-        } catch (\Throwable $exception) {
-            Log::warning('Error revoking unwrap request '.$this->block->hash);
+        } catch (Throwable $exception) {
+            Log::warning('Error revoking unwrap request ' . $this->block->hash);
             Log::debug($exception);
 
             return;

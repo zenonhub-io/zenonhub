@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
+use App\Domains\Nom\Models\Stake;
 use App\Http\Resources\StakeCollection;
 use App\Http\Resources\StakeResource;
-use App\Models\Nom\Stake;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Validator;
@@ -31,7 +33,7 @@ class Stakes extends ApiController
 
     public function find(Request $request, string $hash)
     {
-        $stake = Stake::findByHash($hash);
+        $stake = Stake::findBy('hash', $hash);
 
         if (! $stake) {
             return $this->error('Not found');

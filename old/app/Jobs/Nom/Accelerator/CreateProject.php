@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Accelerator;
 
 use App\Actions\SetBlockAsProcessed;
 use App\Actions\UpdatePillarEngagementScores;
-use App\Classes\Utilities;
-use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\AccountBlock;
+use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Models\NotificationType;
 use App\Services\CoinGecko;
 use App\Services\ZenonSdk;
@@ -42,7 +43,7 @@ class CreateProject implements ShouldQueue
     {
         $this->saveProject();
         $this->notifyUsers();
-        (new UpdatePillarEngagementScores())->execute();
+        (new UpdatePillarEngagementScores)->execute();
         (new SetBlockAsProcessed($this->block))->execute();
     }
 
@@ -61,7 +62,7 @@ class CreateProject implements ShouldQueue
         }
 
         if (! $project) {
-            $owner = Utilities::loadAccount($projectData->owner);
+            $owner = load_account($projectData->owner);
             $project = AcceleratorProject::create([
                 'chain_id' => $this->block->chain->id,
                 'owner_id' => $owner->id,
@@ -102,7 +103,7 @@ class CreateProject implements ShouldQueue
     private function notifyUsers(): void
     {
         $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
-        $networkBot = new \App\Bots\NetworkAlertBot();
+        $networkBot = new \App\Bots\NetworkAlertBot;
 
         Notification::send(
             $subscribedUsers->prepend($networkBot),

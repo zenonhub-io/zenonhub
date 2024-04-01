@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Bridge;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\BridgeNetwork;
-use App\Models\Nom\BridgeNetworkToken;
-use App\Models\Nom\BridgeUnwrap;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeNetwork;
+use App\Domains\Nom\Models\BridgeNetworkToken;
+use App\Domains\Nom\Models\BridgeUnwrap;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class UnwrapToken implements ShouldQueue
 {
@@ -36,8 +38,8 @@ class UnwrapToken implements ShouldQueue
     {
         try {
             $this->processUnwrap();
-        } catch (\Throwable $exception) {
-            Log::warning('Unable to process unwrap: '.$this->block->hash);
+        } catch (Throwable $exception) {
+            Log::warning('Unable to process unwrap: ' . $this->block->hash);
             Log::debug($exception);
 
             return;
@@ -50,7 +52,7 @@ class UnwrapToken implements ShouldQueue
     {
         $data = $this->block->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
-        $account = Utilities::loadAccount($data['toAddress']);
+        $account = load_account($data['toAddress']);
         $bridgeToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
 
         $unwrap = BridgeUnwrap::updateOrCreate([

@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
+use App\Domains\Nom\Models\Token;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\Token;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Tokens extends Component
 {
-    use WithPagination;
     use DataTableTrait;
+    use WithPagination;
 
     public string $tab = 'all';
 

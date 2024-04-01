@@ -114,11 +114,11 @@
                         <ul class="list-group list-group-flush mb-0">
                             <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">Last Active</span>
-                                {{ ($account->latest_block ? $account->latest_block->created_at->format(config('zenon.date_format')) : '-') }}
+                                {{ ($account->latestBlock ? $account->latestBlock->created_at->format(config('zenon.date_format')) : '-') }}
                             </li>
                             <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">First Active</span>
-                                {{ ($account->first_block ? $account->first_block->created_at->format(config('zenon.date_format')) : '-') }}
+                                {{ ($account->firstBlock ? $account->firstBlock->created_at->format(config('zenon.date_format')) : '-') }}
                             </li>
                             <li class="list-group-item">
                                 <span class="d-block fs-sm text-muted">Delegating To</span>
@@ -217,7 +217,7 @@
                     @elseif ($tab === 'json')
                         <div class="p-4">
                             @if ($account->raw_json)
-                                <pre class="line-numbers"><code class="lang-json">{{ pretty_json($account->raw_json) }}</code></pre>
+                                <pre class="line-numbers"><code class="lang-json">{{ json_encode($account->raw_json, JSON_PRETTY_PRINT) }}</code></pre>
                             @else
                                 <x-alert
                                     message="Unable to load JSON data"

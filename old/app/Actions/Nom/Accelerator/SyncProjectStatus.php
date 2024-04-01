@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Nom\Accelerator;
 
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorProject;
 use App\Services\ZenonSdk;
 use Exception;
 use Illuminate\Support\Facades\App;
@@ -27,7 +29,7 @@ class SyncProjectStatus
             $this->processData();
             $this->processPhases();
         } catch (Exception $exception) {
-            Log::warning('Unable to sync AZ project status '.$this->project->hash);
+            Log::warning('Unable to sync AZ project status ' . $this->project->hash);
             Log::debug($exception->getMessage());
         }
     }

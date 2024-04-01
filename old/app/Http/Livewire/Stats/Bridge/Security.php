@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Stats\Bridge;
 
-use App\Models\Nom\BridgeAdmin;
-use App\Models\Nom\BridgeGuardian;
+use App\Domains\Nom\Models\BridgeAdmin;
+use App\Domains\Nom\Models\BridgeGuardian;
 use App\Services\BridgeStatus;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;

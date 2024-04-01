@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs\Nom\Plasma;
 
 use App\Actions\SetBlockAsProcessed;
-use App\Classes\Utilities;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Fusion;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Plasma;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,9 +34,9 @@ class Fuse implements ShouldQueue
     public function handle(): void
     {
         $blockData = $this->block->data->decoded;
-        $toAccount = Utilities::loadAccount($blockData['address']);
+        $toAccount = load_account($blockData['address']);
 
-        Fusion::create([
+        Plasma::create([
             'chain_id' => $this->block->chain->id,
             'from_account_id' => $this->block->account_id,
             'to_account_id' => $toAccount->id,
@@ -45,7 +46,7 @@ class Fuse implements ShouldQueue
             'ended_at' => null,
         ]);
 
-        $fusedQsr = qsr_token()->getDisplayAmount(Fusion::isActive()->sum('amount'), 0);
+        $fusedQsr = qsr_token()->getFormattedAmount(Plasma::isActive()->sum('amount'), 0);
         Cache::put('fused-qsr', $fusedQsr);
 
         (new SetBlockAsProcessed($this->block))->execute();

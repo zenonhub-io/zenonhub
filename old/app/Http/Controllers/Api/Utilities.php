@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\Token;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
@@ -27,7 +31,7 @@ class Utilities extends ApiController
             );
 
             return $this->success($account);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->error($exception->getMessage());
         }
     }
@@ -59,14 +63,14 @@ class Utilities extends ApiController
             }
 
             return $this->error('Invalid signature');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->error($exception->getMessage());
         }
     }
 
     public function accountLpBalances(): JsonResponse
     {
-        $lpToken = Token::findByZts(Token::ZTS_LP_ETH);
+        $lpToken = Token::findBy('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
         $accounts = Account::whereHas(
             'stakes',
             fn ($q) => $q->where('token_id', $lpToken->id)
@@ -106,7 +110,7 @@ class Utilities extends ApiController
             abort(404);
         }
 
-        $token = Token::findByZts($zts);
+        $token = Token::findBy('token_standard', $zts);
 
         if (! $token) {
             abort(404);
@@ -120,7 +124,7 @@ class Utilities extends ApiController
             $supply = $token->raw_json->maxSupply;
         }
 
-        return $token->getDisplayAmount($supply, $token->decimals, '.', '');
+        return $token->getFormattedAmount($supply, $token->decimals, '.', '');
     }
 
     public function tokenPrice(): JsonResponse

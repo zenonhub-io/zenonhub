@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Az;
 
+use App\Domains\Nom\Models\AcceleratorProject;
 use App\Http\Livewire\DataTableTrait;
-use App\Models\Nom\AcceleratorProject;
 use Livewire\Component;
 use Livewire\WithPagination;
 

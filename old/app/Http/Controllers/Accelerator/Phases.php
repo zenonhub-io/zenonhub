@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Accelerator;
 
-use App\Models\Nom\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorPhase;
 use Meta;
 
 class Phases
 {
     public function detail($hash)
     {
-        $phase = AcceleratorPhase::findByHash($hash);
+        $phase = AcceleratorPhase::findBy('hash', $hash);
 
         if (! $phase) {
             abort(404);

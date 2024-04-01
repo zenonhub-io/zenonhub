@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\Nom\Momentum;
+use App\Domains\Nom\Models\Momentum;
 use App\Services\ZenonSdk;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;

@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Classes\Indexer;
-use App\Models\Nom\Momentum;
+use App\Domains\Nom\Models\Momentum;
 use App\Services\ZenonSdk;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 
@@ -46,7 +49,7 @@ class Index extends Command
         try {
             $znn = App::make(ZenonSdk::class);
             $momentum = $znn->ledger->getFrontierMomentum()['data'];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return self::FAILURE;
         }
 

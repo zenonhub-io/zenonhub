@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Account;
 
 use App\Classes\Utilities;
-use App\Models\Nom\Account;
+use App\Domains\Nom\Models\Account;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Http\Request;
 
@@ -41,7 +43,7 @@ class Addresses
             ],
         ]);
 
-        $account = Account::findByAddress($request->input('address'));
+        $account = Account::findBy('address', $request->input('address'));
 
         $verified = ZnnUtilities::verifySignedMessage(
             $account->decoded_public_key,

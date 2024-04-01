@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Explorer;
 
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Momentum;
-use App\Models\Nom\Token;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Momentum;
+use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
@@ -26,7 +28,7 @@ class Overview extends Component
 
     private function loadData()
     {
-        $this->momentums = Momentum::withCount('account_blocks')
+        $this->momentums = Momentum::withCount('accountBlocks')
             ->limit(9)
             ->orderBy('id', 'DESC')
             ->get();

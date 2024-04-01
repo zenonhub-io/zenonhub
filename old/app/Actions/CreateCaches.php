@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions;
 
-use App\Models\Nom\Account;
-use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Fusion;
-use App\Models\Nom\Momentum;
-use App\Models\Nom\PillarDelegator;
-use App\Models\Nom\Stake;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Momentum;
+use App\Domains\Nom\Models\PillarDelegator;
+use App\Domains\Nom\Models\Plasma;
+use App\Domains\Nom\Models\Stake;
 use Illuminate\Support\Facades\Cache;
 
 class CreateCaches
@@ -21,10 +23,10 @@ class CreateCaches
         $delegators = PillarDelegator::isActive()->whereHas('account', fn ($query) => $query->where('znn_balance', '>', '0'))->count();
         Cache::put('delegators-count', $delegators);
 
-        $fusedQsr = qsr_token()->getDisplayAmount(Fusion::isActive()->sum('amount'));
+        $fusedQsr = qsr_token()->getFormattedAmount(Plasma::isActive()->sum('amount'));
         Cache::put('fused-qsr', $fusedQsr);
 
-        $stakedZnn = znn_token()->getDisplayAmount(Stake::isActive()->isZnn()->sum('amount'), 0);
+        $stakedZnn = znn_token()->getFormattedAmount(Stake::isActive()->isZnn()->sum('amount'), 0);
         Cache::put('staked-znn', $stakedZnn);
     }
 }

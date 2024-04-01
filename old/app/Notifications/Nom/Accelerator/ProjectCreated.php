@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Nom\Accelerator;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\AcceleratorProject;
+use App\Domains\Nom\Models\AcceleratorProject;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,7 +46,7 @@ class ProjectCreated extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix().'New project')
+            ->subject(get_env_prefix() . 'New project')
             ->markdown('mail.notifications.nom.az.project-created', [
                 'user' => $notifiable,
                 'project' => $this->project,
