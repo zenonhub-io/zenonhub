@@ -16,6 +16,21 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    $indexer = app(App\Domains\Nom\Services\Indexer::class);
+    $indexer->run();
+
+    dd('donme');
+
+    $indexer = new App\Domains\Nom\Services\Indexer;
+
+    $token = App\Domains\Nom\Models\Token::find(1);
+
+    $amount = 8;
+
+    dd($token->getDisplayAmount($amount), $token->getFormattedAmount($amount));
+
+    dd('complete');
+
     $token = 'Uzj87ixm14JnNXMflMsM0oneRlwEBx7ZfpEzIkk00090759b';
     $response = Http::withToken($token)
         ->accept('application/json')
