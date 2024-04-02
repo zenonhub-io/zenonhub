@@ -1,3 +1,4 @@
 *
 !public/
+!genesis/*.json
 !.gitignore
