@@ -34,6 +34,7 @@ return new class extends Migration
             $table->bigInteger('base_plasma')->default(0);
             $table->bigInteger('used_plasma')->default(0);
             $table->bigInteger('difficulty')->default(0);
+            $table->string('nonce')->nullable();
             $table->string('hash')->unique();
             $table->timestamp('created_at')->nullable();
         });

@@ -59,6 +59,7 @@ class AccountBlock extends Model
         'base_plasma',
         'used_plasma',
         'difficulty',
+        'nonce',
         'hash',
         'created_at',
     ];

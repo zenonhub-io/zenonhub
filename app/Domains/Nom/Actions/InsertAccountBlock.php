@@ -64,6 +64,7 @@ class InsertAccountBlock
                 'base_plasma' => $blockData->basePlasma,
                 'used_plasma' => $blockData->usedPlasma,
                 'difficulty' => $blockData->difficulty,
+                'nonce' => $blockData->nonce,
                 'hash' => $blockData->hash,
                 'created_at' => $blockData->confirmationDetail?->momentumTimestamp,
             ]);
