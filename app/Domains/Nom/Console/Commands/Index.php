@@ -6,9 +6,8 @@ namespace App\Domains\Nom\Console\Commands;
 
 use App\Domains\Nom\Services\Indexer;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Isolatable;
 
-class Index extends Command implements Isolatable
+class Index extends Command
 {
     /**
      * The name and signature of the console command.

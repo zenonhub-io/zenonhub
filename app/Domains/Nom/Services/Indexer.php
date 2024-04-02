@@ -40,6 +40,13 @@ class Indexer
             return;
         }
 
+        $lock = Cache::lock('indexerLock', 0, 'indexer');
+        $emergencyLock = Cache::lock('indexerEmergencyLock', 0, 'indexer');
+
+        if (! $lock->get() || ! $emergencyLock->get()) {
+            return;
+        }
+
         Log::debug('Indexer - Starting', [
             'current height' => $this->currentDbHeight,
             'target height' => $momentum->height,
@@ -70,15 +77,21 @@ class Indexer
 
                     $this->updateCurrentHeight();
                 });
-            } catch (IndexerException $exception) {
-                break;
             } catch (Throwable $exception) {
                 Log::error($exception);
                 Log::debug('Indexer - Error', [
                     'message' => $exception->getMessage(),
                 ]);
+                break;
             }
         }
+
+        $lock->release();
+
+        Log::debug('Indexer - Stopping', [
+            'current height' => $this->currentDbHeight,
+            'target height' => $momentum->height,
+        ]);
     }
 
     private function updateCurrentHeight(): void
