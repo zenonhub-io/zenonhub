@@ -61,7 +61,7 @@ class Tokens implements ShouldQueue
     private function processTokens()
     {
         $this->tokens->each(function ($data) {
-            $token = Token::whereZts($data->tokenStandard)->first();
+            $token = Token::findBy('token_standard', $data->tokenStandard);
             $owner = load_account($data->owner);
             if (! $token) {
                 $chain = load_chain();

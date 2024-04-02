@@ -33,7 +33,7 @@ class UpdateToken implements ShouldQueue
     public function handle(): void
     {
         $blockData = $this->block->data->decoded;
-        $token = Token::whereZts($blockData['tokenStandard'])->first();
+        $token = Token::findBy('token_standard', $blockData['tokenStandard']);
 
         if ($token) {
             $owner = load_account($blockData['owner']);

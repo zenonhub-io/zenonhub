@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Site;
 
-use App\Actions\CreateCaches;
 use App\Actions\GenerateSitemap;
 use App\Actions\UpdateContractMethods;
 use App\Actions\UpdateTokenPrices;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class AfterDeploy extends Command
 {
@@ -44,11 +46,10 @@ class AfterDeploy extends Command
         ]);
 
         try {
-            (new CreateCaches())->execute();
-            (new UpdateContractMethods())->execute();
-            (new UpdateTokenPrices())->execute();
-            (new GenerateSitemap())->execute();
-        } catch (\Throwable $throwable) {
+            (new UpdateContractMethods)->execute();
+            (new UpdateTokenPrices)->execute();
+            (new GenerateSitemap)->execute();
+        } catch (Throwable $throwable) {
             Log::error($throwable);
         }
 

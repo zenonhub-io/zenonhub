@@ -41,7 +41,7 @@ class ProcessAccountBalance
                 $this->account->qsr_balance = $holdings->balance;
             }
 
-            $token = Token::whereZts($tokenStandard)->first();
+            $token = Token::findBy('token_standard', $tokenStandard);
             $tokenIds = $this->account->balances()
                 ->pluck('token_id')
                 ->toArray();

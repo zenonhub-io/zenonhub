@@ -40,7 +40,7 @@ class IssueToken implements ShouldQueue
         $znn = App::make(ZenonSdk::class);
         $zts = Utilities::ztsFromHash($this->block->hash);
         $tokenData = $znn->token->getByZts($zts)['data'];
-        $token = Token::whereZts($tokenData->tokenStandard)->first();
+        $token = Token::findBy('token_standard', $tokenData->tokenStandard);
         $totalSupply = $tokenData->totalSupply;
         $maxSupply = $tokenData->maxSupply;
 

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Domains\Nom\Models\AcceleratorProject;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Models\Pillar;
 use App\Domains\Nom\Models\Sentinel;
 use App\Domains\Nom\Models\Token;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Meta;
 
@@ -25,15 +27,15 @@ class Home
                 [
                     'name' => 'Momentums',
                     'link' => route('explorer.momentums'),
-                    'value' => Number::abbreviate(Cache::get('momentum-count')),
+                    'value' => Number::abbreviate(Momentum::count()),
                 ], [
                     'name' => 'Transactions',
                     'link' => route('explorer.transactions'),
-                    'value' => Number::abbreviate(Cache::get('transaction-count')),
+                    'value' => Number::abbreviate(AccountBlock::count()),
                 ], [
                     'name' => 'Addresses',
                     'link' => route('explorer.accounts'),
-                    'value' => Number::abbreviate(Cache::get('address-count')),
+                    'value' => Number::abbreviate(Account::count()),
                 ], [
                     'name' => 'Tokens',
                     'link' => route('explorer.tokens'),
