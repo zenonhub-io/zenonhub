@@ -99,16 +99,13 @@ class InsertAccountBlock
         $descendants->each(function ($descendant) use ($parentBlock) {
             $child = AccountBlock::findBy('hash', $descendant->hash);
 
-            // TODO
             if (! $child) {
-                dd('no child', [
-                    'parent' => $parentBlock->hash,
-                    'child' => $descendant->hash,
-                ]);
+                return;
             }
 
             $child->parent_id = $parentBlock->id;
             $child->save();
+
         });
     }
 
