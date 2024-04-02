@@ -64,24 +64,28 @@ class Indexer
                         DB::commit();
                     } catch (Throwable $exception) {
                         DB::rollBack();
+                        Log::error($exception);
                         throw new IndexerException("Indexing error, rollback - {$exception->getMessage()}");
                     }
 
                     $this->updateCurrentHeight();
                 });
+            } catch (IndexerException $exception) {
+                break;
             } catch (Throwable $exception) {
+                Log::error($exception);
                 Log::debug('Indexer - Error', [
                     'message' => $exception->getMessage(),
                 ]);
-                Log::error($exception);
-                break;
             }
         }
     }
 
     private function updateCurrentHeight(): void
     {
-        $this->currentDbHeight = Momentum::max('height') ?? 1;
+        // If db only has genesis data start from height 2, dont reindex genesis
+        $dbHeight = Momentum::max('height');
+        $this->currentDbHeight = max($dbHeight, 2);
     }
 
     private function processMomentums(): void

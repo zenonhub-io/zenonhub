@@ -16,6 +16,7 @@ class InsertMomentum
     public function execute(MomentumDTO $momentumDTO): void
     {
         Log::debug('Insert Momentum', [
+            'height' => $momentumDTO->height,
             'hash' => $momentumDTO->hash,
         ]);
 

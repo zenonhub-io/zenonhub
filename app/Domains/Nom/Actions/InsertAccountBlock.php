@@ -13,6 +13,7 @@ use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
+use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -93,7 +94,38 @@ class InsertAccountBlock
         }
     }
 
-    public function processBlockData(AccountBlock $block, AccountBlockDTO $accountBlockDTO): void
+    private function linkDescendantBlocks(AccountBlock $parentBlock, Collection $descendants): void
+    {
+        $descendants->each(function ($descendant) use ($parentBlock) {
+            $child = AccountBlock::findBy('hash', $descendant->hash);
+
+            // TODO
+            if (! $child) {
+                dd('no child', [
+                    'parent' => $parentBlock->hash,
+                    'child' => $descendant->hash,
+                ]);
+            }
+
+            $child->parent_id = $parentBlock->id;
+            $child->save();
+        });
+    }
+
+    private function linkPairedAccountBlock(AccountBlock $block, AccountBlockDTO $pairedAccountBlockDTO): void
+    {
+        $pairedAccountBlock = AccountBlock::findBy('hash', $pairedAccountBlockDTO->hash);
+
+        if ($pairedAccountBlock) {
+            $block->paired_account_block_id = $pairedAccountBlock->id;
+            $block->save();
+
+            $pairedAccountBlock->paired_account_block_id = $block->id;
+            $pairedAccountBlock->save();
+        }
+    }
+
+    private function processBlockData(AccountBlock $block, AccountBlockDTO $accountBlockDTO): void
     {
         Log::debug('Insert Account Block Data', [
             'hash' => $accountBlockDTO->hash,
@@ -101,9 +133,9 @@ class InsertAccountBlock
 
         $decodedData = null;
         $data = base64_decode($accountBlockDTO->data);
-        $fingerprint = ZnnUtilities::getDataFingerprint($data);
-        $contractMethod = $block->toAccount
-            ->contract::whereRelation('methods', 'fingerprint', $fingerprint)
+        $fingerprint = Utilities::getDataFingerprint($data);
+        $contractMethod = ContractMethod::whereRelation('contract', 'name', $block->toAccount->contract?->name)
+            ->where('fingerprint', $fingerprint)
             ->first();
 
         // Fallback for common methods (not related to a specific account)
@@ -140,36 +172,5 @@ class InsertAccountBlock
             'raw' => $accountBlockDTO->data,
             'decoded' => $decodedData,
         ]);
-    }
-
-    private function linkDescendantBlocks(AccountBlock $parentBlock, Collection $descendants): void
-    {
-        $descendants->each(function ($descendant) use ($parentBlock) {
-            $child = AccountBlock::findBy('hash', $descendant->hash);
-
-            // TODO
-            if (! $child) {
-                dd('no child', [
-                    'parent' => $parentBlock->hash,
-                    'child' => $descendant->hash,
-                ]);
-            }
-
-            $child->parent_id = $parentBlock->id;
-            $child->save();
-        });
-    }
-
-    private function linkPairedAccountBlock(AccountBlock $block, AccountBlockDTO $pairedAccountBlockDTO): void
-    {
-        $pairedAccountBlock = AccountBlock::findBy('hash', $pairedAccountBlockDTO->hash);
-
-        if ($pairedAccountBlock) {
-            $block->paired_account_block_id = $pairedAccountBlock->id;
-            $block->save();
-
-            $pairedAccountBlock->paired_account_block_id = $block->id;
-            $pairedAccountBlock->save();
-        }
     }
 }

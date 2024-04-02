@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountBlockData;
 use App\Domains\Nom\Models\Chain;
 use App\Domains\Nom\Models\Contract;
 use App\Domains\Nom\Models\ContractMethod;
@@ -35,21 +36,22 @@ class DatabaseSeeder extends Seeder
         NotificationType::truncate();
         Role::truncate();
         Chain::truncate();
+        Account::truncate();
         Contract::truncate();
         ContractMethod::truncate();
-        Account::truncate();
         Token::truncate();
         Pillar::truncate();
         Momentum::truncate();
         AccountBlock::truncate();
+        AccountBlockData::truncate();
         Schema::enableForeignKeyConstraints();
 
         $this->call([
             NotificationTypesSeeder::class,
             UserRolesSeeder::class,
             ChainsSeeder::class,
-            ContractMethodSeeder::class,
             AccountsSeeder::class,
+            ContractMethodSeeder::class,
             TokensSeeder::class,
             PillarsSeeder::class,
             MomentumsSeeder::class,

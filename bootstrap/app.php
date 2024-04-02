@@ -21,6 +21,9 @@ return Application::configure()
         // channels: __DIR__.'/../routes/channels.php',
         // health: '/up',
     )
+    ->withCommands([
+        __DIR__ . '/../app/Domains/Nom/Console/Commands',
+    ])
     ->withEvents(discover: [
         __DIR__ . '/../app/Domains/Nom/Listeners',
     ])

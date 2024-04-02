@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom;
 
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\Contract;
 use App\Domains\Nom\Models\ContractMethod;
 use Illuminate\Database\Seeder;
@@ -35,6 +36,7 @@ class ContractMethodSeeder extends Seeder
 
             $blockContract = Contract::create([
                 'chain_id' => 1,
+                'account_id' => Account::where('name', 'LIKE', "{$contract}%")->first()?->id,
                 'name' => $contract,
             ]);
 
