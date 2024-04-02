@@ -65,7 +65,7 @@ class BridgeNetworkToken extends Model
 
     public static function findByTokenAddress(int $networkId, string $address): BridgeNetworkToken
     {
-        return static::whereHas('network', fn ($q) => $q->where('id', $networkId))
+        return static::whereRelation('network', 'id', $networkId)
             ->where('token_address', $address)
             ->sole();
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
-use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
 use App\Traits\FindByColumnTrait;
@@ -17,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
@@ -240,36 +238,6 @@ class Account extends Model implements Sitemapable
         $publicKey = base64_decode($this->public_key);
 
         return ZnnUtilities::toHex($publicKey);
-    }
-
-    public function getLiveBalancesAttribute(): Collection
-    {
-        return Cache::rememberForever("{$this->cacheKey()}|getLiveBalancesAttribute", function () {
-            $znn = App::make(ZenonSdk::class);
-            $apiData = $znn->ledger->getAccountInfoByAddress($this->address);
-            $balances = [];
-
-            if ($apiData['status']) {
-                foreach ($apiData['data']->balanceInfoMap as $token => $holdings) {
-                    if (! $holdings->balance) {
-                        continue;
-                    }
-
-                    if (in_array($token, [NetworkTokensEnum::ZNN->value, NetworkTokensEnum::QSR->value])) {
-                        continue;
-                    }
-
-                    $token = Token::whereZts($token)->first();
-                    $balances[] = [
-                        'name' => $token->name,
-                        'token' => $token,
-                        'balance' => $token->getDisplayAmount($holdings->balance),
-                    ];
-                }
-            }
-
-            return collect($balances);
-        });
     }
 
     public function getDisplayZnnBalanceAttribute($decimals = null): string

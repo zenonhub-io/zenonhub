@@ -80,9 +80,7 @@ class PillarDelegator extends Model
 
     public function scopeWithBalance($query)
     {
-        return $query->whereHas('account', function ($q) {
-            $q->where('znn_balance', '>', '0');
-        });
+        return $query->whereRelation('account', 'znn_balance', '>', '0');
     }
 
     //

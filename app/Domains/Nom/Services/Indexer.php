@@ -96,16 +96,9 @@ class Indexer
 
     private function updateCurrentHeight(): void
     {
-        // If db only has genesis data start from height 2, dont reindex genesis
+        // If DB only has genesis data start from height 2, dont reindex genesis
         $dbHeight = Momentum::max('height');
         $this->currentDbHeight = max($dbHeight, 2);
-    }
-
-    private function processMomentums(): void
-    {
-        Cache::put('momentum-count', Momentum::count());
-        Cache::put('transaction-count', AccountBlock::count());
-        Cache::put('address-count', Account::count());
     }
 
     private function updateTokenTransferTotals(Account $account, Account $toAccount, Token $token, \App\Domains\Nom\DataTransferObjects\AccountBlockData $blockData): void

@@ -144,11 +144,6 @@ class Token extends Model implements Sitemapable
     //
     // Scopes
 
-    public function scopeWhereZts($query, $zts)
-    {
-        return $query->where('token_standard', $zts);
-    }
-
     public function scopeWhereListSearch($query, $search)
     {
         return $query->where(function ($q) use ($search) {
