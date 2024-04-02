@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Domains\Nom\Enums\NetworkTokensEnum;
-use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeAdmin;
@@ -21,17 +20,10 @@ function load_account(string $address, ?string $name = null): Account
     $account = Account::findBy('address', $address);
 
     if (! $account) {
-        try {
-            $block = app(ZenonSdk::class)->getFrontierAccountBlock($address);
-        } catch (ZenonRpcException $e) {
-            $block = null;
-        }
-
         $account = Account::create([
             'chain_id' => load_chain()->id,
             'address' => $address,
             'name' => $name,
-            'public_key' => $block?->publicKey,
         ]);
     }
 

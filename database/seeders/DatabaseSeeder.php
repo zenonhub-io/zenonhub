@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         Token::truncate();
         Pillar::truncate();
         Momentum::truncate();
-        //AccountBlock::truncate();
+        AccountBlock::truncate();
         Schema::enableForeignKeyConstraints();
 
         $this->call([
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
             TokensSeeder::class,
             PillarsSeeder::class,
             MomentumsSeeder::class,
-            //AccountBlocksSeeder::class,
+            AccountBlocksSeeder::class,
         ]);
     }
 }

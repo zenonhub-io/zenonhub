@@ -6,6 +6,7 @@ namespace Database\Seeders\Nom;
 
 use App\Domains\Nom\Models\AccountBlock;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class AccountBlocksSeeder extends Seeder
 {
@@ -15,14 +16,7 @@ class AccountBlocksSeeder extends Seeder
     public function run(): void
     {
         $chain = load_chain();
-        $accountBlocks = [
-            [
-                'account' => '',
-                'to_account' => '',
-                'momentum' => '',
-                'hash' => '',
-            ],
-        ];
+        $accountBlocks = Storage::json('genesis/account-blocks.json');
 
         foreach ($accountBlocks as $accountBlock) {
             AccountBlock::insert([
