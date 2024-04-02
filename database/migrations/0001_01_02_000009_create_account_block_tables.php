@@ -47,7 +47,7 @@ return new class extends Migration
             $table->boolean('is_processed')->default(0);
         });
 
-        Artisan::call('db:create-or-update-latest-account-blocks-view');
+        Artisan::call('nom-db:create-or-update-latest-account-blocks-view');
     }
 
     /**

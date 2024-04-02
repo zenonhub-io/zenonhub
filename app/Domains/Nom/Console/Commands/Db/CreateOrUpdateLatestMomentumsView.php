@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands\Db;
+namespace App\Domains\Nom\Console\Commands\Db;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ class CreateOrUpdateLatestMomentumsView extends Command
      *
      * @var string
      */
-    protected $signature = 'db:create-or-update-latest-momentums-view';
+    protected $signature = 'nom-db:create-or-update-latest-momentums-view';
 
     /**
      * The console command description.

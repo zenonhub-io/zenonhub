@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamp('created_at')->nullable();
         });
 
-        Artisan::call('db:create-or-update-latest-momentums-view');
+        Artisan::call('nom-db:create-or-update-latest-momentums-view');
     }
 
     /**
