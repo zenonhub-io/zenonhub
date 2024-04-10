@@ -73,8 +73,8 @@ class Pillars implements ShouldQueue
                 $pillar = Pillar::create([
                     'chain_id' => $chain->id,
                     'owner_id' => $ownerAddress?->id,
-                    'producer_id' => $producerAddress?->id,
-                    'withdraw_id' => $withdrawAddress?->id,
+                    'producer_account_id' => $producerAddress?->id,
+                    'withdraw_account_id' => $withdrawAddress?->id,
                     'name' => $data->name,
                     'slug' => Str::slug($data->name),
                     'weight' => $data->weight,
@@ -93,8 +93,8 @@ class Pillars implements ShouldQueue
                 $missed = true;
             }
 
-            $pillar->producer_id = $producerAddress?->id;
-            $pillar->withdraw_id = $withdrawAddress?->id;
+            $pillar->producer_account_id = $producerAddress?->id;
+            $pillar->withdraw_account_id = $withdrawAddress?->id;
             $pillar->weight = $data->weight;
             $pillar->produced_momentums = $data->currentStats->producedMomentums;
             $pillar->expected_momentums = $data->currentStats->expectedMomentums;

@@ -9,6 +9,11 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    public function setupAccountBlock()
+    {
+
+    }
+
     public function assertComponentRenders(string $expected, string $template, array $data = []): void
     {
         $indenter = new Indenter;

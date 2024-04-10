@@ -82,16 +82,16 @@ class Account extends Model implements Sitemapable
 
     public static function getAllPillarWithdrawAddresses()
     {
-        $withdrawAddresses = Pillar::select('withdraw_id')->distinct()->pluck('withdraw_id');
-        $pastWithdrawAddresses = PillarHistory::select('withdraw_id')->distinct()->pluck('withdraw_id');
+        $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
+        $pastWithdrawAddresses = PillarHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
 
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique();
     }
 
     public static function getAllPillarProducerAddresses()
     {
-        $producerAddresses = Pillar::select('producer_id')->distinct()->pluck('producer_id');
-        $pastProducerAddresses = PillarHistory::select('producer_id')->distinct()->pluck('producer_id');
+        $producerAddresses = Pillar::select('producer_account_id')->distinct()->pluck('producer_account_id');
+        $pastProducerAddresses = PillarHistory::select('producer_account_id')->distinct()->pluck('producer_account_id');
 
         return $producerAddresses->merge($pastProducerAddresses)->unique();
     }
@@ -179,12 +179,12 @@ class Account extends Model implements Sitemapable
 
     public function latestBlock(): HasOne
     {
-        return $this->hasOne(AccountBlock::class, 'account_id')->latestOfMany();
+        return $this->hasOne(AccountBlock::class)->latestOfMany();
     }
 
     public function firstBlock(): HasOne
     {
-        return $this->hasOne(AccountBlock::class, 'account_id')->oldestOfMany();
+        return $this->hasOne(AccountBlock::class)->oldestOfMany();
     }
 
     public function rewards(): HasMany
@@ -346,8 +346,8 @@ class Account extends Model implements Sitemapable
 
     public function getIsPillarWithdrawAddressAttribute(): bool
     {
-        $withdrawAddresses = Pillar::select('withdraw_id')->distinct()->pluck('withdraw_id');
-        $pastWithdrawAddresses = PillarHistory::select('withdraw_id')->distinct()->pluck('withdraw_id');
+        $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
+        $pastWithdrawAddresses = PillarHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
 
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique()->contains($this->id);
     }
@@ -385,7 +385,7 @@ class Account extends Model implements Sitemapable
             return true;
         }
 
-        //        $pillarProducer = Pillar::where('producer_id', $this->id)
+        //        $pillarProducer = Pillar::where('producer_account_id', $this->id)
         //            ->whereNull('revoked_at')
         //            ->first();
         //

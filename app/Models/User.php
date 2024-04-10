@@ -48,7 +48,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'login_ip',
         'two_factor_recovery_codes',
         'two_factor_secret',
-        'two_factor_confirmed_at',
         'email_verified_at',
         'privacy_confirmed_at',
     ];
@@ -64,6 +63,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             'password' => 'hashed',
             'email_verified_at' => 'datetime',
             'privacy_confirmed_at' => 'datetime',
+            'two_factor_confirmed_at' => 'datetime',
             'last_login_at' => 'datetime',
             'last_seen_at' => 'datetime',
         ];

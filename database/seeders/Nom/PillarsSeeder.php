@@ -154,8 +154,8 @@ class PillarsSeeder extends Seeder
             Pillar::insert([
                 'chain_id' => $chain->id,
                 'owner_id' => load_account($pillar['owner'])->id,
-                'producer_id' => load_account($pillar['producer'])->id,
-                'withdraw_id' => load_account($pillar['withdraw'])->id,
+                'producer_account_id' => load_account($pillar['producer'])->id,
+                'withdraw_account_id' => load_account($pillar['withdraw'])->id,
                 'name' => $pillar['name'],
                 'slug' => Str::slug($pillar['name']),
                 'qsr_burn' => 15000000000000,

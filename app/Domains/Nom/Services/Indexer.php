@@ -6,8 +6,8 @@ namespace App\Domains\Nom\Services;
 
 use App\Domains\Nom\Actions\InsertAccountBlock;
 use App\Domains\Nom\Actions\InsertMomentum;
-use App\Domains\Nom\DataTransferObjects\MomentumContentData as MomentumContentDTO;
-use App\Domains\Nom\DataTransferObjects\MomentumData as MomentumDTO;
+use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
+use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Exceptions\IndexerException;
@@ -28,6 +28,8 @@ class Indexer
 
     public function __construct(
         protected ZenonSdk $znn,
+        protected InsertMomentum $insertMomentum,
+        protected InsertAccountBlock $insertAccountBlock,
     ) {
         $this->updateCurrentHeight();
     }
@@ -44,6 +46,11 @@ class Indexer
         $emergencyLock = Cache::lock('indexerEmergencyLock', 0, 'indexer');
 
         if (! $lock->get() || ! $emergencyLock->get()) {
+            Log::debug('Indexer - Locked', [
+                'lock' => $lock->get(),
+                'emergency' => $emergencyLock->get(),
+            ]);
+
             return;
         }
 
@@ -62,10 +69,10 @@ class Indexer
                     // Try catch to commit db changes per momentum, will throw
                     // an exception to the parent try catch to break the loop
                     try {
-                        (new InsertMomentum)->execute($momentumDTO);
+                        $this->insertMomentum->execute($momentumDTO);
 
                         $momentumDTO->content->each(function (MomentumContentDTO $momentumContentDTO) {
-                            (new InsertAccountBlock)->execute($momentumContentDTO);
+                            $this->insertAccountBlock->execute($momentumContentDTO);
                         });
 
                         DB::commit();
@@ -101,7 +108,7 @@ class Indexer
         $this->currentDbHeight = max($dbHeight, 2);
     }
 
-    private function updateTokenTransferTotals(Account $account, Account $toAccount, Token $token, \App\Domains\Nom\DataTransferObjects\AccountBlockData $blockData): void
+    private function updateTokenTransferTotals(Account $account, Account $toAccount, Token $token, \App\Domains\Nom\DataTransferObjects\AccountBlockDTO $blockData): void
     {
         if ($blockData->token && $blockData->amount > 0) {
             $save = false;
@@ -125,7 +132,7 @@ class Indexer
         }
     }
 
-    private function processLiquidityProgramRewards(AccountBlock $block, \App\Domains\Nom\DataTransferObjects\AccountBlockData $blockData): void
+    private function processLiquidityProgramRewards(AccountBlock $block, \App\Domains\Nom\DataTransferObjects\AccountBlockDTO $blockData): void
     {
         if ($block->token?->id === 2 && $blockData->address === config('explorer.liquidity_program_distributor')) {
             AccountReward::create([

@@ -16,12 +16,22 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $indexer = app(App\Domains\Nom\Services\Indexer::class);
-    $indexer->run();
+    //    $MomentumsJson = Storage::json('test-json/multiple-momentums.json');
+    //    $test = \App\Domains\Nom\DataTransferObjects\MomentumDTO::collect($MomentumsJson, \Illuminate\Support\Collection::class);
+    //
+    //    dd($test);
 
-    dd('donme');
+    $momentum = app(App\Domains\Nom\Services\ZenonSdk::class)->getMomentumsByHeight(3, 1);
 
-    $indexer = new App\Domains\Nom\Services\Indexer;
+    dd($momentum->first());
+
+    $momentum = App\Domains\Nom\Models\Momentum::find(1);
+    dd($momentum->toJson());
+
+    $momentumDTO = App\Domains\Nom\DataTransferObjects\MomentumDTO::from('{"id":1,"chain_id":1,"producer_account_id":72,"producer_pillar_id":null,"version":1,"height":1,"hash":"9e204601d1b7b1427fe12bc82622e610d8a6ad43c40abf020eb66e538bb8eeb0","data":"MDAwMDAwMDAwMDAwMDAwMDAwMDA0ZGQwNDA1OTU1NDBkNDNjZThmZjU5NDZlZWFhNDAzZmIxM2QwZTU4MmQ4ZiNXZSBhcmUgYWxsIFNhdG9zaGkjRG9uJ3QgdHJ1c3QuIFZlcmlmeQ==","created_at":"2021-11-24T12:00:00.000000Z"}');
+
+    $account = App\Domains\Nom\Models\Account::find(2);
+    dd($account->contract->methods);
 
     $token = App\Domains\Nom\Models\Token::find(1);
 

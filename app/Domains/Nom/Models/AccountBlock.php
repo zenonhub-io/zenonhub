@@ -47,6 +47,7 @@ class AccountBlock extends Model
         'account_id',
         'to_account_id',
         'momentum_id',
+        'momentum_acknowledged_id',
         'parent_id',
         'paired_account_block_id',
         'token_id',

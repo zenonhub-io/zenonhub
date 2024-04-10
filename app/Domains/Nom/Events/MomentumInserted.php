@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Events;
 
-use App\Domains\Nom\DataTransferObjects\MomentumData as MomentumDTO;
+use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Models\Momentum;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Events;
 
-use App\Domains\Nom\DataTransferObjects\AccountBlockData as AccountBlockDTO;
+use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\Models\AccountBlock;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;

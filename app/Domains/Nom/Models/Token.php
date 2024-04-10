@@ -270,18 +270,38 @@ class Token extends Model implements Sitemapable
         return 0;
     }
 
-    public function getDisplayAmount(mixed $amount): float
+    public function getRawJsonAttribute(): array
+    {
+        $updateCache = true;
+        $cacheKey = "nom.token.rawJson.{$this->id}";
+
+        try {
+            $znn = App::make(ZenonSdk::class);
+            $data = $znn->token->getByZts($this->token_standard)['data'];
+        } catch (Throwable $throwable) {
+            $updateCache = false;
+            $data = Cache::get($cacheKey);
+        }
+
+        if ($updateCache) {
+            Cache::forever($cacheKey, $data);
+        }
+
+        return $data;
+    }
+
+    public function getDisplayAmount(mixed $amount): int|float
     {
         if (is_null($amount)) {
             return 0;
         }
 
         $number = BigDecimal::of(10)->power($this->decimals);
-        $amount = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
-        $number = $amount->toScale($this->decimals, RoundingMode::DOWN);
+        $bigDecimal = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
+        $number = $bigDecimal->toScale($this->decimals, RoundingMode::DOWN);
 
-        if ($this->decimals === 0 || $amount->getScale() === 0) {
-            return $amount->toBigInteger()->toFloat();
+        if ($this->decimals === 0 || $bigDecimal->getScale() === 0) {
+            return $bigDecimal->toBigInteger()->toInt();
         }
 
         return $number->toFloat();
@@ -303,25 +323,5 @@ class Token extends Model implements Sitemapable
     public function getDisplayUsdAmount($amount): float
     {
         return $this->getDisplayAmount($amount) * $this->usd_price;
-    }
-
-    public function getRawJsonAttribute(): array
-    {
-        $updateCache = true;
-        $cacheKey = "nom.token.rawJson.{$this->id}";
-
-        try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->token->getByZts($this->token_standard)['data'];
-        } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
-        }
-
-        return $data;
     }
 }

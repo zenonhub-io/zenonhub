@@ -29,8 +29,10 @@ class ManageTwoFactorAuthentication extends Component
 
     public function mount(): void
     {
-        if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') &&
-            is_null(Auth::user()->two_factor_confirmed_at)) {
+        if (
+            Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') &&
+            is_null(Auth::user()->two_factor_confirmed_at)
+        ) {
             app(DisableTwoFactorAuthentication::class)(Auth::user());
         }
     }

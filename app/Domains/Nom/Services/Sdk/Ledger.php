@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Services\Sdk;
 
-use App\Domains\Nom\DataTransferObjects\AccountBlockData;
-use App\Domains\Nom\DataTransferObjects\MomentumData;
+use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
+use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Support\Collection;
@@ -15,12 +15,12 @@ trait Ledger
     /**
      * @throws ZenonRpcException
      */
-    public function getFrontierMomentum(): MomentumData
+    public function getFrontierMomentum(): MomentumDTO
     {
         try {
             $data = $this->sdk->ledger->getFrontierMomentum()['data'];
 
-            return MomentumData::from($data);
+            return MomentumDTO::from($data);
         } catch (Exception $e) {
             throw new ZenonRpcException('Unable to getFrontierMomentum');
         }
@@ -34,7 +34,7 @@ trait Ledger
         try {
             $data = $this->sdk->ledger->getMomentumsByHeight($height, $count)['data']->list;
 
-            return MomentumData::collect($data, Collection::class);
+            return MomentumDTO::collect($data, Collection::class);
         } catch (Exception $e) {
             throw new ZenonRpcException('Unable to getMomentumsByHeight');
         }
@@ -43,7 +43,7 @@ trait Ledger
     /**
      * @throws ZenonRpcException
      */
-    public function getFrontierAccountBlock(string $address): ?AccountBlockData
+    public function getFrontierAccountBlock(string $address): ?AccountBlockDTO
     {
         try {
             $data = $this->sdk->ledger->getFrontierAccountBlock($address)['data'];
@@ -52,7 +52,7 @@ trait Ledger
                 return null;
             }
 
-            return AccountBlockData::from($data);
+            return AccountBlockDTO::from($data);
         } catch (Exception $e) {
             throw new ZenonRpcException('Unable to getFrontierAccountBlock');
         }
@@ -61,12 +61,12 @@ trait Ledger
     /**
      * @throws ZenonRpcException
      */
-    public function getAccountBlockByHash(string $hash): AccountBlockData
+    public function getAccountBlockByHash(string $hash): AccountBlockDTO
     {
         try {
             $data = $this->sdk->ledger->getAccountBlockByHash($hash)['data'];
 
-            return AccountBlockData::from($data);
+            return AccountBlockDTO::from($data);
         } catch (Exception $e) {
             throw new ZenonRpcException('Unable to getAccountBlockByHash');
         }

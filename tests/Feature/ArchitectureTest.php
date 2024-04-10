@@ -21,6 +21,10 @@ test('controllers have the "Controller" suffix')
     ->expect('App\Http\Controllers')
     ->toHaveSuffix('Controller');
 
+test('DTOs have the "DTO" suffix')
+    ->expect('App\Http\DataTransferObjects')
+    ->toHaveSuffix('DTO');
+
 test('tests have the "Test" suffix')
     ->expect('Tests\Feature')
     ->toHaveSuffix('Test');

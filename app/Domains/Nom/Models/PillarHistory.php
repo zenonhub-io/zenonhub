@@ -33,8 +33,8 @@ class PillarHistory extends Model
      */
     protected $fillable = [
         'pillar_id',
-        'producer_id',
-        'withdraw_id',
+        'producer_account_id',
+        'withdraw_account_id',
         'momentum_rewards',
         'delegate_rewards',
         'is_reward_change',

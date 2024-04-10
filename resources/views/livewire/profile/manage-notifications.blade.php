@@ -31,7 +31,7 @@
                                        type="checkbox"
                                        wire:model="notifications.{{ $notificationType->id }}"
                                        id="{{ $uuid }}"
-                                       {{ $notificationType->is_user_subscribed ? 'checked' : null }}
+                                       {{ $notificationType->checkUserSubscribed($this->getUserProperty()) ? 'checked' : null }}
                                 >
                             </div>
                             <div>

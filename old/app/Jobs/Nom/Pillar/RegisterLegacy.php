@@ -46,8 +46,8 @@ class RegisterLegacy implements ShouldQueue
             $pillar = Pillar::create([
                 'chain_id' => $this->block->chain->id,
                 'owner_id' => $this->block->account->id,
-                'producer_id' => $producerAddress?->id,
-                'withdraw_id' => $withdrawAddress?->id,
+                'producer_account_id' => $producerAddress?->id,
+                'withdraw_account_id' => $withdrawAddress?->id,
                 'name' => $blockData['name'],
                 'slug' => Str::slug($blockData['name']),
                 'weight' => 0,

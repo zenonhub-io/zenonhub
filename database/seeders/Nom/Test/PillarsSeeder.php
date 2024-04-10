@@ -1,0 +1,65 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Seeders\Nom\Test;
+
+use App\Domains\Nom\DataTransferObjects\PillarDTO;
+use App\Domains\Nom\Models\Pillar;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class PillarsSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $chain = load_chain();
+        $pillarsJson = Storage::json('nom-json/test/pillars.json');
+        $pillarsDTO = PillarDTO::collect($pillarsJson, Collection::class);
+
+        $pillarsDTO->each(function ($pillarDTO) use ($chain) {
+
+            $owner = load_account($pillarDTO->ownerAddress);
+            $producer = load_account($pillarDTO->producerAddress);
+            $withdraw = load_account($pillarDTO->withdrawAddress);
+
+            $pillar = Pillar::create([
+                'chain_id' => $chain->id,
+                'owner_id' => $owner->id,
+                'producer_account_id' => $producer->id,
+                'withdraw_account_id' => $withdraw->id,
+                'name' => $pillarDTO->name,
+                'slug' => Str::slug($pillarDTO->name),
+                'qsr_burn' => 15000000000000,
+                'weight' => 0,
+                'produced_momentums' => 0,
+                'expected_momentums' => 0,
+                'missed_momentums' => 0,
+                'momentum_rewards' => 0,
+                'delegate_rewards' => 0,
+                'az_engagement' => '0.00',
+                'az_avg_vote_time' => null,
+                'avg_momentums_produced' => 0,
+                'total_momentums_produced' => 0,
+                'is_legacy' => 1,
+                'revoked_at' => null,
+                'created_at' => '2021-11-24 12:00:00',
+                'updated_at' => null,
+            ]);
+
+            $pillar->history()->create([
+                'producer_account_id' => $producer->id,
+                'withdraw_account_id' => $withdraw->id,
+                'momentum_rewards' => $pillarDTO->giveMomentumRewardPercentage,
+                'delegate_rewards' => $pillarDTO->giveDelegateRewardPercentage,
+                'is_reward_change' => 1,
+                'updated_at' => '2021-11-24 12:00:00',
+            ]);
+        });
+    }
+}

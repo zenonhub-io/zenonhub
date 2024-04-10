@@ -55,8 +55,8 @@ class UpdatePillar implements ShouldQueue
 
         PillarHistory::create([
             'pillar_id' => $pillar->id,
-            'producer_id' => $producerAddress?->id,
-            'withdraw_id' => $rewardAddress?->id,
+            'producer_account_id' => $producerAddress?->id,
+            'withdraw_account_id' => $rewardAddress?->id,
             'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
             'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
             'is_reward_change' => $rewardsChanged,
@@ -65,8 +65,8 @@ class UpdatePillar implements ShouldQueue
 
         $pillar->momentum_rewards = $blockData['giveBlockRewardPercentage'];
         $pillar->delegate_rewards = $blockData['giveDelegateRewardPercentage'];
-        $pillar->producer_id = $producerAddress?->id;
-        $pillar->withdraw_id = $rewardAddress?->id;
+        $pillar->producer_account_id = $producerAddress?->id;
+        $pillar->withdraw_account_id = $rewardAddress?->id;
         $pillar->save();
         $pillar->refresh();
 

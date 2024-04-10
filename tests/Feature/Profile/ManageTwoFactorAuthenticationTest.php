@@ -8,7 +8,7 @@ use Laravel\Fortify\Features;
 use Livewire\Livewire;
 
 test('two factor authentication can be enabled', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $this->withSession(['auth.password_confirmed_at' => time()]);
 
@@ -22,7 +22,7 @@ test('two factor authentication can be enabled', function () {
 })->skip(fn () => ! Features::canManageTwoFactorAuthentication(), 'Two factor authentication is not enabled.')->group('profile', '2fa');
 
 test('recovery codes can be regenerated', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $this->withSession(['auth.password_confirmed_at' => time()]);
 
@@ -39,7 +39,7 @@ test('recovery codes can be regenerated', function () {
 })->skip(fn () => ! Features::canManageTwoFactorAuthentication(), 'Two factor authentication is not enabled.')->group('profile', '2fa');
 
 test('two factor authentication can be disabled', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $this->withSession(['auth.password_confirmed_at' => time()]);
 

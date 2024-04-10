@@ -7,7 +7,7 @@ use App\Models\User;
 use Livewire\Livewire;
 
 test('current profile details are available', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $component = Livewire::test(UpdateDetails::class);
 
@@ -17,7 +17,7 @@ test('current profile details are available', function () {
 })->group('profile', 'details');
 
 test('profile details can be updated', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     Livewire::test(UpdateDetails::class)
         ->set('state', [

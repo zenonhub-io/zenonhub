@@ -7,7 +7,7 @@ use App\Models\User;
 use Livewire\Livewire;
 
 test('api tokens can be created', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $component = Livewire::test(ManageApiTokens::class)
         ->set(['createApiTokenForm' => [
@@ -24,7 +24,7 @@ test('api tokens can be created', function () {
 })->group('profile', 'manage-api-tokens');
 
 test('api tokens can be viewed', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $user->tokens()->create([
         'name' => 'Test Token',
@@ -37,7 +37,7 @@ test('api tokens can be viewed', function () {
 })->group('profile', 'manage-api-tokens');
 
 test('api tokens can be deleted', function () {
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     $token = $user->tokens()->create([
         'name' => 'Test Token',

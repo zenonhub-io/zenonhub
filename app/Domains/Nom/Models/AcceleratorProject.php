@@ -118,7 +118,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function latestPhase(): HasOne
     {
-        return $this->hasOne(AcceleratorPhase::class, 'accelerator_project_id')->latestOfMany();
+        return $this->hasOne(AcceleratorPhase::class)->latestOfMany();
     }
 
     public function votes(): MorphMany

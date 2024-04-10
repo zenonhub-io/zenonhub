@@ -48,8 +48,8 @@ class Pillar extends Model implements Sitemapable
     protected $fillable = [
         'chain_id',
         'owner_id',
-        'producer_id',
-        'withdraw_id',
+        'producer_account_id',
+        'withdraw_account_id',
         'name',
         'slug',
         'qsr_burn',

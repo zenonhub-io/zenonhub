@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use Database\Seeders\GenesisMomentum\NomAccountBlocksTableSeeder;
-use Database\Seeders\GenesisMomentum\NomAccountsTableSeeder;
-use Database\Seeders\GenesisMomentum\NomChainsTableSeeder;
-use Database\Seeders\GenesisMomentum\NomContractMethodsTableSeeder;
-use Database\Seeders\GenesisMomentum\NomContractsTableSeeder;
-use Database\Seeders\GenesisMomentum\NomMomentumsTableSeeder;
-use Database\Seeders\GenesisMomentum\NomPillarsTableSeeder;
-use Database\Seeders\GenesisMomentum\NomTokensTableSeeder;
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountBlockData;
+use App\Domains\Nom\Models\Chain;
+use App\Domains\Nom\Models\Contract;
+use App\Domains\Nom\Models\ContractMethod;
+use App\Domains\Nom\Models\Momentum;
+use App\Domains\Nom\Models\Pillar;
+use App\Domains\Nom\Models\Token;
+use Database\Seeders\Nom\AccountBlocksSeeder;
+use Database\Seeders\Nom\AccountsSeeder;
+use Database\Seeders\Nom\ChainsSeeder;
+use Database\Seeders\Nom\ContractMethodSeeder;
+use Database\Seeders\Nom\MomentumsSeeder;
+use Database\Seeders\Nom\PillarsSeeder;
+use Database\Seeders\Nom\TokensSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -23,18 +31,25 @@ class GenesisSeeder extends Seeder
     public function run(): void
     {
         Schema::disableForeignKeyConstraints();
+        Chain::truncate();
+        Account::truncate();
+        Contract::truncate();
+        ContractMethod::truncate();
+        Token::truncate();
+        Pillar::truncate();
+        Momentum::truncate();
+        AccountBlock::truncate();
+        AccountBlockData::truncate();
+        Schema::enableForeignKeyConstraints();
 
         $this->call([
-            //NomAccountBlocksTableSeeder::class,
-            //NomAccountsTableSeeder::class,
-            NomChainsTableSeeder::class,
-            NomContractMethodsTableSeeder::class,
-            NomContractsTableSeeder::class,
-            //NomMomentumsTableSeeder::class,
-            NomPillarsTableSeeder::class,
-            NomTokensTableSeeder::class,
+            ChainsSeeder::class,
+            AccountsSeeder::class,
+            ContractMethodSeeder::class,
+            TokensSeeder::class,
+            PillarsSeeder::class,
+            MomentumsSeeder::class,
+            AccountBlocksSeeder::class,
         ]);
-
-        Schema::enableForeignKeyConstraints();
     }
 }

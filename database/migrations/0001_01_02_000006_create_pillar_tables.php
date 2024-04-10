@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
             $table->foreignId('owner_id')->nullable()->references('id')->on('nom_accounts');
-            $table->foreignId('producer_id')->nullable()->references('id')->on('nom_accounts');
-            $table->foreignId('withdraw_id')->nullable()->references('id')->on('nom_accounts');
+            $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts');
+            $table->foreignId('withdraw_account_id')->nullable()->references('id')->on('nom_accounts');
             $table->string('name')->index();
             $table->string('slug')->index();
             $table->bigInteger('qsr_burn')->default(15000000000000);
@@ -41,8 +41,8 @@ return new class extends Migration
         Schema::create('nom_pillar_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->cascadeOnDelete();
-            $table->foreignId('producer_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('withdraw_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
+            $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
+            $table->foreignId('withdraw_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
             $table->integer('momentum_rewards')->default(0);
             $table->integer('delegate_rewards')->default(0);
             $table->boolean('is_reward_change')->default(0);

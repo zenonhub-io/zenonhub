@@ -18,7 +18,7 @@ test('component displays notification subscriptions', function () {
 
 test('user can subscribe to notifications', function () {
     $this->seed(Database\Seeders\NotificationTypesSeeder::class);
-    $this->actingAs($user = User::factory()->create());
+    $this->actingAs($user = User::factory()->create()->fresh());
 
     expect($user->fresh()->notificationTypes)->toHaveCount(0);
 

@@ -16,7 +16,7 @@ class AccountBlocksSeeder extends Seeder
     public function run(): void
     {
         $chain = load_chain();
-        $accountBlocks = Storage::json('genesis/account-blocks.json');
+        $accountBlocks = Storage::json('nom-json/genesis/account-blocks.json');
 
         foreach ($accountBlocks as $accountBlock) {
             AccountBlock::insert([

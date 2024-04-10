@@ -48,7 +48,7 @@ class VoteByProdAddress implements ShouldQueue
         $blockData = $this->block->data->decoded;
 
         // Load the pillar that voted
-        $pillar = Pillar::where('producer_id', $this->block->address_id)->first();
+        $pillar = Pillar::where('producer_account_id', $this->block->address_id)->first();
 
         if (! $pillar) {
             return;
