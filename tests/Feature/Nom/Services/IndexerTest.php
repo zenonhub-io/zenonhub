@@ -8,17 +8,17 @@ use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\Indexer;
 use App\Domains\Nom\Services\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\TestGenesisSeeder;
+use Database\Seeders\TestDatabaseSeeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Mockery\MockInterface;
 
-const INDEXER_TEST_TX_HASH1 = '1000000000000000000000000000000000000000000000000000000000000002';
-const INDEXER_TEST_TX_HASH2 = '2000000000000000000000000000000000000000000000000000000000000002';
+const INDEXER_TEST_TX_HASH1 = 'txAddr1000000000000000000000000000000000000000000000000000000002';
+const INDEXER_TEST_TX_HASH2 = 'txAddr2000000000000000000000000000000000000000000000000000000002';
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(TestGenesisSeeder::class);
+    $this->seed(TestDatabaseSeeder::class);
 
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {
 
@@ -71,6 +71,6 @@ it('inserts five momentums', function () {
     $latestMomentum = Momentum::latest()->first();
 
     expect($momentumCount)->toBe(5)
-        ->and($latestMomentum->hash)->toBe('0000000000000000000000000000000000000000000000000000000000000005');
+        ->and($latestMomentum->hash)->toBe('momentum00000000000000000000000000000000000000000000000000000005');
 
 })->group('nom-services', 'indexer');

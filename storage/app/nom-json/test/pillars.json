@@ -1,0 +1,69 @@
+[{
+    "name": "Pillar1",
+    "rank": 0,
+    "type": 1,
+    "ownerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar1",
+    "producerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1",
+    "withdrawAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar1",
+    "isRevocable": false,
+    "revokeCooldown": 2314000,
+    "revokeTimestamp": 0,
+    "giveMomentumRewardPercentage": 69,
+    "giveDelegateRewardPercentage": 99,
+    "currentStats": {
+        "producedMomentums": 1,
+        "expectedMomentums": 1
+    },
+    "weight": "1"
+}, {
+    "name": "Pillar2",
+    "rank": 0,
+    "type": 1,
+    "ownerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar2",
+    "producerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod2",
+    "withdrawAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar2",
+    "isRevocable": false,
+    "revokeCooldown": 2314000,
+    "revokeTimestamp": 0,
+    "giveMomentumRewardPercentage": 69,
+    "giveDelegateRewardPercentage": 99,
+    "currentStats": {
+        "producedMomentums": 1,
+        "expectedMomentums": 1
+    },
+    "weight": "2"
+}, {
+    "name": "Pillar3",
+    "rank": 1,
+    "type": 1,
+    "ownerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar3",
+    "producerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod3",
+    "withdrawAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar3",
+    "isRevocable": false,
+    "revokeCooldown": 2314000,
+    "revokeTimestamp": 0,
+    "giveMomentumRewardPercentage": 69,
+    "giveDelegateRewardPercentage": 99,
+    "currentStats": {
+        "producedMomentums": 1,
+        "expectedMomentums": 1
+    },
+    "weight": "3"
+}, {
+    "name": "Pillar4",
+    "rank": 0,
+    "type": 1,
+    "ownerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar4",
+    "producerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod4",
+    "withdrawAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar4",
+    "isRevocable": false,
+    "revokeCooldown": 2314000,
+    "revokeTimestamp": 0,
+    "giveMomentumRewardPercentage": 69,
+    "giveDelegateRewardPercentage": 99,
+    "currentStats": {
+        "producedMomentums": 1,
+        "expectedMomentums": 1
+    },
+    "weight": "4"
+}]

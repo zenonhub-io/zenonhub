@@ -16,7 +16,7 @@ class AccountBlockDTO extends Data
         public string $hash,
         public string $previousHash,
         public int $height,
-        public ?MomentumAcknowledgedDTO $momentumAcknowledged,
+        public MomentumAcknowledgedDTO $momentumAcknowledged,
         public string $address,
         public string $toAddress,
         public string $amount,
