@@ -4,11 +4,11 @@
         "version": 1,
         "chainIdentifier": 1,
         "blockType": 2,
-        "hash": "1000000000000000000000000000000000000000000000000000000000000002",
-        "previousHash": "1000000000000000000000000000000000000000000000000000000000000001",
+        "hash": "txAddr1000000000000000000000000000000000000000000000000000000001",
+        "previousHash": "txAddr1000000000000000000000000000000000000000000000000000000000",
         "height": 1,
         "momentumAcknowledged": {
-            "hash": "0000000000000000000000000000000000000000000000000000000000000001",
+            "hash": "momentum00000000000000000000000000000000000000000000000000000001",
             "height": 1
         },
         "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
@@ -30,7 +30,43 @@
         "confirmationDetail": {
             "numConfirmations": 1,
             "momentumHeight": 2,
-            "momentumHash": "0000000000000000000000000000000000000000000000000000000000000002",
+            "momentumHash": "momentum00000000000000000000000000000000000000000000000000000002",
+            "momentumTimestamp": 1637755210
+        },
+        "pairedAccountBlock": null
+    },
+    {
+        "_comment": "Unreceived send TX",
+        "version": 1,
+        "chainIdentifier": 1,
+        "blockType": 2,
+        "hash": "txAddr1000000000000000000000000000000000000000000000000000000002",
+        "previousHash": "txAddr1000000000000000000000000000000000000000000000000000000001",
+        "height": 1,
+        "momentumAcknowledged": {
+            "hash": "momentum00000000000000000000000000000000000000000000000000000001",
+            "height": 1
+        },
+        "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
+        "toAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr2",
+        "amount": "10000000000",
+        "tokenStandard": "zts1znnxxxxxxxxxxxxx9z4ulx",
+        "fromBlockHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "descendantBlocks": [],
+        "data": "",
+        "fusedPlasma": 0,
+        "difficulty": 0,
+        "nonce": "0000000000000000",
+        "basePlasma": 0,
+        "usedPlasma": 0,
+        "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "publicKey": null,
+        "signature": null,
+        "token": null,
+        "confirmationDetail": {
+            "numConfirmations": 1,
+            "momentumHeight": 2,
+            "momentumHash": "momentum00000000000000000000000000000000000000000000000000000002",
             "momentumTimestamp": 1637755210
         },
         "pairedAccountBlock": null
@@ -40,11 +76,11 @@
         "version": 1,
         "chainIdentifier": 1,
         "blockType": 3,
-        "hash": "2000000000000000000000000000000000000000000000000000000000000002",
-        "previousHash": "2000000000000000000000000000000000000000000000000000000000000001",
+        "hash": "txAddr2000000000000000000000000000000000000000000000000000000001",
+        "previousHash": "txAddr2000000000000000000000000000000000000000000000000000000000",
         "height": 1,
         "momentumAcknowledged": {
-            "hash": "0000000000000000000000000000000000000000000000000000000000000002",
+            "hash": "momentum00000000000000000000000000000000000000000000000000000002",
             "height": 2
         },
         "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr2",
@@ -66,18 +102,18 @@
         "confirmationDetail": {
             "numConfirmations": 1,
             "momentumHeight": 3,
-            "momentumHash": "0000000000000000000000000000000000000000000000000000000000000003",
+            "momentumHash": "momentum00000000000000000000000000000000000000000000000000000003",
             "momentumTimestamp": 1637755220
         },
         "pairedAccountBlock": {
             "version": 1,
             "chainIdentifier": 1,
             "blockType": 2,
-            "hash": "1000000000000000000000000000000000000000000000000000000000000002",
-            "previousHash": "1000000000000000000000000000000000000000000000000000000000000001",
+            "hash": "txAddr1000000000000000000000000000000000000000000000000000000001",
+            "previousHash": "txAddr1000000000000000000000000000000000000000000000000000000000",
             "height": 1,
             "momentumAcknowledged": {
-                "hash": "0000000000000000000000000000000000000000000000000000000000000001",
+                "hash": "momentum00000000000000000000000000000000000000000000000000000001",
                 "height": 1
             },
             "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
@@ -99,118 +135,10 @@
             "confirmationDetail": {
                 "numConfirmations": 1,
                 "momentumHeight": 2,
-                "momentumHash": "0000000000000000000000000000000000000000000000000000000000000002",
+                "momentumHash": "momentum00000000000000000000000000000000000000000000000000000002",
                 "momentumTimestamp": 1637755210
             },
             "pairedAccountBlock": null
         }
     }
-
-    // 1 - collect reward - c5fd4272e18300a65850029f7fa0f372d372fac89e64bb6d56a205ef7697b46b
-    {
-        "_comment": "Collect Reward from pillar contract - 1st TX in descendants chain",
-        "version": 1,
-        "chainIdentifier": 1,
-        "blockType": 2,
-        "hash": "1000000000000000000000000000000000000000000000000000000000000003",
-        "previousHash": "1000000000000000000000000000000000000000000000000000000000000002",
-        "height": 3,
-        "momentumAcknowledged": {
-            "hash": "0000000000000000000000000000000000000000000000000000000000000003",
-            "height": 3
-        },
-        "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
-        "toAddress": "z1qxemdeddedxpyllarxxxxxxxxxxxxxxxsy3fmg",
-        "amount": "0",
-        "tokenStandard": "zts1znnxxxxxxxxxxxxx9z4ulx",
-        "fromBlockHash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "descendantBlocks": [],
-        "data": "r0PT8A==",
-        "fusedPlasma": 52500,
-        "difficulty": 0,
-        "nonce": "0000000000000000",
-        "basePlasma": 52500,
-        "usedPlasma": 52500,
-        "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "publicKey": null,
-        "signature": null,
-        "token": {
-            "name": "ZNN",
-            "symbol": "ZNN",
-            "domain": "zenon.network",
-            "totalSupply": "1000000000000000",
-            "decimals": 8,
-            "owner": "z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0",
-            "tokenStandard": "zts1znnxxxxxxxxxxxxx9z4ulx",
-            "maxSupply": "9007199254740991",
-            "isBurnable": true,
-            "isMintable": true,
-            "isUtility": true
-        },
-        "confirmationDetail": {
-            "numConfirmations": 1,
-            "momentumHeight": 4,
-            "momentumHash": "0000000000000000000000000000000000000000000000000000000000000004",
-            "momentumTimestamp": 1637755230
-        },
-        "pairedAccountBlock": null
-    },
-
-    // 2 - mint - 8844e149d8e29c13364ecdc61226a910722f5d066fb8dcc76b1e842ec36eb58a
-    {
-        "_comment": "Mint triggered from collect rewards - 2st TX in descendants chain",
-        "version": 1,
-        "chainIdentifier": 1,
-        "blockType": 4,
-        "hash": "embed00000000000000000000000000000000000000000000000000000000001",
-        "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "height": 1,
-        "momentumAcknowledged": {
-            "hash": "0000000000000000000000000000000000000000000000000000000000000004",
-            "height": 4
-        },
-        "address": "z1qxemdeddedxpyllarxxxxxxxxxxxxxxxsy3fmg",
-        "toAddress": "z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0",
-        "amount": "0",
-        "tokenStandard": "zts1znnxxxxxxxxxxxxx9z4ulx",
-        "fromBlockHash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "descendantBlocks": [],
-        "data": "zXD5vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU5mMYxjGMYxjGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABLM\/dAAAAAAAAAAAAAAAAAAaxZOdQM+azszZjPLM7ym4xnp2Q==",
-        "fusedPlasma": 0,
-        "difficulty": 0,
-        "nonce": "0000000000000000",
-        "basePlasma": 0,
-        "usedPlasma": 0,
-        "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "publicKey": null,
-        "signature": null,
-        "token": {
-            "name": "ZNN",
-            "symbol": "ZNN",
-            "domain": "zenon.network",
-            "totalSupply": "1000000000000000",
-            "decimals": 8,
-            "owner": "z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0",
-            "tokenStandard": "zts1znnxxxxxxxxxxxxx9z4ulx",
-            "maxSupply": "9007199254740991",
-            "isBurnable": true,
-            "isMintable": true,
-            "isUtility": true
-        },
-        "confirmationDetail": {
-            "numConfirmations": 1,
-            "momentumHeight": 5,
-            "momentumHash": "0000000000000000000000000000000000000000000000000000000000000005",
-            "momentumTimestamp": 1637755240
-        },
-        "pairedAccountBlock": null
-    }
-
-
-    // 1 - collect reward - c5fd4272e18300a65850029f7fa0f372d372fac89e64bb6d56a205ef7697b46b - momentum 1
-    // 2 - mint - 8844e149d8e29c13364ecdc61226a910722f5d066fb8dcc76b1e842ec36eb58a - descendant of 3 - momentum 2
-    // 3 - contract receive (paired 1) - c6d5ed95c532758f5dddd5c8e45aadd1c7b33620d71ce10edf11aeb7d40f4f95 - momentum 2
-    // 4 - transfer - 22cf116ac4a9bb5835ba594f024be2548edbc0a7099a4fe8632b320fb9f6e08f - descendant of 5 - momentum 3
-    // 5 - contract receive (paired 2) - 4af38eefadf1fb15fb32044611e88468e08853ca35c6f3159828831a375aa905 - momentum 3
-    // 6 - receive (paired 4) - 13184162fea7e5621e4b0904ef8f1be0918c00bbff556c6e538ce43a33326738 - momentum 4
 ]

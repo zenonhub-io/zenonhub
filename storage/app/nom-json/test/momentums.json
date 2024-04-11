@@ -1,71 +1,60 @@
-[{
-    "version": 1,
-    "chainIdentifier": 1,
-    "hash": "0000000000000000000000000000000000000000000000000000000000000002",
-    "previousHash": "0000000000000000000000000000000000000000000000000000000000000001",
-    "height": 2,
-    "timestamp": 1637755210,
-    "data": "",
-    "content": [
-        {
-            "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
-            "hash": "1000000000000000000000000000000000000000000000000000000000000002",
-            "height": 1
-        }
-    ],
-    "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-    "publicKey": null,
-    "signature": null,
-    "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1"
-},{
-    "version": 1,
-    "chainIdentifier": 1,
-    "hash": "0000000000000000000000000000000000000000000000000000000000000003",
-    "previousHash": "0000000000000000000000000000000000000000000000000000000000000002",
-    "height": 3,
-    "timestamp": 1637755220,
-    "data": "",
-    "content": [
-        {
-            "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr2",
-            "hash": "2000000000000000000000000000000000000000000000000000000000000002",
-            "height": 1
-        }
-    ],
-    "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-    "publicKey": null,
-    "signature": null,
-    "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod3"
-},{
-    "version": 1,
-    "chainIdentifier": 1,
-    "hash": "0000000000000000000000000000000000000000000000000000000000000004",
-    "previousHash": "0000000000000000000000000000000000000000000000000000000000000003",
-    "height": 4,
-    "timestamp": 1637755230,
-    "data": "",
-    "content": [
-        {
-            "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
-            "hash": "1000000000000000000000000000000000000000000000000000000000000002",
-            "height": 3
-        }
-    ],
-    "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-    "publicKey": null,
-    "signature": null,
-    "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod4"
-},{
-    "version": 1,
-    "chainIdentifier": 1,
-    "hash": "0000000000000000000000000000000000000000000000000000000000000005",
-    "previousHash": "0000000000000000000000000000000000000000000000000000000000000004",
-    "height": 5,
-    "timestamp": 1637755240,
-    "data": "",
-    "content": [],
-    "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-    "publicKey": null,
-    "signature": null,
-    "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1"
-}]
+[
+    {
+        "version": 1,
+        "chainIdentifier": 1,
+        "hash": "momentum00000000000000000000000000000000000000000000000000000001",
+        "previousHash": "momentum00000000000000000000000000000000000000000000000000000000",
+        "height": 1,
+        "timestamp": 1637755200,
+        "data": "",
+        "content": [],
+        "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "publicKey": null,
+        "signature": null,
+        "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1"
+    },
+    {
+        "version": 1,
+        "chainIdentifier": 1,
+        "hash": "momentum00000000000000000000000000000000000000000000000000000002",
+        "previousHash": "momentum00000000000000000000000000000000000000000000000000000001",
+        "height": 2,
+        "timestamp": 1637755210,
+        "data": "",
+        "content": [
+            {
+                "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
+                "hash": "txAddr1000000000000000000000000000000000000000000000000000000001",
+                "height": 1
+            },{
+                "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1",
+                "hash": "txAddr1000000000000000000000000000000000000000000000000000000002",
+                "height": 1
+            }
+        ],
+        "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "publicKey": null,
+        "signature": null,
+        "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod2"
+    },
+    {
+        "version": 1,
+        "chainIdentifier": 1,
+        "hash": "momentum00000000000000000000000000000000000000000000000000000003",
+        "previousHash": "momentum00000000000000000000000000000000000000000000000000000001",
+        "height": 3,
+        "timestamp": 1637755220,
+        "data": "",
+        "content": [
+            {
+                "address": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr2",
+                "hash": "txAddr2000000000000000000000000000000000000000000000000000000001",
+                "height": 1
+            }
+        ],
+        "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "publicKey": null,
+        "signature": null,
+        "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1"
+    }
+]

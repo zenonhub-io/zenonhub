@@ -19,34 +19,33 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(TestDatabaseSeeder::class);
 
+    $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
+    $momentumsJson = Storage::json('nom-json/test/momentums.json');
+    $this->accountBlockDTOs = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
+    $this->momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
+
     $this->hash1 = 'txAddr1000000000000000000000000000000000000000000000000000000001';
     $this->hash2 = 'txAddr1000000000000000000000000000000000000000000000000000000002';
     $this->hash3 = 'txAddr2000000000000000000000000000000000000000000000000000000001';
-
-    $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
-    $this->accountBlockDTOs = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
-
-    $momentumsJson = Storage::json('nom-json/test/momentums.json');
-    $this->momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
 
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {
 
         $mock->shouldReceive('getAccountBlockByHash')
             ->withArgs([$this->hash1])
-            ->andReturn($this->accountBlockDTOs->where('hash', $this->hash1)->first());
+            ->andReturn($this->accountBlockDTOs->firstWhere('hash', $this->hash1));
 
         $mock->shouldReceive('getAccountBlockByHash')
             ->withArgs([$this->hash2])
-            ->andReturn($this->accountBlockDTOs->where('hash', $this->hash2)->first());
+            ->andReturn($this->accountBlockDTOs->firstWhere('hash', $this->hash2));
 
         $mock->shouldReceive('getAccountBlockByHash')
             ->withArgs([$this->hash3])
-            ->andReturn($this->accountBlockDTOs->where('hash', $this->hash3)->first());
+            ->andReturn($this->accountBlockDTOs->firstWhere('hash', $this->hash3));
     });
 
-    $genesisMomentum = $this->momentumDTOs->where('height', 1)->first();
-    $firstMomentum = $this->momentumDTOs->where('height', 2)->first();
-    $secondMomentum = $this->momentumDTOs->where('height', 3)->first();
+    $genesisMomentum = $this->momentumDTOs->firstWhere('height', 1);
+    $firstMomentum = $this->momentumDTOs->firstWhere('height', 2);
+    $secondMomentum = $this->momentumDTOs->firstWhere('height', 3);
 
     Momentum::insert([
         [

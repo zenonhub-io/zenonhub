@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\Indexer;
 use App\Domains\Nom\Services\ZenonSdk;
@@ -13,12 +14,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Mockery\MockInterface;
 
-const INDEXER_TEST_TX_HASH1 = 'txAddr1000000000000000000000000000000000000000000000000000000002';
-const INDEXER_TEST_TX_HASH2 = 'txAddr2000000000000000000000000000000000000000000000000000000002';
-
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(TestDatabaseSeeder::class);
+
+    $this->hash1 = 'txAddr1000000000000000000000000000000000000000000000000000000001';
+    $this->hash2 = 'txAddr1000000000000000000000000000000000000000000000000000000002';
+    $this->hash3 = 'txAddr2000000000000000000000000000000000000000000000000000000001';
 
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {
 
@@ -36,12 +38,16 @@ beforeEach(function () {
             ->andReturn($momentumDTOs);
 
         $mock->shouldReceive('getAccountBlockByHash')
-            ->withArgs([INDEXER_TEST_TX_HASH1])
-            ->andReturn($accountBlockDTOs->where('hash', INDEXER_TEST_TX_HASH1)->first());
+            ->withArgs([$this->hash1])
+            ->andReturn($accountBlockDTOs->firstWhere('hash', $this->hash1));
 
         $mock->shouldReceive('getAccountBlockByHash')
-            ->withArgs([INDEXER_TEST_TX_HASH2])
-            ->andReturn($accountBlockDTOs->where('hash', INDEXER_TEST_TX_HASH2)->first());
+            ->withArgs([$this->hash2])
+            ->andReturn($accountBlockDTOs->firstWhere('hash', $this->hash2));
+
+        $mock->shouldReceive('getAccountBlockByHash')
+            ->withArgs([$this->hash3])
+            ->andReturn($accountBlockDTOs->firstWhere('hash', $this->hash3));
     });
 });
 
@@ -50,7 +56,7 @@ it('respects the lock', function () {
 
     app(Indexer::class)->run();
 
-    expect(Momentum::count())->toBe(1);
+    expect(Momentum::count())->toBe(0);
 })->group('nom-services', 'indexer');
 
 it('respects the emergency lock', function () {
@@ -59,18 +65,22 @@ it('respects the emergency lock', function () {
 
     app(Indexer::class)->run();
 
-    expect(Momentum::count())->toBe(1);
+    expect(Momentum::count())->toBe(0);
 
 })->group('nom-services', 'indexer');
 
-it('inserts five momentums', function () {
+it('inserts momentums', function () {
 
     app(Indexer::class)->run();
 
-    $momentumCount = Momentum::count();
-    $latestMomentum = Momentum::latest()->first();
+    expect(Momentum::count())->toBe(3);
 
-    expect($momentumCount)->toBe(5)
-        ->and($latestMomentum->hash)->toBe('momentum00000000000000000000000000000000000000000000000000000005');
+})->group('nom-services', 'indexer');
+
+it('inserts account blocks', function () {
+
+    app(Indexer::class)->run();
+
+    expect(AccountBlock::count())->toBe(3);
 
 })->group('nom-services', 'indexer');
