@@ -6,6 +6,8 @@ use App\Livewire\Profile\ManageApiTokens;
 use App\Models\User;
 use Livewire\Livewire;
 
+uses()->group('profile', 'manage-api-tokens');
+
 test('api tokens can be created', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
 
@@ -21,7 +23,7 @@ test('api tokens can be created', function () {
     expect($user->fresh()->tokens)->toHaveCount(1);
     expect($user->fresh()->tokens->first())
         ->name->toEqual('Test Token');
-})->group('profile', 'manage-api-tokens');
+});
 
 test('api tokens can be viewed', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
@@ -34,7 +36,7 @@ test('api tokens can be viewed', function () {
     Livewire::test(ManageApiTokens::class)
         ->assertSee('Test Token');
 
-})->group('profile', 'manage-api-tokens');
+});
 
 test('api tokens can be deleted', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
@@ -51,4 +53,4 @@ test('api tokens can be deleted', function () {
         ->call('deleteApiToken');
 
     expect($user->fresh()->tokens)->toHaveCount(0);
-})->group('profile', 'manage-api-tokens');
+});

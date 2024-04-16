@@ -40,8 +40,8 @@ class PillarsSeeder extends Seeder
                 'produced_momentums' => 0,
                 'expected_momentums' => 0,
                 'missed_momentums' => 0,
-                'momentum_rewards' => 0,
-                'delegate_rewards' => 0,
+                'momentum_rewards' => $pillarDTO->giveMomentumRewardPercentage,
+                'delegate_rewards' => $pillarDTO->giveDelegateRewardPercentage,
                 'az_engagement' => '0.00',
                 'az_avg_vote_time' => null,
                 'avg_momentums_produced' => 0,
@@ -52,11 +52,16 @@ class PillarsSeeder extends Seeder
                 'updated_at' => null,
             ]);
 
+            // Create history with different producer address
+            if ($pillar->id === 1) {
+                $producer = load_account('z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod0');
+            }
+
             $pillar->history()->create([
                 'producer_account_id' => $producer->id,
                 'withdraw_account_id' => $withdraw->id,
-                'momentum_rewards' => $pillarDTO->giveMomentumRewardPercentage,
-                'delegate_rewards' => $pillarDTO->giveDelegateRewardPercentage,
+                'momentum_rewards' => $pillarDTO->giveMomentumRewardPercentage - 1,
+                'delegate_rewards' => $pillarDTO->giveDelegateRewardPercentage - 1,
                 'is_reward_change' => 1,
                 'updated_at' => '2021-11-24 12:00:00',
             ]);

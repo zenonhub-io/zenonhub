@@ -17,7 +17,7 @@ class AccountBlocksSeeder extends Seeder
      */
     public function run(): void
     {
-        $accountBlocksJson = Storage::json('nom-json/test/genesis-transactions.json');
+        $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
         $accountBlocksDTO = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
 
         $accountBlocksDTO->each(function ($accountBlockDTO) {

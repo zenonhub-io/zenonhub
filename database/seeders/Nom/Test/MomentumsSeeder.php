@@ -16,7 +16,7 @@ class MomentumsSeeder extends Seeder
      */
     public function run(): void
     {
-        $momentumJson = Storage::json('nom-json/test/genesis-momentum.json');
+        $momentumJson = Storage::json('nom-json/test/momentums.json');
         $momentumDTO = MomentumDTO::from($momentumJson);
 
         Momentum::insert([

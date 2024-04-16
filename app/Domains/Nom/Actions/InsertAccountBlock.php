@@ -10,10 +10,8 @@ use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Events\AccountBlockInserted;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
-use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -85,7 +83,7 @@ class InsertAccountBlock
             AccountBlockTypesEnum::SEND->value,
             AccountBlockTypesEnum::CONTRACT_SEND->value,
         ], true)) {
-            $this->processBlockData($block, $blockData);
+            $this->linkBlockData($block, $blockData);
         }
 
         AccountBlockInserted::dispatch($block, $blockData);
@@ -128,52 +126,14 @@ class InsertAccountBlock
         Log::debug('Link paired account block - link found');
     }
 
-    private function processBlockData(AccountBlock $block, AccountBlockDTO $accountBlockDTO): void
+    private function linkBlockData(AccountBlock $block, AccountBlockDTO $accountBlockDTO): void
     {
         Log::debug('Insert Account Block Data', [
             'hash' => $accountBlockDTO->hash,
         ]);
 
-        $decodedData = null;
-        $data = base64_decode($accountBlockDTO->data);
-        $fingerprint = Utilities::getDataFingerprint($data);
-        $contractMethod = ContractMethod::whereRelation('contract', 'name', $block->toAccount->contract?->name)
-            ->where('fingerprint', $fingerprint)
-            ->first();
-
-        // Fallback for common methods (not related to a specific account)
-        if (! $contractMethod) {
-            $contractMethod = ContractMethod::whereRelation('contract', 'name', 'Common')
-                ->where('fingerprint', $fingerprint)
-                ->first();
-        }
-
-        if ($contractMethod) {
-            $block->contract_method_id = $contractMethod->id;
-            $block->save();
-
-            $contractName = ucfirst(strtolower($contractMethod->contract->name));
-            $embeddedContract = "DigitalSloth\ZnnPhp\Abi\Contracts\\" . $contractName;
-
-            if (class_exists($embeddedContract)) {
-                $embeddedContract = new $embeddedContract;
-                $decoded = $embeddedContract->decode($contractMethod->name, $data);
-                $parameters = $embeddedContract->getParameterNames($contractMethod->name);
-
-                if ($decoded && $parameters) {
-                    $parameters = explode(',', $parameters);
-
-                    $decodedData = array_combine(
-                        $parameters,
-                        $decoded
-                    );
-                }
-            }
-        }
-
         $block->data()->create([
             'raw' => $accountBlockDTO->data,
-            'decoded' => $decodedData,
         ]);
     }
 }

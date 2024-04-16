@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Models\User;
 use Livewire\Livewire;
 
+uses()->group('profile', 'password-confirmation-trait');
+
 $testComponent = new class extends \Livewire\Component
 {
     use App\Traits\Livewire\ConfirmsPasswordTrait;
@@ -33,7 +35,7 @@ test('password confirmation can be started', function () use ($testComponent) {
     expect($component->confirmableId)->toEqual($confirmationId);
     expect($component->confirmablePassword)->toBeEmpty();
 
-})->group('profile', 'password-confirmation-trait');
+});
 
 test('password confirmation can be stopped', function () use ($testComponent) {
 
@@ -48,7 +50,7 @@ test('password confirmation can be stopped', function () use ($testComponent) {
     expect($component->confirmableId)->toBeNull();
     expect($component->confirmablePassword)->toBeEmpty();
 
-})->group('profile', 'password-confirmation-trait');
+});
 
 test('password confirmation accepts correct password', function () use ($testComponent) {
 
@@ -67,7 +69,7 @@ test('password confirmation accepts correct password', function () use ($testCom
         ->assertSessionHas('auth.password_confirmed_at')
         ->assertDispatched('stop-confirming-password');
 
-})->group('profile', 'password-confirmation-trait');
+});
 
 test('password confirmation doesnt accept wrong password', function () use ($testComponent) {
 
@@ -85,4 +87,4 @@ test('password confirmation doesnt accept wrong password', function () use ($tes
         ->assertHasErrors('confirmable_password')
         ->assertSessionMissing('auth.password_confirmed_at');
 
-})->group('profile', 'password-confirmation-trait');
+});

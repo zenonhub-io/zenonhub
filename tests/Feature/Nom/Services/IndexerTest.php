@@ -14,21 +14,18 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Mockery\MockInterface;
 
+uses()->group('nom', 'nom-services', 'indexer');
+
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(TestDatabaseSeeder::class);
-
-    $this->hash1 = 'txAddr1000000000000000000000000000000000000000000000000000000001';
-    $this->hash2 = 'txAddr1000000000000000000000000000000000000000000000000000000002';
-    $this->hash3 = 'txAddr2000000000000000000000000000000000000000000000000000000001';
 
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {
 
         // setup the mock to return predefined Json for specific calls
         $momentumsJson = Storage::json('nom-json/test/momentums.json');
-        $momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
-
         $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
+        $momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
         $accountBlockDTOs = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
 
         $mock->shouldReceive('getFrontierMomentum')
@@ -37,17 +34,23 @@ beforeEach(function () {
         $mock->shouldReceive('getMomentumsByHeight')
             ->andReturn($momentumDTOs);
 
-        $mock->shouldReceive('getAccountBlockByHash')
-            ->withArgs([$this->hash1])
-            ->andReturn($accountBlockDTOs->firstWhere('hash', $this->hash1));
+        $hashes = [
+            'txAddr1000000000000000000000000000000000000000000000000000000001',
+            'txAddr1000000000000000000000000000000000000000000000000000000002',
+            'txAddr1000000000000000000000000000000000000000000000000000000003',
+            'txAddr1000000000000000000000000000000000000000000000000000000004',
+            'txAddr2000000000000000000000000000000000000000000000000000000001',
+            'embedpyllar00000000000000000000000000000000000000000000000000001',
+            'embedpyllar00000000000000000000000000000000000000000000000000002',
+            'embedt0ken000000000000000000000000000000000000000000000000000001',
+            'embedt0ken000000000000000000000000000000000000000000000000000002',
+        ];
 
-        $mock->shouldReceive('getAccountBlockByHash')
-            ->withArgs([$this->hash2])
-            ->andReturn($accountBlockDTOs->firstWhere('hash', $this->hash2));
-
-        $mock->shouldReceive('getAccountBlockByHash')
-            ->withArgs([$this->hash3])
-            ->andReturn($accountBlockDTOs->firstWhere('hash', $this->hash3));
+        foreach ($hashes as $hash) {
+            $mock->shouldReceive('getAccountBlockByHash')
+                ->withArgs([$hash])
+                ->andReturn($accountBlockDTOs->firstWhere('hash', $hash));
+        }
     });
 });
 
@@ -57,7 +60,7 @@ it('respects the lock', function () {
     app(Indexer::class)->run();
 
     expect(Momentum::count())->toBe(0);
-})->group('nom-services', 'indexer');
+});
 
 it('respects the emergency lock', function () {
 
@@ -66,21 +69,18 @@ it('respects the emergency lock', function () {
     app(Indexer::class)->run();
 
     expect(Momentum::count())->toBe(0);
-
-})->group('nom-services', 'indexer');
+});
 
 it('inserts momentums', function () {
 
     app(Indexer::class)->run();
 
-    expect(Momentum::count())->toBe(3);
-
-})->group('nom-services', 'indexer');
+    expect(Momentum::count())->toBe(6);
+});
 
 it('inserts account blocks', function () {
 
     app(Indexer::class)->run();
 
-    expect(AccountBlock::count())->toBe(3);
-
-})->group('nom-services', 'indexer');
+    expect(AccountBlock::count())->toBe(8);
+});

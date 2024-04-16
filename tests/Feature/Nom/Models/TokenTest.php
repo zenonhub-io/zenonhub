@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Domains\Nom\Models\Token;
 
+uses()->group('nom', 'nom-models', 'token');
+
 beforeEach(function () {
     $this->token = new Token;
 });
@@ -15,7 +17,7 @@ test('getDisplayAmount returns correct value with for null values', function () 
 
     expect($result)->toBe(0);
 
-})->group('nom-models', 'token');
+});
 
 test('getDisplayAmount returns correct value with for 0 values', function () {
 
@@ -24,7 +26,7 @@ test('getDisplayAmount returns correct value with for 0 values', function () {
 
     expect($result)->toBe(0.0);
 
-})->group('nom-models', 'token');
+});
 
 test('getDisplayAmount returns correct value with for whole numbers', function () {
 
@@ -33,7 +35,7 @@ test('getDisplayAmount returns correct value with for whole numbers', function (
 
     expect($result)->toBe(10000000.0);
 
-})->group('nom-models', 'token');
+});
 
 test('getDisplayAmount returns correct value with for decimal', function () {
 
@@ -42,7 +44,7 @@ test('getDisplayAmount returns correct value with for decimal', function () {
 
     expect($result)->toBe(10000000.00000001);
 
-})->group('nom-models', 'token');
+});
 
 test('getDisplayAmount returns correct value for token with 0 decimals', function () {
 
@@ -51,7 +53,7 @@ test('getDisplayAmount returns correct value for token with 0 decimals', functio
 
     expect($result)->toBe(1000000000000001);
 
-})->group('nom-models', 'token');
+});
 
 test('getFormattedAmount returns correct value with for null values', function () {
 
@@ -60,7 +62,7 @@ test('getFormattedAmount returns correct value with for null values', function (
 
     expect($result)->toBe('-');
 
-})->group('nom-models', 'token');
+});
 
 test('getFormattedAmount returns correct value with for 0 values', function () {
 
@@ -69,7 +71,7 @@ test('getFormattedAmount returns correct value with for 0 values', function () {
 
     expect($result)->toBe('0');
 
-})->group('nom-models', 'token');
+});
 
 test('getFormattedAmount returns correct value with for whole numbers', function () {
 
@@ -78,7 +80,7 @@ test('getFormattedAmount returns correct value with for whole numbers', function
 
     expect($result)->toBe('10,000,000');
 
-})->group('nom-models', 'token');
+});
 
 test('getFormattedAmount returns correct value with for decimal', function () {
 
@@ -87,7 +89,7 @@ test('getFormattedAmount returns correct value with for decimal', function () {
 
     expect($result)->toBe('10,000,000.00000001');
 
-})->group('nom-models', 'token');
+});
 
 test('getFormattedAmount returns correct value for token with 0 decimals', function () {
 
@@ -96,4 +98,4 @@ test('getFormattedAmount returns correct value for token with 0 decimals', funct
 
     expect($result)->toBe('1,000,000,000,000,001');
 
-})->group('nom-models', 'token');
+});

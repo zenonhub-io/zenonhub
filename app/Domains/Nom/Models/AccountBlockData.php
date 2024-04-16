@@ -47,6 +47,7 @@ class AccountBlockData extends Model
     {
         return [
             'decoded' => 'array',
+            'is_processed' => 'boolean',
         ];
     }
 

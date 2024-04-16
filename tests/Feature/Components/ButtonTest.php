@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+uses()->group('components', 'button');
+
 test('button component can be rendered', function () {
 
     $view = $this->blade('<x-buttons.button :text="$text" />', [
@@ -11,7 +13,7 @@ test('button component can be rendered', function () {
     $view->assertSee('type="button"', false);
     $view->assertSee('Basic button');
 
-})->group('components', 'button');
+});
 
 test('button component type can be changed', function () {
 
@@ -23,7 +25,7 @@ test('button component type can be changed', function () {
     $view->assertSee('type="submit"', false);
     $view->assertSee('Submit button');
 
-})->group('components', 'button');
+});
 
 test('button component content can be changed', function () {
 
@@ -31,4 +33,4 @@ test('button component content can be changed', function () {
 
     $view->assertSee('<i class="bi bi-info"></i> Custom Button', false);
 
-})->group('components', 'button');
+});

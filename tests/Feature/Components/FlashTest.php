@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+uses()->group('components', 'flash');
+
 test('flash component can be rendered', function () {
 
     session()->flash('alert', 'Info alert');
@@ -16,7 +18,7 @@ HTML;
 
     $this->assertComponentRenders($expected, $view);
 
-})->group('components', 'flash');
+});
 
 test('flash component success can be rendered', function () {
 
@@ -31,7 +33,7 @@ test('flash component success can be rendered', function () {
 
     $this->assertComponentRenders($expectedSuccess, $viewSuccess);
 
-})->group('components', 'flash');
+});
 
 test('flash component error can be rendered', function () {
 
@@ -46,7 +48,7 @@ test('flash component error can be rendered', function () {
 
     $this->assertComponentRenders($expectedError, $viewError);
 
-})->group('components', 'flash');
+});
 
 test('flash component can be slotted', function () {
 
@@ -68,7 +70,7 @@ test('flash component can be slotted', function () {
 
     $this->assertComponentRenders($expected, $template);
 
-})->group('components', 'flash');
+});
 
 test('flash component multiple messages can be used', function () {
 
@@ -93,4 +95,4 @@ test('flash component multiple messages can be used', function () {
 
     $this->assertComponentRenders($expected, $template);
 
-})->group('components', 'flash');
+});

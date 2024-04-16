@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+uses()->group('components', 'alert');
+
 test('alert component can be rendered', function () {
 
     $view = $this->blade('<x-alerts.alert :message="$message" />', [
@@ -11,7 +13,7 @@ test('alert component can be rendered', function () {
     $view->assertSee('alert-info');
     $view->assertSee('Alert info');
 
-})->group('components', 'alert');
+});
 
 test('alert component type can be changed', function () {
 
@@ -23,7 +25,7 @@ test('alert component type can be changed', function () {
     $view->assertSee('alert-success');
     $view->assertSee('Alert success');
 
-})->group('components', 'alert');
+});
 
 test('alert component content can be changed', function () {
 
@@ -32,4 +34,4 @@ test('alert component content can be changed', function () {
     $view->assertSee('alert-info');
     $view->assertSee('<i class="bi bi-info"></i> Custom content', false);
 
-})->group('components', 'alert');
+});

@@ -6,6 +6,8 @@ use App\Livewire\Profile\UpdateDetails;
 use App\Models\User;
 use Livewire\Livewire;
 
+uses()->group('profile', 'details');
+
 test('current profile details are available', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
 
@@ -14,7 +16,7 @@ test('current profile details are available', function () {
     expect($component->state['name'])->toEqual($user->name);
     expect($component->state['username'])->toEqual($user->username);
     expect($component->state['email'])->toEqual($user->email);
-})->group('profile', 'details');
+});
 
 test('profile details can be updated', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
@@ -32,4 +34,4 @@ test('profile details can be updated', function () {
         ->name->toEqual('Test Name')
         ->username->toEqual('test')
         ->email->toEqual('test@example.com');
-})->group('profile', 'details');
+});

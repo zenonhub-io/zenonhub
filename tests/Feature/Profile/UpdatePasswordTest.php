@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 
+uses()->group('profile', 'password');
+
 test('password can be updated', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
 
@@ -20,7 +22,7 @@ test('password can be updated', function () {
         ->assertDispatched('profile.password.saved');
 
     expect(Hash::check('new-password', $user->fresh()->password))->toBeTrue();
-})->group('profile', 'password');
+});
 
 test('current password must be correct', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
@@ -35,7 +37,7 @@ test('current password must be correct', function () {
         ->assertHasErrors(['current_password']);
 
     expect(Hash::check('password', $user->fresh()->password))->toBeTrue();
-})->group('profile', 'password');
+});
 
 test('new passwords must match', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
@@ -50,4 +52,4 @@ test('new passwords must match', function () {
         ->assertHasErrors(['password']);
 
     expect(Hash::check('password', $user->fresh()->password))->toBeTrue();
-})->group('profile', 'password');
+});

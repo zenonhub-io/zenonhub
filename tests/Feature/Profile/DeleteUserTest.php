@@ -6,6 +6,8 @@ use App\Livewire\Profile\DeleteUser;
 use App\Models\User;
 use Livewire\Livewire;
 
+uses()->group('profile', 'delete-account');
+
 test('user accounts can be deleted', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
 
@@ -15,4 +17,4 @@ test('user accounts can be deleted', function () {
         ->call('deleteUser');
 
     expect($user->fresh())->toBeNull();
-})->group('profile', 'delete-account');
+});
