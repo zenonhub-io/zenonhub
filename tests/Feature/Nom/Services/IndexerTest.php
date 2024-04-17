@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
+use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\Indexer;
@@ -20,19 +21,19 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(TestDatabaseSeeder::class);
 
+    // setup the mock to return predefined Json for specific calls
+    $momentumsJson = Storage::json('nom-json/test/momentums.json');
+    $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
+    $this->momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
+    $this->accountBlockDTOs = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
+
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {
 
-        // setup the mock to return predefined Json for specific calls
-        $momentumsJson = Storage::json('nom-json/test/momentums.json');
-        $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
-        $momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
-        $accountBlockDTOs = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
-
         $mock->shouldReceive('getFrontierMomentum')
-            ->andReturn($momentumDTOs->last());
+            ->andReturn($this->momentumDTOs->last());
 
         $mock->shouldReceive('getMomentumsByHeight')
-            ->andReturn($momentumDTOs);
+            ->andReturn($this->momentumDTOs);
 
         $hashes = [
             'txAddr1000000000000000000000000000000000000000000000000000000001',
@@ -49,7 +50,7 @@ beforeEach(function () {
         foreach ($hashes as $hash) {
             $mock->shouldReceive('getAccountBlockByHash')
                 ->withArgs([$hash])
-                ->andReturn($accountBlockDTOs->firstWhere('hash', $hash));
+                ->andReturn($this->accountBlockDTOs->firstWhere('hash', $hash));
         }
     });
 });
@@ -83,4 +84,39 @@ it('inserts account blocks', function () {
     app(Indexer::class)->run();
 
     expect(AccountBlock::count())->toBe(8);
+});
+
+it('rolls back on exception', function () {
+
+    $this->mock(ZenonSdk::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getFrontierMomentum')
+            ->andReturn($this->momentumDTOs->last());
+
+        $mock->shouldReceive('getMomentumsByHeight')
+            ->andReturn($this->momentumDTOs);
+
+        $hashes = [
+            'txAddr1000000000000000000000000000000000000000000000000000000001',
+            'txAddr1000000000000000000000000000000000000000000000000000000002',
+            'txAddr1000000000000000000000000000000000000000000000000000000003',
+            'txAddr2000000000000000000000000000000000000000000000000000000001',
+        ];
+
+        foreach ($hashes as $hash) {
+            if ($hash === 'txAddr2000000000000000000000000000000000000000000000000000000001') {
+                $mock->shouldReceive('getAccountBlockByHash')
+                    ->withArgs([$hash])
+                    ->andThrow(new ZenonRpcException('Unable to load data'));
+            } else {
+                $mock->shouldReceive('getAccountBlockByHash')
+                    ->withArgs([$hash])
+                    ->andReturn($this->accountBlockDTOs->firstWhere('hash', $hash));
+            }
+        }
+    });
+
+    app(Indexer::class)->run();
+
+    expect(Momentum::count())->toBe(2)
+        ->and(AccountBlock::count())->toBe(2);
 });

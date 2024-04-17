@@ -64,11 +64,11 @@ class Indexer
             try {
                 $momentums = $this->znn->getMomentumsByHeight($this->currentDbHeight, 500);
                 $momentums->each(function (MomentumDTO $momentumDTO) {
-                    DB::beginTransaction();
-
                     // Try catch to commit db changes per momentum, will throw
                     // an exception to the parent try catch to break the loop
                     try {
+                        DB::beginTransaction();
+
                         $this->insertMomentum->execute($momentumDTO);
 
                         $momentumDTO->content->each(function (MomentumContentDTO $momentumContentDTO) {
