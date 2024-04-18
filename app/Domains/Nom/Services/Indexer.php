@@ -20,11 +20,15 @@ use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
 
 class Indexer
 {
     protected ?int $currentDbHeight = null;
+
+    protected ?int $momentumsPerBatch = 500;
 
     public function __construct(
         protected ZenonSdk $znn,
@@ -54,15 +58,22 @@ class Indexer
             return;
         }
 
+        $momentumsToIndex = $momentum->height - $this->currentDbHeight;
+        $output = new ConsoleOutput;
+        $progressBar = new ProgressBar($output, $momentumsToIndex);
+
         Log::debug('Indexer - Starting', [
             'current height' => $this->currentDbHeight,
             'target height' => $momentum->height,
+            'to index' => $momentumsToIndex,
         ]);
+
+        $progressBar->start();
 
         while ($this->currentDbHeight < $momentum->height) {
             // Try catch to break out indexing loop in case of error
             try {
-                $momentums = $this->znn->getMomentumsByHeight($this->currentDbHeight, 500);
+                $momentums = $this->znn->getMomentumsByHeight($this->currentDbHeight, $this->momentumsPerBatch);
                 $momentums->each(function (MomentumDTO $momentumDTO) {
                     // Try catch to commit db changes per momentum, will throw
                     // an exception to the parent try catch to break the loop
@@ -91,7 +102,11 @@ class Indexer
                 ]);
                 break;
             }
+
+            $progressBar->advance($this->momentumsPerBatch);
         }
+
+        $progressBar->finish();
 
         $lock->release();
 
