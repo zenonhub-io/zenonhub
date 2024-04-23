@@ -39,14 +39,6 @@ class ContractMethod extends Model
     ];
 
     //
-    // Methods
-
-    public static function findByFingerprint(string $fingerprint): ?ContractMethod
-    {
-        return static::where('fingerprint', $fingerprint)->first();
-    }
-
-    //
     // Relations
 
     public function contract(): BelongsTo
@@ -61,4 +53,7 @@ class ContractMethod extends Model
     {
         return "App\Jobs\Nom\\{$this->contract->name}\\{$this->name}";
     }
+
+    //
+    // Methods
 }

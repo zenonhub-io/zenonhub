@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Domains\Nom\Actions\InsertAccountBlock;
+use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Events\AccountBlockInserted;
@@ -84,6 +84,27 @@ it('relates an account block to a momentum', function () {
         ->and($accountBlock->momentum->height)->toEqual(2)
         ->and($momentum->accountBlocks->count())->toBe(1);
 
+});
+
+it('sets an accounts public key', function () {
+
+    $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
+    (new InsertAccountBlock)->execute($momentumDTO->content->first());
+
+    $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
+
+    expect($account->public_key)->toEqual($accountBlockDTO->publicKey);
+});
+
+it('sets an accounts first active date', function () {
+
+    $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
+    (new InsertAccountBlock)->execute($momentumDTO->content->first());
+
+    $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
+
+    expect($account->first_active_at->timestamp)->toEqual($momentumDTO->timestamp);
 });
 
 it('relates an account block to the correct account', function () {

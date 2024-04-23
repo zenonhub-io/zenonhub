@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Providers;
 
-use App\Domains\Nom\Actions\InsertAccountBlock;
-use App\Domains\Nom\Actions\InsertMomentum;
+use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
+use App\Domains\Nom\Actions\Indexer\InsertMomentum;
 use App\Domains\Nom\Services\Indexer;
 use App\Domains\Nom\Services\PlasmaBot;
 use App\Domains\Nom\Services\ZenonCli;
@@ -25,7 +25,7 @@ class NoMServiceProvider extends ServiceProvider
     {
         $this->app->bind('InsertMomentum', fn ($app) => new InsertMomentum);
 
-        $this->app->bind('InsertAccountBlock', fn ($app) => new InsertAccountBlock);
+        $this->app->bind('InsertAccountBlock', fn ($app) => new InsertAccountBlock($app->make(ZenonSdk::class)));
 
         $this->app->singleton(Zenon::class, function ($app, $params) {
             $nodeUrl = $params['node'] ?? config('services.zenon.node_url');
@@ -36,7 +36,11 @@ class NoMServiceProvider extends ServiceProvider
 
         $this->app->singleton(ZenonSdk::class, fn ($app, $params) => new ZenonSdk($app->make(Zenon::class)));
 
-        $this->app->singleton(ZenonCli::class, fn ($app, $params) => new ZenonCli($params['node_url'], $params['keystore'], $params['passphrase']));
+        $this->app->singleton(ZenonCli::class, fn ($app, $params) => new ZenonCli(
+            $params['node_url'],
+            $params['keystore'],
+            $params['passphrase']
+        ));
 
         $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot);
 

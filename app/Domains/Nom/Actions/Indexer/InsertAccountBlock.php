@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Actions;
+namespace App\Domains\Nom\Actions\Indexer;
 
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
@@ -10,13 +10,20 @@ use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Events\AccountBlockInserted;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
+use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class InsertAccountBlock
 {
+    public function __construct(
+        protected ZenonSdk $znn
+    ) {
+    }
+
     /**
      * @throws ZenonRpcException
      */
@@ -26,8 +33,7 @@ class InsertAccountBlock
             'hash' => $momentumContentDTO->hash,
         ]);
 
-        $znn = app(ZenonSdk::class);
-        $blockData = $znn->getAccountBlockByHash($momentumContentDTO->hash);
+        $blockData = $this->znn->getAccountBlockByHash($momentumContentDTO->hash);
         $block = AccountBlock::findBy('hash', $blockData->hash);
 
         if ($block) {
@@ -79,10 +85,13 @@ class InsertAccountBlock
             $this->linkPairedAccountBlock($block, $blockData->pairedAccountBlock);
         }
 
-        if (! empty($blockData->data) && in_array($block->block_type->value, [
-            AccountBlockTypesEnum::SEND->value,
-            AccountBlockTypesEnum::CONTRACT_SEND->value,
-        ], true)) {
+        if (
+            $block->toAccount !== 1 &&
+            ! empty($blockData->data) &&
+            in_array($block->block_type->value, [
+                AccountBlockTypesEnum::SEND->value,
+                AccountBlockTypesEnum::CONTRACT_SEND->value,
+            ], true)) {
             $this->linkBlockData($block, $blockData);
         }
 
@@ -126,14 +135,36 @@ class InsertAccountBlock
         Log::debug('Link paired account block - link found');
     }
 
-    private function linkBlockData(AccountBlock $block, AccountBlockDTO $accountBlockDTO): void
+    private function linkBlockData(AccountBlock $accountBlock, AccountBlockDTO $accountBlockDTO): void
     {
         Log::debug('Insert Account Block Data', [
             'hash' => $accountBlockDTO->hash,
         ]);
 
-        $block->data()->create([
+        $decodedData = null;
+        $data = base64_decode($accountBlockDTO->data);
+        $fingerprint = Utilities::getDataFingerprint($data);
+        $contractMethod = ContractMethod::whereRelation('contract', 'name', $accountBlock->toAccount->contract?->name)
+            ->where('fingerprint', $fingerprint)
+            ->first();
+
+        // Fallback for common methods (not related to a specific account)
+        if (! $contractMethod) {
+            $contractMethod = ContractMethod::whereRelation('contract', 'name', 'Common')
+                ->where('fingerprint', $fingerprint)
+                ->first();
+        }
+
+        if ($contractMethod) {
+            $accountBlock->contract_method_id = $contractMethod->id;
+            $accountBlock->save();
+
+            $decodedData = $this->znn->abiDecode($contractMethod, $data);
+        }
+
+        $accountBlock->data()->create([
             'raw' => $accountBlockDTO->data,
+            'decoded' => $decodedData,
         ]);
     }
 }

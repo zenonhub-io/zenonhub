@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Domains\Nom\Actions\InsertMomentum;
+use App\Domains\Nom\Actions\Indexer\InsertMomentum;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Events\MomentumInserted;
 use App\Domains\Nom\Models\Momentum;

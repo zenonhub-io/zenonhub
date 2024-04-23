@@ -18,7 +18,7 @@ test('current profile details are available', function () {
     expect($component->state['email'])->toEqual($user->email);
 });
 
-test('profile details can be updated', function () {
+test('profile details can be updated with different email', function () {
     $this->actingAs($user = User::factory()->create()->fresh());
 
     Livewire::test(UpdateDetails::class)
@@ -34,4 +34,22 @@ test('profile details can be updated', function () {
         ->name->toEqual('Test Name')
         ->username->toEqual('test')
         ->email->toEqual('test@example.com');
+});
+
+test('profile details can be updated with same email', function () {
+    $this->actingAs($user = User::factory()->create()->fresh());
+
+    Livewire::test(UpdateDetails::class)
+        ->set('state', [
+            'name' => 'Test Name',
+            'username' => 'test',
+            'email' => $user->email,
+        ])
+        ->call('updateProfileInformation')
+        ->assertDispatched('profile.details.saved');
+
+    expect($user->fresh())
+        ->name->toEqual('Test Name')
+        ->username->toEqual('test')
+        ->email->toEqual($user->email);
 });

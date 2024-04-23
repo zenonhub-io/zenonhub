@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Actions;
+namespace App\Domains\Nom\Actions\Indexer;
 
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Events\MomentumInserted;

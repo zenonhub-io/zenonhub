@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Services;
 
-use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Services\Sdk\Abi;
 use App\Domains\Nom\Services\Sdk\Accelerator;
 use App\Domains\Nom\Services\Sdk\Bridge;
 use App\Domains\Nom\Services\Sdk\Htlc;
@@ -22,7 +22,7 @@ use DigitalSloth\ZnnPhp\Zenon;
 
 class ZenonSdk
 {
-    use Accelerator, Bridge, Htlc, Ledger, Liquidity, Pillar, Plasma, Sentinel, Stake, Stats, Swap, Token;
+    use Abi, Accelerator, Bridge, Htlc, Ledger, Liquidity, Pillar, Plasma, Sentinel, Stake, Stats, Swap, Token;
 
     public function __construct(
         protected Zenon $sdk
@@ -31,25 +31,14 @@ class ZenonSdk
 
     public function verifySignature(string $publicKey, string $address, string $message, string $signature): bool
     {
-        $validated = false;
         $validSignature = Utilities::verifySignedMessage(
             $publicKey,
             $message,
             $signature
         );
 
-        $account = Account::findBy('address', $address);
         $accountCheck = Utilities::addressFromPublicKey($publicKey);
 
-        if ($validSignature && ($address === $accountCheck)) {
-            $validated = true;
-        }
-
-        if ($validated && $account && ! $account->public_key) {
-            $account->public_key = base64_encode(Utilities::hexToBin($publicKey));
-            $account->save();
-        }
-
-        return $validated;
+        return $validSignature && ($address === $accountCheck);
     }
 }

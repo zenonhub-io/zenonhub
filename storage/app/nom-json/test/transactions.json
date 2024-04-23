@@ -24,7 +24,7 @@
         "basePlasma": 0,
         "usedPlasma": 0,
         "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
-        "publicKey": null,
+        "publicKey": "=publicKey",
         "signature": null,
         "token": null,
         "confirmationDetail": {

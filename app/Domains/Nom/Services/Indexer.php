@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Services;
 
-use App\Domains\Nom\Actions\InsertAccountBlock;
-use App\Domains\Nom\Actions\InsertMomentum;
+use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
+use App\Domains\Nom\Actions\Indexer\InsertMomentum;
 use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
@@ -40,9 +40,13 @@ class Indexer
 
     public function run(): void
     {
+        $output = new ConsoleOutput;
+
         try {
             $momentum = $this->znn->getFrontierMomentum();
         } catch (ZenonRpcException $e) {
+            $output->writeln('Unable to load frontier momentum - ' . $e->getMessage());
+
             return;
         }
 
@@ -59,7 +63,7 @@ class Indexer
         }
 
         $momentumsToIndex = $momentum->height - $this->currentDbHeight;
-        $output = new ConsoleOutput;
+
         $progressBar = new ProgressBar($output, $momentumsToIndex);
 
         Log::debug('Indexer - Starting', [
@@ -96,6 +100,7 @@ class Indexer
                     $this->updateCurrentHeight();
                 });
             } catch (Throwable $exception) {
+                $output->writeln('Indexer exception rolling back - ' . $exception->getMessage());
                 Log::error($exception);
                 Log::debug('Indexer - Error', [
                     'message' => $exception->getMessage(),
