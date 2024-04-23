@@ -31,7 +31,7 @@ class Funding extends Component
         ];
 
         $znnFunds = Cache::remember('stats.az.znnFunding', $cacheExpiry, function () use ($fundingLabels) {
-            $znnToken = znn_token();
+            $znnToken = app('znnToken');
             $totalZnnUsed = $this->acceleratorContract
                 ->sentBlocks()
                 ->where('token_id', $znnToken->id)
@@ -47,7 +47,7 @@ class Funding extends Component
         });
 
         $qsrFunds = Cache::remember('stats.az.qsrFunding', $cacheExpiry, function () use ($fundingLabels) {
-            $qsrToken = qsr_token();
+            $qsrToken = app('qsrToken');
             $totalQsrUsed = $this->acceleratorContract
                 ->sentBlocks()
                 ->where('token_id', $qsrToken->id)

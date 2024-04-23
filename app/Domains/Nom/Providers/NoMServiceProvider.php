@@ -6,6 +6,8 @@ namespace App\Domains\Nom\Providers;
 
 use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
 use App\Domains\Nom\Actions\Indexer\InsertMomentum;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Token;
 use App\Domains\Nom\Services\Indexer;
 use App\Domains\Nom\Services\PlasmaBot;
 use App\Domains\Nom\Services\ZenonCli;
@@ -23,9 +25,9 @@ class NoMServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('InsertMomentum', fn ($app) => new InsertMomentum);
+        $this->app->bind(InsertMomentum::class, fn ($app) => new InsertMomentum);
 
-        $this->app->bind('InsertAccountBlock', fn ($app) => new InsertAccountBlock($app->make(ZenonSdk::class)));
+        $this->app->bind(InsertAccountBlock::class, fn ($app) => new InsertAccountBlock($app->make(ZenonSdk::class)));
 
         $this->app->singleton(Zenon::class, function ($app, $params) {
             $nodeUrl = $params['node'] ?? config('services.zenon.node_url');
@@ -49,6 +51,10 @@ class NoMServiceProvider extends ServiceProvider
             $app->make(InsertMomentum::class),
             $app->make(InsertAccountBlock::class),
         ));
+
+        $this->app->singleton('znnToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::ZNN->value));
+
+        $this->app->singleton('qsrToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::QSR->value));
     }
 
     /**

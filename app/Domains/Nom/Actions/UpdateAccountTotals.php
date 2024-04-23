@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Actions;
 
-use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
 
 class UpdateAccountTotals
@@ -14,106 +14,91 @@ class UpdateAccountTotals
 
     public function execute(Account $account): void
     {
+        if ($account->address === config('explorer.empty_address')) {
+            return;
+        }
+
         $this->account = $account;
 
         $this->saveCurrentBalance();
+        $this->updateSendReceiveTotals();
         $this->saveStakedZnn();
         $this->saveFusedQsr();
-        $this->saveLockedTotals();
-        $this->saveTotals();
         $this->saveRewardTotals();
 
-        $this->account->updated_at = $this->account->latestBlock?->created_at ?? null;
+        $this->account->updated_at = $this->account->latestBlock?->created_at ?? now();
         $this->account->save();
     }
 
     private function saveCurrentBalance(): void
     {
-        $apiData = $this->account->raw_json;
+        $tokenIds = AccountBlock::involvingAccount($this->account)
+            ->select('token_id')
+            ->whereNotNull('token_id')
+            ->groupBy('token_id')
+            ->pluck('token_id');
 
-        foreach ($apiData->balanceInfoMap as $tokenStandard => $holdings) {
-            if ($tokenStandard === NetworkTokensEnum::ZNN->value) {
-                $this->account->znn_balance = $holdings->balance;
-            }
+        $accountTokenIds = $this->account->balances()
+            ->pluck('token_id')
+            ->toArray();
 
-            if ($tokenStandard === NetworkTokensEnum::QSR->value) {
-                $this->account->qsr_balance = $holdings->balance;
-            }
+        $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
+            $token = Token::find($tokenId);
+            $totalSent = $this->account->sentBlocks()->where('token_id', $tokenId)->sum('amount');
+            $totalReceived = $this->account->receivedBlocks()->where('token_id', $tokenId)->sum('amount');
+            $balance = $totalReceived - $totalSent;
 
-            $token = Token::findBy('token_standard', $tokenStandard);
-            $tokenIds = $this->account->balances()
-                ->pluck('token_id')
-                ->toArray();
-
-            if (! in_array($token->id, $tokenIds)) {
+            if (! in_array($token->id, $accountTokenIds, true)) {
                 $this->account->balances()->attach($token, [
-                    'balance' => $holdings->balance,
+                    'balance' => $balance,
                     'updated_at' => now(),
                 ]);
             } else {
                 $this->account->balances()->updateExistingPivot($token->id, [
-                    'balance' => $holdings->balance,
+                    'balance' => $balance,
                     'updated_at' => now(),
                 ]);
             }
-        }
+        });
+    }
+
+    private function updateSendReceiveTotals(): void
+    {
+        $znnTokenId = app('znnToken')->id;
+        $qsrTokenId = app('qsrToken')->id;
+
+        $this->account->znn_sent = $this->account->sentBlocks()->where('token_id', $znnTokenId)->sum('amount');
+        $this->account->znn_received = $this->account->receivedBlocks()->where('token_id', $znnTokenId)->sum('amount');
+
+        $this->account->qsr_sent = $this->account->sentBlocks()->where('token_id', $qsrTokenId)->sum('amount');
+        $this->account->qsr_received = $this->account->receivedBlocks()->where('token_id', $qsrTokenId)->sum('amount');
     }
 
     private function saveStakedZnn(): void
     {
         $this->account->znn_staked = $this->account->stakes()
-            ->where('token_id', znn_token()->id)
-            ->whereNull('ended_at')
+            ->isActive()
+            ->isZnn()
             ->sum('amount');
     }
 
     private function saveFusedQsr(): void
     {
         $this->account->qsr_fused = $this->account->fusions()
-            ->whereNull('ended_at')
+            ->isActive()
             ->sum('amount');
-    }
-
-    private function saveLockedTotals(): void
-    {
-        $lockedZnn = 0;
-        $lockedQsr = 0;
-
-        $this->account
-            ->pillars()
-            ->whereNull('revoked_at')
-            ->each(function ($pillar) use (&$lockedZnn, &$lockedQsr) {
-                $lockedZnn += 1500000000000;
-            });
-
-        $this->account
-            ->sentinels()
-            ->whereNull('revoked_at')
-            ->each(function ($sentinel) use (&$lockedZnn, &$lockedQsr) {
-                $lockedZnn += 500000000000;
-                $lockedQsr += 5000000000000;
-            });
-
-        $this->account->znn_locked = $lockedZnn;
-        $this->account->qsr_locked = $lockedQsr;
-    }
-
-    private function saveTotals(): void
-    {
-        $this->account->total_znn_balance = ($this->account->znn_balance + $this->account->znn_staked + $this->account->znn_locked);
-        $this->account->total_qsr_balance = ($this->account->qsr_balance + $this->account->qsr_fused + $this->account->qsr_locked);
     }
 
     private function saveRewardTotals(): void
     {
-        $this->account->total_znn_rewards = $this->account
+        $this->account->znn_rewards = $this->account
             ->rewards()
-            ->where('token_id', znn_token()->id)
+            ->where('token_id', app('znnToken')->id)
             ->sum('amount');
 
-        $this->account->total_qsr_rewards = $this->account
+        $this->account->qsr_rewards = $this->account
             ->rewards()
-            ->where('token_id', qsr_token()->id)
+            ->where('token_id', app('qsrToken')->id)
             ->sum('amount');
     }
 }

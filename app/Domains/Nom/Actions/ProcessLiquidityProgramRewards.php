@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domains\Nom\Actions;
+
+use App\Domains\Nom\Enums\AccountRewardTypesEnum;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountReward;
+
+class ProcessLiquidityProgramRewards
+{
+    public function execute(AccountBlock $accountBlock): void
+    {
+        if ($accountBlock->token?->id !== 2) {
+            return;
+        }
+
+        if ($accountBlock->account->address !== config('explorer.liquidity_program_distributor')) {
+            return;
+        }
+
+        AccountReward::create([
+            'chain_id' => $accountBlock->chain->id,
+            'account_id' => $accountBlock->toAccount->id,
+            'token_id' => $accountBlock->token->id,
+            'type' => AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value,
+            'amount' => $accountBlock->amount,
+            'created_at' => $accountBlock->created_at,
+        ]);
+    }
+}

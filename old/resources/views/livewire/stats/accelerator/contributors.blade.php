@@ -40,10 +40,10 @@
                         <x-address :account="$contributor" :eitherSide="8" :alwaysShort="true"/>
                     </td>
                     <td>
-                        {{ znn_token()->getDisplayAmount($contributor->znn_paid) }}
+                        {{ app('znnToken')->getDisplayAmount($contributor->znn_paid) }}
                     </td>
                     <td>
-                        {{ qsr_token()->getDisplayAmount($contributor->qsr_paid) }}
+                        {{ app('qsrToken')->getDisplayAmount($contributor->qsr_paid) }}
                     </td>
                     <td>
                         {{ number_format($contributor->completed_projects_count) }}

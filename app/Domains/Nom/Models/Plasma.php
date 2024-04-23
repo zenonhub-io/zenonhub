@@ -98,7 +98,7 @@ class Plasma extends Model
 
     public function getDisplayAmountAttribute(): string
     {
-        return qsr_token()->getFormattedAmount($this->amount);
+        return app('qsrToken')->getFormattedAmount($this->amount);
     }
 
     public function getDisplayDurationAttribute(): string

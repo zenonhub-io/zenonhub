@@ -48,7 +48,7 @@ class Staking extends Component
         $this->query = Stake::isActive();
 
         if ($this->tab === 'znn') {
-            $this->query->where('token_id', znn_token()->id);
+            $this->query->where('token_id', app('znnToken')->id);
         }
 
         if ($this->tab === 'lp-eth') {

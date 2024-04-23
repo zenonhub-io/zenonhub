@@ -85,7 +85,7 @@ class Stake extends Model
 
     public function scopeIsZnn($query)
     {
-        return $query->where('token_id', znn_token()->id);
+        return $query->where('token_id', app('znnToken')->id);
     }
 
     public function scopeIsEthLp($query)

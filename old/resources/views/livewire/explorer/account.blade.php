@@ -98,13 +98,13 @@
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
                                     <span class="d-inline d-md-block text-muted fs-sm">ZNN rewards</span>
                                     <span class="float-end float-md-none pb-2">
-                                        {{ ($account->display_total_znn_rewards ?: '-') }}
+                                        {{ ($account->display_znn_rewards ?: '-') }}
                                     </span>
                                 </div>
                                 <div class="text-start text-md-center mb-2 mb-md-0 order-0">
                                     <span class="d-inline d-md-block text-muted fs-sm">QSR rewards</span>
                                     <span class="float-end float-md-none pb-2">
-                                        {{ ($account->display_total_qsr_rewards ?: '-') }}
+                                        {{ ($account->display_qsr_rewards ?: '-') }}
                                     </span>
                                 </div>
                             </div>

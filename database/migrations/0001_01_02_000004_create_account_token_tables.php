@@ -22,6 +22,7 @@ return new class extends Migration
 
         Schema::create('nom_account_rewards', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
             $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
             $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->nullOnDelete();
             $table->string('type')->index();

@@ -10,12 +10,12 @@ trait AcceleratorFundingTrait
 {
     public function getDisplayZnnRequestedAttribute(): string
     {
-        return znn_token()->getFormattedAmount($this->znn_requested);
+        return app('znnToken')->getFormattedAmount($this->znn_requested);
     }
 
     public function getDisplayQsrRequestedAttribute(): string
     {
-        return qsr_token()->getFormattedAmount($this->qsr_requested);
+        return app('qsrToken')->getFormattedAmount($this->qsr_requested);
     }
 
     public function getDisplayUsdRequestedAttribute(): string
@@ -40,8 +40,8 @@ trait AcceleratorFundingTrait
             }
         }
 
-        $znn = znn_token()->getDisplayAmount($this->znn_requested);
-        $qsr = qsr_token()->getDisplayAmount($this->qsr_requested);
+        $znn = app('znnToken')->getDisplayAmount($this->znn_requested);
+        $qsr = app('qsrToken')->getDisplayAmount($this->qsr_requested);
 
         $znnTotal = ($this->znn_price * $znn);
         $qsrTotal = ($this->qsr_price * $qsr);

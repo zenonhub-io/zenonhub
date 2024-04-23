@@ -61,11 +61,11 @@ class Overview extends Component
             ], [
                 'name' => 'Staked ZNN',
                 'link' => route('explorer.staking'),
-                'value' => znn_token()->getFormattedAmount(Stake::isActive()->isZnn()->sum('amount'), 0),
+                'value' => app('znnToken')->getFormattedAmount(Stake::isActive()->isZnn()->sum('amount'), 0),
             ], [
                 'name' => 'Fused QSR',
                 'link' => route('explorer.fusions'),
-                'value' => qsr_token()->getFormattedAmount(Plasma::isActive()->sum('amount'), 0),
+                'value' => app('qsrToken')->getFormattedAmount(Plasma::isActive()->sum('amount'), 0),
             ],
         ];
     }

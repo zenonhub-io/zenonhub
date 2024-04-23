@@ -41,7 +41,7 @@ class CancelFuse implements ShouldQueue
             $fusion->save();
         }
 
-        $fusedQsr = qsr_token()->getFormattedAmount(Plasma::isActive()->sum('amount'), 0);
+        $fusedQsr = app('qsrToken')->getFormattedAmount(Plasma::isActive()->sum('amount'), 0);
         Cache::put('fused-qsr', $fusedQsr);
 
         (new SetBlockAsProcessed($this->block))->execute();

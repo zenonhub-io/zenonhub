@@ -43,7 +43,7 @@ class Cancel implements ShouldQueue
         }
 
         $totalZnnStaked = Stake::isActive()->isZnn()->sum('amount');
-        $stakedZnn = znn_token()->getFormattedAmount($totalZnnStaked, 0);
+        $stakedZnn = app('znnToken')->getFormattedAmount($totalZnnStaked, 0);
         Cache::put('staked-znn', $stakedZnn);
 
         (new SetBlockAsProcessed($this->block))->execute();

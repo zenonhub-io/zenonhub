@@ -66,8 +66,8 @@ class Overview extends Component
 
     public function loadOverviewData(): void
     {
-        $znnToken = znn_token();
-        $qsrToken = qsr_token();
+        $znnToken = app('znnToken');
+        $qsrToken = app('qsrToken');
         $bridgeAccount = Account::findBy('address', EmbeddedContractsEnum::BRIDGE->value);
 
         //

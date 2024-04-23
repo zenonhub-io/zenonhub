@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
+use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
 use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
@@ -53,8 +53,6 @@ class Account extends Model implements Sitemapable
         'name',
         'znn_balance',
         'qsr_balance',
-        'total_znn_rewards',
-        'total_qsr_rewards',
         'is_embedded_contract',
         'first_active_at',
         'updated_at',
@@ -242,18 +240,18 @@ class Account extends Model implements Sitemapable
 
     public function getDisplayZnnBalanceAttribute($decimals = null): string
     {
-        return znn_token()->getFormattedAmount($this->znn_balance, $decimals);
+        return app('znnToken')->getFormattedAmount($this->znn_balance, $decimals);
     }
 
     public function getDisplayQsrBalanceAttribute($decimals = null): string
     {
-        return qsr_token()->getFormattedAmount($this->qsr_balance, $decimals);
+        return app('qsrToken')->getFormattedAmount($this->qsr_balance, $decimals);
     }
 
     public function getDisplayUsdBalanceAttribute(): string
     {
-        $znnBalance = znn_token()->getDisplayAmount($this->znn_balance);
-        $qsrBalance = qsr_token()->getDisplayAmount($this->qsr_balance);
+        $znnBalance = app('znnToken')->getDisplayAmount($this->znn_balance);
+        $qsrBalance = app('qsrToken')->getDisplayAmount($this->qsr_balance);
 
         $znnPrice = znn_price();
         $qsrPrice = qsr_price();
@@ -266,37 +264,27 @@ class Account extends Model implements Sitemapable
 
     public function getDisplayZnnStakedAttribute($decimals = null): string
     {
-        return znn_token()->getFormattedAmount($this->znn_staked, $decimals);
+        return app('znnToken')->getFormattedAmount($this->znn_staked, $decimals);
     }
 
     public function getDisplayQsrFusedAttribute($decimals = null): string
     {
-        return qsr_token()->getFormattedAmount($this->qsr_fused, $decimals);
+        return app('qsrToken')->getFormattedAmount($this->qsr_fused, $decimals);
     }
 
-    public function getDisplayTotalZnnBalanceAttribute($decimals = null): string
+    public function getDisplayZnnRewardsAttribute($decimals = null): string
     {
-        return znn_token()->getFormattedAmount($this->total_znn_balance, $decimals);
+        return app('znnToken')->getFormattedAmount($this->znn_rewards, $decimals);
     }
 
-    public function getDisplayTotalQsrBalanceAttribute($decimals = null): string
+    public function getDisplayQsrRewardsAttribute($decimals = null): string
     {
-        return qsr_token()->getFormattedAmount($this->total_qsr_balance, $decimals);
-    }
-
-    public function getDisplayTotalZnnRewardsAttribute($decimals = null): string
-    {
-        return znn_token()->getFormattedAmount($this->total_znn_rewards, $decimals);
-    }
-
-    public function getDisplayTotalQsrRewardsAttribute($decimals = null): string
-    {
-        return qsr_token()->getFormattedAmount($this->total_qsr_rewards, $decimals);
+        return app('qsrToken')->getFormattedAmount($this->qsr_rewards, $decimals);
     }
 
     public function getFusedQsrAttribute(): string
     {
-        return qsr_token()->getFormattedAmount($this->fuses->sum('amount'));
+        return app('qsrToken')->getFormattedAmount($this->fuses->sum('amount'));
     }
 
     public function getPlasmaLevelAttribute(): string

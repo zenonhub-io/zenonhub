@@ -59,16 +59,6 @@ function load_token(?string $zts): ?Token
     return $token;
 }
 
-function znn_token(): Token
-{
-    return Token::findBy('token_standard', NetworkTokensEnum::ZNN->value);
-}
-
-function qsr_token(): Token
-{
-    return Token::findBy('token_standard', NetworkTokensEnum::QSR->value);
-}
-
 function lp_eth_token(): Token
 {
     return Token::findBy('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);

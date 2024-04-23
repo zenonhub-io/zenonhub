@@ -8,15 +8,9 @@ use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
 use App\Domains\Nom\Actions\Indexer\InsertMomentum;
 use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
-use App\Domains\Nom\Enums\AccountRewardTypesEnum;
-use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Exceptions\IndexerException;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\AccountReward;
 use App\Domains\Nom\Models\Momentum;
-use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -126,43 +120,5 @@ class Indexer
         // If DB only has genesis data start from height 2, dont reindex genesis
         $dbHeight = Momentum::max('height');
         $this->currentDbHeight = max($dbHeight, 2);
-    }
-
-    private function updateTokenTransferTotals(Account $account, Account $toAccount, Token $token, \App\Domains\Nom\DataTransferObjects\AccountBlockDTO $blockData): void
-    {
-        if ($blockData->token && $blockData->amount > 0) {
-            $save = false;
-
-            if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
-                $account->total_znn_sent += $blockData->amount;
-                $toAccount->total_znn_received += $blockData->amount;
-                $save = true;
-            }
-
-            if ($token->token_standard === NetworkTokensEnum::QSR->value) {
-                $account->total_qsr_sent += $blockData->amount;
-                $toAccount->total_qsr_received += $blockData->amount;
-                $save = true;
-            }
-
-            if ($save) {
-                $account->save();
-                $toAccount->save();
-            }
-        }
-    }
-
-    private function processLiquidityProgramRewards(AccountBlock $block, \App\Domains\Nom\DataTransferObjects\AccountBlockDTO $blockData): void
-    {
-        if ($block->token?->id === 2 && $blockData->address === config('explorer.liquidity_program_distributor')) {
-            AccountReward::create([
-                'chain_id' => $block->chain->id,
-                'account_id' => $block->toAccount->id,
-                'token_id' => $block->token->id,
-                'type' => AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value,
-                'amount' => $block->amount,
-                'created_at' => $block->created_at,
-            ]);
-        }
     }
 }

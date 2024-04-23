@@ -196,12 +196,12 @@ class Pillar extends Model implements Sitemapable
             $weight = $this->active_delegators->map(fn ($delegator) => $delegator->account->znn_balance)->sum();
         }
 
-        return Number::abbreviate(znn_token()->getDisplayAmount($weight));
+        return Number::abbreviate(app('znnToken')->getDisplayAmount($weight));
     }
 
     public function getDisplayQsrBurnAttribute(): string
     {
-        return Number::abbreviate(qsr_token()->getDisplayAmount($this->qsr_burn));
+        return Number::abbreviate(app('qsrToken')->getDisplayAmount($this->qsr_burn));
     }
 
     public function getRankAttribute(): string
