@@ -25,9 +25,9 @@ class NoMServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('InsertMomentum', fn ($app) => new InsertMomentum);
+        $this->app->bind(InsertMomentum::class, fn ($app) => new InsertMomentum);
 
-        $this->app->bind('InsertAccountBlock', fn ($app) => new InsertAccountBlock($app->make(ZenonSdk::class)));
+        $this->app->bind(InsertAccountBlock::class, fn ($app) => new InsertAccountBlock($app->make(ZenonSdk::class)));
 
         $this->app->singleton(Zenon::class, function ($app, $params) {
             $nodeUrl = $params['node'] ?? config('services.zenon.node_url');

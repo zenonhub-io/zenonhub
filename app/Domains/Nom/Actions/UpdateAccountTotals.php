@@ -21,18 +21,9 @@ class UpdateAccountTotals implements ShouldBeUnique
         return $account->id;
     }
 
-    public function getJobUniqueFor(Account $account): int
-    {
-        if ($account->is_embedded_contract) {
-            return 60 * 5;
-        }
-
-        return 60;
-    }
-
     public function handle(Account $account): void
     {
-        $this->account = $account;
+        $this->account = $account->refresh();
 
         $this->saveCurrentBalance();
         $this->saveStakedZnn();

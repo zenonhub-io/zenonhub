@@ -12,14 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class ProcessInsertedAccountBlock implements ShouldQueue
 {
     /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      */
     public function handle(AccountBlockInserted $event): void
@@ -27,13 +19,19 @@ class ProcessInsertedAccountBlock implements ShouldQueue
         $accountBlock = $event->accountBlock;
 
         if ($accountBlock->account->address !== config('explorer.empty_address')) {
-            UpdateAccountTotals::dispatch($accountBlock->account)->delay(60);
+            $delay = $accountBlock->account->is_embedded_contract
+                ? now()->addMinutes(5)->diffInSeconds(now())
+                : now()->addMinute()->diffInSeconds(now());
+            UpdateAccountTotals::dispatch($accountBlock->account)->delay($delay);
         }
 
         if ($accountBlock->toAccount->address !== config('explorer.empty_address')) {
-            UpdateAccountTotals::dispatch($accountBlock->toAccount)->delay(60);
+            $delay = $accountBlock->toAccount->is_embedded_contract
+                ? now()->addMinutes(5)->diffInSeconds(now())
+                : now()->addMinute()->diffInSeconds(now());
+            UpdateAccountTotals::dispatch($accountBlock->toAccount)->delay($delay);
         }
 
-        (new ProcessLiquidityProgramRewards)->execute($accountBlock);
+        ProcessLiquidityProgramRewards::run($accountBlock);
     }
 }

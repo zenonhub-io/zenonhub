@@ -7,10 +7,13 @@ namespace App\Domains\Nom\Actions;
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\AccountReward;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class ProcessLiquidityProgramRewards
 {
-    public function execute(AccountBlock $accountBlock): void
+    use AsAction;
+
+    public function handle(AccountBlock $accountBlock): void
     {
         if ($accountBlock->token?->id !== 2) {
             return;
