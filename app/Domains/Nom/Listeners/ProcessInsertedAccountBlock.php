@@ -26,8 +26,14 @@ class ProcessInsertedAccountBlock implements ShouldQueue
     {
         $accountBlock = $event->accountBlock;
 
-        //(new UpdateAccountTotals)->execute($accountBlock->account);
-        //(new UpdateAccountTotals)->execute($accountBlock->toAccount);
+        if ($accountBlock->account->address !== config('explorer.empty_address')) {
+            UpdateAccountTotals::dispatch($accountBlock->account)->delay(60);
+        }
+
+        if ($accountBlock->toAccount->address !== config('explorer.empty_address')) {
+            UpdateAccountTotals::dispatch($accountBlock->toAccount)->delay(60);
+        }
+
         (new ProcessLiquidityProgramRewards)->execute($accountBlock);
     }
 }

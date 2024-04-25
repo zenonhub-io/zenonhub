@@ -4,24 +4,37 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Actions;
 
+use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Lorisleiva\Actions\Concerns\AsAction;
 
-class UpdateAccountTotals
+class UpdateAccountTotals implements ShouldBeUnique
 {
+    use AsAction;
+
     private Account $account;
 
-    public function execute(Account $account): void
+    public function getJobUniqueId(Account $account): int
     {
-        if ($account->address === config('explorer.empty_address')) {
-            return;
+        return $account->id;
+    }
+
+    public function getJobUniqueFor(Account $account): int
+    {
+        if ($account->is_embedded_contract) {
+            return 60 * 5;
         }
 
+        return 60;
+    }
+
+    public function handle(Account $account): void
+    {
         $this->account = $account;
 
         $this->saveCurrentBalance();
-        $this->updateSendReceiveTotals();
         $this->saveStakedZnn();
         $this->saveFusedQsr();
         $this->saveRewardTotals();
@@ -30,25 +43,44 @@ class UpdateAccountTotals
         $this->account->save();
     }
 
+    public function asJob(Account $account): void
+    {
+        $this->handle($account);
+    }
+
     private function saveCurrentBalance(): void
     {
-        $tokenIds = AccountBlock::involvingAccount($this->account)
-            ->select('token_id')
+        $accountTokenIds = $this->account->balances()->pluck('token_id');
+        $tokenIds = $this->account->receivedBlocks()
             ->whereNotNull('token_id')
-            ->groupBy('token_id')
+            ->distinct()
+            ->get(['token_id'])
             ->pluck('token_id');
-
-        $accountTokenIds = $this->account->balances()
-            ->pluck('token_id')
-            ->toArray();
 
         $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
             $token = Token::find($tokenId);
-            $totalSent = $this->account->sentBlocks()->where('token_id', $tokenId)->sum('amount');
-            $totalReceived = $this->account->receivedBlocks()->where('token_id', $tokenId)->sum('amount');
-            $balance = $totalReceived - $totalSent;
 
-            if (! in_array($token->id, $accountTokenIds, true)) {
+            $sent = $this->account->sentBlocks()
+                ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
+                ->where('token_id', $token->id)
+                ->first()->total;
+
+            $received = $this->account->receivedBlocks()
+                ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
+                ->where('token_id', $token->id)
+                ->first()->total;
+
+            $balance = $received - $sent;
+
+            if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+                $this->account->znn_balance = $balance;
+            }
+
+            if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+                $this->account->qsr_balance = $balance;
+            }
+
+            if ($accountTokenIds->contains($token->id)) {
                 $this->account->balances()->attach($token, [
                     'balance' => $balance,
                     'updated_at' => now(),
@@ -60,18 +92,6 @@ class UpdateAccountTotals
                 ]);
             }
         });
-    }
-
-    private function updateSendReceiveTotals(): void
-    {
-        $znnTokenId = app('znnToken')->id;
-        $qsrTokenId = app('qsrToken')->id;
-
-        $this->account->znn_sent = $this->account->sentBlocks()->where('token_id', $znnTokenId)->sum('amount');
-        $this->account->znn_received = $this->account->receivedBlocks()->where('token_id', $znnTokenId)->sum('amount');
-
-        $this->account->qsr_sent = $this->account->sentBlocks()->where('token_id', $qsrTokenId)->sum('amount');
-        $this->account->qsr_received = $this->account->receivedBlocks()->where('token_id', $qsrTokenId)->sum('amount');
     }
 
     private function saveStakedZnn(): void

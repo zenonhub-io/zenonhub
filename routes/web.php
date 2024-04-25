@@ -16,6 +16,60 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    $account = App\Domains\Nom\Models\Account::find(35);
+    App\Domains\Nom\Actions\UpdateAccountTotals::run($account);
+
+    $sent = Illuminate\Support\Facades\DB::table('nom_account_blocks')
+        ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
+        ->where('account_id', $account->id)
+        ->where('token_id', 2)
+        ->first()->total;
+
+    $received = Illuminate\Support\Facades\DB::table('nom_account_blocks')
+        ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
+        ->where('to_account_id', $account->id)
+        ->where('token_id', 2)
+        ->first()->total;
+
+    dd($sent, $received);
+
+    $totalSent = $account->sentBlocks()->where('token_id', 2)->sum('amount');
+    $totalReceived = $account->receivedBlocks()->where('token_id', 2)->sum('amount');
+
+    dd($totalSent, $totalReceived);
+
+    $account = App\Domains\Nom\Models\Account::find(6864);
+
+    $account = App\Domains\Nom\Models\Account::find(6864);
+    $tokenIds = App\Domains\Nom\Models\AccountBlock::involvingAccount($account)
+        ->select('token_id')
+        ->whereNotNull('token_id')
+        ->groupBy('token_id')
+        ->pluck('token_id');
+
+    $accountTokenIds = $account->balances()->pluck('token_id');
+
+    $tokenIds->each(function ($tokenId) use ($accountTokenIds, $account) {
+        $token = App\Domains\Nom\Models\Token::find($tokenId);
+        $totalSent = $account->sentBlocks()->where('token_id', $tokenId)->sum('amount');
+        $totalReceived = $account->receivedBlocks()->where('token_id', $tokenId)->sum('amount');
+        $balance = $totalReceived - $totalSent;
+
+        if ($accountTokenIds->contains($token->id)) {
+            $account->balances()->attach($token, [
+                'balance' => $balance,
+                'updated_at' => now(),
+            ]);
+        } else {
+            $account->balances()->updateExistingPivot($token->id, [
+                'balance' => $balance,
+                'updated_at' => now(),
+            ]);
+        }
+    });
+
+    dd($accountTokenIds);
+
     //    $MomentumsJson = Storage::json('test-json/multiple-momentums.json');
     //    $test = \App\Domains\Nom\DataTransferObjects\MomentumDTO::collect($MomentumsJson, \Illuminate\Support\Collection::class);
     //

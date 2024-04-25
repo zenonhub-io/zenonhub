@@ -25,10 +25,6 @@ return new class extends Migration
             $table->string('qsr_fused')->index()->default(0);
             $table->string('znn_rewards')->index()->default(0);
             $table->string('qsr_rewards')->index()->default(0);
-            $table->string('znn_sent')->index()->default(0);
-            $table->string('znn_received')->index()->default(0);
-            $table->string('qsr_sent')->index()->default(0);
-            $table->string('qsr_received')->index()->default(0);
             $table->boolean('is_embedded_contract')->default(0);
             $table->timestamp('first_active_at')->index()->nullable();
             $table->timestamp('updated_at')->index()->nullable();

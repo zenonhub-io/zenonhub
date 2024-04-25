@@ -37,6 +37,13 @@ return new class extends Migration
             $table->string('nonce')->nullable();
             $table->string('hash')->unique();
             $table->timestamp('created_at')->nullable();
+
+            $table->index('account_id');
+            $table->index('to_account_id');
+
+            $table->index(['account_id', 'to_account_id']);
+            $table->index(['account_id', 'token_id']);
+            $table->index(['to_account_id', 'token_id']);
         });
 
         Schema::create('nom_account_block_data', function (Blueprint $table) {

@@ -65,7 +65,8 @@ beforeEach(function () {
 it('inserts a account block', function () {
 
     $momentumContent = $this->momentumDTOs->firstWhere('height', 2)->content->first();
-    (new InsertAccountBlock)->execute($momentumContent);
+
+    app(InsertAccountBlock::class)->execute($momentumContent);
 
     expect(AccountBlock::count())->toBe(1)
         ->and(AccountBlock::find(1)->hash)->toEqual('txAddr1000000000000000000000000000000000000000000000000000000001');
@@ -75,7 +76,7 @@ it('inserts a account block', function () {
 it('relates an account block to a momentum', function () {
 
     $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
-    (new InsertAccountBlock)->execute($momentumDTO->content->first());
+    app(InsertAccountBlock::class)->execute($momentumDTO->content->first());
 
     $accountBlock = AccountBlock::find(1);
     $momentum = Momentum::firstWhere('hash', $momentumDTO->hash);
@@ -89,7 +90,7 @@ it('relates an account block to a momentum', function () {
 it('sets an accounts public key', function () {
 
     $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
-    (new InsertAccountBlock)->execute($momentumDTO->content->first());
+    app(InsertAccountBlock::class)->execute($momentumDTO->content->first());
 
     $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
     $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
@@ -100,7 +101,7 @@ it('sets an accounts public key', function () {
 it('sets an accounts first active date', function () {
 
     $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
-    (new InsertAccountBlock)->execute($momentumDTO->content->first());
+    app(InsertAccountBlock::class)->execute($momentumDTO->content->first());
 
     $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
 
@@ -112,7 +113,7 @@ it('relates an account block to the correct account', function () {
     $momentumDTOs = $this->momentumDTOs->whereBetween('height', [2, 3]);
     $momentumDTOs->each(function ($momentumDTO) {
         $momentumDTO->content->each(function ($momentumContentDTO) {
-            (new InsertAccountBlock)->execute($momentumContentDTO);
+            app(InsertAccountBlock::class)->execute($momentumContentDTO);
         });
     });
 
@@ -133,7 +134,7 @@ it('associates account block with paired block', function () {
     $momentumDTOs = $this->momentumDTOs->whereBetween('height', [2, 3]);
     $momentumDTOs->each(function ($momentumDTO) {
         $momentumDTO->content->each(function ($momentumContentDTO) {
-            (new InsertAccountBlock)->execute($momentumContentDTO);
+            app(InsertAccountBlock::class)->execute($momentumContentDTO);
         });
     });
 
@@ -149,11 +150,10 @@ it('associates account block with paired block', function () {
 
 it('associates parent and descendant blocks', function () {
 
-    // TODO
     $momentumDTOs = $this->momentumDTOs->whereBetween('height', [4, 5, 6]);
     $momentumDTOs->each(function ($momentumDTO) {
         $momentumDTO->content->each(function ($momentumContentDTO) {
-            (new InsertAccountBlock)->execute($momentumContentDTO);
+            app(InsertAccountBlock::class)->execute($momentumContentDTO);
         });
     });
 
@@ -169,7 +169,7 @@ it('associates parent and descendant blocks', function () {
 it('associates block data to an account block', function () {
 
     $momentumContent = $this->momentumDTOs->firstWhere('height', 4)->content->first();
-    (new InsertAccountBlock)->execute($momentumContent);
+    app(InsertAccountBlock::class)->execute($momentumContent);
 
     $accountBlock = AccountBlock::findBy('hash', 'txAddr1000000000000000000000000000000000000000000000000000000003', true);
 
@@ -183,7 +183,7 @@ it('dispatches account block inserted event once for each account block', functi
     Event::fake();
 
     $momentumContent = $this->momentumDTOs->firstWhere('height', 2)->content->first();
-    (new InsertAccountBlock)->execute($momentumContent);
+    app(InsertAccountBlock::class)->execute($momentumContent);
 
     Event::assertDispatchedTimes(AccountBlockInserted::class, 1);
 
