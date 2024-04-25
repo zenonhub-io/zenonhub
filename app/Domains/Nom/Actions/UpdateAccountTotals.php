@@ -8,6 +8,7 @@ use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\Token;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class UpdateAccountTotals implements ShouldBeUnique
@@ -23,6 +24,10 @@ class UpdateAccountTotals implements ShouldBeUnique
 
     public function handle(Account $account): void
     {
+        Log::debug('Update account totals', [
+            'address' => $account->address,
+        ]);
+
         $this->account = $account->refresh();
 
         $this->saveCurrentBalance();
@@ -32,11 +37,6 @@ class UpdateAccountTotals implements ShouldBeUnique
 
         $this->account->updated_at = $this->account->latestBlock?->created_at ?? now();
         $this->account->save();
-    }
-
-    public function asJob(Account $account): void
-    {
-        $this->handle($account);
     }
 
     private function saveCurrentBalance(): void
