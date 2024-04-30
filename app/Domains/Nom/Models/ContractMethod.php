@@ -49,11 +49,6 @@ class ContractMethod extends Model
     //
     // Attributes
 
-    public function getJobClassNameAttribute(): string
-    {
-        return "App\Jobs\Nom\\{$this->contract->name}\\{$this->name}";
-    }
-
     //
     // Methods
 }

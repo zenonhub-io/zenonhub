@@ -8,6 +8,7 @@ use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Events\AccountBlockInserted;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
@@ -45,6 +46,21 @@ beforeEach(function () {
             $mock->shouldReceive('getAccountBlockByHash')
                 ->withArgs([$hash])
                 ->andReturn($this->accountBlockDTOs->firstWhere('hash', $hash));
+        }
+
+        $apiDataResponses = [
+            'r0PT8A==' => null,
+            'zXD5vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU5mMYxjGMYxjGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABLM/dAAAAAAAAAAAAAAAAAAaxZOdQM+azszZjPLM7ym4xnp2Q==' => '{"tokenStandard":"zts1znnxxxxxxxxxxxxx9z4ulx","amount":"315424208","receiveAddress":"z1qp43vnn4qvlxkwenvceukvau5m33n6we4rt3aj"}',
+        ];
+
+        foreach ($apiDataResponses as $input => $output) {
+
+            $input = base64_decode($input);
+            $output = $output ? json_decode($output, true) : null;
+
+            $mock->shouldReceive('abiDecode')
+                ->withArgs([ContractMethod::class, $input])
+                ->andReturn($output);
         }
     });
 
@@ -166,16 +182,36 @@ it('associates parent and descendant blocks', function () {
         ->and($childAccountBlock->parent->hash)->toEqual($parentAccountBlock->hash);
 });
 
-it('associates block data to an account block', function () {
+it('associates to a contract and contract method', function () {
 
-    $momentumContent = $this->momentumDTOs->firstWhere('height', 4)->content->first();
+    $blockHash = 'embedpyllar00000000000000000000000000000000000000000000000000001';
+    $decodedData = json_decode('{"tokenStandard":"zts1znnxxxxxxxxxxxxx9z4ulx","amount":"315424208","receiveAddress":"z1qp43vnn4qvlxkwenvceukvau5m33n6we4rt3aj"}', true);
+
+    $momentumContent = $this->momentumDTOs->firstWhere('height', 5)->content->firstWhere('hash', $blockHash);
     app(InsertAccountBlock::class)->execute($momentumContent);
 
-    $accountBlock = AccountBlock::findBy('hash', 'txAddr1000000000000000000000000000000000000000000000000000000003', true);
+    $accountBlock = AccountBlock::findBy('hash', $blockHash, true);
 
     expect($accountBlock->data)->not->toBeNull()
-        ->and($accountBlock->data->raw)->toEqual('r0PT8A==')
-        ->and($accountBlock->data->is_processed)->toBeFalse();
+        ->and($accountBlock->contractMethod->contract->name)->toEqual('Token')
+        ->and($accountBlock->contractMethod->name)->toEqual('Mint')
+        ->and($accountBlock->data->decoded)->toEqual($decodedData);
+});
+
+it('associates raw and decoded data', function () {
+
+    $blockHash = 'embedpyllar00000000000000000000000000000000000000000000000000001';
+    $rawData = 'zXD5vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU5mMYxjGMYxjGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABLM/dAAAAAAAAAAAAAAAAAAaxZOdQM+azszZjPLM7ym4xnp2Q==';
+    $decodedData = json_decode('{"tokenStandard":"zts1znnxxxxxxxxxxxxx9z4ulx","amount":"315424208","receiveAddress":"z1qp43vnn4qvlxkwenvceukvau5m33n6we4rt3aj"}', true);
+
+    $momentumContent = $this->momentumDTOs->firstWhere('height', 5)->content->firstWhere('hash', $blockHash);
+    app(InsertAccountBlock::class)->execute($momentumContent);
+
+    $accountBlock = AccountBlock::findBy('hash', $blockHash, true);
+
+    expect($accountBlock->data)->not->toBeNull()
+        ->and($accountBlock->data->raw)->toEqual($rawData)
+        ->and($accountBlock->data->decoded)->toEqual($decodedData);
 });
 
 it('dispatches account block inserted event once for each account block', function () {

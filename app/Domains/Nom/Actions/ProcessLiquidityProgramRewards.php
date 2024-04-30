@@ -15,14 +15,6 @@ class ProcessLiquidityProgramRewards
 
     public function handle(AccountBlock $accountBlock): void
     {
-        if ($accountBlock->token?->id !== 2) {
-            return;
-        }
-
-        if ($accountBlock->account->address !== config('explorer.liquidity_program_distributor')) {
-            return;
-        }
-
         AccountReward::create([
             'chain_id' => $accountBlock->chain->id,
             'account_id' => $accountBlock->toAccount->id,

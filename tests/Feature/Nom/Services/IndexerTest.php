@@ -6,6 +6,7 @@ use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\Indexer;
 use App\Domains\Nom\Services\ZenonSdk;
@@ -51,6 +52,21 @@ beforeEach(function () {
             $mock->shouldReceive('getAccountBlockByHash')
                 ->withArgs([$hash])
                 ->andReturn($this->accountBlockDTOs->firstWhere('hash', $hash));
+        }
+
+        $apiDataResponses = [
+            'r0PT8A==' => null,
+            'zXD5vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU5mMYxjGMYxjGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABLM/dAAAAAAAAAAAAAAAAAAaxZOdQM+azszZjPLM7ym4xnp2Q==' => '{"tokenStandard":"zts1znnxxxxxxxxxxxxx9z4ulx","amount":"315424208","receiveAddress":"z1qp43vnn4qvlxkwenvceukvau5m33n6we4rt3aj"}',
+        ];
+
+        foreach ($apiDataResponses as $input => $output) {
+
+            $input = base64_decode($input);
+            $output = $output ? json_decode($output, true) : null;
+
+            $mock->shouldReceive('abiDecode')
+                ->withArgs([ContractMethod::class, $input])
+                ->andReturn($output);
         }
     });
 });
