@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
+use App\Domains\Indexer\Actions\InsertAccountBlock;
+use App\Domains\Indexer\Events\AccountBlockInserted;
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
-use App\Domains\Nom\Events\AccountBlockInserted;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;

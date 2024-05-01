@@ -6,14 +6,8 @@ use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeAdmin;
-use App\Domains\Nom\Models\Chain;
 use App\Domains\Nom\Models\Token;
 use App\Domains\Nom\Services\ZenonSdk;
-
-function load_chain(): Chain
-{
-    return Chain::getCurrentChainId();
-}
 
 function load_account(string $address, ?string $name = null): Account
 {
@@ -21,7 +15,7 @@ function load_account(string $address, ?string $name = null): Account
 
     if (! $account) {
         $account = Account::create([
-            'chain_id' => load_chain()->id,
+            'chain_id' => app('currentChain')->id,
             'address' => $address,
             'name' => $name,
         ]);
@@ -41,7 +35,7 @@ function load_token(?string $zts): ?Token
     if (! $token) {
         $data = app(ZenonSdk::class)->getByZts($zts);
         $token = Token::create([
-            'chain_id' => load_chain()->id,
+            'chain_id' => app('currentChain')->id,
             'owner_id' => load_account($data->owner)->id,
             'name' => $data->name,
             'symbol' => $data->symbol,

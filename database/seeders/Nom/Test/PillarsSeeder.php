@@ -18,7 +18,7 @@ class PillarsSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = load_chain();
+        $chain = app('currentChain');
         $pillarsJson = Storage::json('nom-json/test/pillars.json');
         $pillarsDTO = PillarDTO::collect($pillarsJson, Collection::class);
 

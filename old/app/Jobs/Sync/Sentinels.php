@@ -66,7 +66,7 @@ class Sentinels implements ShouldQueue
             })->first();
 
             if (! $exists) {
-                $chain = load_chain();
+                $chain = app('currentChain');
                 $owner = load_account($data->owner);
 
                 Sentinel::create([

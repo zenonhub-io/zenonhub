@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Actions\Indexer;
+namespace App\Domains\Indexer\Actions;
 
+use App\Domains\Indexer\Events\MomentumInserted;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
-use App\Domains\Nom\Events\MomentumInserted;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Models\Pillar;
 use App\Domains\Nom\Models\PillarHistory;
@@ -20,7 +20,7 @@ class InsertMomentum
             'hash' => $momentumDTO->hash,
         ]);
 
-        $chain = load_chain();
+        $chain = app('currentChain');
         $producer = load_account($momentumDTO->producer);
         $momentum = Momentum::where('hash', $momentumDTO->hash)->first();
         $pillar = Pillar::where('producer_account_id', $producer->id)->first();

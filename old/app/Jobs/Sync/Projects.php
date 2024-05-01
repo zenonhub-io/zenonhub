@@ -64,7 +64,7 @@ class Projects implements ShouldQueue
         $this->projects->each(function ($data) {
             $project = AcceleratorProject::where('hash', $data->id)->first();
             if (! $project) {
-                $chain = load_chain();
+                $chain = app('currentChain');
                 $owner = load_account($data->owner);
 
                 $project = AcceleratorProject::create([
@@ -105,7 +105,7 @@ class Projects implements ShouldQueue
         foreach ($phases as $data) {
             $phase = AcceleratorPhase::where('hash', $data->phase->id)->first();
             if (! $phase) {
-                $chain = load_chain();
+                $chain = app('currentChain');
                 $phase = AcceleratorPhase::create([
                     'chain_id' => $chain->id,
                     'project_id' => $project->id,

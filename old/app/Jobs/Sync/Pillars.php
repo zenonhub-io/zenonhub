@@ -64,7 +64,7 @@ class Pillars implements ShouldQueue
         $this->pillars->each(function ($data) {
             $pillar = Pillar::where('name', $data->name)->first();
 
-            $chain = load_chain();
+            $chain = app('currentChain');
             $ownerAddress = load_account($data->ownerAddress);
             $producerAddress = load_account($data->producerAddress);
             $withdrawAddress = load_account($data->withdrawAddress);

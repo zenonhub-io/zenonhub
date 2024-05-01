@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Domains\Indexer\Services\Indexer;
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
-use App\Domains\Nom\Services\Indexer;
 use App\Domains\Nom\Services\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\TestDatabaseSeeder;

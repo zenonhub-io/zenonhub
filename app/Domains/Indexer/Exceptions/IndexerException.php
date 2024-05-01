@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Exceptions;
+namespace App\Domains\Indexer\Exceptions;
 
 use Exception;
 

@@ -16,7 +16,7 @@ class AccountsSeeder extends Seeder
     public function run(): void
     {
         Account::insert([
-            'chain_id' => load_chain()->id,
+            'chain_id' => app('currentChain')->id,
             'address' => config('explorer.empty_address'),
             'name' => 'Empty address',
             'is_embedded_contract' => false,
@@ -24,7 +24,7 @@ class AccountsSeeder extends Seeder
 
         foreach (EmbeddedContractsEnum::cases() as $address) {
             Account::insert([
-                'chain_id' => load_chain()->id,
+                'chain_id' => app('currentChain')->id,
                 'address' => $address->value,
                 'name' => $address->label(),
                 'is_embedded_contract' => true,

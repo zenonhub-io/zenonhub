@@ -14,7 +14,7 @@ class MomentumsSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = load_chain();
+        $chain = app('currentChain');
         $momentums = [
             [
                 'producer' => 'z1qznll3hchu0dwej3c9r4dgrp6e30tq8l7qv2em',

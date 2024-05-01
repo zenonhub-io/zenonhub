@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Services;
+namespace App\Domains\Indexer\Services;
 
-use App\Domains\Nom\Actions\Indexer\InsertAccountBlock;
-use App\Domains\Nom\Actions\Indexer\InsertMomentum;
+use App\Domains\Indexer\Actions\InsertAccountBlock;
+use App\Domains\Indexer\Actions\InsertMomentum;
+use App\Domains\Indexer\Exceptions\IndexerException;
 use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
-use App\Domains\Nom\Exceptions\IndexerException;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\Momentum;
+use App\Domains\Nom\Services\ZenonSdk;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;

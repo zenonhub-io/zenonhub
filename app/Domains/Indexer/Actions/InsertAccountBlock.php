@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Actions\Indexer;
+namespace App\Domains\Indexer\Actions;
 
+use App\Domains\Indexer\Events\AccountBlockInserted;
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
-use App\Domains\Nom\Events\AccountBlockInserted;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
@@ -40,7 +40,7 @@ class InsertAccountBlock
             return;
         }
 
-        $chain = load_chain();
+        $chain = app('currentChain');
         $account = load_account($blockData->address);
         $toAccount = load_account($blockData->toAddress);
         $token = load_token($blockData->token?->tokenStandard);

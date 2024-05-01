@@ -16,7 +16,7 @@ class BridgeNetworkSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = load_chain();
+        $chain = app('currentChain');
         $znn = App::make(ZenonSdk::class);
         $bridgeNetworks = $znn->bridge->getAllNetworks()['data']->list;
 

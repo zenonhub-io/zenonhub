@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Events;
+namespace App\Domains\Indexer\Events;
 
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Models\Momentum;

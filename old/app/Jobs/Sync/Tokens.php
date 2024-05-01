@@ -64,7 +64,7 @@ class Tokens implements ShouldQueue
             $token = Token::findBy('token_standard', $data->tokenStandard);
             $owner = load_account($data->owner);
             if (! $token) {
-                $chain = load_chain();
+                $chain = app('currentChain');
                 $token = Token::create([
                     'chain_id' => $chain->id,
                     'owner_id' => $owner->id,

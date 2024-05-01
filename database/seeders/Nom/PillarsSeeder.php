@@ -15,7 +15,7 @@ class PillarsSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = load_chain();
+        $chain = app('currentChain');
         $pillars = [
             [
                 'owner' => 'z1qzlaadsmar8pm0rdfwkctvxc8n2g5gaadxvmqj',

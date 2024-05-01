@@ -14,7 +14,7 @@ class TokensSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = load_chain();
+        $chain = app('currentChain');
         $tokens = [
             [
                 'owner' => 'z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0',

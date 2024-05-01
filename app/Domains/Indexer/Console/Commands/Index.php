@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Console\Commands;
+namespace App\Domains\Indexer\Console\Commands;
 
-use App\Domains\Nom\Services\Indexer;
+use App\Domains\Indexer\Services\Indexer;
 use Illuminate\Console\Command;
 
 class Index extends Command
@@ -14,7 +14,7 @@ class Index extends Command
      *
      * @var string
      */
-    protected $signature = 'nom:index';
+    protected $signature = 'indexer:run';
 
     /**
      * The console command description.
