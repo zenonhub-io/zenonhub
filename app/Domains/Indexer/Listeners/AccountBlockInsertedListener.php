@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Listeners;
 
 use App\Domains\Indexer\Events\AccountBlockInserted;
+use App\Domains\Indexer\Factories\ContractMethodProcessorFactory;
 use App\Domains\Nom\Actions\ProcessLiquidityProgramRewards;
 use App\Domains\Nom\Actions\UpdateAccountTotals;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
-use App\Domains\Nom\Factories\ContractMethodProcessorFactory;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use Exception;

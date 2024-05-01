@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Factories;
+namespace App\Domains\Indexer\Factories;
 
 use App\Domains\Nom\Models\ContractMethod;
 use App\Exceptions\ApplicationException;
