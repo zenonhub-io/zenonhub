@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Bridge;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeNetwork;
 use App\Domains\Nom\Models\BridgeNetworkToken;
@@ -12,7 +12,7 @@ use App\Domains\Nom\Models\BridgeUnwrap;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class UnwrapToken extends AbstractIndexerAction
+class UnwrapToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

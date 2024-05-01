@@ -14,7 +14,7 @@ class ContractMethodProcessorFactory
      */
     public static function create(ContractMethod $contractMethod): string
     {
-        $className = "App\Domains\Nom\Actions\Indexer\\{$contractMethod->contract->name}\\$contractMethod->name";
+        $className = "App\Domains\Indexer\Actions\\{$contractMethod->contract->name}\\$contractMethod->name";
 
         if (! class_exists($className)) {
             throw new ApplicationException(sprintf(

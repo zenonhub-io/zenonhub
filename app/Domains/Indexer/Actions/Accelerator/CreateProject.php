@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Actions\UpdatePillarEngagementScores;
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Models\NotificationType;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
-class CreateProject extends AbstractIndexerAction
+class CreateProject extends AbstractContractMethodProcessor
 {
     public AcceleratorProject $project;
 

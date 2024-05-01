@@ -7,7 +7,7 @@ namespace App\Domains\Indexer\Actions;
 use App\Domains\Nom\Models\AccountBlock;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-abstract class AbstractIndexerAction
+abstract class AbstractContractMethodProcessor
 {
     use AsAction;
 

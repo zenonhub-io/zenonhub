@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Plasma;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Plasma;
 use Illuminate\Support\Facades\Cache;
 
 use function App\Jobs\Nom\Plasma\qsr_token;
 
-class Fuse extends AbstractIndexerAction
+class Fuse extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Bridge;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeNetwork;
 use App\Domains\Nom\Models\BridgeWrap;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class WrapToken extends AbstractIndexerAction
+class WrapToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

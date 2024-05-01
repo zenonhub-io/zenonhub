@@ -6,7 +6,7 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Actions\Nom\Accelerator\SyncPhaseStatus;
 use App\Actions\Nom\Accelerator\SyncProjectStatus;
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AcceleratorVote;
@@ -15,7 +15,7 @@ use App\Domains\Nom\Models\Pillar;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class VoteByName extends AbstractIndexerAction
+class VoteByName extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

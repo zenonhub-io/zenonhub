@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Accelerator;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AccountBlock;
 
-class UpdatePhase extends AbstractIndexerAction
+class UpdatePhase extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

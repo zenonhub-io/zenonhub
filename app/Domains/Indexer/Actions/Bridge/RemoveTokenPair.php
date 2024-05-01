@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Bridge;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeNetwork;
 use App\Domains\Nom\Models\BridgeNetworkToken;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class RemoveTokenPair extends AbstractIndexerAction
+class RemoveTokenPair extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Token;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\AccountReward;
 use App\Domains\Nom\Models\TokenMint;
 
-class Mint extends AbstractIndexerAction
+class Mint extends AbstractContractMethodProcessor
 {
     public TokenMint $tokenMint;
 

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Stake;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake as StakeModel;
 use Illuminate\Support\Facades\Cache;
 
 use function App\Jobs\Nom\Stake\znn_token;
 
-class Stake extends AbstractIndexerAction
+class Stake extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

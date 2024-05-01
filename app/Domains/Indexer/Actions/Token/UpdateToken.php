@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Token;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
 
-class UpdateToken extends AbstractIndexerAction
+class UpdateToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

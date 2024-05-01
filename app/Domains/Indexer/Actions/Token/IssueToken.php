@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Token;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
 use App\Models\NotificationType;
@@ -13,7 +13,7 @@ use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Notification;
 
-class IssueToken extends AbstractIndexerAction
+class IssueToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

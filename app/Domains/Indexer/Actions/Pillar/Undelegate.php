@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Pillar;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\PillarDelegator;
 use App\Jobs\Sync\Pillars as SyncPillars;
@@ -12,7 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
-class Undelegate extends AbstractIndexerAction
+class Undelegate extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

@@ -16,6 +16,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AccountBlockInsertedListener implements ShouldQueue
 {
+    public string $queue = 'indexer';
+
     /**
      * Handle the event.
      */
@@ -63,8 +65,11 @@ class AccountBlockInsertedListener implements ShouldQueue
         }
 
         try {
+            $jobDelay = now()->addMinutes(1)->diffInSeconds(now());
             $blockProcessorClass = ContractMethodProcessorFactory::create($accountBlock->contractMethod);
-            $blockProcessorClass::dispatch($accountBlock);
+            $blockProcessorClass::dispatch($accountBlock)
+                ->onQueue('blockProcessor')
+                ->delay($jobDelay);
         } catch (Exception $exception) {
         }
     }

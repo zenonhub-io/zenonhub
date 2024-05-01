@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Bridge;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeNetwork;
 use Illuminate\Support\Facades\Log;
 
-class RemoveNetwork extends AbstractIndexerAction
+class RemoveNetwork extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

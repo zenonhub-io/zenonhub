@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Liquidity;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake as StakeModel;
 
-class LiquidityStake extends AbstractIndexerAction
+class LiquidityStake extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

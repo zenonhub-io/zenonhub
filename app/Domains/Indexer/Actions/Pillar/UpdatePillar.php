@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Pillar;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Domains\Nom\Models\PillarHistory;
 use App\Models\NotificationType;
 use Illuminate\Support\Facades\Notification;
 
-class UpdatePillar extends AbstractIndexerAction
+class UpdatePillar extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {

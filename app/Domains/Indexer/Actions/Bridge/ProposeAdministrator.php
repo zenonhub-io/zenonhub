@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Bridge;
 
-use App\Domains\Indexer\Actions\AbstractIndexerAction;
+use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeAdmin;
 use Illuminate\Support\Facades\Log;
 
-class ProposeAdministrator extends AbstractIndexerAction
+class ProposeAdministrator extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
