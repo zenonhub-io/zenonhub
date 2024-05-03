@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Actions;
 
-use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\Token;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -49,35 +47,34 @@ class UpdateAccountTotals implements ShouldBeUnique
             ->pluck('token_id');
 
         $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
-            $token = Token::find($tokenId);
 
             $sent = $this->account->sentBlocks()
                 ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
-                ->where('token_id', $token->id)
+                ->where('token_id', $tokenId)
                 ->first()->total;
 
             $received = $this->account->receivedBlocks()
                 ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
-                ->where('token_id', $token->id)
+                ->where('token_id', $tokenId)
                 ->first()->total;
 
             $balance = $received - $sent;
 
-            if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+            if ($tokenId === 1) {
                 $this->account->znn_balance = $balance;
             }
 
-            if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+            if ($tokenId === 2) {
                 $this->account->qsr_balance = $balance;
             }
 
-            if ($accountTokenIds->contains($token->id)) {
-                $this->account->balances()->attach($token, [
+            if ($accountTokenIds->contains($tokenId)) {
+                $this->account->balances()->attach($tokenId, [
                     'balance' => $balance,
                     'updated_at' => now(),
                 ]);
             } else {
-                $this->account->balances()->updateExistingPivot($token->id, [
+                $this->account->balances()->updateExistingPivot($tokenId, [
                     'balance' => $balance,
                     'updated_at' => now(),
                 ]);
