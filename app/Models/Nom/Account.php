@@ -560,7 +560,7 @@ class Account extends Model implements Sitemapable
             ->where('token_id', $token->id)
             ->first();
 
-        if ($holdings && $holdings->pivot->balance > 0) {
+        if ($holdings && $holdings->pivot->balance > 0 && $token->total_supply > 0) {
             $percentage = ($holdings->pivot->balance / $token->total_supply) * 100;
 
             return number_format($percentage, 2);
