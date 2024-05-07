@@ -16,8 +16,15 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $account = App\Domains\Nom\Models\Account::find(35);
-    App\Domains\Nom\Actions\UpdateAccountTotals::run($account);
+    dd(sprintf(
+        '%s%s%s',
+        '',
+        $tokenEntropy = Illuminate\Support\Str::random(40),
+        hash('crc32b', $tokenEntropy)
+    ));
+
+    $account = App\Domains\Nom\Models\Account::find(13852);
+    //App\Domains\Nom\Actions\UpdateAccountTotals::run($account);
 
     $sent = Illuminate\Support\Facades\DB::table('nom_account_blocks')
         ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
@@ -31,67 +38,11 @@ Route::get('test', function () {
         ->where('token_id', 2)
         ->first()->total;
 
-    dd($sent, $received);
+    $balance = ($received - $sent);
 
-    $totalSent = $account->sentBlocks()->where('token_id', 2)->sum('amount');
-    $totalReceived = $account->receivedBlocks()->where('token_id', 2)->sum('amount');
+    $qsrBalance = App\Domains\Nom\Models\Token::find(2)?->getDisplayAmount($balance);
 
-    dd($totalSent, $totalReceived);
-
-    $account = App\Domains\Nom\Models\Account::find(6864);
-
-    $account = App\Domains\Nom\Models\Account::find(6864);
-    $tokenIds = App\Domains\Nom\Models\AccountBlock::involvingAccount($account)
-        ->select('token_id')
-        ->whereNotNull('token_id')
-        ->groupBy('token_id')
-        ->pluck('token_id');
-
-    $accountTokenIds = $account->balances()->pluck('token_id');
-
-    $tokenIds->each(function ($tokenId) use ($accountTokenIds, $account) {
-        $token = App\Domains\Nom\Models\Token::find($tokenId);
-        $totalSent = $account->sentBlocks()->where('token_id', $tokenId)->sum('amount');
-        $totalReceived = $account->receivedBlocks()->where('token_id', $tokenId)->sum('amount');
-        $balance = $totalReceived - $totalSent;
-
-        if ($accountTokenIds->contains($token->id)) {
-            $account->balances()->attach($token, [
-                'balance' => $balance,
-                'updated_at' => now(),
-            ]);
-        } else {
-            $account->balances()->updateExistingPivot($token->id, [
-                'balance' => $balance,
-                'updated_at' => now(),
-            ]);
-        }
-    });
-
-    dd($accountTokenIds);
-
-    //    $MomentumsJson = Storage::json('test-json/multiple-momentums.json');
-    //    $test = \App\Domains\Nom\DataTransferObjects\MomentumDTO::collect($MomentumsJson, \Illuminate\Support\Collection::class);
-    //
-    //    dd($test);
-
-    $momentum = app(App\Domains\Nom\Services\ZenonSdk::class)->getMomentumsByHeight(3, 1);
-
-    dd($momentum->first());
-
-    $momentum = App\Domains\Nom\Models\Momentum::find(1);
-    dd($momentum->toJson());
-
-    $momentumDTO = App\Domains\Nom\DataTransferObjects\MomentumDTO::from('{"id":1,"chain_id":1,"producer_account_id":72,"producer_pillar_id":null,"version":1,"height":1,"hash":"9e204601d1b7b1427fe12bc82622e610d8a6ad43c40abf020eb66e538bb8eeb0","data":"MDAwMDAwMDAwMDAwMDAwMDAwMDA0ZGQwNDA1OTU1NDBkNDNjZThmZjU5NDZlZWFhNDAzZmIxM2QwZTU4MmQ4ZiNXZSBhcmUgYWxsIFNhdG9zaGkjRG9uJ3QgdHJ1c3QuIFZlcmlmeQ==","created_at":"2021-11-24T12:00:00.000000Z"}');
-
-    $account = App\Domains\Nom\Models\Account::find(2);
-    dd($account->contract->methods);
-
-    $token = App\Domains\Nom\Models\Token::find(1);
-
-    $amount = 8;
-
-    dd($token->getDisplayAmount($amount), $token->getFormattedAmount($amount));
+    dd($sent, $received, $qsrBalance);
 
     dd('complete');
 
