@@ -115,6 +115,7 @@ class ZenonCli
             'u' => $this->nodeUrl,
             'k' => $this->keystore,
             'p' => $this->passphrase,
+            'c' => app()->isProduction() ? '1' : '3',
         ])->filter()->implode(fn ($value, $key) => "-{$key} $value ");
         $flags = trim($flags);
 
