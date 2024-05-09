@@ -234,6 +234,6 @@ class Utilities extends ApiController
             );
         }
 
-        return $this->success($fuse->expires_at->format('Y-m-d H:i:s'));
+        return $this->success($fuse->expires_at?->format('Y-m-d H:i:s'));
     }
 }
