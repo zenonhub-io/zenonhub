@@ -6,6 +6,7 @@ use App\Actions\PlasmaBot\AccessKeyValidator;
 use App\Actions\PlasmaBot\Fuse;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
+use App\Models\PlasmaBotEntry;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -167,6 +168,7 @@ class Utilities extends ApiController
             return $this->validationError($validator);
         }
 
+        $address = $request->input('address');
         $plasmaBotAccount = Account::findByAddress(config('plasma-bot.address'));
 
         if ($plasmaBotAccount->qsr_balance < 20) {
@@ -177,16 +179,61 @@ class Utilities extends ApiController
             );
         }
 
-        $result = (new Fuse)->execute($request->input('address'), 20, null);
+        $existingFuse = PlasmaBotEntry::whereAddress($address)
+            ->whereActive()
+            ->isConfirmed()
+            ->exists();
 
-        if (! $result) {
-            return $this->error(
-                'Error fusing QSR',
-                'An error occurred while fusing QSR, please try again',
-                400
-            );
+        if (! $existingFuse) {
+            $result = (new Fuse)->execute($address, 20, null);
+
+            if (! $result) {
+                return $this->error(
+                    'Error fusing QSR',
+                    'An error occurred while fusing QSR, please try again',
+                    400
+                );
+            }
         }
 
         return $this->success('Success');
+    }
+
+    public function plasmaBotExpiration(Request $request, string $address): JsonResponse
+    {
+        try {
+            (new AccessKeyValidator())->execute($request->bearerToken());
+        } catch (\RuntimeException) {
+            return $this->error(
+                'Invalid access token',
+                'Your API token is invalid',
+                403
+            );
+        }
+
+        $validator = Validator::make([
+            'address' => $address,
+        ], [
+            'address' => 'required|string|size:40',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        $fuse = PlasmaBotEntry::whereAddress($address)
+            ->whereActive()
+            ->isConfirmed()
+            ->first();
+
+        if (! $fuse) {
+            return $this->error(
+                'Address not found',
+                'The supplied address has not used the plasma bot service.',
+                404
+            );
+        }
+
+        return $this->success($fuse->expires_at->format('Y-m-d H:i:s'));
     }
 }
