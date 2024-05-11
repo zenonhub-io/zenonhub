@@ -6,6 +6,7 @@ namespace Database\Seeders\Nom;
 
 use App\Domains\Nom\Models\Token;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class TokensSeeder extends Seeder
 {
@@ -14,33 +15,19 @@ class TokensSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = app('currentChain');
-        $tokens = [
-            [
-                'owner' => 'z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0',
-                'name' => 'ZNN',
-                'symbol' => 'ZNN',
-                'domain' => 'zenon.network',
-                'token_standard' => 'zts1znnxxxxxxxxxxxxx9z4ulx',
-            ], [
-                'owner' => 'z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0',
-                'name' => 'QSR',
-                'symbol' => 'QSR',
-                'domain' => 'zenon.network',
-                'token_standard' => 'zts1qsrxxxxxxxxxxxxxmrhjll',
-            ],
-        ];
+        $chainId = app('currentChain')->id;
+        $tokens = Storage::json('nom-json/genesis/tokens.json');
 
         foreach ($tokens as $token) {
             Token::insert([
-                'chain_id' => $chain->id,
+                'chain_id' => $chainId,
                 'owner_id' => load_account($token['owner'])->id,
                 'name' => $token['name'],
                 'symbol' => $token['symbol'],
                 'domain' => $token['domain'],
                 'token_standard' => $token['token_standard'],
-                'total_supply' => 0,
-                'max_supply' => 9007199254740991,
+                'total_supply' => $token['total_supply'],
+                'max_supply' => $token['max_supply'],
                 'decimals' => 8,
                 'is_burnable' => true,
                 'is_mintable' => true,

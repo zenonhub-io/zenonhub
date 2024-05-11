@@ -15,16 +15,15 @@ class AccountBlocksSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = app('currentChain');
+        $chainId = app('currentChain')->id;
         $accountBlocks = Storage::json('nom-json/genesis/account-blocks.json');
 
         foreach ($accountBlocks as $accountBlock) {
             AccountBlock::insert([
-                'chain_id' => $chain->id,
+                'chain_id' => $chainId,
                 'account_id' => load_account($accountBlock['account'])->id,
                 'to_account_id' => load_account($accountBlock['to_account'])->id,
                 'momentum_id' => 1,
-                'version' => 1,
                 'block_type' => 1,
                 'height' => 1,
                 'nonce' => '0000000000000000',

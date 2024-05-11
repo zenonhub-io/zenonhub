@@ -53,6 +53,8 @@ class Account extends Model implements Sitemapable
         'name',
         'znn_balance',
         'qsr_balance',
+        'genesis_znn_balance',
+        'genesis_qsr_balance',
         'is_embedded_contract',
         'first_active_at',
         'updated_at',

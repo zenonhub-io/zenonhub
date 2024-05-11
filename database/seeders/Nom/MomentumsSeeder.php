@@ -14,7 +14,7 @@ class MomentumsSeeder extends Seeder
      */
     public function run(): void
     {
-        $chain = app('currentChain');
+        $chainId = app('currentChain')->id;
         $momentums = [
             [
                 'producer' => 'z1qznll3hchu0dwej3c9r4dgrp6e30tq8l7qv2em',
@@ -26,10 +26,8 @@ class MomentumsSeeder extends Seeder
 
         foreach ($momentums as $momentum) {
             Momentum::insert([
-                'chain_id' => $chain->id,
+                'chain_id' => $chainId,
                 'producer_account_id' => load_account($momentum['producer'])->id,
-                'producer_pillar_id' => null,
-                'version' => 1,
                 'height' => $momentum['height'],
                 'hash' => $momentum['hash'],
                 'data' => $momentum['data'],

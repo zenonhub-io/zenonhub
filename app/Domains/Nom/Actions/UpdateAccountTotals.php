@@ -61,11 +61,17 @@ class UpdateAccountTotals implements ShouldBeUnique
             $balance = $received - $sent;
 
             if ($tokenId === 1) {
+                $balance += $this->account->genesis_znn_balance;
                 $this->account->znn_balance = $balance;
+                $this->account->znn_sent = $sent ?: 0;
+                $this->account->znn_received = $received ?: 0;
             }
 
             if ($tokenId === 2) {
+                $balance += $this->account->genesis_qsr_balance;
                 $this->account->qsr_balance = $balance;
+                $this->account->qsr_sent = $sent ?: 0;
+                $this->account->qsr_received = $received ?: 0;
             }
 
             if ($accountTokenIds->contains($tokenId)) {

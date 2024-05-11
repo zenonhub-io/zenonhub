@@ -28,11 +28,11 @@ return new class extends Migration
             $table->integer('missed_momentums')->default(0);
             $table->integer('momentum_rewards')->default(0);
             $table->integer('delegate_rewards')->default(0);
-            $table->decimal('az_engagement', 5)->default(0)->index();
+            $table->decimal('az_engagement', 5)->nullable()->index();
             $table->bigInteger('az_avg_vote_time')->nullable()->index();
             $table->integer('avg_momentums_produced')->default(0)->index();
             $table->bigInteger('total_momentums_produced')->default(0)->index();
-            $table->boolean('is_legacy')->default(1);
+            $table->boolean('is_legacy')->default(0);
             $table->timestamp('revoked_at')->nullable();
             $table->timestamp('created_at')->default('2021-11-24 12:00:00');
             $table->timestamp('updated_at')->nullable();

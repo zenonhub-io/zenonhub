@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
             $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
             $table->foreignId('producer_pillar_id')->nullable()->references('id')->on('nom_pillars')->nullOnDelete();
-            $table->integer('version');
+            $table->integer('version')->default(1);
             $table->bigInteger('height')->unique();
             $table->string('hash')->unique();
             $table->text('data')->nullable();

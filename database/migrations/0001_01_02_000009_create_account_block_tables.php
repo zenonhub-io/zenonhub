@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('paired_account_block_id')->nullable()->references('id')->on('nom_account_blocks')->nullOnDelete();
             $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->nullOnDelete();
             $table->foreignId('contract_method_id')->nullable()->references('id')->on('nom_contract_methods')->nullOnDelete();
-            $table->integer('version');
+            $table->integer('version')->default(1);
             $table->integer('block_type')->index();
             $table->bigInteger('height')->index();
             $table->string('amount')->default(0);

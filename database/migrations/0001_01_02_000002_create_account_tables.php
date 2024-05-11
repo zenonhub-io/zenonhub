@@ -21,6 +21,12 @@ return new class extends Migration
             $table->string('public_key')->nullable();
             $table->string('znn_balance')->index()->default(0);
             $table->string('qsr_balance')->index()->default(0);
+            $table->string('genesis_znn_balance')->default(0);
+            $table->string('genesis_qsr_balance')->default(0);
+            $table->string('znn_sent')->default(0);
+            $table->string('znn_received')->default(0);
+            $table->string('qsr_sent')->default(0);
+            $table->string('qsr_received')->default(0);
             $table->string('znn_staked')->index()->default(0);
             $table->string('qsr_fused')->index()->default(0);
             $table->string('znn_rewards')->index()->default(0);
