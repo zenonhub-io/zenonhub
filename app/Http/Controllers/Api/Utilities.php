@@ -168,10 +168,11 @@ class Utilities extends ApiController
             return $this->validationError($validator);
         }
 
+        $fuseAmount = 100;
         $address = $request->input('address');
         $plasmaBotAccount = Account::findByAddress(config('plasma-bot.address'));
 
-        if ($plasmaBotAccount->qsr_balance < 20) {
+        if ($plasmaBotAccount->qsr_balance < $fuseAmount) {
             return $this->error(
                 'Unable to fuse QSR',
                 'Not enough QSR available in the bot, try again later',
@@ -185,7 +186,7 @@ class Utilities extends ApiController
             ->exists();
 
         if (! $existingFuse) {
-            $result = (new Fuse)->execute($address, 20, null);
+            $result = (new Fuse)->execute($address, $fuseAmount, null);
 
             if (! $result) {
                 return $this->error(
@@ -234,6 +235,17 @@ class Utilities extends ApiController
             );
         }
 
-        return $this->success($fuse->expires_at?->format('Y-m-d H:i:s'));
+        $expirationDate = $fuse->expires_at;
+
+        if (! $expirationDate) {
+            $account = Account::findByAddress($address);
+            if ($account && $account->latest_block) {
+                $account->latest_block->created_at->addDays(30);
+            } else {
+                $expirationDate = now()->addDays(30);
+            }
+        }
+
+        return $this->success($expirationDate->format('Y-m-d H:i:s'));
     }
 }
