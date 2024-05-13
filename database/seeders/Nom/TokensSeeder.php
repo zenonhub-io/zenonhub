@@ -16,24 +16,24 @@ class TokensSeeder extends Seeder
     public function run(): void
     {
         $chainId = app('currentChain')->id;
-        $tokens = Storage::json('nom-json/genesis/tokens.json');
+        $tokens = Storage::json('nom-json/genesis/genesis.json')['TokenConfig']['Tokens'];
 
-        foreach ($tokens as $token) {
+        collect($tokens)->each(function ($token) use ($chainId) {
             Token::insert([
                 'chain_id' => $chainId,
                 'owner_id' => load_account($token['owner'])->id,
-                'name' => $token['name'],
-                'symbol' => $token['symbol'],
-                'domain' => $token['domain'],
-                'token_standard' => $token['token_standard'],
-                'total_supply' => $token['total_supply'],
-                'max_supply' => $token['max_supply'],
-                'decimals' => 8,
-                'is_burnable' => true,
-                'is_mintable' => true,
-                'is_utility' => true,
+                'name' => $token['tokenName'],
+                'symbol' => $token['tokenSymbol'],
+                'domain' => $token['tokenDomain'],
+                'token_standard' => $token['tokenStandard'],
+                'total_supply' => $token['totalSupply'],
+                'max_supply' => $token['maxSupply'],
+                'decimals' => $token['decimals'],
+                'is_burnable' => $token['isBurnable'],
+                'is_mintable' => $token['isMintable'],
+                'is_utility' => $token['isUtility'],
                 'created_at' => '2021-11-24 12:00:00',
             ]);
-        }
+        });
     }
 }

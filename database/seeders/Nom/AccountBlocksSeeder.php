@@ -18,7 +18,7 @@ class AccountBlocksSeeder extends Seeder
         $chainId = app('currentChain')->id;
         $accountBlocks = Storage::json('nom-json/genesis/account-blocks.json');
 
-        foreach ($accountBlocks as $accountBlock) {
+        collect($accountBlocks)->each(function ($accountBlock) use ($chainId) {
             AccountBlock::insert([
                 'chain_id' => $chainId,
                 'account_id' => load_account($accountBlock['account'])->id,
@@ -30,6 +30,6 @@ class AccountBlocksSeeder extends Seeder
                 'hash' => $accountBlock['hash'],
                 'created_at' => '2021-11-24 12:00:00',
             ]);
-        }
+        });
     }
 }

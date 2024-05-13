@@ -80,7 +80,7 @@ class PillarDelegators extends Component
 
         if ($this->sort === 'weight') {
             $this->query->orderBy(
-                Account::select('znn_balance')->whereColumn('nom_accounts.id', 'nom_pillar_delegators.account_id'),
+                Account::select('znn_balance')->whereColumn('nom_accounts.id', 'nom_delegations.account_id'),
                 $this->order
             );
         } else {

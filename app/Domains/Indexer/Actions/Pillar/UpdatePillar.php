@@ -7,7 +7,6 @@ namespace App\Domains\Indexer\Actions\Pillar;
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
-use App\Domains\Nom\Models\PillarHistory;
 use App\Models\NotificationType;
 use Illuminate\Support\Facades\Notification;
 
@@ -15,8 +14,8 @@ class UpdatePillar extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $blockData = $this->accountBlock->data->decoded;
-        $pillar = Pillar::where('owner_id', $this->accountBlock->account->id)->first();
+        $blockData = $accountBlock->data->decoded;
+        $pillar = Pillar::where('owner_id', $accountBlock->account->id)->isActive()->first();
 
         if (! $pillar) {
             return;
@@ -33,27 +32,21 @@ class UpdatePillar extends AbstractContractMethodProcessor
         $producerAddress = load_account($blockData['producerAddress']);
         $rewardAddress = load_account($blockData['rewardAddress']);
 
-        PillarHistory::create([
-            'pillar_id' => $pillar->id,
-            'producer_account_id' => $producerAddress?->id,
-            'withdraw_account_id' => $rewardAddress?->id,
+        $pillar->producer_account_id = $producerAddress->id;
+        $pillar->withdraw_account_id = $rewardAddress->id;
+        $pillar->momentum_rewards = $blockData['giveBlockRewardPercentage'];
+        $pillar->delegate_rewards = $blockData['giveDelegateRewardPercentage'];
+        $pillar->updated_at = $accountBlock->created_at;
+        $pillar->save();
+
+        $pillar->history()->create([
+            'producer_account_id' => $producerAddress->id,
+            'withdraw_account_id' => $rewardAddress->id,
             'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
             'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
             'is_reward_change' => $rewardsChanged,
-            'updated_at' => $this->accountBlock->momentum->created_at,
+            'updated_at' => $accountBlock->created_at,
         ]);
-
-        $pillar->momentum_rewards = $blockData['giveBlockRewardPercentage'];
-        $pillar->delegate_rewards = $blockData['giveDelegateRewardPercentage'];
-        $pillar->producer_account_id = $producerAddress?->id;
-        $pillar->withdraw_account_id = $rewardAddress?->id;
-        $pillar->save();
-        $pillar->refresh();
-
-        if ($rewardsChanged) {
-            $this->notifyUsers($pillar);
-        }
-
     }
 
     private function notifyUsers($pillar): void

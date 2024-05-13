@@ -17,6 +17,7 @@ class AccountsSeeder extends Seeder
     public function run(): void
     {
         $chainId = app('currentChain')->id;
+        $accounts = Storage::json('nom-json/genesis/genesis.json')['GenesisBlocks']['Blocks'];
 
         Account::insert([
             'chain_id' => $chainId,
@@ -34,15 +35,14 @@ class AccountsSeeder extends Seeder
             ]);
         }
 
-        $accounts = Storage::json('nom-json/genesis/accounts.json');
-        foreach ($accounts as $account) {
+        collect($accounts)->each(function ($account) use ($chainId) {
             Account::updateOrInsert([
                 'chain_id' => $chainId,
-                'address' => $account['address'],
+                'address' => $account['Address'],
             ], [
-                'genesis_znn_balance' => $account['znn_balance'],
-                'genesis_qsr_balance' => $account['qsr_balance'],
+                'genesis_znn_balance' => $account['BalanceList']['zts1znnxxxxxxxxxxxxx9z4ulx'] ?? 0,
+                'genesis_qsr_balance' => $account['BalanceList']['zts1qsrxxxxxxxxxxxxxmrhjll'] ?? 0,
             ]);
-        }
+        });
     }
 }

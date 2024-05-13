@@ -14,8 +14,8 @@ class Revoke extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $blockData = $this->accountBlock->data->decoded;
-        $pillar = Pillar::where('name', $blockData['name'])->first();
+        $blockData = $accountBlock->data->decoded;
+        $pillar = Pillar::findBy('name', $blockData['name']);
 
         if (! $pillar) {
             return;
@@ -25,11 +25,8 @@ class Revoke extends AbstractContractMethodProcessor
         $pillar->produced_momentums = 0;
         $pillar->expected_momentums = 0;
         $pillar->missed_momentums = 0;
-        $pillar->revoked_at = $this->accountBlock->momentum->created_at;
+        $pillar->revoked_at = $accountBlock->created_at;
         $pillar->save();
-
-        $this->notifyUsers($pillar);
-
     }
 
     private function notifyUsers($pillar): void

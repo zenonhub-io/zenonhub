@@ -68,7 +68,7 @@ class PillarActiveDelegators implements FromQuery, WithHeadings, WithMapping
 
         if ($this->sort === 'weight') {
             $query->orderBy(
-                Account::select('znn_balance')->whereColumn('nom_accounts.id', 'nom_pillar_delegators.account_id'),
+                Account::select('znn_balance')->whereColumn('nom_accounts.id', 'nom_delegations.account_id'),
                 $this->order
             );
         } else {

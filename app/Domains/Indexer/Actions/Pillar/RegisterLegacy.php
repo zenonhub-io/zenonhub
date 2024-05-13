@@ -15,36 +15,24 @@ class RegisterLegacy extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $blockData = $this->accountBlock->data->decoded;
+        $blockData = $accountBlock->data->decoded;
 
-        $pillar = Pillar::where('name', $blockData['name'])->first();
+        $producerAddress = load_account($blockData['producerAddress']);
+        $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
 
-        if (! $pillar) {
-            $producerAddress = load_account($blockData['producerAddress']);
-            $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
-
-            $pillar = Pillar::create([
-                'chain_id' => $this->accountBlock->chain->id,
-                'owner_id' => $this->accountBlock->account->id,
-                'producer_account_id' => $producerAddress?->id,
-                'withdraw_account_id' => $withdrawAddress?->id,
-                'name' => $blockData['name'],
-                'slug' => Str::slug($blockData['name']),
-                'weight' => 0,
-                'qsr_burn' => 15000000000000,
-                'produced_momentums' => 0,
-                'expected_momentums' => 0,
-                'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
-                'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
-                'is_legacy' => true,
-            ]);
-        }
-
-        $pillar->created_at = $this->accountBlock->momentum->created_at;
-        $pillar->save();
-
-        $this->notifyUsers($pillar);
-
+        Pillar::create([
+            'chain_id' => $accountBlock->chain->id,
+            'owner_id' => $accountBlock->account->id,
+            'producer_account_id' => $producerAddress->id,
+            'withdraw_account_id' => $withdrawAddress->id,
+            'name' => $blockData['name'],
+            'slug' => Str::slug($blockData['name']),
+            'qsr_burn' => 15000000000000,
+            'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
+            'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
+            'is_legacy' => true,
+            'created_at' => $accountBlock->created_at,
+        ]);
     }
 
     private function notifyUsers($pillar): void

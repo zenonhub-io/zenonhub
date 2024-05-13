@@ -17,21 +17,31 @@ class PillarsSeeder extends Seeder
     public function run(): void
     {
         $chainId = app('currentChain')->id;
-        $pillars = Storage::json('nom-json/genesis/pillars.json');
+        $pillars = Storage::json('nom-json/genesis/genesis.json')['PillarConfig']['Pillars'];
 
-        foreach ($pillars as $pillar) {
-            Pillar::insert([
+        collect($pillars)->each(function ($pillar) use ($chainId) {
+            $pillar = Pillar::create([
                 'chain_id' => $chainId,
-                'owner_id' => load_account($pillar['owner'])->id,
-                'producer_account_id' => load_account($pillar['producer'])->id,
-                'withdraw_account_id' => load_account($pillar['withdraw'])->id,
-                'name' => $pillar['name'],
-                'slug' => Str::slug($pillar['name']),
-                'momentum_rewards' => $pillar['momentum_rewards'],
-                'delegate_rewards' => $pillar['delegate_rewards'],
+                'owner_id' => load_account($pillar['StakeAddress'])->id,
+                'producer_account_id' => load_account($pillar['BlockProducingAddress'])->id,
+                'withdraw_account_id' => load_account($pillar['RewardWithdrawAddress'])->id,
+                'name' => $pillar['Name'],
+                'slug' => Str::slug($pillar['Name']),
+                'qsr_burn' => $pillar['Amount'],
+                'momentum_rewards' => $pillar['GiveBlockRewardPercentage'],
+                'delegate_rewards' => $pillar['GiveDelegateRewardPercentage'],
                 'is_legacy' => 1,
                 'created_at' => '2021-11-24 12:00:00',
             ]);
-        }
+
+            $pillar->history()->create([
+                'producer_account_id' => load_account($pillar['BlockProducingAddress'])->id,
+                'withdraw_account_id' => load_account($pillar['RewardWithdrawAddress'])->id,
+                'momentum_rewards' => $pillar['GiveBlockRewardPercentage'],
+                'delegate_rewards' => $pillar['GiveDelegateRewardPercentage'],
+                'is_reward_change' => false,
+                'updated_at' => '2021-11-24 12:00:00',
+            ]);
+        });
     }
 }

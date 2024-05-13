@@ -117,9 +117,11 @@ class Account extends Model implements Sitemapable
         return $this->hasOne(Contract::class);
     }
 
-    public function delegations(): HasMany
+    public function delegations(): BelongsToMany
     {
-        return $this->hasMany(PillarDelegator::class);
+        return $this->belongsToMany(Pillar::class, 'nom_delegations')
+            ->using(Delegation::class)
+            ->withPivot('started_at', 'ended_at');
     }
 
     public function fusions(): HasMany

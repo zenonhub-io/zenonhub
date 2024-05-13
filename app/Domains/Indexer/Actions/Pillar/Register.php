@@ -15,50 +15,33 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $blockData = $this->accountBlock->data->decoded;
+        $blockData = $accountBlock->data->decoded;
 
-        $pillar = Pillar::where('name', $blockData['name'])->first();
+        $producerAddress = load_account($blockData['producerAddress']);
+        $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
 
-        if (! $pillar) {
-            $producerAddress = load_account($blockData['producerAddress']);
-            $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
-
-            $pillar = Pillar::create([
-                'chain_id' => $this->accountBlock->chain->id,
-                'owner_id' => $this->accountBlock->account->id,
-                'producer_account_id' => $producerAddress?->id,
-                'withdraw_account_id' => $withdrawAddress?->id,
-                'name' => $blockData['name'],
-                'slug' => Str::slug($blockData['name']),
-                'weight' => 0,
-                'produced_momentums' => 0,
-                'expected_momentums' => 0,
-                'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
-                'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
-                'is_legacy' => false,
-            ]);
-        }
-
-        $qsrBurnData = $this->accountBlock->pairedAccountBlock?->descendants()
+        $qsrBurnData = $accountBlock->pairedAccountBlock?->descendants()
             ->whereHas('contractMethod', function ($q) {
                 $q->whereHas('contract', fn ($q) => $q->where('name', 'Token'))
-                    ->where('name', ' Burn');
+                    ->where('name', 'Burn');
             })
             ->first();
 
-        if ($qsrBurnData) {
-            $qsrBurn = $qsrBurnData->amount;
-        } else {
-            $qsrBurn = Pillar::max('qsr_burn') + config('zenon.pillar_qsr_burn_increment');
-        }
+        $qsrBurn = $qsrBurnData?->amount ?? (Pillar::max('qsr_burn') + 1000000000000);
 
-        $pillar->qsr_burn = $qsrBurn;
-        $pillar->created_at = $this->accountBlock->momentum->created_at;
-        $pillar->is_legacy = false;
-        $pillar->save();
-
-        $this->notifyUsers($pillar);
-
+        Pillar::create([
+            'chain_id' => $accountBlock->chain->id,
+            'owner_id' => $accountBlock->account->id,
+            'producer_account_id' => $producerAddress?->id,
+            'withdraw_account_id' => $withdrawAddress?->id,
+            'name' => $blockData['name'],
+            'slug' => Str::slug($blockData['name']),
+            'qsr_burn' => $qsrBurn,
+            'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
+            'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
+            'is_legacy' => false,
+            'created_at' => $accountBlock->created_at,
+        ]);
     }
 
     private function notifyUsers($pillar): void

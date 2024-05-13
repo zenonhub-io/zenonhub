@@ -16,6 +16,51 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    // Delegate
+    //    $accountBlock = \App\Domains\Nom\Models\AccountBlock::find(14309);
+    //    \App\Domains\Indexer\Actions\Pillar\Delegate::run($accountBlock);
+
+    // Undelegate
+    //    $accountBlock = \App\Domains\Nom\Models\AccountBlock::find(21040);
+    //    \App\Domains\Indexer\Actions\Pillar\Undelegate::run($accountBlock);
+
+    // Update pillar
+    //    $accountBlock = \App\Domains\Nom\Models\AccountBlock::find(15726);
+    //    \App\Domains\Indexer\Actions\Pillar\UpdatePillar::run($accountBlock);
+
+    // Register pillar
+    //    $accountBlock = \App\Domains\Nom\Models\AccountBlock::find(16731);
+    //    \App\Domains\Indexer\Actions\Pillar\Register::run($accountBlock);
+
+    // Register legacy pillar
+    //    $accountBlock = \App\Domains\Nom\Models\AccountBlock::find(17912);
+    //    \App\Domains\Indexer\Actions\Pillar\RegisterLegacy::run($accountBlock);
+
+    // Revoke pillar
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(647636);
+    App\Domains\Indexer\Actions\Pillar\Revoke::run($accountBlock);
+
+    dd('done');
+
+    $test = $account
+        ->delegations()
+        ->wherePivotNull('ended_at')
+        ->get();
+
+    dd($test->first()->pivot->display_duration, $test->first()->pivot->ended_at);
+
+    $account
+        ->delegations()
+        ->newPivotStatementForId($account->id)
+        ->where('ended_at', null)
+        ->update(['ended_at' => now()]);
+
+    $account->delegations()->attach($pillar->id, [
+        'started_at' => now(),
+    ]);
+
+    dd('done');
+
     dd(sprintf(
         '%s%s%s',
         '',

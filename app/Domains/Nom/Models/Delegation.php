@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PillarDelegator extends Model
+class Delegation extends Pivot
 {
-    use HasFactory;
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -24,7 +21,7 @@ class PillarDelegator extends Model
      *
      * @var string
      */
-    protected $table = 'nom_pillar_delegators';
+    protected $table = 'nom_delegations';
 
     /**
      * The attributes that are mass assignable.
@@ -32,7 +29,6 @@ class PillarDelegator extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'chain_id',
         'pillar_id',
         'account_id',
         'started_at',
@@ -55,11 +51,6 @@ class PillarDelegator extends Model
     //
     // Relations
 
-    public function chain(): BelongsTo
-    {
-        return $this->belongsTo(Chain::class);
-    }
-
     public function pillar(): BelongsTo
     {
         return $this->belongsTo(Pillar::class);
@@ -68,19 +59,6 @@ class PillarDelegator extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
-    }
-
-    //
-    // Scopes
-
-    public function scopeIsActive($query)
-    {
-        return $query->whereNull('ended_at');
-    }
-
-    public function scopeWithBalance($query)
-    {
-        return $query->whereRelation('account', 'znn_balance', '>', '0');
     }
 
     //

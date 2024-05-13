@@ -7,8 +7,6 @@ namespace App\Domains\Indexer\Actions\Pillar;
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
-use App\Domains\Nom\Models\PillarDelegator;
-use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
@@ -19,53 +17,37 @@ class Delegate extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->processDelegate();
-        //$this->notifyUsers();
+        $blockData = $accountBlock->data->decoded;
+        $pillar = Pillar::where('name', $blockData['name'])->first();
 
-    }
-
-    private function processDelegate(): void
-    {
-        $blockData = $this->accountBlock->data->decoded;
-        $this->pillar = Pillar::where('name', $blockData['name'])->first();
-
-        if (! $this->pillar) {
-            exit;
+        if (! $pillar) {
+            return;
         }
 
-        SyncPillars::dispatchSync();
+        Cache::forget("{$pillar->cacheKey()}|pillar-rank");
 
-        Cache::forget("pillar-{$this->pillar->id}-rank");
+        $accountBlock->account
+            ->delegations()
+            ->newPivotStatementForId($accountBlock->account->id)
+            ->where('ended_at', null)
+            ->update(['ended_at' => $accountBlock->created_at]);
 
-        // Unset any previous delegation for the account -- TODO might not be needed?
-        PillarDelegator::where('account_id', $this->accountBlock->account->id)
-            ->whereNull('ended_at')
-            ->update([
-                'ended_at' => $this->accountBlock->created_at,
-            ]);
-
-        PillarDelegator::create([
-            'chain_id' => $this->accountBlock->chain->id,
-            'pillar_id' => $this->pillar->id,
-            'account_id' => $this->accountBlock->account->id,
-            'started_at' => $this->accountBlock->created_at,
+        $accountBlock->account->delegations()->attach($pillar->id, [
+            'started_at' => $accountBlock->created_at,
         ]);
-
-        $delegators = PillarDelegator::isActive()->whereHas('account', fn ($query) => $query->where('znn_balance', '>', '0'))->count();
-        Cache::put('delegators-count', $delegators);
     }
 
-    private function notifyUsers(): void
-    {
-        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-delegator-added'))
-            ->whereHas('nom_accounts', function ($query) {
-                $query->whereHas('pillars', fn ($query) => $query->where('id', $this->pillar->id));
-            })
-            ->get();
-
-        Notification::send(
-            $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\NewDelegator($this->pillar, $this->accountBlock->account)
-        );
-    }
+    //    private function notifyUsers(): void
+    //    {
+    //        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-delegator-added'))
+    //            ->whereHas('nom_accounts', function ($query) {
+    //                $query->whereHas('pillars', fn ($query) => $query->where('id', $this->pillar->id));
+    //            })
+    //            ->get();
+    //
+    //        Notification::send(
+    //            $subscribedUsers,
+    //            new \App\Notifications\Nom\Pillar\NewDelegator($this->pillar, $accountBlock->account)
+    //        );
+    //    }
 }

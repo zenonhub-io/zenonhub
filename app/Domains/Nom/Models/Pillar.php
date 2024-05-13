@@ -11,6 +11,7 @@ use App\Traits\ModelCacheKeyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -53,18 +54,9 @@ class Pillar extends Model implements Sitemapable
         'name',
         'slug',
         'qsr_burn',
-        'weight',
-        'produced_momentums',
-        'expected_momentums',
-        'missed_momentums',
         'momentum_rewards',
         'delegate_rewards',
-        'az_engagement',
-        'az_avg_vote_time',
-        'avg_momentums_produced',
-        'total_momentums_produced',
         'is_legacy',
-        'revoked_at',
         'created_at',
         'updated_at',
     ];
@@ -128,9 +120,11 @@ class Pillar extends Model implements Sitemapable
         return $this->hasMany(PillarHistory::class);
     }
 
-    public function delegators(): HasMany
+    public function delegators(): BelongsToMany
     {
-        return $this->hasMany(PillarDelegator::class);
+        return $this->belongsToMany(Account::class, 'nom_delegations')
+            ->using(Delegation::class)
+            ->withPivot('started_at', 'ended_at');
     }
 
     public function azVotes(): HasMany

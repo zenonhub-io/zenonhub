@@ -49,13 +49,13 @@ return new class extends Migration
             $table->timestamp('updated_at')->nullable();
         });
 
-        Schema::create('nom_pillar_delegators', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
+        Schema::create('nom_delegations', function (Blueprint $table) {
             $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->cascadeOnDelete();
             $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ended_at')->nullable();
+
+            $table->index(['pillar_id', 'account_id']);
         });
 
         Schema::create('nom_pillar_messages', function (Blueprint $table) {
@@ -76,7 +76,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('nom_pillar_messages');
         Schema::dropIfExists('nom_pillar_histories');
-        Schema::dropIfExists('nom_pillar_delegators');
+        Schema::dropIfExists('nom_delegations');
         Schema::dropIfExists('nom_pillars');
     }
 };

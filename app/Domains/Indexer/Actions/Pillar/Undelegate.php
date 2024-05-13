@@ -6,8 +6,6 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\PillarDelegator;
-use App\Jobs\Sync\Pillars as SyncPillars;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
@@ -16,24 +14,22 @@ class Undelegate extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        SyncPillars::dispatchSync();
+        $delegation = $accountBlock->account
+            ->delegations()
+            ->wherePivotNull('ended_at')
+            ->first();
 
-        $delegation = $this->block
-            ->account
-            ->active_delegation;
-
-        if ($delegation) {
-            Cache::forget("pillar-{$delegation->pillar->id}-rank");
-
-            $delegation->ended_at = $this->accountBlock->created_at;
-            $delegation->save();
-
-            //$this->notifyUsers($delegation->pillar);
+        if (! $delegation) {
+            return;
         }
 
-        $delegators = PillarDelegator::isActive()->whereHas('account', fn ($query) => $query->where('znn_balance', '>', '0'))->count();
-        Cache::put('delegators-count', $delegators);
+        Cache::forget("{$delegation->cacheKey()}|pillar-rank");
 
+        $accountBlock->account
+            ->delegations()
+            ->updateExistingPivot($delegation->id, [
+                'ended_at' => $accountBlock->created_at,
+            ]);
     }
 
     private function notifyUsers($pillar): void
