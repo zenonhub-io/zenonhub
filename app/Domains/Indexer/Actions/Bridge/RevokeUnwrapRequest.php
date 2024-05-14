@@ -20,7 +20,7 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
             $this->loadUnwrap();
             $this->processRevokeUnwrap();
         } catch (Throwable $exception) {
-            Log::warning('Error revoking unwrap request ' . $this->accountBlock->hash);
+            Log::warning('Error revoking unwrap request ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -30,7 +30,7 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
 
     private function loadUnwrap(): void
     {
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $this->unwrap = BridgeUnwrap::where('transaction_hash', $data['transactionHash'])
             ->where('log_index', $data['logIndex'])
             ->sole();
@@ -38,7 +38,7 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
 
     private function processRevokeUnwrap(): void
     {
-        $this->unwrap->revoked_at = $this->accountBlock->created_at;
+        $this->unwrap->revoked_at = $accountBlock->created_at;
         $this->unwrap->save();
     }
 }

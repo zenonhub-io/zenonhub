@@ -18,7 +18,7 @@ class WrapToken extends AbstractContractMethodProcessor
         try {
             $this->processWrap();
         } catch (Throwable $exception) {
-            Log::warning('Unable to process wrap: ' . $this->accountBlock->hash);
+            Log::warning('Unable to process wrap: ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -28,17 +28,17 @@ class WrapToken extends AbstractContractMethodProcessor
 
     private function processWrap(): void
     {
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
 
         BridgeWrap::create([
             'bridge_network_id' => $network->id,
-            'account_id' => $this->accountBlock->account_id,
-            'token_id' => $this->accountBlock->token_id,
-            'account_block_id' => $this->accountBlock->id,
+            'account_id' => $accountBlock->account_id,
+            'token_id' => $accountBlock->token_id,
+            'account_block_id' => $accountBlock->id,
             'to_address' => $data['toAddress'],
-            'amount' => $this->accountBlock->amount,
-            'created_at' => $this->accountBlock->created_at,
+            'amount' => $accountBlock->amount,
+            'created_at' => $accountBlock->created_at,
         ]);
     }
 }

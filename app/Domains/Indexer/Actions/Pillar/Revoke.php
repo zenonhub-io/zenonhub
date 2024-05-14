@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Pillar\PillarRevoked;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
@@ -27,6 +28,8 @@ class Revoke extends AbstractContractMethodProcessor
         $pillar->missed_momentums = 0;
         $pillar->revoked_at = $accountBlock->created_at;
         $pillar->save();
+
+        PillarRevoked::dispatch($accountBlock, $pillar);
     }
 
     private function notifyUsers($pillar): void

@@ -19,7 +19,7 @@ class SetNetworkMetadata extends AbstractContractMethodProcessor
             return;
         }
 
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $bridgeNetwork = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
 
         $bridgeNetwork->meta_data = json_decode($data['metadata']);

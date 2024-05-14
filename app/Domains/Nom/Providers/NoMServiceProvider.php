@@ -7,6 +7,7 @@ namespace App\Domains\Nom\Providers;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Chain;
 use App\Domains\Nom\Models\Token;
+use App\Domains\Nom\Services\CoinGecko;
 use App\Domains\Nom\Services\PlasmaBot;
 use App\Domains\Nom\Services\ZenonCli;
 use App\Domains\Nom\Services\ZenonSdk;
@@ -39,6 +40,8 @@ class NoMServiceProvider extends ServiceProvider
         ));
 
         $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot);
+
+        $this->app->singleton(CoinGecko::class, fn ($app, $params) => new CoinGecko);
 
         $this->app->singleton('znnToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::ZNN->value));
 

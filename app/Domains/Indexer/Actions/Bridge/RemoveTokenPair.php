@@ -24,7 +24,7 @@ class RemoveTokenPair extends AbstractContractMethodProcessor
         try {
             $this->removeTokenPair();
         } catch (Throwable $exception) {
-            Log::warning('Remove token pair error ' . $this->accountBlock->hash);
+            Log::warning('Remove token pair error ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -34,7 +34,7 @@ class RemoveTokenPair extends AbstractContractMethodProcessor
 
     private function removeTokenPair(): void
     {
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
         $networkToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
         $networkToken->delete();

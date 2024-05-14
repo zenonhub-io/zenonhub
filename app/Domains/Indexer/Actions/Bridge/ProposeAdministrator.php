@@ -25,10 +25,10 @@ class ProposeAdministrator extends AbstractContractMethodProcessor
 
     private function proposeAdmin(): void
     {
-        $proposedAccount = load_account($this->accountBlock->data->decoded['address']);
+        $proposedAccount = load_account($accountBlock->data->decoded['address']);
         BridgeAdmin::create([
             'account_id' => $proposedAccount->id,
-            'nominated_at' => $this->accountBlock->created_at,
+            'nominated_at' => $accountBlock->created_at,
         ]);
     }
 }

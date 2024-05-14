@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Pillar\PillarUpdated;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
@@ -15,9 +16,9 @@ class UpdatePillar extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $pillar = Pillar::where('owner_id', $accountBlock->account->id)->isActive()->first();
+        $pillar = Pillar::findBy('name', $blockData['name']);
 
-        if (! $pillar) {
+        if (! $pillar || $pillar->owner_id !== $accountBlock->account->id) {
             return;
         }
 
@@ -47,6 +48,8 @@ class UpdatePillar extends AbstractContractMethodProcessor
             'is_reward_change' => $rewardsChanged,
             'updated_at' => $accountBlock->created_at,
         ]);
+
+        PillarUpdated::dispatch($accountBlock, $pillar);
     }
 
     private function notifyUsers($pillar): void

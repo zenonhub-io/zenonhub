@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Sentinel;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Sentinel\SentinelRegistered;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Sentinel;
 use App\Models\NotificationType;
@@ -14,22 +15,13 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $sentinel = Sentinel::where('owner_id', $this->accountBlock->account->id)->first();
+        $sentinel = Sentinel::create([
+            'chain_id' => $accountBlock->chain->id,
+            'owner_id' => $accountBlock->account->id,
+            'created_at' => $accountBlock->created_at,
+        ]);
 
-        if (! $sentinel) {
-            $sentinel = Sentinel::create([
-                'chain_id' => $this->accountBlock->chain->id,
-                'owner_id' => $this->accountBlock->account->id,
-                'created_at' => $this->accountBlock->created_at,
-            ]);
-        }
-
-        $sentinel->created_at = $this->accountBlock->created_at;
-        $sentinel->revoked_at = null;
-        $sentinel->save();
-
-        $this->notifyUsers($sentinel);
-
+        SentinelRegistered::dispatch($accountBlock, $sentinel);
     }
 
     private function notifyUsers($sentinel): void

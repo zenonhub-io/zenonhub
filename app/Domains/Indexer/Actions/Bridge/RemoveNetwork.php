@@ -25,7 +25,7 @@ class RemoveNetwork extends AbstractContractMethodProcessor
 
     private function removeNetwork(): void
     {
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $bridgeNetwork = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
         $bridgeNetwork->delete();
     }

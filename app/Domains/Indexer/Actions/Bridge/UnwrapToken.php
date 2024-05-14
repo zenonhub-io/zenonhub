@@ -19,7 +19,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
         try {
             $this->processUnwrap();
         } catch (Throwable $exception) {
-            Log::warning('Unable to process unwrap: ' . $this->accountBlock->hash);
+            Log::warning('Unable to process unwrap: ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -29,7 +29,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
 
     private function processUnwrap(): void
     {
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
         $account = load_account($data['toAddress']);
         $bridgeToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
@@ -42,14 +42,14 @@ class UnwrapToken extends AbstractContractMethodProcessor
             'bridge_network_token_id' => $bridgeToken->id,
             'to_account_id' => $account->id,
             'token_id' => $bridgeToken->token->id,
-            'account_block_id' => $this->accountBlock->id,
+            'account_block_id' => $accountBlock->id,
             'signature' => $data['signature'],
             'amount' => $data['amount'],
-            'updated_at' => $this->accountBlock->created_at,
+            'updated_at' => $accountBlock->created_at,
         ]);
 
         if (! $unwrap->created_at) {
-            $unwrap->created_at = $this->accountBlock->created_at;
+            $unwrap->created_at = $accountBlock->created_at;
             $unwrap->save();
         }
 

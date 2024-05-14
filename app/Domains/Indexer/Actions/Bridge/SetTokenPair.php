@@ -19,7 +19,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
-        $this->blockData = $this->accountBlock->data->decoded;
+        $this->blockData = $accountBlock->data->decoded;
         $this->onQueue('indexer');
     }
 
@@ -35,7 +35,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
             $this->loadNetwork();
             $this->setTokenPair();
         } catch (Throwable $exception) {
-            Log::warning('Unable to set token pair: ' . $this->accountBlock->hash);
+            Log::warning('Unable to set token pair: ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -62,7 +62,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
             'is_bridgeable' => $this->blockData['bridgeable'],
             'is_redeemable' => $this->blockData['redeemable'],
             'is_owned' => $this->blockData['owned'],
-            'created_at' => $this->accountBlock->created_at,
+            'created_at' => $accountBlock->created_at,
         ]);
     }
 }

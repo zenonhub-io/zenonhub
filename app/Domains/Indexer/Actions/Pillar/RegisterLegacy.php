@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Pillar\PillarRegistered;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
@@ -17,22 +18,21 @@ class RegisterLegacy extends AbstractContractMethodProcessor
     {
         $blockData = $accountBlock->data->decoded;
 
-        $producerAddress = load_account($blockData['producerAddress']);
-        $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
-
-        Pillar::create([
+        $pillar = Pillar::updateOrCreate([
             'chain_id' => $accountBlock->chain->id,
-            'owner_id' => $accountBlock->account->id,
-            'producer_account_id' => $producerAddress->id,
-            'withdraw_account_id' => $withdrawAddress->id,
-            'name' => $blockData['name'],
+            'owner_id' => $accountBlock->account->id, 'name' => $blockData['name'],
             'slug' => Str::slug($blockData['name']),
+        ], [
+            'producer_account_id' => load_account($blockData['producerAddress'])->id,
+            'withdraw_account_id' => load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']))->id,
             'qsr_burn' => 15000000000000,
             'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
             'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
             'is_legacy' => true,
             'created_at' => $accountBlock->created_at,
         ]);
+
+        PillarRegistered::dispatch($accountBlock, $pillar);
     }
 
     private function notifyUsers($pillar): void

@@ -57,18 +57,11 @@ class AcceleratorProject extends Model implements Sitemapable
         'status',
         'znn_requested',
         'qsr_requested',
-        'znn_paid',
-        'qsr_paid',
         'znn_remaining',
         'qsr_remaining',
         'znn_price',
         'qsr_price',
-        'vote_total',
-        'vote_yes',
-        'vote_no',
         'created_at',
-        'updated_at',
-        'modified_at',
     ];
 
     protected static array $marks = [
@@ -113,7 +106,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function phases(): HasMany
     {
-        return $this->hasMany(AcceleratorPhase::class);
+        return $this->hasMany(AcceleratorPhase::class, 'project_id');
     }
 
     public function latestPhase(): HasOne

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Services;
+declare(strict_types=1);
+
+namespace App\Domains\Nom\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -22,9 +24,9 @@ class CoinGecko
         return false;
     }
 
-    public function historicPrice(string $token, string $currency, int $timestamp): ?float
+    public function historicPrice(string $token, string $currency, Carbon $timestamp): ?float
     {
-        $date = Carbon::createFromTimestamp($timestamp)->format('d-m-Y');
+        $date = $timestamp->format('d-m-Y');
 
         return Cache::rememberForever("coingecko-price-{$token}-{$currency}-{$date}", function () use ($token, $date, $currency) {
             return Http::get("https://api.coingecko.com/api/v3/coins/{$token}/history?date={$date}")

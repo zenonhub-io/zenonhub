@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
+use App\Traits\FindByColumnTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Plasma extends Model
 {
-    use HasFactory;
+    use FindByColumnTrait, HasFactory;
 
     /**
      * Indicates if the model should be timestamped.

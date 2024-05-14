@@ -38,7 +38,6 @@ class Sentinel extends Model
     protected $fillable = [
         'chain_id',
         'owner_id',
-        'active',
         'created_at',
     ];
 
@@ -73,6 +72,11 @@ class Sentinel extends Model
     public function scopeIsActive($query)
     {
         return $query->whereNull('revoked_at');
+    }
+
+    public function scopeWhereOwner($query, $ownerId)
+    {
+        return $query->where('owner_id', $ownerId);
     }
 
     //

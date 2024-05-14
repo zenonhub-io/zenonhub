@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Token;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Token\TokenBurned;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\TokenBurn;
 
@@ -12,25 +13,24 @@ class Burn extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        TokenBurn::create([
-            'chain_id' => $this->accountBlock->chain->id,
-            'token_id' => $this->accountBlock->token->id,
-            'account_id' => $this->accountBlock->account->id,
-            'account_block_id' => $this->accountBlock->id,
-            'amount' => $this->accountBlock->amount,
-            'created_at' => $this->accountBlock->created_at,
+        $burn = TokenBurn::create([
+            'chain_id' => $accountBlock->chain->id,
+            'token_id' => $accountBlock->token->id,
+            'account_id' => $accountBlock->account->id,
+            'account_block_id' => $accountBlock->id,
+            'amount' => $accountBlock->amount,
+            'created_at' => $accountBlock->created_at,
         ]);
 
-        $this->updateTokenSupply();
+        $this->updateTokenSupply($burn);
 
+        TokenBurned::dispatch($accountBlock, $burn);
     }
 
-    private function updateTokenSupply()
+    private function updateTokenSupply(TokenBurn $burn): void
     {
-        $token = $this->accountBlock->token;
-        $data = $token->raw_json;
-        $token->total_supply = $data->totalSupply;
-        $token->max_supply = $data->maxSupply;
+        $token = $burn->token;
+        $token->total_supply -= $burn->amount;
         $token->save();
     }
 }

@@ -25,7 +25,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
 
     private function changeAdmin(): void
     {
-        $adminAddress = $this->accountBlock->data->decoded['administrator'];
+        $adminAddress = $accountBlock->data->decoded['administrator'];
         $oldAdmin = BridgeAdmin::getActiveAdmin();
         $newAdmin = BridgeAdmin::whereHas('account', fn ($q) => $q->where('address', $adminAddress))
             ->isProposed()
@@ -42,7 +42,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
 
     private function updateAdmin(BridgeAdmin $admin, string $field): void
     {
-        $admin->{$field} = $this->accountBlock->created_at;
+        $admin->{$field} = $accountBlock->created_at;
         $admin->save();
     }
 }

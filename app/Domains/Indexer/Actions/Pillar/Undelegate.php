@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Pillar\AccountUndelegated;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -30,6 +31,8 @@ class Undelegate extends AbstractContractMethodProcessor
             ->updateExistingPivot($delegation->id, [
                 'ended_at' => $accountBlock->created_at,
             ]);
+
+        AccountUndelegated::dispatch($accountBlock, $accountBlock->account, $delegation);
     }
 
     private function notifyUsers($pillar): void
@@ -42,7 +45,7 @@ class Undelegate extends AbstractContractMethodProcessor
 
         Notification::send(
             $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\LostDelegator($pillar, $this->accountBlock->account)
+            new \App\Notifications\Nom\Pillar\LostDelegator($pillar, $accountBlock->account)
         );
     }
 }

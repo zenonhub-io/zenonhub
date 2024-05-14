@@ -21,7 +21,7 @@ class SetNetwork extends AbstractContractMethodProcessor
             return;
         }
 
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
 
         try {
             $chain = Chain::where('chain_identifier', $data['chainId'])->sole();
@@ -41,10 +41,10 @@ class SetNetwork extends AbstractContractMethodProcessor
         $bridgeNetwork->name = $data['name'];
         $bridgeNetwork->contract_address = $data['contractAddress'];
         $bridgeNetwork->meta_data = json_decode($data['metadata']);
-        $bridgeNetwork->updated_at = $this->accountBlock->created_at;
+        $bridgeNetwork->updated_at = $accountBlock->created_at;
 
         if (! $bridgeNetwork->created_at) {
-            $bridgeNetwork->created_at = $this->accountBlock->created_at;
+            $bridgeNetwork->created_at = $accountBlock->created_at;
         }
 
         $bridgeNetwork->save();

@@ -19,7 +19,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
     public function __construct(AccountBlock $block)
     {
         $this->block = $block;
-        $this->blockData = $this->accountBlock->data->decoded;
+        $this->blockData = $accountBlock->data->decoded;
         $this->onQueue('indexer');
     }
 
@@ -29,7 +29,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
             $this->loadWrap();
             $this->processUpdate();
         } catch (Throwable $exception) {
-            Log::warning('Error updating wrap request ' . $this->accountBlock->hash);
+            Log::warning('Error updating wrap request ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -46,7 +46,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
     private function processUpdate(): void
     {
         $this->wrap->signature = $this->blockData['signature'];
-        $this->wrap->updated_at = $this->accountBlock->created_at;
+        $this->wrap->updated_at = $accountBlock->created_at;
         $this->wrap->save();
     }
 }

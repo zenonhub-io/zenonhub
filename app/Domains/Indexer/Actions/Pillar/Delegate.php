@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Pillar\AccountDelegated;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\User;
@@ -18,7 +19,7 @@ class Delegate extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $pillar = Pillar::where('name', $blockData['name'])->first();
+        $pillar = Pillar::findBy('name', $blockData['name']);
 
         if (! $pillar) {
             return;
@@ -35,6 +36,8 @@ class Delegate extends AbstractContractMethodProcessor
         $accountBlock->account->delegations()->attach($pillar->id, [
             'started_at' => $accountBlock->created_at,
         ]);
+
+        AccountDelegated::dispatch($accountBlock, $accountBlock->account, $pillar);
     }
 
     //    private function notifyUsers(): void

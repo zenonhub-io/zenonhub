@@ -328,40 +328,4 @@ class Pillar extends Model implements Sitemapable
 
     //
     // Methods
-
-    public function updateAzEngagementScores()
-    {
-        $totalProjects = AcceleratorProject::where('created_at', '>=', $this->created_at)->count();
-        $totalPhases = AcceleratorPhase::where('created_at', '>=', $this->created_at)->count();
-        $totalVotableItems = ($totalProjects + $totalPhases);
-
-        $this->az_engagement = 0;
-
-        if ($totalVotableItems > 0) {
-
-            // Make sure the vote item was created after the pillar
-            // Projects/phases might be open after a pillar spawned, dont include these
-            $votes = $this->azVotes()->get();
-            $totalVotes = $votes->map(function ($vote) {
-                if ($vote->votable->created_at >= $this->created_at) {
-                    return 1;
-                }
-
-                return 0;
-            })->sum();
-
-            // If a pillar has more votes than projects ensure the pillar doenst get over 100% engagement
-            if ($totalVotes > $totalVotableItems) {
-                $totalVotes = $totalVotableItems;
-            }
-
-            $percentage = ($totalVotes * 100) / $totalVotableItems;
-            $this->az_engagement = round($percentage, 1);
-        }
-
-        $averageVoteTime = $this->azVotes->map(fn ($vote) => $vote->created_at->timestamp - $vote->votable->created_at->timestamp)->average();
-
-        $this->az_avg_vote_time = $averageVoteTime;
-        $this->save();
-    }
 }

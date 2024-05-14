@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Sentinel;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Sentinel\SentinelRevoked;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Sentinel;
 use App\Models\NotificationType;
@@ -14,17 +15,18 @@ class Revoke extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $sentinel = Sentinel::where('owner_id', $this->accountBlock->account->id)->isActive()->first();
+        $sentinel = Sentinel::whereOwner($accountBlock->account->id)
+            ->isActive()
+            ->first();
 
         if (! $sentinel) {
             return;
         }
 
-        $sentinel->revoked_at = $this->accountBlock->created_at;
+        $sentinel->revoked_at = $accountBlock->created_at;
         $sentinel->save();
 
-        $this->notifyUsers($sentinel);
-
+        SentinelRevoked::dispatch($accountBlock, $sentinel);
     }
 
     private function notifyUsers($sentinel): void

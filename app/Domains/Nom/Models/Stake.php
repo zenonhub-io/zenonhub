@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
+use App\Traits\FindByColumnTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Str;
 
 class Stake extends Model
 {
-    use HasFactory;
+    use FindByColumnTrait, HasFactory;
 
     /**
      * Indicates if the model should be timestamped.

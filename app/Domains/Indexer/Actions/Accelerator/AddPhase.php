@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Actions\Accelerator;
 
-use App\Actions\UpdatePillarEngagementScores;
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Accelerator\PhaseCreated;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Services\CoinGecko;
 use App\Models\NotificationType;
-use App\Services\CoinGecko;
-use App\Services\ZenonSdk;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -22,70 +20,41 @@ class AddPhase extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+        $project = AcceleratorProject::findBy('hash', $blockData['id']);
 
-        $this->savePhase();
-        $this->notifyUsers();
-        (new UpdatePillarEngagementScores)->execute();
-    }
+        if (! $project) {
+            return;
+        }
 
-    private function savePhase(): void
-    {
-        $znn = App::make(ZenonSdk::class);
-        $phaseData = $znn->accelerator->getPhaseById($this->accountBlock->hash)['data'];
-
-        $project = AcceleratorProject::findBy('hash', $phaseData->phase->projectID);
-        $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $phaseData->phase->creationTimestamp);
-        $qsrPrice = App::make(CoinGecko::class)->historicPrice('quasar', 'usd', $phaseData->phase->creationTimestamp);
+        $priceService = app(CoinGecko::class);
+        $znnPrice = $priceService->historicPrice('zenon-2', 'usd', $accountBlock->created_at);
+        $qsrPrice = $priceService->historicPrice('quasar', 'usd', $accountBlock->created_at);
 
         // Projects created before QSR price available
         if (is_null($qsrPrice) && $znnPrice) {
             $qsrPrice = $znnPrice / 10;
         }
 
-        $phase = $project?->phases()
-            ->where('hash', $phaseData->phase->id)
-            ->first();
+        $phase = $project->phases()->create([
+            'hash' => $accountBlock->hash,
+            'name' => $blockData['name'],
+            'slug' => Str::slug($blockData['name']),
+            'url' => $blockData['url'],
+            'description' => $blockData['description'],
+            'znn_requested' => $blockData['znnFundsNeeded'],
+            'qsr_requested' => $blockData['qsrFundsNeeded'],
+            'znn_price' => $znnPrice ?: null,
+            'qsr_price' => $qsrPrice ?: null,
+            'created_at' => $accountBlock->created_at,
+        ]);
 
-        if (! $phase) {
-            $phase = AcceleratorPhase::create([
-                'chain_id' => $this->accountBlock->chain->id,
-                'project_id' => $project->id,
-                'hash' => $phaseData->phase->id,
-                'name' => $phaseData->phase->name,
-                'slug' => Str::slug($phaseData->phase->name),
-                'url' => $phaseData->phase->url,
-                'description' => $phaseData->phase->description,
-                'status' => $phaseData->phase->status,
-                'znn_requested' => $phaseData->phase->znnFundsNeeded,
-                'qsr_requested' => $phaseData->phase->qsrFundsNeeded,
-                'znn_price' => $znnPrice ?: null,
-                'qsr_price' => $qsrPrice ?: null,
-                'vote_total' => $phaseData->votes->total,
-                'vote_yes' => $phaseData->votes->yes,
-                'vote_no' => $phaseData->votes->no,
-                'accepted_at' => ($phaseData->phase->acceptedTimestamp ?: null),
-                'created_at' => $phaseData->phase->creationTimestamp,
-            ]);
-        }
-
-        // Update existing details
-        $phase->znn_requested = $phaseData->phase->znnFundsNeeded;
-        $phase->qsr_requested = $phaseData->phase->qsrFundsNeeded;
-        $phase->znn_price = $znnPrice ?: null;
-        $phase->qsr_price = $qsrPrice ?: null;
-        $phase->vote_total = $phaseData->votes->total;
-        $phase->vote_yes = $phaseData->votes->yes;
-        $phase->vote_no = $phaseData->votes->no;
-        $phase->accepted_at = ($phaseData->phase->acceptedTimestamp ?: null);
-        $phase->created_at = $phaseData->phase->creationTimestamp;
-        $phase->updated_at = null;
-        $phase->save();
-
-        $project->modified_at = $phaseData->phase->creationTimestamp;
+        $project->modified_at = $accountBlock->created_at;
         $project->save();
 
-        $this->phase = $phase;
+        PhaseCreated::dispatch($accountBlock, $phase);
+
+        //(new UpdatePillarEngagementScores)->execute();
     }
 
     private function notifyUsers(): void

@@ -5,27 +5,26 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Plasma;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Plasma\EndFuse;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Plasma;
-use Illuminate\Support\Facades\Cache;
-
-use function App\Jobs\Nom\Plasma\qsr_token;
 
 class CancelFuse extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $blockData = $this->accountBlock->data->decoded;
-        $fusion = Plasma::whereHash($blockData['id'])->first();
+        $blockData = $accountBlock->data->decoded;
+        $plasma = Plasma::findBy('hash', $blockData['id']);
 
-        if ($fusion) {
-            $fusion->ended_at = $this->accountBlock->created_at;
-            $fusion->save();
+        if (! $plasma) {
+            return;
         }
 
-        $fusedQsr = qsr_token()->getFormattedAmount(Plasma::isActive()->sum('amount'), 0);
-        Cache::put('fused-qsr', $fusedQsr);
+        $plasma->ended_at = $accountBlock->created_at;
+        $plasma->save();
 
-        \App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
+        EndFuse::dispatch($accountBlock, $plasma);
+
+        //\App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
     }
 }

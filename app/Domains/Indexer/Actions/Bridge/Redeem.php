@@ -24,7 +24,7 @@ class Redeem extends AbstractContractMethodProcessor
             $this->processRedeem();
             $this->processReward();
         } catch (Throwable $exception) {
-            Log::warning('Error processing redeem ' . $this->accountBlock->hash);
+            Log::warning('Error processing redeem ' . $accountBlock->hash);
             Log::debug($exception);
 
             return;
@@ -34,7 +34,7 @@ class Redeem extends AbstractContractMethodProcessor
 
     private function loadUnwrap(): void
     {
-        $data = $this->accountBlock->data->decoded;
+        $data = $accountBlock->data->decoded;
         $this->unwrap = BridgeUnwrap::where('transaction_hash', $data['transactionHash'])
             ->where('log_index', $data['logIndex'])
             ->whereNull('redeemed_at')
@@ -43,7 +43,7 @@ class Redeem extends AbstractContractMethodProcessor
 
     private function processRedeem(): void
     {
-        $this->unwrap->redeemed_at = $this->accountBlock->created_at;
+        $this->unwrap->redeemed_at = $accountBlock->created_at;
         $this->unwrap->save();
     }
 
@@ -54,12 +54,12 @@ class Redeem extends AbstractContractMethodProcessor
         }
 
         AccountReward::create([
-            'chain_id' => $this->accountBlock->chain_id,
+            'chain_id' => $accountBlock->chain_id,
             'account_id' => $this->unwrap->to_account_id,
             'token_id' => $this->unwrap->token_id,
             'type' => AccountRewardTypesEnum::BRIDGE_AFFILIATE->value,
             'amount' => $this->unwrap->amount,
-            'created_at' => $this->accountBlock->created_at,
+            'created_at' => $accountBlock->created_at,
         ]);
 
         ProcessAccountBalance::dispatch($this->unwrap->toAccount);

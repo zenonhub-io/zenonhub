@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Listeners;
 
 use App\Domains\Indexer\Events\AccountBlockInserted;
+use App\Domains\Nom\Actions\ProcessBlockRewards;
 use App\Domains\Nom\Actions\ProcessLiquidityProgramRewards;
 use App\Domains\Nom\Actions\UpdateAccountTotals;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
@@ -25,6 +26,7 @@ class AccountBlockInsertedListener implements ShouldQueue
 
         $this->dispatchAccountTotalsProcessor($accountBlock->account);
         $this->dispatchAccountTotalsProcessor($accountBlock->toAccount);
+        $this->dispatchBlockRewardProcessor($accountBlock);
         $this->dispatchLiquidityProgramProcessor($accountBlock);
     }
 
@@ -40,6 +42,19 @@ class AccountBlockInsertedListener implements ShouldQueue
 
         UpdateAccountTotals::dispatch($account)
             ->delay($delay->diffInSeconds(now()));
+    }
+
+    private function dispatchBlockRewardProcessor(AccountBlock $accountBlock): void
+    {
+        if (! $accountBlock->parent) {
+            return;
+        }
+
+        if ($accountBlock->contractMethod->name !== 'Mint' && $accountBlock->contractMethod->contract->name !== 'Token') {
+            return;
+        }
+
+        ProcessBlockRewards::run($accountBlock);
     }
 
     private function dispatchLiquidityProgramProcessor(AccountBlock $accountBlock): void

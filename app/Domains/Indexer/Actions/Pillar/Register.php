@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Pillar\PillarRegistered;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
@@ -17,9 +18,6 @@ class Register extends AbstractContractMethodProcessor
     {
         $blockData = $accountBlock->data->decoded;
 
-        $producerAddress = load_account($blockData['producerAddress']);
-        $withdrawAddress = load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']));
-
         $qsrBurnData = $accountBlock->pairedAccountBlock?->descendants()
             ->whereHas('contractMethod', function ($q) {
                 $q->whereHas('contract', fn ($q) => $q->where('name', 'Token'))
@@ -27,21 +25,22 @@ class Register extends AbstractContractMethodProcessor
             })
             ->first();
 
-        $qsrBurn = $qsrBurnData?->amount ?? (Pillar::max('qsr_burn') + 1000000000000);
-
-        Pillar::create([
-            'chain_id' => $accountBlock->chain->id,
-            'owner_id' => $accountBlock->account->id,
-            'producer_account_id' => $producerAddress?->id,
-            'withdraw_account_id' => $withdrawAddress?->id,
+        $pillar = Pillar::updateOrCreate([
             'name' => $blockData['name'],
             'slug' => Str::slug($blockData['name']),
-            'qsr_burn' => $qsrBurn,
+            'chain_id' => $accountBlock->chain->id,
+            'owner_id' => $accountBlock->account->id,
+        ], [
+            'producer_account_id' => load_account($blockData['producerAddress'])->id,
+            'withdraw_account_id' => load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']))->id,
+            'qsr_burn' => $qsrBurnData?->amount ?? (Pillar::max('qsr_burn') + 1000000000000),
             'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
             'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
             'is_legacy' => false,
             'created_at' => $accountBlock->created_at,
         ]);
+
+        PillarRegistered::dispatch($accountBlock, $pillar);
     }
 
     private function notifyUsers($pillar): void

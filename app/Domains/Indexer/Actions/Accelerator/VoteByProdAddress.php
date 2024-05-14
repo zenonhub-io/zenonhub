@@ -25,10 +25,10 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
 
     private function processVote()
     {
-        $blockData = $this->accountBlock->data->decoded;
+        $blockData = $accountBlock->data->decoded;
 
         // Load the pillar that voted
-        $pillar = Pillar::where('producer_account_id', $this->accountBlock->address_id)->first();
+        $pillar = Pillar::where('producer_account_id', $accountBlock->address_id)->first();
 
         if (! $pillar) {
             return;
@@ -78,7 +78,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
                 'is_yes' => $this->isVoteType('yes'),
                 'is_no' => $this->isVoteType('no'),
                 'is_abstain' => $this->isVoteType('abstain'),
-                'created_at' => $this->accountBlock->momentum->created_at,
+                'created_at' => $accountBlock->momentum->created_at,
             ]);
         }
 
@@ -92,7 +92,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
 
     private function isVoteType($type): bool
     {
-        $blockData = $this->accountBlock->data->decoded;
+        $blockData = $accountBlock->data->decoded;
 
         if ($type === 'yes' && $blockData['vote'] === '0') {
             return true;

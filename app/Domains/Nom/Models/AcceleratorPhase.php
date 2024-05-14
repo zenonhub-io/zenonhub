@@ -7,6 +7,7 @@ namespace App\Domains\Nom\Models;
 use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
+use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ use Throwable;
 
 class AcceleratorPhase extends Model implements Sitemapable
 {
-    use AcceleratorFundingTrait, AcceleratorVotesTrait, HasFactory, ModelCacheKeyTrait;
+    use AcceleratorFundingTrait, AcceleratorVotesTrait, FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -43,10 +44,8 @@ class AcceleratorPhase extends Model implements Sitemapable
      * @var array<string>
      */
     protected $fillable = [
-        'chain_id',
         'project_id',
         'hash',
-        'owner',
         'name',
         'slug',
         'url',
@@ -56,12 +55,7 @@ class AcceleratorPhase extends Model implements Sitemapable
         'qsr_requested',
         'znn_price',
         'qsr_price',
-        'vote_total',
-        'vote_yes',
-        'vote_no',
-        'accepted_at',
         'created_at',
-        'updated_at',
     ];
 
     protected static array $marks = [
@@ -93,11 +87,6 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     //
     // Relations
-
-    public function chain(): BelongsTo
-    {
-        return $this->belongsTo(Chain::class);
-    }
 
     public function project(): BelongsTo
     {
