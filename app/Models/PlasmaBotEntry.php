@@ -55,6 +55,14 @@ class PlasmaBotEntry extends Model
         return $query->where('expires_at', '<', now());
     }
 
+    public function scopeWhereActive(Builder $query): Builder
+    {
+        return $query->where(function (Builder $q) {
+            $q->whereNull('expires_at')
+                ->orWhere('expires_at', '>', now());
+        });
+    }
+
     public function scopeWhereAddress(Builder $query, $address): Builder
     {
         return $query->where('address', $address);
