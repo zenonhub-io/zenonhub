@@ -13,10 +13,11 @@ class Cancel extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $stake = Stake::findBy('hash', $blockData['id']);
 
-        if (! $stake) {
+        if (! $stake || ! $this->validateAction($stake)) {
             return;
         }
 
@@ -24,5 +25,16 @@ class Cancel extends AbstractContractMethodProcessor
         $stake->save();
 
         EndStake::dispatch($accountBlock, $stake);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$stake] = func_get_args();
+
+        if ($stake->end_date < now()) {
+            return false;
+        }
+
+        return $stake->account_id === $this->accountBlock->account_id;
     }
 }

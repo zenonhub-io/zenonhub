@@ -19,8 +19,10 @@ class VoteByName extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->processVote();
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
 
+        $this->processVote();
     }
 
     private function processVote()

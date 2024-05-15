@@ -15,10 +15,11 @@ class UpdatePillar extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::findBy('name', $blockData['name']);
 
-        if (! $pillar || $pillar->owner_id !== $accountBlock->account->id) {
+        if (! $pillar || $pillar->owner_id !== $accountBlock->account_id) {
             return;
         }
 

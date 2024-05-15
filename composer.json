@@ -25,7 +25,9 @@
         "lorisleiva/laravel-actions": "^2.8",
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-permission": "*",
-        "spatie/laravel-sitemap": "*"
+        "spatie/laravel-sitemap": "*",
+        "ext-bcmath": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

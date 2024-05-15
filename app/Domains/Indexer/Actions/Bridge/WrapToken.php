@@ -15,6 +15,9 @@ class WrapToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+
         try {
             $this->processWrap();
         } catch (Throwable $exception) {

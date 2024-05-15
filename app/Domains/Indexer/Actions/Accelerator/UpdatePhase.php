@@ -13,6 +13,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $phase = AcceleratorPhase::findBy('hash', $blockData['id']);
 

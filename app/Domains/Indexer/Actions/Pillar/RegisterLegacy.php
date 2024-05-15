@@ -16,11 +16,13 @@ class RegisterLegacy extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
         $pillar = Pillar::updateOrCreate([
-            'chain_id' => $accountBlock->chain->id,
-            'owner_id' => $accountBlock->account->id, 'name' => $blockData['name'],
+            'chain_id' => $accountBlock->chain_id,
+            'owner_id' => $accountBlock->account_id,
+            'name' => $blockData['name'],
             'slug' => Str::slug($blockData['name']),
         ], [
             'producer_account_id' => load_account($blockData['producerAddress'])->id,

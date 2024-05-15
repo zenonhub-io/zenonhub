@@ -15,6 +15,9 @@ class Undelegate extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+
         $delegation = $accountBlock->account
             ->delegations()
             ->wherePivotNull('ended_at')

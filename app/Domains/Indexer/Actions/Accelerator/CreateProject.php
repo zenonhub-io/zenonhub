@@ -17,6 +17,7 @@ class CreateProject extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
         $priceService = app(CoinGecko::class);
@@ -29,8 +30,8 @@ class CreateProject extends AbstractContractMethodProcessor
         }
 
         $project = AcceleratorProject::create([
-            'chain_id' => $accountBlock->chain->id,
-            'owner_id' => $accountBlock->account->id,
+            'chain_id' => $accountBlock->chain_id,
+            'owner_id' => $accountBlock->account_id,
             'hash' => $accountBlock->hash,
             'name' => $blockData['name'],
             'slug' => Str::slug($blockData['name']),

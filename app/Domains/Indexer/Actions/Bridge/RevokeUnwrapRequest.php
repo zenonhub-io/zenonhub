@@ -16,6 +16,9 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+
         try {
             $this->loadUnwrap();
             $this->processRevokeUnwrap();

@@ -15,11 +15,14 @@ class Revoke extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $sentinel = Sentinel::whereOwner($accountBlock->account->id)
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+
+        $sentinel = Sentinel::whereOwner($accountBlock->account_id)
             ->isActive()
             ->first();
 
-        if (! $sentinel) {
+        if (! $sentinel || ! $this->validateAction($sentinel)) {
             return;
         }
 
@@ -27,6 +30,13 @@ class Revoke extends AbstractContractMethodProcessor
         $sentinel->save();
 
         SentinelRevoked::dispatch($accountBlock, $sentinel);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$sentinel] = func_get_args();
+
+        // check sentinel revoke window
     }
 
     private function notifyUsers($sentinel): void

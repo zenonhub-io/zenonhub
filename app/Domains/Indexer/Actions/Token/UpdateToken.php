@@ -13,10 +13,11 @@ class UpdateToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $token = Token::findBy('token_standard', $blockData['tokenStandard']);
 
-        if (! $token) {
+        if (! $token || ! $this->validateAction($token)) {
             return;
         }
 
@@ -27,5 +28,12 @@ class UpdateToken extends AbstractContractMethodProcessor
         $token->save();
 
         TokenUpdated::dispatch($accountBlock, $token);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$token] = func_get_args();
+
+        return $token && $token->owner_id === $this->accountBlock->account_id;
     }
 }

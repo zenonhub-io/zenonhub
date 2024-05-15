@@ -20,4 +20,9 @@ abstract class AbstractContractMethodProcessor
         $this->accountBlock->data->is_processed = true;
         $this->accountBlock->data->save();
     }
+
+    protected function validateAction(): bool
+    {
+        return true;
+    }
 }

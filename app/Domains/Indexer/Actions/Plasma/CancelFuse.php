@@ -13,10 +13,11 @@ class CancelFuse extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $plasma = Plasma::findBy('hash', $blockData['id']);
 
-        if (! $plasma) {
+        if (! $plasma || ! $this->validateAction($plasma)) {
             return;
         }
 
@@ -26,5 +27,20 @@ class CancelFuse extends AbstractContractMethodProcessor
         EndFuse::dispatch($accountBlock, $plasma);
 
         //\App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$plasma] = func_get_args();
+
+        if ($this->accountBlock->account_id !== $plasma->from_account_id) {
+            return false;
+        }
+
+        if ($plasma->started_at->addHours(config('nom.plasma.expiration')) > now()) {
+            return false;
+        }
+
+        return true;
     }
 }

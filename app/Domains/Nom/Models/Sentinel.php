@@ -102,6 +102,17 @@ class Sentinel extends Model
         return $data;
     }
 
+    public function getIsRevokableAttribute(): bool
+    {
+        $secsInDay = 24 * 60 * 60;
+        $lockTimeWindow = 27 * $secsInDay;
+        $revokeTimeWindow = 3 * $secsInDay;
+
+        $epochTime = (now()->timestamp - $this->created_at->timestamp) % ($lockTimeWindow + $revokeTimeWindow);
+
+        return $epochTime >= $lockTimeWindow;
+    }
+
     public function getDisplayRevocableInAttribute(): string
     {
         if (! $this->raw_json) {

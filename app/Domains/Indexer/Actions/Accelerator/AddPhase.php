@@ -6,7 +6,6 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PhaseCreated;
-use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Services\CoinGecko;
@@ -16,10 +15,9 @@ use Illuminate\Support\Str;
 
 class AddPhase extends AbstractContractMethodProcessor
 {
-    public AcceleratorPhase $phase;
-
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $project = AcceleratorProject::findBy('hash', $blockData['id']);
 

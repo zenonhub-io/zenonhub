@@ -18,6 +18,7 @@ class Delegate extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::findBy('name', $blockData['name']);
 
@@ -29,7 +30,7 @@ class Delegate extends AbstractContractMethodProcessor
 
         $accountBlock->account
             ->delegations()
-            ->newPivotStatementForId($accountBlock->account->id)
+            ->newPivotStatementForId($accountBlock->account_id)
             ->where('ended_at', null)
             ->update(['ended_at' => $accountBlock->created_at]);
 

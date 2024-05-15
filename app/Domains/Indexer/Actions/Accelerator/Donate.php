@@ -9,10 +9,10 @@ use App\Domains\Nom\Models\AccountBlock;
 
 class Donate extends AbstractContractMethodProcessor
 {
-    public AccountBlock $block;
-
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
 
     }
 }

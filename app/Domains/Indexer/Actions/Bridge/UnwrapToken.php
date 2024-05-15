@@ -16,6 +16,9 @@ class UnwrapToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+
         try {
             $this->processUnwrap();
         } catch (Throwable $exception) {

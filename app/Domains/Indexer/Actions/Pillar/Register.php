@@ -16,6 +16,7 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
         $qsrBurnData = $accountBlock->pairedAccountBlock?->descendants()
@@ -28,8 +29,8 @@ class Register extends AbstractContractMethodProcessor
         $pillar = Pillar::updateOrCreate([
             'name' => $blockData['name'],
             'slug' => Str::slug($blockData['name']),
-            'chain_id' => $accountBlock->chain->id,
-            'owner_id' => $accountBlock->account->id,
+            'chain_id' => $accountBlock->chain_id,
+            'owner_id' => $accountBlock->account_id,
         ], [
             'producer_account_id' => load_account($blockData['producerAddress'])->id,
             'withdraw_account_id' => load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']))->id,

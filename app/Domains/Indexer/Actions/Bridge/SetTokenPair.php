@@ -25,6 +25,9 @@ class SetTokenPair extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
+
         if (! validate_bridge_tx($this->block)) {
             Log::warning('Bridge action sent from non-admin');
 

@@ -16,14 +16,18 @@ class IssueToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
-        $zts = Utilities::ztsFromHash($accountBlock->hash);
+
+        if (! $this->validateAction($blockData)) {
+            return;
+        }
 
         $token = Token::updateOrCreate([
-            'token_standard' => $zts,
+            'token_standard' => Utilities::ztsFromHash($accountBlock->hash),
         ], [
-            'chain_id' => $accountBlock->chain->id,
-            'owner_id' => $accountBlock->account->id,
+            'chain_id' => $accountBlock->chain_id,
+            'owner_id' => $accountBlock->account_id,
             'name' => $blockData['tokenName'],
             'symbol' => $blockData['tokenSymbol'],
             'domain' => $blockData['tokenDomain'],
@@ -37,6 +41,42 @@ class IssueToken extends AbstractContractMethodProcessor
         ]);
 
         TokenIssued::dispatch($accountBlock, $token);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$blockData] = func_get_args();
+
+        if ($blockData['tokenName'] === '') {
+            return false;
+        }
+
+        if ($blockData['tokenSymbol'] === '') {
+            return false;
+        }
+
+        if ($blockData['tokenDomain'] === '') {
+            return false;
+        }
+
+        if (in_array($blockData['tokenSymbol'], ['ZNN', 'QSR'])) {
+            return false;
+        }
+
+        if ($blockData['maxSupply'] <= 0) {
+            return false;
+        }
+
+        // Total supply is less and equal in case of non-mintable coins
+        if (bccomp($blockData['maxSupply'], $blockData['totalSupply']) === -1) {
+            return false;
+        }
+
+        if (! $blockData['isMintable'] && bccomp($blockData['maxSupply'], $blockData['totalSupply']) !== 0) {
+            return false;
+        }
+
+        return true;
     }
 
     private function notifyUsers($token): void
