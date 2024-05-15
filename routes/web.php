@@ -16,6 +16,28 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    //    $znn = app(\App\Domains\Nom\Services\ZenonSdk::class);
+    //
+    //    \App\Domains\Nom\Models\AccountBlockData::with('accountBlock', 'accountBlock.contractMethod', 'accountBlock.contractMethod.contract')
+    //        ->chunk(1000, function (\Illuminate\Support\Collection $blockDatas) use ($znn) {
+    //            foreach ($blockDatas as $blockData) {
+    //
+    //                $contractMethod = $blockData->accountBlock->contractMethod;
+    //
+    //                if (! $contractMethod) {
+    //                    continue;
+    //                }
+    //
+    //                $rawData = base64_decode($blockData->raw);
+    //                $decoded = $znn->abiDecode($contractMethod, $rawData);
+    //
+    //                $blockData->decoded = $decoded;
+    //                $blockData->save();
+    //            }
+    //        });
+    //
+    //    dd('.');
+
     // Delegate
     //    $accountBlock = \App\Domains\Nom\Models\AccountBlock::find(14309);
     //    \App\Domains\Indexer\Actions\Pillar\Delegate::run($accountBlock);
@@ -37,8 +59,20 @@ Route::get('test', function () {
     //    \App\Domains\Indexer\Actions\Pillar\RegisterLegacy::run($accountBlock);
 
     // Revoke pillar
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(647636);
-    App\Domains\Indexer\Actions\Pillar\Revoke::run($accountBlock);
+    //    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(647636);
+    //    App\Domains\Indexer\Actions\Pillar\Revoke::run($accountBlock);
+
+    // Create project
+    //    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(568484);
+    //    App\Domains\Indexer\Actions\Accelerator\CreateProject::run($accountBlock);
+
+    // Add phase
+    //    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(605658);
+    //    App\Domains\Indexer\Actions\Accelerator\AddPhase::run($accountBlock);
+
+    // Phase updated
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(611319);
+    App\Domains\Indexer\Actions\Accelerator\UpdatePhase::run($accountBlock);
 
     dd('done');
 
