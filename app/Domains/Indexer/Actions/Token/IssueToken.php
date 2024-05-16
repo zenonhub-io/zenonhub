@@ -47,19 +47,27 @@ class IssueToken extends AbstractContractMethodProcessor
     {
         [$blockData] = func_get_args();
 
-        if ($blockData['tokenName'] === '') {
+        if ($blockData['tokenName'] === '' || strlen($blockData['tokenName']) > config('nom.token.nameLengthMax')) {
             return false;
         }
 
-        if ($blockData['tokenSymbol'] === '') {
+        if ($blockData['tokenSymbol'] === '' || strlen($blockData['tokenSymbol']) > config('nom.token.symbolLengthMax')) {
             return false;
         }
 
-        if ($blockData['tokenDomain'] === '') {
+        if ($blockData['tokenDomain'] === '' || strlen($blockData['tokenDomain']) > config('nom.token.domainLengthMax')) {
             return false;
         }
 
         if (in_array($blockData['tokenSymbol'], ['ZNN', 'QSR'])) {
+            return false;
+        }
+
+        if ($blockData['decimals'] > config('nom.token.maxDecimals')) {
+            return false;
+        }
+
+        if (gmp_cmp($blockData['maxSupply'], config('nom.token.maxSupplyBig')) > 0) {
             return false;
         }
 

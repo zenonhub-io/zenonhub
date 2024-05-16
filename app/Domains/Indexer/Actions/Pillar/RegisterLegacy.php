@@ -35,6 +35,8 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         ]);
 
         PillarRegistered::dispatch($accountBlock, $pillar);
+
+        $this->setBlockAsProcessed();
     }
 
     private function notifyUsers($pillar): void

@@ -51,6 +51,8 @@ class UpdatePillar extends AbstractContractMethodProcessor
         ]);
 
         PillarUpdated::dispatch($accountBlock, $pillar);
+
+        $this->setBlockAsProcessed();
     }
 
     private function notifyUsers($pillar): void

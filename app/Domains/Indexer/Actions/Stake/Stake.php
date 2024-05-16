@@ -40,11 +40,14 @@ class Stake extends AbstractContractMethodProcessor
             return false;
         }
 
-        if ($this->accountBlock->amount <= 0) {
+        if ($this->accountBlock->amount < config('nom.stake.minAmount')) {
             return false;
         }
 
-        if ($this->accountBlock->data->decoded['durationInSec'] <= 0) {
+        if (
+            $this->accountBlock->data->decoded['durationInSec'] < config('nom.stake.timeMinSec') ||
+            $this->accountBlock->data->decoded['durationInSec'] > config('nom.stake.timeMaxSec')
+        ) {
             return false;
         }
 

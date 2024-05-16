@@ -37,7 +37,7 @@ class Register extends AbstractContractMethodProcessor
             return false;
         }
 
-        return $this->accountBlock->amount === 500000000000;
+        return $this->accountBlock->amount === config('nom.sentinel.znnRegisterAmount');
     }
 
     private function notifyUsers($sentinel): void

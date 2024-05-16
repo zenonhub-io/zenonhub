@@ -18,7 +18,7 @@ class Delegate extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $this->accountBlock = $accountBlock->load('account');
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::findBy('name', $blockData['name']);
 
@@ -28,17 +28,19 @@ class Delegate extends AbstractContractMethodProcessor
 
         Cache::forget("{$pillar->cacheKey()}|pillar-rank");
 
-        $accountBlock->account
-            ->delegations()
-            ->newPivotStatementForId($accountBlock->account_id)
-            ->where('ended_at', null)
-            ->update(['ended_at' => $accountBlock->created_at]);
+        //        $accountBlock->account
+        //            ->delegations()
+        //            ->newPivotStatementForId($accountBlock->account_id)
+        //            ->where('ended_at', null)
+        //            ->update(['ended_at' => $accountBlock->created_at]);
 
         $accountBlock->account->delegations()->attach($pillar->id, [
             'started_at' => $accountBlock->created_at,
         ]);
 
         AccountDelegated::dispatch($accountBlock, $accountBlock->account, $pillar);
+
+        $this->setBlockAsProcessed();
     }
 
     //    private function notifyUsers(): void

@@ -16,7 +16,7 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $this->accountBlock = $accountBlock->load('pairedAccountBlock');
         $blockData = $accountBlock->data->decoded;
 
         $qsrBurnData = $accountBlock->pairedAccountBlock?->descendants()
@@ -42,6 +42,8 @@ class Register extends AbstractContractMethodProcessor
         ]);
 
         PillarRegistered::dispatch($accountBlock, $pillar);
+
+        $this->setBlockAsProcessed();
     }
 
     private function notifyUsers($pillar): void

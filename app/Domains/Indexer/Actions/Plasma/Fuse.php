@@ -42,12 +42,12 @@ class Fuse extends AbstractContractMethodProcessor
             return false;
         }
 
-        if ($this->accountBlock->amount < config('nom.sentinel.minFuseAmount')) {
+        if ($this->accountBlock->amount < config('nom.plasma.minAmount')) {
             return false;
         }
 
         // make sure users send multiple of constants.CostPerFusionUnit
-        if (bcmod($this->accountBlock->amount, config('nom.sentinel.costPerFusionUnit')) !== '0') {
+        if (bcmod($this->accountBlock->amount, config('nom.plasma.costPerFusionUnit')) !== '0') {
             return false;
         }
 

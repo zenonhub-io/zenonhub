@@ -16,6 +16,20 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    App\Domains\Nom\Models\AccountBlock::with('data', 'contractMethod', 'contractMethod.contract')
+        //->whereRelation('contractMethod.contract', 'name', 'Pillar')
+        ->whereHas('contractMethod', function ($query) {
+            $query->whereIn('name', ['Delegate', 'Undelegate']);
+        })
+        ->chunk(1000, function (Illuminate\Support\Collection $accountBlocks) {
+            $accountBlocks->each(function ($accountBlock) {
+                $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
+                $blockProcessorClass::run($accountBlock);
+            });
+        });
+
+    dd('donedsfggnb');
+
     //    $znn = app(\App\Domains\Nom\Services\ZenonSdk::class);
     //
     //    \App\Domains\Nom\Models\AccountBlockData::with('accountBlock', 'accountBlock.contractMethod', 'accountBlock.contractMethod.contract')

@@ -31,6 +31,8 @@ class Revoke extends AbstractContractMethodProcessor
         $pillar->save();
 
         PillarRevoked::dispatch($accountBlock, $pillar);
+
+        $this->setBlockAsProcessed();
     }
 
     private function notifyUsers($pillar): void
