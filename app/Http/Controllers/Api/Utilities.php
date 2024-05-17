@@ -241,9 +241,11 @@ class Utilities extends ApiController
             $account = Account::findByAddress($address);
             if ($account && $account->latest_block) {
                 $account->latest_block->created_at->addDays(30);
-            } else {
-                $expirationDate = now()->addDays(30);
             }
+        }
+
+        if (! $expirationDate) {
+            $expirationDate = now()->addDays(30);
         }
 
         return $this->success($expirationDate->format('Y-m-d H:i:s'));
