@@ -9,6 +9,7 @@ use App\Domains\Indexer\Events\Pillar\PillarUpdated;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class UpdatePillar extends AbstractContractMethodProcessor
@@ -19,7 +20,12 @@ class UpdatePillar extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::findBy('name', $blockData['name']);
 
-        if (! $pillar || $pillar->owner_id !== $accountBlock->account_id) {
+        if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
+            Log::info('Pillar: UpdatePillar failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -52,7 +58,35 @@ class UpdatePillar extends AbstractContractMethodProcessor
 
         PillarUpdated::dispatch($accountBlock, $pillar);
 
-        $this->setBlockAsProcessed();
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Pillar $pillar
+         */
+        [$accountBlock, $pillar] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        if ($pillar->owner_id !== $accountBlock->account_id) {
+            return false;
+        }
+
+        if ($pillar->revoked_at !== null) {
+            return false;
+        }
+
+        if ($blockData['giveBlockRewardPercentage'] > 100 || $blockData['giveBlockRewardPercentage'] < 0) {
+            return false;
+        }
+
+        if ($blockData['giveDelegateRewardPercentage'] > 100 || $blockData['giveDelegateRewardPercentage'] < 0) {
+            return false;
+        }
+
+        return true;
     }
 
     private function notifyUsers($pillar): void

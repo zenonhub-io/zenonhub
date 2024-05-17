@@ -9,20 +9,27 @@ use App\Domains\Indexer\Events\Pillar\AccountUndelegated;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class Undelegate extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock->load('account');
+        $accountBlock->load('account');
+        $blockData = $this->accountBlock->data->decoded;
 
         $delegation = $accountBlock->account
             ->delegations()
             ->wherePivotNull('ended_at')
             ->first();
 
-        if (! $delegation) {
+        if (! $delegation || ! $this->validateAction()) {
+            Log::info('Pillar: Undelegate failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -36,7 +43,7 @@ class Undelegate extends AbstractContractMethodProcessor
 
         AccountUndelegated::dispatch($accountBlock, $accountBlock->account, $delegation);
 
-        $this->setBlockAsProcessed();
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     private function notifyUsers($pillar): void

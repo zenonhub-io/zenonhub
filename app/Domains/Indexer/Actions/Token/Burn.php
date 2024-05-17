@@ -8,14 +8,21 @@ use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Token\TokenBurned;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\TokenBurn;
+use Illuminate\Support\Facades\Log;
 
 class Burn extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $accountBlock->load('token');
+        $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock->token)) {
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Token: Burn failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -31,17 +38,30 @@ class Burn extends AbstractContractMethodProcessor
         $this->updateTokenSupply($burn);
 
         TokenBurned::dispatch($accountBlock, $burn);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        [$token] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
 
-        if ($this->accountBlock->amount <= 0) {
+        if ($accountBlock->amount <= 0) {
             return false;
         }
 
-        return $token->is_mintable && $token->owner_id === $this->accountBlock->account_id;
+        if (! $accountBlock->token->is_burnable) {
+            return false;
+        }
+
+        if ($accountBlock->token->owner_id === $accountBlock->account_id) {
+            return false;
+        }
+
+        return true;
     }
 
     private function updateTokenSupply(TokenBurn $burn): void

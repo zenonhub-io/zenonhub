@@ -10,6 +10,7 @@ use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Services\CoinGecko;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -17,8 +18,16 @@ class CreateProject extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
+
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Accelerator: CreateProject failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
+            return;
+        }
 
         $priceService = app(CoinGecko::class);
         $znnPrice = $priceService->historicPrice('zenon-2', 'usd', $accountBlock->created_at);
@@ -49,6 +58,15 @@ class CreateProject extends AbstractContractMethodProcessor
         ProjectCreated::dispatch($accountBlock, $project);
 
         //(new UpdatePillarEngagementScores)->execute();
+
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$accountBlock] = func_get_args();
+
+        return true;
     }
 
     private function notifyUsers(): void

@@ -9,20 +9,22 @@ use App\Domains\Indexer\Events\Sentinel\SentinelRevoked;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Sentinel;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class Revoke extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
+        $sentinel = Sentinel::whereOwner($accountBlock->account_id)->isActive()->first();
 
-        $sentinel = Sentinel::whereOwner($accountBlock->account_id)
-            ->isActive()
-            ->first();
+        if (! $sentinel || ! $this->validateAction($accountBlock, $sentinel)) {
+            Log::info('Sentinel: Revoke failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
 
-        if (! $sentinel || ! $this->validateAction($sentinel)) {
             return;
         }
 
@@ -30,11 +32,17 @@ class Revoke extends AbstractContractMethodProcessor
         $sentinel->save();
 
         SentinelRevoked::dispatch($accountBlock, $sentinel);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        [$sentinel] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Sentinel $sentinel
+         */
+        [$accountBlock, $sentinel] = func_get_args();
 
         // check sentinel revoke window
     }

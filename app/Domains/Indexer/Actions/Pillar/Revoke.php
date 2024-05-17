@@ -9,17 +9,22 @@ use App\Domains\Indexer\Events\Pillar\PillarRevoked;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class Revoke extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::findBy('name', $blockData['name']);
 
-        if (! $pillar) {
+        if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
+            Log::info('Pillar: Revoke failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -32,7 +37,28 @@ class Revoke extends AbstractContractMethodProcessor
 
         PillarRevoked::dispatch($accountBlock, $pillar);
 
-        $this->setBlockAsProcessed();
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Pillar $pillar
+         */
+        [$accountBlock, $pillar] = func_get_args();
+
+        if ($pillar->revoked_at !== null) {
+            return false;
+        }
+
+        if ($pillar->owner_id !== $accountBlock->account_id) {
+            return false;
+        }
+
+        // check sentinel revoke window
+
+        return true;
     }
 
     private function notifyUsers($pillar): void

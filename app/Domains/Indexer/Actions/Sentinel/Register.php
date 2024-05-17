@@ -10,15 +10,21 @@ use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Sentinel;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction()) {
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Sentinel: Register failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -29,15 +35,26 @@ class Register extends AbstractContractMethodProcessor
         ]);
 
         SentinelRegistered::dispatch($accountBlock, $sentinel);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        if ($this->accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
             return false;
         }
 
-        return $this->accountBlock->amount === config('nom.sentinel.znnRegisterAmount');
+        if ($accountBlock->amount !== config('nom.sentinel.znnRegisterAmount')) {
+            return false;
+        }
+
+        return true;
     }
 
     private function notifyUsers($sentinel): void

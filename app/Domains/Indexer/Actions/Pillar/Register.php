@@ -6,9 +6,11 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Pillar\PillarRegistered;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -16,8 +18,17 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock->load('pairedAccountBlock');
+        $accountBlock->load('pairedAccountBlock');
         $blockData = $accountBlock->data->decoded;
+
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Pillar: Register failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
+            return;
+        }
 
         $qsrBurnData = $accountBlock->pairedAccountBlock?->descendants()
             ->whereHas('contractMethod', function ($q) {
@@ -43,7 +54,42 @@ class Register extends AbstractContractMethodProcessor
 
         PillarRegistered::dispatch($accountBlock, $pillar);
 
-        $this->setBlockAsProcessed();
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.pillar.nameLengthMax')) {
+            return false;
+        }
+
+        if (! preg_match('/^([a-zA-Z0-9]+[-._]?)*[a-zA-Z0-9]$/', $blockData['name'])) {
+            return false;
+        }
+
+        if ($blockData['giveBlockRewardPercentage'] > 100 || $blockData['giveBlockRewardPercentage'] < 0) {
+            return false;
+        }
+
+        if ($blockData['giveDelegateRewardPercentage'] > 100 || $blockData['giveDelegateRewardPercentage'] < 0) {
+            return false;
+        }
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+            return false;
+        }
+
+        if ($accountBlock->amount !== config('nom.pillar.znnStakeAmount')) {
+            return false;
+        }
+
+        return true;
     }
 
     private function notifyUsers($pillar): void

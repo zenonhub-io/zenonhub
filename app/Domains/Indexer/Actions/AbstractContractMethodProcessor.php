@@ -15,10 +15,10 @@ abstract class AbstractContractMethodProcessor
 
     abstract public function handle(AccountBlock $accountBlock): void;
 
-    public function setBlockAsProcessed(): void
+    public function setBlockAsProcessed(AccountBlock $accountBlock): void
     {
-        $this->accountBlock->data->is_processed = true;
-        $this->accountBlock->data->save();
+        $accountBlock->data->is_processed = true;
+        $accountBlock->data->save();
     }
 
     protected function validateAction(): bool

@@ -8,16 +8,21 @@ use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Token\TokenUpdated;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
+use Illuminate\Support\Facades\Log;
 
 class UpdateToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $token = Token::findBy('token_standard', $blockData['tokenStandard']);
 
-        if (! $token || ! $this->validateAction($token)) {
+        if (! $token || ! $this->validateAction($accountBlock, $token)) {
+            Log::info('Token: UpdateToken failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -28,12 +33,22 @@ class UpdateToken extends AbstractContractMethodProcessor
         $token->save();
 
         TokenUpdated::dispatch($accountBlock, $token);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        [$token] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Token $token
+         */
+        [$accountBlock, $token] = func_get_args();
 
-        return $token && $token->owner_id === $this->accountBlock->account_id;
+        if ($token->owner_id !== $accountBlock->account_id) {
+            return false;
+        }
+
+        return true;
     }
 }

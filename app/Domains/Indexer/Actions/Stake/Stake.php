@@ -9,15 +9,21 @@ use App\Domains\Indexer\Events\Stake\StartStake;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake as StakeModel;
+use Illuminate\Support\Facades\Log;
 
 class Stake extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction()) {
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Stake: Stake failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -32,21 +38,29 @@ class Stake extends AbstractContractMethodProcessor
         ]);
 
         StartStake::dispatch($accountBlock, $stake);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        if ($this->accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
             return false;
         }
 
-        if ($this->accountBlock->amount < config('nom.stake.minAmount')) {
+        if ($accountBlock->amount < config('nom.stake.minAmount')) {
             return false;
         }
 
         if (
-            $this->accountBlock->data->decoded['durationInSec'] < config('nom.stake.timeMinSec') ||
-            $this->accountBlock->data->decoded['durationInSec'] > config('nom.stake.timeMaxSec')
+            $blockData['durationInSec'] < config('nom.stake.timeMinSec') ||
+            $blockData['durationInSec'] > config('nom.stake.timeMaxSec')
         ) {
             return false;
         }

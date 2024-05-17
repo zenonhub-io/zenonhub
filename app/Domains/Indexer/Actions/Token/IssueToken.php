@@ -6,20 +6,26 @@ namespace App\Domains\Indexer\Actions\Token;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Token\TokenIssued;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
 use App\Models\NotificationType;
 use DigitalSloth\ZnnPhp\Utilities;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class IssueToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($blockData)) {
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Token: IssueToken failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -41,11 +47,17 @@ class IssueToken extends AbstractContractMethodProcessor
         ]);
 
         TokenIssued::dispatch($accountBlock, $token);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        [$blockData] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
 
         if ($blockData['tokenName'] === '' || strlen($blockData['tokenName']) > config('nom.token.nameLengthMax')) {
             return false;
@@ -81,6 +93,14 @@ class IssueToken extends AbstractContractMethodProcessor
         }
 
         if (! $blockData['isMintable'] && bccomp($blockData['maxSupply'], $blockData['totalSupply']) !== 0) {
+            return false;
+        }
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+            return false;
+        }
+
+        if ($accountBlock->amount !== config('nom.token.issueAmount')) {
             return false;
         }
 

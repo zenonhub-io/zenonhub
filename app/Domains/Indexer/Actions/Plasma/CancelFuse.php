@@ -8,16 +8,21 @@ use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Plasma\EndFuse;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Plasma;
+use Illuminate\Support\Facades\Log;
 
 class CancelFuse extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $plasma = Plasma::findBy('hash', $blockData['id']);
 
-        if (! $plasma || ! $this->validateAction($plasma)) {
+        if (! $plasma || ! $this->validateAction($accountBlock, $plasma)) {
+            Log::info('Plasma: CancelFuse failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -27,13 +32,19 @@ class CancelFuse extends AbstractContractMethodProcessor
         EndFuse::dispatch($accountBlock, $plasma);
 
         //\App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        [$plasma] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Plasma $plasma
+         */
+        [$accountBlock, $plasma] = func_get_args();
 
-        if ($this->accountBlock->account_id !== $plasma->from_account_id) {
+        if ($accountBlock->account_id !== $plasma->from_account_id) {
             return false;
         }
 

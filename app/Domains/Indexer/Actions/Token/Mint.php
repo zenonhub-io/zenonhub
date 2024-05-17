@@ -9,16 +9,22 @@ use App\Domains\Indexer\Events\Token\TokenMinted;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\TokenMint;
+use Illuminate\Support\Facades\Log;
 
 class Mint extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
+        $accountBlock->load('account');
         $blockData = $accountBlock->data->decoded;
         $token = load_token($blockData['tokenStandard']);
 
-        if (! $token || ! $this->validateAction($token)) {
+        if (! $token || ! $this->validateAction($accountBlock, $token)) {
+            Log::info('Token: Mint failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -35,29 +41,45 @@ class Mint extends AbstractContractMethodProcessor
         $this->updateTokenSupply($mint);
 
         TokenMinted::dispatch($accountBlock, $mint);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        [$token] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         * @var \App\Domains\Nom\Models\Token $token
+         */
+        [$accountBlock, $token] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
 
         if (! $token->is_mintable) {
             return false;
         }
 
-        if ($this->accountBlock->data->decoded['amount'] <= 0) {
+        if ($blockData['amount'] <= 0) {
             return false;
         }
 
-        if ($token->token_standard === NetworkTokensEnum::ZNN->value && $this->accountBlock->account->is_embedded_contract) {
+        // ensure we're not minting more than the max supply
+        if (bcsub($token->max_supply, $token->total_supply) < $blockData['amount']) {
+            return false;
+        }
+
+        if ($token->token_standard === NetworkTokensEnum::ZNN->value && $accountBlock->account->is_embedded_contract) {
             return true;
         }
 
-        if ($token->token_standard === NetworkTokensEnum::QSR->value && $this->accountBlock->account->is_embedded_contract) {
+        if ($token->token_standard === NetworkTokensEnum::QSR->value && $accountBlock->account->is_embedded_contract) {
             return true;
         }
 
-        return $token->owner_id === $this->accountBlock->account_id;
+        if ($token->owner_id !== $accountBlock->account_id) {
+            return false;
+        }
+
+        return true;
     }
 
     private function updateTokenSupply(TokenMint $mint): void

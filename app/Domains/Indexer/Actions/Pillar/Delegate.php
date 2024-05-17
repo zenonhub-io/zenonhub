@@ -10,6 +10,7 @@ use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class Delegate extends AbstractContractMethodProcessor
@@ -18,11 +19,16 @@ class Delegate extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock->load('account');
+        $accountBlock->load('account');
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::findBy('name', $blockData['name']);
 
-        if (! $pillar) {
+        if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
+            Log::info('Pillar: Delegate failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -40,7 +46,22 @@ class Delegate extends AbstractContractMethodProcessor
 
         AccountDelegated::dispatch($accountBlock, $accountBlock->account, $pillar);
 
-        $this->setBlockAsProcessed();
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Pillar $pillar
+         */
+        [$accountBlock, $pillar] = func_get_args();
+
+        if ($pillar->revoked_at !== null) {
+            return false;
+        }
+
+        return true;
     }
 
     //    private function notifyUsers(): void

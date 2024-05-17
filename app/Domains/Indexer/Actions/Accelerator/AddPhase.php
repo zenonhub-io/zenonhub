@@ -10,6 +10,7 @@ use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Services\CoinGecko;
 use App\Models\NotificationType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -17,11 +18,15 @@ class AddPhase extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $project = AcceleratorProject::findBy('hash', $blockData['id']);
 
-        if (! $project) {
+        if (! $project || ! $this->validateAction($accountBlock)) {
+            Log::info('Accelerator: AddPhase failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -53,6 +58,15 @@ class AddPhase extends AbstractContractMethodProcessor
         PhaseCreated::dispatch($accountBlock, $phase);
 
         //(new UpdatePillarEngagementScores)->execute();
+
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$accountBlock] = func_get_args();
+
+        return true;
     }
 
     private function notifyUsers(): void

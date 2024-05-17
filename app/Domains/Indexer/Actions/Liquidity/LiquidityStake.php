@@ -9,15 +9,20 @@ use App\Domains\Indexer\Events\Stake\StartStake;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake as StakeModel;
+use Illuminate\Support\Facades\Log;
 
 class LiquidityStake extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction()) {
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Liquidity: LiquidityStake failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -32,19 +37,26 @@ class LiquidityStake extends AbstractContractMethodProcessor
         ]);
 
         StartStake::dispatch($accountBlock, $stake);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        if ($this->accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->value) {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->value) {
             return false;
         }
 
-        if ($this->accountBlock->amount <= 0) {
+        if ($accountBlock->amount <= 0) {
             return false;
         }
 
-        if ($this->accountBlock->data->decoded['durationInSec'] <= 0) {
+        if ($accountBlock->data->decoded['durationInSec'] <= 0) {
             return false;
         }
 

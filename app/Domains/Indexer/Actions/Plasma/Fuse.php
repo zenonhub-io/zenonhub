@@ -9,15 +9,20 @@ use App\Domains\Indexer\Events\Plasma\StartFuse;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Plasma;
+use Illuminate\Support\Facades\Log;
 
 class Fuse extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction()) {
+        if (! $this->validateAction($accountBlock)) {
+            Log::info('Plasma: Fuse failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -34,20 +39,27 @@ class Fuse extends AbstractContractMethodProcessor
 
         // TODO - refactor event into new listener
         //\App\Events\Nom\Plasma\Fuse::dispatch($accountBlock, $blockData);
+
+        $this->setBlockAsProcessed($accountBlock);
     }
 
     protected function validateAction(): bool
     {
-        if ($this->accountBlock->token->token_standard !== NetworkTokensEnum::QSR->value) {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::QSR->value) {
             return false;
         }
 
-        if ($this->accountBlock->amount < config('nom.plasma.minAmount')) {
+        if ($accountBlock->amount < config('nom.plasma.minAmount')) {
             return false;
         }
 
         // make sure users send multiple of constants.CostPerFusionUnit
-        if (bcmod($this->accountBlock->amount, config('nom.plasma.costPerFusionUnit')) !== '0') {
+        if (bcmod($accountBlock->amount, config('nom.plasma.costPerFusionUnit')) !== '0') {
             return false;
         }
 

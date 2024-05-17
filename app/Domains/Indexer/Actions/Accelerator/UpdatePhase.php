@@ -8,16 +8,21 @@ use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PhaseUpdated;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AccountBlock;
+use Illuminate\Support\Facades\Log;
 
 class UpdatePhase extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
         $phase = AcceleratorPhase::findBy('hash', $blockData['id']);
 
-        if (! $phase) {
+        if (! $phase || ! $this->validateAction($accountBlock)) {
+            Log::info('Accelerator: UpdatePhase failed', [
+                'accountBlock' => $accountBlock->hash,
+                'data' => $blockData,
+            ]);
+
             return;
         }
 
@@ -35,5 +40,14 @@ class UpdatePhase extends AbstractContractMethodProcessor
         $phase->project->save();
 
         PhaseUpdated::dispatch($accountBlock, $phase);
+
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    protected function validateAction(): bool
+    {
+        [$accountBlock] = func_get_args();
+
+        return true;
     }
 }
