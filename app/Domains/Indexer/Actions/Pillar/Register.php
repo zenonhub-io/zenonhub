@@ -18,7 +18,7 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $accountBlock->load('pairedAccountBlock');
+        $accountBlock->load('token', 'pairedAccountBlock');
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {

@@ -17,7 +17,7 @@ class Undelegate extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $accountBlock->load('account');
-        $blockData = $this->accountBlock->data->decoded;
+        $blockData = $accountBlock->data->decoded;
 
         $delegation = $accountBlock->account
             ->delegations()
@@ -47,7 +47,7 @@ class Undelegate extends AbstractContractMethodProcessor
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'account' => $accountBlock->account->address,
-            'pillar' => $delegation,
+            'pillar' => $delegation->name,
         ]);
 
         $this->setBlockAsProcessed($accountBlock);

@@ -50,7 +50,7 @@ class Delegate extends AbstractContractMethodProcessor
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'account' => $accountBlock->account->address,
-            'pillar' => $pillar,
+            'pillar' => $pillar->name,
 
         ]);
 

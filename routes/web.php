@@ -16,7 +16,7 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::findBy('hash', 'da21752ee638d10f2bb2205935d34b62af94618b92c468aeb784cb704bf0b35f');
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::findBy('hash', '70a39b78936f5a4a373e3d37fe4e09f91ebac99e801ee997ef627143d429435a');
 
     $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
     $blockProcessorClass::run($accountBlock);
