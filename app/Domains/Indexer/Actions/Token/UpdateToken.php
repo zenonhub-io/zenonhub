@@ -18,9 +18,9 @@ class UpdateToken extends AbstractContractMethodProcessor
         $token = Token::findBy('token_standard', $blockData['tokenStandard']);
 
         if (! $token || ! $this->validateAction($accountBlock, $token)) {
-            Log::info('Token: UpdateToken failed', [
+            Log::info('Contract Method Processor - Token: UpdateToken failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -33,6 +33,12 @@ class UpdateToken extends AbstractContractMethodProcessor
         $token->save();
 
         TokenUpdated::dispatch($accountBlock, $token);
+
+        Log::info('Contract Method Processor - Token: UpdateToken complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'token' => $token,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

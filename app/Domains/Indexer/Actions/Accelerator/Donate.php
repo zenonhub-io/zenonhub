@@ -15,9 +15,9 @@ class Donate extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Accelerator: Donate failed', [
+            Log::info('Contract Method Processor - Accelerator: Donate failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;

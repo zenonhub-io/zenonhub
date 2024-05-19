@@ -20,9 +20,9 @@ class Revoke extends AbstractContractMethodProcessor
         $pillar = Pillar::findBy('name', $blockData['name']);
 
         if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
-            Log::info('Pillar: Revoke failed', [
+            Log::info('Contract Method Processor - Pillar: Revoke failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -36,6 +36,12 @@ class Revoke extends AbstractContractMethodProcessor
         $pillar->save();
 
         PillarRevoked::dispatch($accountBlock, $pillar);
+
+        Log::info('Contract Method Processor - Pillar: Revoke complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'pillar' => $pillar,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

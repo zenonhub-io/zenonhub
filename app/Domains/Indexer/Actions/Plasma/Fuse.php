@@ -18,9 +18,9 @@ class Fuse extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Plasma: Fuse failed', [
+            Log::info('Contract Method Processor - Plasma: Fuse failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -36,6 +36,12 @@ class Fuse extends AbstractContractMethodProcessor
         ]);
 
         StartFuse::dispatch($accountBlock, $plasma);
+
+        Log::info('Contract Method Processor - Plasma: Fuse complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'plasma' => $plasma,
+        ]);
 
         // TODO - refactor event into new listener
         //\App\Events\Nom\Plasma\Fuse::dispatch($accountBlock, $blockData);

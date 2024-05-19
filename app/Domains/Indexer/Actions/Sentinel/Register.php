@@ -20,9 +20,9 @@ class Register extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Sentinel: Register failed', [
+            Log::info('Contract Method Processor - Sentinel: Register failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -35,6 +35,12 @@ class Register extends AbstractContractMethodProcessor
         ]);
 
         SentinelRegistered::dispatch($accountBlock, $sentinel);
+
+        Log::info('Contract Method Processor - Sentinel: Register complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'sentinel' => $sentinel,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

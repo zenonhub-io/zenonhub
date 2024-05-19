@@ -19,9 +19,9 @@ class Stake extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Stake: Stake failed', [
+            Log::info('Contract Method Processor - Stake: Stake failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -38,6 +38,12 @@ class Stake extends AbstractContractMethodProcessor
         ]);
 
         StartStake::dispatch($accountBlock, $stake);
+
+        Log::info('Contract Method Processor - Stake: Stake complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'stake' => $stake,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

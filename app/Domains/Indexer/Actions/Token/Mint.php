@@ -20,9 +20,9 @@ class Mint extends AbstractContractMethodProcessor
         $token = load_token($blockData['tokenStandard']);
 
         if (! $token || ! $this->validateAction($accountBlock, $token)) {
-            Log::info('Token: Mint failed', [
+            Log::info('Contract Method Processor - Token: Mint failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -41,6 +41,12 @@ class Mint extends AbstractContractMethodProcessor
         $this->updateTokenSupply($mint);
 
         TokenMinted::dispatch($accountBlock, $mint);
+
+        Log::info('Contract Method Processor - Token: Mint complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'mint' => $mint,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

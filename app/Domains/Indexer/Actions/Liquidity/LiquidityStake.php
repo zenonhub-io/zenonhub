@@ -18,9 +18,9 @@ class LiquidityStake extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Liquidity: LiquidityStake failed', [
+            Log::info('Contract Method Processor - Liquidity: LiquidityStake failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -37,6 +37,12 @@ class LiquidityStake extends AbstractContractMethodProcessor
         ]);
 
         StartStake::dispatch($accountBlock, $stake);
+
+        Log::info('Contract Method Processor - Liquidity: LiquidityStake complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'stake' => $stake,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

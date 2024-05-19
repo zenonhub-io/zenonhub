@@ -18,9 +18,9 @@ class Burn extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Token: Burn failed', [
+            Log::info('Contract Method Processor - Token: Burn failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -38,6 +38,12 @@ class Burn extends AbstractContractMethodProcessor
         $this->updateTokenSupply($burn);
 
         TokenBurned::dispatch($accountBlock, $burn);
+
+        Log::info('Contract Method Processor - Token: Burn complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'burn' => $burn,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

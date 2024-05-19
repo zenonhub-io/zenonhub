@@ -18,9 +18,9 @@ class Cancel extends AbstractContractMethodProcessor
         $stake = Stake::findBy('hash', $blockData['id']);
 
         if (! $stake || ! $this->validateAction($accountBlock, $stake)) {
-            Log::info('Stake: Cancel failed', [
+            Log::info('Contract Method Processor - Stake: Cancel failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -30,6 +30,11 @@ class Cancel extends AbstractContractMethodProcessor
         $stake->save();
 
         EndStake::dispatch($accountBlock, $stake);
+
+        Log::info('Contract Method Processor - Stake: Cancel complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $stake,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

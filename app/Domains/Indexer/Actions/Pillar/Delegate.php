@@ -24,9 +24,9 @@ class Delegate extends AbstractContractMethodProcessor
         $pillar = Pillar::findBy('name', $blockData['name']);
 
         if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
-            Log::info('Pillar: Delegate failed', [
+            Log::info('Contract Method Processor - Pillar: Delegate failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -45,6 +45,14 @@ class Delegate extends AbstractContractMethodProcessor
         ]);
 
         AccountDelegated::dispatch($accountBlock, $accountBlock->account, $pillar);
+
+        Log::info('Contract Method Processor - Pillar: Delegate complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'account' => $accountBlock->account->address,
+            'pillar' => $pillar,
+
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

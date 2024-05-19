@@ -22,15 +22,20 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Accelerator: VoteByProdAddress failed', [
+            Log::info('Contract Method Processor - Accelerator: VoteByProdAddress failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
         }
 
         $this->processVote();
+
+        Log::info('Contract Method Processor - Accelerator: VoteByProdAddress complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

@@ -20,8 +20,8 @@ return [
     'accelerator' => [
         'projectNameLengthMax' => 30,
         'projectDescriptionLengthMax' => 240,
-        'projectZnnMaximumFunds' => 5000 * NOM_DECIMALS,
-        'projectQsrMaximumFunds' => 50000 * NOM_DECIMALS,
+        'projectZnnMaximumFunds' => (string) (5000 * NOM_DECIMALS),
+        'projectQsrMaximumFunds' => (string) (50000 * NOM_DECIMALS),
         'projectCreationAmount' => 1 * NOM_DECIMALS,
         'phaseTimeUnit' => 24 * 60 * 60,
         'acceleratorDuration' => 20 * 12 * 30 * NOM_SECONDS_IN_DAY,
@@ -31,9 +31,9 @@ return [
 
     // Pillar
     'pillar' => [
-        'znnStakeAmount' => 15 * NOM_DECIMALS,
-        'qsrStakeBaseAmount' => 150 * NOM_DECIMALS,
-        'qsrStakeIncreaseAmount' => 10 * NOM_DECIMALS,
+        'znnStakeAmount' => (string) (15000 * NOM_DECIMALS),
+        'qsrStakeBaseAmount' => (string) (150000 * NOM_DECIMALS),
+        'qsrStakeIncreaseAmount' => (string) (10000 * NOM_DECIMALS),
         'epochLockTime' => 83 * NOM_SECONDS_IN_DAY,
         'epochRevokeTime' => 7 * NOM_SECONDS_IN_DAY,
         'nameLengthMax' => 40,
@@ -41,8 +41,8 @@ return [
 
     // Sentinel
     'sentinel' => [
-        'znnRegisterAmount' => 5 * NOM_DECIMALS,
-        'qsrDepositAmount' => 50 * NOM_DECIMALS,
+        'znnRegisterAmount' => (string) (5000 * NOM_DECIMALS),
+        'qsrDepositAmount' => (string) (50000 * NOM_DECIMALS),
         'lockTimeWindow' => 27 * NOM_SECONDS_IN_DAY,
         'revokeTimeWindow' => 3 * NOM_SECONDS_IN_DAY,
     ],
@@ -67,7 +67,7 @@ return [
 
     // Token
     'token' => [
-        'issueAmount' => 1 * NOM_DECIMALS,
+        'issueAmount' => (string) (1 * NOM_DECIMALS),
         'nameLengthMax' => 40,
         'symbolLengthMax' => 10,
         'domainLengthMax' => 128,

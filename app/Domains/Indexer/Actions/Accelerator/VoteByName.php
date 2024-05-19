@@ -22,15 +22,20 @@ class VoteByName extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Accelerator: VoteByName failed', [
+            Log::info('Contract Method Processor - Accelerator: VoteByName failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
         }
 
         $this->processVote();
+
+        Log::info('Contract Method Processor - Accelerator: VoteByName complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
 
         $this->setBlockAsProcessed();
     }

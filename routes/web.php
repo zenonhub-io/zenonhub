@@ -16,19 +16,24 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    App\Domains\Nom\Models\AccountBlock::with('data', 'contractMethod', 'contractMethod.contract')
-        //->whereRelation('contractMethod.contract', 'name', 'Pillar')
-        ->whereHas('contractMethod', function ($query) {
-            $query->whereIn('name', ['Delegate', 'Undelegate']);
-        })
-        ->chunk(1000, function (Illuminate\Support\Collection $accountBlocks) {
-            $accountBlocks->each(function ($accountBlock) {
-                $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
-                $blockProcessorClass::run($accountBlock);
-            });
-        });
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::findBy('hash', 'da21752ee638d10f2bb2205935d34b62af94618b92c468aeb784cb704bf0b35f');
 
-    dd('donedsfggnb');
+    $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
+    $blockProcessorClass::run($accountBlock);
+
+    dd('done');
+
+    //    App\Domains\Nom\Models\AccountBlock::with('data', 'contractMethod', 'contractMethod.contract')
+    //        ->whereRelation('contractMethod.contract', 'name', 'Token')
+    ////        ->whereHas('contractMethod', function ($query) {
+    ////            $query->whereIn('name', ['Delegate', 'Undelegate']);
+    ////        })
+    //        ->chunk(1000, function (Illuminate\Support\Collection $accountBlocks) {
+    //            $accountBlocks->each(function ($accountBlock) {
+    //                $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
+    //                $blockProcessorClass::run($accountBlock);
+    //            });
+    //        });
 
     //    $znn = app(\App\Domains\Nom\Services\ZenonSdk::class);
     //

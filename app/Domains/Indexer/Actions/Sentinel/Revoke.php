@@ -20,9 +20,9 @@ class Revoke extends AbstractContractMethodProcessor
         $sentinel = Sentinel::whereOwner($accountBlock->account_id)->isActive()->first();
 
         if (! $sentinel || ! $this->validateAction($accountBlock, $sentinel)) {
-            Log::info('Sentinel: Revoke failed', [
+            Log::info('Contract Method Processor - Sentinel: Revoke failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -32,6 +32,12 @@ class Revoke extends AbstractContractMethodProcessor
         $sentinel->save();
 
         SentinelRevoked::dispatch($accountBlock, $sentinel);
+
+        Log::info('Contract Method Processor - Sentinel: Revoke complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'sentinel' => $sentinel,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

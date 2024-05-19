@@ -18,9 +18,9 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
         $stake = Stake::findBy('hash', $blockData['id']);
 
         if (! $stake || ! $this->validateAction($accountBlock, $stake)) {
-            Log::info('Liquidity: CancelLiquidityStake failed', [
+            Log::info('Contract Method Processor - Liquidity: CancelLiquidityStake failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -30,6 +30,12 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
         $stake->save();
 
         EndStake::dispatch($accountBlock, $stake);
+
+        Log::info('Contract Method Processor - Liquidity: CancelLiquidityStake complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'stake' => $stake,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

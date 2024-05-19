@@ -18,12 +18,13 @@ class IssueToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Token: IssueToken failed', [
+            Log::info('Contract Method Processor - Token: IssueToken failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -47,6 +48,12 @@ class IssueToken extends AbstractContractMethodProcessor
         ]);
 
         TokenIssued::dispatch($accountBlock, $token);
+
+        Log::info('Contract Method Processor - Token: IssueToken complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'token' => $token,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

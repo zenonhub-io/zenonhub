@@ -22,9 +22,9 @@ class Register extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Pillar: Register failed', [
+            Log::info('Contract Method Processor - Pillar: Register failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -53,6 +53,12 @@ class Register extends AbstractContractMethodProcessor
         ]);
 
         PillarRegistered::dispatch($accountBlock, $pillar);
+
+        Log::info('Contract Method Processor - Pillar: Register complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'pillar' => $pillar,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

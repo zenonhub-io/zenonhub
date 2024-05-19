@@ -18,9 +18,9 @@ class UpdatePhase extends AbstractContractMethodProcessor
         $phase = AcceleratorPhase::findBy('hash', $blockData['id']);
 
         if (! $phase || ! $this->validateAction($accountBlock)) {
-            Log::info('Accelerator: UpdatePhase failed', [
+            Log::info('Contract Method Processor - Accelerator: UpdatePhase failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -40,6 +40,12 @@ class UpdatePhase extends AbstractContractMethodProcessor
         $phase->project->save();
 
         PhaseUpdated::dispatch($accountBlock, $phase);
+
+        Log::info('Contract Method Processor - Accelerator: UpdatePhase failed', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'phase' => $phase,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

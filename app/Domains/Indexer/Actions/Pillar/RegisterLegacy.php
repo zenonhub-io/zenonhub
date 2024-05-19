@@ -21,9 +21,9 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Pillar: RegisterLegacy failed', [
+            Log::info('Contract Method Processor - Pillar: RegisterLegacy failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -45,6 +45,12 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         ]);
 
         PillarRegistered::dispatch($accountBlock, $pillar);
+
+        Log::info('Contract Method Processor - Pillar: RegisterLegacy complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'pillar' => $pillar,
+        ]);
 
         $this->setBlockAsProcessed($accountBlock);
     }

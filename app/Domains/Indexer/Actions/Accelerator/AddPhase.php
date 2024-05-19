@@ -22,9 +22,9 @@ class AddPhase extends AbstractContractMethodProcessor
         $project = AcceleratorProject::findBy('hash', $blockData['id']);
 
         if (! $project || ! $this->validateAction($accountBlock)) {
-            Log::info('Accelerator: AddPhase failed', [
+            Log::info('Contract Method Processor - Accelerator: AddPhase failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -56,6 +56,12 @@ class AddPhase extends AbstractContractMethodProcessor
         $project->save();
 
         PhaseCreated::dispatch($accountBlock, $phase);
+
+        Log::info('Contract Method Processor - Accelerator: AddPhase complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'phase' => $phase,
+        ]);
 
         //(new UpdatePillarEngagementScores)->execute();
 

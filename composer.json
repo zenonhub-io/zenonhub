@@ -27,7 +27,8 @@
         "spatie/laravel-permission": "*",
         "spatie/laravel-sitemap": "*",
         "ext-bcmath": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-gmp": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

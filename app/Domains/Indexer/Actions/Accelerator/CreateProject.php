@@ -21,9 +21,9 @@ class CreateProject extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
-            Log::info('Accelerator: CreateProject failed', [
+            Log::info('Contract Method Processor - Accelerator: CreateProject failed', [
                 'accountBlock' => $accountBlock->hash,
-                'data' => $blockData,
+                'blockData' => $blockData,
             ]);
 
             return;
@@ -56,6 +56,12 @@ class CreateProject extends AbstractContractMethodProcessor
         ]);
 
         ProjectCreated::dispatch($accountBlock, $project);
+
+        Log::info('Contract Method Processor - Accelerator: CreateProject complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+            'project' => $project,
+        ]);
 
         //(new UpdatePillarEngagementScores)->execute();
 
