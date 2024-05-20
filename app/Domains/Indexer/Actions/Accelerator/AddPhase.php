@@ -6,6 +6,8 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PhaseCreated;
+use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
+use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Services\CoinGecko;
@@ -21,7 +23,7 @@ class AddPhase extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $project = AcceleratorProject::findBy('hash', $blockData['id']);
 
-        if (! $project || ! $this->validateAction($accountBlock)) {
+        if (! $project || ! $this->validateAction($accountBlock, $project)) {
             Log::info('Contract Method Processor - Accelerator: AddPhase failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
@@ -70,7 +72,41 @@ class AddPhase extends AbstractContractMethodProcessor
 
     protected function validateAction(): bool
     {
-        [$accountBlock] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         * @var AcceleratorProject $project
+         */
+        [$accountBlock, $project] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+        $latestPhase = $project->phases()->latest()->first();
+
+        if ($project->owner_id !== $accountBlock->account_id) {
+            return false;
+        }
+
+        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED->value) {
+            return false;
+        }
+
+        if ($latestPhase && $latestPhase !== AcceleratorPhaseStatusEnum::PAID->value) {
+            return false;
+        }
+
+        if ($blockData['name'] === '' || $blockData['name'] > config('nom.accelerator.projectNameLengthMax')) {
+            return false;
+        }
+
+        if ($blockData['description'] === '' || $blockData['description'] > config('nom.accelerator.projectDescriptionLengthMax')) {
+            return false;
+        }
+
+        if ($blockData['znnFundsNeeded'] > config('nom.accelerator.projectZnnMaximumFunds')) {
+            return false;
+        }
+
+        if ($blockData['qsrFundsNeeded'] > config('nom.accelerator.projectQsrMaximumFunds')) {
+            return false;
+        }
 
         return true;
     }

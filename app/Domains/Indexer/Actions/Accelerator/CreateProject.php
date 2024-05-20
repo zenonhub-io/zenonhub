@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\ProjectCreated;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Services\CoinGecko;
@@ -70,7 +71,35 @@ class CreateProject extends AbstractContractMethodProcessor
 
     protected function validateAction(): bool
     {
+        /**
+         * @var AccountBlock $accountBlock
+         */
         [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        if ($blockData['name'] === '' || $blockData['name'] > config('nom.accelerator.projectNameLengthMax')) {
+            return false;
+        }
+
+        if ($blockData['description'] === '' || $blockData['description'] > config('nom.accelerator.projectDescriptionLengthMax')) {
+            return false;
+        }
+
+        if ($blockData['znnFundsNeeded'] > config('nom.accelerator.projectZnnMaximumFunds')) {
+            return false;
+        }
+
+        if ($blockData['qsrFundsNeeded'] > config('nom.accelerator.projectQsrMaximumFunds')) {
+            return false;
+        }
+
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+            return false;
+        }
+
+        if ($accountBlock->amount !== config('nom.accelerator.projectCreationAmount')) {
+            return false;
+        }
 
         return true;
     }

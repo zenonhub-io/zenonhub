@@ -6,7 +6,9 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PhaseUpdated;
+use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
 use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
 use Illuminate\Support\Facades\Log;
 
@@ -15,9 +17,10 @@ class UpdatePhase extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $phase = AcceleratorPhase::findBy('hash', $blockData['id']);
+        $project = AcceleratorProject::findBy('hash', $blockData['id']);
+        $phase = $project?->phases()->latest()->first();
 
-        if (! $phase || ! $this->validateAction($accountBlock)) {
+        if (! $project || ! $phase || ! $this->validateAction($accountBlock, $project, $phase)) {
             Log::info('Contract Method Processor - Accelerator: UpdatePhase failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
@@ -26,6 +29,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
             return;
         }
 
+        $phase->hash = $accountBlock->hash;
         $phase->name = $blockData['name'];
         $phase->description = $blockData['description'];
         $phase->url = $blockData['url'];
@@ -52,7 +56,20 @@ class UpdatePhase extends AbstractContractMethodProcessor
 
     protected function validateAction(): bool
     {
-        [$accountBlock] = func_get_args();
+        /**
+         * @var AccountBlock $accountBlock
+         * @var AcceleratorProject $project
+         * @var AcceleratorPhase $phase
+         */
+        [$accountBlock, $project, $phase] = func_get_args();
+
+        if ($project->owner_id !== $accountBlock->account_id) {
+            return false;
+        }
+
+        if (! $phase || $phase->status !== AcceleratorPhaseStatusEnum::OPEN->value) {
+            return false;
+        }
 
         return true;
     }
