@@ -51,7 +51,7 @@ class ProjectVotes extends Component
 
         if ($this->sort === 'pillar') {
             $this->query->orderBy(
-                Pillar::select('name')->whereColumn('nom_pillars.owner_id', 'nom_accelerator_votes.owner_id'),
+                Pillar::select('name')->whereColumn('nom_pillars.owner_id', 'nom_votes.owner_id'),
                 $this->order
             );
         } else {

@@ -67,6 +67,10 @@ return new class extends Migration
             $table->string('signature');
             $table->timestamp('created_at')->nullable();
         });
+
+        Schema::table('nom_votes', function (Blueprint $table) {
+            $table->foreignId('pillar_id')->after('owner_id')->nullable()->references('id')->on('nom_pillars')->nullOnDelete();
+        });
     }
 
     /**
@@ -74,6 +78,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('nom_votes', function (Blueprint $table) {
+            $table->dropForeign(['pillar_id']);
+        });
+
         Schema::dropIfExists('nom_pillar_messages');
         Schema::dropIfExists('nom_pillar_histories');
         Schema::dropIfExists('nom_delegations');

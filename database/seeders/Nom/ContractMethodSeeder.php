@@ -25,6 +25,7 @@ class ContractMethodSeeder extends Seeder
             'Pillar' => \DigitalSloth\ZnnPhp\Abi\Contracts\Pillar::class,
             'Plasma' => \DigitalSloth\ZnnPhp\Abi\Contracts\Plasma::class,
             'Sentinel' => \DigitalSloth\ZnnPhp\Abi\Contracts\Sentinel::class,
+            'Spork' => \DigitalSloth\ZnnPhp\Abi\Contracts\Spork::class,
             'Stake' => \DigitalSloth\ZnnPhp\Abi\Contracts\Stake::class,
             'Swap' => \DigitalSloth\ZnnPhp\Abi\Contracts\Swap::class,
             'Token' => \DigitalSloth\ZnnPhp\Abi\Contracts\Token::class,

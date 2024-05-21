@@ -19,6 +19,7 @@ class CreateProject extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
@@ -77,11 +78,11 @@ class CreateProject extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
-        if ($blockData['name'] === '' || $blockData['name'] > config('nom.accelerator.projectNameLengthMax')) {
+        if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.accelerator.projectNameLengthMax')) {
             return false;
         }
 
-        if ($blockData['description'] === '' || $blockData['description'] > config('nom.accelerator.projectDescriptionLengthMax')) {
+        if ($blockData['description'] === '' || strlen($blockData['description']) > config('nom.accelerator.projectDescriptionLengthMax')) {
             return false;
         }
 

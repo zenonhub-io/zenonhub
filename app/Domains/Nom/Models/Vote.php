@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class AcceleratorVote extends Model
+class Vote extends Model
 {
     use HasFactory;
 
@@ -25,7 +25,7 @@ class AcceleratorVote extends Model
      *
      * @var string
      */
-    protected $table = 'nom_accelerator_votes';
+    protected $table = 'nom_votes';
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +53,26 @@ class AcceleratorVote extends Model
         return [
             'created_at' => 'datetime',
         ];
+    }
+
+    //
+    // Helpers
+
+    public static function isVoteType(string $type, string $vote): bool
+    {
+        if ($type === 'yes' && $vote === '0') {
+            return true;
+        }
+
+        if ($type === 'no' && $vote === '1') {
+            return true;
+        }
+
+        if ($type === 'abstain' && $vote === '2') {
+            return true;
+        }
+
+        return false;
     }
 
     //

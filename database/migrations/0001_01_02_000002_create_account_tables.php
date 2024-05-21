@@ -39,6 +39,10 @@ return new class extends Migration
         Schema::table('nom_contracts', function (Blueprint $table) {
             $table->foreignId('account_id')->after('chain_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
         });
+
+        Schema::table('nom_votes', function (Blueprint $table) {
+            $table->foreignId('owner_id')->after('id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
+        });
     }
 
     /**
@@ -46,6 +50,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('nom_votes', function (Blueprint $table) {
+            $table->dropForeign(['owner_id']);
+        });
+
         Schema::table('nom_contracts', function (Blueprint $table) {
             $table->dropForeign(['account_id']);
         });

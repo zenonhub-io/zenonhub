@@ -116,7 +116,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function votes(): MorphMany
     {
-        return $this->morphMany(AcceleratorVote::class, 'votable');
+        return $this->morphMany(Vote::class, 'votable');
     }
 
     //
@@ -211,7 +211,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function getQuorumStatusAttribute(): string
     {
-        if ($this->status === AcceleratorProjectStatusEnum::NEW->value && $this->total_more_votes_needed > 0) {
+        if ($this->status->value === AcceleratorProjectStatusEnum::NEW->value && $this->total_more_votes_needed > 0) {
             $votesText = Str::plural('vote', $this->total_more_votes_needed);
 
             return "{$this->total_more_votes_needed} {$votesText} needed in {$this->open_for_time}";

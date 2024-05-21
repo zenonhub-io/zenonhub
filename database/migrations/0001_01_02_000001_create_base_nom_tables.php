@@ -35,6 +35,15 @@ return new class extends Migration
             $table->string('signature');
             $table->string('fingerprint')->index();
         });
+
+        Schema::create('nom_votes', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('votable');
+            $table->boolean('is_yes')->default(0);
+            $table->boolean('is_no')->default(0);
+            $table->boolean('is_abstain')->default(0);
+            $table->timestamp('created_at')->nullable();
+        });
     }
 
     /**
@@ -43,6 +52,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('nom_votes');
         Schema::dropIfExists('nom_contract_methods');
         Schema::dropIfExists('nom_contracts');
         Schema::dropIfExists('nom_chains');

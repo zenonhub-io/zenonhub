@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Listeners;
+namespace App\Domains\Common\Listeners;
 
+use App\Domains\Common\Actions\ProcessBlockRewards;
+use App\Domains\Common\Actions\ProcessLiquidityProgramRewards;
+use App\Domains\Common\Actions\UpdateAccountTotals;
 use App\Domains\Indexer\Events\AccountBlockInserted;
-use App\Domains\Nom\Actions\ProcessBlockRewards;
-use App\Domains\Nom\Actions\ProcessLiquidityProgramRewards;
-use App\Domains\Nom\Actions\UpdateAccountTotals;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
@@ -15,8 +15,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AccountBlockInsertedListener implements ShouldQueue
 {
-    public string $queue = 'indexer';
-
     /**
      * Handle the event.
      */

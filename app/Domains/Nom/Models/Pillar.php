@@ -128,9 +128,9 @@ class Pillar extends Model implements Sitemapable
             ->withPivot('started_at', 'ended_at');
     }
 
-    public function azVotes(): HasMany
+    public function votes(): HasMany
     {
-        return $this->hasMany(AcceleratorVote::class);
+        return $this->hasMany(Vote::class);
     }
 
     public function messages(): HasMany

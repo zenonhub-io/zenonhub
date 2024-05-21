@@ -84,19 +84,20 @@ class AddPhase extends AbstractContractMethodProcessor
             return false;
         }
 
-        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED->value) {
+        // TODO
+        //        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED->value) {
+        //            return false;
+        //        }
+        //
+        //        if ($latestPhase && $latestPhase !== AcceleratorPhaseStatusEnum::PAID->value) {
+        //            return false;
+        //        }
+
+        if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.accelerator.projectNameLengthMax')) {
             return false;
         }
 
-        if ($latestPhase && $latestPhase !== AcceleratorPhaseStatusEnum::PAID->value) {
-            return false;
-        }
-
-        if ($blockData['name'] === '' || $blockData['name'] > config('nom.accelerator.projectNameLengthMax')) {
-            return false;
-        }
-
-        if ($blockData['description'] === '' || $blockData['description'] > config('nom.accelerator.projectDescriptionLengthMax')) {
+        if ($blockData['description'] === '' || strlen($blockData['description']) > config('nom.accelerator.projectDescriptionLengthMax')) {
             return false;
         }
 

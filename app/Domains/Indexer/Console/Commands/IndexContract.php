@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Indexer\Console\Commands;
 
+use App\Domains\Indexer\Exceptions\ContractMethodProcessorNotFound;
 use App\Domains\Indexer\Factories\ContractMethodProcessorFactory;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Contract;
@@ -46,8 +47,12 @@ class IndexContract extends Command
             ->whereRelation('contractMethod.contract', 'name', $contract)
             ->chunk(1000, function (Collection $accountBlocks) use ($bar) {
                 $accountBlocks->each(function ($accountBlock) use ($bar) {
-                    $blockProcessorClass = ContractMethodProcessorFactory::create($accountBlock->contractMethod);
-                    $blockProcessorClass::run($accountBlock);
+                    try {
+                        $blockProcessorClass = ContractMethodProcessorFactory::create($accountBlock->contractMethod);
+                        $blockProcessorClass::run($accountBlock);
+                    } catch (ContractMethodProcessorNotFound) {
+                    }
+
                     $bar->advance();
                 });
             });

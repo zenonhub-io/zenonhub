@@ -2,10 +2,21 @@
 
 declare(strict_types=1);
 
-const NOM_DECIMALS = 100000000;
-const NOM_SECONDS_IN_DAY = 24 * 60 * 60;
-const NOM_MOMENTUMS_PER_HOUR = 3600 / 10;
-const NOM_MOMENTUMS_PER_EPOCH = NOM_MOMENTUMS_PER_HOUR * 24;
+if (! defined('NOM_DECIMALS')) {
+    define('NOM_DECIMALS', 100000000);
+}
+
+if (! defined('NOM_SECONDS_IN_DAY')) {
+    define('NOM_SECONDS_IN_DAY', 24 * 60 * 60);
+}
+
+if (! defined('NOM_MOMENTUMS_PER_HOUR')) {
+    define('NOM_MOMENTUMS_PER_HOUR', 3600 / 10);
+}
+
+if (! defined('NOM_MOMENTUMS_PER_EPOCH')) {
+    define('NOM_MOMENTUMS_PER_EPOCH', NOM_MOMENTUMS_PER_HOUR * 24);
+}
 
 return [
 
@@ -22,7 +33,7 @@ return [
         'projectDescriptionLengthMax' => 240,
         'projectZnnMaximumFunds' => (string) (5000 * NOM_DECIMALS),
         'projectQsrMaximumFunds' => (string) (50000 * NOM_DECIMALS),
-        'projectCreationAmount' => 1 * NOM_DECIMALS,
+        'projectCreationAmount' => (string) (1 * NOM_DECIMALS),
         'phaseTimeUnit' => 24 * 60 * 60,
         'acceleratorDuration' => 20 * 12 * 30 * NOM_SECONDS_IN_DAY,
         'voteAcceptanceThreshold' => 33,
@@ -52,7 +63,7 @@ return [
         'timeUnitSec' => 30 * NOM_SECONDS_IN_DAY,
         'timeMinSec' => (30 * NOM_SECONDS_IN_DAY) * 1,
         'timeMaxSec' => (30 * NOM_SECONDS_IN_DAY) * 12,
-        'minAmount' => 1 * NOM_DECIMALS,
+        'minAmount' => (string) (1 * NOM_DECIMALS),
     ],
 
     // Plasma

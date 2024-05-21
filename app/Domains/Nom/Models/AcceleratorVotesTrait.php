@@ -10,27 +10,14 @@ use Illuminate\Support\Facades\Cache;
 
 trait AcceleratorVotesTrait
 {
-    public function scopeIsOpenForVoting($query)
-    {
-        return $query->whereDate('created_at', '>', now()->subDays(40));
-    }
-
-    public function getIsVotingOpen(): bool
-    {
-        return $this->created_at->addDays(14) > now();
-    }
-
-    public function getIsQuorumReachedAttribute(): bool
-    {
-        return ! ($this->total_more_votes_needed > 0);
-    }
-
     public function getOpenForTimeAttribute(): string
     {
-        return $this->created_at->addDays(14)->diffForHumans(['parts' => 2], true);
+        $votingPeriod = config('nom.accelerator.acceleratorProjectVotingPeriod');
+
+        return $this->created_at->addSeconds($votingPeriod)->diffForHumans(['parts' => 2], true);
     }
 
-    public function getVotesNeededAttribute()
+    public function getVotesNeededAttribute(): int
     {
         return Cache::tags('azVote')->rememberForever("{$this->cacheKey()}|getVotesNeededAttribute", function () {
 
@@ -38,17 +25,17 @@ trait AcceleratorVotesTrait
 
             // New projects or open phases can be voted on by all pillars so creation date shouldnt be accounted for
             if (
-                ($this instanceof AcceleratorProject && $this->status === AcceleratorProjectStatusEnum::NEW->value)
-                || ($this instanceof AcceleratorPhase && $this->status === AcceleratorPhaseStatusEnum::OPEN->value)
+                ($this instanceof AcceleratorProject && $this->status->value === AcceleratorProjectStatusEnum::NEW->value) ||
+                ($this instanceof AcceleratorPhase && $this->status->value === AcceleratorPhaseStatusEnum::OPEN->value)
             ) {
                 $totalPillars = Pillar::isActive()->count();
             }
 
-            return ceil($totalPillars * .33);
+            return ceil($totalPillars * (config('nom.accelerator.voteAcceptanceThreshold') / 100));
         });
     }
 
-    public function getTotalVotesAttribute()
+    public function getTotalVotesAttribute(): int
     {
         return Cache::tags('azVote')->rememberForever("{$this->cacheKey()}|getTotalVotesAttribute", function () {
             return $this->votes()
@@ -92,21 +79,29 @@ trait AcceleratorVotesTrait
 
     public function getVotesPercentageAttribute(): float
     {
-        return round(($this->getTotalVotesAttribute() * 100) / $this->getVotesNeededAttribute());
+        $percentage = ($this->getTotalVotesAttribute() * 100) / $this->getVotesNeededAttribute();
+
+        return round($percentage);
     }
 
     public function getTotalYesVotesPercentageAttribute(): float
     {
-        return round(($this->getTotalYesVotesAttribute() * 100) / $this->getVotesNeededAttribute());
+        $percentage = ($this->getTotalYesVotesAttribute() * 100) / $this->getVotesNeededAttribute();
+
+        return round($percentage);
     }
 
     public function getTotalNoVotesPercentageAttribute(): float
     {
-        return round(($this->getTotalNoVotesAttribute() * 100) / $this->getVotesNeededAttribute());
+        $percentage = ($this->getTotalNoVotesAttribute() * 100) / $this->getVotesNeededAttribute();
+
+        return round($percentage);
     }
 
     public function getTotalAbstainVotesPercentageAttribute(): float
     {
-        return round(($this->getTotalAbstainVotesAttribute() * 100) / $this->getVotesNeededAttribute());
+        $percentage = ($this->getTotalAbstainVotesAttribute() * 100) / $this->getVotesNeededAttribute();
+
+        return round($percentage);
     }
 }

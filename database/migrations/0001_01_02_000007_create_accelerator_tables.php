@@ -59,17 +59,6 @@ return new class extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
-
-        Schema::create('nom_accelerator_votes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('owner_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->nullOnDelete();
-            $table->morphs('votable');
-            $table->boolean('is_yes')->default(0);
-            $table->boolean('is_no')->default(0);
-            $table->boolean('is_abstain')->default(0);
-            $table->timestamp('created_at')->nullable();
-        });
     }
 
     /**
@@ -77,7 +66,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nom_accelerator_votes');
         Schema::dropIfExists('nom_accelerator_phases');
         Schema::dropIfExists('nom_accelerator_projects');
     }

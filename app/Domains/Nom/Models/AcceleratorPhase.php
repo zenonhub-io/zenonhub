@@ -95,7 +95,7 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     public function votes(): MorphMany
     {
-        return $this->morphMany(AcceleratorVote::class, 'votable');
+        return $this->morphMany(Vote::class, 'votable');
     }
 
     //

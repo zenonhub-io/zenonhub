@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Actions;
+namespace App\Domains\Common\Actions;
 
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
@@ -25,7 +25,10 @@ class UpdatePillarEngagementScore
 
             // Make sure the vote item was created after the pillar
             // Projects/phases might be open after a pillar spawned, dont include these
-            $votes = $pillar->azVotes()->get();
+            $votes = $pillar->votes()->whereHasMorph('votable', [
+                AcceleratorProject::class,
+                AcceleratorPhase::class,
+            ])->get();
             $totalVotes = $votes->map(function ($vote) use ($pillar) {
                 if ($vote->votable->created_at >= $pillar->created_at) {
                     return 1;
@@ -44,7 +47,12 @@ class UpdatePillarEngagementScore
         }
 
         $averageVoteTime = $pillar
-            ->azVotes
+            ->votes()
+            ->whereHasMorph('votable', [
+                AcceleratorProject::class,
+                AcceleratorPhase::class,
+            ])
+            ->get()
             ->map(fn ($vote) => $vote->created_at->timestamp - $vote->votable->created_at->timestamp)
             ->average();
 

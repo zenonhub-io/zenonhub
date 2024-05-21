@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Nom\Actions;
+namespace App\Domains\Common\Actions;
 
 use App\Domains\Nom\Models\Account;
 use Illuminate\Contracts\Queue\ShouldBeUnique;

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Accelerator\PillarVoted;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
-use App\Domains\Nom\Models\AcceleratorVote;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
+use App\Domains\Nom\Models\Vote;
 use Illuminate\Support\Facades\Log;
 
 class VoteByName extends AbstractContractMethodProcessor
@@ -32,19 +33,23 @@ class VoteByName extends AbstractContractMethodProcessor
             return;
         }
 
-        AcceleratorVote::updateOrCreate([
+        Vote::updateOrCreate([
             'owner_id' => $pillar->owner_id,
             'pillar_id' => $pillar->id,
             'votable_id' => $item->id,
             'votable_type' => $item::class,
         ], [
-            'is_yes' => $this->isVoteType('yes', $blockData['vote']),
-            'is_no' => $this->isVoteType('no', $blockData['vote']),
-            'is_abstain' => $this->isVoteType('abstain', $blockData['vote']),
-            'created_at' => $accountBlock->momentum->created_at,
+            'is_yes' => Vote::isVoteType('yes', $blockData['vote']),
+            'is_no' => Vote::isVoteType('no', $blockData['vote']),
+            'is_abstain' => Vote::isVoteType('abstain', $blockData['vote']),
+            'created_at' => $accountBlock->created_at,
         ]);
 
+        $item->touch();
+
         //$pillar->updateAzEngagementScores();
+
+        PillarVoted::dispatch($accountBlock, $pillar, $item);
 
         Log::info('Contract Method Processor - Accelerator: VoteByName complete', [
             'accountBlock' => $accountBlock->hash,
@@ -67,22 +72,5 @@ class VoteByName extends AbstractContractMethodProcessor
         }
 
         return true;
-    }
-
-    private function isVoteType(string $type, string $vote): bool
-    {
-        if ($type === 'yes' && $vote === '0') {
-            return true;
-        }
-
-        if ($type === 'no' && $vote === '1') {
-            return true;
-        }
-
-        if ($type === 'abstain' && $vote === '2') {
-            return true;
-        }
-
-        return false;
     }
 }

@@ -16,11 +16,7 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $sentinel = App\Domains\Nom\Models\Sentinel::find(251);
-    dd($sentinel->is_revokable, $sentinel->time_until_revokable);
-
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::findBy('hash', '07466e5f3217131dad950b64b6d2b131244902f843644f70aac682ddd511fa43');
-
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::findBy('hash', '576020680136c2475d3fb159fdf0f4858822e7454de08d127c0ff4522299ff16');
     $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
     $blockProcessorClass::run($accountBlock);
 

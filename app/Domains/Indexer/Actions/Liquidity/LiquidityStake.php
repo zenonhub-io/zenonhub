@@ -15,6 +15,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {

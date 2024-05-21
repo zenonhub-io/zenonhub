@@ -45,7 +45,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
 
         PhaseUpdated::dispatch($accountBlock, $phase);
 
-        Log::info('Contract Method Processor - Accelerator: UpdatePhase failed', [
+        Log::info('Contract Method Processor - Accelerator: UpdatePhase complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'phase' => $phase,
@@ -67,7 +67,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
             return false;
         }
 
-        if (! $phase || $phase->status !== AcceleratorPhaseStatusEnum::OPEN->value) {
+        if (! $phase || $phase->status->value !== AcceleratorPhaseStatusEnum::OPEN->value) {
             return false;
         }
 
