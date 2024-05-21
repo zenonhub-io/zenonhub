@@ -48,7 +48,7 @@ class AccountBlockInsertedListener implements ShouldQueue
             return;
         }
 
-        if ($accountBlock->contractMethod->name !== 'Mint' && $accountBlock->contractMethod->contract->name !== 'Token') {
+        if ($accountBlock->contractMethod?->name !== 'Mint' && $accountBlock->contractMethod?->contract->name !== 'Token') {
             return;
         }
 
