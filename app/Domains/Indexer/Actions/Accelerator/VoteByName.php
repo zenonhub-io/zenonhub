@@ -54,7 +54,7 @@ class VoteByName extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    protected function validateAction(): bool
+    public function validateAction(): bool
     {
         /**
          * @var AccountBlock $accountBlock

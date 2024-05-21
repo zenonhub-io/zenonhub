@@ -43,7 +43,10 @@ class UpdatePillarEngagementScore
             $pillar->az_engagement = round($percentage, 1);
         }
 
-        $averageVoteTime = $pillar->azVotes->map(fn ($vote) => $vote->created_at->timestamp - $vote->votable->created_at->timestamp)->average();
+        $averageVoteTime = $pillar
+            ->azVotes
+            ->map(fn ($vote) => $vote->created_at->timestamp - $vote->votable->created_at->timestamp)
+            ->average();
 
         $pillar->az_avg_vote_time = $averageVoteTime;
         $pillar->save();

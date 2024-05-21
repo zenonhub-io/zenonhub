@@ -39,7 +39,7 @@ class Cancel extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    protected function validateAction(): bool
+    public function validateAction(): bool
     {
         /**
          * @var AccountBlock $accountBlock
@@ -47,7 +47,7 @@ class Cancel extends AbstractContractMethodProcessor
          */
         [$accountBlock, $stake] = func_get_args();
 
-        if ($stake->end_date < now()) {
+        if ($stake->end_date > $accountBlock->created_at) {
             return false;
         }
 

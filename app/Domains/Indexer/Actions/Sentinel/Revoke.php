@@ -42,7 +42,7 @@ class Revoke extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    protected function validateAction(): bool
+    public function validateAction(): bool
     {
         /**
          * @var AccountBlock $accountBlock
@@ -50,7 +50,15 @@ class Revoke extends AbstractContractMethodProcessor
          */
         [$accountBlock, $sentinel] = func_get_args();
 
-        // check sentinel revoke window
+        if ($sentinel->revoked_at !== null) {
+            return false;
+        }
+
+        if (! $sentinel->getIsRevokableAttribute($accountBlock->created_at)) {
+            return false;
+        }
+
+        return true;
     }
 
     private function notifyUsers($sentinel): void

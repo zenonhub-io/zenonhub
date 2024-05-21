@@ -62,7 +62,7 @@ return [
 
         'accountBlockBasePlasma' => 21000,
         'ABByteDataPlasma' => 68,
-        'costPerFusionUnit' => 100000000,
+        'costPerFusionUnit' => '100000000',
     ],
 
     // Token

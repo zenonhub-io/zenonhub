@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -311,6 +312,31 @@ class Pillar extends Model implements Sitemapable
         }
 
         return false;
+    }
+
+    public function getIsRevokableAttribute(?Carbon $dateTime): bool
+    {
+        $lockTimeWindow = config('nom.pillar.epochLockTime');
+        $revokeTimeWindow = config('nom.pillar.epochRevokeTime');
+        $relativeTo = $dateTime ?? now();
+        $epochTime = ($relativeTo->timestamp - $this->created_at->timestamp) % ($lockTimeWindow + $revokeTimeWindow);
+
+        return $epochTime >= $lockTimeWindow;
+    }
+
+    public function getTimeUntilRevokableAttribute(?Carbon $dateTime): string
+    {
+        if ($this->getIsRevokableAttribute($dateTime)) {
+            return 'Now';
+        }
+
+        $lockTimeWindow = config('nom.pillar.epochLockTime');
+        $revokeTimeWindow = config('nom.pillar.epochRevokeTime');
+        $relativeTo = $dateTime ?? now();
+        $epochTime = ($relativeTo->timestamp - $this->created_at->timestamp) % ($lockTimeWindow + $revokeTimeWindow);
+        $revokeCooldown = $lockTimeWindow - $epochTime;
+
+        return Carbon::parse($relativeTo)->addSeconds($revokeCooldown)->diffForHumans(['parts' => 2], true);
     }
 
     public function getDisplayRevocableInAttribute(): string

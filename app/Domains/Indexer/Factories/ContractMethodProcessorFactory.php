@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Factories;
 
 use App\Domains\Nom\Models\ContractMethod;
 use App\Exceptions\ApplicationException;
+use Exception;
 
 class ContractMethodProcessorFactory
 {
@@ -17,7 +18,7 @@ class ContractMethodProcessorFactory
         $className = "App\Domains\Indexer\Actions\\{$contractMethod->contract->name}\\$contractMethod->name";
 
         if (! class_exists($className)) {
-            throw new ApplicationException(sprintf(
+            throw new Exception(sprintf(
                 'No processor class for %s %s',
                 $contractMethod->contract->name,
                 $contractMethod->name

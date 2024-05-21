@@ -8,6 +8,7 @@ use App\Services\ZenonSdk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
@@ -102,27 +103,28 @@ class Sentinel extends Model
         return $data;
     }
 
-    public function getIsRevokableAttribute(): bool
+    public function getIsRevokableAttribute(?Carbon $dateTime): bool
     {
-        $secsInDay = 24 * 60 * 60;
-        $lockTimeWindow = 27 * $secsInDay;
-        $revokeTimeWindow = 3 * $secsInDay;
-
-        $epochTime = (now()->timestamp - $this->created_at->timestamp) % ($lockTimeWindow + $revokeTimeWindow);
+        $lockTimeWindow = config('nom.sentinel.lockTimeWindow');
+        $revokeTimeWindow = config('nom.sentinel.revokeTimeWindow');
+        $relativeTo = $dateTime ?? now();
+        $epochTime = ($relativeTo->timestamp - $this->created_at->timestamp) % ($lockTimeWindow + $revokeTimeWindow);
 
         return $epochTime >= $lockTimeWindow;
     }
 
-    public function getDisplayRevocableInAttribute(): string
+    public function getTimeUntilRevokableAttribute(?Carbon $dateTime): string
     {
-        if (! $this->raw_json) {
-            return '-';
+        if ($this->getIsRevokableAttribute($dateTime)) {
+            return 'Now';
         }
 
-        if ($this->raw_json?->revokeCooldown > 0) {
-            return now()->addSeconds($this->raw_json->revokeCooldown)->diffForHumans(['parts' => 2], true);
-        }
+        $lockTimeWindow = config('nom.sentinel.lockTimeWindow');
+        $revokeTimeWindow = config('nom.sentinel.revokeTimeWindow');
+        $relativeTo = $dateTime ?? now();
+        $epochTime = ($relativeTo->timestamp - $this->created_at->timestamp) % ($lockTimeWindow + $revokeTimeWindow);
+        $revokeCooldown = $lockTimeWindow - $epochTime;
 
-        return 'Now';
+        return Carbon::parse($relativeTo)->addSeconds($revokeCooldown)->diffForHumans(['parts' => 2], true);
     }
 }

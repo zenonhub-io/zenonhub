@@ -17,6 +17,7 @@ class Register extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
         if (! $this->validateAction($accountBlock)) {
@@ -45,7 +46,7 @@ class Register extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    protected function validateAction(): bool
+    public function validateAction(): bool
     {
         /**
          * @var AccountBlock $accountBlock
