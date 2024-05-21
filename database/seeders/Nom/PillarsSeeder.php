@@ -19,26 +19,26 @@ class PillarsSeeder extends Seeder
         $chainId = app('currentChain')->id;
         $pillars = Storage::json('nom-json/genesis/genesis.json')['PillarConfig']['Pillars'];
 
-        collect($pillars)->each(function ($pillar) use ($chainId) {
+        collect($pillars)->each(function ($pillarData) use ($chainId) {
             $pillar = Pillar::create([
                 'chain_id' => $chainId,
-                'owner_id' => load_account($pillar['StakeAddress'])->id,
-                'producer_account_id' => load_account($pillar['BlockProducingAddress'])->id,
-                'withdraw_account_id' => load_account($pillar['RewardWithdrawAddress'])->id,
-                'name' => $pillar['Name'],
-                'slug' => Str::slug($pillar['Name']),
-                'qsr_burn' => $pillar['Amount'],
-                'momentum_rewards' => $pillar['GiveBlockRewardPercentage'],
-                'delegate_rewards' => $pillar['GiveDelegateRewardPercentage'],
+                'owner_id' => load_account($pillarData['StakeAddress'])->id,
+                'producer_account_id' => load_account($pillarData['BlockProducingAddress'])->id,
+                'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
+                'name' => $pillarData['Name'],
+                'slug' => Str::slug($pillarData['Name']),
+                'qsr_burn' => $pillarData['Amount'],
+                'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],
+                'delegate_rewards' => $pillarData['GiveDelegateRewardPercentage'],
                 'is_legacy' => 1,
                 'created_at' => '2021-11-24 12:00:00',
             ]);
 
             $pillar->history()->create([
-                'producer_account_id' => load_account($pillar['BlockProducingAddress'])->id,
-                'withdraw_account_id' => load_account($pillar['RewardWithdrawAddress'])->id,
-                'momentum_rewards' => $pillar['GiveBlockRewardPercentage'],
-                'delegate_rewards' => $pillar['GiveDelegateRewardPercentage'],
+                'producer_account_id' => load_account($pillarData['BlockProducingAddress'])->id,
+                'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
+                'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],
+                'delegate_rewards' => $pillarData['GiveDelegateRewardPercentage'],
                 'is_reward_change' => false,
                 'updated_at' => '2021-11-24 12:00:00',
             ]);

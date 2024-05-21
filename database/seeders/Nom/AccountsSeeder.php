@@ -35,13 +35,13 @@ class AccountsSeeder extends Seeder
             ]);
         }
 
-        collect($accounts)->each(function ($account) use ($chainId) {
+        collect($accounts)->each(function ($accountData) use ($chainId) {
             Account::updateOrInsert([
                 'chain_id' => $chainId,
-                'address' => $account['Address'],
+                'address' => $accountData['Address'],
             ], [
-                'genesis_znn_balance' => $account['BalanceList']['zts1znnxxxxxxxxxxxxx9z4ulx'] ?? 0,
-                'genesis_qsr_balance' => $account['BalanceList']['zts1qsrxxxxxxxxxxxxxmrhjll'] ?? 0,
+                'genesis_znn_balance' => $accountData['BalanceList']['zts1znnxxxxxxxxxxxxx9z4ulx'] ?? 0,
+                'genesis_qsr_balance' => $accountData['BalanceList']['zts1qsrxxxxxxxxxxxxxmrhjll'] ?? 0,
             ]);
         });
     }

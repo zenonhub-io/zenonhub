@@ -24,13 +24,13 @@ class MomentumsSeeder extends Seeder
             ],
         ];
 
-        foreach ($momentums as $momentum) {
+        foreach ($momentums as $momentumData) {
             Momentum::insert([
                 'chain_id' => $chainId,
-                'producer_account_id' => load_account($momentum['producer'])->id,
-                'height' => $momentum['height'],
-                'hash' => $momentum['hash'],
-                'data' => $momentum['data'],
+                'producer_account_id' => load_account($momentumData['producer'])->id,
+                'height' => $momentumData['height'],
+                'hash' => $momentumData['hash'],
+                'data' => $momentumData['data'],
                 'created_at' => '2021-11-24 12:00:00',
             ]);
         }

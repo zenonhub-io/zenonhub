@@ -18,20 +18,20 @@ class TokensSeeder extends Seeder
         $chainId = app('currentChain')->id;
         $tokens = Storage::json('nom-json/genesis/genesis.json')['TokenConfig']['Tokens'];
 
-        collect($tokens)->each(function ($token) use ($chainId) {
+        collect($tokens)->each(function ($tokenData) use ($chainId) {
             Token::insert([
                 'chain_id' => $chainId,
-                'owner_id' => load_account($token['owner'])->id,
-                'name' => $token['tokenName'],
-                'symbol' => $token['tokenSymbol'],
-                'domain' => $token['tokenDomain'],
-                'token_standard' => $token['tokenStandard'],
-                'total_supply' => $token['totalSupply'],
-                'max_supply' => $token['maxSupply'],
-                'decimals' => $token['decimals'],
-                'is_burnable' => $token['isBurnable'],
-                'is_mintable' => $token['isMintable'],
-                'is_utility' => $token['isUtility'],
+                'owner_id' => load_account($tokenData['owner'])->id,
+                'name' => $tokenData['tokenName'],
+                'symbol' => $tokenData['tokenSymbol'],
+                'domain' => $tokenData['tokenDomain'],
+                'token_standard' => $tokenData['tokenStandard'],
+                'total_supply' => $tokenData['totalSupply'],
+                'max_supply' => $tokenData['maxSupply'],
+                'decimals' => $tokenData['decimals'],
+                'is_burnable' => $tokenData['isBurnable'],
+                'is_mintable' => $tokenData['isMintable'],
+                'is_utility' => $tokenData['isUtility'],
                 'created_at' => '2021-11-24 12:00:00',
             ]);
         });
