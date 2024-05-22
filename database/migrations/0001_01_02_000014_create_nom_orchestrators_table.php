@@ -12,8 +12,8 @@ return new class extends Migration
     {
         Schema::create('nom_orchestrators', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->cascadeOnDelete();
-            $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
+            $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
+            $table->foreignId('account_id')->references('id')->on('nom_accounts');
             $table->boolean('status')->index()->default(0);
         });
     }

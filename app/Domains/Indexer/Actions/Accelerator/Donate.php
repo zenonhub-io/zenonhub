@@ -12,7 +12,7 @@ class Donate extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $blockData = $accountBlock->data->decoded;
+        $blockData = $accountBlock->data?->decoded;
 
         if (! $this->validateAction($accountBlock)) {
             Log::info('Contract Method Processor - Accelerator: Donate failed', [

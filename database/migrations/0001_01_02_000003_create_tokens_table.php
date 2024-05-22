@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('nom_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('owner_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('owner_id')->references('id')->on('nom_accounts');
             $table->string('name')->index();
             $table->string('symbol')->index();
             $table->string('domain');
-            $table->string('token_standard')->index();
-            $table->string('total_supply')->default(0)->index();
-            $table->string('max_supply')->default(0)->index();
+            $table->string('token_standard')->unique();
+            $table->string('total_supply')->default(0);
+            $table->string('max_supply')->default(0);
             $table->integer('decimals');
             $table->boolean('is_burnable')->default(1);
             $table->boolean('is_mintable')->default(1);

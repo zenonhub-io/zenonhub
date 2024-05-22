@@ -18,6 +18,7 @@ trait Abi
         'pillar' => \DigitalSloth\ZnnPhp\Abi\Contracts\Pillar::class,
         'plasma' => \DigitalSloth\ZnnPhp\Abi\Contracts\Plasma::class,
         'sentinel' => \DigitalSloth\ZnnPhp\Abi\Contracts\Sentinel::class,
+        'spork' => \DigitalSloth\ZnnPhp\Abi\Contracts\Spork::class,
         'stake' => \DigitalSloth\ZnnPhp\Abi\Contracts\Stake::class,
         'swap' => \DigitalSloth\ZnnPhp\Abi\Contracts\Swap::class,
         'token' => \DigitalSloth\ZnnPhp\Abi\Contracts\Token::class,

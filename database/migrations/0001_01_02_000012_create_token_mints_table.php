@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('nom_token_mints', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->cascadeOnDelete();
-            $table->foreignId('issuer_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('receiver_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('account_block_id')->nullable()->references('id')->on('nom_account_blocks')->nullOnDelete();
-            $table->string('amount')->default(0);
-            $table->timestamp('created_at')->nullable();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
+            $table->foreignId('issuer_id')->references('id')->on('nom_accounts');
+            $table->foreignId('receiver_id')->references('id')->on('nom_accounts');
+            $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
+            $table->string('amount');
+            $table->timestamp('created_at');
         });
     }
 

@@ -42,9 +42,9 @@ class SyncProjectStatus
 
     private function processData(): void
     {
-        $this->project->vote_total = $this->projectData->votes->total;
-        $this->project->vote_yes = $this->projectData->votes->yes;
-        $this->project->vote_no = $this->projectData->votes->no;
+        $this->project->total_votes = $this->projectData->votes->total;
+        $this->project->total_yes_votes = $this->projectData->votes->yes;
+        $this->project->total_no_votes = $this->projectData->votes->no;
         $this->project->status = $this->projectData->status;
         $this->project->modified_at = $this->projectData->lastUpdateTimestamp;
         $this->project->updated_at = $this->projectData->lastUpdateTimestamp;

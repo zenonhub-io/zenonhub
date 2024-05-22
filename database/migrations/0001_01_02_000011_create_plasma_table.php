@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('nom_plasma', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('from_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('to_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->string('amount')->default(0)->index();
-            $table->string('hash')->nullable();
-            $table->timestamp('started_at')->index()->nullable();
-            $table->timestamp('ended_at')->index()->nullable();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('from_account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('to_account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
+            $table->string('amount')->index();
+            $table->string('hash');
+            $table->timestamp('started_at')->index();
+            $table->timestamp('ended_at')->nullable()->index();
         });
     }
 

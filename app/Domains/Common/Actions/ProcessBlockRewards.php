@@ -41,6 +41,7 @@ class ProcessBlockRewards
 
         AccountReward::create([
             'chain_id' => $accountBlock->chain_id,
+            'account_block_id' => $accountBlock->id,
             'account_id' => $rewardReceiver->id,
             'token_id' => $token->id,
             'type' => $rewardType,

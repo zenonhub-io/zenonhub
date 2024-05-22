@@ -36,6 +36,7 @@ class Plasma extends Model
         'chain_id',
         'from_account_id',
         'to_account_id',
+        'account_block_id',
         'amount',
         'hash',
         'started_at',
@@ -71,6 +72,11 @@ class Plasma extends Model
     public function toAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function accountBlock(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class);
     }
 
     //

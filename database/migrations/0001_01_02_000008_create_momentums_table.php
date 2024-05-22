@@ -17,14 +17,14 @@ return new class extends Migration
     {
         Schema::create('nom_momentums', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('producer_pillar_id')->nullable()->references('id')->on('nom_pillars')->nullOnDelete();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('producer_account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('producer_pillar_id')->nullable()->references('id')->on('nom_pillars');
             $table->integer('version')->default(1);
             $table->bigInteger('height')->unique();
             $table->string('hash')->unique();
             $table->text('data')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('created_at');
         });
 
         Artisan::call('nom:create-or-update-latest-momentums-view');

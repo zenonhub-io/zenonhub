@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('nom_sentinels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('owner_id')->nullable()->references('id')->on('nom_accounts');
-            $table->timestamp('created_at')->nullable()->index();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('owner_id')->references('id')->on('nom_accounts');
+            $table->timestamp('created_at')->index();
             $table->timestamp('revoked_at')->nullable()->index();
         });
     }

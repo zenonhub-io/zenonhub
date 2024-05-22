@@ -67,7 +67,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
             return false;
         }
 
-        if (! $phase || $phase->status->value !== AcceleratorPhaseStatusEnum::OPEN->value) {
+        if (! $phase || $phase->status !== AcceleratorPhaseStatusEnum::OPEN) {
             return false;
         }
 

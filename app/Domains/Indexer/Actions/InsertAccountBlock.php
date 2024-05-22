@@ -86,12 +86,13 @@ class InsertAccountBlock
         }
 
         if (
-            $block->toAccount !== 1 &&
             ! empty($blockData->data) &&
-            in_array($block->block_type->value, [
-                AccountBlockTypesEnum::SEND->value,
-                AccountBlockTypesEnum::CONTRACT_SEND->value,
-            ], true)) {
+            $blockData->toAddress !== config('explorer.empty_address') &&
+            in_array($block->block_type, [
+                AccountBlockTypesEnum::SEND,
+                AccountBlockTypesEnum::CONTRACT_SEND,
+            ], true)
+        ) {
             $this->linkBlockData($block, $blockData);
         }
 
@@ -141,7 +142,6 @@ class InsertAccountBlock
             'hash' => $accountBlockDTO->hash,
         ]);
 
-        $decodedData = null;
         $data = base64_decode($accountBlockDTO->data);
         $fingerprint = Utilities::getDataFingerprint($data);
         $contractMethod = ContractMethod::whereRelation('contract', 'name', $accountBlock->toAccount->contract?->name)
@@ -160,11 +160,18 @@ class InsertAccountBlock
             $accountBlock->save();
 
             $decodedData = $this->znn->abiDecode($contractMethod, $data);
-        }
 
-        $accountBlock->data()->create([
-            'raw' => $accountBlockDTO->data,
-            'decoded' => $decodedData,
-        ]);
+            if ($decodedData) {
+                $accountBlock->data()->create([
+                    'raw' => $accountBlockDTO->data,
+                    'decoded' => $decodedData,
+                ]);
+            }
+        } else {
+            $accountBlock->data()->create([
+                'raw' => $accountBlockDTO->data,
+                'decoded' => $data,
+            ]);
+        }
     }
 }

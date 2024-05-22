@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('nom_stakes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->cascadeOnDelete();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
+            $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
             $table->string('amount')->default(0)->index();
             $table->bigInteger('duration')->index();
-            $table->string('hash')->nullable();
-            $table->timestamp('started_at')->index()->nullable();
+            $table->string('hash');
+            $table->timestamp('started_at')->index();
             $table->timestamp('ended_at')->index()->nullable();
         });
     }

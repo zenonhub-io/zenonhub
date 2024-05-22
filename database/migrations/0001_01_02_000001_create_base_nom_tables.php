@@ -24,13 +24,13 @@ return new class extends Migration
 
         Schema::create('nom_contracts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
+            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains');
             $table->string('name')->index();
         });
 
         Schema::create('nom_contract_methods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contract_id')->nullable()->references('id')->on('nom_contracts')->cascadeOnDelete();
+            $table->foreignId('contract_id')->nullable()->references('id')->on('nom_contracts');
             $table->string('name')->index();
             $table->string('signature');
             $table->string('fingerprint')->index();

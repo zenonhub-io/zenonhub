@@ -45,9 +45,9 @@ class SyncPhaseStatus
 
     private function processData(): void
     {
-        $this->phase->vote_total = $this->phaseData->votes->total;
-        $this->phase->vote_yes = $this->phaseData->votes->yes;
-        $this->phase->vote_no = $this->phaseData->votes->no;
+        $this->phase->total_votes = $this->phaseData->votes->total;
+        $this->phase->total_yes_votes = $this->phaseData->votes->yes;
+        $this->phase->total_no_votes = $this->phaseData->votes->no;
         $this->phase->status = $this->phaseData->phase->status;
         $this->phase->accepted_at = ($this->phaseData->phase->acceptedTimestamp ?: null);
         $this->phase->save();

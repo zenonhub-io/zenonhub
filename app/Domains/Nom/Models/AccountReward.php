@@ -34,6 +34,7 @@ class AccountReward extends Model
      */
     protected $fillable = [
         'chain_id',
+        'account_block_id',
         'account_id',
         'token_id',
         'type',
@@ -60,6 +61,11 @@ class AccountReward extends Model
     public function chain(): BelongsTo
     {
         return $this->belongsTo(Chain::class);
+    }
+
+    public function accountBlock(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class);
     }
 
     public function account(): BelongsTo

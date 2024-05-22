@@ -45,7 +45,12 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
             'created_at' => $accountBlock->created_at,
         ]);
 
-        $item->touch();
+        $item->total_votes = $item->votes()->count();
+        $item->total_yes_votes = $item->votes()->whereYesVote()->count();
+        $item->total_no_votes = $item->votes()->whereNoVote()->count();
+        $item->total_abstain_votes = $item->votes()->whereAbstainVote()->count();
+        $item->updated_at = $accountBlock->created_at;
+        $item->save();
 
         //$pillar->updateAzEngagementScores();
 

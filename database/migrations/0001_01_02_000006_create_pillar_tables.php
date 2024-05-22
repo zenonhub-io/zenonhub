@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('nom_pillars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('owner_id')->nullable()->references('id')->on('nom_accounts');
-            $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts');
-            $table->foreignId('withdraw_account_id')->nullable()->references('id')->on('nom_accounts');
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('owner_id')->references('id')->on('nom_accounts');
+            $table->foreignId('producer_account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('withdraw_account_id')->references('id')->on('nom_accounts');
             $table->string('name')->index();
             $table->string('slug')->index();
             $table->bigInteger('qsr_burn')->default(15000000000000);
@@ -40,36 +40,32 @@ return new class extends Migration
 
         Schema::create('nom_pillar_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->cascadeOnDelete();
-            $table->foreignId('producer_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->foreignId('withdraw_account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
+            $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
+            $table->foreignId('producer_account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('withdraw_account_id')->references('id')->on('nom_accounts');
             $table->integer('momentum_rewards')->default(0);
             $table->integer('delegate_rewards')->default(0);
             $table->boolean('is_reward_change')->default(0);
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('updated_at');
         });
 
         Schema::create('nom_delegations', function (Blueprint $table) {
-            $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->cascadeOnDelete();
-            $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
+            $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
+            $table->foreignId('account_id')->references('id')->on('nom_accounts');
+            $table->timestamp('started_at')->index();
+            $table->timestamp('ended_at')->nullable()->index();
 
-            $table->index(['pillar_id', 'account_id']);
+            $table->index(['pillar_id', 'account_id'], 'account_pillar_id');
         });
 
         Schema::create('nom_pillar_messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pillar_id')->nullable()->references('id')->on('nom_pillars')->cascadeOnDelete();
+            $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
             $table->string('title')->index();
             $table->text('post');
             $table->string('message');
             $table->string('signature');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::table('nom_votes', function (Blueprint $table) {
-            $table->foreignId('pillar_id')->after('owner_id')->nullable()->references('id')->on('nom_pillars')->nullOnDelete();
+            $table->timestamp('created_at');
         });
     }
 
@@ -78,10 +74,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('nom_votes', function (Blueprint $table) {
-            $table->dropForeign(['pillar_id']);
-        });
-
         Schema::dropIfExists('nom_pillar_messages');
         Schema::dropIfExists('nom_pillar_histories');
         Schema::dropIfExists('nom_delegations');

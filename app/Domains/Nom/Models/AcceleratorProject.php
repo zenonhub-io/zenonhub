@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -209,15 +210,30 @@ class AcceleratorProject extends Model implements Sitemapable
     //
     // Attributes
 
+    public function getIsVotingOpenAttribute(?Carbon $dateTime): bool
+    {
+        $relativeTo = $dateTime ?? now();
+        $votingPeriod = config('nom.accelerator.acceleratorProjectVotingPeriod');
+
+        return $this->created_at->addSeconds($votingPeriod) > $relativeTo;
+    }
+
+    public function getOpenForTimeAttribute(): string
+    {
+        $votingPeriod = config('nom.accelerator.acceleratorProjectVotingPeriod');
+
+        return $this->created_at->addSeconds($votingPeriod)->diffForHumans(['parts' => 2], true);
+    }
+
     public function getQuorumStatusAttribute(): string
     {
-        if ($this->status->value === AcceleratorProjectStatusEnum::NEW->value && $this->total_more_votes_needed > 0) {
+        if ($this->is_voting_open && ! $this->is_quorum_reached) {
             $votesText = Str::plural('vote', $this->total_more_votes_needed);
 
             return "{$this->total_more_votes_needed} {$votesText} needed in {$this->open_for_time}";
         }
 
-        if ($this->total_more_votes_needed > 0) {
+        if (! $this->is_quorum_reached) {
             return 'Quorum not reached';
         }
 

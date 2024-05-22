@@ -31,6 +31,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
             'chain_id' => $accountBlock->chain_id,
             'account_id' => $accountBlock->account_id,
             'token_id' => $accountBlock->token_id,
+            'account_block_id' => $accountBlock->id,
             'amount' => $accountBlock->amount,
             'duration' => $blockData['durationInSec'],
             'hash' => $accountBlock->hash,

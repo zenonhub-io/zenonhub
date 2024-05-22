@@ -133,7 +133,7 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     public function getQuorumStatusAttribute(): string
     {
-        if ($this->total_more_votes_needed > 0) {
+        if (! $this->is_quorum_reached) {
             $votesText = Str::plural('vote', $this->total_more_votes_needed);
 
             return "{$this->total_more_votes_needed} {$votesText} needed";

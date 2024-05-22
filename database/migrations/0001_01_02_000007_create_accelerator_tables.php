@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('nom_accelerator_projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('owner_id')->nullable()->references('id')->on('nom_accounts')->nullOnDelete();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('owner_id')->references('id')->on('nom_accounts');
             $table->string('hash')->unique();
             $table->string('name')->index();
             $table->string('slug')->index();
@@ -29,19 +29,20 @@ return new class extends Migration
             $table->bigInteger('qsr_paid')->default(0);
             $table->bigInteger('znn_remaining')->default(0);
             $table->bigInteger('qsr_remaining')->default(0);
-            $table->decimal('znn_price', 12, 4)->nullable()->index();
-            $table->decimal('qsr_price', 12, 4)->nullable()->index();
-            $table->integer('vote_total')->default(0)->index();
-            $table->integer('vote_yes')->default(0)->index();
-            $table->integer('vote_no')->default(0)->index();
+            $table->decimal('znn_price', 12, 4)->nullable();
+            $table->decimal('qsr_price', 12, 4)->nullable();
+            $table->integer('total_votes')->default(0)->index();
+            $table->integer('total_yes_votes')->default(0)->index();
+            $table->integer('total_no_votes')->default(0)->index();
+            $table->integer('total_abstain_votes')->default(0)->index();
             $table->timestamp('modified_at')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });
 
         Schema::create('nom_accelerator_phases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->nullable()->references('id')->on('nom_accelerator_projects')->cascadeOnDelete();
+            $table->foreignId('project_id')->references('id')->on('nom_accelerator_projects');
             $table->string('hash')->unique();
             $table->string('name')->index();
             $table->string('slug')->index();
@@ -50,13 +51,14 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->bigInteger('znn_requested')->default(0);
             $table->bigInteger('qsr_requested')->default(0);
-            $table->decimal('znn_price', 12, 4)->nullable()->index();
-            $table->decimal('qsr_price', 12, 4)->nullable()->index();
-            $table->integer('vote_total')->default(0)->index();
-            $table->integer('vote_yes')->default(0)->index();
-            $table->integer('vote_no')->default(0)->index();
+            $table->decimal('znn_price', 12, 4)->nullable();
+            $table->decimal('qsr_price', 12, 4)->nullable();
+            $table->integer('total_votes')->default(0)->index();
+            $table->integer('total_yes_votes')->default(0)->index();
+            $table->integer('total_no_votes')->default(0)->index();
+            $table->integer('total_abstain_votes')->default(0)->index();
             $table->timestamp('accepted_at')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });
     }

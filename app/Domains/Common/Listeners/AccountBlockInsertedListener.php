@@ -44,11 +44,11 @@ class AccountBlockInsertedListener implements ShouldQueue
 
     private function dispatchBlockRewardProcessor(AccountBlock $accountBlock): void
     {
-        if (! $accountBlock->parent) {
+        if (! $accountBlock->parent || ! $accountBlock->contractMethod) {
             return;
         }
 
-        if ($accountBlock->contractMethod?->name !== 'Mint' && $accountBlock->contractMethod?->contract->name !== 'Token') {
+        if ($accountBlock->contractMethod->name !== 'Mint' || $accountBlock->contractMethod->contract->name !== 'Token') {
             return;
         }
 

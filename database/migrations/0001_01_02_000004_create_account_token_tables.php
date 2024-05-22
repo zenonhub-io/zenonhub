@@ -14,20 +14,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('nom_account_tokens', function (Blueprint $table) {
-            $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
-            $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->cascadeOnDelete();
-            $table->string('balance')->default(0)->index()->nullable();
-            $table->timestamp('updated_at')->index()->nullable();
+            $table->foreignId('account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
+            $table->string('balance')->default(0)->index();
+            $table->timestamp('updated_at')->index();
+
+            $table->index(['account_id', 'token_id'], 'account_token_id');
         });
 
         Schema::create('nom_account_rewards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains')->cascadeOnDelete();
-            $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts')->cascadeOnDelete();
-            $table->foreignId('token_id')->nullable()->references('id')->on('nom_tokens')->nullOnDelete();
+            $table->foreignId('chain_id')->references('id')->on('nom_chains');
+            $table->foreignId('account_id')->references('id')->on('nom_accounts');
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->string('type')->index();
             $table->string('amount')->default(0)->index();
             $table->timestamp('created_at')->index();
+
+            $table->index(['account_id', 'type'], 'account_type');
         });
     }
 

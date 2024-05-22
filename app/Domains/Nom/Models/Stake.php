@@ -38,6 +38,7 @@ class Stake extends Model
         'chain_id',
         'account_id',
         'token_id',
+        'account_block_id',
         'amount',
         'duration',
         'hash',
@@ -74,6 +75,11 @@ class Stake extends Model
     public function token(): BelongsTo
     {
         return $this->belongsTo(Token::class);
+    }
+
+    public function accountBlock(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class);
     }
 
     //
