@@ -17,7 +17,7 @@ class Undelegate extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $accountBlock->load('account');
-        $blockData = $accountBlock->data?->decoded;
+        $blockData = $accountBlock->data->decoded;
 
         $delegation = $accountBlock->account
             ->delegations()

@@ -40,7 +40,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
 
         $phase->votes()->delete();
 
-        $phase->project->modified_at = $accountBlock->created_at;
+        $phase->project->updated_at = $accountBlock->created_at;
         $phase->project->save();
 
         PhaseUpdated::dispatch($accountBlock, $phase);

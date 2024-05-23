@@ -54,7 +54,7 @@ class AddPhase extends AbstractContractMethodProcessor
             'created_at' => $accountBlock->created_at,
         ]);
 
-        $project->modified_at = $accountBlock->created_at;
+        $project->updated_at = $accountBlock->created_at;
         $project->save();
 
         PhaseCreated::dispatch($accountBlock, $phase);

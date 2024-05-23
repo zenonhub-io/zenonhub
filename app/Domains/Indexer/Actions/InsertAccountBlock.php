@@ -142,8 +142,8 @@ class InsertAccountBlock
             'hash' => $accountBlockDTO->hash,
         ]);
 
-        $data = base64_decode($accountBlockDTO->data);
-        $fingerprint = Utilities::getDataFingerprint($data);
+        $decodedData = base64_decode($accountBlockDTO->data);
+        $fingerprint = Utilities::getDataFingerprint($decodedData);
         $contractMethod = ContractMethod::whereRelation('contract', 'name', $accountBlock->toAccount->contract?->name)
             ->where('fingerprint', $fingerprint)
             ->first();
@@ -159,19 +159,12 @@ class InsertAccountBlock
             $accountBlock->contract_method_id = $contractMethod->id;
             $accountBlock->save();
 
-            $decodedData = $this->znn->abiDecode($contractMethod, $data);
-
-            if ($decodedData) {
-                $accountBlock->data()->create([
-                    'raw' => $accountBlockDTO->data,
-                    'decoded' => $decodedData,
-                ]);
-            }
-        } else {
-            $accountBlock->data()->create([
-                'raw' => $accountBlockDTO->data,
-                'decoded' => $data,
-            ]);
+            $decodedData = $this->znn->abiDecode($contractMethod, $decodedData);
         }
+
+        $accountBlock->data()->create([
+            'raw' => $accountBlockDTO->data,
+            'decoded' => $decodedData,
+        ]);
     }
 }

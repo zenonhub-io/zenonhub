@@ -79,7 +79,6 @@ class AcceleratorProject extends Model implements Sitemapable
         return [
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'modified_at' => 'datetime',
             'status' => AcceleratorProjectStatusEnum::class,
         ];
     }
@@ -183,7 +182,7 @@ class AcceleratorProject extends Model implements Sitemapable
     public function scopeOrderByLatest($query)
     {
         return $query->orderByRaw('(status = 0) DESC')
-            ->orderBy('modified_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->orderBy('slug', 'desc');
     }
 
@@ -215,7 +214,7 @@ class AcceleratorProject extends Model implements Sitemapable
         $relativeTo = $dateTime ?? now();
         $votingPeriod = config('nom.accelerator.acceleratorProjectVotingPeriod');
 
-        return $this->created_at->addSeconds($votingPeriod) > $relativeTo;
+        return $this->created_at->addSeconds($votingPeriod) >= $relativeTo;
     }
 
     public function getOpenForTimeAttribute(): string

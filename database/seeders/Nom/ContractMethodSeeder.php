@@ -35,16 +35,18 @@ class ContractMethodSeeder extends Seeder
             $abi = new $abiClass;
             $methods = $abi->getMethods();
 
-            $blockContract = Contract::create([
-                'chain_id' => 1,
-                'account_id' => Account::where('name', 'LIKE', "{$contract}%")->first()?->id,
+            $blockContract = Contract::updateOrCreate([
                 'name' => $contract,
+                'chain_id' => 1,
+            ], [
+                'account_id' => Account::where('name', 'LIKE', "{$contract}%")->first()?->id,
             ]);
 
             foreach ($methods as $method) {
-                ContractMethod::create([
+                ContractMethod::updateOrCreate([
                     'contract_id' => $blockContract->id,
                     'name' => $method,
+                ], [
                     'signature' => $abi->getMethodSignature($method),
                     'fingerprint' => $abi->getMethodFingerprint($method),
                 ]);

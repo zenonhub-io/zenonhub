@@ -35,7 +35,6 @@ return new class extends Migration
             $table->integer('total_yes_votes')->default(0)->index();
             $table->integer('total_no_votes')->default(0)->index();
             $table->integer('total_abstain_votes')->default(0)->index();
-            $table->timestamp('modified_at')->nullable();
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });
