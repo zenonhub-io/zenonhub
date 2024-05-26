@@ -56,11 +56,11 @@ class Indexer
             'to index' => $momentumsToIndex,
         ]);
 
-        $this->output->write([
+        $this->writeOutput([
             'Start height: ' . $this->currentDbHeight,
             'Target height: ' . $momentum->height,
             'Momentums to index: ' . $momentumsToIndex,
-        ], true);
+        ]);
 
         $progressBar = $this->initProgressBar($momentumsToIndex);
 
@@ -68,17 +68,17 @@ class Indexer
             try {
                 $this->processMomentums();
             } catch (Throwable $exception) {
-                $this->output->writeln('Indexer error rolling back');
+                $this->writeOutput('Indexer error rolling back');
                 Log::debug('Indexer - Error', [
                     'message' => $exception->getMessage(),
                 ]);
                 break;
             }
 
-            $progressBar->advance($this->momentumsPerBatch);
+            $progressBar?->advance($this->momentumsPerBatch);
         }
 
-        $progressBar->finish();
+        $progressBar?->finish();
         $lock->release();
 
         Log::debug('Indexer - Stopping', [
@@ -128,12 +128,28 @@ class Indexer
         return $lock;
     }
 
-    private function initProgressBar(int $total): ProgressBar
+    private function initProgressBar(int $total): ?ProgressBar
     {
+        if (app()->runningUnitTests()) {
+            return null;
+        }
+
         $progressBar = new ProgressBar($this->output, $total);
         $progressBar->start();
 
         return $progressBar;
+    }
+
+    private function writeOutput(array|string $message): void
+    {
+        if (! app()->runningUnitTests()) {
+
+            if (is_string($message)) {
+                $message = [$message];
+            }
+
+            $this->output->write($message, true);
+        }
     }
 
     /**
@@ -151,7 +167,8 @@ class Indexer
                 $this->insertMomentum->execute($momentumDTO);
 
                 $momentumDTO->content->each(function (MomentumContentDTO $momentumContentDTO) {
-                    $this->insertAccountBlock->execute($momentumContentDTO);
+                    $accountBlockDTO = $this->znn->getAccountBlockByHash($momentumContentDTO->hash);
+                    $this->insertAccountBlock->execute($accountBlockDTO);
                 });
 
                 DB::commit();

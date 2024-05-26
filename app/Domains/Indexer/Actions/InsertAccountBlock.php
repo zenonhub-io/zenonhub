@@ -6,13 +6,12 @@ namespace App\Domains\Indexer\Actions;
 
 use App\Domains\Indexer\Events\AccountBlockInserted;
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
-use App\Domains\Nom\DataTransferObjects\MomentumContentDTO;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
-use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
+use DigitalSloth\ZnnPhp\Exceptions\DecodeException;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -25,35 +24,33 @@ class InsertAccountBlock
     }
 
     /**
-     * @throws ZenonRpcException
+     * @throws DecodeException
      */
-    public function execute(MomentumContentDTO $momentumContentDTO): void
+    public function execute(AccountBlockDTO $accountBlockDTO): void
     {
-        Log::debug('Insert Account Block', [
-            'hash' => $momentumContentDTO->hash,
-        ]);
-
-        $blockData = $this->znn->getAccountBlockByHash($momentumContentDTO->hash);
-        $block = AccountBlock::findBy('hash', $blockData->hash);
-
+        $block = AccountBlock::findBy('hash', $accountBlockDTO->hash);
         if ($block) {
             return;
         }
 
+        Log::debug('Insert Account Block', [
+            'hash' => $accountBlockDTO->hash,
+        ]);
+
         $chain = app('currentChain');
-        $account = load_account($blockData->address);
-        $toAccount = load_account($blockData->toAddress);
-        $token = load_token($blockData->token?->tokenStandard);
-        $momentum = Momentum::findBy('hash', $blockData->confirmationDetail->momentumHash, true);
-        $momentumAcknowledged = Momentum::findBy('hash', $blockData->momentumAcknowledged->hash, true);
+        $account = load_account($accountBlockDTO->address);
+        $toAccount = load_account($accountBlockDTO->toAddress);
+        $token = load_token($accountBlockDTO->token?->tokenStandard);
+        $momentum = Momentum::findBy('hash', $accountBlockDTO->confirmationDetail->momentumHash, true);
+        $momentumAcknowledged = Momentum::findBy('hash', $accountBlockDTO->momentumAcknowledged->hash, true);
 
         if (! $account->public_key) {
-            $account->public_key = $blockData->publicKey;
+            $account->public_key = $accountBlockDTO->publicKey;
             $account->save();
         }
 
         if (! $account->first_active_at) {
-            $account->first_active_at = $blockData->confirmationDetail->momentumTimestamp;
+            $account->first_active_at = $accountBlockDTO->confirmationDetail->momentumTimestamp;
             $account->save();
         }
 
@@ -61,42 +58,42 @@ class InsertAccountBlock
             'chain_id' => $chain->id,
             'account_id' => $account->id,
             'to_account_id' => $toAccount->id,
-            'momentum_id' => $momentum->id,
-            'momentum_acknowledged_id' => $momentumAcknowledged->id,
+            'momentum_id' => $momentum?->id,
+            'momentum_acknowledged_id' => $momentumAcknowledged?->id,
             'token_id' => $token?->id,
-            'version' => $blockData->version,
-            'block_type' => $blockData->blockType,
-            'height' => $blockData->height,
-            'amount' => $blockData->amount,
-            'fused_plasma' => $blockData->fusedPlasma,
-            'base_plasma' => $blockData->basePlasma,
-            'used_plasma' => $blockData->usedPlasma,
-            'difficulty' => $blockData->difficulty,
-            'nonce' => $blockData->nonce,
-            'hash' => $blockData->hash,
-            'created_at' => $blockData->confirmationDetail?->momentumTimestamp,
+            'version' => $accountBlockDTO->version,
+            'block_type' => $accountBlockDTO->blockType,
+            'height' => $accountBlockDTO->height,
+            'amount' => $accountBlockDTO->amount,
+            'fused_plasma' => $accountBlockDTO->fusedPlasma,
+            'base_plasma' => $accountBlockDTO->basePlasma,
+            'used_plasma' => $accountBlockDTO->usedPlasma,
+            'difficulty' => $accountBlockDTO->difficulty,
+            'nonce' => $accountBlockDTO->nonce,
+            'hash' => $accountBlockDTO->hash,
+            'created_at' => $accountBlockDTO->confirmationDetail?->momentumTimestamp,
         ]);
 
-        if ($blockData->descendantBlocks->count()) {
-            $this->linkDescendantBlocks($block, $blockData->descendantBlocks);
+        if ($accountBlockDTO->descendantBlocks->count()) {
+            $this->linkDescendantBlocks($block, $accountBlockDTO->descendantBlocks);
         }
 
-        if ($blockData->pairedAccountBlock) {
-            $this->linkPairedAccountBlock($block, $blockData->pairedAccountBlock);
+        if ($accountBlockDTO->pairedAccountBlock) {
+            $this->linkPairedAccountBlock($block, $accountBlockDTO->pairedAccountBlock);
         }
 
         if (
-            ! empty($blockData->data) &&
-            $blockData->toAddress !== config('explorer.empty_address') &&
+            ! empty($accountBlockDTO->data) &&
+            $accountBlockDTO->toAddress !== config('explorer.empty_address') &&
             in_array($block->block_type, [
                 AccountBlockTypesEnum::SEND,
                 AccountBlockTypesEnum::CONTRACT_SEND,
             ], true)
         ) {
-            $this->linkBlockData($block, $blockData);
+            $this->linkBlockData($block, $accountBlockDTO);
         }
 
-        AccountBlockInserted::dispatch($block, $blockData);
+        AccountBlockInserted::dispatch($block, $accountBlockDTO);
     }
 
     private function linkDescendantBlocks(AccountBlock $parentBlock, Collection $descendants): void
@@ -136,30 +133,34 @@ class InsertAccountBlock
         Log::debug('Link paired account block - link found');
     }
 
+    /**
+     * @throws DecodeException
+     */
     private function linkBlockData(AccountBlock $accountBlock, AccountBlockDTO $accountBlockDTO): void
     {
         Log::debug('Insert Account Block Data', [
             'hash' => $accountBlockDTO->hash,
         ]);
 
-        $decodedData = base64_decode($accountBlockDTO->data);
-        $fingerprint = Utilities::getDataFingerprint($decodedData);
+        $encodedData = base64_decode($accountBlockDTO->data);
+        $fingerprint = Utilities::getDataFingerprint($encodedData);
         $contractMethod = ContractMethod::whereRelation('contract', 'name', $accountBlock->toAccount->contract?->name)
             ->where('fingerprint', $fingerprint)
             ->first();
 
-        // Fallback for common methods (not related to a specific account)
+        // Fallback for common methods (not related to a specific contract)
         if (! $contractMethod) {
             $contractMethod = ContractMethod::whereRelation('contract', 'name', 'Common')
                 ->where('fingerprint', $fingerprint)
                 ->first();
         }
 
+        $decodedData = null;
         if ($contractMethod) {
             $accountBlock->contract_method_id = $contractMethod->id;
             $accountBlock->save();
 
-            $decodedData = $this->znn->abiDecode($contractMethod, $decodedData);
+            $decodedData = $this->znn->abiDecode($contractMethod, $encodedData);
         }
 
         $accountBlock->data()->create([

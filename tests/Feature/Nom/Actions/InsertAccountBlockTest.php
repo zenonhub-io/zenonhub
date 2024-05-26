@@ -80,19 +80,20 @@ beforeEach(function () {
 
 it('inserts a account block', function () {
 
-    $momentumContent = $this->momentumDTOs->firstWhere('height', 2)->content->first();
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
 
-    app(InsertAccountBlock::class)->execute($momentumContent);
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
     expect(AccountBlock::count())->toBe(1)
-        ->and(AccountBlock::find(1)->hash)->toEqual('txAddr1000000000000000000000000000000000000000000000000000000001');
+        ->and(AccountBlock::find(1)->hash)->toEqual($accountBlockDTO->hash);
 
 });
 
 it('relates an account block to a momentum', function () {
 
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
     $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
-    app(InsertAccountBlock::class)->execute($momentumDTO->content->first());
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
     $accountBlock = AccountBlock::find(1);
     $momentum = Momentum::firstWhere('hash', $momentumDTO->hash);
@@ -105,32 +106,29 @@ it('relates an account block to a momentum', function () {
 
 it('sets an accounts public key', function () {
 
-    $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
-    app(InsertAccountBlock::class)->execute($momentumDTO->content->first());
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
     $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
-    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
 
     expect($account->public_key)->toEqual($accountBlockDTO->publicKey);
 });
 
 it('sets an accounts first active date', function () {
 
-    $momentumDTO = $this->momentumDTOs->firstWhere('height', 2);
-    app(InsertAccountBlock::class)->execute($momentumDTO->content->first());
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
     $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
 
-    expect($account->first_active_at->timestamp)->toEqual($momentumDTO->timestamp);
+    expect($account->first_active_at->timestamp)->toEqual($accountBlockDTO->confirmationDetail->momentumTimestamp);
 });
 
 it('relates an account block to the correct account', function () {
 
-    $momentumDTOs = $this->momentumDTOs->whereBetween('height', [2, 3]);
-    $momentumDTOs->each(function ($momentumDTO) {
-        $momentumDTO->content->each(function ($momentumContentDTO) {
-            app(InsertAccountBlock::class)->execute($momentumContentDTO);
-        });
+    $accountBlockDTOs = $this->accountBlockDTOs->take(3);
+    $accountBlockDTOs->each(function ($accountBlockDTO) {
+        app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
     $accountOne = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
@@ -147,11 +145,9 @@ it('relates an account block to the correct account', function () {
 
 it('associates account block with paired block', function () {
 
-    $momentumDTOs = $this->momentumDTOs->whereBetween('height', [2, 3]);
-    $momentumDTOs->each(function ($momentumDTO) {
-        $momentumDTO->content->each(function ($momentumContentDTO) {
-            app(InsertAccountBlock::class)->execute($momentumContentDTO);
-        });
+    $accountBlockDTOs = $this->accountBlockDTOs->take(3);
+    $accountBlockDTOs->each(function ($accountBlockDTO) {
+        app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
     $firstAccountBlock = AccountBlock::findBy('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001', true);
@@ -166,11 +162,9 @@ it('associates account block with paired block', function () {
 
 it('associates parent and descendant blocks', function () {
 
-    $momentumDTOs = $this->momentumDTOs->whereBetween('height', [4, 5, 6]);
-    $momentumDTOs->each(function ($momentumDTO) {
-        $momentumDTO->content->each(function ($momentumContentDTO) {
-            app(InsertAccountBlock::class)->execute($momentumContentDTO);
-        });
+    $accountBlockDTOs = $this->accountBlockDTOs->skip(3)->take(5);
+    $accountBlockDTOs->each(function ($accountBlockDTO) {
+        app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
     $parentAccountBlock = AccountBlock::findBy('hash', 'embedpyllar00000000000000000000000000000000000000000000000000002', true);
@@ -184,13 +178,12 @@ it('associates parent and descendant blocks', function () {
 
 it('associates to a contract and contract method', function () {
 
-    $blockHash = 'embedpyllar00000000000000000000000000000000000000000000000000001';
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000001');
     $decodedData = json_decode('{"tokenStandard":"zts1znnxxxxxxxxxxxxx9z4ulx","amount":"315424208","receiveAddress":"z1qp43vnn4qvlxkwenvceukvau5m33n6we4rt3aj"}', true);
 
-    $momentumContent = $this->momentumDTOs->firstWhere('height', 5)->content->firstWhere('hash', $blockHash);
-    app(InsertAccountBlock::class)->execute($momentumContent);
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $accountBlock = AccountBlock::findBy('hash', $blockHash, true);
+    $accountBlock = AccountBlock::findBy('hash', $accountBlockDTO->hash, true);
 
     expect($accountBlock->data)->not->toBeNull()
         ->and($accountBlock->contractMethod->contract->name)->toEqual('Token')
@@ -200,14 +193,13 @@ it('associates to a contract and contract method', function () {
 
 it('associates raw and decoded data', function () {
 
-    $blockHash = 'embedpyllar00000000000000000000000000000000000000000000000000001';
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000001');
     $rawData = 'zXD5vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU5mMYxjGMYxjGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABLM/dAAAAAAAAAAAAAAAAAAaxZOdQM+azszZjPLM7ym4xnp2Q==';
     $decodedData = json_decode('{"tokenStandard":"zts1znnxxxxxxxxxxxxx9z4ulx","amount":"315424208","receiveAddress":"z1qp43vnn4qvlxkwenvceukvau5m33n6we4rt3aj"}', true);
 
-    $momentumContent = $this->momentumDTOs->firstWhere('height', 5)->content->firstWhere('hash', $blockHash);
-    app(InsertAccountBlock::class)->execute($momentumContent);
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $accountBlock = AccountBlock::findBy('hash', $blockHash, true);
+    $accountBlock = AccountBlock::findBy('hash', $accountBlockDTO->hash, true);
 
     expect($accountBlock->data)->not->toBeNull()
         ->and($accountBlock->data->raw)->toEqual($rawData)
@@ -218,9 +210,8 @@ it('dispatches account block inserted event once for each account block', functi
 
     Event::fake();
 
-    $momentumContent = $this->momentumDTOs->firstWhere('height', 2)->content->first();
-    app(InsertAccountBlock::class)->execute($momentumContent);
+    $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
+    app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
     Event::assertDispatchedTimes(AccountBlockInserted::class, 1);
-
 });
