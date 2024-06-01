@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Models;
 
 use App\Models\Markable\Favorite;
-use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +17,7 @@ use Throwable;
 
 class Momentum extends Model
 {
-    use FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
+    use HasFactory, ModelCacheKeyTrait;
     //use HasFactory, Markable;
 
     /**

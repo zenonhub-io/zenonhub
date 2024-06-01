@@ -6,7 +6,6 @@ namespace App\Domains\Nom\Models;
 
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
-use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,8 +24,8 @@ use Throwable;
 
 class Pillar extends Model implements Sitemapable
 {
-    use FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
-    //use ModelCacheKeyTrait, FindByColumnTrait, HasFactory, Markable;
+    use HasFactory, ModelCacheKeyTrait;
+    //use ModelCacheKeyTrait, HasFactory, Markable;
 
     /**
      * Indicates if the model should be timestamped.

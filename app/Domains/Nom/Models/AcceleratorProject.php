@@ -8,7 +8,6 @@ use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
 use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
-use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +25,7 @@ use Throwable;
 
 class AcceleratorProject extends Model implements Sitemapable
 {
-    use AcceleratorFundingTrait, AcceleratorVotesTrait, FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
+    use AcceleratorFundingTrait, AcceleratorVotesTrait, HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.

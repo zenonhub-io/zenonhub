@@ -8,7 +8,6 @@ use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
-use App\Traits\FindByColumnTrait;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,8 +23,8 @@ use Throwable;
 
 class Token extends Model implements Sitemapable
 {
-    //use FindByColumnTrait, HasFactory, Markable;
-    use FindByColumnTrait, HasFactory;
+    //use HasFactory, Markable;
+    use HasFactory;
 
     /**
      * Indicates if the model should be timestamped.

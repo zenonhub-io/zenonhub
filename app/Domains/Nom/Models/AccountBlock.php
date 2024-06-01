@@ -7,7 +7,6 @@ namespace App\Domains\Nom\Models;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
-use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +21,7 @@ use Throwable;
 class AccountBlock extends Model
 {
     //use HasFactory, Markable;
-    use FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
+    use HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.

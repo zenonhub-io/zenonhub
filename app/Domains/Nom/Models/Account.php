@@ -6,7 +6,6 @@ namespace App\Domains\Nom\Models;
 
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
-use App\Traits\FindByColumnTrait;
 use App\Traits\ModelCacheKeyTrait;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,8 +23,8 @@ use Throwable;
 
 class Account extends Model implements Sitemapable
 {
-    //use FindByColumnTrait, HasFactory, Markable;
-    use FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
+    //use HasFactory, Markable;
+    use HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.

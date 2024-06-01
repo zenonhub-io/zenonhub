@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Traits\FindByColumnTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationType extends Model
 {
-    use FindByColumnTrait;
-
     /**
      * Indicates if the model should be timestamped.
      *
