@@ -12,17 +12,32 @@ use App\Domains\Nom\Services\PlasmaBot;
 use App\Domains\Nom\Services\ZenonCli;
 use App\Domains\Nom\Services\ZenonSdk;
 use DigitalSloth\ZnnPhp\Zenon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class NoMServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
+    {
+        $this->registerSdkAndCli();
+        $this->registerHelpers();
+
+        $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot);
+
+        $this->app->singleton(CoinGecko::class, fn ($app, $params) => new CoinGecko);
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+
+    }
+
+    private function registerSdkAndCli(): void
     {
         $this->app->singleton(Zenon::class, function ($app, $params) {
             $nodeUrl = $params['node'] ?? config('services.zenon.node_url');
@@ -38,25 +53,14 @@ class NoMServiceProvider extends ServiceProvider
             $params['keystore'],
             $params['passphrase']
         ));
+    }
 
-        $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot);
-
-        $this->app->singleton(CoinGecko::class, fn ($app, $params) => new CoinGecko);
-
+    private function registerHelpers(): void
+    {
         $this->app->singleton('znnToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::ZNN->value));
 
         $this->app->singleton('qsrToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::QSR->value));
 
         $this->app->singleton('currentChain', fn ($app, $params) => Chain::getCurrentChainId());
-    }
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Model::shouldBeStrict();
     }
 }

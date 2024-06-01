@@ -48,11 +48,11 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
          */
         [$accountBlock, $stake] = func_get_args();
 
-        if ($stake->end_date > $accountBlock->created_at) {
+        if ($stake->account_id !== $accountBlock->account_id) {
             return false;
         }
 
-        if ($stake->account_id !== $accountBlock->account_id) {
+        if ($stake->end_date > $accountBlock->created_at) {
             return false;
         }
 

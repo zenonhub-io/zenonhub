@@ -43,6 +43,20 @@ trait Ledger
     /**
      * @throws ZenonRpcException
      */
+    public function getMomentumsByHash(string $hash): MomentumDTO
+    {
+        try {
+            $data = $this->sdk->ledger->getMomentumByHash($hash)['data'];
+
+            return MomentumDTO::from($data);
+        } catch (Exception $e) {
+            throw new ZenonRpcException('Unable to getMomentumsByHeight');
+        }
+    }
+
+    /**
+     * @throws ZenonRpcException
+     */
     public function getFrontierAccountBlock(string $address): ?AccountBlockDTO
     {
         try {

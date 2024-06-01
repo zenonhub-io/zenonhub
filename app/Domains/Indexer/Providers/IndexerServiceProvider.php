@@ -8,29 +8,18 @@ use App\Domains\Indexer\Actions\InsertAccountBlock;
 use App\Domains\Indexer\Actions\InsertMomentum;
 use App\Domains\Indexer\Services\Indexer;
 use App\Domains\Nom\Services\ZenonSdk;
-use DigitalSloth\ZnnPhp\Zenon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class IndexerServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind(InsertMomentum::class, fn ($app) => new InsertMomentum);
 
-        $this->app->bind(InsertAccountBlock::class, fn ($app) => new InsertAccountBlock($app->make(ZenonSdk::class)));
-
-        $this->app->singleton(Zenon::class, function ($app, $params) {
-            $nodeUrl = $params['node'] ?? config('services.zenon.node_url');
-            $throwErrors = $params['throwErrors'] ?? config('services.zenon.throw_errors');
-
-            return new Zenon($nodeUrl, $throwErrors);
-        });
+        $this->app->bind(InsertAccountBlock::class, fn ($app) => new InsertAccountBlock);
 
         $this->app->singleton(Indexer::class, fn ($app, $params) => new Indexer(
             $app->make(ZenonSdk::class),
@@ -41,11 +30,9 @@ class IndexerServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        Model::shouldBeStrict();
+
     }
 }

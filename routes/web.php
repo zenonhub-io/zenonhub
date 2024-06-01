@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Domains\Nom\Models\ContractMethod;
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PillarsController;
@@ -16,7 +17,7 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::findBy('hash', '576020680136c2475d3fb159fdf0f4858822e7454de08d127c0ff4522299ff16');
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::firstWhere('hash', '9716770adb54dee82b7a0d6c18c8444a27e00dc72bf81b9dc816af4274a5875d');
     $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
     $blockProcessorClass::run($accountBlock);
 

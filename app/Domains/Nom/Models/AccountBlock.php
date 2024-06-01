@@ -8,6 +8,7 @@ use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\FindByColumnTrait;
+use App\Traits\ModelCacheKeyTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ use Throwable;
 class AccountBlock extends Model
 {
     //use HasFactory, Markable;
-    use FindByColumnTrait, HasFactory;
+    use FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -246,7 +247,7 @@ class AccountBlock extends Model
     public function getRawJsonAttribute(): array
     {
         $updateCache = true;
-        $cacheKey = "nom.accountBlock.rawJson.{$this->id}";
+        $cacheKey = "{$this->cacheKey()}|rawJson";
 
         try {
             $data = app(ZenonSdk::class)->getAccountBlockByHash($this->hash);

@@ -6,7 +6,7 @@ namespace App\Traits;
 
 trait ModelCacheKeyTrait
 {
-    public function cacheKey()
+    public function cacheKey(): string
     {
         return sprintf(
             '%s/%s-%s',

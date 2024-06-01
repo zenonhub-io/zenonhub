@@ -54,7 +54,7 @@ class CancelFuse extends AbstractContractMethodProcessor
             return false;
         }
 
-        if ($plasma->started_at->addHours(config('nom.plasma.expiration')) > now()) {
+        if ($plasma->started_at->addHours(config('nom.plasma.expiration')) >= $accountBlock->created_at) {
             return false;
         }
 

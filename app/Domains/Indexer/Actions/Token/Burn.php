@@ -59,11 +59,7 @@ class Burn extends AbstractContractMethodProcessor
             return false;
         }
 
-        if (! $accountBlock->token->is_burnable) {
-            return false;
-        }
-
-        if ($accountBlock->token->owner_id === $accountBlock->account_id) {
+        if (! $accountBlock->token->is_burnable && $accountBlock->token->owner_id !== $accountBlock->account_id) {
             return false;
         }
 

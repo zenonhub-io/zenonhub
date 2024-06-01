@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Models;
 
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
 use App\Traits\FindByColumnTrait;
+use App\Traits\ModelCacheKeyTrait;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Throwable;
 
 class Momentum extends Model
 {
-    use FindByColumnTrait, HasFactory;
+    use FindByColumnTrait, HasFactory, ModelCacheKeyTrait;
     //use HasFactory, Markable;
 
     /**
@@ -125,17 +124,16 @@ class Momentum extends Model
 
     public function getPreviousMomentumAttribute(): ?Model
     {
-        self::where('height', ($this->height - 1))->first();
+        return self::where('height', ($this->height - 1))->first();
     }
 
     public function getRawJsonAttribute(): array
     {
         $updateCache = true;
-        $cacheKey = "nom.momentum.rawJson.{$this->id}";
+        $cacheKey = "{$this->cacheKey()}|rawJson";
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->ledger->getMomentumByHash($this->hash)['data'];
+            $data = app(\App\Domains\Nom\Services\ZenonSdk::class)->getMomentumsByHash($this->hash);
         } catch (Throwable $throwable) {
             $updateCache = false;
             $data = Cache::get($cacheKey);

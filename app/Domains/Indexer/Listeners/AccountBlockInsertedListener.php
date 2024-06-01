@@ -8,12 +8,9 @@ use App\Domains\Indexer\Events\AccountBlockInserted;
 use App\Domains\Indexer\Factories\ContractMethodProcessorFactory;
 use App\Domains\Nom\Models\AccountBlock;
 use Exception;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AccountBlockInsertedListener implements ShouldQueue
+class AccountBlockInsertedListener
 {
-    public string $queue = 'indexer';
-
     /**
      * Handle the event.
      */

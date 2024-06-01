@@ -18,11 +18,6 @@ use Illuminate\Support\Facades\Log;
 
 class InsertAccountBlock
 {
-    public function __construct(
-        protected ZenonSdk $znn
-    ) {
-    }
-
     /**
      * @throws DecodeException
      */
@@ -41,8 +36,8 @@ class InsertAccountBlock
         $account = load_account($accountBlockDTO->address);
         $toAccount = load_account($accountBlockDTO->toAddress);
         $token = load_token($accountBlockDTO->token?->tokenStandard);
-        $momentum = Momentum::findBy('hash', $accountBlockDTO->confirmationDetail->momentumHash, true);
-        $momentumAcknowledged = Momentum::findBy('hash', $accountBlockDTO->momentumAcknowledged->hash, true);
+        $momentum = Momentum::findBy('hash', $accountBlockDTO->confirmationDetail->momentumHash);
+        $momentumAcknowledged = Momentum::findBy('hash', $accountBlockDTO->momentumAcknowledged->hash);
 
         if (! $account->public_key) {
             $account->public_key = $accountBlockDTO->publicKey;
@@ -160,7 +155,7 @@ class InsertAccountBlock
             $accountBlock->contract_method_id = $contractMethod->id;
             $accountBlock->save();
 
-            $decodedData = $this->znn->abiDecode($contractMethod, $encodedData);
+            $decodedData = app(ZenonSdk::class)->abiDecode($contractMethod, $encodedData);
         }
 
         $accountBlock->data()->create([
