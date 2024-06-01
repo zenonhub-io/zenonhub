@@ -22,7 +22,7 @@ class ManageFavoriteToken extends Component
 
     public function mount(string $zts)
     {
-        $token = Token::findBy('token_standard', $zts);
+        $token = Token::firstWhere('token_standard', $zts);
         $favorite = Favorite::findExisting($token, auth()->user());
 
         $this->zts = $zts;
@@ -53,7 +53,7 @@ class ManageFavoriteToken extends Component
         ]);
 
         $user = auth()->user();
-        $token = Token::findBy('token_standard', $validatedData['zts']);
+        $token = Token::firstWhere('token_standard', $validatedData['zts']);
 
         (new ManageFavorite($token, $user, $validatedData))->execute();
 
@@ -71,7 +71,7 @@ class ManageFavoriteToken extends Component
         ]);
 
         $user = auth()->user();
-        $token = Token::findBy('token_standard', $validatedData['zts']);
+        $token = Token::firstWhere('token_standard', $validatedData['zts']);
 
         (new DeleteFavorite($token, $user))->execute();
 

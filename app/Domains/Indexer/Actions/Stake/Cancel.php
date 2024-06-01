@@ -15,7 +15,7 @@ class Cancel extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $stake = Stake::findBy('hash', $blockData['id']);
+        $stake = Stake::firstWhere('hash', $blockData['id']);
 
         if (! $stake || ! $this->validateAction($accountBlock, $stake)) {
             Log::info('Contract Method Processor - Stake: Cancel failed', [

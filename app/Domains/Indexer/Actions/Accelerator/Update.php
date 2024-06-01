@@ -35,13 +35,13 @@ class Update extends AbstractContractMethodProcessor
         $projects->sortBy(fn (AcceleratorProject $project) => $project->phases->last()?->created_at->timestamp ?: $project->created_at->timestamp);
 
         $projects->each(function (AcceleratorProject $project) use ($accountBlock) {
-
             if ($project->status === AcceleratorProjectStatusEnum::NEW) {
                 if (! $project->getIsVotingOpenAttribute($accountBlock->created_at)) {
 
                     $project->status = ($project->total_yes_votes > $project->total_no_votes)
                         ? AcceleratorProjectStatusEnum::ACCEPTED
                         : AcceleratorProjectStatusEnum::REJECTED;
+
                     $project->updated_at = $accountBlock->created_at;
                     $project->save();
                 }

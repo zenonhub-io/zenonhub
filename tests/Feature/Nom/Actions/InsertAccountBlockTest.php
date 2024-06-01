@@ -109,7 +109,7 @@ it('sets an accounts public key', function () {
     $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
     app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
+    $account = Account::firstWhere('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
 
     expect($account->public_key)->toEqual($accountBlockDTO->publicKey);
 });
@@ -119,7 +119,7 @@ it('sets an accounts first active date', function () {
     $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
     app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $account = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
+    $account = Account::firstWhere('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
 
     expect($account->first_active_at->timestamp)->toEqual($accountBlockDTO->confirmationDetail->momentumTimestamp);
 });
@@ -131,8 +131,8 @@ it('relates an account block to the correct account', function () {
         app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
-    $accountOne = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
-    $accountTwo = Account::findBy('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr2');
+    $accountOne = Account::firstWhere('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr1');
+    $accountTwo = Account::firstWhere('address', 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxaddr2');
     $accountBlock = AccountBlock::find(1);
 
     expect($accountOne->sentBlocks->count())->toEqual(2)
@@ -150,9 +150,9 @@ it('associates account block with paired block', function () {
         app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
-    $firstAccountBlock = AccountBlock::findBy('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
-    $secondAccountBlock = AccountBlock::findBy('hash', 'txAddr2000000000000000000000000000000000000000000000000000000001');
-    $unpairedAccountBlock = AccountBlock::findBy('hash', 'txAddr1000000000000000000000000000000000000000000000000000000002');
+    $firstAccountBlock = AccountBlock::firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
+    $secondAccountBlock = AccountBlock::firstWhere('hash', 'txAddr2000000000000000000000000000000000000000000000000000000001');
+    $unpairedAccountBlock = AccountBlock::firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000002');
 
     expect($firstAccountBlock->pairedAccountBlock->hash)->toEqual($secondAccountBlock->hash)
         ->and($secondAccountBlock->pairedAccountBlock->hash)->toEqual($firstAccountBlock->hash)
@@ -167,8 +167,8 @@ it('associates parent and descendant blocks', function () {
         app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
-    $parentAccountBlock = AccountBlock::findBy('hash', 'embedpyllar00000000000000000000000000000000000000000000000000002');
-    $childAccountBlock = AccountBlock::findBy('hash', 'embedpyllar00000000000000000000000000000000000000000000000000001');
+    $parentAccountBlock = AccountBlock::firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000002');
+    $childAccountBlock = AccountBlock::firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000001');
 
     expect($parentAccountBlock->descendants->count())->toEqual(1)
         ->and($parentAccountBlock->descendants->first()->hash)->toEqual($childAccountBlock->hash)
@@ -183,7 +183,7 @@ it('associates to a contract and contract method', function () {
 
     app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $accountBlock = AccountBlock::findBy('hash', $accountBlockDTO->hash);
+    $accountBlock = AccountBlock::firstWhere('hash', $accountBlockDTO->hash);
 
     expect($accountBlock->data)->not->toBeNull()
         ->and($accountBlock->contractMethod->contract->name)->toEqual('Token')
@@ -199,7 +199,7 @@ it('associates raw and decoded data', function () {
 
     app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $accountBlock = AccountBlock::findBy('hash', $accountBlockDTO->hash);
+    $accountBlock = AccountBlock::firstWhere('hash', $accountBlockDTO->hash);
 
     expect($accountBlock->data)->not->toBeNull()
         ->and($accountBlock->data->raw)->toEqual($rawData)

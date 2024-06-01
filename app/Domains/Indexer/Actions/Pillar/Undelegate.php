@@ -33,7 +33,7 @@ class Undelegate extends AbstractContractMethodProcessor
             return;
         }
 
-        Cache::forget("{$delegation->cacheKey()}|pillar-rank");
+        Cache::forget($delegation->cacheKey('pillar-rank'));
 
         $accountBlock->account
             ->delegations()

@@ -57,9 +57,9 @@ class NoMServiceProvider extends ServiceProvider
 
     private function registerHelpers(): void
     {
-        $this->app->singleton('znnToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::ZNN->value));
+        $this->app->singleton('znnToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value));
 
-        $this->app->singleton('qsrToken', fn ($app, $params) => Token::findBy('token_standard', NetworkTokensEnum::QSR->value));
+        $this->app->singleton('qsrToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value));
 
         $this->app->singleton('currentChain', fn ($app, $params) => Chain::getCurrentChainId());
     }

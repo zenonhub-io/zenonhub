@@ -18,10 +18,10 @@ class VoteByName extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $pillar = Pillar::findBy('name', $blockData['name']);
-        $item = AcceleratorProject::findBy('hash', $blockData['id']);
+        $pillar = Pillar::firstWhere('name', $blockData['name']);
+        $item = AcceleratorProject::firstWhere('hash', $blockData['id']);
         if (! $item) {
-            $item = AcceleratorPhase::findBy('hash', $blockData['id']);
+            $item = AcceleratorPhase::firstWhere('hash', $blockData['id']);
         }
 
         if (! $pillar || ! $item || ! $this->validateAction($accountBlock, $pillar)) {

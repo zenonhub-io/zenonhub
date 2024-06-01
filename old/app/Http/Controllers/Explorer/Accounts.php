@@ -21,7 +21,7 @@ class Accounts
 
     public function detail($address)
     {
-        $account = Account::findBy('address', $address);
+        $account = Account::firstWhere('address', $address);
 
         if (! $account) {
             abort(404);

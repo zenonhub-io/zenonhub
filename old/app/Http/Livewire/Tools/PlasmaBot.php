@@ -35,7 +35,7 @@ class PlasmaBot extends Component
 
     public function render()
     {
-        $account = Account::findBy('address', config('plasma-bot.address'));
+        $account = Account::firstWhere('address', config('plasma-bot.address'));
         $totalQsrAvailable = $account->qsr_balance;
         $fusedQsr = $account->fusions()->isActive()->sum('amount');
         $percentageAvailable = ($fusedQsr / $totalQsrAvailable) * 100;

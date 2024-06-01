@@ -16,11 +16,10 @@ use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Notifications\Bots\BridgeAlert;
 use App\Notifications\Bots\WhaleAlert;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class AccountBlockInsertedListener implements ShouldQueue
+class AccountBlockInsertedListener
 {
     use AsAction;
 
@@ -66,7 +65,7 @@ class AccountBlockInsertedListener implements ShouldQueue
             return;
         }
 
-        ProcessBlockRewards::run($accountBlock);
+        ProcessBlockRewards::dispatch($accountBlock);
     }
 
     private function dispatchLiquidityProgramProcessor(AccountBlock $accountBlock): void
@@ -79,7 +78,7 @@ class AccountBlockInsertedListener implements ShouldQueue
             return;
         }
 
-        ProcessLiquidityProgramRewards::run($accountBlock);
+        ProcessLiquidityProgramRewards::dispatch($accountBlock);
     }
 
     private function dispatchWhaleAlerts(AccountBlock $accountBlock): void

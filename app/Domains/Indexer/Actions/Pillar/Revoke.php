@@ -17,7 +17,7 @@ class Revoke extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $pillar = Pillar::findBy('name', $blockData['name']);
+        $pillar = Pillar::firstWhere('name', $blockData['name']);
 
         if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
             Log::info('Contract Method Processor - Pillar: Revoke failed', [

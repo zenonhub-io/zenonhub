@@ -19,7 +19,7 @@ class Pillars
 
     public function detail($slug)
     {
-        $pillar = Pillar::findBy('slug', $slug);
+        $pillar = Pillar::firstWhere('slug', $slug);
 
         if (! $pillar) {
             abort(404);

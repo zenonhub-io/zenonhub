@@ -49,7 +49,6 @@ class SyncPhaseStatus
         $this->phase->total_yes_votes = $this->phaseData->votes->yes;
         $this->phase->total_no_votes = $this->phaseData->votes->no;
         $this->phase->status = $this->phaseData->phase->status;
-        $this->phase->accepted_at = ($this->phaseData->phase->acceptedTimestamp ?: null);
         $this->phase->save();
     }
 }

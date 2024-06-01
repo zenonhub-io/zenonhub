@@ -130,7 +130,7 @@ class Momentum extends Model
     public function getRawJsonAttribute(): array
     {
         $updateCache = true;
-        $cacheKey = "{$this->cacheKey()}|rawJson";
+        $cacheKey = $this->cacheKey('rawJson');
 
         try {
             $data = app(\App\Domains\Nom\Services\ZenonSdk::class)->getMomentumsByHash($this->hash);

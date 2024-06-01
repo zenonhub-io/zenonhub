@@ -22,7 +22,7 @@ class ManageFavoriteAccount extends Component
 
     public function mount(string $address)
     {
-        $account = Account::findBy('address', $address);
+        $account = Account::firstWhere('address', $address);
         $favorite = Favorite::findExisting($account, auth()->user());
 
         $this->address = $address;
@@ -53,7 +53,7 @@ class ManageFavoriteAccount extends Component
         ]);
 
         $user = auth()->user();
-        $account = Account::findBy('address', $validatedData['address']);
+        $account = Account::firstWhere('address', $validatedData['address']);
 
         (new ManageFavorite($account, $user, $validatedData))->execute();
 
@@ -71,7 +71,7 @@ class ManageFavoriteAccount extends Component
         ]);
 
         $user = auth()->user();
-        $account = Account::findBy('address', $validatedData['address']);
+        $account = Account::firstWhere('address', $validatedData['address']);
 
         (new DeleteFavorite($account, $user))->execute();
 

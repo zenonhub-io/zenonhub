@@ -21,7 +21,7 @@ class Momentums
 
     public function detail($hash)
     {
-        $momentum = Momentum::findBy('hash', $hash);
+        $momentum = Momentum::firstWhere('hash', $hash);
 
         if (! $momentum) {
             abort(404);

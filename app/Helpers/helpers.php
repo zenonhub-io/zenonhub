@@ -11,7 +11,7 @@ use App\Domains\Nom\Services\ZenonSdk;
 
 function load_account(string $address, ?string $name = null): Account
 {
-    $account = Account::findBy('address', $address);
+    $account = Account::firstWhere('address', $address);
 
     if (! $account) {
         $account = Account::create([
@@ -30,7 +30,7 @@ function load_token(?string $zts): ?Token
         return null;
     }
 
-    $token = Token::findBy('token_standard', $zts);
+    $token = Token::firstWhere('token_standard', $zts);
 
     if (! $token) {
         $data = app(ZenonSdk::class)->getByZts($zts);
@@ -55,7 +55,7 @@ function load_token(?string $zts): ?Token
 
 function lp_eth_token(): Token
 {
-    return Token::findBy('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
+    return Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
 }
 
 function znn_price(): float

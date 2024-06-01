@@ -195,20 +195,20 @@ class Token extends Model implements Sitemapable
         $totalLocked = 0;
 
         if ($this->token_standard === NetworkTokensEnum::ZNN->value) {
-            $pillarLockup = Account::findBy('address', EmbeddedContractsEnum::PILLAR->value)->znn_balance;
-            $sentinelLockup = Account::findBy('address', EmbeddedContractsEnum::SENTINEL->value)->znn_balance;
-            $stakingLockup = Account::findBy('address', EmbeddedContractsEnum::STAKE->value)->znn_balance;
+            $pillarLockup = Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->znn_balance;
+            $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->znn_balance;
+            $stakingLockup = Account::firstWhere('address', EmbeddedContractsEnum::STAKE->value)->znn_balance;
             $totalLocked = ($pillarLockup + $sentinelLockup + $stakingLockup);
         }
 
         if ($this->token_standard === NetworkTokensEnum::QSR->value) {
-            $sentinelLockup = Account::findBy('address', EmbeddedContractsEnum::SENTINEL->value)->qsr_balance;
-            $plasmaLockup = Account::findBy('address', EmbeddedContractsEnum::PLASMA->value)->qsr_balance;
+            $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->qsr_balance;
+            $plasmaLockup = Account::firstWhere('address', EmbeddedContractsEnum::PLASMA->value)->qsr_balance;
             $totalLocked = ($sentinelLockup + $plasmaLockup);
         }
 
         if ($this->token_standard === NetworkTokensEnum::LP_ZNN_ETH->value) {
-            $liquidityAccount = Account::findBy('address', EmbeddedContractsEnum::LIQUIDITY->value);
+            $liquidityAccount = Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value);
             $totalLocked = $liquidityAccount->balances()
                 ->where('token_id', $this->id)
                 ->first()?->pivot->balance;

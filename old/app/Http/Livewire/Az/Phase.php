@@ -20,7 +20,7 @@ class Phase extends Component
     public function render()
     {
         return view('livewire.az.phase', [
-            'phase' => AcceleratorPhase::findBy('hash', $this->hash),
+            'phase' => AcceleratorPhase::firstWhere('hash', $this->hash),
         ]);
     }
 }

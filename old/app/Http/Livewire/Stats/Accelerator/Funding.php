@@ -23,7 +23,7 @@ class Funding extends Component
 
     public function loadFundingData()
     {
-        $this->acceleratorContract = Account::findBy('address', EmbeddedContractsEnum::ACCELERATOR->value);
+        $this->acceleratorContract = Account::firstWhere('address', EmbeddedContractsEnum::ACCELERATOR->value);
         $cacheExpiry = (60 * 60);
         $fundingLabels = [
             'Remaining',

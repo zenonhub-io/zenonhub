@@ -89,7 +89,7 @@ class Sync extends Command
 
             DB::table('nom_accounts')->orderBy('id')->chunk(100, function ($accounts) {
                 foreach ($accounts as $account) {
-                    $account = Account::findBy('address', $account->address);
+                    $account = Account::firstWhere('address', $account->address);
                     ProcessAccountBalance::dispatch($account);
                     $this->output->progressAdvance();
                 }

@@ -21,7 +21,7 @@ class AddPhase extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $project = AcceleratorProject::findBy('hash', $blockData['id']);
+        $project = AcceleratorProject::firstWhere('hash', $blockData['id']);
 
         if (! $project || ! $this->validateAction($accountBlock, $project)) {
             Log::info('Contract Method Processor - Accelerator: AddPhase failed', [
@@ -84,14 +84,13 @@ class AddPhase extends AbstractContractMethodProcessor
             return false;
         }
 
-        // TODO
-        //        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED->value) {
-        //            return false;
-        //        }
-        //
-        //        if ($latestPhase && $latestPhase !== AcceleratorPhaseStatusEnum::PAID->value) {
-        //            return false;
-        //        }
+        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED) {
+            return false;
+        }
+
+        if ($latestPhase && $latestPhase->status !== AcceleratorPhaseStatusEnum::PAID) {
+            return false;
+        }
 
         if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.accelerator.projectNameLengthMax')) {
             return false;

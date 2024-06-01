@@ -21,7 +21,7 @@ class Delegate extends AbstractContractMethodProcessor
     {
         $accountBlock->load('account');
         $blockData = $accountBlock->data->decoded;
-        $pillar = Pillar::findBy('name', $blockData['name']);
+        $pillar = Pillar::firstWhere('name', $blockData['name']);
 
         if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
             Log::info('Contract Method Processor - Pillar: Delegate failed', [
@@ -32,7 +32,7 @@ class Delegate extends AbstractContractMethodProcessor
             return;
         }
 
-        Cache::forget("{$pillar->cacheKey()}|pillar-rank");
+        Cache::forget($pillar->cacheKey('pillar-rank'));
 
         //        $accountBlock->account
         //            ->delegations()

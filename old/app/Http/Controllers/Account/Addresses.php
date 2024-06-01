@@ -43,7 +43,7 @@ class Addresses
             ],
         ]);
 
-        $account = Account::findBy('address', $request->input('address'));
+        $account = Account::firstWhere('address', $request->input('address'));
 
         $verified = ZnnUtilities::verifySignedMessage(
             $account->decoded_public_key,

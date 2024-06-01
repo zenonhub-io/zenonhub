@@ -23,7 +23,7 @@ class InsertAccountBlock
      */
     public function execute(AccountBlockDTO $accountBlockDTO): void
     {
-        $block = AccountBlock::findBy('hash', $accountBlockDTO->hash);
+        $block = AccountBlock::firstWhere('hash', $accountBlockDTO->hash);
         if ($block) {
             return;
         }
@@ -36,8 +36,8 @@ class InsertAccountBlock
         $account = load_account($accountBlockDTO->address);
         $toAccount = load_account($accountBlockDTO->toAddress);
         $token = load_token($accountBlockDTO->token?->tokenStandard);
-        $momentum = Momentum::findBy('hash', $accountBlockDTO->confirmationDetail->momentumHash);
-        $momentumAcknowledged = Momentum::findBy('hash', $accountBlockDTO->momentumAcknowledged->hash);
+        $momentum = Momentum::firstWhere('hash', $accountBlockDTO->confirmationDetail->momentumHash);
+        $momentumAcknowledged = Momentum::firstWhere('hash', $accountBlockDTO->momentumAcknowledged->hash);
 
         if (! $account->public_key) {
             $account->public_key = $accountBlockDTO->publicKey;
@@ -94,7 +94,7 @@ class InsertAccountBlock
     private function linkDescendantBlocks(AccountBlock $parentBlock, Collection $descendants): void
     {
         $descendants->each(function ($descendant) use ($parentBlock) {
-            $child = AccountBlock::findBy('hash', $descendant->hash);
+            $child = AccountBlock::firstWhere('hash', $descendant->hash);
 
             if (! $child) {
                 return;
@@ -113,7 +113,7 @@ class InsertAccountBlock
             'pair' => $pairedAccountBlockDTO->hash,
         ]);
 
-        $pairedAccountBlock = AccountBlock::findBy('hash', $pairedAccountBlockDTO->hash);
+        $pairedAccountBlock = AccountBlock::firstWhere('hash', $pairedAccountBlockDTO->hash);
 
         if (! $pairedAccountBlock) {
             return;

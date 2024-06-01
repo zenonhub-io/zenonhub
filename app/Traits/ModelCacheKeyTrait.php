@@ -6,13 +6,14 @@ namespace App\Traits;
 
 trait ModelCacheKeyTrait
 {
-    public function cacheKey(): string
+    public function cacheKey(?string $name = null): string
     {
         return sprintf(
-            '%s/%s-%s',
+            '%s/%s-%s|%s',
             $this->getTable(),
             $this->getKey(),
-            $this->updated_at?->timestamp ?: $this->created_at->timestamp
+            $this->updated_at?->timestamp ?: $this->created_at->timestamp,
+            $name
         );
     }
 }

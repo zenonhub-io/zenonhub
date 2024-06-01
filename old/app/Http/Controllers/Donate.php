@@ -13,7 +13,7 @@ class Donate
     {
         Meta::title('Donate to Zenon Hub', false);
 
-        $donationAccount = Account::findBy('address', config('zenon.donation_address'));
+        $donationAccount = Account::firstWhere('address', config('zenon.donation_address'));
         $excludeAddresses = Account::isEmbedded() // Exclude AZ + rewards
             ->orWhere('address', config('plasma-bot.address')) // Exclude refund from plasma bot
             ->pluck('id')

@@ -34,7 +34,7 @@ class UpdateNamedAddresses extends Command
         $namedAccounts = config('explorer.named_accounts');
 
         foreach ($namedAccounts as $address => $name) {
-            $address = Account::findBy('address', $address);
+            $address = Account::firstWhere('address', $address);
             if ($address) {
                 $address->name = $name;
                 $address->save();

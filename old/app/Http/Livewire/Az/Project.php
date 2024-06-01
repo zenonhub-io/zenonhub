@@ -20,7 +20,7 @@ class Project extends Component
     public function render()
     {
         return view('livewire.az.project', [
-            'project' => AcceleratorProject::findBy('hash', $this->hash),
+            'project' => AcceleratorProject::firstWhere('hash', $this->hash),
         ]);
     }
 }

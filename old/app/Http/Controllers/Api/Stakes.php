@@ -33,7 +33,7 @@ class Stakes extends ApiController
 
     public function find(Request $request, string $hash)
     {
-        $stake = Stake::findBy('hash', $hash);
+        $stake = Stake::firstWhere('hash', $hash);
 
         if (! $stake) {
             return $this->error('Not found');

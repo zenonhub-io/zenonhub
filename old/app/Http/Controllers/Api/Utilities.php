@@ -70,7 +70,7 @@ class Utilities extends ApiController
 
     public function accountLpBalances(): JsonResponse
     {
-        $lpToken = Token::findBy('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
+        $lpToken = Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
         $accounts = Account::whereHas(
             'stakes',
             fn ($q) => $q->where('token_id', $lpToken->id)
@@ -110,7 +110,7 @@ class Utilities extends ApiController
             abort(404);
         }
 
-        $token = Token::findBy('token_standard', $zts);
+        $token = Token::firstWhere('token_standard', $zts);
 
         if (! $token) {
             abort(404);

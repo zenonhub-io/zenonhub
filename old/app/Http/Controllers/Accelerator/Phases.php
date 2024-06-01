@@ -11,7 +11,7 @@ class Phases
 {
     public function detail($hash)
     {
-        $phase = AcceleratorPhase::findBy('hash', $hash);
+        $phase = AcceleratorPhase::firstWhere('hash', $hash);
 
         if (! $phase) {
             abort(404);

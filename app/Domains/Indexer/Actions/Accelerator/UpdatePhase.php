@@ -17,7 +17,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $project = AcceleratorProject::findBy('hash', $blockData['id']);
+        $project = AcceleratorProject::firstWhere('hash', $blockData['id']);
         $phase = $project?->phases()->latest()->first();
 
         if (! $project || ! $phase || ! $this->validateAction($accountBlock, $project, $phase)) {

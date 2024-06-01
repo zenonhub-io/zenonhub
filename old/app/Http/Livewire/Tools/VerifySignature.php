@@ -37,7 +37,7 @@ class VerifySignature extends Component
     public function updated($propertyName)
     {
         if ($propertyName === 'address') {
-            $accountCheck = Account::findBy('address', $this->address);
+            $accountCheck = Account::firstWhere('address', $this->address);
             if ($accountCheck) {
                 $this->public_key = $accountCheck->decoded_public_key;
             }

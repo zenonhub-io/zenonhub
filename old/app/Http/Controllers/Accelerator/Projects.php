@@ -19,7 +19,7 @@ class Projects
 
     public function detail($hash)
     {
-        $project = AcceleratorProject::findBy('hash', $hash);
+        $project = AcceleratorProject::firstWhere('hash', $hash);
 
         if (! $project) {
             abort(404);

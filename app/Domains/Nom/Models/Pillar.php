@@ -201,7 +201,7 @@ class Pillar extends Model implements Sitemapable
 
     public function getRankAttribute(): string
     {
-        return Cache::remember("{$this->cacheKey()}|pillar-rank", 60 * 10, function () {
+        return Cache::remember($this->cacheKey('pillar-rank'), 60 * 10, function () {
             if ($this->revoked_at || ! $this->weight) {
                 return '-';
             }

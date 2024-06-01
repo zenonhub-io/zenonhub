@@ -20,7 +20,7 @@ class ManageFavoriteTransaction extends Component
 
     public function mount(string $hash)
     {
-        $block = AccountBlock::findBy('hash', $hash);
+        $block = AccountBlock::firstWhere('hash', $hash);
         $favorite = Favorite::findExisting($block, auth()->user());
 
         $this->hash = $hash;
@@ -46,7 +46,7 @@ class ManageFavoriteTransaction extends Component
         ]);
 
         $user = auth()->user();
-        $block = AccountBlock::findBy('hash', $validatedData['hash']);
+        $block = AccountBlock::firstWhere('hash', $validatedData['hash']);
 
         (new ManageFavorite($block, $user, $validatedData))->execute();
 
@@ -64,7 +64,7 @@ class ManageFavoriteTransaction extends Component
         ]);
 
         $user = auth()->user();
-        $account = AccountBlock::findBy('hash', $validatedData['hash']);
+        $account = AccountBlock::firstWhere('hash', $validatedData['hash']);
 
         (new DeleteFavorite($account, $user))->execute();
 

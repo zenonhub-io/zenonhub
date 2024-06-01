@@ -45,7 +45,7 @@ class BroadcastMessage extends Component
     public function updated($propertyName)
     {
         if ($propertyName === 'address') {
-            $accountCheck = Account::findBy('address', $this->address);
+            $accountCheck = Account::firstWhere('address', $this->address);
             if ($accountCheck) {
                 $this->public_key = $accountCheck->decoded_public_key;
             }
@@ -57,7 +57,7 @@ class BroadcastMessage extends Component
     public function submit()
     {
         $data = $this->validate();
-        $account = Account::findBy('address', $data['address']);
+        $account = Account::firstWhere('address', $data['address']);
         $validated = ZenonSdk::verifySignature($data['public_key'], $data['address'], $data['message'], $data['signature']);
 
         if (! $validated) {

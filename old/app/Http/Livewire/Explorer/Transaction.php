@@ -21,7 +21,7 @@ class Transaction extends Component
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.explorer.transaction', [
-            'transaction' => \App\Domains\Nom\Models\AccountBlock::findBy('hash', $this->hash),
+            'transaction' => \App\Domains\Nom\Models\AccountBlock::firstWhere('hash', $this->hash),
         ]);
     }
 

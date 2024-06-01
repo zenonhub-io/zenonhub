@@ -20,7 +20,7 @@ class Pillar extends Component
     public function render()
     {
         return view('livewire.pillars.pillar', [
-            'pillar' => PillarModel::findBy('slug', $this->slug),
+            'pillar' => PillarModel::firstWhere('slug', $this->slug),
         ]);
     }
 }

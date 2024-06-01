@@ -31,7 +31,7 @@ class Accounts extends ApiController
 
     public function find(Request $request, string $address)
     {
-        $account = Account::findBy('address', $address);
+        $account = Account::firstWhere('address', $address);
 
         if (! $account) {
             return $this->error('Not found');

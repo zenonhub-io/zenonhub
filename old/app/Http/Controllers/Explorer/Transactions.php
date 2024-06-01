@@ -21,7 +21,7 @@ class Transactions
 
     public function detail($hash)
     {
-        $transaction = AccountBlock::findBy('hash', $hash);
+        $transaction = AccountBlock::firstWhere('hash', $hash);
 
         if (! $transaction) {
             abort(404);

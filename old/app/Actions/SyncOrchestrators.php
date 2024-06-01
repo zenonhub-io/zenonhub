@@ -48,8 +48,8 @@ class SyncOrchestrators
 
         foreach ($this->json->pillars as $data) {
 
-            $pillar = Pillar::findBy('name', $data->pillar_name);
-            $account = Account::findBy('address', $data->stake_address);
+            $pillar = Pillar::firstWhere('name', $data->pillar_name);
+            $account = Account::firstWhere('address', $data->stake_address);
 
             if (! $pillar || ! $account) {
                 continue;

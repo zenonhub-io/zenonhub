@@ -20,7 +20,7 @@ class ManageFavoriteMomentum extends Component
 
     public function mount(string $hash)
     {
-        $momentum = Momentum::findBy('hash', $hash);
+        $momentum = Momentum::firstWhere('hash', $hash);
         $favorite = Favorite::findExisting($momentum, auth()->user());
 
         $this->hash = $hash;
@@ -46,7 +46,7 @@ class ManageFavoriteMomentum extends Component
         ]);
 
         $user = auth()->user();
-        $momentum = Momentum::findBy('hash', $validatedData['hash']);
+        $momentum = Momentum::firstWhere('hash', $validatedData['hash']);
 
         (new ManageFavorite($momentum, $user, $validatedData))->execute();
 
@@ -64,7 +64,7 @@ class ManageFavoriteMomentum extends Component
         ]);
 
         $user = auth()->user();
-        $momentum = Momentum::findBy('hash', $validatedData['hash']);
+        $momentum = Momentum::firstWhere('hash', $validatedData['hash']);
 
         (new DeleteFavorite($momentum, $user))->execute();
 

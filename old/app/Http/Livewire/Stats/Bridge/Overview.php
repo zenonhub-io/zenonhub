@@ -68,7 +68,7 @@ class Overview extends Component
     {
         $znnToken = app('znnToken');
         $qsrToken = app('qsrToken');
-        $bridgeAccount = Account::findBy('address', EmbeddedContractsEnum::BRIDGE->value);
+        $bridgeAccount = Account::firstWhere('address', EmbeddedContractsEnum::BRIDGE->value);
 
         //
         // Totals

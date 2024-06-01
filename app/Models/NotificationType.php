@@ -55,7 +55,7 @@ class NotificationType extends Model
 
     public static function getSubscribedUsers(string $code)
     {
-        return self::findBy('code', $code)->subscribed_users;
+        return self::firstWhere('code', $code)->subscribed_users;
     }
 
     //

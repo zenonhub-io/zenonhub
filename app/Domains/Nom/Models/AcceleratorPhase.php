@@ -70,7 +70,6 @@ class AcceleratorPhase extends Model implements Sitemapable
     protected function casts(): array
     {
         return [
-            'accepted_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'status' => AcceleratorPhaseStatusEnum::class,

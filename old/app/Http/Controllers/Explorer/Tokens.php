@@ -21,7 +21,7 @@ class Tokens
 
     public function detail($zts)
     {
-        $token = Token::findBy('token_standard', $zts);
+        $token = Token::firstWhere('token_standard', $zts);
 
         if (! $token) {
             abort(404);

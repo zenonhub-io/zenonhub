@@ -15,7 +15,7 @@ class UpdateToken extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $token = Token::findBy('token_standard', $blockData['tokenStandard']);
+        $token = Token::firstWhere('token_standard', $blockData['tokenStandard']);
 
         if (! $token || ! $this->validateAction($accountBlock, $token)) {
             Log::info('Contract Method Processor - Token: UpdateToken failed', [

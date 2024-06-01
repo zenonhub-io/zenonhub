@@ -19,7 +19,7 @@ class Account extends Component
     public function render()
     {
         return view('livewire.explorer.account', [
-            'account' => \App\Domains\Nom\Models\Account::findBy('address', $this->address),
+            'account' => \App\Domains\Nom\Models\Account::firstWhere('address', $this->address),
         ]);
     }
 }

@@ -118,7 +118,6 @@ class Projects implements ShouldQueue
                     'total_votes' => $data->votes->total,
                     'total_yes_votes' => $data->votes->yes,
                     'total_no_votes' => $data->votes->no,
-                    'accepted_at' => ($data->phase->acceptedTimestamp ?: null),
                     'created_at' => $data->phase->creationTimestamp,
                 ]);
 
@@ -130,7 +129,6 @@ class Projects implements ShouldQueue
             $phase->total_yes_votes = $data->votes->yes;
             $phase->total_no_votes = $data->votes->no;
             $phase->status = $data->phase->status;
-            $phase->accepted_at = ($data->phase->acceptedTimestamp ?: null);
             $phase->save();
 
             $project->updated_at = $data->phase->acceptedTimestamp ?: $data->phase->creationTimestamp;
