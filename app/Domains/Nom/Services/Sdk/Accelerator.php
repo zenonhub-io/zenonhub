@@ -4,30 +4,32 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Services\Sdk;
 
+use App\Domains\Nom\DataTransferObjects\AcceleratorPhaseDTO;
+use App\Domains\Nom\DataTransferObjects\AcceleratorProjectDTO;
+use App\Domains\Nom\Exceptions\ZenonRpcException;
+use DigitalSloth\ZnnPhp\Exceptions\Exception;
+
 trait Accelerator
 {
-    public function AcceleratorGetAll(int $page = 0, int $perPage = 1000): array
+    public function getProjectById(string $id): AcceleratorProjectDTO
     {
-        return $this->sdk->accelerator->getAll($page, $perPage);
+        try {
+            $data = $this->sdk->accelerator->getProjectById($id)['data'];
+
+            return AcceleratorProjectDTO::from($data);
+        } catch (Exception $e) {
+            throw new ZenonRpcException('Unable to getProjectById');
+        }
     }
 
-    public function AcceleratorGetProjectById(string $id): array
+    public function getPhaseById(string $id): AcceleratorPhaseDTO
     {
-        return $this->sdk->accelerator->getProjectById($id);
-    }
+        try {
+            $data = $this->sdk->accelerator->getPhaseById($id)['data'];
 
-    public function AcceleratorGetPhaseById(string $id): array
-    {
-        return $this->sdk->accelerator->getPhaseById($id);
-    }
-
-    public function AcceleratorGetPillarVotes(string $pillarName, array $projectHashes = []): array
-    {
-        return $this->sdk->accelerator->getPillarVotes($pillarName, $projectHashes);
-    }
-
-    public function AcceleratorGetVoteBreakdown(string $hash): array
-    {
-        return $this->sdk->accelerator->getVoteBreakdown($hash);
+            return AcceleratorPhaseDTO::from($data);
+        } catch (Exception $e) {
+            throw new ZenonRpcException('Unable to getProjectById');
+        }
     }
 }

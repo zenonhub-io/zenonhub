@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('owner_id')->references('id')->on('nom_accounts');
             $table->foreignId('producer_account_id')->references('id')->on('nom_accounts');
             $table->foreignId('withdraw_account_id')->references('id')->on('nom_accounts');
+            $table->integer('rank')->nullable()->index();
             $table->string('name')->index();
             $table->string('slug')->index();
             $table->bigInteger('qsr_burn')->default(15000000000000);

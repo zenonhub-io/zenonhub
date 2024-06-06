@@ -51,6 +51,7 @@ class Pillar extends Model implements Sitemapable
         'owner_id',
         'producer_account_id',
         'withdraw_account_id',
+        'rank',
         'name',
         'slug',
         'qsr_burn',
@@ -200,16 +201,11 @@ class Pillar extends Model implements Sitemapable
 
     public function getRankAttribute(): string
     {
-        return Cache::remember($this->cacheKey('pillar-rank'), 60 * 10, function () {
-            if ($this->revoked_at || ! $this->weight) {
-                return '-';
-            }
+        if ($this->revoked_at || ! $this->weight) {
+            return '-';
+        }
 
-            $pillars = self::whereNull('revoked_at')->orderBy('weight', 'desc')->get();
-            $data = $pillars->where('id', $this->id);
-
-            return $data->keys()->first() + 1;
-        });
+        return $this->rank;
     }
 
     public function getProducedMomentumsPercentageAttribute(): float

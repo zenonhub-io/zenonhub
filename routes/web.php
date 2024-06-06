@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Domains\Nom\Models\ContractMethod;
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PillarsController;
@@ -17,7 +16,29 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::firstWhere('hash', '9716770adb54dee82b7a0d6c18c8444a27e00dc72bf81b9dc816af4274a5875d');
+    $pillars = App\Domains\Nom\Models\Pillar::isActive()->get();
+    $pillars->each(function ($pillar) {
+        App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);
+    });
+
+    dd('done');
+
+    //    $projects = \App\Domains\Nom\Models\AcceleratorProject::get();
+    //    $projects->each(function ($project) {
+    //        \App\Domains\Nom\Actions\SyncProjectStatus::run($project);
+    //    });
+    //
+    //    dd('done');
+
+    $data = app(App\Domains\Nom\Services\ZenonSdk::class)
+        ->getProjectById('f86c185058d7ed83bc959b57db335f7b3b5f4ed752293a5e7714654a74a82260');
+
+    //    $data = app(\App\Domains\Nom\Services\ZenonSdk::class)
+    //        ->getPhaseById('a331c580fdcfc2b985ce7900250ad72a0d787e1e078ad0d8b79ec9a21a2d5571');
+
+    dd($data);
+
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::firstWhere('hash', '06e51eadcba26371bc50ef4301b8bc82acbb2f24881821fe5e67c7a2956d82ef');
     $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
     $blockProcessorClass::run($accountBlock);
 
@@ -151,6 +172,88 @@ Route::get('test', function () {
         ->json();
 
     dd($response);
+
+    // XEGGEX
+    //    $apiKey = '8ec015f680d33a11abe518706711060b';
+    //    $apiSecret = '2934e33613c49a5d96d2e4c4541aaa11d3300d33c9d1348d';
+    //    $baseUrl = 'https://api.xeggex.com/api/v2';
+    //
+    //    //$ticker = Http::withToken($apiKey.':'.$apiSecret, 'Basic')->get($baseUrl.'/market/getbysymbol/ZNN_USDT')->json();
+    //    /**
+    //     * Ticker
+    //     * ticker_id = symbol
+    //     * base_currency = primaryTicker
+    //     * target_currency = ?
+    //     * last_price = lastPrice
+    //     * base_volume = volume
+    //     * target_volume = ?
+    //     * bid = bestBid
+    //     * ask = bestAsk
+    //     * high = highPrice
+    //     * low = lowPrice
+    //     *
+    //     *
+    //     * "_id" => "664f53aabeff051fd3301807"
+    //     * "symbol" => "ZNN/USDT"
+    //     * "primaryName" => "Zenon"
+    //     * "primaryTicker" => "ZNN"
+    //     * "lastPrice" => "0.565791"
+    //     * "yesterdayPrice" => "0.633919"
+    //     * "highPrice" => "0.797121"
+    //     * "lowPrice" => "0.450001"
+    //     * "volume" => "463.7462"
+    //     * "lastTradeAt" => 1717357553572
+    //     * "priceDecimals" => 6
+    //     * "quantityDecimals" => 4
+    //     * "isActive" => true
+    //     * "primaryAsset" => "65d979fe2fb89f13b1fc2006"
+    //     * "secondaryAsset" => "613b398ed7a0bd1a304f963e"
+    //     * "imageUUID" => "1af8dc72-9b35-4d1b-b566-1ed23cf7e803"
+    //     * "engineId" => 5
+    //     * "isPaused" => false
+    //     * "bestAsk" => "0.570619"
+    //     * "bestBid" => "0.56579"
+    //     * "createdAt" => 1716474794843
+    //     * "updatedAt" => 1717357855114
+    //     * "primaryUsdValue" => "0.575736900000"
+    //     * "primaryCirculation" => ""
+    //     * "secondaryUsdValue" => "1"
+    //     * "secondaryCirculation" => "78311766178.46"
+    //     * "lastPriceUpDown" => "down"
+    //     * "spreadPercent" => "0.846"
+    //     * "changePercent" => "-10.74"
+    //     * "volumeSecondary" => "285.9444"
+    //     * "lastPriceNumber" => 0.565791
+    //     * "bestBidNumber" => 0.56579
+    //     * "bestAskNumber" => 0.570619
+    //     * "yesterdayPriceNumber" => 0.633919
+    //     * "changePercentNumber" => -10.74
+    //     * "highPriceNumber" => 0.797121
+    //     * "lowPriceNumber" => 0.450001
+    //     * "volumeNumber" => 463.7462
+    //     * "volumeSecondaryNumber" => 285.9444
+    //     * "volumeUsdNumber" => 285.94
+    //     * "marketcapNumber" => 0
+    //     * "lineChart" => "[]"
+    //     * "minimumQuantity" => 0
+    //     * "maxAllowedPrice" => ""
+    //     * "minAllowedPrice" => ""
+    //     * "pauseBuys" => false
+    //     * "pauseSells" => false
+    //     * "assignedWebsites" => "629b1213681675f1a93444f4"
+    //     * "spreadPercentNumber" => 0.846
+    //     * "id" => "664f53aabeff051fd3301807"
+    //     */
+    //
+    //    //$market = Http::withToken($apiKey.':'.$apiSecret, 'Basic')->get($baseUrl.'/market/getorderbookbysymbol/ZNN_USDT')->json();
+    //    /**
+    //     * Market
+    //     *
+    //     * ticker_id = symbol
+    //     * timestamp = timestamp
+    //     * bids = bids
+    //     * asks = asks
+    //     */
 
 });
 
