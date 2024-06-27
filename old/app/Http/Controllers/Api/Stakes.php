@@ -50,11 +50,11 @@ class Stakes extends ApiController
 
         if ($state = $request->input('state')) {
             if ($state === 'active') {
-                $query->isActive();
+                $query->whereActive();
             }
 
             if ($state === 'ended') {
-                $query->isEnded();
+                $query->whereEnded();
             }
         }
 

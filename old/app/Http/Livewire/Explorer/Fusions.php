@@ -36,7 +36,7 @@ class Fusions extends Component
 
     protected function initQuery()
     {
-        $this->query = Plasma::isActive();
+        $this->query = Plasma::whereActive();
     }
 
     protected function sortList()

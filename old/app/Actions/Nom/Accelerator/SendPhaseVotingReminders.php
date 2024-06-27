@@ -14,7 +14,7 @@ class SendPhaseVotingReminders
     public function execute()
     {
         $networkBot = new NetworkAlertBot;
-        $phases = AcceleratorPhase::isOpen()
+        $phases = AcceleratorPhase::whereOpen()
             ->shouldSendVotingReminder()
             ->get();
 

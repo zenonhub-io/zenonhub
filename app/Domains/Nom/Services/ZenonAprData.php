@@ -133,9 +133,9 @@ class ZenonAprData
 
     private function setPillarData(): void
     {
-        $this->pillars = Pillar::isActive()->get();
-        $this->pillarsTop30 = Pillar::isTop30()->isActive()->get();
-        $this->pillarsNotTop30 = Pillar::isNotTop30()->isActive()->get();
+        $this->pillars = Pillar::whereActive()->get();
+        $this->pillarsTop30 = Pillar::whereTop30()->whereActive()->get();
+        $this->pillarsNotTop30 = Pillar::whereNotTop30()->whereActive()->get();
 
         $this->pillarCount = $this->pillars->count();
         $this->pillarValue = (znn_price() * self::PILLAR_COLLATERAL_ZNN) + (qsr_price() * self::PILLAR_COLLATERAL_QSR);
@@ -166,7 +166,7 @@ class ZenonAprData
 
     private function setSentinelData(): void
     {
-        $this->sentinels = Sentinel::isActive()->get();
+        $this->sentinels = Sentinel::whereActive()->get();
 
         $this->sentinelCount = $this->sentinels->count();
         $this->sentinelValue = (znn_price() * self::SENTINEL_COLLATERAL_ZNN) + (qsr_price() * self::SENTINEL_COLLATERAL_QSR);

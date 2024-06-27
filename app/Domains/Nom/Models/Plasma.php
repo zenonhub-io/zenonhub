@@ -81,7 +81,7 @@ class Plasma extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('ended_at');
     }

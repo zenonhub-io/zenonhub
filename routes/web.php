@@ -16,7 +16,7 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $pillars = App\Domains\Nom\Models\Pillar::isActive()->get();
+    $pillars = App\Domains\Nom\Models\Pillar::whereActive()->get();
     $pillars->each(function ($pillar) {
         App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);
     });

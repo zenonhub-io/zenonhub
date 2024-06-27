@@ -206,7 +206,7 @@ class Account extends Model implements Sitemapable
     //
     // Scopes
 
-    public function scopeIsEmbedded($query)
+    public function scopeWhereEmbedded($query)
     {
         $query->where('is_embedded_contract', '1');
     }
@@ -307,17 +307,17 @@ class Account extends Model implements Sitemapable
 
     public function getActiveStakesAttribute(): ?Model
     {
-        return $this->stakes()->isActive()->get();
+        return $this->stakes()->whereActive()->get();
     }
 
     public function getActiveDelegationAttribute(): ?Model
     {
-        return $this->delegations()->isActive()->first();
+        return $this->delegations()->whereActive()->first();
     }
 
     public function getActivePillarAttribute(): ?Model
     {
-        return $this->pillars()->isActive()->latest()->first();
+        return $this->pillars()->whereActive()->latest()->first();
     }
 
     public function getPillarAttribute(): ?Model
@@ -327,7 +327,7 @@ class Account extends Model implements Sitemapable
 
     public function getActiveSentinelAttribute(): ?Model
     {
-        return $this->sentinels()->isActive()->latest()->first();
+        return $this->sentinels()->whereActive()->latest()->first();
     }
 
     public function getSentinelAttribute(): ?Model

@@ -22,7 +22,7 @@ class ManageNotifications extends Component
     {
         $user = Auth::user();
 
-        $this->notifications = NotificationType::isActive()
+        $this->notifications = NotificationType::whereActive()
             ->get()
             ->mapWithKeys(fn ($notificationType) => [$notificationType->id => $notificationType->checkUserSubscribed($user)])->toArray();
     }
@@ -43,7 +43,7 @@ class ManageNotifications extends Component
 
     public function getNotificationTypesProperty($category): Collection
     {
-        return NotificationType::isActive()->where('category', $category)->get();
+        return NotificationType::whereActive()->where('category', $category)->get();
     }
 
     public function getNotificationCategoriesProperty(): array

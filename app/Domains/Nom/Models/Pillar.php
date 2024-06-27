@@ -141,36 +141,36 @@ class Pillar extends Model implements Sitemapable
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('revoked_at');
     }
 
-    public function scopeIsProducing($query)
+    public function scopeWhereProducing($query)
     {
         return $query->where('missed_momentums', '<=', config('zenon.pillar_missed_momentum_limit'))
             ->whereNull('revoked_at');
     }
 
-    public function scopeIsNotProducing($query)
+    public function scopeWhereNotProducing($query)
     {
         return $query->where('missed_momentums', '>', config('zenon.pillar_missed_momentum_limit'));
     }
 
-    public function scopeIsRevoked($query)
+    public function scopeWhereRevoked($query)
     {
         return $query->whereNotNull('revoked_at');
     }
 
-    public function scopeIsTop30($query)
+    public function scopeWhereTop30($query)
     {
         return $query->orderBy('weight', 'desc')
             ->limit(30);
     }
 
-    public function scopeIsNotTop30($query)
+    public function scopeWhereNotTop30($query)
     {
-        $top30 = self::isActive()->isTop30()->pluck('id');
+        $top30 = self::whereActive()->whereTop30()->pluck('id');
 
         return $query->whereNotIn('id', $top30);
     }
@@ -222,7 +222,7 @@ class Pillar extends Model implements Sitemapable
     public function getActiveDelegatorsAttribute(): ?Collection
     {
         return $this->delegators()
-            ->isActive()
+            ->whereActive()
             ->withBalance()
             ->get();
     }
@@ -230,7 +230,7 @@ class Pillar extends Model implements Sitemapable
     public function getActiveDelegatorsCountAttribute(): int
     {
         return $this->delegators()
-            ->isActive()
+            ->whereActive()
             ->withBalance()
             ->count();
     }

@@ -58,7 +58,7 @@ class ProposeAdministrator extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
-        $isGuardian = BridgeGuardian::isActive()->where('account_id', $accountBlock->account_id)->exists();
+        $isGuardian = BridgeGuardian::whereActive()->where('account_id', $accountBlock->account_id)->exists();
 
         if (! $isGuardian) {
             throw new IndexerActionValidationException('Action sent from non guardian');
@@ -68,7 +68,7 @@ class ProposeAdministrator extends AbstractContractMethodProcessor
     private function checkVotes(AccountBlock $accountBlock): void
     {
         // if over half the guardians vote for the same address it becomes the new admin
-        $numGuardians = BridgeGuardian::isActive()->count();
+        $numGuardians = BridgeGuardian::whereActive()->count();
         $guardianVotesNeeded = $numGuardians / 2;
         $nominations = BridgeAdmin::select(['*', DB::raw('count(*) as count')])
             ->whereNull('accepted_at')

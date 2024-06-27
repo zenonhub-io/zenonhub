@@ -67,13 +67,13 @@ class Overview extends Component
     private function filterList()
     {
         if ($this->list === 'open') {
-            $this->query->isOpen();
+            $this->query->whereOpen();
         } elseif ($this->list === 'accepted') {
-            $this->query->isAccepted();
+            $this->query->whereAccepted();
         } elseif ($this->list === 'complete') {
-            $this->query->isCompleted();
+            $this->query->whereCompleted();
         } elseif ($this->list === 'rejected') {
-            $this->query->isRejected();
+            $this->query->whereRejected();
         }
 
         if ($this->search) {

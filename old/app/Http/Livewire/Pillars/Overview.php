@@ -80,13 +80,13 @@ class Overview extends Component
     private function filterList()
     {
         if ($this->list === 'active') {
-            $this->query->isActive()
-                ->isProducing();
+            $this->query->whereActive()
+                ->whereProducing();
         } elseif ($this->list === 'inactive') {
-            $this->query->isActive()
-                ->isNotProducing();
+            $this->query->whereActive()
+                ->whereNotProducing();
         } elseif ($this->list === 'revoked') {
-            $this->query->isRevoked();
+            $this->query->whereRevoked();
         }
 
         if ($this->search) {

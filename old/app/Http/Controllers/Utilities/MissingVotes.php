@@ -15,7 +15,7 @@ class MissingVotes
         $this->page['meta']['title'] = 'AZ Missing votes';
 
         $phaseData = [];
-        $phases = AcceleratorPhase::isOpen()
+        $phases = AcceleratorPhase::whereOpen()
             ->whereNotIn('hash', [
                 'c1d667abca033ba7148e6448a661556f5d4046b68f6c31803d74ab22f19b6142',
             ])
@@ -33,7 +33,7 @@ class MissingVotes
         }
 
         $projectData = [];
-        $projects = AcceleratorProject::isNew()->get();
+        $projects = AcceleratorProject::whereNew()->get();
 
         foreach ($projects as $project) {
             $votingPillars = $project->votes()->pluck('pillar_id');

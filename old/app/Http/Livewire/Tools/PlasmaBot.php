@@ -37,7 +37,7 @@ class PlasmaBot extends Component
     {
         $account = Account::firstWhere('address', config('plasma-bot.address'));
         $totalQsrAvailable = $account->qsr_balance;
-        $fusedQsr = $account->fusions()->isActive()->sum('amount');
+        $fusedQsr = $account->fusions()->whereActive()->sum('amount');
         $percentageAvailable = ($fusedQsr / $totalQsrAvailable) * 100;
         $nextExpiring = PlasmaBotEntry::orderBy('expires_at', 'desc')->first();
 
@@ -57,7 +57,7 @@ class PlasmaBot extends Component
         $this->result = false;
         $this->message = false;
 
-        $existing = PlasmaBotEntry::isConfirmed()
+        $existing = PlasmaBotEntry::whereConfirmed()
             ->whereAddress($data['address'])
             ->first();
 

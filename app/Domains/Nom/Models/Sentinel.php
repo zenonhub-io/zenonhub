@@ -70,7 +70,7 @@ class Sentinel extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('revoked_at');
     }

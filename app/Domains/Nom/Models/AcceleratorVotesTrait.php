@@ -13,14 +13,14 @@ trait AcceleratorVotesTrait
     public function getVotesNeededAttribute(): float
     {
         return Cache::rememberForever($this->cacheKey('getVotesNeededAttribute'), function () {
-            $totalPillars = Pillar::isActive()->where('created_at', '<=', $this->created_at)->count();
+            $totalPillars = Pillar::whereActive()->where('created_at', '<=', $this->created_at)->count();
 
             // New projects or open phases can be voted on by all pillars so creation date shouldnt be accounted for
             if (
                 ($this instanceof AcceleratorProject && $this->status === AcceleratorProjectStatusEnum::NEW) ||
                 ($this instanceof AcceleratorPhase && $this->status === AcceleratorPhaseStatusEnum::OPEN)
             ) {
-                $totalPillars = Pillar::isActive()->count();
+                $totalPillars = Pillar::whereActive()->count();
             }
 
             return ceil($totalPillars * (config('nom.accelerator.voteAcceptanceThreshold') / 100));

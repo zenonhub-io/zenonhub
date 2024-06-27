@@ -91,15 +91,15 @@ class UpdateAccountTotals implements ShouldBeUnique
     private function saveStakedZnn(): void
     {
         $this->account->znn_staked = $this->account->stakes()
-            ->isActive()
-            ->isZnn()
+            ->whereActive()
+            ->whereZnn()
             ->sum('amount');
     }
 
     private function saveFusedQsr(): void
     {
         $this->account->qsr_fused = $this->account->fusions()
-            ->isActive()
+            ->whereActive()
             ->sum('amount');
     }
 

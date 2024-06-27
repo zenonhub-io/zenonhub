@@ -46,9 +46,9 @@ class GenerateSitemap
             ->add($this->addItem('explorer.momentums'))
             ->add($this->addItem('explorer.transactions'))
             ->add($this->addItem('explorer.accounts'))
-            ->add(Account::isEmbedded()->get()->all())
+            ->add(Account::whereEmbedded()->get()->all())
             ->add($this->addItem('explorer.tokens'))
-            ->add(Token::isNetwork()->get()->all())
+            ->add(Token::whereNetwork()->get()->all())
             ->add($this->addItem('explorer.stakes'))
             ->add($this->addItem('explorer.plasma'))
 

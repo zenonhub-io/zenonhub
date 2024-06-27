@@ -152,7 +152,7 @@ class Token extends Model implements Sitemapable
         });
     }
 
-    public function scopeIsNetwork($query)
+    public function scopeWhereNetwork($query)
     {
         return $query->whereRelation('owner', 'is_embedded_contract', '1');
     }

@@ -53,12 +53,12 @@ class Orchestrator extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->where('status', true);
     }
 
-    public function scopeIsInactive($query)
+    public function scopeWhereInactive($query)
     {
         return $query->where('status', false);
     }

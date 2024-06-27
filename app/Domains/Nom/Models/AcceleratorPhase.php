@@ -99,12 +99,12 @@ class AcceleratorPhase extends Model implements Sitemapable
     //
     // Scopes
 
-    public function scopeIsOpen($query)
+    public function scopeWhereOpen($query)
     {
         return $query->where('status', AcceleratorPhaseStatusEnum::OPEN->value);
     }
 
-    public function scopeIsPaid($query)
+    public function scopeWherePaid($query)
     {
         return $query->where('status', AcceleratorPhaseStatusEnum::PAID->value);
     }

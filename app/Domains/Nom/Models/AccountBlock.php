@@ -173,12 +173,12 @@ class AccountBlock extends Model
         });
     }
 
-    public function scopeIsReceived($query)
+    public function scopeWhereReceived($query)
     {
         return $query->whereNotNull('paired_account_block_id');
     }
 
-    public function scopeIsUnreceived($query)
+    public function scopeWhereUnreceived($query)
     {
         return $query->whereNull('paired_account_block_id');
     }
@@ -262,7 +262,7 @@ class AccountBlock extends Model
         return $data->toJson();
     }
 
-    public function getIsUnReceivedAttribute(): bool
+    public function getWhereUnreceivedAttribute(): bool
     {
         return ! $this->paired_account_block_id;
     }

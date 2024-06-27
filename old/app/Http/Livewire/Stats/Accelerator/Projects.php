@@ -27,10 +27,10 @@ class Projects extends Component
             return [
                 'labels' => ['New', 'Accepted', 'Completed', 'Rejected'],
                 'data' => [
-                    AcceleratorProject::isNew()->count(),
-                    AcceleratorProject::isAccepted()->count(),
-                    AcceleratorProject::isCompleted()->count(),
-                    AcceleratorProject::isRejected()->count(),
+                    AcceleratorProject::whereNew()->count(),
+                    AcceleratorProject::whereAccepted()->count(),
+                    AcceleratorProject::whereCompleted()->count(),
+                    AcceleratorProject::whereRejected()->count(),
                 ],
             ];
         });

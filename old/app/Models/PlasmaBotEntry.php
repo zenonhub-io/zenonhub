@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -40,17 +42,17 @@ class PlasmaBotEntry extends Model
     //
     // Scopes
 
-    public function scopeIsUnConfirmed(Builder $query): Builder
+    public function scopeWhereUnConfirmed(Builder $query): Builder
     {
         return $query->where('is_confirmed', 0);
     }
 
-    public function scopeIsConfirmed(Builder $query): Builder
+    public function scopeWhereConfirmed(Builder $query): Builder
     {
         return $query->where('is_confirmed', '1');
     }
 
-    public function scopeIsExpired(Builder $query): Builder
+    public function scopeWhereExpired(Builder $query): Builder
     {
         return $query->where('expires_at', '<', now());
     }

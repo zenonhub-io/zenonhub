@@ -121,32 +121,32 @@ class AcceleratorProject extends Model implements Sitemapable
     //
     // Scopes
 
-    public function scopeIsNew($query)
+    public function scopeWhereNew($query)
     {
         return $query->where('status', AcceleratorProjectStatusEnum::NEW->value);
     }
 
-    public function scopeIsAccepted($query)
+    public function scopeWhereAccepted($query)
     {
         return $query->where('status', AcceleratorProjectStatusEnum::ACCEPTED->value);
     }
 
-    public function scopeIsRejected($query)
+    public function scopeWhereRejected($query)
     {
         return $query->where('status', AcceleratorProjectStatusEnum::REJECTED->value);
     }
 
-    public function scopeIsNotRejected($query)
+    public function scopeWhereNotRejected($query)
     {
         return $query->where('status', '!=', AcceleratorProjectStatusEnum::REJECTED->value);
     }
 
-    public function scopeIsCompleted($query)
+    public function scopeWhereCompleted($query)
     {
         return $query->where('status', AcceleratorProjectStatusEnum::COMPLETE->value);
     }
 
-    public function scopeIsOpen($query)
+    public function scopeWhereOpen($query)
     {
         return $query->where('status', AcceleratorProjectStatusEnum::NEW->value)
             ->orWhere(function ($q) {

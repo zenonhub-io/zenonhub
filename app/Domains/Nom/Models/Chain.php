@@ -64,7 +64,7 @@ class Chain extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('is_active');
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire\Account;
 
 use App\Models\NotificationType;
@@ -27,23 +29,21 @@ class Notifications extends Component
 
     public function mount()
     {
-        $types = NotificationType::isActive()->get();
+        $types = NotificationType::whereActive()->get();
         $userSubscriptions = auth()
             ->user()
             ->notification_types()
             ->pluck('type_id')
             ->toArray();
 
-        $this->notifications = $types->mapWithKeys(function ($type) use ($userSubscriptions) {
-            return [$type->id => in_array($type->id, $userSubscriptions)];
-        })->toArray();
+        $this->notifications = $types->mapWithKeys(fn ($type) => [$type->id => in_array($type->id, $userSubscriptions)])->toArray();
     }
 
     public function render()
     {
         return view('livewire.account.notifications', [
             'notificationTabs' => NotificationType::getAllCategories(),
-            'notificationTypes' => NotificationType::isActive()->get(),
+            'notificationTypes' => NotificationType::whereActive()->get(),
         ]);
     }
 

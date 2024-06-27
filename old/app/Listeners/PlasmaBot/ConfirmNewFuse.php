@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners\PlasmaBot;
 
 use App\Events\Nom\Plasma\Fuse;
@@ -24,7 +26,7 @@ class ConfirmNewFuse
             return;
         }
 
-        $entry = PlasmaBotEntry::isUnConfirmed()
+        $entry = PlasmaBotEntry::whereUnConfirmed()
             ->where('address', $event->data['address'])
             ->first();
 

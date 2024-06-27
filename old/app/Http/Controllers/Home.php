@@ -43,11 +43,11 @@ class Home
                 ], [
                     'name' => 'Pillars',
                     'link' => route('explorer.accounts', ['tab' => 'pillars']),
-                    'value' => Pillar::isActive()->count(),
+                    'value' => Pillar::whereActive()->count(),
                 ], [
                     'name' => 'Sentinels',
                     'link' => route('explorer.accounts', ['tab' => 'sentinels']),
-                    'value' => Sentinel::isActive()->count(),
+                    'value' => Sentinel::whereActive()->count(),
                 ],
             ],
             'accelerator' => AcceleratorProject::orderByLatest()->limit(8)->get(),

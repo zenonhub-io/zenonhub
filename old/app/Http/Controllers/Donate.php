@@ -14,7 +14,7 @@ class Donate
         Meta::title('Donate to Zenon Hub', false);
 
         $donationAccount = Account::firstWhere('address', config('zenon.donation_address'));
-        $excludeAddresses = Account::isEmbedded() // Exclude AZ + rewards
+        $excludeAddresses = Account::whereEmbedded() // Exclude AZ + rewards
             ->orWhere('address', config('plasma-bot.address')) // Exclude refund from plasma bot
             ->pluck('id')
             ->toArray();

@@ -34,7 +34,7 @@ class BroadcastMessage extends Component
     public function mount()
     {
         $this->message = Str::upper(Str::random(8));
-        $this->pillars = Pillar::isActive()->orderBy('name')->get();
+        $this->pillars = Pillar::whereActive()->orderBy('name')->get();
     }
 
     public function render()

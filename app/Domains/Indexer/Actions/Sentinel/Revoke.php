@@ -18,7 +18,7 @@ class Revoke extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $sentinel = Sentinel::whereOwner($accountBlock->account_id)->isActive()->first();
+        $sentinel = Sentinel::whereOwner($accountBlock->account_id)->whereActive()->first();
 
         try {
             $this->validateAction($accountBlock, $sentinel);

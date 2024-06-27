@@ -45,7 +45,7 @@ class Staking extends Component
 
     protected function initQuery()
     {
-        $this->query = Stake::isActive();
+        $this->query = Stake::whereActive();
 
         if ($this->tab === 'znn') {
             $this->query->where('token_id', app('znnToken')->id);

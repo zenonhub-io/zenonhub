@@ -14,7 +14,7 @@ class SendProjectVotingReminders
     public function execute()
     {
         $networkBot = new NetworkAlertBot;
-        $projects = AcceleratorProject::isNew()
+        $projects = AcceleratorProject::whereNew()
             ->shouldSendVotingReminder()
             ->get();
 

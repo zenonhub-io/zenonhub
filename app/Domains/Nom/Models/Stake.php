@@ -84,22 +84,22 @@ class Stake extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('ended_at');
     }
 
-    public function scopeIsZnn($query)
+    public function scopeWhereZnn($query)
     {
         return $query->where('token_id', app('znnToken')->id);
     }
 
-    public function scopeIsEthLp($query)
+    public function scopeWhereEthLp($query)
     {
         return $query->where('token_id', lp_eth_token()->id);
     }
 
-    public function scopeIsEnded($query)
+    public function scopeWhereEnded($query)
     {
         return $query->whereNotNull('ended_at');
     }

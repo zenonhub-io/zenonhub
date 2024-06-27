@@ -71,7 +71,7 @@ class SyncOrchestrators
 
     private function calculateOnlinePercentage(): void
     {
-        $online = Orchestrator::isActive()->count() / Orchestrator::count();
+        $online = Orchestrator::whereActive()->count() / Orchestrator::count();
         $percent = $online * 100;
         Cache::forever('orchestrators-online-percentage', $percent);
     }

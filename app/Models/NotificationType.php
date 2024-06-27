@@ -58,7 +58,7 @@ class NotificationType extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->where('is_active', '1');
     }
