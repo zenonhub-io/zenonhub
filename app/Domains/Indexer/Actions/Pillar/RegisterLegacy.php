@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Pillar\PillarRegistered;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
@@ -21,10 +22,13 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Pillar: RegisterLegacy failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -56,7 +60,10 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -65,30 +72,28 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.pillar.nameLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Pillar name is too long');
         }
 
         if (! preg_match('/^([a-zA-Z0-9]+[-._]?)*[a-zA-Z0-9]$/', $blockData['name'])) {
-            return false;
+            throw new IndexerActionValidationException('Pillar name is invalid');
         }
 
         if ($blockData['giveBlockRewardPercentage'] > 100 || $blockData['giveBlockRewardPercentage'] < 0) {
-            return false;
+            throw new IndexerActionValidationException('Block reward percentage is invalid');
         }
 
         if ($blockData['giveDelegateRewardPercentage'] > 100 || $blockData['giveDelegateRewardPercentage'] < 0) {
-            return false;
+            throw new IndexerActionValidationException('Delegate reward percentage is invalid');
         }
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
-            return false;
+            throw new IndexerActionValidationException('Token must be ZNN');
         }
 
         if ($accountBlock->amount !== config('nom.pillar.znnStakeAmount')) {
-            return false;
+            throw new IndexerActionValidationException('Amount doesnt match pillar registration cost');
         }
-
-        return true;
     }
 
     private function notifyUsers($pillar): void

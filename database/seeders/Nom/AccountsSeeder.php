@@ -7,6 +7,7 @@ namespace Database\Seeders\Nom;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Models\Account;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class AccountsSeeder extends Seeder
@@ -16,6 +17,10 @@ class AccountsSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Account::truncate();
+        Schema::enableForeignKeyConstraints();
+
         $chainId = app('currentChain')->id;
         $accounts = Storage::json('nom-json/genesis/genesis.json')['GenesisBlocks']['Blocks'];
 

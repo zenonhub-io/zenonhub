@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Sentinel;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Sentinel\SentinelRevoked;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Sentinel;
 use App\Models\NotificationType;
@@ -19,10 +20,13 @@ class Revoke extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $sentinel = Sentinel::whereOwner($accountBlock->account_id)->isActive()->first();
 
-        if (! $sentinel || ! $this->validateAction($accountBlock, $sentinel)) {
+        try {
+            $this->validateAction($accountBlock, $sentinel);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Sentinel: Revoke failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -42,7 +46,10 @@ class Revoke extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -50,15 +57,17 @@ class Revoke extends AbstractContractMethodProcessor
          */
         [$accountBlock, $sentinel] = func_get_args();
 
+        if (! $sentinel) {
+            throw new IndexerActionValidationException('Invalid sentinel');
+        }
+
         if ($sentinel->revoked_at !== null) {
-            return false;
+            throw new IndexerActionValidationException('Sentinel already revoked');
         }
 
         if (! $sentinel->getIsRevokableAttribute($accountBlock->created_at)) {
-            return false;
+            throw new IndexerActionValidationException('Sentinel not revocable');
         }
-
-        return true;
     }
 
     private function notifyUsers($sentinel): void

@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Token;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Token\TokenBurned;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\TokenBurn;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +18,13 @@ class Burn extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Token: Burn failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -48,7 +52,10 @@ class Burn extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -56,14 +63,12 @@ class Burn extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
 
         if ($accountBlock->amount <= 0) {
-            return false;
+            throw new IndexerActionValidationException('Amount is too small');
         }
 
         if (! $accountBlock->token->is_burnable && $accountBlock->token->owner_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Token is not burnable, or owner doesnt match');
         }
-
-        return true;
     }
 
     private function updateTokenSupply(TokenBurn $burn): void

@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class BridgeGuardian extends Model
 {
@@ -50,6 +53,30 @@ class BridgeGuardian extends Model
         ];
     }
 
+    public static function setNewGuardians(array $guardianAddresses, Carbon $timestamp): Collection
+    {
+        return DB::transaction(function () use ($guardianAddresses, $timestamp) {
+            self::where('accepted_at')->update([
+                'revoked_at' => $timestamp,
+            ]);
+
+            $newGuardians = collect();
+            foreach ($guardianAddresses as $address) {
+                $account = load_account($address);
+
+                $guardian = self::create([
+                    'account_id' => $account->id,
+                    'nominated_at' => $timestamp,
+                    'accepted_at' => $timestamp,
+                ]);
+
+                $newGuardians->push($guardian);
+            }
+
+            return $newGuardians;
+        });
+    }
+
     //
     // Relations
 
@@ -61,8 +88,13 @@ class BridgeGuardian extends Model
     //
     // Scopes
 
-    public function scopeAllActive($query)
+    public function scopeIsActive($query)
     {
-        return $query->whereNull('revoked_at');
+        return $query->whereNotNull('accepted_at')->whereNull('revoked_at');
+    }
+
+    public function scopeIsProposed($query)
+    {
+        return $query->whereNull('accepted_at');
     }
 }

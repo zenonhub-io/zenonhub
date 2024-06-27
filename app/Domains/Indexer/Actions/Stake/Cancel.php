@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Stake;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Stake\EndStake;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +18,13 @@ class Cancel extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $stake = Stake::firstWhere('hash', $blockData['id']);
 
-        if (! $stake || ! $this->validateAction($accountBlock, $stake)) {
+        try {
+            $this->validateAction($accountBlock, $stake);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Stake: Cancel failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -39,7 +43,10 @@ class Cancel extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -47,14 +54,16 @@ class Cancel extends AbstractContractMethodProcessor
          */
         [$accountBlock, $stake] = func_get_args();
 
+        if (! $stake) {
+            throw new IndexerActionValidationException('Invalid stake');
+        }
+
         if ($stake->account_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not stake owner');
         }
 
         if ($stake->end_date > $accountBlock->created_at) {
-            return false;
+            throw new IndexerActionValidationException('Stake already ended');
         }
-
-        return true;
     }
 }

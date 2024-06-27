@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PhaseCreated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
 use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
 use App\Domains\Nom\Models\AcceleratorProject;
@@ -23,10 +24,13 @@ class AddPhase extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $project = AcceleratorProject::firstWhere('hash', $blockData['id']);
 
-        if (! $project || ! $this->validateAction($accountBlock, $project)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Accelerator: AddPhase failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -70,7 +74,10 @@ class AddPhase extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -81,34 +88,32 @@ class AddPhase extends AbstractContractMethodProcessor
         $latestPhase = $project->phases()->latest()->first();
 
         if ($project->owner_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not project owner');
         }
 
         if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED) {
-            return false;
+            throw new IndexerActionValidationException('Project has not been accepted');
         }
 
         if ($latestPhase && $latestPhase->status !== AcceleratorPhaseStatusEnum::PAID) {
-            return false;
+            throw new IndexerActionValidationException('Latest phase has not been paid');
         }
 
         if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.accelerator.projectNameLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid name');
         }
 
         if ($blockData['description'] === '' || strlen($blockData['description']) > config('nom.accelerator.projectDescriptionLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid description');
         }
 
         if ($blockData['znnFundsNeeded'] > config('nom.accelerator.projectZnnMaximumFunds')) {
-            return false;
+            throw new IndexerActionValidationException('Max ZNN fund exceeded');
         }
 
         if ($blockData['qsrFundsNeeded'] > config('nom.accelerator.projectQsrMaximumFunds')) {
-            return false;
+            throw new IndexerActionValidationException('Max QSR funds exceeded');
         }
-
-        return true;
     }
 
     private function notifyUsers(): void

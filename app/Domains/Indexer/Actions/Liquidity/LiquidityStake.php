@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Liquidity;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Stake\StartStake;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake as StakeModel;
@@ -18,10 +19,13 @@ class LiquidityStake extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Liquidity: LiquidityStake failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -49,7 +53,10 @@ class LiquidityStake extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -57,17 +64,15 @@ class LiquidityStake extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->value) {
-            return false;
+            throw new IndexerActionValidationException('Token must be ZNN ETH LP');
         }
 
         if ($accountBlock->amount <= 0) {
-            return false;
+            throw new IndexerActionValidationException('Amount must be more than 0');
         }
 
         if ($accountBlock->data->decoded['durationInSec'] <= 0) {
-            return false;
+            throw new IndexerActionValidationException('Duration must be more than 0');
         }
-
-        return true;
     }
 }

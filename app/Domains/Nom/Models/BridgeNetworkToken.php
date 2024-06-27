@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class BridgeNetworkToken extends Model
+class BridgeNetworkToken extends Pivot
 {
     /**
      * Indicates if the model should be timestamped.

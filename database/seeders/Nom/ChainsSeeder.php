@@ -6,6 +6,7 @@ namespace Database\Seeders\Nom;
 
 use App\Domains\Nom\Models\Chain;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class ChainsSeeder extends Seeder
 {
@@ -14,6 +15,10 @@ class ChainsSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Chain::truncate();
+        Schema::enableForeignKeyConstraints();
+
         Chain::create([
             'chain_identifier' => 1,
             'version' => 1,

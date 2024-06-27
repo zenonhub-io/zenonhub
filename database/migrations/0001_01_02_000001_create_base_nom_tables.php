@@ -44,6 +44,19 @@ return new class extends Migration
             $table->boolean('is_abstain')->default(0);
             $table->timestamp('created_at')->nullable();
         });
+
+        Schema::create('nom_time_challenges', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('chain_id')->nullable()->references('id')->on('nom_chains');
+            $table->foreignId('contract_method_id')->nullable()->references('id')->on('nom_contract_methods');
+            $table->string('hash')->default(0);
+            $table->bigInteger('delay')->default(0);
+            $table->bigInteger('start_height')->nullable();
+            $table->bigInteger('end_height')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('created_at')->nullable();
+        });
     }
 
     /**

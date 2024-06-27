@@ -6,7 +6,7 @@ namespace App\Domains\Nom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BridgeNetwork extends Model
@@ -66,7 +66,7 @@ class BridgeNetwork extends Model
     {
         return static::where('network_class', $networkClass)
             ->where('chain_identifier', $chainId)
-            ->sole();
+            ->first();
     }
 
     //
@@ -77,9 +77,22 @@ class BridgeNetwork extends Model
         return $this->belongsTo(Chain::class);
     }
 
-    public function tokens(): HasMany
+    public function tokens(): BelongsToMany
     {
-        return $this->hasMany(BridgeNetworkToken::class);
+        return $this->belongsToMany(Token::class, 'nom_bridge_network_tokens')
+            ->using(BridgeNetworkToken::class)
+            ->withPivot(
+                'token_address',
+                'min_amount',
+                'fee_percentage',
+                'redeem_delay',
+                'metadata',
+                'is_bridgeable',
+                'is_redeemable',
+                'is_owned',
+                'created_at',
+                'updated_at'
+            );
     }
 
     //

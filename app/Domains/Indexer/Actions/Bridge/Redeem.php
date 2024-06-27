@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Bridge;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Bridge\UnwrapRedeemed;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\AccountReward;
@@ -19,20 +21,59 @@ class Redeem extends AbstractContractMethodProcessor
 
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
         try {
-            $this->loadUnwrap();
-            $this->processRedeem();
-            $this->processReward();
-        } catch (Throwable $exception) {
-            Log::warning('Error processing redeem ' . $accountBlock->hash);
-            Log::debug($exception);
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
+            Log::info('Contract Method Processor - Bridge: Redeem failed', [
+                'accountBlock' => $accountBlock->hash,
+                'blockData' => $blockData,
+                'error' => $e->getMessage(),
+            ]);
 
             return;
         }
 
+        // Logic here
+
+        UnwrapRedeemed::dispatch($accountBlock);
+
+        Log::info('Contract Method Processor - Bridge: Redeem complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
+
+        $this->setBlockAsProcessed($accountBlock);
+
+        //        $this->accountBlock = $accountBlock;
+        //        $blockData = $accountBlock->data->decoded;
+        //
+        //        try {
+        //            $this->loadUnwrap();
+        //            $this->processRedeem();
+        //            $this->processReward();
+        //        } catch (Throwable $exception) {
+        //            Log::warning('Error processing redeem ' . $accountBlock->hash);
+        //            Log::debug($exception);
+        //
+        //            return;
+        //        }
+
+    }
+
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        //throw new IndexerActionValidationException('');
     }
 
     private function loadUnwrap(): void

@@ -6,6 +6,7 @@ namespace Database\Seeders\Nom;
 
 use App\Domains\Nom\Models\Token;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class TokensSeeder extends Seeder
@@ -15,6 +16,10 @@ class TokensSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Token::truncate();
+        Schema::enableForeignKeyConstraints();
+
         $chainId = app('currentChain')->id;
         $tokens = Storage::json('nom-json/genesis/genesis.json')['TokenConfig']['Tokens'];
 

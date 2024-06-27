@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Liquidity;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Stake\EndStake;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +18,13 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $stake = Stake::firstWhere('hash', $blockData['id']);
 
-        if (! $stake || ! $this->validateAction($accountBlock, $stake)) {
+        try {
+            $this->validateAction($accountBlock, $stake);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Liquidity: CancelLiquidityStake failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -40,7 +44,10 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -48,14 +55,16 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
          */
         [$accountBlock, $stake] = func_get_args();
 
+        if (! $stake) {
+            throw new IndexerActionValidationException('Invalid stake');
+        }
+
         if ($stake->account_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not stake owner');
         }
 
         if ($stake->end_date > $accountBlock->created_at) {
-            return false;
+            throw new IndexerActionValidationException('Stake end date in the future');
         }
-
-        return true;
     }
 }

@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PhaseUpdated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
@@ -20,10 +21,13 @@ class UpdatePhase extends AbstractContractMethodProcessor
         $project = AcceleratorProject::firstWhere('hash', $blockData['id']);
         $phase = $project?->phases()->latest()->first();
 
-        if (! $project || ! $phase || ! $this->validateAction($accountBlock, $project, $phase)) {
+        try {
+            $this->validateAction($accountBlock, $project, $phase);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Accelerator: UpdatePhase failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -54,7 +58,10 @@ class UpdatePhase extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -63,14 +70,20 @@ class UpdatePhase extends AbstractContractMethodProcessor
          */
         [$accountBlock, $project, $phase] = func_get_args();
 
+        if (! $project) {
+            throw new IndexerActionValidationException('Invalid project');
+        }
+
+        if (! $phase) {
+            throw new IndexerActionValidationException('Invalid phase');
+        }
+
         if ($project->owner_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not project owner');
         }
 
-        if (! $phase || $phase->status !== AcceleratorPhaseStatusEnum::OPEN) {
-            return false;
+        if ($phase->status !== AcceleratorPhaseStatusEnum::OPEN) {
+            throw new IndexerActionValidationException('Latest phase is not open');
         }
-
-        return true;
     }
 }

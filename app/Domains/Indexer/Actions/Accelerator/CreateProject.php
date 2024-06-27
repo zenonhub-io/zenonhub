@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\ProjectCreated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
@@ -22,10 +23,13 @@ class CreateProject extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Accelerator: CreateProject failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -70,7 +74,10 @@ class CreateProject extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -79,30 +86,28 @@ class CreateProject extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.accelerator.projectNameLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid name');
         }
 
         if ($blockData['description'] === '' || strlen($blockData['description']) > config('nom.accelerator.projectDescriptionLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid description');
         }
 
         if ($blockData['znnFundsNeeded'] > config('nom.accelerator.projectZnnMaximumFunds')) {
-            return false;
+            throw new IndexerActionValidationException('Max ZNN funds exceeded');
         }
 
         if ($blockData['qsrFundsNeeded'] > config('nom.accelerator.projectQsrMaximumFunds')) {
-            return false;
+            throw new IndexerActionValidationException('Max QSR funds exceeded');
         }
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
-            return false;
+            throw new IndexerActionValidationException('Token fee must be ZNN');
         }
 
         if ($accountBlock->amount !== config('nom.accelerator.projectCreationAmount')) {
-            return false;
+            throw new IndexerActionValidationException('Creation fee amount is invalid');
         }
-
-        return true;
     }
 
     private function notifyUsers(): void

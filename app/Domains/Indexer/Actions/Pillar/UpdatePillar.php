@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Pillar\PillarUpdated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
@@ -19,10 +20,13 @@ class UpdatePillar extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::firstWhere('name', $blockData['name']);
 
-        if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
+        try {
+            $this->validateAction($accountBlock, $pillar);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Pillar: UpdatePillar failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -66,7 +70,10 @@ class UpdatePillar extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -75,23 +82,25 @@ class UpdatePillar extends AbstractContractMethodProcessor
         [$accountBlock, $pillar] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
+        if (! $pillar) {
+            throw new IndexerActionValidationException('Invalid pillar');
+        }
+
         if ($pillar->owner_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not pillar owner');
         }
 
         if ($pillar->revoked_at !== null) {
-            return false;
+            throw new IndexerActionValidationException('Pillar is revoked');
         }
 
         if ($blockData['giveBlockRewardPercentage'] > 100 || $blockData['giveBlockRewardPercentage'] < 0) {
-            return false;
+            throw new IndexerActionValidationException('Invalid block reward percentage');
         }
 
         if ($blockData['giveDelegateRewardPercentage'] > 100 || $blockData['giveDelegateRewardPercentage'] < 0) {
-            return false;
+            throw new IndexerActionValidationException('Invalid delegate reward percentage');
         }
-
-        return true;
     }
 
     private function notifyUsers($pillar): void

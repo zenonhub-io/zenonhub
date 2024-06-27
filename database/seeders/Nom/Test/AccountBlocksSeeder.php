@@ -6,8 +6,10 @@ namespace Database\Seeders\Nom\Test;
 
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\AccountBlockData;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class AccountBlocksSeeder extends Seeder
@@ -17,6 +19,11 @@ class AccountBlocksSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        AccountBlock::truncate();
+        AccountBlockData::truncate();
+        Schema::enableForeignKeyConstraints();
+
         $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
         $accountBlocksDTO = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
 

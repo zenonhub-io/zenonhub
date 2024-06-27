@@ -8,6 +8,7 @@ use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\Contract;
 use App\Domains\Nom\Models\ContractMethod;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class ContractMethodSeeder extends Seeder
 {
@@ -16,6 +17,11 @@ class ContractMethodSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Contract::truncate();
+        ContractMethod::truncate();
+        Schema::enableForeignKeyConstraints();
+
         $contracts = [
             'Accelerator' => \DigitalSloth\ZnnPhp\Abi\Contracts\Accelerator::class,
             'Bridge' => \DigitalSloth\ZnnPhp\Abi\Contracts\Bridge::class,

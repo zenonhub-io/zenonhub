@@ -8,6 +8,7 @@ use App\Domains\Nom\DataTransferObjects\PillarDTO;
 use App\Domains\Nom\Models\Pillar;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,10 @@ class PillarsSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Pillar::truncate();
+        Schema::enableForeignKeyConstraints();
+
         $chain = app('currentChain');
         $pillarsJson = Storage::json('nom-json/test/pillars.json');
         $pillarsDTO = PillarDTO::collect($pillarsJson, Collection::class);

@@ -5,33 +5,86 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Bridge;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Bridge\AdministratorProposed;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeAdmin;
+use App\Domains\Nom\Models\BridgeGuardian;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProposeAdministrator extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
-        if (! validate_bridge_tx($this->block)) {
-            Log::warning('Bridge action sent from non-admin');
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
+            Log::info('Contract Method Processor - Bridge: ProposeAdministrator failed', [
+                'accountBlock' => $accountBlock->hash,
+                'blockData' => $blockData,
+                'error' => $e->getMessage(),
+            ]);
 
             return;
         }
 
-        $this->proposeAdmin();
-
-    }
-
-    private function proposeAdmin(): void
-    {
-        $proposedAccount = load_account($accountBlock->data->decoded['address']);
-        BridgeAdmin::create([
+        $proposedAccount = load_account($blockData['address']);
+        $proposedAdmin = BridgeAdmin::create([
             'account_id' => $proposedAccount->id,
+            'nominated_by_id' => $accountBlock->account_id,
             'nominated_at' => $accountBlock->created_at,
         ]);
+
+        $this->checkVotes($accountBlock);
+
+        AdministratorProposed::dispatch($accountBlock, $proposedAdmin);
+
+        Log::info('Contract Method Processor - Bridge: ProposeAdministrator complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
+
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    public function validateAction(): void
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        $isGuardian = BridgeGuardian::isActive()->where('account_id', $accountBlock->account_id)->exists();
+
+        if (! $isGuardian) {
+            throw new IndexerActionValidationException('Action sent from non guardian');
+        }
+    }
+
+    private function checkVotes(AccountBlock $accountBlock): void
+    {
+        // if over half the guardians vote for the same address it becomes the new admin
+        $numGuardians = BridgeGuardian::isActive()->count();
+        $guardianVotesNeeded = $numGuardians / 2;
+        $nominations = BridgeAdmin::select(['*', DB::raw('count(*) as count')])
+            ->whereNull('accepted_at')
+            ->groupBy('account_id')
+            ->get();
+
+        $newAdmin = $nominations->firstWhere(function ($nomination) use ($guardianVotesNeeded) {
+            if ($nomination->count < $guardianVotesNeeded) {
+                return null;
+            }
+
+            return $nomination;
+        });
+
+        if ($newAdmin) {
+            BridgeAdmin::setNewAdmin($newAdmin->account, $accountBlock->created_at);
+        }
     }
 }

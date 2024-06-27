@@ -6,7 +6,9 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Pillar\AccountUndelegated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Pillar;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -24,10 +26,13 @@ class Undelegate extends AbstractContractMethodProcessor
             ->wherePivotNull('ended_at')
             ->first();
 
-        if (! $delegation || ! $this->validateAction()) {
+        try {
+            $this->validateAction($accountBlock, $delegation);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Pillar: Undelegate failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -51,6 +56,22 @@ class Undelegate extends AbstractContractMethodProcessor
         ]);
 
         $this->setBlockAsProcessed($accountBlock);
+    }
+
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         * @var Pillar $delegation
+         */
+        [$accountBlock, $delegation] = func_get_args();
+
+        if (! $delegation) {
+            throw new IndexerActionValidationException('Delegating pillar not found');
+        }
     }
 
     private function notifyUsers($pillar): void

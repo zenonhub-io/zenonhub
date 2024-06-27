@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Token;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Token\TokenIssued;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
@@ -21,10 +22,13 @@ class IssueToken extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Token: IssueToken failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -58,7 +62,10 @@ class IssueToken extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -67,51 +74,49 @@ class IssueToken extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if ($blockData['tokenName'] === '' || strlen($blockData['tokenName']) > config('nom.token.nameLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid token name');
         }
 
         if ($blockData['tokenSymbol'] === '' || strlen($blockData['tokenSymbol']) > config('nom.token.symbolLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid token symbol');
         }
 
         if ($blockData['tokenDomain'] === '' || strlen($blockData['tokenDomain']) > config('nom.token.domainLengthMax')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid token domain');
         }
 
         if (in_array($blockData['tokenSymbol'], ['ZNN', 'QSR'])) {
-            return false;
+            throw new IndexerActionValidationException('Token symbol is reserved');
         }
 
         if ($blockData['decimals'] > config('nom.token.maxDecimals')) {
-            return false;
+            throw new IndexerActionValidationException('Too many decimals');
         }
 
         if (gmp_cmp($blockData['maxSupply'], config('nom.token.maxSupplyBig')) > 0) {
-            return false;
+            throw new IndexerActionValidationException('Max supply is too big');
         }
 
         if ($blockData['maxSupply'] <= 0) {
-            return false;
+            throw new IndexerActionValidationException('Max supply is too small');
         }
 
         // Total supply is less and equal in case of non-mintable coins
         if (bccomp($blockData['maxSupply'], $blockData['totalSupply']) === -1) {
-            return false;
+            throw new IndexerActionValidationException('Total supply is less than max supply');
         }
 
         if (! $blockData['isMintable'] && bccomp($blockData['maxSupply'], $blockData['totalSupply']) !== 0) {
-            return false;
+            throw new IndexerActionValidationException('Max and total supply do not match');
         }
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
-            return false;
+            throw new IndexerActionValidationException('Send block must be ZNN');
         }
 
         if ($accountBlock->amount !== config('nom.token.issueAmount')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid issue amount');
         }
-
-        return true;
     }
 
     private function notifyUsers($token): void

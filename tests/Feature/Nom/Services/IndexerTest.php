@@ -11,7 +11,8 @@ use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\TestDatabaseSeeder;
+use Database\Seeders\Nom\Test\PillarsSeeder;
+use Database\Seeders\NomBaseSeeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Mockery\MockInterface;
@@ -20,7 +21,8 @@ uses()->group('nom', 'nom-services', 'indexer');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(TestDatabaseSeeder::class);
+    $this->seed(NomBaseSeeder::class);
+    $this->seed(PillarsSeeder::class);
 
     // setup the mock to return predefined Json for specific calls
     $momentumsJson = Storage::json('nom-json/test/momentums.json');

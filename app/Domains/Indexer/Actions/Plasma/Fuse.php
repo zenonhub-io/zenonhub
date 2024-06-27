@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Plasma;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Plasma\StartFuse;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Plasma;
@@ -18,10 +19,13 @@ class Fuse extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Plasma: Fuse failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -51,7 +55,10 @@ class Fuse extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -59,18 +66,16 @@ class Fuse extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::QSR->value) {
-            return false;
+            throw new IndexerActionValidationException('Invalid token, must be QSR');
         }
 
         if ($accountBlock->amount < config('nom.plasma.minAmount')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid amount of QSR');
         }
 
         // make sure users send multiple of constants.CostPerFusionUnit
         if (bcmod($accountBlock->amount, config('nom.plasma.costPerFusionUnit')) !== '0') {
-            return false;
+            throw new IndexerActionValidationException('Invalid amount');
         }
-
-        return true;
     }
 }

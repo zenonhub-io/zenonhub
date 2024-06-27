@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Sentinel;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Sentinel\SentinelRegistered;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Sentinel;
@@ -20,10 +21,13 @@ class Register extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Sentinel: Register failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -46,7 +50,10 @@ class Register extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -54,14 +61,12 @@ class Register extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
-            return false;
+            throw new IndexerActionValidationException('Invalid token');
         }
 
         if ($accountBlock->amount !== config('nom.sentinel.znnRegisterAmount')) {
-            return false;
+            throw new IndexerActionValidationException('Amount doesnt match sentinel registration cost');
         }
-
-        return true;
     }
 
     private function notifyUsers($sentinel): void

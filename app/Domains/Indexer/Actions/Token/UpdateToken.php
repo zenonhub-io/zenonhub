@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Token;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Token\TokenUpdated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +18,13 @@ class UpdateToken extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $token = Token::firstWhere('token_standard', $blockData['tokenStandard']);
 
-        if (! $token || ! $this->validateAction($accountBlock, $token)) {
+        try {
+            $this->validateAction($accountBlock, $token);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Token: UpdateToken failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -43,7 +47,10 @@ class UpdateToken extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -51,10 +58,12 @@ class UpdateToken extends AbstractContractMethodProcessor
          */
         [$accountBlock, $token] = func_get_args();
 
-        if ($token->owner_id !== $accountBlock->account_id) {
-            return false;
+        if (! $token) {
+            throw new IndexerActionValidationException('No token found');
         }
 
-        return true;
+        if ($token->owner_id !== $accountBlock->account_id) {
+            throw new IndexerActionValidationException('Token owner mismatch');
+        }
     }
 }

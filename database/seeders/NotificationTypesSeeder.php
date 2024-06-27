@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\NotificationType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class NotificationTypesSeeder extends Seeder
 {
@@ -14,6 +15,10 @@ class NotificationTypesSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        NotificationType::truncate();
+        Schema::enableForeignKeyConstraints();
+
         NotificationType::insert([
             [
                 'name' => 'Site News',

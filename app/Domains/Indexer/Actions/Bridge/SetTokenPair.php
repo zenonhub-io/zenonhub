@@ -5,67 +5,108 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Bridge;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Bridge\TokenPairSet;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
+use App\Domains\Nom\Actions\CheckTimeChallenge;
+use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeAdmin;
 use App\Domains\Nom\Models\BridgeNetwork;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class SetTokenPair extends AbstractContractMethodProcessor
 {
-    public BridgeNetwork $network;
-
-    public array $blockData;
-
-    public function __construct(AccountBlock $block)
-    {
-        $this->block = $block;
-        $this->blockData = $accountBlock->data->decoded;
-        $this->onQueue('indexer');
-    }
-
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
-
-        if (! validate_bridge_tx($this->block)) {
-            Log::warning('Bridge action sent from non-admin');
-
-            return;
-        }
+        $bridgeNetwork = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
 
         try {
-            $this->loadNetwork();
-            $this->setTokenPair();
-        } catch (Throwable $exception) {
-            Log::warning('Unable to set token pair: ' . $accountBlock->hash);
-            Log::debug($exception);
+            $this->validateAction($accountBlock, $bridgeNetwork);
+        } catch (IndexerActionValidationException $e) {
+            Log::info('Contract Method Processor - Bridge: SetTokenPair failed', [
+                'accountBlock' => $accountBlock->hash,
+                'blockData' => $blockData,
+                'error' => $e->getMessage(),
+            ]);
 
             return;
         }
 
-    }
-
-    private function loadNetwork(): void
-    {
-        $this->network = BridgeNetwork::findByNetworkChain($this->blockData['networkClass'], $this->blockData['chainId']);
-    }
-
-    private function setTokenPair(): void
-    {
-        $token = load_token($this->blockData['tokenStandard']);
-        $this->network->tokens()->updateOrCreate([
-            'token_id' => $token->id,
-        ], [
-            'token_address' => $this->blockData['tokenAddress'],
-            'min_amount' => $this->blockData['minAmount'],
-            'fee_percentage' => $this->blockData['feePercentage'],
-            'redeem_delay' => $this->blockData['redeemDelay'],
-            'metadata' => json_decode($this->blockData['metadata']),
-            'is_bridgeable' => $this->blockData['bridgeable'],
-            'is_redeemable' => $this->blockData['redeemable'],
-            'is_owned' => $this->blockData['owned'],
-            'created_at' => $accountBlock->created_at,
+        $token = load_token($blockData['tokenStandard']);
+        $bridgeNetwork->tokens()->syncWithoutDetaching([
+            $token->id => [
+                'token_address' => $blockData['tokenAddress'],
+                'min_amount' => $blockData['minAmount'],
+                'fee_percentage' => $blockData['feePercentage'],
+                'redeem_delay' => $blockData['redeemDelay'],
+                'metadata' => json_decode($blockData['metadata']),
+                'is_bridgeable' => $blockData['bridgeable'],
+                'is_redeemable' => $blockData['redeemable'],
+                'is_owned' => $blockData['owned'],
+                'created_at' => $accountBlock->created_at,
+                'updated_at' => $accountBlock->created_at,
+            ],
         ]);
+
+        TokenPairSet::dispatch($accountBlock, $bridgeNetwork, $token);
+
+        Log::info('Contract Method Processor - Bridge: SetTokenPair complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
+
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         * @var BridgeNetwork $bridgeNetwork
+         */
+        [$accountBlock, $bridgeNetwork] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        $bridgeAdmin = BridgeAdmin::getActiveAdmin();
+
+        if (! $bridgeAdmin->account_id !== $accountBlock->account_id) {
+            throw new IndexerActionValidationException('Action sent from non admin');
+        }
+
+        if (! $bridgeNetwork) {
+            throw new IndexerActionValidationException('Invalid bridgeNetwork');
+        }
+
+        if ($blockData['owned'] && in_array($blockData['tokenStandard'], [NetworkTokensEnum::ZNN->value, NetworkTokensEnum::QSR->value], true)) {
+            throw new IndexerActionValidationException('Unable to assign ZNN or QSR token standard');
+        }
+
+        //        if (! isHex($blockData['tokenAddress'])) {
+        //            throw new IndexerActionValidationException('Invalid contractAddress');
+        //        }
+
+        if ($blockData['tokenStandard'] === NetworkTokensEnum::EMPTY->value) {
+            throw new IndexerActionValidationException('Unable to assign empty ZTS');
+        }
+
+        if ($blockData['feePercentage'] > config('nom.bridge.maximumFee')) {
+            throw new IndexerActionValidationException('Fee exceeds max fee limit');
+        }
+
+        if ($blockData['redeemDelay'] === 0) {
+            throw new IndexerActionValidationException('Fee exceeds max fee limit');
+        }
+
+        $challengeHashData = json_encode($blockData);
+        $timeChallenge = (new CheckTimeChallenge)
+            ->handle($accountBlock, $challengeHashData, config('nom.bridge.minSoftDelay'));
+
+        if ($timeChallenge->is_active) {
+            throw new IndexerActionValidationException('Time challenge is still active');
+        }
     }
 }

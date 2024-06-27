@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Plasma;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Plasma\EndFuse;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Plasma;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +18,13 @@ class CancelFuse extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $plasma = Plasma::firstWhere('hash', $blockData['id']);
 
-        if (! $plasma || ! $this->validateAction($accountBlock, $plasma)) {
+        try {
+            $this->validateAction($accountBlock, $plasma);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Plasma: CancelFuse failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -42,7 +46,10 @@ class CancelFuse extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -50,14 +57,16 @@ class CancelFuse extends AbstractContractMethodProcessor
          */
         [$accountBlock, $plasma] = func_get_args();
 
+        if (! $plasma) {
+            throw new IndexerActionValidationException('Invalid plasma');
+        }
+
         if ($accountBlock->account_id !== $plasma->from_account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not plasma owner');
         }
 
         if ($plasma->started_at->addHours(config('nom.plasma.expiration')) >= $accountBlock->created_at) {
-            return false;
+            throw new IndexerActionValidationException('Plasma not yet cancelable');
         }
-
-        return true;
     }
 }

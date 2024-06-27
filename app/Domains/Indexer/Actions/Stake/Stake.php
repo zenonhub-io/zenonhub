@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Stake;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Stake\StartStake;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake as StakeModel;
@@ -18,10 +19,13 @@ class Stake extends AbstractContractMethodProcessor
         $accountBlock->load('token');
         $blockData = $accountBlock->data->decoded;
 
-        if (! $this->validateAction($accountBlock)) {
+        try {
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Stake: Stake failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -49,7 +53,10 @@ class Stake extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -58,20 +65,18 @@ class Stake extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
-            return false;
+            throw new IndexerActionValidationException('Invalid stake token');
         }
 
         if ($accountBlock->amount < config('nom.stake.minAmount')) {
-            return false;
+            throw new IndexerActionValidationException('Invalid stake amount');
         }
 
         if (
             $blockData['durationInSec'] < config('nom.stake.timeMinSec') ||
             $blockData['durationInSec'] > config('nom.stake.timeMaxSec')
         ) {
-            return false;
+            throw new IndexerActionValidationException('Invalid stake duration');
         }
-
-        return true;
     }
 }

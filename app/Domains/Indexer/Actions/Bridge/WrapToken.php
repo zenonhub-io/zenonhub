@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domains\Indexer\Actions\Bridge;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
+use App\Domains\Indexer\Events\Bridge\TokenWraped;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeNetwork;
 use App\Domains\Nom\Models\BridgeWrap;
@@ -15,18 +17,57 @@ class WrapToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
-        $this->accountBlock = $accountBlock;
         $blockData = $accountBlock->data->decoded;
 
         try {
-            $this->processWrap();
-        } catch (Throwable $exception) {
-            Log::warning('Unable to process wrap: ' . $accountBlock->hash);
-            Log::debug($exception);
+            $this->validateAction($accountBlock);
+        } catch (IndexerActionValidationException $e) {
+            Log::info('Contract Method Processor - Bridge: WrapToken failed', [
+                'accountBlock' => $accountBlock->hash,
+                'blockData' => $blockData,
+                'error' => $e->getMessage(),
+            ]);
 
             return;
         }
 
+        // Logic here
+
+        TokenWraped::dispatch($accountBlock);
+
+        Log::info('Contract Method Processor - Bridge: WrapToken complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
+
+        $this->setBlockAsProcessed($accountBlock);
+
+        //        $this->accountBlock = $accountBlock;
+        //        $blockData = $accountBlock->data->decoded;
+        //
+        //        try {
+        //            $this->processWrap();
+        //        } catch (Throwable $exception) {
+        //            Log::warning('Unable to process wrap: ' . $accountBlock->hash);
+        //            Log::debug($exception);
+        //
+        //            return;
+        //        }
+
+    }
+
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        //throw new IndexerActionValidationException('');
     }
 
     private function processWrap(): void

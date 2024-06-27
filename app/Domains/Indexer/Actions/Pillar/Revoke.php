@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Pillar\PillarRevoked;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\NotificationType;
@@ -19,10 +20,13 @@ class Revoke extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::firstWhere('name', $blockData['name']);
 
-        if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
+        try {
+            $this->validateAction($accountBlock, $pillar);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Pillar: Revoke failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -46,7 +50,10 @@ class Revoke extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -54,19 +61,21 @@ class Revoke extends AbstractContractMethodProcessor
          */
         [$accountBlock, $pillar] = func_get_args();
 
+        if (! $pillar) {
+            throw new IndexerActionValidationException('Invalid pillar');
+        }
+
         if ($pillar->revoked_at !== null) {
-            return false;
+            throw new IndexerActionValidationException('Pillar already revoked');
         }
 
         if ($pillar->owner_id !== $accountBlock->account_id) {
-            return false;
+            throw new IndexerActionValidationException('Account is not pillar owner');
         }
 
         if (! $pillar->getIsRevokableAttribute($accountBlock->created_at)) {
-            return false;
+            throw new IndexerActionValidationException('Pillar not currently revocable');
         }
-
-        return true;
     }
 
     private function notifyUsers($pillar): void

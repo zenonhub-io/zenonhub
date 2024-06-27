@@ -7,6 +7,7 @@ namespace Database\Seeders\Nom\Test;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Models\Momentum;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class MomentumsSeeder extends Seeder
@@ -16,6 +17,10 @@ class MomentumsSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Momentum::truncate();
+        Schema::enableForeignKeyConstraints();
+
         $momentumJson = Storage::json('nom-json/test/momentums.json');
         $momentumDTO = MomentumDTO::from($momentumJson);
 

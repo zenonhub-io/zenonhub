@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Accelerator;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Accelerator\PillarVoted;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\AccountBlock;
@@ -24,10 +25,13 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
             $item = AcceleratorPhase::firstWhere('hash', $blockData['id']);
         }
 
-        if (! $pillar || ! $item || ! $this->validateAction($accountBlock, $pillar)) {
+        try {
+            $this->validateAction($accountBlock, $pillar, $item);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Accelerator: VoteByProdAddress failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -64,14 +68,23 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
          * @var Pillar $pillar
          */
-        [$accountBlock, $pillar] = func_get_args();
+        [$accountBlock, $pillar, $item] = func_get_args();
 
-        return true;
+        if (! $pillar) {
+            throw new IndexerActionValidationException('Invalid pillar');
+        }
+
+        if (! $item) {
+            throw new IndexerActionValidationException('Invalid votable item');
+        }
     }
 }

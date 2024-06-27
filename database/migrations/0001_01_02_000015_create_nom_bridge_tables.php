@@ -13,7 +13,8 @@ return new class extends Migration
         Schema::create('nom_bridge_admins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_id')->references('id')->on('nom_accounts');
-            $table->timestamp('nominated_at');
+            $table->foreignId('nominated_by_id')->nullable()->references('id')->on('nom_accounts');
+            $table->timestamp('nominated_at')->nullable();
             $table->timestamp('accepted_at')->nullable();
             $table->timestamp('revoked_at')->nullable();
         });
@@ -39,7 +40,6 @@ return new class extends Migration
         });
 
         Schema::create('nom_bridge_network_tokens', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->string('token_address');

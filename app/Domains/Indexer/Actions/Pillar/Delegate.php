@@ -6,6 +6,7 @@ namespace App\Domains\Indexer\Actions\Pillar;
 
 use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Pillar\AccountDelegated;
+use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Pillar;
 use App\Models\User;
@@ -23,10 +24,13 @@ class Delegate extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $pillar = Pillar::firstWhere('name', $blockData['name']);
 
-        if (! $pillar || ! $this->validateAction($accountBlock, $pillar)) {
+        try {
+            $this->validateAction($accountBlock, $pillar);
+        } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Pillar: Delegate failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
+                'error' => $e->getMessage(),
             ]);
 
             return;
@@ -57,7 +61,10 @@ class Delegate extends AbstractContractMethodProcessor
         $this->setBlockAsProcessed($accountBlock);
     }
 
-    public function validateAction(): bool
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
     {
         /**
          * @var AccountBlock $accountBlock
@@ -65,11 +72,13 @@ class Delegate extends AbstractContractMethodProcessor
          */
         [$accountBlock, $pillar] = func_get_args();
 
-        if ($pillar->revoked_at !== null) {
-            return false;
+        if (! $pillar) {
+            throw new IndexerActionValidationException('Invalid pillar');
         }
 
-        return true;
+        if ($pillar->revoked_at !== null) {
+            throw new IndexerActionValidationException('Pillar is revoked');
+        }
     }
 
     //    private function notifyUsers(): void

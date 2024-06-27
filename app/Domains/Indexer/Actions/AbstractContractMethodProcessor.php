@@ -13,9 +13,8 @@ abstract class AbstractContractMethodProcessor
 
     abstract public function handle(AccountBlock $accountBlock): void;
 
-    public function validateAction(): bool
+    public function validateAction(): void
     {
-        return true;
     }
 
     public function setBlockAsProcessed(AccountBlock $accountBlock): void

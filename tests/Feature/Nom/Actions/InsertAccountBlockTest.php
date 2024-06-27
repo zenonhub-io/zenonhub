@@ -12,7 +12,8 @@ use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\TestDatabaseSeeder;
+use Database\Seeders\Nom\Test\PillarsSeeder;
+use Database\Seeders\NomBaseSeeder;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
 
@@ -21,7 +22,8 @@ uses()->group('nom', 'nom-actions', 'insert-account-block');
 beforeEach(function () {
 
     $this->seed(DatabaseSeeder::class);
-    $this->seed(TestDatabaseSeeder::class);
+    $this->seed(NomBaseSeeder::class);
+    $this->seed(PillarsSeeder::class);
 
     $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
     $momentumsJson = Storage::json('nom-json/test/momentums.json');
@@ -150,9 +152,9 @@ it('associates account block with paired block', function () {
         app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
-    $firstAccountBlock = AccountBlock::firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
-    $secondAccountBlock = AccountBlock::firstWhere('hash', 'txAddr2000000000000000000000000000000000000000000000000000000001');
-    $unpairedAccountBlock = AccountBlock::firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000002');
+    $firstAccountBlock = AccountBlock::firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001', true);
+    $secondAccountBlock = AccountBlock::firstWhere('hash', 'txAddr2000000000000000000000000000000000000000000000000000000001', true);
+    $unpairedAccountBlock = AccountBlock::firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000002', true);
 
     expect($firstAccountBlock->pairedAccountBlock->hash)->toEqual($secondAccountBlock->hash)
         ->and($secondAccountBlock->pairedAccountBlock->hash)->toEqual($firstAccountBlock->hash)
@@ -167,8 +169,8 @@ it('associates parent and descendant blocks', function () {
         app(InsertAccountBlock::class)->execute($accountBlockDTO);
     });
 
-    $parentAccountBlock = AccountBlock::firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000002');
-    $childAccountBlock = AccountBlock::firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000001');
+    $parentAccountBlock = AccountBlock::firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000002', true);
+    $childAccountBlock = AccountBlock::firstWhere('hash', 'embedpyllar00000000000000000000000000000000000000000000000000001', true);
 
     expect($parentAccountBlock->descendants->count())->toEqual(1)
         ->and($parentAccountBlock->descendants->first()->hash)->toEqual($childAccountBlock->hash)
@@ -183,7 +185,7 @@ it('associates to a contract and contract method', function () {
 
     app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $accountBlock = AccountBlock::firstWhere('hash', $accountBlockDTO->hash);
+    $accountBlock = AccountBlock::firstWhere('hash', $accountBlockDTO->hash, true);
 
     expect($accountBlock->data)->not->toBeNull()
         ->and($accountBlock->contractMethod->contract->name)->toEqual('Token')
@@ -199,7 +201,7 @@ it('associates raw and decoded data', function () {
 
     app(InsertAccountBlock::class)->execute($accountBlockDTO);
 
-    $accountBlock = AccountBlock::firstWhere('hash', $accountBlockDTO->hash);
+    $accountBlock = AccountBlock::firstWhere('hash', $accountBlockDTO->hash, true);
 
     expect($accountBlock->data)->not->toBeNull()
         ->and($accountBlock->data->raw)->toEqual($rawData)
