@@ -63,13 +63,6 @@ class BridgeNetworkToken extends Pivot
     //
     // Methods
 
-    public static function findByTokenAddress(int $networkId, string $address): BridgeNetworkToken
-    {
-        return static::whereRelation('network', 'id', $networkId)
-            ->where('token_address', $address)
-            ->sole();
-    }
-
     //
     // Relations
 

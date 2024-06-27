@@ -8,20 +8,19 @@ use App\Domains\Indexer\Actions\AbstractContractMethodProcessor;
 use App\Domains\Indexer\Events\Bridge\UnwrapRequestRevoked;
 use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\BridgeAdmin;
 use App\Domains\Nom\Models\BridgeUnwrap;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class RevokeUnwrapRequest extends AbstractContractMethodProcessor
 {
-    public BridgeUnwrap $unwrap;
-
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
+        $unwrap = BridgeUnwrap::findByTxHashLog($blockData['transactionHash'], $blockData['logIndex']);
 
         try {
-            $this->validateAction($accountBlock);
+            $this->validateAction($accountBlock, $unwrap);
         } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Bridge: RevokeUnwrapRequest failed', [
                 'accountBlock' => $accountBlock->hash,
@@ -32,9 +31,10 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
             return;
         }
 
-        // Logic here
+        $unwrap->revoked_at = $accountBlock->created_at;
+        $unwrap->save();
 
-        UnwrapRequestRevoked::dispatch($accountBlock);
+        UnwrapRequestRevoked::dispatch($accountBlock, $unwrap);
 
         Log::info('Contract Method Processor - Bridge: RemoveUnwrapRequest complete', [
             'accountBlock' => $accountBlock->hash,
@@ -42,20 +42,6 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
         ]);
 
         $this->setBlockAsProcessed($accountBlock);
-
-        //        $this->accountBlock = $accountBlock;
-        //        $blockData = $accountBlock->data->decoded;
-        //
-        //        try {
-        //            $this->loadUnwrap();
-        //            $this->processRevokeUnwrap();
-        //        } catch (Throwable $exception) {
-        //            Log::warning('Error revoking unwrap request ' . $accountBlock->hash);
-        //            Log::debug($exception);
-        //
-        //            return;
-        //        }
-
     }
 
     /**
@@ -65,24 +51,19 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
     {
         /**
          * @var AccountBlock $accountBlock
+         * @var BridgeUnwrap $unwrap
          */
-        [$accountBlock] = func_get_args();
+        [$accountBlock, $unwrap] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
-        //throw new IndexerActionValidationException('');
-    }
+        if (! $unwrap) {
+            throw new IndexerActionValidationException('Invalid unwrap');
+        }
 
-    private function loadUnwrap(): void
-    {
-        $data = $accountBlock->data->decoded;
-        $this->unwrap = BridgeUnwrap::where('transaction_hash', $data['transactionHash'])
-            ->where('log_index', $data['logIndex'])
-            ->sole();
-    }
+        $bridgeAdmin = BridgeAdmin::getActiveAdmin();
 
-    private function processRevokeUnwrap(): void
-    {
-        $this->unwrap->revoked_at = $accountBlock->created_at;
-        $this->unwrap->save();
+        if (! $bridgeAdmin->account_id !== $accountBlock->account_id) {
+            throw new IndexerActionValidationException('Action sent from non admin');
+        }
     }
 }

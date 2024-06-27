@@ -9,19 +9,22 @@ use App\Domains\Indexer\Events\Bridge\TokenUnwraped;
 use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeNetwork;
-use App\Domains\Nom\Models\BridgeNetworkToken;
 use App\Domains\Nom\Models\BridgeUnwrap;
+use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class UnwrapToken extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
+        $network = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
+        $token = $network?->tokens()
+            ->wherePivot('token_address', $blockData['toAddress'])
+            ->first();
 
         try {
-            $this->validateAction($accountBlock);
+            $this->validateAction($accountBlock, $network, $token);
         } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Bridge: UnwrapToken failed', [
                 'accountBlock' => $accountBlock->hash,
@@ -32,62 +35,16 @@ class UnwrapToken extends AbstractContractMethodProcessor
             return;
         }
 
-        // Logic here
-
-        TokenUnwraped::dispatch($accountBlock);
-
-        Log::info('Contract Method Processor - Bridge: UnwrapToken complete', [
-            'accountBlock' => $accountBlock->hash,
-            'blockData' => $blockData,
-        ]);
-
-        $this->setBlockAsProcessed($accountBlock);
-
-        //        $this->accountBlock = $accountBlock;
-        //        $blockData = $accountBlock->data->decoded;
-        //
-        //        try {
-        //            $this->processUnwrap();
-        //        } catch (Throwable $exception) {
-        //            Log::warning('Unable to process unwrap: ' . $accountBlock->hash);
-        //            Log::debug($exception);
-        //
-        //            return;
-        //        }
-    }
-
-    /**
-     * @throws IndexerActionValidationException
-     */
-    public function validateAction(): void
-    {
-        /**
-         * @var AccountBlock $accountBlock
-         */
-        [$accountBlock] = func_get_args();
-        $blockData = $accountBlock->data->decoded;
-
-        //throw new IndexerActionValidationException('');
-    }
-
-    private function processUnwrap(): void
-    {
-        $data = $accountBlock->data->decoded;
-        $network = BridgeNetwork::findByNetworkChain($data['networkClass'], $data['chainId']);
-        $account = load_account($data['toAddress']);
-        $bridgeToken = BridgeNetworkToken::findByTokenAddress($network->id, $data['tokenAddress']);
-
         $unwrap = BridgeUnwrap::updateOrCreate([
-            'transaction_hash' => $data['transactionHash'],
-            'log_index' => $data['logIndex'],
+            'transaction_hash' => $blockData['transactionHash'],
+            'log_index' => $blockData['logIndex'],
         ], [
             'bridge_network_id' => $network->id,
-            'bridge_network_token_id' => $bridgeToken->id,
-            'to_account_id' => $account->id,
-            'token_id' => $bridgeToken->token->id,
+            'to_account_id' => load_account($blockData['toAddress'])->id,
+            'token_id' => $token->id,
             'account_block_id' => $accountBlock->id,
-            'signature' => $data['signature'],
-            'amount' => $data['amount'],
+            'signature' => $blockData['signature'],
+            'amount' => $blockData['amount'],
             'updated_at' => $accountBlock->created_at,
         ]);
 
@@ -97,5 +54,40 @@ class UnwrapToken extends AbstractContractMethodProcessor
         }
 
         $unwrap->setFromAddress();
+
+        TokenUnwraped::dispatch($accountBlock, $unwrap);
+
+        Log::info('Contract Method Processor - Bridge: UnwrapToken complete', [
+            'accountBlock' => $accountBlock->hash,
+            'blockData' => $blockData,
+        ]);
+
+        $this->setBlockAsProcessed($accountBlock);
+    }
+
+    /**
+     * @throws IndexerActionValidationException
+     */
+    public function validateAction(): void
+    {
+        /**
+         * @var AccountBlock $accountBlock
+         * @var BridgeNetwork $bridgeNetwork
+         * @var Token $token
+         */
+        [$accountBlock] = func_get_args();
+        $blockData = $accountBlock->data->decoded;
+
+        if (! $bridgeNetwork) {
+            throw new IndexerActionValidationException('Invalid bridge network');
+        }
+
+        if (! $token) {
+            throw new IndexerActionValidationException('Invalid token');
+        }
+
+        if (! $token->pivot->is_redeemable) {
+            throw new IndexerActionValidationException('Token is not redeemable');
+        }
     }
 }

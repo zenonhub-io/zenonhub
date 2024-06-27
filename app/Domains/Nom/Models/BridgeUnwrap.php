@@ -32,7 +32,6 @@ class BridgeUnwrap extends Model
      */
     protected $fillable = [
         'bridge_network_id',
-        'bridge_network_token_id',
         'to_account_id',
         'token_id',
         'account_block_id',
@@ -64,16 +63,21 @@ class BridgeUnwrap extends Model
     }
 
     //
+    // Methods
+
+    public static function findByTxHashLog(string $hash, int $log): ?BridgeUnwrap
+    {
+        return static::where('transaction_hash', $hash)
+            ->where('log_index', $log)
+            ->first();
+    }
+
+    //
     // Relations
 
     public function bridgeNetwork(): BelongsTo
     {
         return $this->belongsTo(BridgeNetwork::class);
-    }
-
-    public function bridgeNetworkToken(): BelongsTo
-    {
-        return $this->belongsTo(BridgeNetworkToken::class);
     }
 
     public function toAccount(): BelongsTo

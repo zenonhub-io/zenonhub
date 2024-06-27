@@ -10,16 +10,17 @@ use App\Domains\Indexer\Exceptions\IndexerActionValidationException;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeWrap;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class UpdateWrapRequest extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
+        $wrap = BridgeWrap::whereRelation('accountBlock', 'hash', $blockData['id'])
+            ->first();
 
         try {
-            $this->validateAction($accountBlock);
+            $this->validateAction($accountBlock, $wrap);
         } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Bridge: UpdateWrapRequest failed', [
                 'accountBlock' => $accountBlock->hash,
@@ -30,9 +31,11 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
             return;
         }
 
-        // Logic here
+        $wrap->signature = $blockData['signature'];
+        $wrap->updated_at = $accountBlock->created_at;
+        $wrap->save();
 
-        WrapRequestUpdated::dispatch($accountBlock);
+        WrapRequestUpdated::dispatch($accountBlock, $wrap);
 
         Log::info('Contract Method Processor - Bridge: UpdateWrapRequest complete', [
             'accountBlock' => $accountBlock->hash,
@@ -40,20 +43,6 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
         ]);
 
         $this->setBlockAsProcessed($accountBlock);
-
-        //        $this->accountBlock = $accountBlock;
-        //        $blockData = $accountBlock->data->decoded;
-        //
-        //        try {
-        //            $this->loadWrap();
-        //            $this->processUpdate();
-        //        } catch (Throwable $exception) {
-        //            Log::warning('Error updating wrap request ' . $accountBlock->hash);
-        //            Log::debug($exception);
-        //
-        //            return;
-        //        }
-
     }
 
     /**
@@ -63,23 +52,13 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
     {
         /**
          * @var AccountBlock $accountBlock
+         * @var BridgeWrap $wrap
          */
         [$accountBlock] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
-        //throw new IndexerActionValidationException('');
-    }
-
-    private function loadWrap(): void
-    {
-        $this->wrap = BridgeWrap::whereRelation('accountBlock', 'hash', $this->blockData['id'])
-            ->sole();
-    }
-
-    private function processUpdate(): void
-    {
-        $this->wrap->signature = $this->blockData['signature'];
-        $this->wrap->updated_at = $accountBlock->created_at;
-        $this->wrap->save();
+        if (! $wrap) {
+            throw new IndexerActionValidationException('Invalid wrap');
+        }
     }
 }

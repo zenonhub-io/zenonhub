@@ -12,6 +12,7 @@ use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeAdmin;
 use App\Domains\Nom\Models\BridgeNetwork;
+use App\Domains\Nom\Models\Token;
 use Illuminate\Support\Facades\Log;
 
 class SetTokenPair extends AbstractContractMethodProcessor
@@ -20,9 +21,10 @@ class SetTokenPair extends AbstractContractMethodProcessor
     {
         $blockData = $accountBlock->data->decoded;
         $bridgeNetwork = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
+        $token = load_token($blockData['tokenStandard']);
 
         try {
-            $this->validateAction($accountBlock, $bridgeNetwork);
+            $this->validateAction($accountBlock, $bridgeNetwork, $token);
         } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Bridge: SetTokenPair failed', [
                 'accountBlock' => $accountBlock->hash,
@@ -33,7 +35,6 @@ class SetTokenPair extends AbstractContractMethodProcessor
             return;
         }
 
-        $token = load_token($blockData['tokenStandard']);
         $bridgeNetwork->tokens()->syncWithoutDetaching([
             $token->id => [
                 'token_address' => $blockData['tokenAddress'],
@@ -67,8 +68,9 @@ class SetTokenPair extends AbstractContractMethodProcessor
         /**
          * @var AccountBlock $accountBlock
          * @var BridgeNetwork $bridgeNetwork
+         * @var Token $token
          */
-        [$accountBlock, $bridgeNetwork] = func_get_args();
+        [$accountBlock, $bridgeNetwork, $token] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
         $bridgeAdmin = BridgeAdmin::getActiveAdmin();
@@ -79,6 +81,10 @@ class SetTokenPair extends AbstractContractMethodProcessor
 
         if (! $bridgeNetwork) {
             throw new IndexerActionValidationException('Invalid bridgeNetwork');
+        }
+
+        if (! $token) {
+            throw new IndexerActionValidationException('Invalid token');
         }
 
         if ($blockData['owned'] && in_array($blockData['tokenStandard'], [NetworkTokensEnum::ZNN->value, NetworkTokensEnum::QSR->value], true)) {

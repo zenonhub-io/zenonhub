@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\BridgeAdmin;
 use App\Domains\Nom\Models\Token;
 use App\Domains\Nom\Services\ZenonSdk;
 
@@ -76,13 +74,6 @@ function eth_price(): float
 function btc_price(): float
 {
     return (float) Cache::get('btc-price');
-}
-
-function validate_bridge_tx(AccountBlock $block): bool
-{
-    $bridgeAdmin = BridgeAdmin::getActiveAdmin();
-
-    return $block->account_id === $bridgeAdmin->account_id;
 }
 
 function short_address(Account $account)
