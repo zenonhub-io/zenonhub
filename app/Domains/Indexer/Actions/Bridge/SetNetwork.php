@@ -72,11 +72,11 @@ class SetNetwork extends AbstractContractMethodProcessor
 
         $bridgeAdmin = BridgeAdmin::getActiveAdmin();
 
-        if (! $bridgeAdmin->account_id !== $accountBlock->account_id) {
+        if ($bridgeAdmin->account_id !== $accountBlock->account_id) {
             throw new IndexerActionValidationException('Action sent from non admin');
         }
 
-        if ($blockData['name'] < 3 || $blockData['name'] > 32) {
+        if (strlen($blockData['name']) < 3 || strlen($blockData['name']) > 32) {
             throw new IndexerActionValidationException('Invalid name length');
         }
 

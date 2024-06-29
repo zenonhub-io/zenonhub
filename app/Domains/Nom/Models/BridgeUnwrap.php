@@ -65,7 +65,7 @@ class BridgeUnwrap extends Model
     //
     // Methods
 
-    public static function findByTxHashLog(string $hash, int $log): ?BridgeUnwrap
+    public static function findByTxHashLog(string $hash, string $log): ?BridgeUnwrap
     {
         return static::where('transaction_hash', $hash)
             ->where('log_index', $log)

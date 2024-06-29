@@ -56,7 +56,7 @@ class Redeem extends AbstractContractMethodProcessor
          * @var AccountBlock $accountBlock
          * @var BridgeUnwrap $unwrap
          */
-        [$accountBlock] = func_get_args();
+        [$accountBlock, $unwrap] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
         if (! $unwrap) {

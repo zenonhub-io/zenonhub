@@ -62,7 +62,7 @@ class BridgeNetwork extends Model
     //
     // Methods
 
-    public static function findByNetworkChain(int $networkClass, int $chainId): ?BridgeNetwork
+    public static function findByNetworkChain(string $networkClass, string $chainId): ?BridgeNetwork
     {
         return static::where('network_class', $networkClass)
             ->where('chain_identifier', $chainId)

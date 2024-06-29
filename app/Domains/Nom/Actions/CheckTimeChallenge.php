@@ -14,6 +14,7 @@ class CheckTimeChallenge
 
     public function handle(AccountBlock $accountBlock, string $hash, int $delay): TimeChallenge
     {
+        $accountBlock->load('momentum');
         $momentum = $accountBlock->momentum;
         $timeChallenge = TimeChallenge::firstOrCreate([
             'chain_id' => app('currentChain')->id,

@@ -16,42 +16,27 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    //    Schema::dropIfExists('nom_public_node_histories');
-    //    Schema::create('nom_public_node_histories', function ($table) {
-    //        $table->id();
-    //        $table->integer('node_count');
-    //        $table->integer('unique_versions');
-    //        $table->integer('unique_isps');
-    //        $table->integer('unique_cities');
-    //        $table->integer('unique_countries');
-    //        $table->date('date');
-    //    });
+    $network = App\Domains\Nom\Models\BridgeNetwork::findByNetworkChain('2', '1');
+    $token = $network?->tokens()
+        ->wherePivot('token_address', '0xb2e96a63479C2Edd2FD62b382c89D5CA79f572d3')
+        ->first();
+
+    dd($token);
+
+    //    $contract = \App\Domains\Nom\Models\Contract::firstWhere('name', 'Bridge');
+    //    \App\Domains\Indexer\Actions\IndexContract::run($contract);
+    //
+    ////    $accountBlocks = App\Domains\Nom\Models\AccountBlock::with('contractMethod', 'data')
+    ////        ->where('contract_method_id', 12)
+    ////        ->get();
+    ////    $accountBlocks->each(function ($accountBlock) {
+    ////        $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
+    ////        $blockProcessorClass::run($accountBlock);
+    ////    });
     //
     //    dd('done');
 
-    $pillars = App\Domains\Nom\Models\Pillar::whereActive()->get();
-    $pillars->each(function ($pillar) {
-        App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);
-    });
-
-    dd('done');
-
-    //    $projects = \App\Domains\Nom\Models\AcceleratorProject::get();
-    //    $projects->each(function ($project) {
-    //        \App\Domains\Nom\Actions\SyncProjectStatus::run($project);
-    //    });
-    //
-    //    dd('done');
-
-    $data = app(App\Domains\Nom\Services\ZenonSdk::class)
-        ->getProjectById('f86c185058d7ed83bc959b57db335f7b3b5f4ed752293a5e7714654a74a82260');
-
-    //    $data = app(\App\Domains\Nom\Services\ZenonSdk::class)
-    //        ->getPhaseById('a331c580fdcfc2b985ce7900250ad72a0d787e1e078ad0d8b79ec9a21a2d5571');
-
-    dd($data);
-
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::firstWhere('hash', '06e51eadcba26371bc50ef4301b8bc82acbb2f24881821fe5e67c7a2956d82ef');
+    $accountBlock = App\Domains\Nom\Models\AccountBlock::firstWhere('hash', 'a7ab32c6f367fa4fc04177fbab35ed5b07e952b3607e4e49750d1e68a8318c4c');
     $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
     $blockProcessorClass::run($accountBlock);
 

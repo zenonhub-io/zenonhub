@@ -10,6 +10,7 @@ use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Contract;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -28,13 +29,16 @@ class IndexContract
         $progressBar->start();
 
         AccountBlock::with('data', 'contractMethod', 'contractMethod.contract')
-            ->whereRelation('contractMethod.contract', 'name', $contract)
+            ->whereRelation('contractMethod.contract', 'name', $contract->name)
             ->chunk(1000, function (Collection $accountBlocks) use ($progressBar) {
                 $accountBlocks->each(function ($accountBlock) use ($progressBar) {
                     try {
                         $blockProcessorClass = ContractMethodProcessorFactory::create($accountBlock->contractMethod);
                         $blockProcessorClass::run($accountBlock);
-                    } catch (ContractMethodProcessorNotFound) {
+                    } catch (ContractMethodProcessorNotFound $e) {
+                        Log::info('Index contract error', [
+                            'error' => $e->getMessage(),
+                        ]);
                     }
 
                     $progressBar->advance();

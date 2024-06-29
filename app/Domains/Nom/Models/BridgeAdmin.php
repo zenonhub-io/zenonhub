@@ -77,7 +77,7 @@ class BridgeAdmin extends Model
 
     public static function getActiveAdmin(): BridgeAdmin
     {
-        return static::getActive()->sole();
+        return static::whereActive()->sole();
     }
 
     //

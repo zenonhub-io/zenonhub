@@ -56,7 +56,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
 
         $bridgeAdmin = BridgeAdmin::getActiveAdmin();
 
-        if (! $bridgeAdmin->account_id !== $accountBlock->account_id) {
+        if ($bridgeAdmin->account_id !== $accountBlock->account_id) {
             throw new IndexerActionValidationException('Action sent from non admin');
         }
 

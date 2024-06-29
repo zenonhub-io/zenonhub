@@ -19,7 +19,7 @@ class WrapToken extends AbstractContractMethodProcessor
     {
         $blockData = $accountBlock->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
-        $token = $network?->tokens()->where('id', $accountBlock->token_id)->first();
+        $token = $network?->tokens()->where('token_id', $accountBlock->token_id)->first();
 
         try {
             $this->validateAction($accountBlock, $network, $token);
@@ -63,7 +63,7 @@ class WrapToken extends AbstractContractMethodProcessor
          * @var BridgeNetwork $bridgeNetwork
          * @var Token $token
          */
-        [$accountBlock] = func_get_args();
+        [$accountBlock, $bridgeNetwork, $token] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
         if (! $bridgeNetwork) {

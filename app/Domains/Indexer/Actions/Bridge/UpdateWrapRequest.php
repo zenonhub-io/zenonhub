@@ -54,7 +54,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
          * @var AccountBlock $accountBlock
          * @var BridgeWrap $wrap
          */
-        [$accountBlock] = func_get_args();
+        [$accountBlock, $wrap] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
         if (! $wrap) {

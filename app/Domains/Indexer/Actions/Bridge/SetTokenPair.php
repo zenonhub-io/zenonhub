@@ -19,6 +19,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
 {
     public function handle(AccountBlock $accountBlock): void
     {
+        $accountBlock->load('momentum');
         $blockData = $accountBlock->data->decoded;
         $bridgeNetwork = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
         $token = load_token($blockData['tokenStandard']);
@@ -75,7 +76,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
 
         $bridgeAdmin = BridgeAdmin::getActiveAdmin();
 
-        if (! $bridgeAdmin->account_id !== $accountBlock->account_id) {
+        if ($bridgeAdmin->account_id !== $accountBlock->account_id) {
             throw new IndexerActionValidationException('Action sent from non admin');
         }
 

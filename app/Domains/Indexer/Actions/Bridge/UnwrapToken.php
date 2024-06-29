@@ -20,7 +20,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
         $network = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
         $token = $network?->tokens()
-            ->wherePivot('token_address', $blockData['toAddress'])
+            ->wherePivot('token_address', $blockData['tokenAddress'])
             ->first();
 
         try {
@@ -53,7 +53,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
             $unwrap->save();
         }
 
-        $unwrap->setFromAddress();
+        //$unwrap->setFromAddress();
 
         TokenUnwraped::dispatch($accountBlock, $unwrap);
 
@@ -75,7 +75,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
          * @var BridgeNetwork $bridgeNetwork
          * @var Token $token
          */
-        [$accountBlock] = func_get_args();
+        [$accountBlock, $bridgeNetwork, $token] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
         if (! $bridgeNetwork) {
