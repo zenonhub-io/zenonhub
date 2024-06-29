@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 
 use App\Actions\ClearBridgeStatusCache;
@@ -24,15 +26,9 @@ class Kernel extends ConsoleKernel
         //
         // All environments
 
-        $schedule->command('zenon:sync pillars orchestrators')->everyFiveMinutes();
-        $schedule->command('zenon:check-indexer')->everyFifteenMinutes();
-        $schedule->command('zenon:sync az-status')->hourly();
-        $schedule->command('queue:prune-batches')->daily();
-        $schedule->command('zenon:sync nodes')->cron('5 */6 * * *');
-
-        $schedule->call(fn () => (new ClearBridgeStatusCache())->execute())->everyFiveMinutes();
-        $schedule->call(fn () => (new UpdateProjectFunding())->execute())->hourly();
-        $schedule->call(fn () => (new GenerateSitemap())->execute())->daily();
+        $schedule->call(fn () => (new ClearBridgeStatusCache)->execute())->everyFiveMinutes();
+        $schedule->call(fn () => (new UpdateProjectFunding)->execute())->hourly();
+        $schedule->call(fn () => (new GenerateSitemap)->execute())->daily();
 
         //
         // Production
@@ -40,15 +36,15 @@ class Kernel extends ConsoleKernel
         $schedule->command('horizon:snapshot')->everyFiveMinutes()->environments('production');
         $schedule->call(function () {
             try {
-                (new UpdateTokenPrices())->execute();
+                (new UpdateTokenPrices)->execute();
             } catch (ApplicationException $exception) {
                 Log::warning($exception);
             }
         })->everyFiveMinutes()->environments('production');
 
         $schedule->call(function () {
-            (new CancelExpired())->execute();
-            (new ReceiveAll())->execute();
+            (new CancelExpired)->execute();
+            (new ReceiveAll)->execute();
         })->everyFifteenMinutes()->environments('production');
 
         //        $schedule->call(fn () => (new SendProjectVotingReminders())->execute())
@@ -62,7 +58,19 @@ class Kernel extends ConsoleKernel
         //
         // Staging
 
-        $schedule->call(fn () => (new UpdateTokenPrices())->execute())->dailyAt('00:07')->environments('staging');
+        $schedule->call(fn () => (new UpdateTokenPrices)->execute())->dailyAt('00:07')->environments('staging');
+    }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__ . '/Commands');
+
+        require base_path('routes/console.php');
     }
 
     private function runIndexer(Schedule $schedule): void
@@ -79,17 +87,5 @@ class Kernel extends ConsoleKernel
             ->everyTenSeconds()
             ->withoutOverlapping(3)
             ->runInBackground();
-    }
-
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
-    protected function commands()
-    {
-        $this->load(__DIR__.'/Commands');
-
-        require base_path('routes/console.php');
     }
 }

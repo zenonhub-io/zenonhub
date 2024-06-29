@@ -65,4 +65,12 @@ return [
     'bitquery' => [
         'api_key' => env('BITQUERY_API_KEY'),
     ],
+
+    'orchestrators-status' => [
+        'api_url' => 'http://137.184.138.90:8080/api',
+    ],
+
+    'public-rpc-nodes' => [
+        'api_url' => 'https://github.com/sol-znn/znn-node-parser/releases/download/public_nodes/output_nodes.json',
+    ],
 ];

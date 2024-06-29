@@ -9,14 +9,16 @@ use App\Domains\Nom\Services\ZenonSdk;
 
 function load_account(string $address, ?string $name = null): Account
 {
-    $account = Account::firstWhere('address', $address);
+    $account = Account::firstOrCreate([
+        'address' => $address,
+    ], [
+        'chain_id' => app('currentChain')->id,
+        'name' => $name,
+    ]);
 
-    if (! $account) {
-        $account = Account::create([
-            'chain_id' => app('currentChain')->id,
-            'address' => $address,
-            'name' => $name,
-        ]);
+    if ($name) {
+        $account->name = $name;
+        $account->save();
     }
 
     return $account;

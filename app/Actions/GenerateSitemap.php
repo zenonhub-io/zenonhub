@@ -20,6 +20,8 @@ class GenerateSitemap
 {
     use AsAction;
 
+    public string $commandSignature = 'site:generate-sitemap';
+
     public function handle(): void
     {
         $file = 'app/sitemap/sitemap.xml';

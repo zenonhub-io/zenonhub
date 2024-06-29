@@ -16,6 +16,19 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    //    Schema::dropIfExists('nom_public_node_histories');
+    //    Schema::create('nom_public_node_histories', function ($table) {
+    //        $table->id();
+    //        $table->integer('node_count');
+    //        $table->integer('unique_versions');
+    //        $table->integer('unique_isps');
+    //        $table->integer('unique_cities');
+    //        $table->integer('unique_countries');
+    //        $table->date('date');
+    //    });
+    //
+    //    dd('done');
+
     $pillars = App\Domains\Nom\Models\Pillar::whereActive()->get();
     $pillars->each(function ($pillar) {
         App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);

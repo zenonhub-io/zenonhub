@@ -14,12 +14,28 @@ tasks:
     - artisan:horizon:terminate
     - artisan:queue:restart
     - artisan:schedule:interrupt
-    - artisan:site:after-deploy
+    - artisan:config:cache
+    - artisan:event:cache
+    - artisan:route:cache
+    - artisan:view:cache
+    - artisan:nom:update-contract-methods
+    - artisan:nom:update-named-addresses
+    - artisan:nom:sync-orchestrators
+    - artisan:nom:sync-public-nodes
+    - artisan:site:generate-sitemap
     - artisan:up
   artisan:schedule:interrupt:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan schedule:interrupt'
-  artisan:site:after-deploy:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan site:after-deploy'
+  artisan:nom:update-contract-methods:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-contract-methods'
+  artisan:nom:update-named-addresses:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-named-addresses'
+  artisan:nom:sync-orchestrators:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:sync-orchestrators'
+  artisan:nom:public-nodes:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:public-nodes'
+  artisan:site:generate-sitemap:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan site:generate-sitemap'
   npx:build:production:
     - run: 'cd {{release_or_current_path}} && npm ci && npm run production'
   npx:build:cleanup:

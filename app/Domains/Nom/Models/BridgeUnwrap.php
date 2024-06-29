@@ -73,6 +73,20 @@ class BridgeUnwrap extends Model
     }
 
     //
+    // Scopes
+
+    public static function scopeWhereTxHashLog($query, string $hash, int $log)
+    {
+        return $query->where('transaction_hash', $hash)
+            ->where('log_index', $log);
+    }
+
+    public static function scopeWhereUnredeemed($query)
+    {
+        return $query->whereNull('redeemed_at');
+    }
+
+    //
     // Relations
 
     public function bridgeNetwork(): BelongsTo
@@ -94,9 +108,6 @@ class BridgeUnwrap extends Model
     {
         return $this->belongsTo(AccountBlock::class);
     }
-
-    //
-    // Scopes
 
     public function scopeCreatedLast($query, ?string $limit)
     {

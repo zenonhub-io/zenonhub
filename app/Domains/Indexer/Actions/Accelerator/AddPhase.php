@@ -25,7 +25,7 @@ class AddPhase extends AbstractContractMethodProcessor
         $project = AcceleratorProject::firstWhere('hash', $blockData['id']);
 
         try {
-            $this->validateAction($accountBlock);
+            $this->validateAction($accountBlock, $project);
         } catch (IndexerActionValidationException $e) {
             Log::info('Contract Method Processor - Accelerator: AddPhase failed', [
                 'accountBlock' => $accountBlock->hash,

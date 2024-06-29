@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Lorisleiva\Actions\Facades\Actions;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,9 +49,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureActions();
         $this->configureModels();
 
         Paginator::useBootstrapFive();
+    }
+
+    private function configureActions(): void
+    {
+        Actions::registerCommands([
+            'app/Domains/Common/Actions',
+            'app/Domains/Indexer/Actions',
+            'app/Domains/Nom/Actions',
+        ]);
     }
 
     private function configureModels(): void

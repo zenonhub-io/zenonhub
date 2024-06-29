@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Common\Actions;
+namespace App\Domains\Nom\Actions;
 
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\Contract;
@@ -12,6 +12,8 @@ use Lorisleiva\Actions\Concerns\AsAction;
 class UpdateContractMethods
 {
     use AsAction;
+
+    public string $commandSignature = 'nom:update-contract-methods';
 
     private array $contracts = [
         'Accelerator' => \DigitalSloth\ZnnPhp\Abi\Contracts\Accelerator::class,

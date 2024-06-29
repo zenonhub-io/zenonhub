@@ -7,15 +7,21 @@ namespace App\Domains\Nom\Actions;
 use App\Domains\Nom\DataTransferObjects\AcceleratorPhaseDTO;
 use App\Domains\Nom\DataTransferObjects\AcceleratorProjectDTO;
 use App\Domains\Nom\Enums\AcceleratorPhaseStatusEnum;
+use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Services\ZenonSdk;
+use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SyncProjectStatus
 {
     use AsAction;
+
+    public string $commandSignature = 'nom:sync-project-status';
 
     public function handle(AcceleratorProject $project): void
     {
@@ -39,6 +45,24 @@ class SyncProjectStatus
 
             $this->syncPhaseStatus($phase, $phaseDTO);
         });
+    }
+
+    public function asCommand(Command $command): void
+    {
+        $projects = AcceleratorProject::whereNotIn('status', [
+            AcceleratorProjectStatusEnum::REJECTED->value,
+            AcceleratorProjectStatusEnum::COMPLETE->value,
+        ])->get();
+
+        $progressBar = new ProgressBar(new ConsoleOutput, $projects->count());
+        $progressBar->start();
+
+        $projects->each(function (AcceleratorProject $projects) use ($progressBar): void {
+            $this->handle($projects);
+            $progressBar->advance();
+        });
+
+        $progressBar->finish();
     }
 
     private function syncProjectStatus(AcceleratorProject $project, AcceleratorProjectDTO $projectDTO): void

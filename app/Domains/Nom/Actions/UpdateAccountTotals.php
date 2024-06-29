@@ -2,16 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Common\Actions;
+namespace App\Domains\Nom\Actions;
 
 use App\Domains\Nom\Models\Account;
+use Illuminate\Console\Command;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class UpdateAccountTotals implements ShouldBeUnique
 {
     use AsAction;
+
+    public string $commandSignature = 'nom:update-account-totals';
 
     private Account $account;
 
@@ -26,7 +32,7 @@ class UpdateAccountTotals implements ShouldBeUnique
             'address' => $account->address,
         ]);
 
-        $this->account = $account->refresh();
+        $this->account = $account->refresh()->load('latestBlock');
 
         $this->saveCurrentBalance();
         $this->saveStakedZnn();
@@ -35,6 +41,22 @@ class UpdateAccountTotals implements ShouldBeUnique
 
         $this->account->updated_at = $this->account->latestBlock?->created_at ?? now();
         $this->account->save();
+    }
+
+    public function asCommand(Command $command): void
+    {
+        $totalAccounts = Account::count();
+        $progressBar = new ProgressBar(new ConsoleOutput, $totalAccounts);
+        $progressBar->start();
+
+        Account::chunk(1000, function (Collection $accounts) use ($progressBar) {
+            $accounts->each(function ($account) use ($progressBar) {
+                $this->handle($account);
+                $progressBar->advance();
+            });
+        });
+
+        $progressBar->finish();
     }
 
     private function saveCurrentBalance(): void

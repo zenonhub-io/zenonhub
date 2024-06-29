@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Common\Actions;
+namespace App\Domains\Nom\Actions;
 
 use App\Domains\Nom\Models\AcceleratorPhase;
 use App\Domains\Nom\Models\AcceleratorProject;
 use App\Domains\Nom\Models\Pillar;
+use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class UpdatePillarEngagementScore
 {
     use AsAction;
+
+    public string $commandSignature = 'nom:sync-pillar-engagement-scores';
 
     public function handle(Pillar $pillar): void
     {
@@ -28,7 +33,7 @@ class UpdatePillarEngagementScore
             $votes = $pillar->votes()->whereHasMorph('votable', [
                 AcceleratorProject::class,
                 AcceleratorPhase::class,
-            ])->get();
+            ])->with('votable')->get();
             $totalVotes = $votes->map(function ($vote) use ($pillar) {
                 if ($vote->votable->created_at >= $pillar->created_at) {
                     return 1;
@@ -52,11 +57,27 @@ class UpdatePillarEngagementScore
                 AcceleratorProject::class,
                 AcceleratorPhase::class,
             ])
+            ->with('votable')
             ->get()
             ->map(fn ($vote) => $vote->created_at->timestamp - $vote->votable->created_at->timestamp)
             ->average();
 
         $pillar->az_avg_vote_time = $averageVoteTime;
         $pillar->save();
+    }
+
+    public function asCommand(Command $command): void
+    {
+        $pillars = Pillar::whereActive()->get();
+
+        $progressBar = new ProgressBar(new ConsoleOutput, $pillars->count());
+        $progressBar->start();
+
+        $pillars->each(function (Pillar $pillar) use ($progressBar): void {
+            $this->handle($pillar);
+            $progressBar->advance();
+        });
+
+        $progressBar->finish();
     }
 }
