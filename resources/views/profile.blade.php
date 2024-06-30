@@ -32,7 +32,7 @@
     @endif
 
     @if($tab === 'addresses')
-
+        @livewire('profile.manage-addresses')
     @endif
 
     @if($tab === 'api-keys')

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Domains\Nom\Models\Account;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -71,6 +72,16 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     //
     // Relations
+
+    public function verifiedAccounts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Account::class,
+            'user_nom_verified_accounts_pivot',
+            'user_id',
+            'account_id'
+        )->withPivot('nickname', 'verified_at');
+    }
 
     public function notificationTypes(): BelongsToMany
     {

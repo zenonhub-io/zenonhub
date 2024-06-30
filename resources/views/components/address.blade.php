@@ -1,5 +1,5 @@
 @if ($linked)
-    <a href="{{ route('explorer.account', ['address' => $account->address]) }}">
+    <a href="{{ route('explorer.account.detail', ['address' => $account->address]) }}">
 @endif
 
     @if ($named && $account->has_custom_label)
