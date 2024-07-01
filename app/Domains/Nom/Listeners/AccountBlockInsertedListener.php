@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Common\Listeners;
+namespace App\Domains\Nom\Listeners;
 
 use App\Bots\BridgeAlertBot;
 use App\Bots\WhaleAlertBot;
-use App\Domains\Common\Actions\ProcessBlockRewards;
-use App\Domains\Common\Actions\ProcessLiquidityProgramRewards;
 use App\Domains\Indexer\Events\AccountBlockInserted;
+use App\Domains\Nom\Actions\ProcessBlockRewards;
+use App\Domains\Nom\Actions\ProcessLiquidityProgramRewards;
 use App\Domains\Nom\Actions\UpdateAccountTotals;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;

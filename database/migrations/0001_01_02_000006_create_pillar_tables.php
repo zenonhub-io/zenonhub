@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('slug')->index();
             $table->bigInteger('qsr_burn')->default(15000000000000);
             $table->bigInteger('weight')->index()->default(0);
-            $table->integer('rank')->index();
+            $table->integer('rank')->default(0)->index();
             $table->integer('produced_momentums')->default(0);
             $table->integer('expected_momentums')->default(0);
             $table->integer('missed_momentums')->default(0);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders;
+namespace Database\Seeders\Site;
 
 use App\Models\NotificationType;
 use Illuminate\Database\Seeder;

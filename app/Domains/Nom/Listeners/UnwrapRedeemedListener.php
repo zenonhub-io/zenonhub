@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Common\Listeners;
+namespace App\Domains\Nom\Listeners;
 
-use App\Domains\Common\Actions\ProcessBridgeUnwrapReward;
 use App\Domains\Indexer\Events\Bridge\UnwrapRedeemed;
+use App\Domains\Nom\Actions\ProcessBridgeUnwrapReward;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\BridgeUnwrap;
 use Lorisleiva\Actions\Concerns\AsAction;

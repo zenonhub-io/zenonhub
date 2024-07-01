@@ -43,7 +43,7 @@ class ManageAddresses extends Component
             'message' => ['required', 'string', 'max:8'],
             //'public_key' => ['required', 'string'],
             'signature' => ['required', 'string'],
-        ])->validateWithBag('createApiToken');
+        ])->validateWithBag('verifyAddress');
 
         $zenonSdk = app(ZenonSdk::class);
         $account = load_account($this->verifyAddressForm['address']);

@@ -13,16 +13,16 @@ use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Services\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomBaseSeeder;
+use Database\Seeders\NomSeeder;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
 
-uses()->group('nom', 'nom-actions', 'insert-account-block');
+uses()->group('indexer', 'indexer-actions', 'insert-account-block');
 
 beforeEach(function () {
 
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomBaseSeeder::class);
+    $this->seed(NomSeeder::class);
     $this->seed(PillarsSeeder::class);
 
     $accountBlocksJson = Storage::json('nom-json/test/transactions.json');

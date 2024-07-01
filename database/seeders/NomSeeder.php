@@ -11,7 +11,7 @@ use Database\Seeders\Nom\ContractMethodSeeder;
 use Database\Seeders\Nom\TokensSeeder;
 use Illuminate\Database\Seeder;
 
-class NomBaseSeeder extends Seeder
+class NomSeeder extends Seeder
 {
     /**
      * Seed the application's database.

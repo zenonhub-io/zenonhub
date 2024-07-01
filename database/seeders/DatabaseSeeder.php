@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use Database\Seeders\Site\NotificationTypesSeeder;
+use Database\Seeders\Site\UserRolesSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

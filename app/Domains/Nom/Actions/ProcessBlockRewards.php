@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domains\Common\Actions;
+namespace App\Domains\Nom\Actions;
 
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;

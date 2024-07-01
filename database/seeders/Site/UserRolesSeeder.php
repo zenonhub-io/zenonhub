@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders;
+namespace Database\Seeders\Site;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
