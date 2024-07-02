@@ -16,7 +16,7 @@ use Livewire\Component;
 class ManageAddresses extends Component
 {
     public array $verifyAddressForm = [
-        'name' => '',
+        'nickname' => '',
         'address' => '',
         'public_key' => '',
         'message' => '',
@@ -32,17 +32,17 @@ class ManageAddresses extends Component
         $this->resetErrorBag();
 
         Validator::make([
-            'name' => $this->verifyAddressForm['name'],
             'address' => $this->verifyAddressForm['address'],
-            //'public_key' => $this->verifyAddressForm['public_key'],
+            'nickname' => $this->verifyAddressForm['nickname'],
             'message' => $this->verifyAddressForm['message'],
             'signature' => $this->verifyAddressForm['signature'],
+            //'public_key' => $this->verifyAddressForm['public_key'],
         ], [
-            'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:40', 'exists:nom_accounts,address'],
+            'nickname' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:8'],
-            //'public_key' => ['required', 'string'],
             'signature' => ['required', 'string'],
+            //'public_key' => ['required', 'string'],
         ])->validateWithBag('verifyAddress');
 
         $zenonSdk = app(ZenonSdk::class);
@@ -67,13 +67,13 @@ class ManageAddresses extends Component
 
         $this->user->verifiedAccounts()->syncWithoutDetaching([
             $account->id => [
-                'nickname' => $this->verifyAddressForm['name'],
+                'nickname' => $this->verifyAddressForm['nickname'],
                 'verified_at' => now(),
             ],
         ]);
 
-        $this->verifyAddressForm['name'] = '';
         $this->verifyAddressForm['address'] = '';
+        $this->verifyAddressForm['nickname'] = '';
         $this->verifyAddressForm['message'] = '';
         $this->verifyAddressForm['signature'] = '';
 

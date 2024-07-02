@@ -26,22 +26,13 @@
                 <x-forms.inputs.input name="address" id="{{ $uuid }}" wire:model="verifyAddressForm.address" />
             </div>
         </div>
-{{--        <div class="row align-items-center">--}}
-{{--            @php($uuid = Str::random(8))--}}
-{{--            <div class="col-md-4">--}}
-{{--                <x-forms.label :label="__('Public Key')" for="{{ $uuid }}" />--}}
-{{--            </div>--}}
-{{--            <div class="col-md-12">--}}
-{{--                <x-forms.inputs.input name="public_key" id="{{ $uuid }}" wire:model="verifyAddressForm.public_key" />--}}
-{{--            </div>--}}
-{{--        </div>--}}
         <div class="row align-items-center">
             @php($uuid = Str::random(8))
             <div class="col-md-4">
                 <x-forms.label :label="__('Nickname')" for="{{ $uuid }}" />
             </div>
             <div class="col-md-12">
-                <x-forms.inputs.input name="name" id="{{ $uuid }}" wire:model="verifyAddressForm.name" />
+                <x-forms.inputs.input name="nickname" id="{{ $uuid }}" wire:model="verifyAddressForm.nickname" />
             </div>
         </div>
         <div class="row align-items-center">
@@ -62,6 +53,15 @@
                 <x-forms.inputs.input name="signature" id="{{ $uuid }}" wire:model="verifyAddressForm.signature" />
             </div>
         </div>
+        {{--        <div class="row align-items-center">--}}
+        {{--            @php($uuid = Str::random(8))--}}
+        {{--            <div class="col-md-4">--}}
+        {{--                <x-forms.label :label="__('Public Key')" for="{{ $uuid }}" />--}}
+        {{--            </div>--}}
+        {{--            <div class="col-md-12">--}}
+        {{--                <x-forms.inputs.input name="public_key" id="{{ $uuid }}" wire:model="verifyAddressForm.public_key" />--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
     </div>
     <hr class="my-6 d-md-none">
     <div class="d-md-none">
