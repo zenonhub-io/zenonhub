@@ -16,6 +16,9 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    $pillar = App\Domains\Nom\Models\Pillar::first();
+    App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);
+
     $network = App\Domains\Nom\Models\BridgeNetwork::findByNetworkChain('2', '1');
     $token = $network?->tokens()
         ->wherePivot('token_address', '0xb2e96a63479C2Edd2FD62b382c89D5CA79f572d3')
@@ -170,89 +173,6 @@ Route::get('test', function () {
         ->json();
 
     dd($response);
-
-    // XEGGEX
-    //    $apiKey = '8ec015f680d33a11abe518706711060b';
-    //    $apiSecret = '2934e33613c49a5d96d2e4c4541aaa11d3300d33c9d1348d';
-    //    $baseUrl = 'https://api.xeggex.com/api/v2';
-    //
-    //    //$ticker = Http::withToken($apiKey.':'.$apiSecret, 'Basic')->get($baseUrl.'/market/getbysymbol/ZNN_USDT')->json();
-    //    /**
-    //     * Ticker
-    //     * ticker_id = symbol
-    //     * base_currency = primaryTicker
-    //     * target_currency = ?
-    //     * last_price = lastPrice
-    //     * base_volume = volume
-    //     * target_volume = ?
-    //     * bid = bestBid
-    //     * ask = bestAsk
-    //     * high = highPrice
-    //     * low = lowPrice
-    //     *
-    //     *
-    //     * "_id" => "664f53aabeff051fd3301807"
-    //     * "symbol" => "ZNN/USDT"
-    //     * "primaryName" => "Zenon"
-    //     * "primaryTicker" => "ZNN"
-    //     * "lastPrice" => "0.565791"
-    //     * "yesterdayPrice" => "0.633919"
-    //     * "highPrice" => "0.797121"
-    //     * "lowPrice" => "0.450001"
-    //     * "volume" => "463.7462"
-    //     * "lastTradeAt" => 1717357553572
-    //     * "priceDecimals" => 6
-    //     * "quantityDecimals" => 4
-    //     * "isActive" => true
-    //     * "primaryAsset" => "65d979fe2fb89f13b1fc2006"
-    //     * "secondaryAsset" => "613b398ed7a0bd1a304f963e"
-    //     * "imageUUID" => "1af8dc72-9b35-4d1b-b566-1ed23cf7e803"
-    //     * "engineId" => 5
-    //     * "isPaused" => false
-    //     * "bestAsk" => "0.570619"
-    //     * "bestBid" => "0.56579"
-    //     * "createdAt" => 1716474794843
-    //     * "updatedAt" => 1717357855114
-    //     * "primaryUsdValue" => "0.575736900000"
-    //     * "primaryCirculation" => ""
-    //     * "secondaryUsdValue" => "1"
-    //     * "secondaryCirculation" => "78311766178.46"
-    //     * "lastPriceUpDown" => "down"
-    //     * "spreadPercent" => "0.846"
-    //     * "changePercent" => "-10.74"
-    //     * "volumeSecondary" => "285.9444"
-    //     * "lastPriceNumber" => 0.565791
-    //     * "bestBidNumber" => 0.56579
-    //     * "bestAskNumber" => 0.570619
-    //     * "yesterdayPriceNumber" => 0.633919
-    //     * "changePercentNumber" => -10.74
-    //     * "highPriceNumber" => 0.797121
-    //     * "lowPriceNumber" => 0.450001
-    //     * "volumeNumber" => 463.7462
-    //     * "volumeSecondaryNumber" => 285.9444
-    //     * "volumeUsdNumber" => 285.94
-    //     * "marketcapNumber" => 0
-    //     * "lineChart" => "[]"
-    //     * "minimumQuantity" => 0
-    //     * "maxAllowedPrice" => ""
-    //     * "minAllowedPrice" => ""
-    //     * "pauseBuys" => false
-    //     * "pauseSells" => false
-    //     * "assignedWebsites" => "629b1213681675f1a93444f4"
-    //     * "spreadPercentNumber" => 0.846
-    //     * "id" => "664f53aabeff051fd3301807"
-    //     */
-    //
-    //    //$market = Http::withToken($apiKey.':'.$apiSecret, 'Basic')->get($baseUrl.'/market/getorderbookbysymbol/ZNN_USDT')->json();
-    //    /**
-    //     * Market
-    //     *
-    //     * ticker_id = symbol
-    //     * timestamp = timestamp
-    //     * bids = bids
-    //     * asks = asks
-    //     */
-
 });
 
 Route::middleware([

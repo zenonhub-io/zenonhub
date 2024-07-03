@@ -34,8 +34,38 @@ class Orchestrator extends Model
     protected $fillable = [
         'pillar_id',
         'account_id',
-        'status',
+        'is_active',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
+
+    public static function getOnlinePercent(): float
+    {
+        $total = self::count();
+        $online = self::whereActive()->count();
+        $percent = ($online / $total) * 100;
+
+        return round($percent, 1);
+    }
+
+    public static function getRequiredOnlinePercent(): float
+    {
+        $total = self::count();
+        $required = ceil($total * 0.66) + 1;
+        $percent = ($required / $total) * 100;
+
+        return round($percent, 1);
+    }
 
     //
     // Relations
@@ -55,11 +85,11 @@ class Orchestrator extends Model
 
     public function scopeWhereActive($query)
     {
-        return $query->where('status', true);
+        return $query->where('is_active', true);
     }
 
     public function scopeWhereInactive($query)
     {
-        return $query->where('status', false);
+        return $query->where('is_active', false);
     }
 }

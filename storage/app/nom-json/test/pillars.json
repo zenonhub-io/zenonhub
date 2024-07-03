@@ -34,5 +34,23 @@
             "expectedMomentums": 1
         },
         "weight": "2"
+    },
+    {
+        "name": "Pillar3",
+        "rank": 0,
+        "type": 1,
+        "ownerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar3",
+        "producerAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod3",
+        "withdrawAddress": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar3",
+        "isRevocable": false,
+        "revokeCooldown": 2314000,
+        "revokeTimestamp": 0,
+        "giveMomentumRewardPercentage": 69,
+        "giveDelegateRewardPercentage": 99,
+        "currentStats": {
+            "producedMomentums": 1,
+            "expectedMomentums": 1
+        },
+        "weight": "3"
     }
 ]

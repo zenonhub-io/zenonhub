@@ -13,4 +13,8 @@ class CollectReward extends AbstractContractMethodProcessor
     {
         $blockData = $accountBlock->data->decoded;
     }
+
+    public function validateAction(): void
+    {
+    }
 }

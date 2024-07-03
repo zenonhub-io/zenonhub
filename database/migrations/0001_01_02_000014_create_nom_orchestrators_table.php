@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
             $table->foreignId('account_id')->references('id')->on('nom_accounts');
-            $table->boolean('status')->index()->default(0);
+            $table->boolean('is_active')->default(0);
         });
     }
 

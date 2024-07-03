@@ -199,7 +199,7 @@ class Pillar extends Model implements Sitemapable
         return Number::abbreviate(app('qsrToken')->getDisplayAmount($this->qsr_burn));
     }
 
-    public function getRankAttribute(): string
+    public function getDisplayRankAttribute(): string
     {
         if ($this->revoked_at || ! $this->weight) {
             return '-';

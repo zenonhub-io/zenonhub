@@ -23,7 +23,7 @@ class SyncOrchestrators
         $apiUrl = config('services.orchestrators-status.api_url');
 
         try {
-            $orchestratorJson = Http::get($apiUrl)->throw()->json();
+            $orchestratorJson = Http::get($apiUrl)->throw()->json('pillars');
         } catch (RequestException $e) {
             Log::error('Sync Orchestrators - Failed to fetch orchestrator list', [
                 'url' => $apiUrl,
@@ -38,10 +38,10 @@ class SyncOrchestrators
         Orchestrator::whereNotIn('pillar_id', $pillarIds->toArray())->delete();
     }
 
-    private function processOrchestratorData(object $orchestratorData): ?Orchestrator
+    private function processOrchestratorData(array $orchestratorData): ?Orchestrator
     {
-        $pillar = Pillar::firstWhere('name', $orchestratorData->pillar_name);
-        $account = Account::firstWhere('address', $orchestratorData->stake_address);
+        $pillar = Pillar::firstWhere('name', $orchestratorData['pillar_name']);
+        $account = Account::firstWhere('address', $orchestratorData['stake_address']);
 
         if (! $pillar || ! $account) {
             return null;
@@ -51,10 +51,9 @@ class SyncOrchestrators
             'pillar_id' => $pillar->id,
         ], [
             'account_id' => $account->id,
-            'status' => false,
         ]);
 
-        $orchestrator->status = $orchestratorData->online_status;
+        $orchestrator->is_active = $orchestratorData['online_status'];
         $orchestrator->save();
 
         return $orchestrator;
