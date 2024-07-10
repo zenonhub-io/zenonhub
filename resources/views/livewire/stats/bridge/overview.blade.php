@@ -8,9 +8,9 @@
                 </span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
-                <span class="d-inline d-md-block text-muted fs-sm">Orchestrators <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Over 66% of orchestrators need to be online for the bridge to function"></i></span></span>
+                <span class="d-inline d-md-block text-muted fs-sm">Orchestrators <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Over {{ $requiredOrchestrators }}% of orchestrators need to be online for the bridge to function"></i></span></span>
                 <span class="float-end float-md-none">
-                    <span class="legend-indicator bg-{{ ($orchestrators > 66 ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $orchestrators }}% Online"></span>
+                    <span class="legend-indicator bg-{{ ($onlineOrchestrators > $requiredOrchestrators ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $orchestrators }}% Online"></span>
                 </span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
@@ -33,16 +33,16 @@
             @endif
             please wait until it is back online before interacting with it.
         </x-alert>
-    @elseif ($orchestrators < 66)
+    @elseif ($onlineOrchestrators < $requiredOrchestrators)
         <x-alert
-            message="Only {{$orchestrators}}% of orchestrators are online, please wait until there are over 66% before interacting with the bridge"
+            message="Only {{$onlineOrchestrators}}% of orchestrators are online, please wait until there are over {{ $requiredOrchestrators }}% before interacting with the bridge"
             type="warning"
             icon="exclamation-octagon"
             class="d-flex justify-content-center mb-4"
         />
     @endif
 
-    @if (! $halted && $orchestrators > 66)
+    @if (! $halted && $onlineOrchestrators > $requiredOrchestrators)
         <x-alert
             type="success"
             class="mb-4 justify-content-center"

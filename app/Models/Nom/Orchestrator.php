@@ -35,6 +35,24 @@ class Orchestrator extends Model
         'status',
     ];
 
+    public static function getOnlinePercent(): float
+    {
+        $total = self::count();
+        $online = self::isActive()->count();
+        $percent = ($online / $total) * 100;
+
+        return round($percent, 1);
+    }
+
+    public static function getRequiredOnlinePercent(): float
+    {
+        $total = self::count();
+        $required = ceil($total * 0.66) + 1;
+        $percent = ($required / $total) * 100;
+
+        return round($percent, 1);
+    }
+
     //
     // Relations
 
