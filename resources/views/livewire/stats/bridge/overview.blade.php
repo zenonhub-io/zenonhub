@@ -10,7 +10,7 @@
             <div class="text-start text-md-center mb-2 mb-md-0">
                 <span class="d-inline d-md-block text-muted fs-sm">Orchestrators <span class="text-muted"><i class="bi-question-circle" data-bs-toggle="tooltip" data-bs-title="Over {{ $requiredOrchestrators }}% of orchestrators need to be online for the bridge to function"></i></span></span>
                 <span class="float-end float-md-none">
-                    <span class="legend-indicator bg-{{ ($onlineOrchestrators > $requiredOrchestrators ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $orchestrators }}% Online"></span>
+                    <span class="legend-indicator bg-{{ ($onlineOrchestrators > $requiredOrchestrators ? 'success' : 'danger') }}" data-bs-toggle="tooltip" data-bs-title="{{ $onlineOrchestrators }}% Online"></span>
                 </span>
             </div>
             <div class="text-start text-md-center mb-2 mb-md-0">
