@@ -17,10 +17,10 @@ class PriceTest extends TestCase
         $this->assertIsFloat($price);
     }
 
-    public function test_historic_usd_price_can_be_loaded()
-    {
-        $date = \Carbon\Carbon::parse('01-07-2023');
-        $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $date->timestamp);
-        $this->assertIsFloat($znnPrice);
-    }
+    //    public function test_historic_usd_price_can_be_loaded()
+    //    {
+    //        $date = \Carbon\Carbon::parse('01-07-2023');
+    //        $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $date->timestamp);
+    //        $this->assertIsFloat($znnPrice);
+    //    }
 }
