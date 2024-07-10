@@ -7,10 +7,10 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\BridgeUnwrap;
 use App\Models\Nom\BridgeWrap;
+use App\Models\Nom\Orchestrator;
 use App\Services\BitQuery;
 use App\Services\BridgeStatus;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Livewire\Component;
 
@@ -26,13 +26,15 @@ class Overview extends Component
     {
         $bridgeStatus = App::make(BridgeStatus::class);
         $adminAccount = BridgeAdmin::getActiveAdmin()->account;
-        $orchestrators = Cache::get('orchestrators-online-percentage');
+        $onlineOrchestrators = Orchestrator::getOnlinePercent();
+        $requiredOrchestrators = Orchestrator::getRequiredOnlinePercent();
 
         return view('livewire.stats.bridge.overview', [
             'adminAddress' => $adminAccount,
             'halted' => $bridgeStatus->getIsHalted(),
             'estimatedUnhaltMonemtum' => $bridgeStatus->getEstimatedUnhaltMonemtum(),
-            'orchestrators' => number_format($orchestrators),
+            'onlineOrchestrators' => number_format($onlineOrchestrators),
+            'requiredOrchestrators' => number_format($requiredOrchestrators),
             'affiliateLink' => config('zenon.bridge.affiliate_link'),
             'timeChallenges' => collect($bridgeStatus->getTimeChallenges())->where('isActive', true),
         ]);
