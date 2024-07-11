@@ -143,6 +143,7 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
         Route::get('account-lp-balances', [App\Http\Controllers\Api\Utilities::class, 'accountLpBalances'])->name('accountLpBalances');
         Route::get('token-supply/{token}/{value?}', [App\Http\Controllers\Api\Utilities::class, 'tokenSupply'])->name('tokenSupply');
         Route::get('prices', [App\Http\Controllers\Api\Utilities::class, 'tokenPrice'])->name('tokenPrice');
+        Route::get('reward-totals', [App\Http\Controllers\Api\Utilities::class, 'rewardTotals'])->name('rewardTotals');
         Route::post('plasma-bot/fuse', [App\Http\Controllers\Api\Utilities::class, 'plasmaBotFuse'])->name('plasmaBot.fuse');
         Route::get('plasma-bot/expiration/{address}', [App\Http\Controllers\Api\Utilities::class, 'plasmaBotExpiration'])->name('plasmaBot.expiration');
     });
