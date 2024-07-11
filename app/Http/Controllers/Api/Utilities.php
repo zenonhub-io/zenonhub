@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\PlasmaBot\AccessKeyValidator;
 use App\Actions\PlasmaBot\Fuse;
 use App\Models\Nom\Account;
+use App\Models\Nom\AccountReward;
 use App\Models\Nom\Token;
 use App\Models\PlasmaBotEntry;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
@@ -146,6 +147,27 @@ class Utilities extends ApiController
                 'usd' => btc_price(),
             ],
         ]);
+    }
+
+    public function rewardTotals(): JsonResponse
+    {
+        $znnToken = znn_token();
+        $qsrToken = qsr_token();
+
+        $types = ['delegate', 'stake', 'pillar', 'sentinel', 'liquidity', 'liquidity_program', 'bridge_affiliate'];
+        $tokens = ['znn' => $znnToken, 'qsr' => $qsrToken];
+        $result = [];
+
+        foreach ($types as $type) {
+            foreach ($tokens as $tokenName => $token) {
+                $rewardSum = AccountReward::where('type', constant('AccountReward::TYPE_'.strtoupper($type)))
+                    ->where('token_id', $token->id)
+                    ->sum('amount');
+                $result[$type][$tokenName] = $token->getDisplayAmount($rewardSum);
+            }
+        }
+
+        return $this->success($result);
     }
 
     public function plasmaBotFuse(Request $request): JsonResponse
