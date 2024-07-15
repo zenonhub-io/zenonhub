@@ -154,7 +154,7 @@ class Utilities extends ApiController
         $znnToken = znn_token();
         $qsrToken = qsr_token();
 
-        $types = ['delegate', 'stake', 'pillar', 'sentinel', 'liquidity', 'liquidity_program', 'bridge_affiliate'];
+        $types = ['delegate', 'stake', 'pillar', 'sentinel', 'liquidity', 'bridge_affiliate'];
         $tokens = ['znn' => $znnToken, 'qsr' => $qsrToken];
         $result = [];
 
