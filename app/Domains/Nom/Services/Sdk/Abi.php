@@ -45,6 +45,12 @@ trait Abi
         return null;
     }
 
+    public function abiEncode(ContractMethod $contractMethod, array $data): ?string
+    {
+        return $this->getAbiContract($contractMethod)
+            ->encode($contractMethod->name, $data);
+    }
+
     /**
      * Get the ABI contract for the given ContractMethod.
      *

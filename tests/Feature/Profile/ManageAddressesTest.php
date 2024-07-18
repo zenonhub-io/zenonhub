@@ -23,7 +23,7 @@ test('verified address can be added', function () {
     Livewire::test(ManageAddresses::class)
         ->set(['verifyAddressForm' => [
             'address' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',
-            'name' => 'Test Address',
+            'nickname' => 'Test Address',
             'message' => 'TEST',
             'signature' => '8d70ae934e6efda81e762088ce490328da886c1b9c22a2fd3cb53188cc972cc13c670d6da507b10cac0aa22148a0452c47c12ea20e72402cee5838aae3f35904',
         ]])
@@ -57,7 +57,7 @@ test('invalid signatures are rejected', function () {
     Livewire::test(ManageAddresses::class)
         ->set(['verifyAddressForm' => [
             'address' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',
-            'name' => 'Test Address',
+            'nickname' => 'Test Address',
             'message' => 'TEST',
             'signature' => 'invalid',
         ]])

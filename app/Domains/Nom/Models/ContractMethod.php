@@ -38,6 +38,12 @@ class ContractMethod extends Model
         'fingerprint',
     ];
 
+    public static function findByContractMethod(string $contract, string $method): ?ContractMethod
+    {
+        return self::whereRelation('contract', 'name', $contract)
+            ->firstWhere('name', $method);
+    }
+
     //
     // Relations
 

@@ -16,6 +16,23 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
+    $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'); // ZenonHub
+    $toAccount = load_account(config('explorer.empty_address'));
+    $token = load_token(App\Domains\Nom\Enums\NetworkTokensEnum::ZNN->value);
+    $contractMethod = App\Domains\Nom\Models\ContractMethod::whereRelation('contract', 'name', 'Plasma')
+        ->firstWhere('name', 'Fuse');
+
+    $accountBlockDTO = App\Domains\Indexer\DataTransferObjects\MockAccountBlockDTO::from([
+        'account' => $account,
+        'toAccount' => $toAccount,
+        'token' => $token,
+        'blockType' => App\Domains\Nom\Enums\AccountBlockTypesEnum::SEND,
+        'contractMethod' => $contractMethod,
+        'data' => '{"address":"z1qq5jr3ejh0j9cqn5k3405kuzt5l4x9434z8hnq"}',
+    ]);
+
+    dd($accountBlockDTO);
+
     $pillar = App\Domains\Nom\Models\Pillar::first();
     App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);
 
