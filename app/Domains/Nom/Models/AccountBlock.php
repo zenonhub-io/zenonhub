@@ -245,18 +245,16 @@ class AccountBlock extends Model
 
     public function getRawJsonAttribute(): array
     {
-        $updateCache = true;
         $cacheKey = $this->cacheKey('rawJson');
+        $data = Cache::get($cacheKey);
 
         try {
-            $data = app(ZenonSdk::class)->getAccountBlockByHash($this->hash);
+            $newData = app(ZenonSdk::class)->getAccountBlockByHash($this->hash);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
         } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data->toJson();

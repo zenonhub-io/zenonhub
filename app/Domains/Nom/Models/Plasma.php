@@ -86,6 +86,11 @@ class Plasma extends Model
         return $query->whereNull('ended_at');
     }
 
+    public function scopeWhereInActive($query)
+    {
+        return $query->whereNotNull('ended_at');
+    }
+
     public function scopeWhereHash($query, $hash)
     {
         return $query->where('hash', $hash);

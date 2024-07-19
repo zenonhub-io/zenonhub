@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
+use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Maize\Markable\Markable;
@@ -255,19 +254,16 @@ class Pillar extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): array
     {
-        $updateCache = true;
-        $cacheKey = "nom.pillar.rawJson.{$this->id}";
+        $cacheKey = $this->cacheKey('rawJson');
+        $data = Cache::get($cacheKey);
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->pillar->getByOwner($this->owner->address)['data'][0];
+            $newData = app(ZenonSdk::class)->getPillarByOwner($this->owner->address);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
         } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;

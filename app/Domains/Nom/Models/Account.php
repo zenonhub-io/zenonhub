@@ -8,6 +8,7 @@ use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
+use Http;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -430,19 +430,16 @@ class Account extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): array
     {
-        $updateCache = true;
-        $cacheKey = "nom.account.rawJson.{$this->id}";
+        $cacheKey = $this->cacheKey('rawJson');
+        $data = Cache::get($cacheKey);
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->ledger->getAccountInfoByAddress($this->address)['data'];
+            $newData = app(ZenonSdk::class)->getAccountInfoByAddress($this->address);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
         } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;
@@ -474,6 +471,15 @@ class Account extends Model implements Sitemapable
     public function getFlaggedDetailsAttribute(): string
     {
         return collect(config('explorer.flagged_accounts'))->where($this->account)->first();
+    }
+
+    public function getAvatarSvgAttribute()
+    {
+        $svg = Http::get('https://api.dicebear.com/9.x/identicon/svg', [
+            'seed' => $this->address,
+        ])->body();
+
+        return $svg;
     }
 
     //

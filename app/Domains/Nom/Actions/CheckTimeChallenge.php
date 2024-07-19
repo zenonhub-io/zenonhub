@@ -16,6 +16,7 @@ class CheckTimeChallenge
     {
         $accountBlock->load('momentum');
         $momentum = $accountBlock->momentum;
+
         $timeChallenge = TimeChallenge::firstOrCreate([
             'chain_id' => app('currentChain')->id,
             'contract_method_id' => $accountBlock->contract_method_id,

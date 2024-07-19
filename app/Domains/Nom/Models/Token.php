@@ -6,8 +6,8 @@ namespace App\Domains\Nom\Models;
 
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -271,19 +270,16 @@ class Token extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): array
     {
-        $updateCache = true;
-        $cacheKey = "nom.token.rawJson.{$this->id}";
+        $cacheKey = $this->cacheKey('rawJson');
+        $data = Cache::get($cacheKey);
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->token->getByZts($this->token_standard)['data'];
+            $newData = app(ZenonSdk::class)->getByZts($this->token_standard);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
         } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;

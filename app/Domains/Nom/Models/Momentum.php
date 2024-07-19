@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
+use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
@@ -133,18 +134,16 @@ class Momentum extends Model
 
     public function getRawJsonAttribute(): array
     {
-        $updateCache = true;
         $cacheKey = $this->cacheKey('rawJson');
+        $data = Cache::get($cacheKey);
 
         try {
-            $data = app(\App\Domains\Nom\Services\ZenonSdk::class)->getMomentumsByHash($this->hash);
+            $newData = app(ZenonSdk::class)->getMomentumsByHash($this->hash);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
         } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domains\Nom\Models;
 
-use App\Services\ZenonSdk;
+use App\Domains\Nom\Services\ZenonSdk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
 
@@ -85,19 +84,16 @@ class Sentinel extends Model
 
     public function getRawJsonAttribute(): array
     {
-        $updateCache = true;
-        $cacheKey = "nom.sentinel.rawJson.{$this->id}";
+        $cacheKey = $this->cacheKey('rawJson');
+        $data = Cache::get($cacheKey);
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->sentinel->getByOwner($this->owner->address)['data'][0];
+            $newData = app(ZenonSdk::class)->getSentinelByOwner($this->owner->address);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
         } catch (Throwable $throwable) {
-            $updateCache = false;
-            $data = Cache::get($cacheKey);
-        }
-
-        if ($updateCache) {
-            Cache::forever($cacheKey, $data);
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;

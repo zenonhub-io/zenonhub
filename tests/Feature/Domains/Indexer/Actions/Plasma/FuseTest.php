@@ -18,7 +18,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'plasma');
+uses()->group('indexer', 'indexer-actions', 'plasma', 'fuse');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -26,7 +26,7 @@ beforeEach(function () {
     $this->seed(TestGenesisSeeder::class);
 });
 
-function createMockAccountBlockDTO(array $overrides = []): AccountBlock
+function createFuseAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
         'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
@@ -46,21 +46,23 @@ function createMockAccountBlockDTO(array $overrides = []): AccountBlock
 
 it('create a fuse', function () {
 
-    $accountBlock = createMockAccountBlockDTO();
+    $accountBlock = createFuseAccountBlock();
 
     (new Fuse)->handle($accountBlock);
 
     $plasma = Plasma::first();
 
-    expect(Plasma::count())->toBe(1)
-        ->and($plasma->from_account_id)->toBe($accountBlock->account->id)
-        ->and($plasma->to_account_id)->toBe($accountBlock->account->id)
-        ->and($plasma->amount)->toBe($accountBlock->amount);
+    expect(Plasma::whereActive()->get())->toHaveCount(1)
+        ->and($plasma->from_account_id)->toEqual($accountBlock->account->id)
+        ->and($plasma->to_account_id)->toEqual($accountBlock->account->id)
+        ->and($plasma->amount)->toEqual($accountBlock->amount)
+        ->and($plasma->started_at)->toEqual($accountBlock->created_at)
+        ->and($plasma->ended_at)->toBeNull();
 });
 
 it('dispatches the fused event', function () {
 
-    $accountBlock = createMockAccountBlockDTO();
+    $accountBlock = createFuseAccountBlock();
 
     Event::fake();
 
@@ -75,7 +77,7 @@ it('doesnt pass validation with invalid token', function () {
         ->with('Contract Method Processor - Plasma: Fuse failed', Mockery::on(fn ($data) => $data['error'] === 'Invalid token, must be QSR'))
         ->once();
 
-    $accountBlock = createMockAccountBlockDTO([
+    $accountBlock = createFuseAccountBlock([
         'token' => load_token(NetworkTokensEnum::ZNN->value),
     ]);
 
@@ -84,7 +86,7 @@ it('doesnt pass validation with invalid token', function () {
 
 it('doesnt pass validation with invalid amount of QSR', function () {
 
-    $accountBlock = createMockAccountBlockDTO([
+    $accountBlock = createFuseAccountBlock([
         'amount' => '50',
     ]);
 

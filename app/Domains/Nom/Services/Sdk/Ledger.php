@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Services\Sdk;
 
 use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
+use App\Domains\Nom\DataTransferObjects\AccountDTO;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Exceptions\ZenonRpcException;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
@@ -83,6 +84,17 @@ trait Ledger
             return AccountBlockDTO::from($data);
         } catch (Exception $e) {
             throw new ZenonRpcException('Unable to getAccountBlockByHash');
+        }
+    }
+
+    public function getAccountInfoByAddress(string $address): AccountDTO
+    {
+        try {
+            $data = $this->sdk->ledger->getAccountInfoByAddress($address)['data'];
+
+            return AccountDTO::from($data);
+        } catch (Exception $e) {
+            throw new ZenonRpcException('Unable to getAccountInfoByAddress');
         }
     }
 }

@@ -65,7 +65,8 @@ class CancelFuse extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Account is not plasma owner');
         }
 
-        if ($plasma->started_at->addHours(config('nom.plasma.expiration')) >= $accountBlock->created_at) {
+        // Plasma expiration is actually based on momentum height, so this is a bit of a workaround
+        if ($plasma->started_at->addSeconds(config('nom.plasma.expiration') * 10) >= $accountBlock->created_at) {
             throw new IndexerActionValidationException('Plasma not yet cancelable');
         }
     }
