@@ -160,10 +160,17 @@ class Utilities extends ApiController
 
         foreach ($types as $type) {
             foreach ($tokens as $tokenName => $token) {
-                $rewardSum = AccountReward::where('type', constant('App\Models\Nom\AccountReward::TYPE_'.strtoupper($type)))
+                $typeConstant = constant('App\Models\Nom\AccountReward::TYPE_'.strtoupper($type));
+                $rewardSum = AccountReward::where('type', $typeConstant)
                     ->where('token_id', $token->id)
                     ->sum('amount');
+
+                $uniqueAddresses = AccountReward::where('type', $typeConstant)
+                    ->distinct('account_id')
+                    ->count();
+
                 $result[$type][$tokenName] = $token->getDisplayAmount($rewardSum);
+                $result[$type]['uniqueAddresses'] = $uniqueAddresses;
             }
         }
 
