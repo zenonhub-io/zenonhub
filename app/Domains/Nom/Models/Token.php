@@ -22,7 +22,7 @@ use Throwable;
 
 class Token extends Model implements Sitemapable
 {
-    //use HasFactory, Markable;
+    //use Markable;
     use HasFactory;
 
     /**
@@ -117,6 +117,16 @@ class Token extends Model implements Sitemapable
             'token_id',
             'account_id'
         )->withPivot('balance', 'updated_at');
+    }
+
+    public function prices(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Currency::class,
+            'nom_token_prices',
+            'token_id',
+            'currency_id'
+        )->withPivot('value', 'timestamp');
     }
 
     public function mints(): HasMany

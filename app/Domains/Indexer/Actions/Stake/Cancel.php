@@ -63,7 +63,7 @@ class Cancel extends AbstractContractMethodProcessor
         }
 
         if ($stake->end_date > $accountBlock->created_at) {
-            throw new IndexerActionValidationException('Stake already ended');
+            throw new IndexerActionValidationException('Stake end date in the future');
         }
     }
 }

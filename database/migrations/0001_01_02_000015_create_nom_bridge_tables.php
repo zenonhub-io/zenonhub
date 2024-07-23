@@ -36,7 +36,6 @@ return new class extends Migration
             $table->string('contract_address');
             $table->text('meta_data')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('nom_bridge_network_tokens', function (Blueprint $table) {

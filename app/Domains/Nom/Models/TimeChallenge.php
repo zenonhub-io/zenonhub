@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Models;
 
 use App\Traits\ModelCacheKeyTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TimeChallenge extends Model
 {
-    use HasFactory, ModelCacheKeyTrait;
+    use ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.

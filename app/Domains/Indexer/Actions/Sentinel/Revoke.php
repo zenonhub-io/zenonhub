@@ -61,10 +61,6 @@ class Revoke extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Invalid sentinel');
         }
 
-        if ($sentinel->revoked_at !== null) {
-            throw new IndexerActionValidationException('Sentinel already revoked');
-        }
-
         if (! $sentinel->getIsRevokableAttribute($accountBlock->created_at)) {
             throw new IndexerActionValidationException('Sentinel not revocable');
         }

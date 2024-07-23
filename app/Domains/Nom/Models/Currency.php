@@ -6,7 +6,7 @@ namespace App\Domains\Nom\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Chain extends Model
+class Currency extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -20,7 +20,7 @@ class Chain extends Model
      *
      * @var string
      */
-    protected $table = 'nom_chains';
+    protected $table = 'nom_currencies';
 
     /**
      * The attributes that are mass assignable.
@@ -28,11 +28,9 @@ class Chain extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'chain_identifier',
-        'version',
         'name',
-        'is_active',
-        'created_at',
+        'symbol',
+        'icon',
     ];
 
     /**
@@ -42,14 +40,7 @@ class Chain extends Model
      */
     protected function casts(): array
     {
-        return [
-            'created_at' => 'datetime',
-        ];
-    }
-
-    public static function getCurrentChainId(): Chain
-    {
-        return self::first();
+        return [];
     }
 
     //
@@ -60,11 +51,6 @@ class Chain extends Model
 
     //
     // Scopes
-
-    public function scopeWhereActive($query)
-    {
-        return $query->whereNull('is_active');
-    }
 
     //
     // Methods

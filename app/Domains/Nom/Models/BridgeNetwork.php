@@ -7,12 +7,9 @@ namespace App\Domains\Nom\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BridgeNetwork extends Model
 {
-    use SoftDeletes;
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -41,7 +38,6 @@ class BridgeNetwork extends Model
         'meta_data',
         'created_at',
         'updated_at',
-        'deleted_at',
     ];
 
     /**

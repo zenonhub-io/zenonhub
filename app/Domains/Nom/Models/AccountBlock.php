@@ -9,6 +9,8 @@ use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
 use Carbon\Carbon;
+use Database\Factories\Domains\Nom\AccountBlockFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,7 +22,7 @@ use Throwable;
 
 class AccountBlock extends Model
 {
-    //use HasFactory, Markable;
+    //use Markable;
     use HasFactory, ModelCacheKeyTrait;
 
     /**
@@ -272,5 +274,13 @@ class AccountBlock extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AccountBlockFactory::new();
     }
 }

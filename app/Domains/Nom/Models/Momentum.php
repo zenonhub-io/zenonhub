@@ -7,7 +7,9 @@ namespace App\Domains\Nom\Models;
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\Domains\Nom\MomentumFactory;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +21,7 @@ use Throwable;
 class Momentum extends Model
 {
     use HasFactory, ModelCacheKeyTrait;
-    //use HasFactory, Markable;
+    //use Markable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -67,6 +69,9 @@ class Momentum extends Model
         ];
     }
 
+    /**
+     * Get the current frontier momentum.
+     */
     public static function getFrontier(): Momentum
     {
         return self::latest()->first();
@@ -156,5 +161,13 @@ class Momentum extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return MomentumFactory::new();
     }
 }

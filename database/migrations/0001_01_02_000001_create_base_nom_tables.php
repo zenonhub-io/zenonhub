@@ -57,6 +57,13 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->timestamp('created_at')->nullable();
         });
+
+        Schema::create('nom_currencies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->index();
+            $table->string('symbol')->index();
+            $table->string('icon')->nullable();
+        });
     }
 
     /**

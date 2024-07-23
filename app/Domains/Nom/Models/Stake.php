@@ -89,6 +89,11 @@ class Stake extends Model
         return $query->whereNull('ended_at');
     }
 
+    public function scopeWhereInactive($query)
+    {
+        return $query->whereNotNull('ended_at');
+    }
+
     public function scopeWhereZnn($query)
     {
         return $query->where('token_id', app('znnToken')->id);

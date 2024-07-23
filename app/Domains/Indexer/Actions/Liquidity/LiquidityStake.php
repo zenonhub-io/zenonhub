@@ -64,15 +64,15 @@ class LiquidityStake extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
 
         if ($accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->value) {
-            throw new IndexerActionValidationException('Token must be ZNN ETH LP');
+            throw new IndexerActionValidationException('Invalid stake token');
         }
 
         if ($accountBlock->amount <= 0) {
-            throw new IndexerActionValidationException('Amount must be more than 0');
+            throw new IndexerActionValidationException('Invalid stake amount');
         }
 
         if ($accountBlock->data->decoded['durationInSec'] <= 0) {
-            throw new IndexerActionValidationException('Duration must be more than 0');
+            throw new IndexerActionValidationException('Invalid stake duration');
         }
     }
 }

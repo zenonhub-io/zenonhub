@@ -30,6 +30,14 @@ return new class extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
+
+        Schema::create('nom_token_prices', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('currency_id')->references('id')->on('nom_currencies');
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
+            $table->decimal('value')->index();
+            $table->timestamp('timestamp')->nullable();
+        });
     }
 
     /**

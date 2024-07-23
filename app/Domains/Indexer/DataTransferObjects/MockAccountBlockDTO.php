@@ -39,6 +39,10 @@ class MockAccountBlockDTO extends Data
             $this->height = AccountBlock::max('height') + 1;
         }
 
+        if (! $this->amount) {
+            $this->amount = '0';
+        }
+
         if (! $this->blockType) {
             $this->blockType = AccountBlockTypesEnum::SEND;
         }

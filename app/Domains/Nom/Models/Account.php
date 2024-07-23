@@ -7,9 +7,11 @@ namespace App\Domains\Nom\Models;
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\Domains\Nom\AccountFactory;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
 use Http;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,7 +25,7 @@ use Throwable;
 
 class Account extends Model implements Sitemapable
 {
-    //use HasFactory, Markable;
+    //use Markable;
     use HasFactory, ModelCacheKeyTrait;
 
     /**
@@ -511,5 +513,13 @@ class Account extends Model implements Sitemapable
         }
 
         return '0';
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AccountFactory::new();
     }
 }

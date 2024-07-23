@@ -7,6 +7,8 @@ namespace App\Domains\Nom\Models;
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\Domains\Nom\PillarFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +26,7 @@ use Throwable;
 class Pillar extends Model implements Sitemapable
 {
     use HasFactory, ModelCacheKeyTrait;
-    //use ModelCacheKeyTrait, HasFactory, Markable;
+    //use Markable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -341,6 +343,14 @@ class Pillar extends Model implements Sitemapable
         }
 
         return 'Now';
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return PillarFactory::new();
     }
 
     //

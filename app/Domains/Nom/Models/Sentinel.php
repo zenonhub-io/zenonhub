@@ -74,6 +74,11 @@ class Sentinel extends Model
         return $query->whereNull('revoked_at');
     }
 
+    public function scopeWhereInactive($query)
+    {
+        return $query->whereNotNull('revoked_at');
+    }
+
     public function scopeWhereOwner($query, $ownerId)
     {
         return $query->where('owner_id', $ownerId);

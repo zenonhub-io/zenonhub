@@ -33,13 +33,14 @@ class MockAccountBlockFactory
             'created_at' => $mockAccountBlockDTO->momentum->created_at,
         ]);
 
-        if (! empty($mockAccountBlockDTO->data)) {
+        if ($mockAccountBlockDTO->contractMethod) {
 
+            $data = $mockAccountBlockDTO->data ?: [];
             $encodedData = app(ZenonSdk::class)
-                ->abiEncode($mockAccountBlockDTO->contractMethod, array_values($mockAccountBlockDTO->data));
+                ->abiEncode($mockAccountBlockDTO->contractMethod, array_values($data));
 
             $block->data()->create([
-                'raw' => base64_encode($encodedData),
+                'raw' => base64_encode($encodedData ?: 'null'),
                 'decoded' => $mockAccountBlockDTO->data,
             ]);
         }
