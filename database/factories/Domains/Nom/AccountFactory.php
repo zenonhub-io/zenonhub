@@ -25,7 +25,6 @@ class AccountFactory extends Factory
             'chain_id' => 1,
             'address' => $keyStore->getKeyPair()->address->toString(),
             'public_key' => base64_encode($keyStore->getKeyPair()->publicKey),
-            'name' => null,
             'znn_balance' => 0,
             'qsr_balance' => 0,
         ];

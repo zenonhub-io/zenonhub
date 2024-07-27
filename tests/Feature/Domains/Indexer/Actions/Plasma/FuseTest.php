@@ -18,7 +18,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'plasma', 'fuse');
+uses()->group('indexer', 'indexer-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -74,7 +74,10 @@ it('dispatches the fused event', function () {
 it('doesnt pass validation with invalid token', function () {
 
     Log::shouldReceive('info')
-        ->with('Contract Method Processor - Plasma: Fuse failed', Mockery::on(fn ($data) => $data['error'] === 'Invalid token, must be QSR'))
+        ->with(
+            'Contract Method Processor - Plasma: Fuse failed',
+            Mockery::on(fn ($data) => $data['error'] === 'Invalid token, must be QSR')
+        )
         ->once();
 
     $accountBlock = createFuseAccountBlock([
@@ -82,6 +85,8 @@ it('doesnt pass validation with invalid token', function () {
     ]);
 
     (new Fuse)->handle($accountBlock);
+
+    expect(Plasma::whereActive()->get())->toHaveCount(0);
 });
 
 it('doesnt pass validation with invalid amount of QSR', function () {
@@ -91,10 +96,13 @@ it('doesnt pass validation with invalid amount of QSR', function () {
     ]);
 
     Log::shouldReceive('info')
-        ->with('Contract Method Processor - Plasma: Fuse failed', Mockery::on(fn ($data) => $data['error'] === 'Invalid amount of QSR'))
+        ->with(
+            'Contract Method Processor - Plasma: Fuse failed',
+            Mockery::on(fn ($data) => $data['error'] === 'Invalid amount of QSR')
+        )
         ->once();
 
     (new Fuse)->handle($accountBlock);
 
-    expect(Plasma::count())->toBe(0);
+    expect(Plasma::whereActive()->get())->toHaveCount(0);
 });

@@ -33,7 +33,6 @@ class AccountBlockFactory extends Factory
                 return $momentum->previous_momentum?->id ?: $momentum->id;
             },
             'parent_id' => null,
-            'paired_account_block_id' => AccountBlock::factory(),
             'token_id' => null,
             'contract_method_id' => null,
             'version' => 1,

@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-use App\Domains\Indexer\Actions\Plasma\CancelFuse;
+use App\Domains\Indexer\Actions\Stake\Cancel;
 use App\Domains\Indexer\DataTransferObjects\MockAccountBlockDTO;
-use App\Domains\Indexer\Events\Plasma\EndFuse;
+use App\Domains\Indexer\Events\Stake\EndStake;
 use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
-use App\Domains\Nom\Models\Plasma;
+use App\Domains\Nom\Models\Stake;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\NomSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'plasma');
+uses()->group('indexer', 'indexer-actions', 'stake');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -26,19 +26,21 @@ beforeEach(function () {
     $this->seed(TestGenesisSeeder::class);
 
     $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    Plasma::create([
+    $token = load_token(NetworkTokensEnum::ZNN->value);
+    Stake::create([
         'chain_id' => $account->chain_id,
-        'from_account_id' => $account->id,
-        'to_account_id' => $account->id,
+        'account_id' => $account->id,
+        'token_id' => $token->id,
         'account_block_id' => 1,
-        'amount' => 50 * NOM_DECIMALS,
+        'amount' => 100 * NOM_DECIMALS,
+        'duration' => '31104000',
         'hash' => hash('sha256', 'example-hash'),
-        'started_at' => now()->subDay(),
+        'started_at' => now()->subYear(),
         'ended_at' => null,
     ]);
 });
 
-function createCancelFuseAccountBlock(array $overrides = []): AccountBlock
+function createCancelStakeAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
         'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
@@ -56,61 +58,61 @@ function createCancelFuseAccountBlock(array $overrides = []): AccountBlock
     return MockAccountBlockFactory::create($accountBlockDTO);
 }
 
-it('cancels a fuse', function () {
+it('cancels a stake', function () {
 
-    $accountBlock = createCancelFuseAccountBlock();
+    $accountBlock = createCancelStakeAccountBlock();
     $accountBlock->created_at = now();
 
-    (new CancelFuse)->handle($accountBlock);
+    (new Cancel)->handle($accountBlock);
 
-    $plasma = Plasma::first();
+    $stake = Stake::first();
 
-    expect(Plasma::whereInactive()->get())->toHaveCount(1)
-        ->and($plasma->ended_at)->toEqual($accountBlock->created_at);
+    expect(Stake::whereInactive()->get())->toHaveCount(1)
+        ->and($stake->ended_at)->toEqual($accountBlock->created_at);
 });
 
-it('dispatches the end fuse event', function () {
+it('dispatches the end stake event', function () {
 
-    $accountBlock = createCancelFuseAccountBlock();
+    $accountBlock = createCancelStakeAccountBlock();
     $accountBlock->created_at = now();
 
     Event::fake();
 
-    (new CancelFuse)->handle($accountBlock);
+    (new Cancel)->handle($accountBlock);
 
-    Event::assertDispatched(EndFuse::class);
+    Event::assertDispatched(EndStake::class);
 });
 
-it('ensures only plasma owners can cancel fuses', function () {
+it('ensures only stake owner can cancel stakes', function () {
 
     Log::shouldReceive('info')
         ->with(
-            'Contract Method Processor - Plasma: CancelFuse failed',
-            Mockery::on(fn ($data) => $data['error'] === 'Account is not plasma owner')
+            'Contract Method Processor - Stake: Cancel failed',
+            Mockery::on(fn ($data) => $data['error'] === 'Account is not stake owner')
         )
         ->once();
 
-    $accountBlock = createCancelFuseAccountBlock([
+    $accountBlock = createCancelStakeAccountBlock([
         'account' => load_account(config('explorer.empty_address')),
     ]);
 
-    (new CancelFuse)->handle($accountBlock);
+    (new Cancel)->handle($accountBlock);
 
-    expect(Plasma::whereActive()->get())->toHaveCount(1);
+    expect(Stake::whereActive()->get())->toHaveCount(1);
 });
 
-it('enforces plasma minimum expiration time', function () {
+it('enforces stake duration time', function () {
 
     Log::shouldReceive('info')
         ->with(
-            'Contract Method Processor - Plasma: CancelFuse failed',
-            Mockery::on(fn ($data) => $data['error'] === 'Plasma not yet cancelable')
+            'Contract Method Processor - Stake: Cancel failed',
+            Mockery::on(fn ($data) => $data['error'] === 'Stake end date in the future')
         )
         ->once();
 
-    $accountBlock = createCancelFuseAccountBlock();
+    $accountBlock = createCancelStakeAccountBlock();
 
-    (new CancelFuse)->handle($accountBlock);
+    (new Cancel)->handle($accountBlock);
 
-    expect(Plasma::whereActive()->get())->toHaveCount(1);
+    expect(Stake::whereActive()->get())->toHaveCount(1);
 });

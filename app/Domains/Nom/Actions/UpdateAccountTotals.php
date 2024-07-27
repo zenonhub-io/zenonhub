@@ -62,7 +62,7 @@ class UpdateAccountTotals implements ShouldBeUnique
     private function saveCurrentBalance(): void
     {
         $accountTokenIds = $this->account->balances()->pluck('token_id');
-        $tokenIds = $this->account->receivedBlocks()
+        $tokenIds = $this->account->blocks()
             ->whereNotNull('token_id')
             ->distinct()
             ->get(['token_id'])
@@ -97,12 +97,12 @@ class UpdateAccountTotals implements ShouldBeUnique
             }
 
             if ($accountTokenIds->contains($tokenId)) {
-                $this->account->balances()->attach($tokenId, [
+                $this->account->balances()->updateExistingPivot($tokenId, [
                     'balance' => $balance,
                     'updated_at' => now(),
                 ]);
             } else {
-                $this->account->balances()->updateExistingPivot($tokenId, [
+                $this->account->balances()->attach($tokenId, [
                     'balance' => $balance,
                     'updated_at' => now(),
                 ]);

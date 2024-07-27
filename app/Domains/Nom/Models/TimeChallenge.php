@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Models;
 
 use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\TimeChallengeFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TimeChallenge extends Model
 {
-    use ModelCacheKeyTrait;
+    use HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -51,6 +54,7 @@ class TimeChallenge extends Model
     protected function casts(): array
     {
         return [
+            'is_active' => 'boolean',
             'expires_at' => 'datetime',
             'created_at' => 'datetime',
         ];
@@ -75,6 +79,14 @@ class TimeChallenge extends Model
     public function scopeWhereActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TimeChallengeFactory::new();
     }
 
     //
