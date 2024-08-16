@@ -73,6 +73,18 @@ class Account extends Model implements Sitemapable
     protected function casts(): array
     {
         return [
+            'znn_balance' => 'string',
+            'qsr_balance' => 'string',
+            'genesis_znn_balance' => 'string',
+            'genesis_qsr_balance' => 'string',
+            'znn_sent' => 'string',
+            'znn_received' => 'string',
+            'qsr_sent' => 'string',
+            'qsr_received' => 'string',
+            'znn_staked' => 'string',
+            'qsr_fused' => 'string',
+            'znn_rewards' => 'string',
+            'qsr_rewards' => 'string',
             'first_active_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -128,11 +140,6 @@ class Account extends Model implements Sitemapable
     public function fusions(): HasMany
     {
         return $this->hasMany(Plasma::class, 'from_account_id');
-    }
-
-    public function fuses(): HasMany
-    {
-        return $this->hasMany(Plasma::class, 'to_account_id', 'id');
     }
 
     public function plasma(): Builder

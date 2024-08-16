@@ -203,7 +203,7 @@ Route::middleware([
     Route::get('donate', HomeController::class)->name('donate');
     Route::get('sponsor', HomeController::class)->name('sponsor');
 
-    Route::get('pillars', PillarsController::class)->name('pillars');
+    Route::get('pillars/{tab?}', PillarsController::class)->name('pillars');
     Route::get('pillar/{slug}', PillarsController::class)->name('pillar.detail');
 
     Route::get('sentinels', SentinelsController::class)->name('sentinels');

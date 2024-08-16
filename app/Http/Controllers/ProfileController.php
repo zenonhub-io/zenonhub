@@ -11,7 +11,7 @@ class ProfileController
 {
     private string $defaultTab = 'details';
 
-    public function __invoke($tab = null): View
+    public function __invoke(?string $tab = null): View
     {
         MetaTags::title('Manage your account');
 

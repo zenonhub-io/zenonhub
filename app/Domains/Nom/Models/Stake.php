@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domains\Nom\Models;
 
 use Carbon\Carbon;
+use Database\Factories\Domains\Nom\StakeFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -140,5 +142,13 @@ class Stake extends Model
         $duration = now()->timestamp - $this->started_at->timestamp;
 
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return StakeFactory::new();
     }
 }

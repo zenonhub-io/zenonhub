@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Factories\Domains\Nom;
+
+use App\Domains\Nom\Models\Account;
+use App\Domains\Nom\Models\AccountBlock;
+use App\Domains\Nom\Models\Plasma;
+use App\View\Components\DateTime\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
+
+class PlasmaFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<Model>
+     */
+    protected $model = Plasma::class;
+
+    public function definition(): array
+    {
+        return [
+            'chain_id' => 1,
+            'from_account_id' => Account::factory(),
+            'to_account_id' => Account::factory(),
+            'account_block_id' => AccountBlock::factory(),
+            'amount' => (string) (1 * NOM_DECIMALS),
+            'hash' => fn (array $attributes) => AccountBlock::find($attributes['account_block_id'])->hash,
+            'started_at' => fn (array $attributes) => AccountBlock::find($attributes['account_block_id'])->created_at,
+            'ended_at' => null,
+        ];
+    }
+
+    public function ended(?Carbon $endDate = null): Factory
+    {
+        return $this->state(function (array $attributes) use ($endDate) {
+            return [
+                'ended_at' => $endDate ?: now(),
+            ];
+        });
+    }
+}
