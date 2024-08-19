@@ -9,6 +9,7 @@ use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Stake;
@@ -24,26 +25,12 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(NomSeeder::class);
     $this->seed(TestGenesisSeeder::class);
-
-    $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $token = load_token(NetworkTokensEnum::ZNN->value);
-    Stake::create([
-        'chain_id' => $account->chain_id,
-        'account_id' => $account->id,
-        'token_id' => $token->id,
-        'account_block_id' => 1,
-        'amount' => 100 * NOM_DECIMALS,
-        'duration' => '31104000',
-        'hash' => hash('sha256', 'example-hash'),
-        'started_at' => now()->subYear(),
-        'ended_at' => null,
-    ]);
 });
 
 function createCancelStakeAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
-        'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
+        'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::PLASMA->value),
         'token' => load_token(NetworkTokensEnum::ZNN->value),
         'amount' => '0',
@@ -60,8 +47,16 @@ function createCancelStakeAccountBlock(array $overrides = []): AccountBlock
 
 it('cancels a stake', function () {
 
-    $accountBlock = createCancelStakeAccountBlock();
-    $accountBlock->created_at = now();
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
+    $accountBlock = createCancelStakeAccountBlock([
+        'account' => $stake->account,
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
+    ]);
 
     (new Cancel)->handle($accountBlock);
 
@@ -73,8 +68,16 @@ it('cancels a stake', function () {
 
 it('dispatches the end stake event', function () {
 
-    $accountBlock = createCancelStakeAccountBlock();
-    $accountBlock->created_at = now();
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
+    $accountBlock = createCancelStakeAccountBlock([
+        'account' => $stake->account,
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
+    ]);
 
     Event::fake();
 
@@ -92,8 +95,14 @@ it('ensures only stake owner can cancel stakes', function () {
         )
         ->once();
 
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
     $accountBlock = createCancelStakeAccountBlock([
-        'account' => load_account(config('explorer.empty_address')),
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
     ]);
 
     (new Cancel)->handle($accountBlock);
@@ -110,7 +119,16 @@ it('enforces stake duration time', function () {
         )
         ->once();
 
-    $accountBlock = createCancelStakeAccountBlock();
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now(),
+    ]);
+    $accountBlock = createCancelStakeAccountBlock([
+        'account' => $stake->account,
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
+    ]);
 
     (new Cancel)->handle($accountBlock);
 

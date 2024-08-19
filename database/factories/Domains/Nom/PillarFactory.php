@@ -40,7 +40,7 @@ class PillarFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'qsr_burn' => Pillar::max('qsr_burn') + (150000 * NOM_DECIMALS),
+                'qsr_burn' => 150000 * NOM_DECIMALS,
                 'is_legacy' => 1,
             ];
         });

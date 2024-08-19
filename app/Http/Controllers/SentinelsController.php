@@ -14,6 +14,6 @@ class SentinelsController
         //        MetaTags::title('')
         //            ->description('');
 
-        return view('pillars');
+        return view('home');
     }
 }

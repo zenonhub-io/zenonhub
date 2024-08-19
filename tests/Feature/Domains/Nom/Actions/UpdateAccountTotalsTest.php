@@ -24,8 +24,8 @@ it('updates an accounts current balance', function () {
 
     $token = load_token(NetworkTokensEnum::ZNN->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
 
     AccountBlock::factory()->count(5)->create([
         'account_id' => $sender->id,
@@ -49,8 +49,8 @@ it('updates an accounts current znn balance', function () {
 
     $token = load_token(NetworkTokensEnum::ZNN->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
 
     AccountBlock::factory()->count(5)->create([
         'account_id' => $sender->id,
@@ -70,8 +70,8 @@ it('updates an accounts znn send and received totals', function () {
 
     $token = load_token(NetworkTokensEnum::ZNN->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
 
     AccountBlock::factory()->count(3)->create([
         'account_id' => $sender->id,
@@ -100,8 +100,8 @@ it('updates an accounts current qsr balance', function () {
 
     $token = load_token(NetworkTokensEnum::QSR->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
 
     AccountBlock::factory()->count(5)->create([
         'account_id' => $sender->id,
@@ -121,8 +121,8 @@ it('updates an accounts qsr send and received totals', function () {
 
     $token = load_token(NetworkTokensEnum::QSR->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
 
     AccountBlock::factory()->count(3)->create([
         'account_id' => $sender->id,
@@ -151,8 +151,8 @@ it('accounts for an addresses genesis znn balance', function () {
 
     $token = load_token(NetworkTokensEnum::ZNN->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
     $receiver->genesis_znn_balance = (string) (5 * NOM_DECIMALS);
     $receiver->save();
 
@@ -174,8 +174,8 @@ it('accounts for an addresses genesis qsr balance', function () {
 
     $token = load_token(NetworkTokensEnum::QSR->value);
 
-    $sender = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $receiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvm1');
+    $sender = Account::factory()->create();
+    $receiver = Account::factory()->create();
     $receiver->genesis_qsr_balance = (string) (5 * NOM_DECIMALS);
     $receiver->save();
 

@@ -1,7 +1,7 @@
 @props(['items' => [], 'active' => null])
 
 <div class="d-none d-md-block">
-    <ul class="nav nav-tabs nav-fill nav-tabs-flush gap-6 overflow-x border-0">
+    <ul class="nav nav-tabs nav-tabs-flush gap-6 overflow-x border-0">
         @foreach($items as $name => $link)
             <li class="nav-item">
                 <x-link :href="$link" class="nav-link {{ $active === Str::slug($name) ? 'active' : null }}">

@@ -9,6 +9,7 @@ use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Sentinel;
@@ -29,7 +30,7 @@ beforeEach(function () {
 function createSentinelRegisterAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
-        'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
+        'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::SENTINEL->value),
         'token' => load_token(NetworkTokensEnum::ZNN->value),
         'amount' => (string) (5000 * NOM_DECIMALS),

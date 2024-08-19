@@ -14,6 +14,6 @@ class AcceleratorZController
         //        MetaTags::title('')
         //            ->description('');
 
-        return view('pillars');
+        return view('home');
     }
 }

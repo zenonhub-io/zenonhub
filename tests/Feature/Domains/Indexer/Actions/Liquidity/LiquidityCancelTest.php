@@ -9,10 +9,10 @@ use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Stake;
-use App\Domains\Nom\Models\Token;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\NomSeeder;
 use Database\Seeders\TestGenesisSeeder;
@@ -25,42 +25,12 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(NomSeeder::class);
     $this->seed(TestGenesisSeeder::class);
-
-    Token::insert([
-        'chain_id' => 1,
-        'owner_id' => load_account(EmbeddedContractsEnum::BRIDGE->value)->id,
-        'name' => 'wZNN-wETH-LP-ETH',
-        'symbol' => 'ZNNETHLP',
-        'domain' => 'zenon.network',
-        'token_standard' => 'zts17d6yr02kh0r9qr566p7tg6',
-        'total_supply' => '45249446791218683',
-        'max_supply' => '57896044618658097711785492504343953926634992332820282019728792003956564819967',
-        'decimals' => 18,
-        'is_burnable' => 1,
-        'is_mintable' => 1,
-        'is_utility' => 1,
-        'created_at' => '2023-05-17 09:27:50',
-    ]);
-
-    $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $token = load_token(NetworkTokensEnum::LP_ZNN_ETH->value);
-    Stake::create([
-        'chain_id' => $account->chain_id,
-        'account_id' => $account->id,
-        'token_id' => $token->id,
-        'account_block_id' => 1,
-        'amount' => 100 * NOM_DECIMALS,
-        'duration' => '31104000',
-        'hash' => hash('sha256', 'example-hash'),
-        'started_at' => now()->subYear(),
-        'ended_at' => null,
-    ]);
 });
 
 function createCancelLiquidityStakeAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
-        'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
+        'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::PLASMA->value),
         'token' => load_token(NetworkTokensEnum::ZNN->value),
         'amount' => '0',
@@ -77,8 +47,16 @@ function createCancelLiquidityStakeAccountBlock(array $overrides = []): AccountB
 
 it('cancels a stake', function () {
 
-    $accountBlock = createCancelLiquidityStakeAccountBlock();
-    $accountBlock->created_at = now();
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
+    $accountBlock = createCancelLiquidityStakeAccountBlock([
+        'account' => $stake->account,
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
+    ]);
 
     (new CancelLiquidityStake)->handle($accountBlock);
 
@@ -90,8 +68,16 @@ it('cancels a stake', function () {
 
 it('dispatches the end stake event', function () {
 
-    $accountBlock = createCancelLiquidityStakeAccountBlock();
-    $accountBlock->created_at = now();
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
+    $accountBlock = createCancelLiquidityStakeAccountBlock([
+        'account' => $stake->account,
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
+    ]);
 
     Event::fake();
 
@@ -109,8 +95,14 @@ it('ensures only stake owner can cancel stakes', function () {
         )
         ->once();
 
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
     $accountBlock = createCancelLiquidityStakeAccountBlock([
-        'account' => load_account(config('explorer.empty_address')),
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
     ]);
 
     (new CancelLiquidityStake)->handle($accountBlock);
@@ -127,7 +119,16 @@ it('enforces stake duration time', function () {
         )
         ->once();
 
-    $accountBlock = createCancelLiquidityStakeAccountBlock();
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now(),
+    ]);
+    $accountBlock = createCancelLiquidityStakeAccountBlock([
+        'account' => $stake->account,
+        'data' => json_encode([
+            'id' => $stake->hash,
+        ]),
+    ]);
 
     (new CancelLiquidityStake)->handle($accountBlock);
 

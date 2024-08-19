@@ -36,6 +36,7 @@
                 "property_protected",
                 "property_private",
                 "method:casts",
+                "method:newFactory",
                 "construct",
                 "destruct",
                 "magic",

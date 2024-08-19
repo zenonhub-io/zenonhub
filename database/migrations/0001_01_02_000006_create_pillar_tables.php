@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('withdraw_account_id')->references('id')->on('nom_accounts');
             $table->string('name')->index();
             $table->string('slug')->index();
-            $table->bigInteger('qsr_burn')->default(15000000000000);
+            $table->bigInteger('qsr_burn')->default(150000 * NOM_DECIMALS);
             $table->bigInteger('weight')->index()->default(0);
             $table->integer('rank')->default(0)->index();
             $table->integer('produced_momentums')->default(0);

@@ -9,6 +9,7 @@ use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\AccountRewardTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\AccountReward;
 use App\Domains\Nom\Models\ContractMethod;
@@ -37,7 +38,7 @@ function createRewardAccountBlock(array $overrides = []): AccountBlock
         'data' => json_encode([
             'tokenStandard' => NetworkTokensEnum::ZNN->value,
             'amount' => 50 * NOM_DECIMALS,
-            'receiveAddress' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',
+            'receiveAddress' => Account::factory()->create()->address,
         ]),
     ];
 
@@ -66,8 +67,14 @@ it('doesnt process blocks to the liquidity contract', function () {
 
 it('correctly assigns reward data', function () {
 
-    $rewardReceiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $accountBlock = createRewardAccountBlock();
+    $rewardReceiver = Account::factory()->create();
+    $accountBlock = createRewardAccountBlock([
+        'data' => json_encode([
+            'tokenStandard' => NetworkTokensEnum::ZNN->value,
+            'amount' => 50 * NOM_DECIMALS,
+            'receiveAddress' => $rewardReceiver->address,
+        ]),
+    ]);
 
     (new ProcessBlockRewards)->handle($accountBlock);
 
@@ -82,11 +89,12 @@ it('correctly assigns reward data', function () {
 
 it('correctly assigns reward token', function () {
 
+    $rewardReceiver = Account::factory()->create();
     $accountBlock = createRewardAccountBlock([
         'data' => json_encode([
             'tokenStandard' => NetworkTokensEnum::QSR->value,
             'amount' => 50 * NOM_DECIMALS,
-            'receiveAddress' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',
+            'receiveAddress' => $rewardReceiver->address,
         ]),
     ]);
 
@@ -112,13 +120,20 @@ it('correctly assigns delegate rewards', function () {
 
 it('correctly assigns pillar rewards', function () {
 
-    $accountBlock = createRewardAccountBlock([
-        'account' => load_account(EmbeddedContractsEnum::PILLAR->value),
-    ]);
-    $rewardReceiver = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    $pillar = Pillar::first();
+    $rewardReceiver = Account::factory()->create();
+
+    $pillar = Pillar::factory()->create();
     $pillar->withdraw_account_id = $rewardReceiver->id;
     $pillar->save();
+
+    $accountBlock = createRewardAccountBlock([
+        'account' => load_account(EmbeddedContractsEnum::PILLAR->value),
+        'data' => json_encode([
+            'tokenStandard' => NetworkTokensEnum::ZNN->value,
+            'amount' => 50 * NOM_DECIMALS,
+            'receiveAddress' => $rewardReceiver->address,
+        ]),
+    ]);
 
     (new ProcessBlockRewards)->handle($accountBlock);
 

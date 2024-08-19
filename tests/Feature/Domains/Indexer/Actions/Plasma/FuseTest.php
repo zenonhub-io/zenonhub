@@ -9,6 +9,7 @@ use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Plasma;
@@ -28,14 +29,16 @@ beforeEach(function () {
 
 function createFuseAccountBlock(array $overrides = []): AccountBlock
 {
+    $account = $overrides['account'] ?? Account::factory()->create();
+
     $default = [
-        'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
+        'account' => $account,
         'toAccount' => load_account(EmbeddedContractsEnum::PLASMA->value),
         'token' => load_token(NetworkTokensEnum::QSR->value),
         'amount' => (string) (50 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Plasma', 'Fuse'),
-        'data' => '{"address":"z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm"}',
+        'data' => '{"address":"' . $account->address . '"}',
     ];
 
     $data = array_merge($default, $overrides);

@@ -75,10 +75,19 @@ class Pillar extends Model implements Sitemapable
     protected function casts(): array
     {
         return [
+            'is_legacy' => 'boolean',
             'revoked_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return PillarFactory::new();
     }
 
     //
@@ -343,14 +352,6 @@ class Pillar extends Model implements Sitemapable
         }
 
         return 'Now';
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return PillarFactory::new();
     }
 
     //

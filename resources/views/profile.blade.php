@@ -11,31 +11,35 @@
         ]" :active="$tab" />
     </x-includes.header>
 
-    @if($tab === 'details')
-        @livewire('profile.update-details')
-        <hr class="my-6">
-        @livewire('profile.update-password')
-    @endif
+    <div class="px-3 px-lg-6">
 
-    @if($tab === 'security')
-        @livewire('profile.manage-two-factor-authentication')
-        <hr class="my-6">
-        @livewire('profile.delete-user')
-    @endif
+        @if($tab === 'details')
+            @livewire('profile.update-details')
+            <hr class="my-6">
+            @livewire('profile.update-password')
+        @endif
 
-    @if($tab === 'notifications')
-        @livewire('profile.manage-notifications')
-    @endif
+        @if($tab === 'security')
+            @livewire('profile.manage-two-factor-authentication')
+            <hr class="my-6">
+            @livewire('profile.delete-user')
+        @endif
 
-    @if($tab === 'favorites')
+        @if($tab === 'notifications')
+            @livewire('profile.manage-notifications')
+        @endif
 
-    @endif
+        @if($tab === 'favorites')
 
-    @if($tab === 'addresses')
-        @livewire('profile.manage-addresses')
-    @endif
+        @endif
 
-    @if($tab === 'api-keys')
-        @livewire('profile.manage-api-tokens')
-    @endif
+        @if($tab === 'addresses')
+            @livewire('profile.manage-addresses')
+        @endif
+
+        @if($tab === 'api-keys')
+            @livewire('profile.manage-api-tokens')
+        @endif
+
+    </div>
 </x-app-layout>

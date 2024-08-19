@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Domains\Nom;
 
+use App\Domains\Nom\Enums\NetworkTokensEnum;
 use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\Stake;
@@ -25,7 +26,7 @@ class StakeFactory extends Factory
         return [
             'chain_id' => 1,
             'account_id' => Account::factory(),
-            'token_id' => 1,
+            'token_id' => load_token(NetworkTokensEnum::ZNN->value),
             'account_block_id' => AccountBlock::factory(),
             'amount' => (string) (1 * NOM_DECIMALS),
             'duration' => '31104000',

@@ -9,6 +9,7 @@ use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Plasma;
@@ -24,24 +25,12 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(NomSeeder::class);
     $this->seed(TestGenesisSeeder::class);
-
-    $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
-    Plasma::create([
-        'chain_id' => $account->chain_id,
-        'from_account_id' => $account->id,
-        'to_account_id' => $account->id,
-        'account_block_id' => 1,
-        'amount' => 50 * NOM_DECIMALS,
-        'hash' => hash('sha256', 'example-hash'),
-        'started_at' => now()->subDay(),
-        'ended_at' => null,
-    ]);
 });
 
 function createCancelFuseAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
-        'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
+        'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::PLASMA->value),
         'token' => load_token(NetworkTokensEnum::ZNN->value),
         'amount' => '0',
@@ -58,8 +47,15 @@ function createCancelFuseAccountBlock(array $overrides = []): AccountBlock
 
 it('cancels a fuse', function () {
 
-    $accountBlock = createCancelFuseAccountBlock();
-    $accountBlock->created_at = now();
+    $plasma = Plasma::factory()->create(attributes: [
+        'started_at' => now()->subDay(),
+    ]);
+    $accountBlock = createCancelFuseAccountBlock([
+        'account' => $plasma->fromAccount,
+        'data' => json_encode([
+            'id' => $plasma->hash,
+        ]),
+    ]);
 
     (new CancelFuse)->handle($accountBlock);
 
@@ -71,8 +67,15 @@ it('cancels a fuse', function () {
 
 it('dispatches the end fuse event', function () {
 
-    $accountBlock = createCancelFuseAccountBlock();
-    $accountBlock->created_at = now();
+    $plasma = Plasma::factory()->create([
+        'started_at' => now()->subDay(),
+    ]);
+    $accountBlock = createCancelFuseAccountBlock([
+        'account' => $plasma->fromAccount,
+        'data' => json_encode([
+            'id' => $plasma->hash,
+        ]),
+    ]);
 
     Event::fake();
 
@@ -90,8 +93,13 @@ it('ensures only plasma owners can cancel fuses', function () {
         )
         ->once();
 
+    $plasma = Plasma::factory()->create([
+        'started_at' => now()->subDay(),
+    ]);
     $accountBlock = createCancelFuseAccountBlock([
-        'account' => load_account(config('explorer.empty_address')),
+        'data' => json_encode([
+            'id' => $plasma->hash,
+        ]),
     ]);
 
     (new CancelFuse)->handle($accountBlock);
@@ -108,7 +116,15 @@ it('enforces plasma minimum expiration time', function () {
         )
         ->once();
 
-    $accountBlock = createCancelFuseAccountBlock();
+    $plasma = Plasma::factory()->create([
+        'started_at' => now()->subHour(),
+    ]);
+    $accountBlock = createCancelFuseAccountBlock([
+        'account' => $plasma->fromAccount,
+        'data' => json_encode([
+            'id' => $plasma->hash,
+        ]),
+    ]);
 
     (new CancelFuse)->handle($accountBlock);
 

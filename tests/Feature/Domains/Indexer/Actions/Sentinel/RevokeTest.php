@@ -9,6 +9,7 @@ use App\Domains\Indexer\Factories\MockAccountBlockFactory;
 use App\Domains\Nom\Enums\AccountBlockTypesEnum;
 use App\Domains\Nom\Enums\EmbeddedContractsEnum;
 use App\Domains\Nom\Enums\NetworkTokensEnum;
+use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Sentinel;
@@ -24,18 +25,12 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
     $this->seed(NomSeeder::class);
     $this->seed(TestGenesisSeeder::class);
-
-    Sentinel::create([
-        'chain_id' => 1,
-        'owner_id' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm')->id,
-        'created_at' => now()->subDays(28), // IMPORTANT - This is in the revocable window
-    ]);
 });
 
 function createSentinelRevokeAccountBlock(array $overrides = []): AccountBlock
 {
     $default = [
-        'account' => load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'),
+        'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::SENTINEL->value),
         'token' => load_token(NetworkTokensEnum::ZNN->value),
         'blockType' => AccountBlockTypesEnum::SEND,
@@ -50,7 +45,11 @@ function createSentinelRevokeAccountBlock(array $overrides = []): AccountBlock
 
 it('revokes an existing sentinel', function () {
 
-    $accountBlock = createSentinelRevokeAccountBlock();
+    $accountBlock = createSentinelRevokeAccountBlock([
+        'account' => Sentinel::factory()->create(attributes: [
+            'created_at' => now()->subDays(28),
+        ])->owner,
+    ]);
     $accountBlock->created_at = now();
 
     (new Revoke)->handle($accountBlock);
@@ -63,7 +62,11 @@ it('revokes an existing sentinel', function () {
 
 it('dispatches the sentinel registered event', function () {
 
-    $accountBlock = createSentinelRevokeAccountBlock();
+    $accountBlock = createSentinelRevokeAccountBlock([
+        'account' => Sentinel::factory()->create(attributes: [
+            'created_at' => now()->subDays(28),
+        ])->owner,
+    ]);
     $accountBlock->created_at = now();
 
     Event::fake();
@@ -73,12 +76,11 @@ it('dispatches the sentinel registered event', function () {
     Event::assertDispatched(SentinelRevoked::class);
 });
 
-it('ensure sentinels can only be revoked once', function () {
+it('ensure sentinels can only be revoked once', closure: function () {
 
-    Sentinel::query()
-        ->update([
-            'revoked_at' => now(),
-        ]);
+    Sentinel::factory()->revoked()->create(attributes: [
+        'created_at' => now()->subDays(28),
+    ]);
 
     Log::shouldReceive('info')
         ->with(
@@ -104,7 +106,11 @@ it('enforce the sentinel revocable time window', function () {
         )
         ->once();
 
-    $accountBlock = createSentinelRevokeAccountBlock();
+    $accountBlock = createSentinelRevokeAccountBlock([
+        'account' => Sentinel::factory()->create(attributes: [
+            'created_at' => now()->subDays(28),
+        ])->owner,
+    ]);
     $accountBlock->created_at = now()->subDays(31);
 
     (new Revoke)->handle($accountBlock);
