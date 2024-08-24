@@ -43,7 +43,7 @@ class AccountBlockFactory extends Factory
                 return ($accountChainHeight ?: 0) + 1;
             },
             'amount' => '0',
-            'hash' => hash('sha256', random_bytes(16)),
+            'hash' => fake()->sha256(),
             'created_at' => now(),
         ];
     }

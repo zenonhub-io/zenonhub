@@ -76,7 +76,7 @@ it('dispatches the sentinel registered event', function () {
     Event::assertDispatched(SentinelRevoked::class);
 });
 
-it('ensure sentinels can only be revoked once', closure: function () {
+it('ensure sentinels can only be revoked once', function () {
 
     Sentinel::factory()->revoked()->create(attributes: [
         'created_at' => now()->subDays(28),

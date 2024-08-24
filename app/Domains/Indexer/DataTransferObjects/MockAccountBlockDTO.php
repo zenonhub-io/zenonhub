@@ -10,6 +10,7 @@ use App\Domains\Nom\Models\AccountBlock;
 use App\Domains\Nom\Models\ContractMethod;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Models\Token;
+use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
 class MockAccountBlockDTO extends Data
@@ -25,6 +26,7 @@ class MockAccountBlockDTO extends Data
         public ?Momentum $momentum,
         public ?Momentum $momentumAcknowledged,
         public ?int $height,
+        public ?Carbon $createdAt,
     ) {
 
         if (! $this->momentum) {

@@ -10,6 +10,8 @@ use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
+use Database\Factories\Domains\Nom\TokenFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -76,6 +78,14 @@ class Token extends Model implements Sitemapable
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TokenFactory::new();
     }
 
     //

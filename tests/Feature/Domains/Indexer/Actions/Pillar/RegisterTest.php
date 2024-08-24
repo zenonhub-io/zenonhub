@@ -82,7 +82,7 @@ it('dispatches the pillar registered event', function () {
     Event::assertDispatched(PillarRegistered::class);
 });
 
-it('ensure sentinels can only be pillar with ZNN tokens', function () {
+it('ensure pillars can only be registered with ZNN tokens', function () {
 
     Log::shouldReceive('info')
         ->with(

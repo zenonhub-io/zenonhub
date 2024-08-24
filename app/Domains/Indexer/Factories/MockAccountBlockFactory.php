@@ -30,7 +30,7 @@ class MockAccountBlockFactory
             'difficulty' => 0,
             'nonce' => 0,
             'hash' => hash('sha256', $mockAccountBlockDTO->toJson()),
-            'created_at' => $mockAccountBlockDTO->momentum->created_at,
+            'created_at' => $mockAccountBlockDTO->createdAt ?: $mockAccountBlockDTO->momentum->created_at,
         ]);
 
         if ($mockAccountBlockDTO->contractMethod) {

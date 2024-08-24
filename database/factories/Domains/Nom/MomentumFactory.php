@@ -26,7 +26,7 @@ class MomentumFactory extends Factory
             'producer_account_id' => fn (array $attributes) => Pillar::find($attributes['producer_pillar_id'])->producer_account_id,
             'version' => 1,
             'height' => Momentum::max('height') + 1,
-            'hash' => hash('sha256', random_bytes(16)),
+            'hash' => fake()->sha256(),
             'created_at' => now(),
         ];
     }
