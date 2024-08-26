@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Maize\Markable\Markable;
@@ -138,6 +137,14 @@ class Pillar extends Model implements Sitemapable
             ->withPivot('started_at', 'ended_at');
     }
 
+    public function activeDelegators(): BelongsToMany
+    {
+        return $this->belongsToMany(Account::class, 'nom_delegations')
+            ->using(Delegation::class)
+            ->withPivot('started_at', 'ended_at')
+            ->wherePivotNull('ended_at');
+    }
+
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
@@ -198,7 +205,10 @@ class Pillar extends Model implements Sitemapable
         $weight = $this->weight;
 
         if ($this->revoked_at) {
-            $weight = $this->active_delegators->map(fn ($delegator) => $delegator->account->znn_balance)->sum();
+            $weight = $this->activeDelegators()
+                ->get()
+                ->map(fn ($delegator) => $delegator->znn_balance)
+                ->sum();
         }
 
         return Number::abbreviate(app('znnToken')->getDisplayAmount($weight));
@@ -227,22 +237,6 @@ class Pillar extends Model implements Sitemapable
         }
 
         return 0;
-    }
-
-    public function getActiveDelegatorsAttribute(): ?Collection
-    {
-        return $this->delegators()
-            ->whereActive()
-            ->withBalance()
-            ->get();
-    }
-
-    public function getActiveDelegatorsCountAttribute(): int
-    {
-        return $this->delegators()
-            ->whereActive()
-            ->withBalance()
-            ->count();
     }
 
     public function getPreviousHistoryAttribute(): ?Model
