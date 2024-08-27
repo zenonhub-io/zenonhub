@@ -35,7 +35,7 @@ it('pillar pages return a successful response', function () {
     $this->seed(PillarsSeeder::class);
 
     $routes = [
-        'pillars' => [],
+        'pillar.list' => [],
         'pillar.detail' => [
             'slug' => 'pillar1',
         ],
@@ -52,7 +52,7 @@ it('pillar pages return a successful response', function () {
 it('sentinel pages return a successful response', function () {
 
     $routes = [
-        'sentinels' => [],
+        'sentinel.list' => [],
         'sentinel.detail' => [
             'address' => '123',
         ],
@@ -69,7 +69,7 @@ it('sentinel pages return a successful response', function () {
 it('accelerator-z pages return a successful response', function () {
 
     $routes = [
-        'accelerator-z' => [],
+        'accelerator-z.list' => [],
         'accelerator-z.project.detail' => [
             'hash' => '123',
         ],
@@ -90,25 +90,25 @@ it('explorer pages return a successful response', function () {
 
     $routes = [
         'explorer' => [],
-        'explorer.momentums' => [],
+        'explorer.momentum.list' => [],
         'explorer.momentum.detail' => [
             'hash' => '123',
         ],
-        'explorer.transactions' => [],
+        'explorer.transaction.list' => [],
         'explorer.transaction.detail' => [
             'hash' => '123',
         ],
-        'explorer.accounts' => [],
+        'explorer.account.list' => [],
         'explorer.account.detail' => [
             'address' => '123',
         ],
-        'explorer.tokens' => [],
+        'explorer.token.list' => [],
         'explorer.token.detail' => [
             'zts' => '123',
         ],
-        'explorer.bridge' => [],
-        'explorer.stakes' => [],
-        'explorer.plasma' => [],
+        'explorer.bridge.list' => [],
+        'explorer.stake.list' => [],
+        'explorer.plasma.list' => [],
     ];
 
     foreach ($routes as $routeName => $params) {

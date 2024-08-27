@@ -76,7 +76,7 @@
                     shadow-inset
                     vh-100
                 ">
-                    <main class="container-fluid py-5 px-0 z-n1">
+                    <main class="container-fluid pt-5 pb-3 px-0 z-n1">
                         {{ $slot }}
                     </main>
                 </div>

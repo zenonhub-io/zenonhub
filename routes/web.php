@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SentinelsController;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 include 'redirects.php';
 
 Route::get('test', function () {
+
+    $pillar = App\Domains\Nom\Models\Pillar::find(50)?->load('orchestrator');
+    dd($pillar->name);
+    //dd($pillar->orchestrator);
+
+    $orchestrator = App\Domains\Nom\Models\Orchestrator::find(1);
+    dd($orchestrator);
 
     $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'); // ZenonHub
     $toAccount = load_account(config('explorer.empty_address'));
@@ -203,28 +211,28 @@ Route::middleware([
     Route::get('donate', HomeController::class)->name('donate');
     Route::get('sponsor', HomeController::class)->name('sponsor');
 
-    Route::get('pillars/{tab?}', PillarsController::class)->name('pillars');
-    Route::get('pillar/{slug}', PillarsController::class)->name('pillar.detail');
+    Route::get('pillars/{tab?}', PillarsController::class)->name('pillar.list');
+    Route::get('pillar/{slug}/{tab?}', PillarDetailController::class)->name('pillar.detail');
 
-    Route::get('sentinels', SentinelsController::class)->name('sentinels');
+    Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
     Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
-    Route::get('accelerator-z', AcceleratorZController::class)->name('accelerator-z');
+    Route::get('accelerator-z', AcceleratorZController::class)->name('accelerator-z.list');
     Route::get('accelerator-z/project/{hash}', AcceleratorZController::class)->name('accelerator-z.project.detail');
     Route::get('accelerator-z/phase/{hash}', AcceleratorZController::class)->name('accelerator-z.phase.detail');
 
     Route::get('explorer', HomeController::class)->name('explorer');
-    Route::get('explorer/momentums', HomeController::class)->name('explorer.momentums');
+    Route::get('explorer/momentums', HomeController::class)->name('explorer.momentum.list');
     Route::get('explorer/momentum/{hash}', HomeController::class)->name('explorer.momentum.detail');
-    Route::get('explorer/transactions', HomeController::class)->name('explorer.transactions');
+    Route::get('explorer/transactions', HomeController::class)->name('explorer.transaction.list');
     Route::get('explorer/transaction/{hash}', HomeController::class)->name('explorer.transaction.detail');
-    Route::get('explorer/accounts', HomeController::class)->name('explorer.accounts');
+    Route::get('explorer/accounts', HomeController::class)->name('explorer.account.list');
     Route::get('explorer/account/{address}', HomeController::class)->name('explorer.account.detail');
-    Route::get('explorer/tokens', HomeController::class)->name('explorer.tokens');
+    Route::get('explorer/tokens', HomeController::class)->name('explorer.token.list');
     Route::get('explorer/token/{zts}', HomeController::class)->name('explorer.token.detail');
-    Route::get('explorer/bridge', HomeController::class)->name('explorer.bridge');
-    Route::get('explorer/stakes', HomeController::class)->name('explorer.stakes');
-    Route::get('explorer/plasma', HomeController::class)->name('explorer.plasma');
+    Route::get('explorer/bridge', HomeController::class)->name('explorer.bridge.list');
+    Route::get('explorer/stakes', HomeController::class)->name('explorer.stake.list');
+    Route::get('explorer/plasma', HomeController::class)->name('explorer.plasma.list');
 
     Route::get('stats/bridge', HomeController::class)->name('stats.bridge');
     Route::get('stats/public-nodes', HomeController::class)->name('stats.public-nodes');

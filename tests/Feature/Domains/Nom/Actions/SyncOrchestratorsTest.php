@@ -41,11 +41,13 @@ it('syncs orchestrators from the json data', function () {
     (new SyncOrchestrators)->handle();
 
     $orchestrator = Orchestrator::with('pillar', 'account')->first();
+    $pillar = Pillar::firstWhere('name', 'Pillar1');
 
     expect(Orchestrator::count())->toBe(2)
         ->and($orchestrator->pillar->name)->toEqual('Pillar1')
         ->and($orchestrator->account->address)->toEqual('z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar1')
-        ->and($orchestrator->is_active)->toBeTrue();
+        ->and($orchestrator->is_active)->toBeTrue()
+        ->and($pillar->orchestrator->is_active)->toBeTrue();
 });
 
 it('correctly assigns online status', function () {

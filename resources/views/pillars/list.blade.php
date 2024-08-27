@@ -1,0 +1,14 @@
+<x-app-layout>
+    <x-includes.header :title="__('Pillars')" responsiveBorder>
+        <x-navigation.header.responsive-nav :items="[
+            __('All') => route('pillar.list'),
+            __('Active') => route('pillar.list', ['tab' => 'active']),
+            __('Inactive') => route('pillar.list', ['tab' => 'inactive']),
+            __('Revoked') => route('pillar.list', ['tab' => 'revoked'])
+        ]" :active="$tab" />
+    </x-includes.header>
+
+    <livewire:pillars.pillar-list :tab="$tab" />
+
+</x-app-layout>
+

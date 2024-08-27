@@ -165,13 +165,13 @@ class Pillar extends Model implements Sitemapable
 
     public function scopeWhereProducing($query)
     {
-        return $query->where('missed_momentums', '<=', config('zenon.pillar_missed_momentum_limit'))
+        return $query->where('missed_momentums', '<=', config('zenon-hub.pillar_missed_momentum_limit'))
             ->whereNull('revoked_at');
     }
 
     public function scopeWhereNotProducing($query)
     {
-        return $query->where('missed_momentums', '>', config('zenon.pillar_missed_momentum_limit'));
+        return $query->where('missed_momentums', '>', config('zenon-hub.pillar_missed_momentum_limit'));
     }
 
     public function scopeWhereRevoked($query)
@@ -204,14 +204,11 @@ class Pillar extends Model implements Sitemapable
     {
         $weight = $this->weight;
 
-        if ($this->revoked_at) {
-            $weight = $this->activeDelegators()
-                ->get()
-                ->map(fn ($delegator) => $delegator->znn_balance)
-                ->sum();
+        if ($weight < 1 * NOM_DECIMALS) {
+            return (string) $weight;
         }
 
-        return Number::abbreviate(app('znnToken')->getDisplayAmount($weight));
+        return Number::abbreviate(app('znnToken')->getDisplayAmount($weight), 1);
     }
 
     public function getDisplayQsrBurnAttribute(): string

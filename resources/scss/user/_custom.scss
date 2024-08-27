@@ -5,6 +5,7 @@
 
 @import "components/cards";
 @import "components/inputs";
+@import "components/legend-indicator";
 
 // Load custom font
 @if variable-exists(path-to-fonts) {
@@ -60,7 +61,7 @@ a {
 }
 
 .app-content-wrapper {
-    border-top: 2px solid $primary-border-subtle-dark;
+    border-top: 2px solid $border-color-dark;
     border-left: none;
     @include media-breakpoint-up(lg) {
         border-top: 2px solid $border-color-dark;

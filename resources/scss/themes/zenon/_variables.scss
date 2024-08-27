@@ -129,6 +129,13 @@ $box-shadow-transparent:      0 0 0 0 rgba(0, 0, 0, 0);
 $border-width:              1px;
 $border-color:              $gray-900;
 
+$border-radius:               .375rem;
+$border-radius-sm:            .25rem;
+$border-radius-lg:            .5rem;
+$border-radius-xl:            1rem;
+$border-radius-xxl:           2rem;
+$border-radius-pill:          50rem;
+
 // Icons
 //$bootstrap-icons-font-dir:              '/build/fonts';
 
@@ -169,3 +176,12 @@ $card-transition:           transform .30s ease-in-out,
                             border-color .30s ease-in-out,
                             background-color .30s ease-in-out,
                             box-shadow .30s ease-in-out;
+
+
+// Legend indicator
+$legend-indicator-bg-color:                 $gray-400;
+$legend-indicator-border-radius:            $border-radius;
+$legend-indicator-width:                    .5rem;
+$legend-indicator-height:                   $legend-indicator-width;
+$legend-indicator-margin-y:                 .5rem;
+$legend-indicator-margin-x:                 .4375rem;
