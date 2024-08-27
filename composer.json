@@ -9,6 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-bcmath": "*",
+        "ext-gmp": "*",
+        "ext-json": "*",
         "deployer/deployer": "*",
         "digitalsloth/znn-php": "@dev",
         "diglactic/laravel-breadcrumbs": "*",
@@ -23,12 +26,10 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",
         "lorisleiva/laravel-actions": "^2.8",
+        "rappasoft/laravel-livewire-tables": "^3.4",
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-permission": "*",
-        "spatie/laravel-sitemap": "*",
-        "ext-bcmath": "*",
-        "ext-json": "*",
-        "ext-gmp": "*"
+        "spatie/laravel-sitemap": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
