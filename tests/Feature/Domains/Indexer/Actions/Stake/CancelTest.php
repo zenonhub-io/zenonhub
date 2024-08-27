@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'stake');
+uses()->group('indexer', 'indexer-actions', 'stake-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -36,7 +36,9 @@ function createCancelStakeAccountBlock(array $overrides = []): AccountBlock
         'amount' => '0',
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Plasma', 'CancelFuse'),
-        'data' => '{"id":"' . hash('sha256', 'example-hash') . '"}',
+        'data' => [
+            'id' => hash('sha256', 'example-hash'),
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -53,9 +55,9 @@ it('cancels a stake', function () {
     ]);
     $accountBlock = createCancelStakeAccountBlock([
         'account' => $stake->account,
-        'data' => json_encode([
+        'data' => [
             'id' => $stake->hash,
-        ]),
+        ],
     ]);
 
     (new Cancel)->handle($accountBlock);
@@ -74,9 +76,9 @@ it('dispatches the end stake event', function () {
     ]);
     $accountBlock = createCancelStakeAccountBlock([
         'account' => $stake->account,
-        'data' => json_encode([
+        'data' => [
             'id' => $stake->hash,
-        ]),
+        ],
     ]);
 
     Event::fake();
@@ -88,6 +90,17 @@ it('dispatches the end stake event', function () {
 
 it('ensures only stake owner can cancel stakes', function () {
 
+    $stake = Stake::factory()->create([
+        'account_id' => Account::factory()->create(),
+        'started_at' => now()->subYear()->subDay(),
+    ]);
+    $accountBlock = createCancelStakeAccountBlock([
+        'data' => [
+            'id' => $stake->hash,
+        ],
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Stake: Cancel failed',
@@ -95,29 +108,14 @@ it('ensures only stake owner can cancel stakes', function () {
         )
         ->once();
 
-    $stake = Stake::factory()->create([
-        'account_id' => Account::factory()->create(),
-        'started_at' => now()->subYear()->subDay(),
-    ]);
-    $accountBlock = createCancelStakeAccountBlock([
-        'data' => json_encode([
-            'id' => $stake->hash,
-        ]),
-    ]);
-
     (new Cancel)->handle($accountBlock);
+
+    Event::assertNotDispatched(EndStake::class);
 
     expect(Stake::whereActive()->get())->toHaveCount(1);
 });
 
 it('enforces stake duration time', function () {
-
-    Log::shouldReceive('info')
-        ->with(
-            'Contract Method Processor - Stake: Cancel failed',
-            Mockery::on(fn ($data) => $data['error'] === 'Stake end date in the future')
-        )
-        ->once();
 
     $stake = Stake::factory()->create([
         'account_id' => Account::factory()->create(),
@@ -125,12 +123,22 @@ it('enforces stake duration time', function () {
     ]);
     $accountBlock = createCancelStakeAccountBlock([
         'account' => $stake->account,
-        'data' => json_encode([
+        'data' => [
             'id' => $stake->hash,
-        ]),
+        ],
     ]);
 
+    Event::fake();
+    Log::shouldReceive('info')
+        ->with(
+            'Contract Method Processor - Stake: Cancel failed',
+            Mockery::on(fn ($data) => $data['error'] === 'Stake end date in the future')
+        )
+        ->once();
+
     (new Cancel)->handle($accountBlock);
+
+    Event::assertNotDispatched(EndStake::class);
 
     expect(Stake::whereActive()->get())->toHaveCount(1);
 });

@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions');
+uses()->group('indexer', 'indexer-actions', 'plasma-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -38,7 +38,9 @@ function createFuseAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) (50 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Plasma', 'Fuse'),
-        'data' => '{"address":"' . $account->address . '"}',
+        'data' => [
+            'address' => $account->address,
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -76,6 +78,11 @@ it('dispatches the fused event', function () {
 
 it('doesnt pass validation with invalid token', function () {
 
+    $accountBlock = createFuseAccountBlock([
+        'token' => load_token(NetworkTokensEnum::ZNN->value),
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Plasma: Fuse failed',
@@ -83,11 +90,9 @@ it('doesnt pass validation with invalid token', function () {
         )
         ->once();
 
-    $accountBlock = createFuseAccountBlock([
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
-    ]);
-
     (new Fuse)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartFuse::class);
 
     expect(Plasma::whereActive()->get())->toHaveCount(0);
 });
@@ -98,6 +103,7 @@ it('doesnt pass validation with invalid amount of QSR', function () {
         'amount' => '50',
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Plasma: Fuse failed',
@@ -106,6 +112,8 @@ it('doesnt pass validation with invalid amount of QSR', function () {
         ->once();
 
     (new Fuse)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartFuse::class);
 
     expect(Plasma::whereActive()->get())->toHaveCount(0);
 });

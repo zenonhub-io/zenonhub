@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'sentinel');
+uses()->group('indexer', 'indexer-actions', 'sentinel-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -46,7 +46,7 @@ function createSentinelRevokeAccountBlock(array $overrides = []): AccountBlock
 it('revokes an existing sentinel', function () {
 
     $accountBlock = createSentinelRevokeAccountBlock([
-        'account' => Sentinel::factory()->create(attributes: [
+        'account' => Sentinel::factory()->create([
             'created_at' => now()->subDays(28),
         ])->owner,
     ]);
@@ -63,7 +63,7 @@ it('revokes an existing sentinel', function () {
 it('dispatches the sentinel registered event', function () {
 
     $accountBlock = createSentinelRevokeAccountBlock([
-        'account' => Sentinel::factory()->create(attributes: [
+        'account' => Sentinel::factory()->create([
             'created_at' => now()->subDays(28),
         ])->owner,
     ]);
@@ -78,10 +78,14 @@ it('dispatches the sentinel registered event', function () {
 
 it('ensure sentinels can only be revoked once', function () {
 
-    Sentinel::factory()->revoked()->create(attributes: [
+    Sentinel::factory()->revoked()->create([
         'created_at' => now()->subDays(28),
     ]);
 
+    $accountBlock = createSentinelRevokeAccountBlock();
+    $accountBlock->created_at = now();
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Sentinel: Revoke failed',
@@ -89,16 +93,23 @@ it('ensure sentinels can only be revoked once', function () {
         )
         ->once();
 
-    $accountBlock = createSentinelRevokeAccountBlock();
-    $accountBlock->created_at = now();
-
     (new Revoke)->handle($accountBlock);
+
+    Event::assertNotDispatched(SentinelRevoked::class);
 
     expect(Sentinel::whereInactive()->get())->toHaveCount(1);
 });
 
 it('enforce the sentinel revocable time window', function () {
 
+    $accountBlock = createSentinelRevokeAccountBlock([
+        'account' => Sentinel::factory()->create([
+            'created_at' => now()->subDays(28),
+        ])->owner,
+    ]);
+    $accountBlock->created_at = now()->subDays(31);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Sentinel: Revoke failed',
@@ -106,14 +117,9 @@ it('enforce the sentinel revocable time window', function () {
         )
         ->once();
 
-    $accountBlock = createSentinelRevokeAccountBlock([
-        'account' => Sentinel::factory()->create(attributes: [
-            'created_at' => now()->subDays(28),
-        ])->owner,
-    ]);
-    $accountBlock->created_at = now()->subDays(31);
-
     (new Revoke)->handle($accountBlock);
+
+    Event::assertNotDispatched(SentinelRevoked::class);
 
     expect(Sentinel::whereInactive()->get())->toHaveCount(0);
 });

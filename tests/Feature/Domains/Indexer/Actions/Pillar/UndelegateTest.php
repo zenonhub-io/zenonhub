@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'pillar-undelegate');
+uses()->group('indexer', 'indexer-actions', 'pillar-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -90,6 +90,7 @@ it('ensure only active delegations can be undelegated', function () {
         'ended_at' => $accountBlock->created_at,
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Undelegate failed',
@@ -98,6 +99,8 @@ it('ensure only active delegations can be undelegated', function () {
         ->once();
 
     (new Undelegate)->handle($accountBlock);
+
+    Event::assertNotDispatched(AccountUndelegated::class);
 
     expect($account->delegations()->get())->toHaveCount(1);
 });

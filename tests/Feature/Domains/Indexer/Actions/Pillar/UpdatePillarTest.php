@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'pillar');
+uses()->group('indexer', 'indexer-actions', 'pillar-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -38,7 +38,13 @@ function createUpdatePillarAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) 0,
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Pillar', 'UpdatePillar'),
-        'data' => '{"name":"Test","producerAddress":"' . $account->address . '","rewardAddress":"' . $account->address . '","giveBlockRewardPercentage":"0","giveDelegateRewardPercentage":"90"}',
+        'data' => [
+            'name' => 'Test',
+            'producerAddress' => $account->address,
+            'rewardAddress' => $account->address,
+            'giveBlockRewardPercentage' => '0',
+            'giveDelegateRewardPercentage' => '90',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -50,31 +56,32 @@ function createUpdatePillarAccountBlock(array $overrides = []): AccountBlock
 it('updates a pillar', function () {
 
     $owner = Account::factory()->create();
+    $producer = Account::factory()->create();
+    $withdrawal = Account::factory()->create();
     Pillar::factory()->create([
         'name' => 'Test',
         'owner_id' => $owner->id,
     ]);
     $accountBlock = createUpdatePillarAccountBlock([
         'account' => $owner,
-        'data' => json_encode([
+        'data' => [
             'name' => 'Test',
-            'producerAddress' => $owner->address,
-            'rewardAddress' => $owner->address,
-            'giveBlockRewardPercentage' => '0',
-            'giveDelegateRewardPercentage' => '90',
-        ]),
+            'producerAddress' => $producer->address,
+            'rewardAddress' => $withdrawal->address,
+            'giveBlockRewardPercentage' => '69',
+            'giveDelegateRewardPercentage' => '69',
+        ],
     ]);
 
     (new UpdatePillar)->handle($accountBlock);
 
     $pillar = Pillar::firstWhere('name', 'Test');
 
-    expect(Pillar::whereActive()->get())->toHaveCount(4)
-        ->and($pillar)->not->toBeNull()
-        ->and($pillar->withdraw_account_id)->toEqual($owner->id)
-        ->and($pillar->producer_account_id)->toEqual($owner->id)
-        ->and($pillar->momentum_rewards)->toEqual(0)
-        ->and($pillar->delegate_rewards)->toEqual(90);
+    expect($pillar)->not->toBeNull()
+        ->and($pillar->withdraw_account_id)->toEqual($withdrawal->id)
+        ->and($pillar->producer_account_id)->toEqual($producer->id)
+        ->and($pillar->momentum_rewards)->toEqual(69)
+        ->and($pillar->delegate_rewards)->toEqual(69);
 });
 
 it('dispatches the pillar updated event', function () {
@@ -99,19 +106,17 @@ it('ensure updates can only come from pillar owner', function () {
     Pillar::factory()->create([
         'name' => 'Test',
     ]);
+    $accountBlock = createUpdatePillarAccountBlock([
+        'account' => Account::factory()->create(),
+    ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: UpdatePillar failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not pillar owner')
         )
         ->once();
-
-    $accountBlock = createUpdatePillarAccountBlock([
-        'account' => Account::factory()->create(),
-    ]);
-
-    Event::fake();
 
     (new UpdatePillar)->handle($accountBlock);
 

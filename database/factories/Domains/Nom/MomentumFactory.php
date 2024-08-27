@@ -22,7 +22,7 @@ class MomentumFactory extends Factory
     {
         return [
             'chain_id' => 1,
-            'producer_pillar_id' => Pillar::factory(),
+            'producer_pillar_id' => Pillar::inRandomOrder()->first()->id,
             'producer_account_id' => fn (array $attributes) => Pillar::find($attributes['producer_pillar_id'])->producer_account_id,
             'version' => 1,
             'height' => Momentum::max('height') + 1,

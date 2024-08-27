@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'pillar-revoke');
+uses()->group('indexer', 'indexer-actions', 'pillar-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -38,7 +38,9 @@ function createRevokePillarAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) 0,
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Pillar', 'Revoke'),
-        'data' => '{"name":"Test"}',
+        'data' => [
+            'name' => 'Test',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -67,7 +69,7 @@ it('revokes a pillar', function () {
         ->and($pillar->revoked_at)->toEqual($accountBlock->created_at);
 });
 
-it('dispatches the pillar registered event', function () {
+it('dispatches the pillar revoked event', function () {
 
     $pillar = Pillar::factory()->create([
         'name' => 'Test',
@@ -95,6 +97,7 @@ it('ensure pillars can only be revoked by owner', function () {
         'createdAt' => now(),
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Revoke failed',
@@ -103,6 +106,8 @@ it('ensure pillars can only be revoked by owner', function () {
         ->once();
 
     (new Revoke)->handle($accountBlock);
+
+    Event::assertNotDispatched(PillarRevoked::class);
 
     expect(Pillar::whereActive()->get())->toHaveCount(4);
 });
@@ -118,6 +123,7 @@ it('enforce the pillars revocable time window', function () {
         'createdAt' => now(),
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Revoke failed',
@@ -126,6 +132,8 @@ it('enforce the pillars revocable time window', function () {
         ->once();
 
     (new Revoke)->handle($accountBlock);
+
+    Event::assertNotDispatched(PillarRevoked::class);
 
     expect(Pillar::whereActive()->get())->toHaveCount(4);
 });

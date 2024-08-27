@@ -6,6 +6,7 @@ namespace App\Livewire\Pillars;
 
 use App\Domains\Nom\Models\Pillar;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\NumberFilter;
@@ -59,7 +60,7 @@ class PillarList extends DataTableComponent
             $query->whereRevoked();
         }
 
-        return $query->orderByRaw('! ISNULL(revoked_at)');
+        return $query->orderBy(DB::raw('CASE WHEN revoked_at IS NULL THEN 0 ELSE 1 END'));
     }
 
     public function columns(): array
@@ -70,7 +71,7 @@ class PillarList extends DataTableComponent
             Column::make('Rank')
                 ->sortable()
                 ->format(
-                    fn ($value, $row, Column $column) => '# ' . $row->rank + 1
+                    fn ($value, $row, Column $column) => ! $row->revoked_at ? '# ' . $row->rank + 1 : ''
                 ),
             Column::make('Name', 'name')
                 ->sortable()

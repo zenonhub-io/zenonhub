@@ -75,6 +75,11 @@ class Token extends Model implements Sitemapable
     protected function casts(): array
     {
         return [
+            'total_supply' => 'string',
+            'max_supply' => 'string',
+            'is_burnable' => 'boolean',
+            'is_mintable' => 'boolean',
+            'is_utility' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -174,6 +179,11 @@ class Token extends Model implements Sitemapable
     public function scopeWhereNetwork($query)
     {
         return $query->whereRelation('owner', 'is_embedded_contract', '1');
+    }
+
+    public function scopeWhereUser($query)
+    {
+        return $query->whereRelation('owner', 'is_embedded_contract', '0');
     }
 
     //

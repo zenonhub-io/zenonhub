@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'pillar');
+uses()->group('indexer', 'indexer-actions', 'pillar-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -38,7 +38,15 @@ function createPillarRegisterLegacyAccountBlock(array $overrides = []): AccountB
         'amount' => (string) (15000 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Pillar', 'RegisterLegacy'),
-        'data' => '{"name":"Test","producerAddress":"' . $account->address . '","rewardAddress":"' . $account->address . '","giveBlockRewardPercentage":"100","giveDelegateRewardPercentage":"100","publicKey":"BPDpXeyogBOyTOp41ozqDPOnJV+d5ucgLyikCYrdfoOcfE1rvMcr+FRALQMQmDjPlMSPh8C4i7jOvFHdYSx757c=","signature":"H\/GcB2n1hHPutTOCa6lRRJYExajY8uVrr9ockrjVN0xTP0d63wKbwQyC2dVuk22ol01Hp1BIlV\/445Oc5xKzG54="}',
+        'data' => [
+            'name' => 'Test',
+            'producerAddress' => $account->address,
+            'rewardAddress' => $account->address,
+            'giveBlockRewardPercentage' => '100',
+            'giveDelegateRewardPercentage' => '100',
+            'publicKey' => 'BPDpXeyogBOyTOp41ozqDPOnJV+d5ucgLyikCYrdfoOcfE1rvMcr+FRALQMQmDjPlMSPh8C4i7jOvFHdYSx757c=',
+            'signature' => 'H\/GcB2n1hHPutTOCa6lRRJYExajY8uVrr9ockrjVN0xTP0d63wKbwQyC2dVuk22ol01Hp1BIlV\/445Oc5xKzG54=',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -84,18 +92,17 @@ it('dispatches the pillar registered event', function () {
 
 it('ensure pillars can only be registered with ZNN tokens', function () {
 
+    $accountBlock = createPillarRegisterLegacyAccountBlock([
+        'token' => load_token(NetworkTokensEnum::QSR->value),
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: RegisterLegacy failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token must be ZNN')
         )
         ->once();
-
-    $accountBlock = createPillarRegisterLegacyAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
-    ]);
-
-    Event::fake();
 
     (new RegisterLegacy)->handle($accountBlock);
 
@@ -106,18 +113,17 @@ it('ensure pillars can only be registered with ZNN tokens', function () {
 
 it('enforces the required registration cost', function () {
 
+    $accountBlock = createPillarRegisterLegacyAccountBlock([
+        'amount' => config('nom.pillar.znnStakeAmount') + 1,
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: RegisterLegacy failed',
             Mockery::on(fn ($data) => $data['error'] === 'Amount doesnt match pillar registration cost')
         )
         ->once();
-
-    $accountBlock = createPillarRegisterLegacyAccountBlock([
-        'amount' => config('nom.pillar.znnStakeAmount') + 1,
-    ]);
-
-    Event::fake();
 
     (new RegisterLegacy)->handle($accountBlock);
 

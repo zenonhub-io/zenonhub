@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'pillar-delegate');
+uses()->group('indexer', 'indexer-actions', 'pillar-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -38,7 +38,9 @@ function createDelegateAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) 0,
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Pillar', 'Delegate'),
-        'data' => '{"name":"Test"}',
+        'data' => [
+            'name' => 'Test',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -82,12 +84,10 @@ it('dispatches the account delegated event', function () {
 
 it('ensure only valid pillars can be delegated to', function () {
 
-    Pillar::factory()->create([
-        'name' => 'Test1',
-    ]);
     $accountBlock = createDelegateAccountBlock();
     $account = $accountBlock->account;
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Delegate failed',
@@ -96,6 +96,8 @@ it('ensure only valid pillars can be delegated to', function () {
         ->once();
 
     (new Delegate)->handle($accountBlock);
+
+    Event::assertNotDispatched(AccountDelegated::class);
 
     expect($account->delegations()->get())->toHaveCount(0);
 });
@@ -108,6 +110,7 @@ it('ensure only active pillars can be delegated to', function () {
     $accountBlock = createDelegateAccountBlock();
     $account = $accountBlock->account;
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Delegate failed',
@@ -116,6 +119,8 @@ it('ensure only active pillars can be delegated to', function () {
         ->once();
 
     (new Delegate)->handle($accountBlock);
+
+    Event::assertNotDispatched(AccountDelegated::class);
 
     expect($account->delegations()->get())->toHaveCount(0);
 });

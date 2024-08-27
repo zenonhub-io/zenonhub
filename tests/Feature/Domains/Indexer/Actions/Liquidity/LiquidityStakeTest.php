@@ -20,7 +20,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'liquidity');
+uses()->group('indexer', 'indexer-actions', 'liquidity-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -53,7 +53,9 @@ function createLiquidityStakeAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) (100 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Liquidity', 'LiquidityStake'),
-        'data' => '{"durationInSec":"31104000"}',
+        'data' => [
+            'durationInSec' => '31104000',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -91,6 +93,11 @@ it('dispatches the start stake event', function () {
 
 it('doesnt pass validation with invalid token', function () {
 
+    $accountBlock = createLiquidityStakeAccountBlock([
+        'token' => load_token(NetworkTokensEnum::QSR->value),
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Liquidity: LiquidityStake failed',
@@ -98,11 +105,9 @@ it('doesnt pass validation with invalid token', function () {
         )
         ->once();
 
-    $accountBlock = createLiquidityStakeAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
-    ]);
-
     (new LiquidityStake)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartStake::class);
 
     expect(Stake::whereActive()->get())->toHaveCount(0);
 });
@@ -113,6 +118,7 @@ it('doesnt pass validation with invalid amount', function () {
         'amount' => '0',
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Liquidity: LiquidityStake failed',
@@ -122,15 +128,20 @@ it('doesnt pass validation with invalid amount', function () {
 
     (new LiquidityStake)->handle($accountBlock);
 
+    Event::assertNotDispatched(StartStake::class);
+
     expect(Stake::whereActive()->get())->toHaveCount(0);
 });
 
 it('doesnt pass validation with short duration', function () {
 
     $accountBlock = createLiquidityStakeAccountBlock([
-        'data' => '{"durationInSec":"0"}',
+        'data' => [
+            'durationInSec' => '0',
+        ],
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Liquidity: LiquidityStake failed',
@@ -139,6 +150,8 @@ it('doesnt pass validation with short duration', function () {
         ->once();
 
     (new LiquidityStake)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartStake::class);
 
     expect(Stake::whereActive()->get())->toHaveCount(0);
 });

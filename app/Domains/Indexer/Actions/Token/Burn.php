@@ -39,7 +39,15 @@ class Burn extends AbstractContractMethodProcessor
             'created_at' => $accountBlock->created_at,
         ]);
 
-        $this->updateTokenSupply($burn);
+        $token = $burn->token;
+        $token->total_supply -= $burn->amount;
+
+        // For non-mintable coins, drop MaxSupply as well
+        if (! $token->is_mintable) {
+            $token->max_supply -= $burn->amount;
+        }
+
+        $token->save();
 
         TokenBurned::dispatch($accountBlock, $burn);
 
@@ -69,18 +77,5 @@ class Burn extends AbstractContractMethodProcessor
         if (! $accountBlock->token->is_burnable && $accountBlock->token->owner_id !== $accountBlock->account_id) {
             throw new IndexerActionValidationException('Token is not burnable, or owner doesnt match');
         }
-    }
-
-    private function updateTokenSupply(TokenBurn $burn): void
-    {
-        $token = $burn->token;
-        $token->total_supply -= $burn->amount;
-
-        // For non-mintable coins, drop MaxSupply as well
-        if (! $token->is_mintable) {
-            $token->max_supply -= $burn->amount;
-        }
-
-        $token->save();
     }
 }

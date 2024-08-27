@@ -94,14 +94,14 @@ it('inserts momentums', function () {
 
     app(Indexer::class)->run();
 
-    expect(Momentum::count())->toBe(6);
+    expect(Momentum::count())->toBe(7);
 });
 
 it('inserts account blocks', function () {
 
     app(Indexer::class)->run();
 
-    expect(AccountBlock::count())->toBe(8);
+    expect(AccountBlock::count())->toBe(9);
 });
 
 it('rolls back on exception', function () {

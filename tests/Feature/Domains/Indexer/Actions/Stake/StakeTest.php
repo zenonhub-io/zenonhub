@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'stake');
+uses()->group('indexer', 'indexer-actions', 'stake-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -36,7 +36,9 @@ function createStakeAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) (100 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Stake', 'Stake'),
-        'data' => '{"durationInSec":"31104000"}',
+        'data' => [
+            'durationInSec' => '31104000',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -74,6 +76,11 @@ it('dispatches the start stake event', function () {
 
 it('doesnt pass validation with invalid token', function () {
 
+    $accountBlock = createStakeAccountBlock([
+        'token' => load_token(NetworkTokensEnum::QSR->value),
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
@@ -81,11 +88,9 @@ it('doesnt pass validation with invalid token', function () {
         )
         ->once();
 
-    $accountBlock = createStakeAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
-    ]);
-
     (new StakeAction)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartStake::class);
 
     expect(Stake::get())->toHaveCount(0);
 });
@@ -96,6 +101,7 @@ it('doesnt pass validation with invalid amount of ZNN', function () {
         'amount' => '1',
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
@@ -105,6 +111,8 @@ it('doesnt pass validation with invalid amount of ZNN', function () {
 
     (new StakeAction)->handle($accountBlock);
 
+    Event::assertNotDispatched(StartStake::class);
+
     expect(Stake::whereActive()->get())->toHaveCount(0);
 });
 
@@ -112,9 +120,12 @@ it('doesnt pass validation with short duration', function () {
 
     $duration = config('nom.stake.timeMinSec') - 1;
     $accountBlock = createStakeAccountBlock([
-        'data' => '{"durationInSec":"' . $duration . '"}',
+        'data' => [
+            'durationInSec' => $duration,
+        ],
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
@@ -123,6 +134,8 @@ it('doesnt pass validation with short duration', function () {
         ->once();
 
     (new StakeAction)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartStake::class);
 
     expect(Stake::whereActive()->get())->toHaveCount(0);
 });
@@ -131,9 +144,12 @@ it('doesnt pass validation with long duration', function () {
 
     $duration = config('nom.stake.timeMaxSec') + 1;
     $accountBlock = createStakeAccountBlock([
-        'data' => '{"durationInSec":"' . $duration . '"}',
+        'data' => [
+            'durationInSec' => $duration,
+        ],
     ]);
 
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
@@ -142,6 +158,8 @@ it('doesnt pass validation with long duration', function () {
         ->once();
 
     (new StakeAction)->handle($accountBlock);
+
+    Event::assertNotDispatched(StartStake::class);
 
     expect(Stake::whereActive()->get())->toHaveCount(0);
 });

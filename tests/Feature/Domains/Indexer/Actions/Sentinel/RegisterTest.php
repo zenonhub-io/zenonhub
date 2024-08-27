@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'sentinel');
+uses()->group('indexer', 'indexer-actions', 'sentinel-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -69,6 +69,11 @@ it('dispatches the sentinel registered event', function () {
 
 it('ensure sentinels can only be registered with ZNN tokens', function () {
 
+    $accountBlock = createSentinelRegisterAccountBlock([
+        'token' => load_token(NetworkTokensEnum::QSR->value),
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Sentinel: Register failed',
@@ -76,17 +81,20 @@ it('ensure sentinels can only be registered with ZNN tokens', function () {
         )
         ->once();
 
-    $accountBlock = createSentinelRegisterAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
-    ]);
-
     (new Register)->handle($accountBlock);
+
+    Event::assertNotDispatched(SentinelRegistered::class);
 
     expect(Sentinel::whereActive()->get())->toHaveCount(0);
 });
 
 it('enforces the required registration cost', function () {
 
+    $accountBlock = createSentinelRegisterAccountBlock([
+        'amount' => config('nom.sentinel.znnRegisterAmount') + 1,
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Sentinel: Register failed',
@@ -94,11 +102,9 @@ it('enforces the required registration cost', function () {
         )
         ->once();
 
-    $accountBlock = createSentinelRegisterAccountBlock([
-        'amount' => config('nom.sentinel.znnRegisterAmount') + 1,
-    ]);
-
     (new Register)->handle($accountBlock);
+
+    Event::assertNotDispatched(SentinelRegistered::class);
 
     expect(Sentinel::whereActive()->get())->toHaveCount(0);
 });

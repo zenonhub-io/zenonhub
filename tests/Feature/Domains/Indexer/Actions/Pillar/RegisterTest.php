@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'pillar');
+uses()->group('indexer', 'indexer-actions', 'pillar-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -38,7 +38,13 @@ function createPillarRegisterAccountBlock(array $overrides = []): AccountBlock
         'amount' => (string) (15000 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Pillar', 'Register'),
-        'data' => '{"name":"Test","producerAddress":"' . $account->address . '","rewardAddress":"' . $account->address . '","giveBlockRewardPercentage":"100","giveDelegateRewardPercentage":"100"}',
+        'data' => [
+            'name' => 'Test',
+            'producerAddress' => $account->address,
+            'rewardAddress' => $account->address,
+            'giveBlockRewardPercentage' => '100',
+            'giveDelegateRewardPercentage' => '100',
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -84,18 +90,17 @@ it('dispatches the pillar registered event', function () {
 
 it('ensure pillars can only be registered with ZNN tokens', function () {
 
+    $accountBlock = createPillarRegisterAccountBlock([
+        'token' => load_token(NetworkTokensEnum::QSR->value),
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Register failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token must be ZNN')
         )
         ->once();
-
-    $accountBlock = createPillarRegisterAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
-    ]);
-
-    Event::fake();
 
     (new Register)->handle($accountBlock);
 
@@ -106,18 +111,17 @@ it('ensure pillars can only be registered with ZNN tokens', function () {
 
 it('enforces the required registration cost', function () {
 
+    $accountBlock = createPillarRegisterAccountBlock([
+        'amount' => config('nom.pillar.znnStakeAmount') + 1,
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Pillar: Register failed',
             Mockery::on(fn ($data) => $data['error'] === 'Amount doesnt match pillar registration cost')
         )
         ->once();
-
-    $accountBlock = createPillarRegisterAccountBlock([
-        'amount' => config('nom.pillar.znnStakeAmount') + 1,
-    ]);
-
-    Event::fake();
 
     (new Register)->handle($accountBlock);
 

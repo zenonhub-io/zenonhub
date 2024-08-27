@@ -19,7 +19,7 @@ use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
-uses()->group('indexer', 'indexer-actions', 'plasma');
+uses()->group('indexer', 'indexer-actions', 'plasma-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -36,7 +36,9 @@ function createCancelFuseAccountBlock(array $overrides = []): AccountBlock
         'amount' => '0',
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Plasma', 'CancelFuse'),
-        'data' => '{"id":"' . hash('sha256', 'example-hash') . '"}',
+        'data' => [
+            'id' => hash('sha256', 'example-hash'),
+        ],
     ];
 
     $data = array_merge($default, $overrides);
@@ -52,9 +54,9 @@ it('cancels a fuse', function () {
     ]);
     $accountBlock = createCancelFuseAccountBlock([
         'account' => $plasma->fromAccount,
-        'data' => json_encode([
+        'data' => [
             'id' => $plasma->hash,
-        ]),
+        ],
     ]);
 
     (new CancelFuse)->handle($accountBlock);
@@ -72,9 +74,9 @@ it('dispatches the end fuse event', function () {
     ]);
     $accountBlock = createCancelFuseAccountBlock([
         'account' => $plasma->fromAccount,
-        'data' => json_encode([
+        'data' => [
             'id' => $plasma->hash,
-        ]),
+        ],
     ]);
 
     Event::fake();
@@ -86,6 +88,16 @@ it('dispatches the end fuse event', function () {
 
 it('ensures only plasma owners can cancel fuses', function () {
 
+    $plasma = Plasma::factory()->create([
+        'started_at' => now()->subDay(),
+    ]);
+    $accountBlock = createCancelFuseAccountBlock([
+        'data' => [
+            'id' => $plasma->hash,
+        ],
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Plasma: CancelFuse failed',
@@ -93,22 +105,26 @@ it('ensures only plasma owners can cancel fuses', function () {
         )
         ->once();
 
-    $plasma = Plasma::factory()->create([
-        'started_at' => now()->subDay(),
-    ]);
-    $accountBlock = createCancelFuseAccountBlock([
-        'data' => json_encode([
-            'id' => $plasma->hash,
-        ]),
-    ]);
-
     (new CancelFuse)->handle($accountBlock);
+
+    Event::assertNotDispatched(EndFuse::class);
 
     expect(Plasma::whereActive()->get())->toHaveCount(1);
 });
 
 it('enforces plasma minimum expiration time', function () {
 
+    $plasma = Plasma::factory()->create([
+        'started_at' => now()->subHour(),
+    ]);
+    $accountBlock = createCancelFuseAccountBlock([
+        'account' => $plasma->fromAccount,
+        'data' => [
+            'id' => $plasma->hash,
+        ],
+    ]);
+
+    Event::fake();
     Log::shouldReceive('info')
         ->with(
             'Contract Method Processor - Plasma: CancelFuse failed',
@@ -116,17 +132,9 @@ it('enforces plasma minimum expiration time', function () {
         )
         ->once();
 
-    $plasma = Plasma::factory()->create([
-        'started_at' => now()->subHour(),
-    ]);
-    $accountBlock = createCancelFuseAccountBlock([
-        'account' => $plasma->fromAccount,
-        'data' => json_encode([
-            'id' => $plasma->hash,
-        ]),
-    ]);
-
     (new CancelFuse)->handle($accountBlock);
+
+    Event::assertNotDispatched(EndFuse::class);
 
     expect(Plasma::whereActive()->get())->toHaveCount(1);
 });
