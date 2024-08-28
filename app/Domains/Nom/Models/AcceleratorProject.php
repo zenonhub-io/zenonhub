@@ -9,6 +9,9 @@ use App\Domains\Nom\Enums\AcceleratorProjectStatusEnum;
 use App\Domains\Nom\Services\ZenonSdk;
 use App\Models\Markable\Favorite;
 use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\Domains\Nom\AcceleratorProjectFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,7 +26,7 @@ use Throwable;
 
 class AcceleratorProject extends Model implements Sitemapable
 {
-    use AcceleratorFundingTrait, AcceleratorVotesTrait, ModelCacheKeyTrait;
+    use AcceleratorFundingTrait, AcceleratorVotesTrait, HasFactory, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -78,6 +81,14 @@ class AcceleratorProject extends Model implements Sitemapable
             'updated_at' => 'datetime',
             'status' => AcceleratorProjectStatusEnum::class,
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AcceleratorProjectFactory::new();
     }
 
     //

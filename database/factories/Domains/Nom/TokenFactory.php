@@ -31,7 +31,7 @@ class TokenFactory extends Factory
             'symbol' => fn (array $attributes) => Str::upper($attributes['name']),
             'domain' => fake()->word() . '.' . fake()->tld(),
             'token_standard' => Utilities::ztsFromHash(fake()->md5()),
-            'total_supply' => '9007199254740991',
+            'total_supply' => '0',
             'max_supply' => '9007199254740991',
             'decimals' => 8,
             'is_burnable' => 1,

@@ -42,7 +42,9 @@ class Mint extends AbstractContractMethodProcessor
             'created_at' => $accountBlock->created_at,
         ]);
 
-        $this->updateTokenSupply($mint);
+        $token = $mint->token;
+        $token->total_supply += $mint->amount;
+        $token->save();
 
         TokenMinted::dispatch($accountBlock, $mint);
 
@@ -93,12 +95,5 @@ class Mint extends AbstractContractMethodProcessor
         } elseif ($accountBlock->account->is_embedded_contract || $token->owner_id !== $accountBlock->account_id) {
             throw new IndexerActionValidationException('Attempt to mint token by an unauthorized account');
         }
-    }
-
-    private function updateTokenSupply(TokenMint $mint): void
-    {
-        $token = $mint->token;
-        $token->total_supply += $mint->amount;
-        $token->save();
     }
 }

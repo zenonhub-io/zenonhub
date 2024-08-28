@@ -8,6 +8,7 @@ use App\Domains\Nom\Models\Account;
 use App\Domains\Nom\Models\Pillar;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class PillarFactory extends Factory
 {
@@ -27,7 +28,7 @@ class PillarFactory extends Factory
             'withdraw_account_id' => Account::factory(),
             'rank' => Pillar::max('rank') + 1,
             'name' => fake()->word(),
-            'slug' => fake()->slug(),
+            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
             'qsr_burn' => Pillar::max('qsr_burn') + (10000 * NOM_DECIMALS),
             'momentum_rewards' => 0,
             'delegate_rewards' => 0,
