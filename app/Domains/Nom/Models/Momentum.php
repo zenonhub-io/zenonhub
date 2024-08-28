@@ -70,6 +70,14 @@ class Momentum extends Model
     }
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return MomentumFactory::new();
+    }
+
+    /**
      * Get the current frontier momentum.
      */
     public static function getFrontier(): Momentum
@@ -161,13 +169,5 @@ class Momentum extends Model
         }
 
         return false;
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return MomentumFactory::new();
     }
 }

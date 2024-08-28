@@ -90,6 +90,14 @@ class Account extends Model implements Sitemapable
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AccountFactory::new();
+    }
+
     //
     // Static methods
 
@@ -520,13 +528,5 @@ class Account extends Model implements Sitemapable
         }
 
         return '0';
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return AccountFactory::new();
     }
 }

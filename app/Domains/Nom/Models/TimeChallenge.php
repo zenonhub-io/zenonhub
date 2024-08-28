@@ -60,6 +60,14 @@ class TimeChallenge extends Model
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TimeChallengeFactory::new();
+    }
+
     //
     // Relations
 
@@ -79,14 +87,6 @@ class TimeChallenge extends Model
     public function scopeWhereActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return TimeChallengeFactory::new();
     }
 
     //

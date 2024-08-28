@@ -60,6 +60,14 @@ class Stake extends Model
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return StakeFactory::new();
+    }
+
     //
     // Relations
 
@@ -142,13 +150,5 @@ class Stake extends Model
         $duration = now()->timestamp - $this->started_at->timestamp;
 
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return StakeFactory::new();
     }
 }

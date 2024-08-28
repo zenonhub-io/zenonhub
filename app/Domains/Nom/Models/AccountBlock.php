@@ -84,6 +84,14 @@ class AccountBlock extends Model
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AccountBlockFactory::new();
+    }
+
     //
     // Relations
 
@@ -274,13 +282,5 @@ class AccountBlock extends Model
         }
 
         return false;
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return AccountBlockFactory::new();
     }
 }
