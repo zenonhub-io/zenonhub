@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom;
 
-use App\Domains\Nom\Models\Currency;
+use App\Models\Nom\Currency;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 

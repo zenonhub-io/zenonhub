@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Profile;
 
-use App\Domains\Nom\Services\ZenonSdk;
+use App\Services\ZenonSdk;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;

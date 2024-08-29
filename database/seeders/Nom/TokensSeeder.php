@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom;
 
-use App\Domains\Nom\Models\Token;
+use App\Models\Nom\Token;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;

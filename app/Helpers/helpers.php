@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Domains\Nom\Enums\NetworkTokensEnum;
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\Token;
-use App\Domains\Nom\Services\ZenonSdk;
+use App\Enums\Nom\NetworkTokensEnum;
+use App\Models\Nom\Account;
+use App\Models\Nom\Token;
+use App\Services\ZenonSdk;
 
 function load_account(string $address, ?string $name = null): Account
 {

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Domains\Nom\Models\AcceleratorPhase;
-use App\Domains\Nom\Models\AcceleratorProject;
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\Pillar;
-use App\Domains\Nom\Models\Sentinel;
-use App\Domains\Nom\Models\Token;
+use App\Models\Nom\AcceleratorPhase;
+use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\Account;
+use App\Models\Nom\Pillar;
+use App\Models\Nom\Sentinel;
+use App\Models\Nom\Token;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Lorisleiva\Actions\Concerns\AsAction;

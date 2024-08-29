@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\View\Components;
 
-use App\Domains\Nom\Models\Account;
+use App\Models\Nom\Account;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 

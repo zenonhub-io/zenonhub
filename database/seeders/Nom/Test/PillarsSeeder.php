@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom\Test;
 
-use App\Domains\Nom\DataTransferObjects\PillarDTO;
-use App\Domains\Nom\Models\Pillar;
+use App\DataTransferObjects\Nom\PillarDTO;
+use App\Models\Nom\Pillar;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;

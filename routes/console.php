@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Domains\Nom\Models\Momentum;
+use App\Models\Nom\Momentum;
 use Illuminate\Support\Facades\Artisan;
 
 Artisan::command('nom:reset-db', function () {

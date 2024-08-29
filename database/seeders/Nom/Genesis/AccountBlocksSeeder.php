@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom\Genesis;
 
-use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\AccountBlockData;
+use App\Models\Nom\AccountBlock;
+use App\Models\Nom\AccountBlockData;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;

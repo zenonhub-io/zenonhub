@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Domains\Nom\Models\Pillar;
+use App\Models\Nom\Pillar;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 

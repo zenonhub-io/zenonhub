@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Pillars;
 
-use App\Domains\Nom\Models\Pillar;
+use App\Models\Nom\Pillar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom;
 
-use App\Domains\Nom\Actions\UpdateContractMethods;
-use App\Domains\Nom\Models\Contract;
-use App\Domains\Nom\Models\ContractMethod;
+use App\Actions\Nom\UpdateContractMethods;
+use App\Models\Nom\Contract;
+use App\Models\Nom\ContractMethod;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 

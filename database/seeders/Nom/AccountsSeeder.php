@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom;
 
-use App\Domains\Nom\Enums\EmbeddedContractsEnum;
-use App\Domains\Nom\Models\Account;
+use App\Enums\Nom\EmbeddedContractsEnum;
+use App\Models\Nom\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom\Test;
 
-use App\Domains\Nom\DataTransferObjects\AccountBlockDTO;
-use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\AccountBlockData;
+use App\DataTransferObjects\Nom\AccountBlockDTO;
+use App\Models\Nom\AccountBlock;
+use App\Models\Nom\AccountBlockData;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;

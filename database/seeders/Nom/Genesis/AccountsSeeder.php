@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom\Genesis;
 
-use App\Domains\Nom\Models\Account;
+use App\Models\Nom\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 

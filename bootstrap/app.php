@@ -22,14 +22,10 @@ return Application::configure()
         // health: '/up',
     )
     ->withCommands([
-        __DIR__ . '/../app/Domains/Common/Console/Commands',
-        __DIR__ . '/../app/Domains/Indexer/Console/Commands',
-        __DIR__ . '/../app/Domains/Nom/Console/Commands',
+        __DIR__ . '/../app/Console/Commands',
     ])
     ->withEvents(discover: [
-        __DIR__ . '/../app/Domains/Common/Listeners',
-        __DIR__ . '/../app/Domains/Indexer/Listeners',
-        __DIR__ . '/../app/Domains/Nom/Listeners',
+        __DIR__ . '/../app/Listeners',
     ])
     ->withMiddleware(function (Middleware $middleware) {
         //

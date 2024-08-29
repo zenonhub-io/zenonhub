@@ -58,9 +58,7 @@ class AppServiceProvider extends ServiceProvider
     private function configureActions(): void
     {
         Actions::registerCommands([
-            'app/Domains/Common/Actions',
-            'app/Domains/Indexer/Actions',
-            'app/Domains/Nom/Actions',
+            'app/Actions',
         ]);
     }
 

@@ -17,34 +17,34 @@ include 'redirects.php';
 
 Route::get('test', function () {
 
-    $pillar = App\Domains\Nom\Models\Pillar::find(50)?->load('orchestrator');
+    $pillar = App\Models\Nom\Pillar::find(50)?->load('orchestrator');
     dd($pillar->name);
     //dd($pillar->orchestrator);
 
-    $orchestrator = App\Domains\Nom\Models\Orchestrator::find(1);
+    $orchestrator = App\Models\Nom\Orchestrator::find(1);
     dd($orchestrator);
 
     $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm'); // ZenonHub
     $toAccount = load_account(config('explorer.empty_address'));
-    $token = load_token(App\Domains\Nom\Enums\NetworkTokensEnum::ZNN->value);
-    $contractMethod = App\Domains\Nom\Models\ContractMethod::whereRelation('contract', 'name', 'Plasma')
+    $token = load_token(App\Enums\Nom\NetworkTokensEnum::ZNN->value);
+    $contractMethod = App\Models\Nom\ContractMethod::whereRelation('contract', 'name', 'Plasma')
         ->firstWhere('name', 'Fuse');
 
-    $accountBlockDTO = App\Domains\Indexer\DataTransferObjects\MockAccountBlockDTO::from([
+    $accountBlockDTO = App\DataTransferObjects\MockAccountBlockDTO::from([
         'account' => $account,
         'toAccount' => $toAccount,
         'token' => $token,
-        'blockType' => App\Domains\Nom\Enums\AccountBlockTypesEnum::SEND,
+        'blockType' => App\Enums\Nom\AccountBlockTypesEnum::SEND,
         'contractMethod' => $contractMethod,
         'data' => '{"address":"z1qq5jr3ejh0j9cqn5k3405kuzt5l4x9434z8hnq"}',
     ]);
 
     dd($accountBlockDTO);
 
-    $pillar = App\Domains\Nom\Models\Pillar::first();
-    App\Domains\Nom\Actions\SyncPillarMetrics::run($pillar);
+    $pillar = App\Models\Nom\Pillar::first();
+    App\Actions\Nom\SyncPillarMetrics::run($pillar);
 
-    $network = App\Domains\Nom\Models\BridgeNetwork::findByNetworkChain('2', '1');
+    $network = App\Models\Nom\BridgeNetwork::findByNetworkChain('2', '1');
     $token = $network?->tokens()
         ->wherePivot('token_address', '0xb2e96a63479C2Edd2FD62b382c89D5CA79f572d3')
         ->first();
@@ -64,8 +64,8 @@ Route::get('test', function () {
     //
     //    dd('done');
 
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::firstWhere('hash', 'a7ab32c6f367fa4fc04177fbab35ed5b07e952b3607e4e49750d1e68a8318c4c');
-    $blockProcessorClass = App\Domains\Indexer\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
+    $accountBlock = App\Models\Nom\AccountBlock::firstWhere('hash', 'a7ab32c6f367fa4fc04177fbab35ed5b07e952b3607e4e49750d1e68a8318c4c');
+    $blockProcessorClass = App\Factories\ContractMethodProcessorFactory::create($accountBlock->contractMethod);
     $blockProcessorClass::run($accountBlock);
 
     dd('done');
@@ -137,8 +137,8 @@ Route::get('test', function () {
     //    App\Domains\Indexer\Actions\Accelerator\AddPhase::run($accountBlock);
 
     // Phase updated
-    $accountBlock = App\Domains\Nom\Models\AccountBlock::find(611319);
-    App\Domains\Indexer\Actions\Accelerator\UpdatePhase::run($accountBlock);
+    $accountBlock = App\Models\Nom\AccountBlock::find(611319);
+    App\Actions\Indexer\Accelerator\UpdatePhase::run($accountBlock);
 
     dd('done');
 
@@ -168,7 +168,7 @@ Route::get('test', function () {
         hash('crc32b', $tokenEntropy)
     ));
 
-    $account = App\Domains\Nom\Models\Account::find(13852);
+    $account = App\Models\Nom\Account::find(13852);
     //App\Domains\Nom\Actions\UpdateAccountTotals::run($account);
 
     $sent = Illuminate\Support\Facades\DB::table('nom_account_blocks')
@@ -185,7 +185,7 @@ Route::get('test', function () {
 
     $balance = ($received - $sent);
 
-    $qsrBalance = App\Domains\Nom\Models\Token::find(2)?->getDisplayAmount($balance);
+    $qsrBalance = App\Models\Nom\Token::find(2)?->getDisplayAmount($balance);
 
     dd($sent, $received, $qsrBalance);
 

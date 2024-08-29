@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Nom\Test;
 
-use App\Domains\Nom\DataTransferObjects\MomentumDTO;
-use App\Domains\Nom\Models\Momentum;
+use App\DataTransferObjects\Nom\MomentumDTO;
+use App\Models\Nom\Momentum;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
