@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
@@ -259,13 +260,14 @@ class Pillar extends Model implements Sitemapable
             );
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): PillarDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);
 
         try {
-            $newData = app(ZenonSdk::class)->getPillarByOwner($this->owner->address);
+            $newData = app(ZenonSdk::class)
+                ->getPillarByOwner($this->owner->address);
             Cache::forever($cacheKey, $newData);
             $data = $newData;
         } catch (Throwable $throwable) {

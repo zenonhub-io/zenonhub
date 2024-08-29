@@ -1,10 +1,8 @@
-@props(['title', 'centered' => false, 'responsiveBorder' => false])
+@props(['title' => null])
 
-<header class="{{ $responsiveBorder ? 'border-bottom-0 border-bottom-md' : 'border-bottom' }} mb-6 mx-3 mx-lg-6">
-    <div class="row align-items-center mb-4">
-        <div class="col">
-            <h1 class="ls-tight {{ $centered ? 'text-center' : null }}">{{ $title }}</h1>
-        </div>
-    </div>
+<header {{ $attributes->merge(['class' => 'header mb-6 mx-3 mx-lg-6 border-bottom']) }}>
+     @if ($title)
+         <x-includes.header-title :title="$title" class="mb-4" />
+    @endif
     {{ $slot }}
 </header>

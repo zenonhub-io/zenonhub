@@ -13,7 +13,7 @@ trait Pillar
     public function getPillarByName(string $name): PillarDTO
     {
         try {
-            $data = $this->sdk->pillar->getByName($name)['data'];
+            $data = $this->sdk->pillar->getByName($name)['data'][0];
 
             return PillarDTO::from($data);
         } catch (Exception $e) {
@@ -24,7 +24,7 @@ trait Pillar
     public function getPillarByOwner(string $address): PillarDTO
     {
         try {
-            $data = $this->sdk->pillar->getByOwner($address)['data'];
+            $data = $this->sdk->pillar->getByOwner($address)['data'][0];
 
             return PillarDTO::from($data);
         } catch (Exception $e) {

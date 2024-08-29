@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-includes.header :title="__('Pillars')" responsiveBorder>
+    <x-includes.header :title="__('Pillars')" class="mb-4">
         <x-navigation.header.responsive-nav :items="[
             __('All') => route('pillar.list'),
             __('Active') => route('pillar.list', ['tab' => 'active']),

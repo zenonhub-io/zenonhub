@@ -1,5 +1,5 @@
-@props(['href'])
+@props(['href', 'navigate' => true])
 
-<a href="{{ $href }}" wire:navigate {{ $attributes }}>
+<a href="{{ $href }}" {{ $navigate ? 'wire:navigate' : '' }} {{ $attributes }}>
     {{ $slot }}
 </a>

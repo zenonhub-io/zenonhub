@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <x-includes.header :title="__('Your Profile')" responsiveBorder>
+    <x-includes.header :title="__('Your Profile')">
         <x-navigation.header.responsive-nav :items="[
             __('Details') => route('profile', ['tab' => 'details']),
             __('Security') => route('profile', ['tab' => 'security']),

@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <x-includes.header :title="__('Home Page')" responsiveBorder>
+    <x-includes.header :title="__('Home Page')">
         <x-navigation.header.responsive-nav :items="[
             __('General') => '#general',
             __('Billing') => '#billing',
