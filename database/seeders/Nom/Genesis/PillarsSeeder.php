@@ -39,7 +39,7 @@ class PillarsSeeder extends Seeder
                 'created_at' => '2021-11-24 12:00:00',
             ]);
 
-            $pillar->history()->create([
+            $pillar->updates()->create([
                 'producer_account_id' => load_account($pillarData['BlockProducingAddress'])->id,
                 'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
                 'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],

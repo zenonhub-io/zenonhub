@@ -58,7 +58,7 @@ class Account extends Model implements Sitemapable
         'genesis_qsr_balance',
         'is_embedded_contract',
         'first_active_at',
-        'updated_at',
+        'last_active_at',
     ];
 
     protected static array $marks = [
@@ -86,7 +86,7 @@ class Account extends Model implements Sitemapable
             'znn_rewards' => 'string',
             'qsr_rewards' => 'string',
             'first_active_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'last_active_at' => 'datetime',
         ];
     }
 
@@ -104,7 +104,7 @@ class Account extends Model implements Sitemapable
     public static function getAllPillarWithdrawAddresses()
     {
         $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
-        $pastWithdrawAddresses = PillarHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
+        $pastWithdrawAddresses = PillarUpdateHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
 
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique();
     }
@@ -112,7 +112,7 @@ class Account extends Model implements Sitemapable
     public static function getAllPillarProducerAddresses()
     {
         $producerAddresses = Pillar::select('producer_account_id')->distinct()->pluck('producer_account_id');
-        $pastProducerAddresses = PillarHistory::select('producer_account_id')->distinct()->pluck('producer_account_id');
+        $pastProducerAddresses = PillarUpdateHistory::select('producer_account_id')->distinct()->pluck('producer_account_id');
 
         return $producerAddresses->merge($pastProducerAddresses)->unique();
     }
@@ -355,7 +355,7 @@ class Account extends Model implements Sitemapable
     public function getIsPillarWithdrawAddressAttribute(): bool
     {
         $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
-        $pastWithdrawAddresses = PillarHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
+        $pastWithdrawAddresses = PillarUpdateHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
 
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique()->contains($this->id);
     }

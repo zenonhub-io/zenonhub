@@ -28,6 +28,7 @@ class SyncPillarMetrics
         }
 
         $this->syncPillarMetrics($pillar, $pillarDTO);
+        $this->updatePillarStats($pillar->refresh());
     }
 
     public function asCommand(Command $command): void
@@ -69,5 +70,18 @@ class SyncPillarMetrics
         }
 
         $pillar->save();
+    }
+
+    private function updatePillarStats(Pillar $pillar): void
+    {
+        $pillar->stats()->updateOrCreate([
+            'date' => now()->format('Y-m-d'),
+        ], [
+            'rank' => $pillar->rank,
+            'weight' => $pillar->weight,
+            'momentum_rewards' => $pillar->momentum_rewards,
+            'delegate_rewards' => $pillar->delegate_rewards,
+            'total_delegators' => $pillar->activeDelegators()->count(),
+        ]);
     }
 }

@@ -125,9 +125,14 @@ class Pillar extends Model implements Sitemapable
         return $this->hasOne(Orchestrator::class);
     }
 
-    public function history(): HasMany
+    public function updates(): HasMany
     {
-        return $this->hasMany(PillarHistory::class);
+        return $this->hasMany(PillarUpdateHistory::class);
+    }
+
+    public function stats(): HasMany
+    {
+        return $this->hasMany(PillarStatHistory::class);
     }
 
     public function delegators(): BelongsToMany
@@ -238,7 +243,7 @@ class Pillar extends Model implements Sitemapable
 
     public function getPreviousHistoryAttribute(): ?Model
     {
-        return $this->history()
+        return $this->updates()
             ->orderByDesc('updated_at')
             ->offset(1)
             ->limit(1)

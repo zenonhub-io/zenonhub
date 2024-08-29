@@ -52,7 +52,7 @@ function createCreateProjectAccountBlock(array $overrides = []): AccountBlock
     return MockAccountBlockFactory::create($accountBlockDTO);
 }
 
-it('cancels a new project', function () {
+it('creates a new project', function () {
 
     $accountBlock = createCreateProjectAccountBlock();
 

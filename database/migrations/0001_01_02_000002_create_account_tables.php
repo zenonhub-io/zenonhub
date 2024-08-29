@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('qsr_rewards')->index()->default(0);
             $table->boolean('is_embedded_contract')->default(0);
             $table->timestamp('first_active_at')->index()->nullable();
-            $table->timestamp('updated_at')->index()->nullable();
+            $table->timestamp('last_active_at')->index()->nullable();
         });
     }
 

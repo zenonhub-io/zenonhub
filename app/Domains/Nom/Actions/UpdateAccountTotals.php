@@ -32,14 +32,13 @@ class UpdateAccountTotals implements ShouldBeUnique
             'address' => $account->address,
         ]);
 
-        $this->account = $account->refresh()->load('latestBlock');
+        $this->account = $account->refresh();
 
         $this->saveCurrentBalance();
         $this->saveStakedZnn();
         $this->saveFusedQsr();
         $this->saveRewardTotals();
 
-        $this->account->updated_at = $this->account->latestBlock?->created_at ?? now();
         $this->account->save();
     }
 

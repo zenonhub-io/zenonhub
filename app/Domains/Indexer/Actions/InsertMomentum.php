@@ -8,7 +8,7 @@ use App\Domains\Indexer\Events\MomentumInserted;
 use App\Domains\Nom\DataTransferObjects\MomentumDTO;
 use App\Domains\Nom\Models\Momentum;
 use App\Domains\Nom\Models\Pillar;
-use App\Domains\Nom\Models\PillarHistory;
+use App\Domains\Nom\Models\PillarUpdateHistory;
 use Illuminate\Support\Facades\Log;
 
 class InsertMomentum
@@ -26,7 +26,7 @@ class InsertMomentum
         $pillar = Pillar::where('producer_account_id', $producer->id)->first();
 
         if (! $pillar) {
-            $history = PillarHistory::where('producer_account_id', $producer->id)->first();
+            $history = PillarUpdateHistory::where('producer_account_id', $producer->id)->first();
             if ($history) {
                 $pillar = $history->pillar;
             }

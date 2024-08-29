@@ -41,13 +41,14 @@ class InsertAccountBlock
 
         if (! $account->public_key) {
             $account->public_key = $accountBlockDTO->publicKey;
-            $account->save();
         }
 
         if (! $account->first_active_at) {
             $account->first_active_at = $accountBlockDTO->confirmationDetail->momentumTimestamp;
-            $account->save();
         }
+
+        $account->last_active_at = $accountBlockDTO->confirmationDetail->momentumTimestamp;
+        $account->save();
 
         $block = AccountBlock::create([
             'chain_id' => $chain->id,
@@ -139,18 +140,11 @@ class InsertAccountBlock
 
         $encodedData = base64_decode($accountBlockDTO->data);
         $fingerprint = Utilities::getDataFingerprint($encodedData);
-        $contractMethod = ContractMethod::whereRelation('contract', 'name', $accountBlock->toAccount->contract?->name)
+        $contractName = $accountBlock->toAccount->contract?->name ?: 'Common';
+        $contractMethod = ContractMethod::whereRelation('contract', 'name', $contractName)
             ->where('fingerprint', $fingerprint)
             ->first();
 
-        // Fallback for common methods (not related to a specific contract)
-        if (! $contractMethod) {
-            $contractMethod = ContractMethod::whereRelation('contract', 'name', 'Common')
-                ->where('fingerprint', $fingerprint)
-                ->first();
-        }
-
-        $decodedData = null;
         if ($contractMethod) {
             $accountBlock->contract_method_id = $contractMethod->id;
             $accountBlock->save();
@@ -160,7 +154,7 @@ class InsertAccountBlock
 
         $accountBlock->data()->create([
             'raw' => $accountBlockDTO->data,
-            'decoded' => $decodedData,
+            'decoded' => $decodedData ?? null,
         ]);
     }
 }

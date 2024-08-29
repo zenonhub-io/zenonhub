@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('name')->index();
             $table->string('slug')->index();
             $table->bigInteger('qsr_burn')->default(150000 * NOM_DECIMALS);
-            $table->bigInteger('weight')->index()->default(0);
+            $table->string('weight')->index()->default(0);
             $table->integer('rank')->default(0)->index();
             $table->integer('produced_momentums')->default(0);
             $table->integer('expected_momentums')->default(0);
@@ -39,7 +39,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->nullable();
         });
 
-        Schema::create('nom_pillar_histories', function (Blueprint $table) {
+        Schema::create('nom_pillar_update_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
             $table->foreignId('producer_account_id')->references('id')->on('nom_accounts');
@@ -48,6 +48,17 @@ return new class extends Migration
             $table->integer('delegate_rewards')->default(0);
             $table->boolean('is_reward_change')->default(0);
             $table->timestamp('updated_at');
+        });
+
+        Schema::create('nom_pillar_stat_histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('pillar_id')->references('id')->on('nom_pillars');
+            $table->integer('rank')->default(0)->index();
+            $table->string('weight')->default(0);
+            $table->integer('momentum_rewards')->default(0);
+            $table->integer('delegate_rewards')->default(0);
+            $table->integer('total_delegators')->default(0);
+            $table->date('date');
         });
 
         Schema::create('nom_delegations', function (Blueprint $table) {

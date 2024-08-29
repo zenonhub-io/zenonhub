@@ -62,7 +62,7 @@ class PillarsSeeder extends Seeder
                 $producer = load_account('z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod0');
             }
 
-            $pillar->history()->create([
+            $pillar->updates()->create([
                 'producer_account_id' => $producer->id,
                 'withdraw_account_id' => $withdraw->id,
                 'momentum_rewards' => $pillarDTO->giveMomentumRewardPercentage - 1,
