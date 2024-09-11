@@ -146,6 +146,15 @@ $navbar-nav-link-padding-y:             .375rem;
 $navbar-vertical-nav-link-padding-x:    1rem;
 $navbar-vertical-nav-link-padding-y:    .5rem;
 
+$navbar-vertical-width:                 230px;
+$navbar-vertical-open-width:            230px;
+
+// Cards
+$card-border-radius:                    $border-radius-xl;
+
+// Lists
+$list-group-border-radius:              $border-radius-xl;
+
 // Table
 $table-border-color: 		            var(--#{$prefix}border-color);
 $table-light-th-bg: 		            var(--#{$prefix}body-bg);
@@ -154,6 +163,7 @@ $table-light-th-color: 	                var(--#{$prefix}body-color);
 // Tooltips
 //$tooltip-bg:                            var(--#{$prefix}body-bg);
 //$tooltip-color:                         var(--#{$prefix}body-color);
+$tooltip-max-width:   1000px;
 
 // Modals
 $modal-backdrop-bg:         rgba($zenon-black, .65);

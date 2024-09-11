@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Nom;
 
-use App\DataTransferObjects\Nom\PillarDTO;
 use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\Pillar;
 use App\Services\ZenonSdk;
@@ -27,27 +26,6 @@ class SyncPillarMetrics
             return;
         }
 
-        $this->syncPillarMetrics($pillar, $pillarDTO);
-        $this->updatePillarStats($pillar->refresh());
-    }
-
-    public function asCommand(Command $command): void
-    {
-        $pillars = Pillar::whereActive()->get();
-
-        $progressBar = new ProgressBar(new ConsoleOutput, $pillars->count());
-        $progressBar->start();
-
-        $pillars->each(function (Pillar $pillar) use ($progressBar): void {
-            $this->handle($pillar);
-            $progressBar->advance();
-        });
-
-        $progressBar->finish();
-    }
-
-    private function syncPillarMetrics(Pillar $pillar, PillarDTO $pillarDTO): void
-    {
         $missed = false;
         if (
             $pillar->produced_momentums === $pillarDTO->currentStats->producedMomentums &&
@@ -72,16 +50,18 @@ class SyncPillarMetrics
         $pillar->save();
     }
 
-    private function updatePillarStats(Pillar $pillar): void
+    public function asCommand(Command $command): void
     {
-        $pillar->stats()->updateOrCreate([
-            'date' => now()->format('Y-m-d'),
-        ], [
-            'rank' => $pillar->rank,
-            'weight' => $pillar->weight,
-            'momentum_rewards' => $pillar->momentum_rewards,
-            'delegate_rewards' => $pillar->delegate_rewards,
-            'total_delegators' => $pillar->activeDelegators()->count(),
-        ]);
+        $pillars = Pillar::whereActive()->get();
+
+        $progressBar = new ProgressBar(new ConsoleOutput, $pillars->count());
+        $progressBar->start();
+
+        $pillars->each(function (Pillar $pillar) use ($progressBar): void {
+            $this->handle($pillar);
+            $progressBar->advance();
+        });
+
+        $progressBar->finish();
     }
 }

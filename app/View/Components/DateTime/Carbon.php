@@ -13,7 +13,7 @@ class Carbon extends Component
 {
     public function __construct(
         public DateTimeInterface|string $date,
-        public string $format = 'jS M Y h:i:s A',
+        public string $format = 'jS M Y h:i:s A (T)',
         public bool $human = false,
         public int $parts = 2,
         public bool $syntax = false,
@@ -23,7 +23,7 @@ class Carbon extends Component
             $date = CarbonAlias::parse($date);
         }
 
-        $this->date = CarbonAlias::instance($date);
+        $this->date = CarbonAlias::instance($date)->timezone(session()->get('timezone', 'UTC'));
     }
 
     public function render(): View

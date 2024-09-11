@@ -1,3 +1,5 @@
+@props([$account, $linked => true, $alwaysShort => false, $eitherSide => 10, $breakpoint => 'md'])
+
 @if ($linked)
     <a href="{{ route('explorer.account.detail', ['address' => $account->address]) }}">
 @endif

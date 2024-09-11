@@ -32,14 +32,14 @@ class PillarsSeeder extends Seeder
                 'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
                 'name' => $pillarData['Name'],
                 'slug' => Str::slug($pillarData['Name']),
-                'qsr_burn' => $pillarData['Amount'],
+                'qsr_burn' => 150000 * NOM_DECIMALS,
                 'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],
                 'delegate_rewards' => $pillarData['GiveDelegateRewardPercentage'],
                 'is_legacy' => 1,
                 'created_at' => '2021-11-24 12:00:00',
             ]);
 
-            $pillar->updates()->create([
+            $pillar->updateHistory()->create([
                 'producer_account_id' => load_account($pillarData['BlockProducingAddress'])->id,
                 'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
                 'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],

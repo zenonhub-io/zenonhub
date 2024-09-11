@@ -50,7 +50,7 @@ class UpdatePillar extends AbstractContractMethodProcessor
         $pillar->updated_at = $accountBlock->created_at;
         $pillar->save();
 
-        $pillar->updates()->create([
+        $pillar->updateHistory()->create([
             'producer_account_id' => $producerAddress->id,
             'withdraw_account_id' => $rewardAddress->id,
             'momentum_rewards' => $blockData['giveBlockRewardPercentage'],

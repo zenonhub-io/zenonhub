@@ -21,7 +21,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('user_accounts_pivot');
+        Schema::dropIfExists('user_nom_verified_accounts_pivot');
         Schema::enableForeignKeyConstraints();
     }
 };

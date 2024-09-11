@@ -3,18 +3,18 @@
         <x-link :href="route('services.public-nodes')" class="
             btn w-full
             rounded-pill
-            bg-body-secondary-hover border-0 border-lg-1 border-gray-700
+            bg-body-secondary-hover border-0 border-lg-1 border-gray-700 fs-6
         ">
-            <i class="bi-hdd-rack-fill me-2"></i> Nodes
+            <i class="bi-hdd-rack-fill me-2"></i>Nodes
         </x-link>
     </div>
     <div class="col">
         <x-link :href="route('donate')" class="
             btn w-full
             rounded-pill
-            bg-body-secondary-hover border-0 border-lg-1 border-gray-700
+            bg-body-secondary-hover border-0 border-lg-1 border-gray-700 fs-6
         ">
-            <i class="bi-heart-fill me-2"></i> Donate
+            <i class="bi-heart-fill me-2"></i>Donate
         </x-link>
     </div>
 </div>

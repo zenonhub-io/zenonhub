@@ -13,7 +13,6 @@ function load_account(string $address, ?string $name = null): Account
         'address' => $address,
     ], [
         'chain_id' => app('currentChain')->id,
-        'name' => $name,
     ]);
 
     if ($name) {
@@ -34,13 +33,15 @@ function load_token(?string $zts): ?Token
 
     if (! $token) {
         $data = app(ZenonSdk::class)->getByZts($zts);
-        $token = Token::create([
+
+        $token = Token::firstOrCreate([
+            'token_standard' => $data->tokenStandard,
+        ], [
             'chain_id' => app('currentChain')->id,
             'owner_id' => load_account($data->owner)->id,
             'name' => $data->name,
             'symbol' => $data->symbol,
             'domain' => $data->domain,
-            'token_standard' => $data->tokenStandard,
             'total_supply' => $data->totalSupply,
             'max_supply' => $data->maxSupply,
             'decimals' => $data->decimals,

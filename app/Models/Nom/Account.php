@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\Models\Markable\Favorite;
+use App\Models\SocialProfile;
 use App\Services\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\AccountFactory;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -220,12 +222,22 @@ class Account extends Model implements Sitemapable
         )->withPivot('balance', 'updated_at');
     }
 
+    public function socialProfile(): MorphOne
+    {
+        return $this->morphOne(SocialProfile::class, 'profileable');
+    }
+
     //
     // Scopes
 
     public function scopeWhereEmbedded($query)
     {
         $query->where('is_embedded_contract', '1');
+    }
+
+    public function scopeWhereNotEmbedded($query)
+    {
+        $query->where('is_embedded_contract', '0');
     }
 
     public function scopeTopByZnnBalance($query)
@@ -322,6 +334,31 @@ class Account extends Model implements Sitemapable
         return 'Low';
     }
 
+    public function getDisplayDelegationPercentageShareAttribute(): string
+    {
+        $pillar = $this->delegations()
+            ->wherePivotNull('ended_at')
+            ->first();
+
+        if (! $pillar) {
+            return '-';
+        }
+
+        $weight = $pillar->weight;
+
+        if ($pillar->revoked_at) {
+            $weight = $pillar->activeDelegators->map(fn ($delegator) => $delegator->znn_balance)->sum();
+        }
+
+        if ($this->znn_balance && $weight) {
+            $percentage = ($this->znn_balance / $weight) * 100;
+
+            return number_format($percentage, 2);
+        }
+
+        return '0';
+    }
+
     public function getActiveStakesAttribute(): ?Model
     {
         return $this->stakes()->whereActive()->get();
@@ -330,26 +367,6 @@ class Account extends Model implements Sitemapable
     public function getActiveDelegationAttribute(): ?Model
     {
         return $this->delegations()->whereActive()->first();
-    }
-
-    public function getActivePillarAttribute(): ?Model
-    {
-        return $this->pillars()->whereActive()->latest()->first();
-    }
-
-    public function getPillarAttribute(): ?Model
-    {
-        return $this->pillars()->latest()->first();
-    }
-
-    public function getActiveSentinelAttribute(): ?Model
-    {
-        return $this->sentinels()->whereActive()->latest()->first();
-    }
-
-    public function getSentinelAttribute(): ?Model
-    {
-        return $this->sentinels()->latest()->first();
     }
 
     public function getIsPillarWithdrawAddressAttribute(): bool
@@ -369,13 +386,13 @@ class Account extends Model implements Sitemapable
         if ($user = auth()->user()) {
 
             // Check favorites
-            $favorite = Favorite::findExisting($this, $user);
-            if ($favorite) {
-                return true;
-            }
+            //            $favorite = Favorite::findExisting($this, $user);
+            //            if ($favorite) {
+            //                return true;
+            //            }
 
             // Check verified addresses
-            $userAddress = $user->nom_accounts()
+            $userAddress = $user->verifiedAccounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
                 ->first();
@@ -413,13 +430,13 @@ class Account extends Model implements Sitemapable
         if ($user = auth()->user()) {
 
             // Check favorites
-            $favorite = Favorite::findExisting($this, $user);
-            if ($favorite) {
-                return $favorite->label;
-            }
+            //            $favorite = Favorite::findExisting($this, $user);
+            //            if ($favorite) {
+            //                return $favorite->label;
+            //            }
 
             // Check verified addresses
-            $userAddress = $user->nom_accounts()
+            $userAddress = $user->verifiedAccounts()
                 ->where('address', $this->address)
                 ->whereNotNull('nickname')
                 ->first();

@@ -38,6 +38,20 @@ return new class extends Migration
             $table->decimal('value')->index();
             $table->timestamp('timestamp')->nullable();
         });
+
+        Schema::create('nom_token_stat_histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
+            $table->string('daily_minted')->default(0);
+            $table->string('daily_burned')->default(0);
+            $table->string('total_supply')->default(0);
+            $table->string('total_holders')->default(0);
+            $table->string('total_transactions')->default(0);
+            $table->string('total_transferred')->default(0);
+            $table->string('total_locked')->default(0);
+            $table->string('total_wrapped')->default(0);
+            $table->date('date');
+        });
     }
 
     /**
@@ -45,6 +59,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('nom_token_stat_histories');
+        Schema::dropIfExists('nom_token_prices');
         Schema::dropIfExists('nom_tokens');
     }
 };

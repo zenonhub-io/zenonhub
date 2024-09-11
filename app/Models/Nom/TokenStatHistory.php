@@ -7,7 +7,7 @@ namespace App\Models\Nom;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PillarHistory extends Model
+class TokenStatHistory extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -21,7 +21,7 @@ class PillarHistory extends Model
      *
      * @var string
      */
-    protected $table = 'nom_pillar_histories';
+    protected $table = 'nom_token_stat_histories';
 
     /**
      * The attributes that are mass assignable.
@@ -29,13 +29,16 @@ class PillarHistory extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'pillar_id',
-        'producer_account_id',
-        'withdraw_account_id',
-        'momentum_rewards',
-        'delegate_rewards',
-        'is_reward_change',
-        'updated_at',
+        'token_id',
+        'daily_minted',
+        'daily_burned',
+        'total_supply',
+        'total_holders',
+        'total_transactions',
+        'total_transferred',
+        'total_locked',
+        'total_wrapped',
+        'date',
     ];
 
     /**
@@ -46,25 +49,18 @@ class PillarHistory extends Model
     protected function casts(): array
     {
         return [
-            'updated_at' => 'datetime',
+            'daily_minted' => 'string',
+            'daily_burned' => 'string',
+            'total_supply' => 'string',
+            'date' => 'date',
         ];
     }
 
     //
     // Relations
 
-    public function pillar(): BelongsTo
+    public function token(): BelongsTo
     {
-        return $this->belongsTo(Pillar::class);
-    }
-
-    public function producerAccount(): BelongsTo
-    {
-        return $this->belongsTo(Account::class);
-    }
-
-    public function withdrawAccount(): BelongsTo
-    {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Token::class);
     }
 }

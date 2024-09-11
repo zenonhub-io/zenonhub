@@ -6,6 +6,8 @@
 @import "components/cards";
 @import "components/inputs";
 @import "components/legend-indicator";
+@import "components/code-highliter";
+//@import "components/social-links";
 
 // Load custom font
 @if variable-exists(path-to-fonts) {

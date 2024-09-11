@@ -87,8 +87,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('nom_pillar_messages');
-        Schema::dropIfExists('nom_pillar_histories');
         Schema::dropIfExists('nom_delegations');
+        Schema::dropIfExists('nom_pillar_stat_histories');
+        Schema::dropIfExists('nom_pillar_update_histories');
         Schema::dropIfExists('nom_pillars');
     }
 };

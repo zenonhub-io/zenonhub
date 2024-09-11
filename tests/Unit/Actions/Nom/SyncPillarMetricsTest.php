@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Actions\Nom\SyncPillarMetrics;
 use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Nom\Pillar;
-use App\Models\Nom\PillarStatHistory;
 use App\Services\ZenonSdk;
 use Database\Seeders\Nom\Test\PillarsSeeder;
 use Database\Seeders\NomSeeder;
@@ -103,21 +102,4 @@ it('resets the missed momentum count', function () {
     expect($pillar->expected_momentums)->toBe(20)
         ->and($pillar->produced_momentums)->toEqual(20)
         ->and($pillar->missed_momentums)->toEqual(0);
-});
-
-it('creates pillar stat history', function () {
-
-    $pillar = Pillar::firstWhere('name', 'Pillar1');
-
-    (new SyncPillarMetrics)->handle($pillar);
-
-    $stats = $pillar->stats();
-    $stat = $pillar->stats()->first();
-
-    expect(PillarStatHistory::count())->toBe(1)
-        ->and($stats->count())->toEqual(1)
-        ->and($stat->rank)->toEqual($pillar->rank)
-        ->and($stat->weight)->toEqual($pillar->weight)
-        ->and($stat->momentum_rewards)->toEqual($pillar->momentum_rewards)
-        ->and($stat->delegate_rewards)->toEqual($pillar->delegate_rewards);
 });

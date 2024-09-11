@@ -16,8 +16,6 @@ class PillarList extends DataTableComponent
 {
     public ?string $tab = 'all';
 
-    protected $model = Pillar::class;
-
     public function configure(): void
     {
         //$this->setDebugStatus(true);
@@ -44,9 +42,7 @@ class PillarList extends DataTableComponent
     {
         $query = Pillar::query()
             ->with('orchestrator')
-            ->withCount(['activeDelegators' => function ($q) {
-                $q->where('znn_balance', '>', '0');
-            }]);
+            ->withCount('activeDelegators');
 
         if ($this->tab === 'active') {
             $query->whereProducing();
@@ -114,9 +110,9 @@ class PillarList extends DataTableComponent
                 ])
                 ->filter(function (Builder $builder, string $value) {
                     if ($value === '1') {
-                        $builder->where('is_legacy', 0);
-                    } elseif ($value === '0') {
                         $builder->where('is_legacy', 1);
+                    } elseif ($value === '0') {
+                        $builder->where('is_legacy', 0);
                     }
                 }),
             SelectFilter::make('Orchestrator')

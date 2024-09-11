@@ -7,6 +7,7 @@ namespace App\Models\Nom;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Markable\Favorite;
+use App\Models\SocialProfile;
 use App\Services\ZenonSdk;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -162,6 +164,16 @@ class Token extends Model implements Sitemapable
     public function bridgeNetworkTokens(): HasMany
     {
         return $this->hasMany(BridgeNetworkToken::class);
+    }
+
+    public function socialProfile(): MorphOne
+    {
+        return $this->morphOne(SocialProfile::class, 'profileable');
+    }
+
+    public function statHistory(): HasMany
+    {
+        return $this->hasMany(TokenStatHistory::class);
     }
 
     //

@@ -57,4 +57,14 @@ class PillarUpdateHistory extends Model
     {
         return $this->belongsTo(Pillar::class);
     }
+
+    public function producerAccount(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function withdrawAccount(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
 }

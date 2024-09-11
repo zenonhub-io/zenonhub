@@ -6,6 +6,7 @@ namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Markable\Favorite;
+use App\Models\SocialProfile;
 use App\Services\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\PillarFactory;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
@@ -75,6 +77,7 @@ class Pillar extends Model implements Sitemapable
     protected function casts(): array
     {
         return [
+            'qsr_burn' => 'string',
             'is_legacy' => 'boolean',
             'revoked_at' => 'datetime',
             'created_at' => 'datetime',
@@ -126,12 +129,17 @@ class Pillar extends Model implements Sitemapable
         return $this->hasOne(Orchestrator::class);
     }
 
-    public function updates(): HasMany
+    public function momentums(): HasMany
+    {
+        return $this->hasMany(Momentum::class, 'producer_pillar_id');
+    }
+
+    public function updateHistory(): HasMany
     {
         return $this->hasMany(PillarUpdateHistory::class);
     }
 
-    public function stats(): HasMany
+    public function statHistory(): HasMany
     {
         return $this->hasMany(PillarStatHistory::class);
     }
@@ -148,7 +156,8 @@ class Pillar extends Model implements Sitemapable
         return $this->belongsToMany(Account::class, 'nom_delegations')
             ->using(Delegation::class)
             ->withPivot('started_at', 'ended_at')
-            ->wherePivotNull('ended_at');
+            ->wherePivotNull('ended_at')
+            ->where('znn_balance', '>', '0');
     }
 
     public function votes(): HasMany
@@ -159,6 +168,11 @@ class Pillar extends Model implements Sitemapable
     public function messages(): HasMany
     {
         return $this->hasMany(PillarMessage::class);
+    }
+
+    public function socialProfile(): MorphOne
+    {
+        return $this->morphOne(SocialProfile::class, 'profileable');
     }
 
     //
@@ -228,7 +242,7 @@ class Pillar extends Model implements Sitemapable
             return '-';
         }
 
-        return $this->rank;
+        return (string) ($this->rank + 1);
     }
 
     public function getProducedMomentumsPercentageAttribute(): float
@@ -244,7 +258,7 @@ class Pillar extends Model implements Sitemapable
 
     public function getPreviousHistoryAttribute(): ?Model
     {
-        return $this->updates()
+        return $this->updateHistory()
             ->orderByDesc('updated_at')
             ->offset(1)
             ->limit(1)
@@ -281,6 +295,32 @@ class Pillar extends Model implements Sitemapable
     public function getIsProducingAttribute(): bool
     {
         return is_null($this->revoked_at) && $this->missed_momentums <= config('zenon.pillar_missed_momentum_limit');
+    }
+
+    public function getStatusColourAttribute(): string
+    {
+        if ($this->revoked_at) {
+            return 'danger';
+        }
+
+        if ($this->is_producing) {
+            return 'success';
+        }
+
+        return 'warning';
+    }
+
+    public function getStatusTextAttribute(): string
+    {
+        if ($this->revoked_at) {
+            return __('Revoked');
+        }
+
+        if ($this->is_producing) {
+            return __('Active');
+        }
+
+        return __('Not producing momentums');
     }
 
     public function getAzStatusIndicatorAttribute(): string

@@ -92,7 +92,7 @@ class ZenonAprData
 
     protected int $pillarCount = 0;
 
-    protected int $pillarValue = 0;
+    protected float $pillarValue = 0;
 
     protected int $totalDelegatedZnn = 0;
 
@@ -116,7 +116,7 @@ class ZenonAprData
 
     protected int $sentinelCount = 0;
 
-    protected int $sentinelValue = 0;
+    protected float $sentinelValue = 0;
 
     public function __construct()
     {

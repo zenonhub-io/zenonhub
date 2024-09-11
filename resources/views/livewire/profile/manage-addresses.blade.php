@@ -83,7 +83,7 @@
                         </div>
                     </div>
                     <div class="ms-auto d-flex gap-4 align-items-center">
-                        <x-buttons.button wire:click="confirmAddressDeletion('{{ $account->address }}')" class="btn-outline-danger">
+                        <x-buttons.button wire:click="confirmAddressDeletion('{{ $account->address }}')" class="btn-outline-danger btn-sm">
                             {{ __('Delete') }} <i class="bi bi-trash-fill ms-2"></i>
                         </x-buttons.button>
                     </div>

@@ -22,8 +22,6 @@ class ManageApiTokens extends Component
 
     public ?string $plainTextToken;
 
-    public bool $confirmingApiTokenDeletion = false;
-
     public int $apiTokenIdBeingDeleted;
 
     public function createApiToken(): void

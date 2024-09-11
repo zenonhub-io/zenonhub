@@ -8,6 +8,7 @@ use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SentinelsController;
+use App\Http\Controllers\TimezoneController;
 use App\Http\Middleware\AuthenticateSessionMiddleware;
 use App\Http\Middleware\UserLastSeenMiddleware;
 use App\Http\Middleware\VerifiedIfLoggedInMiddleware;
@@ -16,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 include 'redirects.php';
 
 Route::get('test', function () {
+
+    $apr = (new App\Services\ZenonAprData);
+    dd($apr);
+
+    dd('done');
 
     $pillar = App\Models\Nom\Pillar::find(50)?->load('orchestrator');
     dd($pillar->name);
@@ -211,15 +217,17 @@ Route::middleware([
     Route::get('donate', HomeController::class)->name('donate');
     Route::get('sponsor', HomeController::class)->name('sponsor');
 
+    Route::post('/timezone', [TimezoneController::class, 'update'])->name('timezone.update');
+
     Route::get('pillars/{tab?}', PillarsController::class)->name('pillar.list');
     Route::get('pillar/{slug}/{tab?}', PillarDetailController::class)->name('pillar.detail');
 
     Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
     Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
-    Route::get('accelerator-z', AcceleratorZController::class)->name('accelerator-z.list');
-    Route::get('accelerator-z/project/{hash}', AcceleratorZController::class)->name('accelerator-z.project.detail');
-    Route::get('accelerator-z/phase/{hash}', AcceleratorZController::class)->name('accelerator-z.phase.detail');
+    Route::get('accelerator-z/{tab?}', AcceleratorZController::class)->name('accelerator-z.list');
+    Route::get('accelerator-z/project/{hash}/{tab?}', AcceleratorZController::class)->name('accelerator-z.project.detail');
+    Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorZController::class)->name('accelerator-z.phase.detail');
 
     Route::get('explorer', HomeController::class)->name('explorer');
     Route::get('explorer/momentums', HomeController::class)->name('explorer.momentum.list');

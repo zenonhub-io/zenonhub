@@ -72,6 +72,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('nom_currencies');
+        Schema::dropIfExists('nom_time_challenges');
         Schema::dropIfExists('nom_votes');
         Schema::dropIfExists('nom_contract_methods');
         Schema::dropIfExists('nom_contracts');

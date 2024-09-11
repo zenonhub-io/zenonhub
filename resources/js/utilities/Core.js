@@ -1,5 +1,5 @@
 import Singleton from '../abstracts/Singleton';
-import {Tab, Tooltip} from 'bootstrap';
+import {Tab, Tooltip, Popover} from 'bootstrap';
 import ClipboardJS from "clipboard";
 
 export default class Core extends Singleton {
@@ -26,10 +26,21 @@ export default class Core extends Singleton {
             succeed(({ snapshot, effect }) => {
                 this.offPageGlobals();
 
+                console.log('off page globalbs');
+
                 queueMicrotask(() => {
+                    console.log('on page globalbs');
                     this.onPageGlobals();
                 })
             })
+        });
+
+        document.addEventListener('livewire:navigating', () => {
+            this.offPageGlobals();
+        })
+
+        document.addEventListener('livewire:navigated', () => {
+            this.onPageGlobals();
         })
 
         // window.livewire.on('refreshPage', refresh => {
@@ -43,6 +54,7 @@ export default class Core extends Singleton {
         this.onTabs();
         this.onCopiers();
         this.onTooltips();
+        this.onPopovers();
         this.onSyntaxHighlight();
     }
 
@@ -52,6 +64,7 @@ export default class Core extends Singleton {
         this.offTabs();
         this.offCopiers();
         this.offTooltips();
+        this.offPopovers();
     }
 
     reopenTab() {
@@ -134,7 +147,27 @@ export default class Core extends Singleton {
         }
 
         this.tooltipList.forEach(tooltip => {
-            tooltip.dispose();
+            if (tooltip) {
+                tooltip.dispose();
+            }
+        });
+    }
+
+    onPopovers() {
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        this.popoverList = [...popoverTriggerList].map(popoverTriggerEl => new Popover(popoverTriggerEl));
+    }
+
+    offPopovers() {
+
+        if (! this.popoverList) {
+            return;
+        }
+
+        this.popoverList.forEach(popover => {
+            if (popover) {
+                popover.dispose();
+            }
         });
     }
 

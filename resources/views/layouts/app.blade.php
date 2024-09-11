@@ -76,9 +76,9 @@
                 <div class="app-content-wrapper flex-fill bg-body-tertiary overflow-y-lg-auto
                     rounded-top-0 rounded-top-start-lg-4 rounded-top-end-lg-0
                     shadow-inset
-                    vh-100
+                    d-flex flex-column
                 ">
-                    <main class="container-fluid pt-5 pb-3 px-0 z-n1">
+                    <main class="container-fluid pt-5 pb-3 px-0 flex-grow-1">
                         {{ $slot }}
                     </main>
                 </div>
@@ -91,5 +91,23 @@
         @stack('scripts')
         @rappasoftTableScripts
         @rappasoftTableThirdPartyScripts
+
+        <script>
+            window.onload = function () {
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+                if (timezone !== '{{ session()->get('timezone', 'UTC') }}') {
+                    axios.post('{{ route('timezone.update') }}', { timezone })
+                }
+
+                Livewire.hook('request', ({ uri, options, payload, respond, succeed, fail }) => {
+                    fail(({ status, content, preventDefault }) => {
+                        if (status === 419) {
+                            preventDefault()
+                        }
+                    })
+                })
+            }
+        </script>
+
     </body>
 </html>
