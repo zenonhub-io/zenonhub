@@ -43,9 +43,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
             'votable_id' => $item->id,
             'votable_type' => $item::class,
         ], [
-            'is_yes' => Vote::isVoteType('yes', $blockData['vote']),
-            'is_no' => Vote::isVoteType('no', $blockData['vote']),
-            'is_abstain' => Vote::isVoteType('abstain', $blockData['vote']),
+            'vote' => $blockData['vote'],
             'created_at' => $accountBlock->created_at,
         ]);
 

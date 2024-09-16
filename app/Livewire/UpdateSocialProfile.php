@@ -154,10 +154,7 @@ class UpdateSocialProfile extends Component
 
             $this->address = $address;
             $this->socialProfile = SocialProfile::findByProfileableType($type, $id);
-
-            if ($this->socialProfile) {
-                $this->socialProfileForm = $this->socialProfile->toArray();
-            }
+            $this->socialProfileForm = $this->socialProfile?->toArray();
         }
     }
 }

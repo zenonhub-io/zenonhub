@@ -7,6 +7,7 @@ use App\DataTransferObjects\MockAccountBlockDTO;
 use App\Enums\Nom\AccountBlockTypesEnum;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Enums\Nom\NetworkTokensEnum;
+use App\Enums\Nom\VoteEnum;
 use App\Events\Indexer\Accelerator\PillarVoted;
 use App\Factories\MockAccountBlockFactory;
 use App\Models\Nom\AcceleratorPhase;
@@ -67,7 +68,7 @@ it('creates a a new vote', function () {
 
     expect(Vote::get())->toHaveCount(1)
         ->and($project->votes()->get())->toHaveCount(1)
-        ->and($vote->is_yes)->toBeTrue();
+        ->and($vote->vote)->toEqual(VoteEnum::YES);
 });
 
 it('dispatches the pillar voted event', function () {

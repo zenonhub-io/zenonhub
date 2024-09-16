@@ -39,9 +39,7 @@ return new class extends Migration
         Schema::create('nom_votes', function (Blueprint $table) {
             $table->id();
             $table->morphs('votable');
-            $table->boolean('is_yes')->default(0);
-            $table->boolean('is_no')->default(0);
-            $table->boolean('is_abstain')->default(0);
+            $table->integer('vote')->default(0)->index();
             $table->timestamp('created_at')->nullable();
         });
 

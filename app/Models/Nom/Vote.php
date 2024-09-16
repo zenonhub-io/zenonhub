@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\Enums\Nom\VoteEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -34,9 +35,7 @@ class Vote extends Model
         'pillar_id',
         'votable_id',
         'votable_type',
-        'is_yes',
-        'is_no',
-        'is_abstain',
+        'vote',
         'created_at',
     ];
 
@@ -48,28 +47,9 @@ class Vote extends Model
     protected function casts(): array
     {
         return [
+            'vote' => VoteEnum::class,
             'created_at' => 'datetime',
         ];
-    }
-
-    //
-    // Helpers
-
-    public static function isVoteType(string $type, string $vote): bool
-    {
-        if ($type === 'yes' && $vote === '0') {
-            return true;
-        }
-
-        if ($type === 'no' && $vote === '1') {
-            return true;
-        }
-
-        if ($type === 'abstain' && $vote === '2') {
-            return true;
-        }
-
-        return false;
     }
 
     //
@@ -95,16 +75,16 @@ class Vote extends Model
 
     public function scopeWhereYesVote($query)
     {
-        $query->where('is_yes', '1');
+        $query->where('vote', VoteEnum::YES->value);
     }
 
     public function scopeWhereNoVote($query)
     {
-        $query->where('is_no', '1');
+        $query->where('vote', VoteEnum::NO->value);
     }
 
     public function scopeWhereAbstainVote($query)
     {
-        $query->where('is_abstain', '1');
+        $query->where('vote', VoteEnum::ABSTAIN->value);
     }
 }
