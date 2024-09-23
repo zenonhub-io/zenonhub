@@ -17,6 +17,9 @@ abstract class BaseTable extends DataTableComponent
         $this->setSortingPillsStatus(false)
             ->setFilterPillsStatus(false);
 
+        $this->setPerPageAccepted([10, 25, 50, 100, 150])
+            ->setPerPage(25);
+
         $this->setComponentWrapperAttributes([
             'class' => 'table-responsive',
         ]);

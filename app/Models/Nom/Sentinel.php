@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\SentinelDTO;
 use App\Services\ZenonSdk;
 use Database\Factories\Nom\SentinelFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -97,7 +98,7 @@ class Sentinel extends Model
     //
     // Attributes
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?SentinelDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

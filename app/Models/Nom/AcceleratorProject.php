@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\AcceleratorProjectDTO;
 use App\Enums\Nom\AcceleratorPhaseStatusEnum;
 use App\Enums\Nom\AcceleratorProjectStatusEnum;
 use App\Models\Markable\Favorite;
@@ -247,7 +248,7 @@ class AcceleratorProject extends Model implements Sitemapable
         return 'Quorum reached';
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?AcceleratorProjectDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

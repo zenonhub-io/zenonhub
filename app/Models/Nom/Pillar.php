@@ -274,7 +274,7 @@ class Pillar extends Model implements Sitemapable
             );
     }
 
-    public function getRawJsonAttribute(): PillarDTO
+    public function getRawJsonAttribute(): ?PillarDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

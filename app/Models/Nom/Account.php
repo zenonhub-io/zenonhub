@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\AccountDTO;
 use App\Models\Markable\Favorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk;
@@ -462,7 +463,7 @@ class Account extends Model implements Sitemapable
         return "{$start}....{$end}";
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?AccountDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

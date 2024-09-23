@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\AccountBlockDTO;
 use App\Enums\Nom\AccountBlockTypesEnum;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
@@ -253,7 +254,7 @@ class AccountBlock extends Model
             ->first();
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?AccountBlockDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

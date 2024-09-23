@@ -20,8 +20,16 @@
                             <i class="bi bi-three-dots"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-pillar-{{ $pillar->slug }}">Edit</a></li>
-                            <li><a class="dropdown-item" href="#">Share</a></li>
+                            <li>
+                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-pillar-{{ $pillar->slug }}">
+                                    <i class="bi bi-pencil-fill me-2"></i> {{ __('Edit') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

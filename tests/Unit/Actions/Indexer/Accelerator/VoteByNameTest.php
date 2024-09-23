@@ -84,7 +84,7 @@ it('dispatches the pillar voted event', function () {
 
 it('ensures only the pillar owner and account block sender account match', function () {
 
-    $accountBlock = createAddPhaseAccountBlock([
+    $accountBlock = createVoteByNameAccountBlock([
         'account' => Account::factory()->create(),
     ]);
 

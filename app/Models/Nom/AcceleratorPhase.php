@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\AcceleratorPhaseDTO;
 use App\Enums\Nom\AcceleratorPhaseStatusEnum;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
@@ -154,7 +155,7 @@ class AcceleratorPhase extends Model implements Sitemapable
         return $this->project->phases->pluck('id')->sort()->search($this->id) + 1;
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?AcceleratorPhaseDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\TokenDTO;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Markable\Favorite;
@@ -310,7 +311,7 @@ class Token extends Model implements Sitemapable
         return 0;
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?TokenDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);

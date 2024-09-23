@@ -4,30 +4,22 @@ declare(strict_types=1);
 
 namespace App\Livewire\Pillars;
 
+use App\Livewire\BaseTable;
 use App\Models\Nom\Pillar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class PillarDelegators extends DataTableComponent
+class PillarDelegators extends BaseTable
 {
     public string $pillarId;
 
     public function configure(): void
     {
-        //$this->setDebugStatus(true);
+        parent::configure();
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('formatted_znn_balance', 'desc');
-
-        $this->setSortingPillsStatus(false)
-            ->setFilterPillsStatus(false)
-            ->setComponentWrapperAttributes([
-                'class' => 'table-responsive',
-            ])->setTableAttributes([
-                'class' => 'table-hover table-striped table-nowrap',
-            ]);
     }
 
     public function builder(): Builder

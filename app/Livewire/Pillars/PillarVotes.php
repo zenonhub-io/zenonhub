@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Livewire\Pillars;
 
 use App\Enums\Nom\VoteEnum;
+use App\Livewire\BaseTable;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Vote;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
-class PillarVotes extends DataTableComponent
+class PillarVotes extends BaseTable
 {
     public string $pillarId;
 
@@ -22,21 +22,10 @@ class PillarVotes extends DataTableComponent
 
     public function configure(): void
     {
-        //$this->setDebugStatus(true);
+        parent::configure();
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
-
-        $this->setPerPageAccepted([10, 25, 50, 100, 150])
-            ->setPerPage(25);
-
-        $this->setSortingPillsStatus(false)
-            ->setFilterPillsStatus(false)
-            ->setComponentWrapperAttributes([
-                'class' => 'table-responsive',
-            ])->setTableAttributes([
-                'class' => 'table-hover table-striped table-nowrap',
-            ]);
     }
 
     public function builder(): Builder

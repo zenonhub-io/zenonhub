@@ -4,29 +4,21 @@ declare(strict_types=1);
 
 namespace App\Livewire\Sentinels;
 
+use App\Livewire\BaseTable;
 use App\Models\Nom\Sentinel;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class SentinelList extends DataTableComponent
+class SentinelList extends BaseTable
 {
     public ?string $tab = 'all';
 
     public function configure(): void
     {
-        //$this->setDebugStatus(true);
+        parent::configure();
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
-
-        $this->setSortingPillsStatus(false)
-            ->setFilterPillsStatus(false)
-            ->setComponentWrapperAttributes([
-                'class' => 'table-responsive',
-            ])->setTableAttributes([
-                'class' => 'table-hover table-striped table-nowrap',
-            ]);
     }
 
     public function builder(): Builder

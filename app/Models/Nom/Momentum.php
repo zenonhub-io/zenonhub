@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use App\DataTransferObjects\Nom\MomentumDTO;
 use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
@@ -145,7 +146,7 @@ class Momentum extends Model
         return self::where('height', ($this->height - 1))->first();
     }
 
-    public function getRawJsonAttribute(): array
+    public function getRawJsonAttribute(): ?MomentumDTO
     {
         $cacheKey = $this->cacheKey('rawJson');
         $data = Cache::get($cacheKey);
