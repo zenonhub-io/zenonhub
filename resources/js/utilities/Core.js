@@ -147,7 +147,7 @@ export default class Core extends Singleton {
         }
 
         this.tooltipList.forEach(tooltip => {
-            if (tooltip) {
+            if (tooltip._element) {
                 tooltip.dispose();
             }
         });
@@ -165,7 +165,7 @@ export default class Core extends Singleton {
         }
 
         this.popoverList.forEach(popover => {
-            if (popover) {
+            if (popover._element) {
                 popover.dispose();
             }
         });

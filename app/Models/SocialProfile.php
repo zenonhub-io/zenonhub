@@ -60,7 +60,7 @@ class SocialProfile extends Model
         ];
     }
 
-    public static function findByProfileableType(string $type, string $id): ?SocialProfile
+    public static function findByProfileableType(string $type, int $id): ?SocialProfile
     {
         return self::where('profileable_type', $type)
             ->where('profileable_id', $id)

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Pillars;
 
+use App\Enums\Nom\VoteEnum;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
@@ -61,7 +62,7 @@ class PillarVotes extends DataTableComponent
                 ),
             Column::make('Vote')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.pillar.votes.vote')->withRow($row)
+                    fn ($row, Column $column) => view('tables.columns.vote')->withRow($row)
                 ),
             Column::make('Timestamp', 'created_at')
                 ->sortable()
@@ -96,11 +97,11 @@ class PillarVotes extends DataTableComponent
                 ])
                 ->filter(function (Builder $builder, string $value) {
                     if ($value === 'yes') {
-                        $builder->where('is_yes', 1);
+                        $builder->where('vote', VoteEnum::YES->value);
                     } elseif ($value === 'no') {
-                        $builder->where('is_no', 1);
+                        $builder->where('vote', VoteEnum::NO->value);
                     } elseif ($value === 'abstain') {
-                        $builder->where('is_abstain', 1);
+                        $builder->where('vote', VoteEnum::ABSTAIN->value);
                     }
                 }),
         ];

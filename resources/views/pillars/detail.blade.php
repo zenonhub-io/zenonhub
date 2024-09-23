@@ -1,43 +1,40 @@
 <x-app-layout>
-{{--    <x-includes.header :responsive-border="false">--}}
-{{--        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-4">--}}
-{{--            <div class="d-flex align-items-center mb-3 mb-md-0">--}}
-{{--                <x-svg file="zenon/pillar"--}}
-{{--                       class="me-4 text-{{ $pillar->status_colour }}" style="height: 28px"--}}
-{{--                       data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_text }}"/>--}}
-{{--                <x-includes.header-title :title="$pillar->name" />--}}
-{{--            </div>--}}
-{{--            <div class="d-flex ms-md-auto align-items-center gap-3">--}}
-{{--                <x-social-profile.links :social-profile="$pillar->socialProfile" />--}}
-{{--                <x-social-profile.edit-button item-type="pillar" :item-id="$pillar->slug" :address="$pillar->owner->address" :title="$pillar->name" />--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </x-includes.header>--}}
 
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
-
             <div class="d-flex align-items-start flex-column">
                 <div class="d-flex align-items-center mb-1">
-                    <x-svg file="zenon/pillar" class="me-4" style="height: 28px"/>
+                    @if ($pillar->socialProfile?->avatar)
+                        <div class="w-24 w-md-32">
+                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded float-start title-avatar me-2" alt="{{ $pillar->name }} Logo"/>
+                        </div>
+                    @else
+                        <x-svg file="zenon/pillar" class="me-4" style="height: 28px"/>
+                    @endif
                     <x-includes.header-title :title="$pillar->name" />
                 </div>
                 <div class="d-flex align-items-center gap-3">
-                    <span class="badge text-bg-{{ $pillar->status_colour }}">{{ $pillar->status_text }}</span>
                     <x-social-profile.links :social-profile="$pillar->socialProfile" />
+                    <div class="dropdown">
+                        <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-pillar-{{ $pillar->slug }}">Edit</a></li>
+                            <li><a class="dropdown-item" href="#">Share</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="d-flex align-items-end flex-column">
-                <x-social-profile.edit-button item-type="pillar" :item-id="$pillar->slug" :address="$pillar->owner->address" :title="$pillar->name" />
+            <div class="d-flex align-items-start">
+                <span class="badge text-bg-{{ $pillar->status_colour }}">{{ $pillar->status_text }}</span>
             </div>
         </div>
     </x-includes.header>
 
-    <div class="px-3">
-
-    <div class="container-fluid">
-        <div class="row mb-6">
+    <div class="container-fluid px-3 px-md-6">
+        <div class="row mb-6 gy-6">
             <div class="col-12 col-md-6">
                 <x-cards.card>
                     <x-stats.mini-stat
@@ -90,7 +87,6 @@
                 </x-cards.card>
             </div>
         </div>
-
         <x-cards.card class="mb-6">
             <div class="row">
                 <div class="col-24 col-md-12">
@@ -137,7 +133,6 @@
         </x-cards.card>
     </div>
 
-    </div>
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[
             __('Delegators') => route('pillar.detail', ['slug' => $pillar->slug, 'tab' => 'delegators']),
@@ -163,5 +158,8 @@
         <x-code-highlighters.json :code="$pillar->raw_json" />
     @endif
 
+    <x-modals.modal class="modal-lg" id="edit-pillar-{{ $pillar->slug }}">
+        <livewire:update-social-profile item-type="pillar" :item-id="$pillar->slug" :address="$pillar->owner->address" :title="$pillar->name" />
+    </x-modals.modal>
 </x-app-layout>
 

@@ -5,7 +5,6 @@
         <x-includes.head-tags/>
         @livewireStyles
         @rappasoftTableStyles
-        @rappasoftTableThirdPartyStyles
     </head>
     <body class="bg-body">
         <div class="d-flex flex-column flex-lg-row h-lg-100 gap-3">
@@ -90,7 +89,6 @@
         <x-includes.footer-tags/>
         @stack('scripts')
         @rappasoftTableScripts
-        @rappasoftTableThirdPartyScripts
 
         <script>
             window.onload = function () {

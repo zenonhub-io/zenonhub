@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Livewire\Pillars;
 
+use App\Livewire\BaseTable;
 use App\Models\Nom\Pillar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\NumberFilter;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
-class PillarList extends DataTableComponent
+class PillarList extends BaseTable
 {
     public ?string $tab = 'all';
 
+    public string $viewMode = 'compact';
+
     public function configure(): void
     {
-        //$this->setDebugStatus(true);
+        parent::configure();
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('rank');
@@ -28,14 +30,6 @@ class PillarList extends DataTableComponent
 
         $this->setTableRowUrl(fn ($row) => route('pillar.detail', $row->slug))
             ->setTableRowUrlTarget(fn ($row) => 'navigate');
-
-        $this->setSortingPillsStatus(false)
-            ->setFilterPillsStatus(false)
-            ->setComponentWrapperAttributes([
-                'class' => 'table-responsive',
-            ])->setTableAttributes([
-                'class' => 'table-hover table-striped table-nowrap',
-            ]);
     }
 
     public function builder(): Builder
