@@ -1,6 +1,6 @@
 <div class="d-flex gap-2 text-xs">
     <span class="text-heading fw-semibold">Height:</span>
-    <span class="text-muted"><livewire:current-height /></span>
+    <span class="text-muted"><livewire:utilities.current-height /></span>
 </div>
 <div class="d-flex gap-2 text-xs">
     <span class="text-heading fw-semibold">ZNN:</span>

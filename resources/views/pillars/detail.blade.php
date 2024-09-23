@@ -34,7 +34,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="d-flex align-items-start">
                 <span class="badge text-bg-{{ $pillar->status_colour }}">{{ $pillar->status_text }}</span>
             </div>
@@ -167,7 +166,7 @@
     @endif
 
     <x-modals.modal class="modal-lg" id="edit-pillar-{{ $pillar->slug }}">
-        <livewire:update-social-profile item-type="pillar" :item-id="$pillar->slug" :address="$pillar->owner->address" :title="$pillar->name" />
+        <livewire:utilities.update-social-profile item-type="pillar" :item-id="$pillar->slug" :address="$pillar->owner->address" :title="$pillar->name" />
     </x-modals.modal>
 </x-app-layout>
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire;
+namespace App\Livewire\Utilities;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
@@ -45,7 +45,7 @@ class UpdateSocialProfile extends Component
 
     public function render()
     {
-        return view('livewire.update-social-profile');
+        return view('livewire.utilities.update-social-profile');
     }
 
     public function mount(): void

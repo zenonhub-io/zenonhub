@@ -26,8 +26,8 @@
             </main>
         </div>
 
-        <livewire:utilities.modal/>
-        <livewire:utilities.offcanvas/>
+        <livewire:components.modal/>
+        <livewire:components.offcanvas/>
         <x-includes.footer-tags/>
         @stack('scripts')
     </body>

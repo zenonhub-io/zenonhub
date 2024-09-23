@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Utilities;
+namespace App\Livewire\Components;
 
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
@@ -20,7 +20,7 @@ class Offcanvas extends Component
 
     public function render(): View
     {
-        return view('livewire.utilities.offcanvas');
+        return view('livewire.components.offcanvas');
     }
 
     #[On('open-livewire-offcanvas')]
