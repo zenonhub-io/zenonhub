@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\SocialProfileFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class SocialProfile extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -58,6 +63,14 @@ class SocialProfile extends Model
         return [
             'created_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return SocialProfileFactory::new();
     }
 
     public static function findByProfileableType(string $type, int $id): ?SocialProfile

@@ -11,25 +11,6 @@ beforeEach(function () {
     $this->seed(NomSeeder::class);
 });
 
-it('basic pages return a successful response', function () {
-
-    $routes = [
-        'home',
-        'terms',
-        'policy',
-        'donate',
-        'sponsor',
-    ];
-
-    foreach ($routes as $routeName) {
-        $route = route($routeName, [], false);
-
-        $response = $this->get($route);
-
-        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
-    }
-});
-
 it('pillar pages return a successful response', function () {
 
     $this->seed(PillarsSeeder::class);

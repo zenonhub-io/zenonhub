@@ -3,24 +3,25 @@
     <x-modals.heading :title="__('Manage Profile: ').$title" />
 
     <div class="p-6">
-        <div class="vstack gap-6">
+        <div class="vstack gap-4">
 
-            <p class="mb-0">To save your profile you must sign the message below to prove ownership of the address:<br>
-                <span class="fw-semibold">{{ $address }}</span>
-            </p>
-
-            <hr>
+            @if (! $hasUserVerifiedAddress)
+                <p>To update your profile, signature verification for the following address is required to prove ownership:</p>
+                <p><span class="fw-semibold">{{ $address }}</span></p>
+                <p>Alternatively <a href="{{ route('login') }}">login</a> to your account and <a href="{{ route('profile', ['tab' => 'addresses']) }}">link</a> the address to your profile for faster updates in the future.</p>
+                <hr>
+            @endif
 
             <x-forms.inputs.hidden name="address" value="{{ $address }}" wire:model="address" />
-            <div class="row align-items-center">
-                @php($uuid = Str::random(8))
-                <div class="col-md-4">
-                    <x-forms.label :label="__('Bio')" for="{{ $uuid }}" />
-                </div>
-                <div class="col-md-20">
-                    <x-forms.inputs.textarea name="bio" id="{{ $uuid }}" wire:model="socialProfileForm.bio" />
-                </div>
-            </div>
+{{--            <div class="row align-items-center">--}}
+{{--                @php($uuid = Str::random(8))--}}
+{{--                <div class="col-md-4">--}}
+{{--                    <x-forms.label :label="__('Bio')" for="{{ $uuid }}" />--}}
+{{--                </div>--}}
+{{--                <div class="col-md-20">--}}
+{{--                    <x-forms.inputs.textarea name="bio" id="{{ $uuid }}" wire:model="socialProfileForm.bio" />--}}
+{{--                </div>--}}
+{{--            </div>--}}
             <div class="row align-items-center">
                 @php($uuid = Str::random(8))
                 <div class="col-md-4">
@@ -89,27 +90,30 @@
                 </div>
             </div>
 
-            <hr>
+            @if (! $hasUserVerifiedAddress)
+                <hr>
 
-            <div class="row align-items-center">
-                @php($uuid = Str::random(8))
-                <div class="col-md-4">
-                    <x-forms.label :label="__('Message')" for="{{ $uuid }}" />
+                <div class="row align-items-center">
+                    @php($uuid = Str::random(8))
+                    <div class="col-md-4">
+                        <x-forms.label :label="__('Message')" for="{{ $uuid }}" />
+                    </div>
+                    <div class="col-md-20">
+                        <x-forms.inputs.input name="message" id="{{ $uuid }}" wire:model="message" :readonly="true" />
+                    </div>
                 </div>
-                <div class="col-md-20">
-                    <x-forms.inputs.input name="message" id="{{ $uuid }}" wire:model="message" :readonly="true" />
+                <div class="row align-items-center">
+                    @php($uuid = Str::random(8))
+                    <div class="col-md-4">
+                        <x-forms.label :label="__('Signature')" for="{{ $uuid }}" />
+                    </div>
+                    <div class="col-md-20">
+                        <x-forms.inputs.input name="signature" id="{{ $uuid }}" wire:model="signature" />
+                        <p class="text-muted text-sm">To sign the message you can use Syrius: Settings > Security > Sign</p>
+                    </div>
                 </div>
-            </div>
-            <div class="row align-items-center">
-                @php($uuid = Str::random(8))
-                <div class="col-md-4">
-                    <x-forms.label :label="__('Signature')" for="{{ $uuid }}" />
-                </div>
-                <div class="col-md-20">
-                    <x-forms.inputs.input name="signature" id="{{ $uuid }}" wire:model="signature" />
-                    <p class="text-muted text-sm">To sign the message you can use Syrius: Settings > Security > Sign</p>
-                </div>
-            </div>
+            @endif
+
         </div>
     </div>
 

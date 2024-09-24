@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Livewire\Utilities;
 
-use App\Models\Nom\Account;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Token;
 use App\Models\SocialProfile;
@@ -13,14 +12,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
+use Log;
 
 class UpdateSocialProfile extends Component
 {
-    public string $title;
+    public ?string $title = null;
 
-    public string $itemType;
+    public ?string $itemType = null;
 
-    public string $itemId;
+    public ?string $itemId = null;
 
     public ?SocialProfile $socialProfile = null;
 
@@ -29,6 +29,8 @@ class UpdateSocialProfile extends Component
     public string $message = '';
 
     public string $signature = '';
+
+    public bool $hasUserVerifiedAddress = false;
 
     public array $socialProfileForm = [
         'name' => '',
@@ -51,12 +53,33 @@ class UpdateSocialProfile extends Component
     public function mount(): void
     {
         $this->loadSocialProfile();
+        $this->checkUserHasVerifiedAddress();
         $this->setRandomMessage();
     }
 
     public function saveProfile(): void
     {
         $this->resetErrorBag();
+
+        $rules = [
+            'address' => ['required', 'string', 'max:40', 'exists:nom_accounts,address'],
+            'bio' => ['nullable', 'max:255'],
+            'avatar' => ['nullable', 'url', 'max:255'],
+            'website' => ['nullable', 'url', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'x' => ['nullable', 'url', 'max:255'],
+            'telegram' => ['nullable', 'url', 'max:255'],
+            'github' => ['nullable', 'url', 'max:255'],
+            'medium' => ['nullable', 'url', 'max:255'],
+            'discord' => ['nullable', 'url', 'max:255'],
+        ];
+
+        if (! $this->hasUserVerifiedAddress) {
+            $rules += [
+                'message' => ['required', 'string', 'max:8'],
+                'signature' => ['required', 'string'],
+            ];
+        }
 
         Validator::make([
             'address' => $this->address,
@@ -72,25 +95,9 @@ class UpdateSocialProfile extends Component
             'github' => $this->socialProfileForm['github'],
             'medium' => $this->socialProfileForm['medium'],
             'discord' => $this->socialProfileForm['discord'],
-        ], [
-            'address' => ['required', 'string', 'max:40', 'exists:nom_accounts,address'],
-            //'message' => ['required', 'string', 'max:8'],
-            'signature' => ['required', 'string'],
+        ], $rules)->validateWithBag('verifyAddress');
 
-            'bio' => ['nullable', 'max:255'],
-            'avatar' => ['nullable', 'url', 'max:255'],
-            'website' => ['nullable', 'url', 'max:255'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'x' => ['nullable', 'url', 'max:255'],
-            'telegram' => ['nullable', 'url', 'max:255'],
-            'github' => ['nullable', 'url', 'max:255'],
-            'medium' => ['nullable', 'url', 'max:255'],
-            'discord' => ['nullable', 'url', 'max:255'],
-        ])->validateWithBag('verifyAddress');
-
-        $userControlsAddress = auth()->user()?->whereRelation('verifiedAccounts', 'address', $this->address)->count();
-
-        if (! $userControlsAddress) {
+        if (! $this->hasUserVerifiedAddress) {
             $zenonSdk = app(ZenonSdk::class);
             $account = load_account($this->address);
 
@@ -114,6 +121,7 @@ class UpdateSocialProfile extends Component
 
         $this->socialProfile->update($this->socialProfileForm);
 
+        $this->setRandomMessage();
         $this->dispatch('social-profile.updated');
     }
 
@@ -124,39 +132,51 @@ class UpdateSocialProfile extends Component
             : 'TEST';
     }
 
+    private function checkUserHasVerifiedAddress(): void
+    {
+        $userControlsAddress = auth()->user()?->whereRelation('verifiedAccounts', 'address', $this->address)->count();
+
+        if ($userControlsAddress > 0) {
+            $this->hasUserVerifiedAddress = true;
+        }
+
+        Log::info('checkUserHasVerifiedAddress', [
+            'result' => $this->hasUserVerifiedAddress,
+        ]);
+    }
+
     private function loadSocialProfile(): void
     {
         if ($this->socialProfile === null && $this->itemType) {
 
+            $model = null;
             $address = null;
-            $type = null;
-            $id = null;
 
             if ($this->itemType === 'address') {
-                $type = Account::class;
-                $id = $this->itemId;
-                $address = $this->itemId;
+                $account = $model = load_account($this->itemId);
+                $address = $account->address;
             }
 
             if ($this->itemType === 'pillar') {
-                $type = Pillar::class;
-                $pillar = Pillar::firstWhere('slug', $this->itemId)?->load('owner');
-                $id = $pillar?->id;
+                $pillar = $model = Pillar::firstWhere('slug', $this->itemId)?->load('owner');
                 $address = $pillar?->owner->address;
             }
 
             if ($this->itemType === 'token') {
-                $type = Token::class;
-                $token = Token::firstWhere('token_standard', $this->itemId)?->load('owner');
-                $id = $token?->id;
+                $token = $model = Token::firstWhere('token_standard', $this->itemId)?->load('owner');
                 $address = $token?->owner->address;
             }
 
-            $this->address = $address;
-            $this->socialProfile = SocialProfile::findByProfileableType($type, $id);
-            if ($this->socialProfile) {
-                $this->socialProfileForm = $this->socialProfile?->toArray();
+            $socialProfile = $model?->socialProfile;
+
+            if (! $socialProfile) {
+                $socialProfile = new SocialProfile;
+                $model->socialProfile()->save($socialProfile);
             }
+
+            $this->address = $address;
+            $this->socialProfile = $socialProfile;
+            $this->socialProfileForm = $this->socialProfile->toArray();
         }
     }
 }
