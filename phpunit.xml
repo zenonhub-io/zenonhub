@@ -12,8 +12,8 @@
             <directory>tests/Unit</directory>
         </testsuite>
         <testsuite name="Arch">
-            <file>tests/ArchitectureTest.php</file>
-            <directory>tests/Architecture</directory>
+            <file>tests/ArchTest.php</file>
+            <directory>tests/Arch</directory>
         </testsuite>
     </testsuites>
     <source>
