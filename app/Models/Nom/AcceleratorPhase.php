@@ -52,6 +52,7 @@ class AcceleratorPhase extends Model implements Sitemapable
         'url',
         'description',
         'status',
+        'phase_number',
         'znn_requested',
         'qsr_requested',
         'znn_price',
@@ -121,7 +122,7 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     public function scopeShouldSendVotingReminder($query)
     {
-        $query
+        return $query
             ->whereTime('created_at', '>=', now()->subHour()->startOfHour()->format('H:i:s'))
             ->whereTime('created_at', '<', now()->subHour()->endOfHour()->format('H:i:s'))
             ->where(function ($q) {
@@ -148,11 +149,6 @@ class AcceleratorPhase extends Model implements Sitemapable
         }
 
         return 'Quorum reached';
-    }
-
-    public function getPhaseNumberAttribute(): int
-    {
-        return $this->project->phases->pluck('id')->sort()->search($this->id) + 1;
     }
 
     public function getRawJsonAttribute(): ?AcceleratorPhaseDTO

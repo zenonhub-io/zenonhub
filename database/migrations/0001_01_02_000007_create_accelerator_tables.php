@@ -48,6 +48,7 @@ return new class extends Migration
             $table->string('url');
             $table->mediumText('description');
             $table->integer('status')->default(0);
+            $table->integer('phase_number')->default(1);
             $table->bigInteger('znn_requested')->default(0);
             $table->bigInteger('qsr_requested')->default(0);
             $table->decimal('znn_price', 12, 4)->nullable();

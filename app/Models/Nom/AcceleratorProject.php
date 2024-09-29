@@ -205,7 +205,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function scopeShouldSendVotingReminder($query)
     {
-        $query
+        return $query
             ->whereTime('created_at', '>=', now()->subHour()->startOfHour()->format('H:i:s'))
             ->whereTime('created_at', '<', now()->subHour()->endOfHour()->format('H:i:s'))
             ->where(function ($q) {

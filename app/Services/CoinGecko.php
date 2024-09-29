@@ -21,7 +21,7 @@ class CoinGecko
 
         Log::warning('Unable to load price from coingeko');
 
-        return false;
+        return null;
     }
 
     public function historicPrice(string $token, string $currency, Carbon $timestamp): ?float

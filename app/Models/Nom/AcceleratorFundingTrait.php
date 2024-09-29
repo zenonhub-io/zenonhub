@@ -21,8 +21,8 @@ trait AcceleratorFundingTrait
     public function getDisplayUsdRequestedAttribute(): string
     {
         if (! $this->znn_price || ! $this->qsr_price) {
-            $znnPrice = app(CoinGecko::class)->historicPrice('zenon-2', 'usd', $this->created_at->timestamp);
-            $qsrPrice = app(CoinGecko::class)->historicPrice('quasar', 'usd', $this->created_at->timestamp);
+            $znnPrice = app(CoinGecko::class)->historicPrice('zenon-2', 'usd', $this->created_at);
+            $qsrPrice = app(CoinGecko::class)->historicPrice('quasar', 'usd', $this->created_at);
 
             // Projects created before QSR price available
             if (is_null($qsrPrice) && $znnPrice > 0) {

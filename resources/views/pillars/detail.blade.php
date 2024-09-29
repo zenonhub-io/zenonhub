@@ -42,101 +42,111 @@
 
     <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
-                    <x-stats.mini-stat
-                        :title="__('Weight')"
-                        :stat="$pillar->display_weight . ' ZNN'"
-                        :info="__('Total ZNN delegated to the pillar')"
-                    />
+                    <x-cards.body>
+                        <x-stats.mini-stat
+                            :title="__('Weight')"
+                            :stat="$pillar->display_weight . ' ZNN'"
+                            :info="__('Total ZNN delegated to the pillar')"
+                        />
+                    </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
-                    <x-stats.mini-stat
-                        :title="__('Rewards')"
-                        :info="__('Momentum / Delegate rewards %')">
-                        {{ $pillar->momentum_rewards }} / {{ $pillar->delegate_rewards }}
-                    </x-stats.mini-stat>
+                    <x-cards.body>
+                        <x-stats.mini-stat
+                            :title="__('Rewards')"
+                            :info="__('Momentum / Delegate rewards %')">
+                            {{ $pillar->momentum_rewards }} / {{ $pillar->delegate_rewards }}
+                        </x-stats.mini-stat>
+                    </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
-                    <x-stats.mini-stat
-                        :title="__('Momentums')"
-                        :info="__('Produced / Expected momentums in the current epoch')">
-                        @if (! $pillar->revoked_at)
-                            @if ($pillar->is_producing)
-                                <x-stats.indicator type="success" data-bs-toggle="tooltip" data-bs-title="Producing momentums" />
+                    <x-cards.body>
+                        <x-stats.mini-stat
+                            :title="__('Momentums')"
+                            :info="__('Produced / Expected momentums in the current epoch')">
+                            @if (! $pillar->revoked_at)
+                                @if ($pillar->is_producing)
+                                    <x-stats.indicator type="success" data-bs-toggle="tooltip" data-bs-title="Producing momentums" />
+                                @else
+                                    <x-stats.indicator type="danger" data-bs-toggle="tooltip" data-bs-title="Not producing momentums" />
+                                @endif
+                                {{ $pillar->produced_momentums }} / {{ $pillar->expected_momentums }}
                             @else
                                 <x-stats.indicator type="danger" data-bs-toggle="tooltip" data-bs-title="Not producing momentums" />
+                                0 / 0
                             @endif
-                            {{ $pillar->produced_momentums }} / {{ $pillar->expected_momentums }}
-                        @else
-                            <x-stats.indicator type="danger" data-bs-toggle="tooltip" data-bs-title="Not producing momentums" />
-                            0 / 0
-                        @endif
-                    </x-stats.mini-stat>
+                        </x-stats.mini-stat>
+                    </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
-                    <x-stats.mini-stat
-                        :title="__('Orchestrator')"
-                        :info="__('Indicates if the pillar runs an orchestrator and its status')">
-                        @if($pillar->orchestrator)
-                            <x-stats.indicator :type="$pillar->orchestrator->is_active ? 'success' : 'danger'" />
-                            {{ ($pillar->orchestrator->is_active ? 'Online' : 'Offline') }}
-                        @else
-                            {{ __('None') }}
-                        @endif
-                    </x-stats.mini-stat>
+                    <x-cards.body>
+                        <x-stats.mini-stat
+                            :title="__('Orchestrator')"
+                            :info="__('Indicates if the pillar runs an orchestrator and its status')">
+                            @if($pillar->orchestrator)
+                                <x-stats.indicator :type="$pillar->orchestrator->is_active ? 'success' : 'danger'" />
+                                {{ ($pillar->orchestrator->is_active ? 'Online' : 'Offline') }}
+                            @else
+                                {{ __('None') }}
+                            @endif
+                        </x-stats.mini-stat>
+                    </x-cards.body>
                 </x-cards.card>
             </div>
         </div>
         <x-cards.card class="mb-6">
-            <div class="row">
-                <div class="col-24 col-md-12">
-                    <div class="vstack gap-3">
-                        <x-stats.list-item :title="__('Rank')" :stat="'# ' . $pillar->display_rank" />
-                        <x-stats.list-item :title="__('Voting')" :info="__('% of Accelerator-Z projects and phases voted on')">
-                            @if (! is_null($pillar->az_engagement))
-                                <x-stats.indicator :type="$pillar->az_status_indicator" />
-                                {{ number_format($pillar->az_engagement) }}%
-                            @else
-                                -
-                            @endif
-                        </x-stats.list-item>
-                        <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR'"/>
-                        <x-stats.list-item :title="__('Produced momentums')" :stat="number_format($pillar->momentums()->count())" />
-                        <x-stats.list-item :title="__('Total delegators')" :stat="number_format($pillar->activeDelegators()->count())" :hr="false"/>
-                        <hr class="d-block d-md-none my-0 mb-3">
-                    </div>
-                </div>
-                <div class="col-24 col-md-12">
-                    <div class="vstack gap-3">
-                        <x-stats.list-item :title="__('Spawned')">
-                            <x-date-time.carbon :date="$pillar->created_at" />
-                        </x-stats.list-item>
-                        @if ($pillar->revoked_at)
-                            <x-stats.list-item :title="__('Revoked')">
-                                <x-date-time.carbon :date="$pillar->revoked_at" />
+            <x-cards.body>
+                <div class="row">
+                    <div class="col-24 col-lg-12">
+                        <div class="vstack gap-3">
+                            <x-stats.list-item :title="__('Rank')" :stat="'# ' . $pillar->display_rank" />
+                            <x-stats.list-item :title="__('Voting')" :info="__('% of Accelerator-Z projects and phases voted on')">
+                                @if (! is_null($pillar->az_engagement))
+                                    <x-stats.indicator :type="$pillar->az_status_indicator" />
+                                    {{ number_format($pillar->az_engagement) }}%
+                                @else
+                                    -
+                                @endif
                             </x-stats.list-item>
-                        @else
-                            <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in"/>
-                        @endif
-                        <x-stats.list-item :title="__('Owner')">
-                            <x-address :account="$pillar->owner" :named="false"/>
-                        </x-stats.list-item>
-                        <x-stats.list-item :title="__('Producer')">
-                            <x-address :account="$pillar->producerAccount" :named="false"/>
-                        </x-stats.list-item>
-                        <x-stats.list-item :title="__('Withdraw')" :hr="false">
-                            <x-address :account="$pillar->withdrawAccount" :named="false"/>
-                        </x-stats.list-item>
+                            <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR'"/>
+                            <x-stats.list-item :title="__('Produced momentums')" :stat="number_format($pillar->momentums()->count())" />
+                            <x-stats.list-item :title="__('Total delegators')" :stat="number_format($pillar->activeDelegators()->count())" :hr="false"/>
+                            <hr class="d-block d-md-none my-0 mb-3">
+                        </div>
+                    </div>
+                    <div class="col-24 col-lg-12">
+                        <div class="vstack gap-3">
+                            <x-stats.list-item :title="__('Spawned')">
+                                <x-date-time.carbon :date="$pillar->created_at" />
+                            </x-stats.list-item>
+                            @if ($pillar->revoked_at)
+                                <x-stats.list-item :title="__('Revoked')">
+                                    <x-date-time.carbon :date="$pillar->revoked_at" />
+                                </x-stats.list-item>
+                            @else
+                                <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in"/>
+                            @endif
+                            <x-stats.list-item :title="__('Owner')">
+                                <x-address :account="$pillar->owner" :named="false"/>
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Producer')">
+                                <x-address :account="$pillar->producerAccount" :named="false"/>
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Withdraw')" :hr="false">
+                                <x-address :account="$pillar->withdrawAccount" :named="false"/>
+                            </x-stats.list-item>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </x-cards.body>
         </x-cards.card>
     </div>
 

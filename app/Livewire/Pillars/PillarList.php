@@ -16,7 +16,7 @@ class PillarList extends BaseTable
 {
     public ?string $tab = 'all';
 
-    public string $viewMode = 'compact';
+    public string $viewMode = 'default';
 
     public function configure(): void
     {
@@ -34,8 +34,7 @@ class PillarList extends BaseTable
 
     public function builder(): Builder
     {
-        $query = Pillar::query()
-            ->with('orchestrator')
+        $query = Pillar::with('orchestrator')
             ->withCount('activeDelegators');
 
         if ($this->tab === 'active') {

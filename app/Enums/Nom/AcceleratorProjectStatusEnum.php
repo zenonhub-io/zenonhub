@@ -25,9 +25,9 @@ enum AcceleratorProjectStatusEnum: int
     {
         return match ($this) {
             self::NEW => 'light',
-            self::ACCEPTED => 'primary',
+            self::ACCEPTED => 'secondary',
             self::REJECTED => 'danger',
-            self::COMPLETE => 'success',
+            self::COMPLETE => 'primary',
         };
     }
 }

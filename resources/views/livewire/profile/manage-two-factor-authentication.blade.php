@@ -94,11 +94,13 @@
                     </p>
                 </div>
                 <x-cards.card>
-                    <div class="d-grid gap-3">
-                        @foreach (json_decode(decrypt($this->user->two_factor_recovery_codes), true) as $code)
-                            <div>{{ $code }}</div>
-                        @endforeach
-                    </div>
+                    <x-cards.body>
+                        <div class="d-grid gap-3">
+                            @foreach (json_decode(decrypt($this->user->two_factor_recovery_codes), true) as $code)
+                                <div>{{ $code }}</div>
+                            @endforeach
+                        </div>
+                    </x-cards.body>
                 </x-cards.card>
             @endif
         @endif

@@ -8,7 +8,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 
 abstract class BaseTable extends DataTableComponent
 {
-    public string $viewMode = 'compact';
+    public string $viewMode = 'default';
 
     public function configure(): void
     {
@@ -30,7 +30,7 @@ abstract class BaseTable extends DataTableComponent
             ]);
         }
 
-        if ($this->viewMode === 'compact') {
+        if ($this->viewMode === 'default') {
             $this->setTableAttributes([
                 'class' => 'table-hover table-striped table-nowrap',
             ]);

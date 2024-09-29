@@ -10,9 +10,9 @@ use MetaTags;
 
 class PillarDetailController
 {
-    private string $defaultTab = 'all';
+    private string $defaultTab = 'delegators';
 
-    public function __invoke(?string $slug = null, ?string $tab = 'delegators'): View
+    public function __invoke(?string $slug = null, ?string $tab = null): View
     {
         $pillar = Pillar::firstWhere('slug', $slug);
 

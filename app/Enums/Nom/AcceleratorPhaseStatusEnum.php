@@ -13,15 +13,15 @@ enum AcceleratorPhaseStatusEnum: int
     {
         return match ($this) {
             self::OPEN => 'Open',
-            self::PAID => 'Success',
+            self::PAID => 'Paid',
         };
     }
 
     public function colour(): string
     {
         return match ($this) {
-            self::OPEN => 'primary',
-            self::PAID => 'success',
+            self::OPEN => 'secondary',
+            self::PAID => 'primary',
         };
     }
 }

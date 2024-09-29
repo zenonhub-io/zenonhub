@@ -14,6 +14,10 @@ class Modal extends Component
 
     public array $params = [];
 
+    public bool $static;
+
+    public bool $keyboard;
+
     public string $activeModal;
 
     public function render(): View
@@ -22,10 +26,13 @@ class Modal extends Component
     }
 
     #[On('open-livewire-modal')]
-    public function showModal($alias, $params = []): void
+    public function showModal($alias, $params = [], $static = true, $keyboard = true): void
     {
         $this->alias = $alias;
         $this->params = $params;
+        $this->static = $static;
+        $this->keyboard = $keyboard;
+
         $this->activeModal = 'modal-id-' . mt_rand();
 
         $this->dispatch('show-livewire-modal');

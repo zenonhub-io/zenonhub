@@ -51,6 +51,7 @@ class AddPhase extends AbstractContractMethodProcessor
             'slug' => Str::slug($blockData['name']),
             'url' => $blockData['url'],
             'description' => $blockData['description'],
+            'phase_number' => $project->phases()->max('phase_number') + 1,
             'znn_requested' => $blockData['znnFundsNeeded'],
             'qsr_requested' => $blockData['qsrFundsNeeded'],
             'znn_price' => $znnPrice ?: null,
@@ -91,13 +92,13 @@ class AddPhase extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Account is not project owner');
         }
 
-        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED) {
-            throw new IndexerActionValidationException('Project has not been accepted');
-        }
-
-        if ($latestPhase && $latestPhase->status !== AcceleratorPhaseStatusEnum::PAID) {
-            throw new IndexerActionValidationException('Latest phase has not been paid');
-        }
+        //        if ($project->status !== AcceleratorProjectStatusEnum::ACCEPTED) {
+        //            throw new IndexerActionValidationException('Project has not been accepted');
+        //        }
+        //
+        //        if ($latestPhase && $latestPhase->status !== AcceleratorPhaseStatusEnum::PAID) {
+        //            throw new IndexerActionValidationException('Latest phase has not been paid');
+        //        }
 
         if ($blockData['name'] === '' || strlen($blockData['name']) > config('nom.accelerator.projectNameLengthMax')) {
             throw new IndexerActionValidationException('Invalid name');
