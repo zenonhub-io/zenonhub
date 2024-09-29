@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 uses()->group('site', 'architecture');
 
-arch()->preset()->php();
+arch('php presets')->preset()->php();
 
-arch()->preset()->laravel();
+arch('laravel presets')->preset()->laravel();
 
 arch('strict types')
     ->expect('App')
