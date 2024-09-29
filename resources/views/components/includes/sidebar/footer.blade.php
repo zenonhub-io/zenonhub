@@ -5,7 +5,7 @@
             rounded-pill
             bg-body-secondary-hover fs-6
         ">
-            <i class="bi-hdd-rack-fill me-1"></i>{{ __('Nodes') }}
+            <i class="bi-hdd-rack-fill me-2" style="font-size: 0.80rem;"></i>{{ __('Nodes') }}
         </x-link>
     </div>
     <div class="col">
@@ -14,7 +14,7 @@
             rounded-pill
             bg-body-secondary-hover fs-6
         ">
-            <i class="bi-heart-fill me-1"></i>{{ __('Donate') }}
+            <i class="bi-heart-fill me-2" style="font-size: 0.80rem;"></i>{{ __('Donate') }}
         </x-link>
     </div>
 </div>
