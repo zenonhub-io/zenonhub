@@ -1,20 +1,20 @@
-<div class="row g-0 gap-3 mb-0 mb-lg-3">
+<div class="row g-0 mx-3 mt-3 mb-2 text-center">
     <div class="col">
         <x-link :href="route('services.public-nodes')" class="
             btn w-full
             rounded-pill
-            bg-body-secondary-hover border-0 border-lg-1 border-gray-700 fs-6
+            bg-body-secondary-hover fs-6
         ">
-            <i class="bi-hdd-rack-fill me-2"></i>Nodes
+            <i class="bi-hdd-rack-fill me-1"></i>{{ __('Nodes') }}
         </x-link>
     </div>
     <div class="col">
         <x-link :href="route('donate')" class="
             btn w-full
             rounded-pill
-            bg-body-secondary-hover border-0 border-lg-1 border-gray-700 fs-6
+            bg-body-secondary-hover fs-6
         ">
-            <i class="bi-heart-fill me-2"></i>Donate
+            <i class="bi-heart-fill me-1"></i>{{ __('Donate') }}
         </x-link>
     </div>
 </div>

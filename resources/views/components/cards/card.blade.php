@@ -1,10 +1,18 @@
-@props(['title', 'content'])
+@props(['heading', 'body', 'content' => null])
 
 <div {{ $attributes->merge(['class' => 'card shadow']) }}>
-    @isset($title)
-        <x-cards.heading :title="$title" />
+
+    @isset($heading)
+        <x-cards.heading>
+            {{ $heading }}
+        </x-cards.heading>
     @endisset
-    <div class="card-body">
-        {{ $slot->isEmpty() ? $content : $slot }}
-    </div>
+
+    @isset($body)
+        <x-cards.body>
+            {{ $body }}
+        </x-cards.body>
+    @endisset
+
+    {{ $slot->isEmpty() ? $content : $slot }}
 </div>

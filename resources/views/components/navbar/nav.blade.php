@@ -1,3 +1,3 @@
-<ul class="navbar-nav">
+<ul class="navbar-nav" {{ $attributes }}>
     {{ $slot }}
 </ul>
