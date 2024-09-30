@@ -2,10 +2,10 @@
     <x-includes.header :title="__('Sign up!')" centered>
         <ul class="nav nav-tabs nav-fill nav-tabs-flush gap-6 overflow-x border-0">
             <li class="nav-item">
-                <a href="{{ route('login') }}" class="nav-link">{{ __('Login') }}</a>
+                <x-link :href="route('login')" class="nav-link">{{ __('Login') }}</x-link>
             </li>
             <li class="nav-item">
-                <a href="{{ route('register') }}" class="nav-link active">{{ __('Register') }}</a>
+                <x-link :href="route('register')" class="nav-link active">{{ __('Register') }}</x-link>
             </li>
         </ul>
     </x-includes.header>
@@ -32,8 +32,8 @@
         </div>
         <x-forms.inputs.checkbox name="terms">
             {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                    'terms_of_service' => '<a target="_blank" href="'.route('terms').'" class="">'.__('Terms of Service').'</a>',
-                    'privacy_policy' => '<a target="_blank" href="'.route('policy').'" class="">'.__('Privacy Policy').'</a>',
+                    'terms_of_service' => '<x-link target="_blank" href="'.route('terms').'" class="">'.__('Terms of Service').'</x-link>',
+                    'privacy_policy' => '<x-link target="_blank" href="'.route('policy').'" class="">'.__('Privacy Policy').'</x-link>',
             ]) !!}
         </x-forms.inputs.checkbox>
         <hr class="my-6">

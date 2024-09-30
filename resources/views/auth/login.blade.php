@@ -2,10 +2,10 @@
     <x-includes.header :title="__('Welcome back!')" centered>
         <ul class="nav nav-tabs nav-fill nav-tabs-flush gap-6 overflow-x border-0">
             <li class="nav-item">
-                <a href="{{ route('login') }}" class="nav-link active">{{ __('Login') }}</a>
+                <x-link :href="route('login')" class="nav-link active">{{ __('Login') }}</x-link>
             </li>
             <li class="nav-item">
-                <a href="{{ route('register') }}" class="nav-link">{{ __('Register') }}</a>
+                <x-link :href="route('register')" class="nav-link">{{ __('Register') }}</x-link>
             </li>
         </ul>
     </x-includes.header>

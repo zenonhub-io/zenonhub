@@ -8,7 +8,7 @@
             @if (! $hasUserVerifiedAddress)
                 <p>To update your profile, signature verification for the following address is required to prove ownership:</p>
                 <p><span class="fw-semibold">{{ $address }}</span></p>
-                <p>Alternatively <a href="{{ route('login') }}">login</a> to your account and <a href="{{ route('profile', ['tab' => 'addresses']) }}">link</a> the address to your profile for faster updates in the future.</p>
+                <p>Alternatively <x-link :href="route('login')">login</x-link> to your account and <x-link :href="route('profile', ['tab' => 'addresses'])">link</x-link> the address to your profile for faster updates in the future.</p>
                 <hr>
             @endif
 

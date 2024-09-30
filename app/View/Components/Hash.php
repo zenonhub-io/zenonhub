@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class HashTooltip extends Component
+class Hash extends Component
 {
     public string $hash;
 
@@ -22,8 +25,8 @@ class HashTooltip extends Component
         $this->alwaysShort = $alwaysShort;
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('components.utilities.hash-tooltip');
+        return view('components.hash');
     }
 }

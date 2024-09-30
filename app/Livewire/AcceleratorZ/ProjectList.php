@@ -80,7 +80,7 @@ class ProjectList extends BaseTable
 
     public function renderCustomView($rows): View
     {
-        return view('accelerator-z.list.project-cards', [
+        return view('components.accelerator-z.grid.project-cards', [
             'projects' => $rows,
         ]);
     }

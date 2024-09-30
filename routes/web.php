@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AcceleratorProjectController;
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PillarDetailController;
@@ -226,7 +227,7 @@ Route::middleware([
     Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
     Route::get('accelerator-z/{tab?}', AcceleratorZController::class)->name('accelerator-z.list');
-    Route::get('accelerator-z/project/{hash}/{tab?}', AcceleratorZController::class)->name('accelerator-z.project.detail');
+    Route::get('accelerator-z/project/{hash}/{tab?}', AcceleratorProjectController::class)->name('accelerator-z.project.detail');
     Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorZController::class)->name('accelerator-z.phase.detail');
 
     Route::get('explorer', HomeController::class)->name('explorer');

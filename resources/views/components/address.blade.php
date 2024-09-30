@@ -1,7 +1,7 @@
 @props([$account, $linked => true, $alwaysShort => false, $eitherSide => 10, $breakpoint => 'md'])
 
 @if ($linked)
-    <a href="{{ route('explorer.account.detail', ['address' => $account->address]) }}">
+    <x-link :href="route('explorer.account.detail', ['address' => $account->address])">
 @endif
 
     @if ($named && $account->has_custom_label)
@@ -24,5 +24,5 @@
     @endif
 
 @if ($linked)
-    </a>
+    </x-link>
 @endif
