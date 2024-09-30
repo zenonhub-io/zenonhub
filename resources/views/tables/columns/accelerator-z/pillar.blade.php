@@ -1,3 +1,3 @@
-<x-link :href="route('accelerator-z.project.detail', ['hash' => $row->votable->hash])">
+<x-link :href="route('pillar.detail', ['slug' => $row->pillar->slug])">
     {{ $row->pillar->name }}
 </x-link>
