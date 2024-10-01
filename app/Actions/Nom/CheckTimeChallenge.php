@@ -6,6 +6,7 @@ namespace App\Actions\Nom;
 
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\TimeChallenge;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -13,7 +14,7 @@ class CheckTimeChallenge
 {
     use AsAction;
 
-    public function handle(AccountBlock $accountBlock, string $hash, int $delay): TimeChallenge
+    public function handle(AccountBlock $accountBlock, string $hashString, int $delay): TimeChallenge
     {
         Log::debug('Check Time Challenge - Start');
 
@@ -38,9 +39,9 @@ class CheckTimeChallenge
 
         Log::debug('Check Time Challenge - Loaded');
 
-        $hash = md5($hash);
+        $hash = Hash::make($hashString);
 
-        if ($timeChallenge->hash === $hash) {
+        if ($timeChallenge->hash && Hash::check($hashString, $timeChallenge->hash)) {
 
             Log::debug('Check Time Challenge - Matching hash');
 

@@ -7,6 +7,7 @@ namespace App\Factories;
 use App\DataTransferObjects\MockAccountBlockDTO;
 use App\Models\Nom\AccountBlock;
 use App\Services\ZenonSdk;
+use Illuminate\Support\Facades\Log;
 
 class MockAccountBlockFactory
 {
@@ -42,6 +43,10 @@ class MockAccountBlockFactory
             $block->data()->create([
                 'raw' => base64_encode($encodedData ?: 'null'),
                 'decoded' => $mockAccountBlockDTO->data,
+            ]);
+
+            Log::info('Mock account block data', [
+                $block->data->toArray(),
             ]);
         }
 

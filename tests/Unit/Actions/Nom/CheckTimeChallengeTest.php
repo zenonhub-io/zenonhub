@@ -25,7 +25,7 @@ it('creates a new active time challenge', function () {
         ->handle($accountBlock, $accountBlock->hash, $delay);
 
     expect($timeChallenge->id)->toBe(1)
-        ->and($timeChallenge->hash)->toBe(md5($accountBlock->hash))
+        ->and(Hash::check($accountBlock->hash, Hash::make($accountBlock->hash)))->toBeTrue()
         ->and($timeChallenge->start_height)->toBe($accountBlock->momentum->height)
         ->and($timeChallenge->end_height)->toBe($accountBlock->momentum->height + $delay)
         ->and($timeChallenge->is_active)->toBeTrue();
@@ -48,7 +48,7 @@ it('loads an existing time challenge', function () {
         ->handle($accountBlock, $accountBlock->hash, $delay);
 
     expect($timeChallenge->id)->toBe(1)
-        ->and($timeChallenge->hash)->toBe(md5($accountBlock->hash))
+        ->and(Hash::check($accountBlock->hash, Hash::make($accountBlock->hash)))->toBeTrue()
         ->and($timeChallenge->is_active)->toBeTrue();
 });
 
@@ -59,7 +59,7 @@ it('expires an existing time challenge', function () {
     $startHeight = $accountBlock->momentum->height - $delay - 1;
 
     TimeChallenge::factory()->create([
-        'hash' => md5($accountBlock->hash),
+        'hash' => Hash::make($accountBlock->hash),
         'start_height' => $startHeight,
         'end_height' => $startHeight + $delay,
         'is_active' => true,
@@ -76,7 +76,7 @@ it('resets a time challenge with a non-matching hash', function () {
     $accountBlock = AccountBlock::factory()->create();
     $delay = 5;
     TimeChallenge::factory()->create([
-        'hash' => 'old_hash',
+        'hash' => Hash::make('old_hash'),
         'delay' => $delay,
         'is_active' => true,
     ]);

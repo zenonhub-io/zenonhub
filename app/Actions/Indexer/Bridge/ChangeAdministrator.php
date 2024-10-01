@@ -30,7 +30,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
             return;
         }
 
-        $adminAccount = load_account($accountBlock['address']);
+        $adminAccount = load_account($blockData['administrator']);
         $newAdmin = BridgeAdmin::setNewAdmin($adminAccount, $accountBlock->created_at);
 
         AdministratorChanged::dispatch($accountBlock, $newAdmin);
@@ -60,7 +60,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Action sent from non admin');
         }
 
-        $challengeHashData = $blockData['address'];
+        $challengeHashData = $blockData['administrator'];
         $timeChallenge = (new CheckTimeChallenge)
             ->handle($accountBlock, $challengeHashData, config('nom.bridge.minAdministratorDelay'));
 
