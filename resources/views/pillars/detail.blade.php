@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="d-flex align-items-start">
-                <span class="badge text-bg-{{ $pillar->status_colour }}">{{ $pillar->status_text }}</span>
+                <span class="badge badge-md text-bg-{{ $pillar->status_colour }}">{{ $pillar->status_text }}</span>
             </div>
         </div>
     </x-includes.header>

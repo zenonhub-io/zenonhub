@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="d-flex align-items-start">
-                <span class="badge text-bg-{{ $project->status->colour() }}">{{ $project->status->label() }}</span>
+                <span class="badge badge-md text-bg-{{ $project->status->colour() }}">{{ $project->status->label() }}</span>
             </div>
         </div>
     </x-includes.header>
@@ -32,7 +32,7 @@
                             </span>
                         </x-stats.mini-stat>
                     </div>
-                    <div class="col-12 col-sm-8 d-none d-sm-block">
+                    <div class="col-24 col-sm-8">
                         <x-stats.mini-stat :title="__('USD Request')" :centered="true">
                             <span class="text-white">
                                 {{ $project->display_usd_requested }}
@@ -64,19 +64,19 @@
                             <x-stats.list-item :title="__('Owner')">
                                 <x-address :account="$project->owner" :named="false"/>
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Created')" :hr="false">
-                                <x-date-time.carbon :date="$project->created_at" />
+                            <x-stats.list-item :title="__('Total phases')" :hr="false">
+                                {{ $project->phases->count() }}
                             </x-stats.list-item>
                             <hr class="d-block d-md-none my-0 mb-3">
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
-                            <x-stats.list-item :title="__('Total phases')">
-                                {{ $project->phases->count() }}
-                            </x-stats.list-item>
                             <x-stats.list-item :title="__('ID')">
                                 <x-hash :hash="$project->hash" :always-short="true" />
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Created')">
+                                <x-date-time.carbon :date="$project->created_at" />
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Updated')" :hr="false">
                                 <x-date-time.carbon :date="$project->updated_at" />
@@ -84,8 +84,37 @@
                         </div>
                     </div>
                 </div>
+
+                @if ($project->phases->count())
+                    <hr>
+                    <div class="list-group list-group-flush gap-4 mt-6">
+                        @foreach ($project->phases as $phase)
+                            <div class="list-group-item border rounded d-flex gap-3 p-4 bg-body-secondary-hover bg-body-tertiary">
+                                <div class=" w-100">
+                                    <div class="d-flex align-items-center flex-fill">
+                                        <a href="#" class="stretched-link text-heading">
+                                            <div class="me-auto mb-0">
+                                                <div class="text-muted text-xs">
+                                                    Phase {{ $phase->phase_number }}
+                                                </div>
+                                                {{ $phase->name }}
+                                            </div>
+                                        </a>
+                                        <div class="ms-auto">
+                                            <span class="badge badge-md text-bg-{{ $phase->status->colour() }} bg-opacity-75">{{ $phase->status->label() }}</span>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <x-accelerator-z.funding-info :item="$phase" />
+                                    <x-accelerator-z.voting-info :item="$phase" />
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </x-cards.body>
         </x-cards.card>
+
     </div>
 
     <x-includes.header>
