@@ -75,7 +75,7 @@ class WrapToken extends AbstractContractMethodProcessor
         }
 
         if (! $token->pivot->is_bridgeable) {
-            throw new IndexerActionValidationException('Token is not redeemable');
+            throw new IndexerActionValidationException('Token is not bridgeable');
         }
 
         if (bccomp($accountBlock->amount, $token->pivot->min_amount) === -1) {
