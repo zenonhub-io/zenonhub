@@ -22,7 +22,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
         $accountBlock->load('momentum');
         $blockData = $accountBlock->data->decoded;
         $bridgeNetwork = BridgeNetwork::findByNetworkChain($blockData['networkClass'], $blockData['chainId']);
-        $token = load_token($blockData['tokenStandard']);
+        $token = Token::firstWhere('token_standard', $blockData['tokenStandard']);
 
         try {
             $this->validateAction($accountBlock, $bridgeNetwork, $token);

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use Carbon\Carbon;
+use Database\Factories\Nom\BridgeGuardianFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
@@ -12,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 class BridgeGuardian extends Model
 {
+    use HasFactory;
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -53,8 +58,17 @@ class BridgeGuardian extends Model
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return BridgeGuardianFactory::new();
+    }
+
     public static function setNewGuardians(array $guardianAddresses, Carbon $timestamp): Collection
     {
+        // TODO - Add test for this
         return DB::transaction(function () use ($guardianAddresses, $timestamp) {
             self::where('accepted_at')->update([
                 'revoked_at' => $timestamp,

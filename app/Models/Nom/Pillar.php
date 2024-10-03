@@ -304,7 +304,7 @@ class Pillar extends Model implements Sitemapable
         }
 
         if ($this->is_producing) {
-            return 'success';
+            return 'primary';
         }
 
         return 'warning';

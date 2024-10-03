@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
+use Database\Factories\Nom\BridgeNetworkFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class BridgeNetwork extends Model
 {
+    use HasFactory;
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -53,6 +58,14 @@ class BridgeNetwork extends Model
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return BridgeNetworkFactory::new();
     }
 
     //

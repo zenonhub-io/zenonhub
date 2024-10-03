@@ -10,6 +10,7 @@ use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\BridgeNetwork;
+use App\Models\Nom\Token;
 use Illuminate\Support\Facades\Log;
 
 class RemoveTokenPair extends AbstractContractMethodProcessor
@@ -31,7 +32,7 @@ class RemoveTokenPair extends AbstractContractMethodProcessor
             return;
         }
 
-        $token = load_token($blockData['tokenAddress']);
+        $token = Token::firstWhere('token_standard', $blockData['tokenStandard']);
         $bridgeNetwork->tokens()->detach($token);
 
         TokenPairRemoved::dispatch($accountBlock, $bridgeNetwork, $token);

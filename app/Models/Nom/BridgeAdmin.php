@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use Carbon\Carbon;
+use Database\Factories\Nom\BridgeAdminFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
@@ -53,8 +55,17 @@ class BridgeAdmin extends Model
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return BridgeAdminFactory::new();
+    }
+
     public static function setNewAdmin(Account $account, Carbon $timestamp): BridgeAdmin
     {
+        // TODO - Add test for this
         return DB::transaction(function () use ($account, $timestamp) {
             // Delete old nominations
             self::whereNull('accepted_at')->delete();
