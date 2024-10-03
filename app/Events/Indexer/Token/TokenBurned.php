@@ -20,6 +20,5 @@ class TokenBurned
     public function __construct(
         public AccountBlock $accountBlock,
         public TokenBurn $tokenBurn,
-    ) {
-    }
+    ) {}
 }

@@ -20,6 +20,5 @@ class AccountBlockInserted
     public function __construct(
         public AccountBlock $accountBlock,
         public AccountBlockDTO $accountBlockDTO,
-    ) {
-    }
+    ) {}
 }

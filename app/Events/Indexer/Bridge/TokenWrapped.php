@@ -20,6 +20,5 @@ class TokenWrapped
     public function __construct(
         public AccountBlock $accountBlock,
         public BridgeWrap $wrap,
-    ) {
-    }
+    ) {}
 }

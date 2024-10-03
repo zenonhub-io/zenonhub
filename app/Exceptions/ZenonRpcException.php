@@ -6,6 +6,4 @@ namespace App\Exceptions;
 
 use Exception;
 
-class ZenonRpcException extends Exception
-{
-}
+class ZenonRpcException extends Exception {}

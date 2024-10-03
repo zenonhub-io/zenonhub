@@ -20,6 +20,5 @@ class EndStake
     public function __construct(
         public AccountBlock $accountBlock,
         public Stake $stake,
-    ) {
-    }
+    ) {}
 }

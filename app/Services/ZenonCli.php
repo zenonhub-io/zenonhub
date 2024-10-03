@@ -15,8 +15,7 @@ class ZenonCli
         protected string $nodeUrl,
         protected ?string $keystore = null,
         protected ?string $passphrase = null,
-    ) {
-    }
+    ) {}
 
     //
     // Wallet

@@ -11,6 +11,5 @@ class PillarCurrentStatsDTO extends Data
     public function __construct(
         public int $producedMomentums,
         public int $expectedMomentums,
-    ) {
-    }
+    ) {}
 }

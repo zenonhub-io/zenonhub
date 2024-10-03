@@ -15,8 +15,7 @@ class MetaTag implements Arrayable, JsonSerializable
      */
     public function __construct(
         private readonly array $attributes
-    ) {
-    }
+    ) {}
 
     /**
      * Dynamic getter for the attributes.

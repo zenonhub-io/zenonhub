@@ -20,6 +20,5 @@ class SentinelRevoked
     public function __construct(
         public AccountBlock $accountBlock,
         public Sentinel $sentinel,
-    ) {
-    }
+    ) {}
 }

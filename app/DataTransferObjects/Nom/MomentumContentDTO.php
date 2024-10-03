@@ -12,6 +12,5 @@ class MomentumContentDTO extends Data
         public string $address,
         public string $hash,
         public int $height,
-    ) {
-    }
+    ) {}
 }

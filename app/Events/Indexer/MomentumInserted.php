@@ -20,6 +20,5 @@ class MomentumInserted
     public function __construct(
         public Momentum $momentum,
         public MomentumDTO $momentumDTO,
-    ) {
-    }
+    ) {}
 }

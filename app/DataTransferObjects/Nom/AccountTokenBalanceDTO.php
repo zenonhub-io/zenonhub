@@ -11,6 +11,5 @@ class AccountTokenBalanceDTO extends Data
     public function __construct(
         public TokenDTO $token,
         public string $balance,
-    ) {
-    }
+    ) {}
 }

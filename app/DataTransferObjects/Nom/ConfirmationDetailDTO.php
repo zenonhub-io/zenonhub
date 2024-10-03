@@ -13,6 +13,5 @@ class ConfirmationDetailDTO extends Data
         public int $momentumHeight,
         public string $momentumHash,
         public int $momentumTimestamp,
-    ) {
-    }
+    ) {}
 }

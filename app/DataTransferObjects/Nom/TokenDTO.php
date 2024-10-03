@@ -20,6 +20,5 @@ class TokenDTO extends Data
         public bool $isBurnable,
         public bool $isMintable,
         public bool $isUtility,
-    ) {
-    }
+    ) {}
 }

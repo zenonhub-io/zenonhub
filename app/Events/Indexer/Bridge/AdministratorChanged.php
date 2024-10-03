@@ -20,6 +20,5 @@ class AdministratorChanged
     public function __construct(
         public AccountBlock $accountBlock,
         public BridgeAdmin $bridgeAdmin,
-    ) {
-    }
+    ) {}
 }

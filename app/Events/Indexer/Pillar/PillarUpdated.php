@@ -20,6 +20,5 @@ class PillarUpdated
     public function __construct(
         public AccountBlock $accountBlock,
         public Pillar $pillar,
-    ) {
-    }
+    ) {}
 }

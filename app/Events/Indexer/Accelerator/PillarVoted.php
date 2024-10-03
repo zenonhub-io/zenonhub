@@ -23,6 +23,5 @@ class PillarVoted
         public AccountBlock $accountBlock,
         public Pillar $pillar,
         public AcceleratorProject|AcceleratorPhase $acceleratorItem,
-    ) {
-    }
+    ) {}
 }

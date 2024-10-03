@@ -22,6 +22,5 @@ class PillarDTO extends Data
         public int $giveDelegateRewardPercentage,
         public PillarCurrentStatsDTO $currentStats,
         public string $weight
-    ) {
-    }
+    ) {}
 }

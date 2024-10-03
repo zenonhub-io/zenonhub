@@ -6,6 +6,4 @@ namespace App\Exceptions;
 
 use Exception;
 
-class IndexerActionValidationException extends Exception
-{
-}
+class IndexerActionValidationException extends Exception {}

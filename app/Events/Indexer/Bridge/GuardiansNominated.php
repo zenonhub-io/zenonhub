@@ -20,6 +20,5 @@ class GuardiansNominated
     public function __construct(
         public AccountBlock $accountBlock,
         public Collection $guardians,
-    ) {
-    }
+    ) {}
 }

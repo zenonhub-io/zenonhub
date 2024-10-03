@@ -14,7 +14,5 @@ class WithdrawQsr extends AbstractContractMethodProcessor
         $blockData = $accountBlock->data->decoded;
     }
 
-    public function validateAction(): void
-    {
-    }
+    public function validateAction(): void {}
 }

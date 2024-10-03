@@ -17,8 +17,7 @@ class Address extends Component
         public bool $alwaysShort = false,
         public int $eitherSide = 10,
         public string $breakpoint = 'md'
-    ) {
-    }
+    ) {}
 
     public function render(): View
     {

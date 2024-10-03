@@ -20,6 +20,5 @@ class WrapRequestUpdated
     public function __construct(
         public AccountBlock $accountBlock,
         public BridgeWrap $wrap,
-    ) {
-    }
+    ) {}
 }

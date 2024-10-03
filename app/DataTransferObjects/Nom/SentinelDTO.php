@@ -14,6 +14,5 @@ class SentinelDTO extends Data
         public bool $isRevocable,
         public int $revokeCooldown,
         public bool $active
-    ) {
-    }
+    ) {}
 }

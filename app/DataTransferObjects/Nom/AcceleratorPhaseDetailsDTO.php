@@ -19,6 +19,5 @@ class AcceleratorPhaseDetailsDTO extends Data
         public int $creationTimestamp,
         public int $acceptedTimestamp,
         public int $status,
-    ) {
-    }
+    ) {}
 }

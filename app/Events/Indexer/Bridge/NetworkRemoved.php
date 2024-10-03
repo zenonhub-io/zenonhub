@@ -18,6 +18,5 @@ class NetworkRemoved
      */
     public function __construct(
         public AccountBlock $accountBlock,
-    ) {
-    }
+    ) {}
 }

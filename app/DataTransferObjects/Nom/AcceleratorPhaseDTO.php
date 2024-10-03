@@ -11,6 +11,5 @@ class AcceleratorPhaseDTO extends Data
     public function __construct(
         public AcceleratorPhaseDetailsDTO $phase,
         public VoteDTO $votes,
-    ) {
-    }
+    ) {}
 }

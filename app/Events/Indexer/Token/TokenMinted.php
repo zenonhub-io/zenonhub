@@ -20,6 +20,5 @@ class TokenMinted
     public function __construct(
         public AccountBlock $accountBlock,
         public TokenMint $tokenMint,
-    ) {
-    }
+    ) {}
 }

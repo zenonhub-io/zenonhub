@@ -24,6 +24,5 @@ class AcceleratorProjectDTO extends Data
         public ?VoteDTO $votes,
         /** @var Collection<int, AcceleratorPhaseDTO> */
         public ?Collection $phases,
-    ) {
-    }
+    ) {}
 }

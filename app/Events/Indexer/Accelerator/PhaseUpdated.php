@@ -20,6 +20,5 @@ class PhaseUpdated
     public function __construct(
         public AccountBlock $accountBlock,
         public AcceleratorPhase $acceleratorPhase,
-    ) {
-    }
+    ) {}
 }

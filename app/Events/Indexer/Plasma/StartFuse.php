@@ -20,6 +20,5 @@ class StartFuse
     public function __construct(
         public AccountBlock $accountBlock,
         public Plasma $plasma,
-    ) {
-    }
+    ) {}
 }

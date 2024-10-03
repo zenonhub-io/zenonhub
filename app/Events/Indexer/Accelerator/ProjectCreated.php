@@ -20,6 +20,5 @@ class ProjectCreated
     public function __construct(
         public AccountBlock $accountBlock,
         public AcceleratorProject $acceleratorProject,
-    ) {
-    }
+    ) {}
 }

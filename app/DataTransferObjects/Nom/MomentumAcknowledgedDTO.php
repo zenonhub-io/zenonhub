@@ -11,6 +11,5 @@ class MomentumAcknowledgedDTO extends Data
     public function __construct(
         public string $hash,
         public int $height
-    ) {
-    }
+    ) {}
 }

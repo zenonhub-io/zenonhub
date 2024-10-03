@@ -22,6 +22,5 @@ class TokenPairRemoved
         public AccountBlock $accountBlock,
         public BridgeNetwork $bridgeNetwork,
         public Token $token,
-    ) {
-    }
+    ) {}
 }

@@ -23,6 +23,5 @@ class MomentumDTO extends Data
         public ?string $publicKey,
         public ?string $signature,
         public string $producer,
-    ) {
-    }
+    ) {}
 }

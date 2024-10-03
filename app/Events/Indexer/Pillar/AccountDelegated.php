@@ -22,6 +22,5 @@ class AccountDelegated
         public AccountBlock $accountBlock,
         public Account $account,
         public Pillar $pillar,
-    ) {
-    }
+    ) {}
 }

@@ -20,6 +20,5 @@ class TokenIssued
     public function __construct(
         public AccountBlock $accountBlock,
         public Token $token,
-    ) {
-    }
+    ) {}
 }

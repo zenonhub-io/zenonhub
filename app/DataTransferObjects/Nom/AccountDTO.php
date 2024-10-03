@@ -14,6 +14,5 @@ class AccountDTO extends Data
         public int $accountHeight,
         /** @var Collection<int, AccountTokenBalanceDTO> */
         public ?Collection $balanceInfoMap
-    ) {
-    }
+    ) {}
 }

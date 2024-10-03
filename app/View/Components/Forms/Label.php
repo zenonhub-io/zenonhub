@@ -12,8 +12,7 @@ class Label extends Component
     public function __construct(
         public string $label,
         public ?string $for = null
-    ) {
-    }
+    ) {}
 
     public function render(): View
     {

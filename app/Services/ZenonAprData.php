@@ -229,10 +229,7 @@ class ZenonAprData
         $this->pillarNotTop30Apr = $totalRewardsUsd / $pillarsNotTop30Count / $this->pillarValue * 100;
     }
 
-    private function setPillarDelegateApr(): void
-    {
-
-    }
+    private function setPillarDelegateApr(): void {}
 
     private function getYearlyZnnRewards(): int
     {

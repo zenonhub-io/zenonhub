@@ -26,8 +26,7 @@ class ZenonSdk
 
     public function __construct(
         protected Zenon $sdk
-    ) {
-    }
+    ) {}
 
     public function verifySignature(string $publicKey, string $address, string $message, string $signature): bool
     {

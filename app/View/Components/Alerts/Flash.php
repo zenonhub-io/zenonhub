@@ -10,10 +10,7 @@ use Illuminate\View\Component;
 
 class Flash extends Component
 {
-    public function __construct(public string $type = 'alert')
-    {
-
-    }
+    public function __construct(public string $type = 'alert') {}
 
     public function render(): View
     {

@@ -20,6 +20,5 @@ class UnwrapRequestRevoked
     public function __construct(
         public AccountBlock $accountBlock,
         public BridgeUnwrap $unwrap,
-    ) {
-    }
+    ) {}
 }

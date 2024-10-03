@@ -20,6 +20,5 @@ class NetworkMetadataSet
     public function __construct(
         public AccountBlock $accountBlock,
         public BridgeNetwork $bridgeNetwork,
-    ) {
-    }
+    ) {}
 }

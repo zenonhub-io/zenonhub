@@ -13,6 +13,5 @@ class VoteDTO extends Data
         public int $total,
         public int $yes,
         public int $no,
-    ) {
-    }
+    ) {}
 }

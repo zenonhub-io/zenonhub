@@ -20,6 +20,5 @@ class AdministratorProposed
     public function __construct(
         public AccountBlock $accountBlock,
         public BridgeAdmin $bridgeAdmin,
-    ) {
-    }
+    ) {}
 }

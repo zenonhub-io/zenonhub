@@ -36,6 +36,5 @@ class AccountBlockDTO extends Data
         public ?TokenDTO $token,
         public ?ConfirmationDetailDTO $confirmationDetail,
         public ?AccountBlockDTO $pairedAccountBlock,
-    ) {
-    }
+    ) {}
 }

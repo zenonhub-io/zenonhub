@@ -13,8 +13,7 @@ class Error extends Component
     public function __construct(
         public string $field,
         public string $bag = 'default'
-    ) {
-    }
+    ) {}
 
     public function render(): View
     {
