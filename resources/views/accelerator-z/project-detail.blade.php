@@ -67,7 +67,7 @@
                             <x-stats.list-item :title="__('Total phases')" :hr="false">
                                 {{ $project->phases->count() }}
                             </x-stats.list-item>
-                            <hr class="d-block d-md-none my-0 mb-3">
+                            <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
@@ -89,17 +89,17 @@
                     <hr>
                     <div class="list-group list-group-flush gap-4 mt-6">
                         @foreach ($project->phases as $phase)
-                            <div class="list-group-item border rounded d-flex gap-3 p-4 bg-body-secondary-hover bg-body-tertiary">
+                            <div class="list-group-item border rounded d-flex gap-3 p-4 bg-body-secondary-hover bg-body-tertiary card-hover">
                                 <div class=" w-100">
                                     <div class="d-flex align-items-center flex-fill">
-                                        <a href="#" class="stretched-link text-heading">
+                                        <x-link :href="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="stretched-link text-heading">
                                             <div class="me-auto mb-0">
                                                 <div class="text-muted text-xs">
                                                     Phase {{ $phase->phase_number }}
                                                 </div>
                                                 {{ $phase->name }}
                                             </div>
-                                        </a>
+                                        </x-link>
                                         <div class="ms-auto">
                                             <span class="badge badge-md text-bg-{{ $phase->status->colour() }} bg-opacity-75">{{ $phase->status->label() }}</span>
                                         </div>

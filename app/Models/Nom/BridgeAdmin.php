@@ -7,12 +7,15 @@ namespace App\Models\Nom;
 use Carbon\Carbon;
 use Database\Factories\Nom\BridgeAdminFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 class BridgeAdmin extends Model
 {
+    use HasFactory;
+
     /**
      * Indicates if the model should be timestamped.
      *

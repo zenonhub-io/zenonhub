@@ -61,7 +61,7 @@ it('updates a token wrap request', function () {
         ->and($wrap->signature)->toEqual($accountBlock->data->decoded['signature']);
 });
 
-it('dispatches the token wrapped event', function () {
+it('dispatches the wrap request updated event', function () {
 
     $accountBlock = createUpdateWrapRequestAccountBlock();
 

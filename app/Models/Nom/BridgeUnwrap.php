@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use Carbon\Carbon;
+use Database\Factories\Nom\BridgeUnwrapFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Http;
 
 class BridgeUnwrap extends Model
 {
+    use HasFactory;
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -38,7 +43,6 @@ class BridgeUnwrap extends Model
         'from_address',
         'transaction_hash',
         'log_index',
-        'token_address',
         'signature',
         'amount',
         'redeemed_at',
@@ -62,10 +66,18 @@ class BridgeUnwrap extends Model
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return BridgeUnwrapFactory::new();
+    }
+
     //
     // Methods
 
-    public static function findByTxHashLog(string $hash, string $log): ?BridgeUnwrap
+    public static function findByTxHashLog(string|int $hash, string|int $log): ?BridgeUnwrap
     {
         return static::where('transaction_hash', $hash)
             ->where('log_index', $log)
@@ -149,12 +161,12 @@ class BridgeUnwrap extends Model
 
     public function getFromAddressLinkAttribute(): string
     {
-        return $this->bridgeNetwork->explorer_url . 'address/' . $this->from_address;
+        return $this->bridgeNetwork->explorer_url . '/' . $this->bridgeNetwork->explorer_address_link . '/' . $this->from_address;
     }
 
     public function getTxHashLinkAttribute(): string
     {
-        return $this->bridgeNetwork->explorer_url . 'tx/0x' . $this->transaction_hash;
+        return $this->bridgeNetwork->explorer_url . '/' . $this->bridgeNetwork->explorer_tx_link . '/0x' . $this->transaction_hash;
     }
 
     public function getDisplayAmountAttribute(): string

@@ -34,6 +34,9 @@ return new class extends Migration
             $table->bigInteger('network_class');
             $table->string('name')->index();
             $table->string('contract_address');
+            $table->string('explorer_url')->nullable();
+            $table->string('explorer_tx_link')->nullable();
+            $table->string('explorer_address_link')->nullable();
             $table->text('meta_data')->nullable();
             $table->timestamps();
         });

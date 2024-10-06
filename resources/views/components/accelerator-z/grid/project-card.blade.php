@@ -1,6 +1,6 @@
 @props(['project'])
 
-<x-cards.card class="h-100">
+<x-cards.card class="card-hover h-100">
     <x-slot:heading>
         <div class="d-flex align-items-center mb-0">
             <h4 class="card-title me-3 mb-0">

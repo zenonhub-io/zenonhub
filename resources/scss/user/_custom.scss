@@ -8,8 +8,7 @@
 @import "components/legend-indicator";
 @import "components/code-highliter";
 @import "components/images";
-@import "components/sidebar";
-//@import "components/social-links";
+@import "components/layout";
 
 // Load custom font
 @if variable-exists(path-to-fonts) {

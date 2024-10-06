@@ -123,6 +123,6 @@ class BridgeWrap extends Model
 
     public function getToAddressLinkAttribute(): string
     {
-        return $this->bridgeNetwork->explorer_url . 'address/' . $this->to_address;
+        return $this->bridgeNetwork->explorer_url . '/' . $this->bridgeNetwork->explorer_address_link . '/' . $this->to_address;
     }
 }

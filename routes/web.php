@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorProjectController;
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\HomeController;
@@ -228,7 +229,7 @@ Route::middleware([
 
     Route::get('accelerator-z/{tab?}', AcceleratorZController::class)->name('accelerator-z.list');
     Route::get('accelerator-z/project/{hash}/{tab?}', AcceleratorProjectController::class)->name('accelerator-z.project.detail');
-    Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorZController::class)->name('accelerator-z.phase.detail');
+    Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorPhaseController::class)->name('accelerator-z.phase.detail');
 
     Route::get('explorer', HomeController::class)->name('explorer');
     Route::get('explorer/momentums', HomeController::class)->name('explorer.momentum.list');

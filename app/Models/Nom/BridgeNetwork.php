@@ -40,6 +40,9 @@ class BridgeNetwork extends Model
         'network_class',
         'name',
         'contract_address',
+        'explorer_url',
+        'explorer_tx_link',
+        'explorer_address_link',
         'meta_data',
         'created_at',
         'updated_at',
@@ -107,12 +110,4 @@ class BridgeNetwork extends Model
     //
     // Attributes
 
-    public function getExplorerUrlAttribute(): ?string
-    {
-        if ($this->name === 'Ethereum') {
-            return 'https://etherscan.io/';
-        }
-
-        return null;
-    }
 }
