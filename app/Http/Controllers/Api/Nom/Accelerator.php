@@ -25,8 +25,8 @@ class Accelerator extends ApiController
 
         try {
             $response = $this->znn->accelerator->getAll(
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -80,14 +80,15 @@ class Accelerator extends ApiController
             'project_hashes' => 'required|array',
         ]);
 
-        //dd($request->input('project_hashes'));
-
         if ($validator->fails()) {
             return $this->validationError($validator);
         }
 
         try {
-            $response = $this->znn->accelerator->getPillarVotes($request->input('pillar_name'), $request->input('project_hashes'));
+            $response = $this->znn->accelerator->getPillarVotes(
+                $request->input('pillar_name'),
+                $request->input('project_hashes')
+            );
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

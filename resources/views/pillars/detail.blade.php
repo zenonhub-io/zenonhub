@@ -172,7 +172,9 @@
     @endif
 
     @if ($tab === 'json')
-        <x-code-highlighters.json :code="$pillar->raw_json" />
+        <div class="mx-3 mx-md-6">
+            <x-code-highlighters.json :code="$pillar->raw_json" />
+        </div>
     @endif
 
     <x-modals.modal class="modal-lg" id="edit-pillar-{{ $pillar->slug }}">

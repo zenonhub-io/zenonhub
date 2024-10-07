@@ -9,6 +9,7 @@
 @import "components/code-highliter";
 @import "components/images";
 @import "components/layout";
+@import "components/animations";
 
 // Load custom font
 @if variable-exists(path-to-fonts) {

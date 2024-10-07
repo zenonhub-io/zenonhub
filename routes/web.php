@@ -11,6 +11,7 @@ use App\Http\Controllers\PillarsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SentinelsController;
 use App\Http\Controllers\TimezoneController;
+use App\Http\Controllers\Tools\ApiPlaygroundController;
 use App\Http\Middleware\AuthenticateSessionMiddleware;
 use App\Http\Middleware\UserLastSeenMiddleware;
 use App\Http\Middleware\VerifiedIfLoggedInMiddleware;
@@ -249,7 +250,7 @@ Route::middleware([
     Route::get('stats/accelerator-z', HomeController::class)->name('stats.accelerator-z');
 
     Route::get('tools/plasma-bot', HomeController::class)->name('tools.plasma-bot');
-    Route::get('tools/api-playground', HomeController::class)->name('tools.api-playground');
+    Route::get('tools/api-playground', ApiPlaygroundController::class)->name('tools.api-playground');
     Route::get('tools/broadcast-message', HomeController::class)->name('tools.broadcast-message');
     Route::get('tools/verify-signature', HomeController::class)->name('tools.verify-signature');
 
