@@ -30,9 +30,12 @@
                         <x-forms.label :label="__($input['displayName'] . ' (' . $input['type'] . ')')" for="{{ $uuid }}" />
                     </div>
                     <div class="col-lg-12">
-
                         @if($input['type'] === 'array')
-
+                            <x-forms.inputs.textarea id="{{ $uuid }}" :name="$input['name']"
+                                                  :value="$input['default']"
+                                                  wire:model="data.{{ $input['name'] }}"
+                            />
+                            <p class="text-muted text-sm">Separate each array item with a new line</p>
                         @else
                             <x-forms.inputs.input id="{{ $uuid }}" :name="$input['name']"
                                                   :value="$input['default']"
@@ -40,7 +43,6 @@
                                                   wire:model="data.{{ $input['name'] }}"
                             />
                         @endif
-
                     </div>
                 </div>
             @endforeach
@@ -57,10 +59,12 @@
             </div>
         @endif
 
-        <div class="w-100 mt-6" wire:loading>
-            <x-alerts.alert type="info" class="mb-6">
-                <i class="bi bi-arrow-repeat spin me-2"></i> {{ __('Processing request...') }}
-            </x-alerts.alert>
+        <div class="row align-items-center" wire:loading>
+            <div class="col-lg-16">
+                <x-alerts.alert type="info" class="mb-6">
+                    <i class="bi bi-arrow-repeat spin me-2"></i> {{ __('Processing request...') }}
+                </x-alerts.alert>
+            </div>
         </div>
 
         @if ($result)

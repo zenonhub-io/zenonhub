@@ -69,7 +69,7 @@ class ApiPlayground extends Component
                 $value = match ($input['type']) {
                     'int' => (int) $value,
                     'string' => (string) $value,
-                    'array' => (array) $value,
+                    'array' => explode("\n", str_replace("\r", '', $value)),
                 };
 
                 return [$key => $value];

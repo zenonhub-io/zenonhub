@@ -41,10 +41,10 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
     Route::get('utilities/prices', [Utilities::class, 'tokenPrice'])->name('api.utilities.token-price');
 
     Route::get('nom/accelerator/get-all', [Accelerator::class, 'getAll'])->name('api.accelerator.get-all');
-    Route::get('nom/accelerator/get-project-by-id', [Accelerator::class, 'getProjectById'])->name('getProjectById');
-    Route::get('nom/accelerator/get-phase-by-id', [Accelerator::class, 'getPhaseById'])->name('getPhaseById');
-    Route::get('nom/accelerator/get-pillar-votes', [Accelerator::class, 'getPillarVotes'])->name('getPillarVotes');
-    Route::get('nom/accelerator/get-vote-breakdown', [Accelerator::class, 'getVoteBreakdown'])->name('getVoteBreakdown');
+    Route::get('nom/accelerator/get-project-by-id', [Accelerator::class, 'getProjectById'])->name('api.accelerator.get-project-by-id');
+    Route::get('nom/accelerator/get-phase-by-id', [Accelerator::class, 'getPhaseById'])->name('api.accelerator.get-phase-by-id');
+    Route::get('nom/accelerator/get-pillar-votes', [Accelerator::class, 'getPillarVotes'])->name('api.accelerator.get-pillar-votes');
+    Route::get('nom/accelerator/get-vote-breakdown', [Accelerator::class, 'getVoteBreakdown'])->name('api.accelerator.get-vote-breakdown');
 
     Route::get('nom/bridge/get-bridge-info', [Bridge::class, 'getBridgeInfo'])->name('api.bridge.get-bridge-info');
     Route::get('nom/bridge/get-security-info', [Bridge::class, 'getSecurityInfo'])->name('api.bridge.get-security-info');
