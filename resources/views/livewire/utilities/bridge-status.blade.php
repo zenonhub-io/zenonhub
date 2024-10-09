@@ -2,6 +2,6 @@
     <x-link :href="route('explorer.momentum.list')" class="text-muted"
             data-bs-toggle="tooltip" data-bs-title="{{ $message }}"
     >
-        <span class="me-1">{{ number_format($height) }}</span> <x-stats.indicator :type="$status ? 'success' : 'warning'" />
+        <span class="me-1">Online</span> <x-stats.indicator :type="$indicator" />
     </x-link>
 </div>

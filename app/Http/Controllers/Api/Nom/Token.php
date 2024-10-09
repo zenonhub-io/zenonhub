@@ -25,8 +25,8 @@ class Token extends ApiController
 
         try {
             $response = $this->znn->token->getAll(
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -50,8 +50,8 @@ class Token extends ApiController
         try {
             $response = $this->znn->token->getByOwner(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);

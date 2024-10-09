@@ -83,7 +83,7 @@ class Momentum extends Model
      */
     public static function getFrontier(): Momentum
     {
-        return self::latest()->first();
+        return self::latest('id')->first();
     }
 
     //

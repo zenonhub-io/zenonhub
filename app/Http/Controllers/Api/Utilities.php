@@ -36,6 +36,27 @@ class Utilities extends ApiController
         }
     }
 
+    public function ztsFromHash(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
+            'hash' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $zts = ZnnUtilities::ztsFromHash(
+                $request->input('hash')
+            );
+
+            return $this->success($zts);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
     public function verifySignedMessage(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [

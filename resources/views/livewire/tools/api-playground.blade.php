@@ -1,5 +1,4 @@
 <div>
-
     <div class="vstack gap-6">
         <div class="row align-items-center">
             @php($uuid = Str::random(8))
@@ -19,6 +18,32 @@
                 </select>
             </div>
         </div>
+
+        @if (! $request)
+            <hr class="my-0">
+            <h4>{{ __('Example requests') }}</h4>
+            <div class="row align-items-center">
+                <div class="col-24">
+                    <div class="list-group shadow pe-0">
+                        @foreach([
+                            'Latest AZ Projects' => 'request=Accelerator.getAll&data[page]=0&data[perPage]=10',
+                            'Top 30 Pillars' => 'request=Pillar.getAll&data[page]=0&data[perPage]=30',
+                            'Bridge Status' => 'request=Bridge.getBridgeInfo',
+                            'Pending Unwraps' => 'request=Bridge.getAllUnsignedWrapTokenRequests&data[pageIndex]=0&data[pageSize]=5',
+                            'Latest Momentum' => 'request=Ledger.getFrontierMomentum',
+                            'Account Info' => 'request=Ledger.getAccountInfoByAddress',
+                            'ZNN Token Info' => 'request=Token.getByZts&data[token]=zts1znnxxxxxxxxxxxxx9z4ulx',
+                        ] as $title => $link)
+                            <div class="list-group-item d-flex align-items-center">
+                                <x-link :href="url('tools/api-playground?' . $link)" class="stretched-link">
+                                    {{ __($title) }}
+                                </x-link>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @if ($inputs)
             <hr class="my-0">
@@ -69,9 +94,8 @@
 
         @if ($result)
             <div wire:loading.remove>
-                <hr>
-                <h4 class="mb-6">{{ __('Results') }}</h4>
-
+                <hr class="mt-0 mb-6">
+                <h4 class="mb-4">{{ __('Results') }}</h4>
                 <div class="row align-items-center">
                     @php($uuid = Str::random(8))
                     <div class="col-lg-24">

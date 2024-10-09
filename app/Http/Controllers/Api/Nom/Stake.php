@@ -27,8 +27,8 @@ class Stake extends ApiController
         try {
             $response = $this->znn->stake->getEntriesByAddress(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -71,8 +71,8 @@ class Stake extends ApiController
         try {
             $response = $this->znn->stake->getFrontierRewardByPage(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);

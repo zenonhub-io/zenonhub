@@ -46,8 +46,8 @@ class Ledger extends ApiController
         try {
             $response = $this->znn->ledger->getUnconfirmedBlocksByAddress(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -71,8 +71,8 @@ class Ledger extends ApiController
         try {
             $response = $this->znn->ledger->getUnreceivedBlocksByAddress(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -140,8 +140,8 @@ class Ledger extends ApiController
         try {
             $response = $this->znn->ledger->getAccountBlocksByPage(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -193,8 +193,8 @@ class Ledger extends ApiController
 
         try {
             $response = $this->znn->ledger->getMomentumsByPage(
-                $request->input('page', 0),
-                $request->input('per_page', 100),
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100),
             );
 
             return $this->success($response['data']);

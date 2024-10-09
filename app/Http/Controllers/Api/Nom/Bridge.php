@@ -92,8 +92,8 @@ class Bridge extends ApiController
 
         try {
             $response = $this->znn->bridge->getAllNetworks(
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -186,8 +186,8 @@ class Bridge extends ApiController
 
         try {
             $response = $this->znn->bridge->getAllWrapTokenRequests(
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -211,8 +211,8 @@ class Bridge extends ApiController
         try {
             $response = $this->znn->bridge->getAllWrapTokenRequestsByToAddress(
                 $request->input('to_address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -238,8 +238,8 @@ class Bridge extends ApiController
             $response = $this->znn->bridge->getAllWrapTokenRequestsByToAddressNetworkClassAndChainId(
                 $request->input('to_address'),
                 $request->input('network_class'),
-                $request->input('page', 0),
-                $request->input('per_page', 100),
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100),
             );
 
             return $this->success($response['data']);
@@ -261,8 +261,8 @@ class Bridge extends ApiController
 
         try {
             $response = $this->znn->bridge->getAllUnsignedWrapTokenRequests(
-                $request->input('page', 0),
-                $request->input('per_page', 100),
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100),
             );
 
             return $this->success($response['data']);
@@ -307,8 +307,8 @@ class Bridge extends ApiController
 
         try {
             $response = $this->znn->bridge->getAllUnwrapTokenRequests(
-                $request->input('page', 0),
-                $request->input('per_page', 100),
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100),
             );
 
             return $this->success($response['data']);
@@ -332,8 +332,8 @@ class Bridge extends ApiController
         try {
             $response = $this->znn->bridge->getAllUnwrapTokenRequestsByToAddress(
                 $request->input('to_address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100),
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100),
             );
 
             return $this->success($response['data']);

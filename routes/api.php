@@ -35,6 +35,7 @@ Route::get('/user', fn (Request $request) => $request->user())->middleware(Authe
 Route::group(['middleware' => ['throttle:60,1']], function () {
 
     Route::get('utilities/address-from-public-key', [Utilities::class, 'addressFromPublicKey'])->name('api.utilities.address-from-public-key');
+    Route::get('utilities/zts-from-hash', [Utilities::class, 'ztsFromHash'])->name('api.utilities.zts-from-hash');
     Route::post('utilities/verify-signed-message', [Utilities::class, 'verifySignedMessage'])->name('api.utilities.verify-signed-message');
     Route::get('utilities/account-lp-balances', [Utilities::class, 'accountLpBalances'])->name('api.utilities.account-lp-balances');
     Route::get('utilities/token-supply/{token}/{value?}', [Utilities::class, 'tokenSupply'])->name('api.utilities.token-supply');

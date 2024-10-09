@@ -55,8 +55,8 @@ class Pillars extends ApiController
 
         try {
             $response = $this->znn->pillar->getAll(
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -175,8 +175,8 @@ class Pillars extends ApiController
         try {
             $response = $this->znn->pillar->getFrontierRewardByPage(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);

@@ -49,8 +49,8 @@ class Liquidity extends ApiController
         try {
             $response = $this->znn->liquidity->getLiquidityStakeEntriesByAddress(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);
@@ -95,8 +95,8 @@ class Liquidity extends ApiController
         try {
             $response = $this->znn->liquidity->getFrontierRewardByPage(
                 $request->input('address'),
-                $request->input('page', 0),
-                $request->input('per_page', 100)
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
 
             return $this->success($response['data']);

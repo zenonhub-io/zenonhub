@@ -45,7 +45,7 @@ class ApiPlayground extends Component
     public function setRequest(string $value): void
     {
         $this->request = ($value !== 'null' ? $value : null);
-        $this->reset('url', 'route', 'method', 'inputs', 'result');
+        $this->reset('url', 'route', 'method', 'inputs', 'result', 'data');
         $this->getRequestInputs();
     }
 

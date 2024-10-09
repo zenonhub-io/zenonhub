@@ -26,12 +26,13 @@ export default class Core extends Singleton {
             succeed(({ snapshot, effect }) => {
                 this.offPageGlobals();
 
-                console.log('off page globalbs');
-
-                queueMicrotask(() => {
-                    console.log('on page globalbs');
+                setTimeout(() => {
                     this.onPageGlobals();
-                })
+                }, 0);
+
+                // queueMicrotask(() => {
+                //     this.onPageGlobals();
+                // })
             })
         });
 
