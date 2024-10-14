@@ -11,6 +11,7 @@ use App\DataTransferObjects\Nom\MomentumDTO;
 use App\Exceptions\IndexerException;
 use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\Momentum;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;

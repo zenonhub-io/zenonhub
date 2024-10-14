@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\ZenonCli;
 
 use App\Exceptions\PlasmaBotException;
 use Illuminate\Process\ProcessResult;

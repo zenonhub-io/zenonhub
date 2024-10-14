@@ -6,7 +6,7 @@ namespace App\Factories;
 
 use App\DataTransferObjects\MockAccountBlockDTO;
 use App\Models\Nom\AccountBlock;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Support\Facades\Log;
 
 class MockAccountBlockFactory

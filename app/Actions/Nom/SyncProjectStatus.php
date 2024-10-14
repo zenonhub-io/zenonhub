@@ -11,7 +11,7 @@ use App\Enums\Nom\AcceleratorProjectStatusEnum;
 use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;

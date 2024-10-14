@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-namespace App\Services\ZenonSdk;
+namespace App\Services\ZenonSdk\Providers;
 
 trait Liquidity {}

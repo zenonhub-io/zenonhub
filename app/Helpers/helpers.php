@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 
 function load_account(string $address, ?string $name = null): Account
 {
@@ -61,11 +61,15 @@ function lp_eth_token(): Token
 
 function znn_price(): float
 {
+    return 1.30;
+
     return (float) Cache::get('znn-price');
 }
 
 function qsr_price(): float
 {
+    return znn_price() / 10;
+
     return (float) Cache::get('qsr-price');
 }
 

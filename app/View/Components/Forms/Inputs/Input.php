@@ -18,7 +18,6 @@ class Input extends Component
         public bool $readonly = false,
         public bool $disabled = false,
     ) {
-        $this->name = strtolower($name);
         $this->id = $id ?? $name;
         $this->value = old($name, $value ?? '');
     }

@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\ZenonSdk;
 
-use App\Services\ZenonSdk\Abi;
-use App\Services\ZenonSdk\Accelerator;
-use App\Services\ZenonSdk\Bridge;
-use App\Services\ZenonSdk\Htlc;
-use App\Services\ZenonSdk\Ledger;
-use App\Services\ZenonSdk\Liquidity;
-use App\Services\ZenonSdk\Pillar;
-use App\Services\ZenonSdk\Plasma;
-use App\Services\ZenonSdk\Sentinel;
-use App\Services\ZenonSdk\Stake;
-use App\Services\ZenonSdk\Stats;
-use App\Services\ZenonSdk\Swap;
-use App\Services\ZenonSdk\Token;
+use App\Services\ZenonSdk\Providers\Accelerator;
+use App\Services\ZenonSdk\Providers\Bridge;
+use App\Services\ZenonSdk\Providers\Htlc;
+use App\Services\ZenonSdk\Providers\Ledger;
+use App\Services\ZenonSdk\Providers\Liquidity;
+use App\Services\ZenonSdk\Providers\Pillar;
+use App\Services\ZenonSdk\Providers\Plasma;
+use App\Services\ZenonSdk\Providers\Sentinel;
+use App\Services\ZenonSdk\Providers\Stake;
+use App\Services\ZenonSdk\Providers\Stats;
+use App\Services\ZenonSdk\Providers\Swap;
+use App\Services\ZenonSdk\Providers\Token;
 use DigitalSloth\ZnnPhp\Utilities;
 use DigitalSloth\ZnnPhp\Zenon;
 

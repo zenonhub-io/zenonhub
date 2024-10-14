@@ -7,7 +7,7 @@ namespace App\Models\Nom;
 use App\DataTransferObjects\Nom\AccountBlockDTO;
 use App\Enums\Nom\AccountBlockTypesEnum;
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Carbon\Carbon;
 use Database\Factories\Nom\AccountBlockFactory;

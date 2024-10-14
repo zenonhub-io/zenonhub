@@ -7,7 +7,7 @@ namespace App\Providers;
 use App\Actions\Indexer\InsertAccountBlock;
 use App\Actions\Indexer\InsertMomentum;
 use App\Services\Indexer;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Support\ServiceProvider;
 
 class IndexerServiceProvider extends ServiceProvider

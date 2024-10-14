@@ -9,8 +9,8 @@ use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
 use App\Services\CoinGecko;
 use App\Services\PlasmaBot;
-use App\Services\ZenonCli;
-use App\Services\ZenonSdk;
+use App\Services\ZenonCli\ZenonCli;
+use App\Services\ZenonSdk\ZenonSdk;
 use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Support\ServiceProvider;
 

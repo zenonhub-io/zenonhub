@@ -9,7 +9,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Momentum;
 use App\Services\Indexer;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\Nom\Test\PillarsSeeder;
 use Database\Seeders\NomSeeder;

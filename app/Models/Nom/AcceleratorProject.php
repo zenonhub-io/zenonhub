@@ -8,7 +8,7 @@ use App\DataTransferObjects\Nom\AcceleratorProjectDTO;
 use App\Enums\Nom\AcceleratorPhaseStatusEnum;
 use App\Enums\Nom\AcceleratorProjectStatusEnum;
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\AcceleratorProjectFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;

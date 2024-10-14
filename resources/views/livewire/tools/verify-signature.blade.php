@@ -1,7 +1,6 @@
 <div>
     <form wire:submit="verifySignature">
         <div class="vstack gap-6">
-
             @if ($result !== null)
                 <div class="row align-items-center">
                     <div class="col-lg-16">
@@ -17,7 +16,6 @@
                     </div>
                 </div>
             @endif
-
             <div class="row align-items-center">
                 @php($uuid = Str::random(8))
                 <div class="col-lg-4">
@@ -54,7 +52,6 @@
                     <x-forms.inputs.input name="verifySignatureForm.signature" id="{{ $uuid }}" wire:model="verifySignatureForm.signature" />
                 </div>
             </div>
-
             <div class="row align-items-center">
                 <div class="col-lg-16">
                     <button type="submit" class="btn w-100 btn-outline-primary">
@@ -65,5 +62,4 @@
             </div>
         </div>
     </form>
-
 </div>

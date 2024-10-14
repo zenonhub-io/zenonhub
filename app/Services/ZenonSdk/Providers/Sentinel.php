@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\ZenonSdk;
+namespace App\Services\ZenonSdk\Providers;
 
 use App\DataTransferObjects\Nom\SentinelDTO;
 use App\Exceptions\ZenonRpcException;

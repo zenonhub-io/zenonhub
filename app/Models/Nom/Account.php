@@ -7,7 +7,7 @@ namespace App\Models\Nom;
 use App\DataTransferObjects\Nom\AccountDTO;
 use App\Models\Markable\Favorite;
 use App\Models\SocialProfile;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\AccountFactory;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;

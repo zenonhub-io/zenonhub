@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\ZenonSdk;
+namespace App\Services\ZenonSdk\Providers;
 
 use App\DataTransferObjects\Nom\TokenDTO;
 use App\Exceptions\ZenonRpcException;

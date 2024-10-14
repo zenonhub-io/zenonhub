@@ -6,7 +6,7 @@ namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\MomentumDTO;
 use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\MomentumFactory;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;

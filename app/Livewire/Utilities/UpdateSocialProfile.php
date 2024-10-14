@@ -7,7 +7,7 @@ namespace App\Livewire\Utilities;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Token;
 use App\Models\SocialProfile;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;

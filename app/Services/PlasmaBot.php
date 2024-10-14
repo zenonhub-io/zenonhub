@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\PlasmaBotException;
+use App\Services\ZenonCli\ZenonCli;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Tools;
 
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;

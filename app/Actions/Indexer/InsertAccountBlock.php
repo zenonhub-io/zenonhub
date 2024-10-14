@@ -10,7 +10,7 @@ use App\Events\Indexer\AccountBlockInserted;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Momentum;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use DigitalSloth\ZnnPhp\Exceptions\DecodeException;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Collection;

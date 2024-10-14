@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Actions\Nom\SyncPillarMetrics;
 use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Nom\Pillar;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Database\Seeders\Nom\Test\PillarsSeeder;
 use Database\Seeders\NomSeeder;
 use Illuminate\Support\Collection;

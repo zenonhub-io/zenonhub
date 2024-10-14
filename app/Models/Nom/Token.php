@@ -9,7 +9,7 @@ use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Markable\Favorite;
 use App\Models\SocialProfile;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Database\Factories\Nom\TokenFactory;

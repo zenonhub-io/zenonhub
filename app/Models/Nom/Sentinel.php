@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\SentinelDTO;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Database\Factories\Nom\SentinelFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -6,7 +6,7 @@ namespace App\Actions\Nom;
 
 use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\Pillar;
-use App\Services\ZenonSdk;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
