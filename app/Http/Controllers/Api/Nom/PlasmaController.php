@@ -10,13 +10,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Token extends ApiController
+class PlasmaController extends ApiController
 {
-    public function getAll(Request $request): JsonResponse
+    public function get(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'page' => 'numeric',
-            'per_page' => 'numeric',
+            'address' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -24,10 +23,7 @@ class Token extends ApiController
         }
 
         try {
-            $response = $this->znn->token->getAll(
-                (int) $request->input('page', 0),
-                (int) $request->input('per_page', 100)
-            );
+            $response = $this->znn->plasma->get($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -35,7 +31,7 @@ class Token extends ApiController
         }
     }
 
-    public function getByOwner(Request $request): JsonResponse
+    public function getEntriesByAddress(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
             'address' => 'required|string',
@@ -48,7 +44,7 @@ class Token extends ApiController
         }
 
         try {
-            $response = $this->znn->token->getByOwner(
+            $response = $this->znn->plasma->getEntriesByAddress(
                 $request->input('address'),
                 (int) $request->input('page', 0),
                 (int) $request->input('per_page', 100)
@@ -60,10 +56,13 @@ class Token extends ApiController
         }
     }
 
-    public function getByZts(Request $request): JsonResponse
+    public function getRequiredPoWForAccountBlock(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'token' => 'required|string',
+            'address' => 'required|string',
+            'block_type' => 'required|numeric',
+            'to_address' => 'required|string',
+            'data' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -71,7 +70,12 @@ class Token extends ApiController
         }
 
         try {
-            $response = $this->znn->token->getByZts($request->input('token'));
+            $response = $this->znn->plasma->getRequiredPoWForAccountBlock(
+                $request->input('address'),
+                $request->input('block_type'),
+                $request->input('to_address'),
+                $request->input('data')
+            );
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

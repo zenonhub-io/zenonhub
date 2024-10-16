@@ -10,12 +10,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Htlc extends ApiController
+class SwapController extends ApiController
 {
-    public function getById(Request $request): JsonResponse
+    public function getAssetsByKeyIdHash(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'id' => 'required|string',
+            'id_key' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -23,9 +23,7 @@ class Htlc extends ApiController
         }
 
         try {
-            $response = $this->znn->htlc->getById(
-                $request->input('id'),
-            );
+            $response = $this->znn->swap->getAssetsByKeyIdHash($request->input('id_key'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -33,18 +31,21 @@ class Htlc extends ApiController
         }
     }
 
-    public function getProxyUnlockStatus(Request $request): JsonResponse
+    public function getAssets(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->input(), [
-            'address' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
         try {
-            $response = $this->znn->htlc->getProxyUnlockStatus($request->input('address'));
+            $response = $this->znn->swap->getAssets();
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getLegacyPillars(Request $request): JsonResponse
+    {
+        try {
+            $response = $this->znn->swap->getLegacyPillars();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

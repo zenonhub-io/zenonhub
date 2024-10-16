@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Domains\Nom\Models\Account;
 use App\Http\Resources\AccountCollection;
 use App\Http\Resources\AccountResource;
+use App\Models\Nom\Account;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Validator;

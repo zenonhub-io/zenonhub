@@ -10,20 +10,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Sentinel extends ApiController
+class LiquidityController extends ApiController
 {
-    public function getByOwner(Request $request): JsonResponse
+    public function getLiquidityInfo(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->input(), [
-            'address' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
         try {
-            $response = $this->znn->sentinel->getByOwner($request->input('address'));
+            $response = $this->znn->liquidity->getLiquidityInfo();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -31,9 +23,21 @@ class Sentinel extends ApiController
         }
     }
 
-    public function getAllActive(Request $request): JsonResponse
+    public function getSecurityInfo(Request $request): JsonResponse
+    {
+        try {
+            $response = $this->znn->liquidity->getSecurityInfo();
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getLiquidityStakeEntriesByAddress(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
+            'address' => 'required|string',
             'page' => 'numeric',
             'per_page' => 'numeric',
         ]);
@@ -43,29 +47,11 @@ class Sentinel extends ApiController
         }
 
         try {
-            $response = $this->znn->sentinel->getAllActive(
+            $response = $this->znn->liquidity->getLiquidityStakeEntriesByAddress(
+                $request->input('address'),
                 (int) $request->input('page', 0),
                 (int) $request->input('per_page', 100)
             );
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getDepositedQsr(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->input(), [
-            'address' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
-        try {
-            $response = $this->znn->sentinel->getDepositedQsr($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -84,7 +70,9 @@ class Sentinel extends ApiController
         }
 
         try {
-            $response = $this->znn->sentinel->getUncollectedReward($request->input('address'));
+            $response = $this->znn->liquidity->getUncollectedReward(
+                $request->input('address')
+            );
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -105,11 +93,22 @@ class Sentinel extends ApiController
         }
 
         try {
-            $response = $this->znn->sentinel->getFrontierRewardByPage(
+            $response = $this->znn->liquidity->getFrontierRewardByPage(
                 $request->input('address'),
                 (int) $request->input('page', 0),
                 (int) $request->input('per_page', 100)
             );
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getTimeChallengesInfo(Request $request): JsonResponse
+    {
+        try {
+            $response = $this->znn->liquidity->getTimeChallengesInfo();
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

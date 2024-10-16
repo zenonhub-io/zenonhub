@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Domains\Nom\Models\Stake;
 use App\Http\Resources\StakeCollection;
 use App\Http\Resources\StakeResource;
+use App\Models\Nom\Stake;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Validator;

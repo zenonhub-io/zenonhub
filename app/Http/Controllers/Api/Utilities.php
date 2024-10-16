@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Domains\Nom\Enums\NetworkTokensEnum;
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\Token;
-use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
-use Exception;
+use App\Enums\Nom\NetworkTokensEnum;
+use App\Models\Nom\Account;
+use App\Models\Nom\Token;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
@@ -25,15 +24,16 @@ class Utilities extends ApiController
             return $this->validationError($validator);
         }
 
-        try {
-            $account = ZnnUtilities::addressFromPublicKey(
+        $account = app(ZenonSdk::class)
+            ->addressFromPublicKey(
                 $request->input('public_key')
             );
 
-            return $this->success($account);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
+        if (! $account) {
+            return $this->error('Invalid public key');
         }
+
+        return $this->success($account);
     }
 
     public function ztsFromHash(Request $request): JsonResponse
@@ -46,15 +46,16 @@ class Utilities extends ApiController
             return $this->validationError($validator);
         }
 
-        try {
-            $zts = ZnnUtilities::ztsFromHash(
+        $zts = app(ZenonSdk::class)
+            ->ztsFromHash(
                 $request->input('hash')
             );
 
-            return $this->success($zts);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
+        if (! $zts) {
+            return $this->error('Invalid hash');
         }
+
+        return $this->success($zts);
     }
 
     public function verifySignedMessage(Request $request): JsonResponse
@@ -70,23 +71,19 @@ class Utilities extends ApiController
             return $this->validationError($validator);
         }
 
-        try {
-            $validSignature = ZnnUtilities::verifySignedMessage(
+        $validated = app(ZenonSdk::class)
+            ->verifySignature(
                 $request->input('public_key'),
+                $request->input('address'),
                 $request->input('message'),
                 $request->input('signature')
             );
 
-            $accountCheck = ZnnUtilities::addressFromPublicKey($request->input('public_key'));
-
-            if ($validSignature && ($request->input('address') === $accountCheck)) {
-                return $this->success(true);
-            }
-
+        if (! $validated) {
             return $this->error('Invalid signature');
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
         }
+
+        return $this->success(true);
     }
 
     public function accountLpBalances(): JsonResponse

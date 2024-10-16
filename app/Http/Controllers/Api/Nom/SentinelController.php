@@ -10,9 +10,28 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Accelerator extends ApiController
+class SentinelController extends ApiController
 {
-    public function getAll(Request $request): JsonResponse
+    public function getByOwner(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
+            'address' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $response = $this->znn->sentinel->getByOwner($request->input('address'));
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getAllActive(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
             'page' => 'numeric',
@@ -24,7 +43,7 @@ class Accelerator extends ApiController
         }
 
         try {
-            $response = $this->znn->accelerator->getAll(
+            $response = $this->znn->sentinel->getAllActive(
                 (int) $request->input('page', 0),
                 (int) $request->input('per_page', 100)
             );
@@ -35,10 +54,10 @@ class Accelerator extends ApiController
         }
     }
 
-    public function getProjectById(Request $request): JsonResponse
+    public function getDepositedQsr(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'id' => 'required|string',
+            'address' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -46,7 +65,7 @@ class Accelerator extends ApiController
         }
 
         try {
-            $response = $this->znn->accelerator->getProjectById($request->input('id'));
+            $response = $this->znn->sentinel->getDepositedQsr($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -54,10 +73,10 @@ class Accelerator extends ApiController
         }
     }
 
-    public function getPhaseById(Request $request): JsonResponse
+    public function getUncollectedReward(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'id' => 'required|string',
+            'address' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +84,7 @@ class Accelerator extends ApiController
         }
 
         try {
-            $response = $this->znn->accelerator->getPhaseById($request->input('id'));
+            $response = $this->znn->sentinel->getUncollectedReward($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -73,11 +92,12 @@ class Accelerator extends ApiController
         }
     }
 
-    public function getPillarVotes(Request $request): JsonResponse
+    public function getFrontierRewardByPage(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'pillar_name' => 'required|string',
-            'project_hashes' => 'required|array',
+            'address' => 'required|string',
+            'page' => 'numeric',
+            'per_page' => 'numeric',
         ]);
 
         if ($validator->fails()) {
@@ -85,29 +105,11 @@ class Accelerator extends ApiController
         }
 
         try {
-            $response = $this->znn->accelerator->getPillarVotes(
-                $request->input('pillar_name'),
-                $request->input('project_hashes')
+            $response = $this->znn->sentinel->getFrontierRewardByPage(
+                $request->input('address'),
+                (int) $request->input('page', 0),
+                (int) $request->input('per_page', 100)
             );
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getVoteBreakdown(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->input(), [
-            'hash' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
-        try {
-            $response = $this->znn->accelerator->getVoteBreakdown($request->input('hash'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

@@ -10,34 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Liquidity extends ApiController
+class AcceleratorController extends ApiController
 {
-    public function getLiquidityInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->liquidity->getLiquidityInfo();
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getSecurityInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->liquidity->getSecurityInfo();
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getLiquidityStakeEntriesByAddress(Request $request): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'address' => 'required|string',
             'page' => 'numeric',
             'per_page' => 'numeric',
         ]);
@@ -47,8 +24,7 @@ class Liquidity extends ApiController
         }
 
         try {
-            $response = $this->znn->liquidity->getLiquidityStakeEntriesByAddress(
-                $request->input('address'),
+            $response = $this->znn->accelerator->getAll(
                 (int) $request->input('page', 0),
                 (int) $request->input('per_page', 100)
             );
@@ -59,10 +35,10 @@ class Liquidity extends ApiController
         }
     }
 
-    public function getUncollectedReward(Request $request): JsonResponse
+    public function getProjectById(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'address' => 'required|string',
+            'id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -70,8 +46,48 @@ class Liquidity extends ApiController
         }
 
         try {
-            $response = $this->znn->liquidity->getUncollectedReward(
-                $request->input('address')
+            $response = $this->znn->accelerator->getProjectById($request->input('id'));
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getPhaseById(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
+            'id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $response = $this->znn->accelerator->getPhaseById($request->input('id'));
+
+            return $this->success($response['data']);
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
+        }
+    }
+
+    public function getPillarVotes(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->input(), [
+            'pillar_name' => 'required|string',
+            'project_hashes' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        try {
+            $response = $this->znn->accelerator->getPillarVotes(
+                $request->input('pillar_name'),
+                $request->input('project_hashes')
             );
 
             return $this->success($response['data']);
@@ -80,12 +96,10 @@ class Liquidity extends ApiController
         }
     }
 
-    public function getFrontierRewardByPage(Request $request): JsonResponse
+    public function getVoteBreakdown(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'address' => 'required|string',
-            'page' => 'numeric',
-            'per_page' => 'numeric',
+            'hash' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -93,22 +107,7 @@ class Liquidity extends ApiController
         }
 
         try {
-            $response = $this->znn->liquidity->getFrontierRewardByPage(
-                $request->input('address'),
-                (int) $request->input('page', 0),
-                (int) $request->input('per_page', 100)
-            );
-
-            return $this->success($response['data']);
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
-        }
-    }
-
-    public function getTimeChallengesInfo(Request $request): JsonResponse
-    {
-        try {
-            $response = $this->znn->liquidity->getTimeChallengesInfo();
+            $response = $this->znn->accelerator->getVoteBreakdown($request->input('hash'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {

@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Stake extends ApiController
+class StakeController extends ApiController
 {
     public function getEntriesByAddress(Request $request): JsonResponse
     {

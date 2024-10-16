@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Ledger extends ApiController
+class LedgerController extends ApiController
 {
     public function getFrontierAccountBlock(Request $request): JsonResponse
     {

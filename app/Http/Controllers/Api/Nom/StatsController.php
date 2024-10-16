@@ -9,7 +9,7 @@ use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class Stats extends ApiController
+class StatsController extends ApiController
 {
     public function runtimeInfo(Request $request): JsonResponse
     {

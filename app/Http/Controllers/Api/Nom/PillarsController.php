@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Pillars extends ApiController
+class PillarsController extends ApiController
 {
     public function getQsrRegistrationCost(Request $request): JsonResponse
     {

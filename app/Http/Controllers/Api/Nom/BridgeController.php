@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class Bridge extends ApiController
+class BridgeController extends ApiController
 {
     public function getBridgeInfo(Request $request): JsonResponse
     {
