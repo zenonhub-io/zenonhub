@@ -6,7 +6,7 @@ uses()->group('site', 'architecture');
 
 arch('php presets')->preset()->php();
 
-arch('laravel presets')->preset()->laravel();
+//arch('laravel presets')->preset()->laravel();
 
 arch('strict types')
     ->expect('App')

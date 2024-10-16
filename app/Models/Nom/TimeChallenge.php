@@ -91,4 +91,9 @@ class TimeChallenge extends Model
 
     //
     // Attributes
+
+    public function getEndsInAttribute(): int
+    {
+        return $this->end_height - Momentum::getFrontier()->height;
+    }
 }

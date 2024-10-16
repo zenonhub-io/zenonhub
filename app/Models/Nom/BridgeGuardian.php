@@ -91,6 +91,11 @@ class BridgeGuardian extends Model
         });
     }
 
+    public static function getActiveGuardians(): Collection
+    {
+        return self::whereActive()->get();
+    }
+
     //
     // Relations
 

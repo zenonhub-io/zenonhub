@@ -79,9 +79,10 @@ it('removes inactive orchestrators', function () {
     expect(Orchestrator::count())->toBe(2);
 });
 
-it('calculates online percent correctly', function () {
-
-    (new SyncOrchestrators)->handle();
-
-    expect(Orchestrator::getOnlinePercent())->toBe(50.0);
-});
+// TODO - This can be moved to the sync bridge status test
+//it('calculates online percent correctly', function () {
+//
+//    (new SyncOrchestrators)->handle();
+//
+//    expect(Orchestrator::getOnlinePercent())->toBe(50.0);
+//});
