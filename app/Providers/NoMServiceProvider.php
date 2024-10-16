@@ -45,11 +45,12 @@ class NoMServiceProvider extends ServiceProvider
 
         $this->app->singleton(ZenonSdk::class, fn ($app, $params) => new ZenonSdk($app->make(Zenon::class)));
 
-        $this->app->singleton(ZenonCli::class, fn ($app, $params) => new ZenonCli(
-            $params['node_url'],
-            $params['keystore'],
-            $params['passphrase']
-        ));
+        $this->app->singleton(ZenonCli::class, function ($app, $params) {
+            $executablePath = $params['executable_path'] ?? config('services.zenon.executable_path');
+            $node = $params['node_url'] ?? config('services.zenon.node_url');
+
+            return new ZenonCli($executablePath, $node);
+        });
     }
 
     private function registerHelpers(): void

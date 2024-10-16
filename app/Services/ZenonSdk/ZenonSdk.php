@@ -18,6 +18,7 @@ use App\Services\ZenonSdk\Providers\Swap;
 use App\Services\ZenonSdk\Providers\Token;
 use DigitalSloth\ZnnPhp\Utilities;
 use DigitalSloth\ZnnPhp\Zenon;
+use Throwable;
 
 class ZenonSdk
 {
@@ -38,5 +39,23 @@ class ZenonSdk
         $accountCheck = Utilities::addressFromPublicKey($publicKey);
 
         return $validSignature && ($address === $accountCheck);
+    }
+
+    public function addressFromPublicKey(string $publicKey): ?string
+    {
+        try {
+            return Utilities::addressFromPublicKey($publicKey);
+        } catch (Throwable $throwable) {
+            return null;
+        }
+    }
+
+    public function ztsFromHash(string $hash): ?string
+    {
+        try {
+            return Utilities::ztsFromHash($hash);
+        } catch (Throwable $throwable) {
+            return null;
+        }
     }
 }

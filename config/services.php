@@ -36,6 +36,7 @@ return [
     'zenon' => [
         'node_url' => env('ZNN_NODE_URL', '127.0.0.1:35997'),
         'throw_errors' => env('ZNN_NODE_THROW_ERRORS', true),
+        'executable_path' => env('ZNN_CLI_EXECUTABLE_PATH', 'bin/znn-cli/osx'),
     ],
 
     'discourse' => [
@@ -72,5 +73,12 @@ return [
 
     'public-rpc-nodes' => [
         'api_url' => 'https://github.com/sol-znn/znn-node-parser/releases/download/public_nodes/output_nodes.json',
+    ],
+
+    'plasma-bot' => [
+        'node_url' => env('ZNN_NODE_URL', '127.0.0.1:35997'),
+        'keystore' => env('PLASMA_BOT_KEYSTORE', 'plasma-bot-dev'),
+        'passphrase' => env('PLASMA_BOT_PASSPHRASE', 'test'),
+        'address' => env('PLASMA_BOT_ADDRESS'),
     ],
 ];

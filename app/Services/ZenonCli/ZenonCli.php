@@ -4,46 +4,36 @@ declare(strict_types=1);
 
 namespace App\Services\ZenonCli;
 
-use App\Exceptions\PlasmaBotException;
+use App\Exceptions\ZenonCliException;
+use App\Services\ZenonCli\Providers\Plasma;
+use App\Services\ZenonCli\Providers\Wallet;
 use Illuminate\Process\ProcessResult;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
 
 class ZenonCli
 {
+    use Plasma, Wallet;
+
     public function __construct(
+        protected ?string $executablePath,
         protected string $nodeUrl,
         protected ?string $keystore = null,
         protected ?string $passphrase = null,
     ) {}
 
     //
-    // Wallet
-
-    public function walletCreateNew(string $passphrase, string $keystore): bool
-    {
-        $result = $this->runCommand("wallet.createNew {$passphrase} {$keystore}");
-
-        if (! $result->seeInOutput('Done')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function walletCreateFromMnemonic(string $mnemonic, string $passphrase, string $keystore): bool
-    {
-        $result = $this->runCommand("wallet.createFromMnemonic '{$mnemonic}' {$passphrase} {$keystore}");
-
-        if (! $result->seeInOutput('Done')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    //
     // General
+
+    public function setKeystore(string $keystore): void
+    {
+        $this->keystore = $keystore;
+    }
+
+    public function setPassphrase(string $passphrase): void
+    {
+        $this->passphrase = $passphrase;
+    }
 
     public function send(string $toAddress, int $amount): bool
     {
@@ -79,39 +69,14 @@ class ZenonCli
     }
 
     //
-    // Plasma
-
-    public function plasmaFuse(string $address, int $amount = 10): bool
-    {
-        $result = $this->runCommand("plasma.fuse {$address} {$amount}");
-
-        if (! $result->seeInOutput('Done')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function plasmaCancel(string $hash): bool
-    {
-        $result = $this->runCommand("plasma.cancel {$hash}");
-
-        if (! $result->seeInOutput('Done')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    //
     // Internal
 
     /**
-     * @throws PlasmaBotException
+     * @throws ZenonCliException
      */
-    private function runCommand(string $action): ProcessResult
+    protected function runCommand(string $action): ProcessResult
     {
-        $path = base_path('bin/znn');
+        $path = base_path($this->executablePath);
         $flags = collect([
             'u' => $this->nodeUrl,
             'k' => $this->keystore,
@@ -122,9 +87,11 @@ class ZenonCli
         $command = "./znn-cli {$action} {$flags}";
         $result = Process::path($path)->run($command);
 
+        dd($result->command());
+
         if (! $result->successful()) {
             Log::error($result->errorOutput());
-            throw new PlasmaBotException($result->errorOutput());
+            throw new ZenonCliException($result->errorOutput());
         }
 
         return $result;
