@@ -34,9 +34,10 @@ return [
     ],
 
     'zenon' => [
-        'node_url' => env('ZNN_NODE_URL', '127.0.0.1:35997'),
+        'http_node_url' => env('ZNN_HTTP_NODE_URL', 'http://127.0.0.1:35997'),
+        'ws_node_url' => env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997'),
         'throw_errors' => env('ZNN_NODE_THROW_ERRORS', true),
-        'executable_path' => env('ZNN_CLI_EXECUTABLE_PATH', 'bin/znn-cli/osx'),
+        'cli_executable' => env('ZNN_CLI_EXECUTABLE_PATH', 'bin/znn-cli/osx'),
     ],
 
     'discourse' => [
@@ -76,7 +77,7 @@ return [
     ],
 
     'plasma-bot' => [
-        'node_url' => env('ZNN_NODE_URL', '127.0.0.1:35997'),
+        'node' => env('PLASMA_BOT_NODE_URL', env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997')),
         'keystore' => env('PLASMA_BOT_KEYSTORE', 'plasma-bot-dev'),
         'passphrase' => env('PLASMA_BOT_PASSPHRASE', 'test'),
         'address' => env('PLASMA_BOT_ADDRESS'),

@@ -6,39 +6,15 @@ namespace App\Services;
 
 use App\Exceptions\PlasmaBotException;
 use App\Services\ZenonCli\ZenonCli;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class PlasmaBot
 {
-    private ?ZenonCli $cli;
-
-    private ?string $keystore;
-
-    private ?string $passphrase;
-
-    public function __construct()
-    {
-        $this->keystore = config('plasma-bot.keystore');
-        $this->passphrase = config('plasma-bot.passphrase');
-        $this->cli = App::make(ZenonCli::class, [
-            'node_url' => config('plasma-bot.node_url'),
-            'keystore' => $this->keystore,
-            'passphrase' => $this->passphrase,
-        ]);
-    }
-
-    public function install($mnemonic): bool
-    {
-        try {
-            return $this->cli->walletCreateFromMnemonic(
-                $mnemonic,
-                $this->keystore,
-                $this->passphrase
-            );
-        } catch (PlasmaBotException $exception) {
-            return $this->exceptionHandler($exception);
-        }
+    public function __construct(
+        private readonly ZenonCli $cli
+    ) {
+        $this->cli->setKeystore(config('services.plasma-bot.keystore'));
+        $this->cli->setPassphrase(config('services.plasma-bot.passphrase'));
     }
 
     public function fuse(string $address, int $amount = 10): bool

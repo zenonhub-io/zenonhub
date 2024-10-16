@@ -6,6 +6,17 @@ namespace App\Services\ZenonCli\Providers;
 
 trait Wallet
 {
+    public function walletList(): bool
+    {
+        $result = $this->runCommand('wallet.list');
+
+        if (! $result->seeInOutput('Available wallets')) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function walletCreateNew(string $passphrase, string $keystore): bool
     {
         $result = $this->runCommand("wallet.createNew {$passphrase} {$keystore}");

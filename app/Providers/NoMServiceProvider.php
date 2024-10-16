@@ -12,6 +12,7 @@ use App\Services\PlasmaBot;
 use App\Services\ZenonCli\ZenonCli;
 use App\Services\ZenonSdk\ZenonSdk;
 use DigitalSloth\ZnnPhp\Zenon;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class NoMServiceProvider extends ServiceProvider
@@ -24,7 +25,10 @@ class NoMServiceProvider extends ServiceProvider
         $this->registerSdkAndCli();
         $this->registerHelpers();
 
-        $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot);
+        $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot($app->make(ZenonCli::class, [
+            'executable' => config('services.zenon.cli_executable'),
+            'node' => config('services.plasma-bot.node'),
+        ])));
 
         $this->app->singleton(CoinGecko::class, fn ($app, $params) => new CoinGecko);
     }
@@ -37,7 +41,7 @@ class NoMServiceProvider extends ServiceProvider
     private function registerSdkAndCli(): void
     {
         $this->app->singleton(Zenon::class, function ($app, $params) {
-            $nodeUrl = $params['node'] ?? config('services.zenon.node_url');
+            $nodeUrl = $params['node'] ?? config('services.zenon.node_url_http');
             $throwErrors = $params['throwErrors'] ?? config('services.zenon.throw_errors');
 
             return new Zenon($nodeUrl, $throwErrors);
@@ -46,10 +50,10 @@ class NoMServiceProvider extends ServiceProvider
         $this->app->singleton(ZenonSdk::class, fn ($app, $params) => new ZenonSdk($app->make(Zenon::class)));
 
         $this->app->singleton(ZenonCli::class, function ($app, $params) {
-            $executablePath = $params['executable_path'] ?? config('services.zenon.executable_path');
-            $node = $params['node_url'] ?? config('services.zenon.node_url');
+            $executable = $params['executable'] ?? config('services.zenon.cli_executable');
+            $node = $params['node'] ?? config('services.zenon.ws_node_url');
 
-            return new ZenonCli($executablePath, $node);
+            return new ZenonCli($executable, $node);
         });
     }
 

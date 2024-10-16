@@ -87,8 +87,6 @@ class ZenonCli
         $command = "./znn-cli {$action} {$flags}";
         $result = Process::path($path)->run($command);
 
-        dd($result->command());
-
         if (! $result->successful()) {
             Log::error($result->errorOutput());
             throw new ZenonCliException($result->errorOutput());
