@@ -41,7 +41,7 @@ class NoMServiceProvider extends ServiceProvider
     private function registerSdkAndCli(): void
     {
         $this->app->singleton(Zenon::class, function ($app, $params) {
-            $nodeUrl = $params['node'] ?? config('services.zenon.node_url_http');
+            $nodeUrl = $params['node'] ?? config('services.zenon.http_node_url');
             $throwErrors = $params['throwErrors'] ?? config('services.zenon.throw_errors');
 
             return new Zenon($nodeUrl, $throwErrors);

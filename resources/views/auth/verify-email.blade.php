@@ -12,6 +12,7 @@
     @endif
 
     <x-forms.form :action="route('verification.send')">
+        <x-honeypot />
         <x-buttons.button type="submit" class="btn-outline-primary w-100">
             {{ __('Resend Verification Email') }} <i class="bi bi-arrow-right ms-2"></i>
         </x-buttons.button>

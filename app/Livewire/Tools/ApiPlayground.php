@@ -10,9 +10,13 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Spatie\Honeypot\Http\Livewire\Concerns\HoneypotData;
+use Spatie\Honeypot\Http\Livewire\Concerns\UsesSpamProtection;
 
 class ApiPlayground extends Component
 {
+    use UsesSpamProtection;
+
     #[Url]
     public ?string $request = null;
 
@@ -31,8 +35,11 @@ class ApiPlayground extends Component
 
     public ?array $result = null;
 
+    public HoneypotData $extraFields;
+
     public function mount(): void
     {
+        $this->extraFields = new HoneypotData;
         $this->availableRequests = Storage::json('nom-json/api-playground.json');
         $this->getRequestInputs();
     }
@@ -51,6 +58,8 @@ class ApiPlayground extends Component
 
     public function makeRequest()
     {
+        $this->protectAgainstSpam();
+
         if (! $this->request) {
             return;
         }

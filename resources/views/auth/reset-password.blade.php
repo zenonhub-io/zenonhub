@@ -8,6 +8,7 @@
     @endif
 
     <x-forms.form :action="route('password.update')" class="needs-validation">
+        <x-honeypot />
         <x-forms.inputs.hidden name="token" :value="$request->route('token')" />
         <div class="mb-4">
             @php($uuid = Str::random(8))

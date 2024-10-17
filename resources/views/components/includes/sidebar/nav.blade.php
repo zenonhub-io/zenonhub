@@ -24,7 +24,6 @@
     <x-navbar.dropdown title="Tools" icon="tools" isActive="{{ request()->routeIs('tools.*') }}">
         <x-navbar.dropdown-item title="Plasma Bot" route="tools.plasma-bot" />
         <x-navbar.dropdown-item title="API Playground" route="tools.api-playground" />
-        <x-navbar.dropdown-item title="Broadcast Message" route="tools.broadcast-message" />
         <x-navbar.dropdown-item title="Verify Signature" route="tools.verify-signature" />
     </x-navbar.dropdown>
 

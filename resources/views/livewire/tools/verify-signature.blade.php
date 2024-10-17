@@ -1,5 +1,6 @@
 <div>
     <form wire:submit="verifySignature">
+        <x-honeypot livewire-model="extraFields" />
         <div class="vstack gap-6">
             @if ($result !== null)
                 <div class="row align-items-center">

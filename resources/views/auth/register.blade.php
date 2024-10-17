@@ -10,6 +10,7 @@
         </ul>
     </x-includes.header>
     <x-forms.form :action="route('register')" class="needs-validation">
+        <x-honeypot />
         <div class="mb-4">
             @php($uuid = Str::random(8))
             <x-forms.label :label="__('Username')" for="{{ $uuid }}" />

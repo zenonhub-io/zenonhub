@@ -12,6 +12,7 @@
     @endif
 
     <x-forms.form :action="route('password.email')" class="needs-validation">
+        <x-honeypot />
         <div>
             @php($uuid = Str::random(8))
             <x-forms.label :label="__('Email')" for="{{ $uuid }}" />

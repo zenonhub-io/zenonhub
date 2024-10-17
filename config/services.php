@@ -80,6 +80,6 @@ return [
         'node' => env('PLASMA_BOT_NODE_URL', env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997')),
         'keystore' => env('PLASMA_BOT_KEYSTORE', 'plasma-bot-dev'),
         'passphrase' => env('PLASMA_BOT_PASSPHRASE', 'test'),
-        'address' => env('PLASMA_BOT_ADDRESS'),
+        'address' => env('PLASMA_BOT_ADDRESS', 'z1qzzavvq2zywv77ts2e9yntc3y24qetjh0x0aj4'),
     ],
 ];

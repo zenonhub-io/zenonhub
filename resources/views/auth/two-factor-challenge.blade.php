@@ -8,6 +8,7 @@
             {{ __('Please confirm access to your account by entering one of your emergency recovery codes.') }}
         </div>
         <x-forms.form :action="route('two-factor.login')" class="needs-validation">
+            <x-honeypot />
             <div class="mb-4" x-show="! recovery">
                 @php($uuid = Str::random(8))
                 <x-forms.label :label="__('Code')" for="{{ $uuid }}" />

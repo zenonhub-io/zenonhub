@@ -28,6 +28,7 @@
         "lorisleiva/laravel-actions": "^2.8",
         "rappasoft/laravel-livewire-tables": "^3.4",
         "spatie/laravel-data": "^4.4",
+        "spatie/laravel-honeypot": "^4.5",
         "spatie/laravel-permission": "*",
         "spatie/laravel-sitemap": "*"
     },

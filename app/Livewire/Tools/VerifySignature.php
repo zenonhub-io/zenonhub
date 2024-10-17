@@ -9,10 +9,14 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Spatie\Honeypot\Http\Livewire\Concerns\HoneypotData;
+use Spatie\Honeypot\Http\Livewire\Concerns\UsesSpamProtection;
 use Throwable;
 
 class VerifySignature extends Component
 {
+    use UsesSpamProtection;
+
     public ?bool $result = null;
 
     #[Validate([
@@ -40,6 +44,13 @@ class VerifySignature extends Component
         'signature' => '',
     ];
 
+    public HoneypotData $extraFields;
+
+    public function mount(): void
+    {
+        $this->extraFields = new HoneypotData;
+    }
+
     public function render(): View
     {
         return view('livewire.tools.verify-signature');
@@ -47,6 +58,7 @@ class VerifySignature extends Component
 
     public function verifySignature(): void
     {
+        $this->protectAgainstSpam();
         $this->validate();
 
         $zenonSdk = app(ZenonSdk::class);
