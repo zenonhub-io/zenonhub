@@ -62,6 +62,18 @@ $danger:        $red;
 $light: 		lighten($gray-100, 1%);
 $dark: 			$zenon-black; //$zenon-black;
 
+$theme-colors: (
+    "primary":      $primary,
+    "secondary":    $secondary,
+    "tertiary":    $tertiary,
+    "success":      $success,
+    "info":         $info,
+    "warning":      $warning,
+    "danger":       $danger,
+    "light":        $light,
+    "dark":         $dark,
+);
+
 // Body
 $body-bg-dark: $dark;
 
