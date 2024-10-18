@@ -33,6 +33,14 @@
         }
     }
 
+    //.navbar-vertical.navbar-expand > ul.navbar-nav:after {
+    //    content: "";
+    //    pointer-events: none;
+    //    background-image: linear-gradient(to bottom, rgba($body-bg-dark,0), rgba($body-bg-dark, 1) 90%);
+    //    width: 100%;
+    //    height: 4em;
+    //}
+
     @include media-breakpoint-up(md) {
         height: calc(100vh - 60px);
         top: 60px;

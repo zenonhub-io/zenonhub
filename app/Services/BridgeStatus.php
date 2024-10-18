@@ -7,12 +7,13 @@ namespace App\Services;
 use App\DataTransferObjects\BridgeStatusDTO;
 use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\TimeChallenge;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class BridgeStatus
 {
-    private BridgeStatusDTO $bridgeStatusDTO;
+    public BridgeStatusDTO $bridgeStatusDTO;
 
     public function __construct()
     {
@@ -52,6 +53,15 @@ class BridgeStatus
     public function getMomentumsToUnhalt(): ?int
     {
         return $this->bridgeStatusDTO->estimatedMomentumsUntilUnhalt;
+    }
+
+    public function getTimeTouUhalt(): ?Carbon
+    {
+        if (! $this->bridgeStatusDTO->estimatedMomentumsUntilUnhalt) {
+            return null;
+        }
+
+        return now()->addSeconds($this->bridgeStatusDTO->estimatedMomentumsUntilUnhalt * 10);
     }
 
     public function getBridgeAdmin(): BridgeAdmin

@@ -1,0 +1,101 @@
+<x-app-layout>
+
+    <x-includes.header :title="__('Bridge Stats')" class="mb-4">
+        <x-navigation.header.responsive-nav :items="[
+            __('Overview') => route('stats.bridge'),
+            __('Security') => route('stats.bridge', ['tab' => 'security']),
+            __('Actions') => route('stats.bridge', ['tab' => 'actions']),
+            __('Orchestrators') => route('stats.bridge', ['tab' => 'orchestrators'])
+        ]" :active="$tab" />
+    </x-includes.header>
+
+    <div class="container-fluid px-3 px-md-6">
+        @if ($tab === 'overview')
+
+            <div class="row mb-6 gy-6">
+                <div class="col-24 col-md-8">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat :title="__('Bridge')">
+                                <x-stats.indicator :type="$status->isBridgeOnline() ? 'success' : 'warning'" />
+                                {{ $status->isBridgeOnline() ? __('Online') : __('Offline') }}
+                            </x-stats.mini-stat>
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+                <div class="col-24 col-md-8">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat
+                                :title="__('Orchestrators')"
+                                :info="$status->bridgeStatusDTO->orchestratorsOnlinePercentage .'% Online'">
+                                <x-stats.indicator :type="$status->isBridgeOnline() ? 'success' : 'warning'" />
+                                 {{ $status->isOrchestratorsOnline() ? __('Online') : __('Offline') }}
+                            </x-stats.mini-stat>
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+                <div class="col-24 col-md-8">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat
+                                :title="__('Pending')"
+                                :info="__('Number of pending incoming and outgoing transaction)')">
+                                {{ !is_null($status->bridgeStatusDTO->pendingIncomingTx) ? $status->bridgeStatusDTO->pendingIncomingTx : '-' }} / {{ !is_null($status->bridgeStatusDTO->pendingOutgoingTx) ? $status->bridgeStatusDTO->pendingOutgoingTx : '-' }}
+                            </x-stats.mini-stat>
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+            </div>
+
+            @if (! $status->isBridgeOnline())
+                <x-alerts.alert type="warning" class="mb-4">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i> The bridge is currently halted
+                    @if($status->getMomentumsToUnhalt())
+                        for another {{ $status->getTimeTouUhalt()->diffForHumans(['parts' => 2], true) }} ({{ number_format($status->getMomentumsToUnhalt()) }} momentums)
+                    @endif
+                    please wait until it is back online before interacting with it.
+                </x-alerts.alert>
+            @endif
+
+            @if (! $status->isOrchestratorsOnline())
+                <x-alerts.alert type="warning" class="mb-4">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i> Only {{ $status->bridgeStatusDTO->orchestratorsOnlinePercentage }}% of orchestrators are online, please wait until there are over {{ $status->bridgeStatusDTO->orchestratorsRequiredOnlinePercentage }}% before interacting with the bridge
+                </x-alerts.alert>
+            @endif
+
+            @if ($status->isBridgeOnline())
+                <x-alerts.alert type="success" class="mb-4">
+                    <span class="d-block mb-4">
+                        <i class="bi bi-check-circle-fill me-2"></i> The bridge and orchestrators are online
+                    </span>
+
+                    <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-outline-success w-100">
+                        Bridge tokens now
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </x-alerts.alert>
+            @endif
+
+{{--            @foreach($timeChallenges as $challenge)--}}
+{{--                <x-alert--}}
+{{--                    message="A time challenge is in place for {{  $challenge['name'] }}. The challenge will expire in {{  number_format($challenge['endsIn']) }} momentums, {{ now()->addSeconds($challenge['endsIn'] * 10)->diffForHumans() }}"--}}
+{{--                    type="warning"--}}
+{{--                    icon="exclamation-octagon"--}}
+{{--                    class="d-flex justify-content-center mb-4"--}}
+{{--                />--}}
+{{--            @endforeach--}}
+
+        @endif
+
+        @if ($tab === 'security')
+        @endif
+
+        @if ($tab === 'actions')
+        @endif
+
+        @if ($tab === 'orchestrators')
+        @endif
+    </div>
+
+</x-app-layout>

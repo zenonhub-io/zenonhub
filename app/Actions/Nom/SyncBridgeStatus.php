@@ -58,6 +58,8 @@ class SyncBridgeStatus
         $estimatedUnhaltHeight = $this->getEstimatedUnhaltHeight($bridgeInfo->unhaltedAt, $bridgeInfo->unhaltDurationInMomentums);
         $estimatedMomentumsUntilUnhalt = $this->getEstimatedMomentumsUntilUnhalt($estimatedUnhaltHeight);
         $bridgeOnline = $this->getBridgeOnline($bridgeInfo->halted, $estimatedUnhaltHeight);
+        $pendingIncomingTx = $this->getPendingIncomingTx();
+        $pendingOutgoingTx = $this->getPendingOutgoingTx();
 
         return BridgeStatusDTO::from([
             'bridgeOnline' => $bridgeOnline,
@@ -69,6 +71,8 @@ class SyncBridgeStatus
             'unhaltDurationInMomentums' => $bridgeInfo->unhaltDurationInMomentums,
             'estimatedUnhaltHeight' => $estimatedUnhaltHeight,
             'estimatedMomentumsUntilUnhalt' => $estimatedMomentumsUntilUnhalt,
+            'pendingIncomingTx' => $pendingIncomingTx,
+            'pendingOutgoingTx' => $pendingOutgoingTx,
             'allowKeyGen' => $bridgeInfo->allowKeyGen,
             'compressedTssECDSAPubKey' => $bridgeInfo->compressedTssECDSAPubKey,
             'decompressedTssECDSAPubKey' => $bridgeInfo->decompressedTssECDSAPubKey,
@@ -127,5 +131,35 @@ class SyncBridgeStatus
     private function getBridgeOnline(bool $halted, ?int $estimatedUnhaltHeight): bool
     {
         return ! ($estimatedUnhaltHeight || $halted);
+    }
+
+    private function getPendingIncomingTx(): ?int
+    {
+        $sdk = app(ZenonSdk::class);
+
+        try {
+            Log::debug('Sync Bridge Status - Get pending incoming tx');
+
+            return $sdk->getPendingIncoming();
+        } catch (Throwable $exception) {
+            Log::warning('Sync Bridge Status - Unable to call getPendingIncoming');
+
+            return null;
+        }
+    }
+
+    private function getPendingOutgoingTx(): ?int
+    {
+        $sdk = app(ZenonSdk::class);
+
+        try {
+            Log::debug('Sync Bridge Status - Get pending incoming tx');
+
+            return $sdk->getPendingOutgoing();
+        } catch (Throwable $exception) {
+            Log::warning('Sync Bridge Status - Unable to call getPendingIncoming');
+
+            return null;
+        }
     }
 }

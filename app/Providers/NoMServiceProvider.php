@@ -8,11 +8,9 @@ use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
 use App\Services\CoinGecko;
-use App\Services\PlasmaBot;
 use App\Services\ZenonCli\ZenonCli;
 use App\Services\ZenonSdk\ZenonSdk;
 use DigitalSloth\ZnnPhp\Zenon;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class NoMServiceProvider extends ServiceProvider
@@ -24,11 +22,6 @@ class NoMServiceProvider extends ServiceProvider
     {
         $this->registerSdkAndCli();
         $this->registerHelpers();
-
-        $this->app->singleton(PlasmaBot::class, fn ($app, $params) => new PlasmaBot($app->make(ZenonCli::class, [
-            'executable' => config('services.zenon.cli_executable'),
-            'node' => config('services.plasma-bot.node'),
-        ])));
 
         $this->app->singleton(CoinGecko::class, fn ($app, $params) => new CoinGecko);
     }

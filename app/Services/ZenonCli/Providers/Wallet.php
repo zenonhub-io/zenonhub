@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\ZenonCli\Providers;
 
+use App\Exceptions\ZenonCliException;
+
 trait Wallet
 {
     public function walletList(): bool
@@ -11,7 +13,7 @@ trait Wallet
         $result = $this->runCommand('wallet.list');
 
         if (! $result->seeInOutput('Available wallets')) {
-            return false;
+            throw new ZenonCliException('Zenon CLI - Unable to list wallets');
         }
 
         return true;
@@ -22,7 +24,7 @@ trait Wallet
         $result = $this->runCommand("wallet.createNew {$passphrase} {$keystore}");
 
         if (! $result->seeInOutput('Done')) {
-            return false;
+            throw new ZenonCliException('Zenon CLI - Unable to create wallet');
         }
 
         return true;
@@ -33,7 +35,7 @@ trait Wallet
         $result = $this->runCommand("wallet.createFromMnemonic '{$mnemonic}' {$passphrase} {$keystore}");
 
         if (! $result->seeInOutput('Done')) {
-            return false;
+            throw new ZenonCliException('Zenon CLI - Unable to create from mnemonic');
         }
 
         return true;

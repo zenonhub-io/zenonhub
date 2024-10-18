@@ -22,6 +22,8 @@ class BridgeStatusDTO extends Data
         public int $unhaltDurationInMomentums,
         public ?int $estimatedUnhaltHeight,
         public ?int $estimatedMomentumsUntilUnhalt,
+        public ?int $pendingIncomingTx,
+        public ?int $pendingOutgoingTx,
         public bool $allowKeyGen,
         public string $compressedTssECDSAPubKey,
         public string $decompressedTssECDSAPubKey,

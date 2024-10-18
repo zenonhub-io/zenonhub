@@ -40,7 +40,7 @@ class ZenonCli
         $result = $this->runCommand("send {$toAddress} {$amount}");
 
         if (! $result->seeInOutput('Done')) {
-            return false;
+            throw new ZenonCliException('Zenon CLI - Unable to send');
         }
 
         return true;
@@ -51,7 +51,7 @@ class ZenonCli
         $result = $this->runCommand("receive {$hash}");
 
         if (! $result->seeInOutput('Done')) {
-            return false;
+            throw new ZenonCliException('Zenon CLI - Unable to receive');
         }
 
         return true;
@@ -62,7 +62,7 @@ class ZenonCli
         $result = $this->runCommand('receiveAll');
 
         if (! $result->seeInOutput('Done')) {
-            return false;
+            throw new ZenonCliException('Zenon CLI - Unable to receive all');
         }
 
         return true;
