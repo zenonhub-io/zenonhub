@@ -74,7 +74,7 @@ class BridgeStatus
         return $this->bridgeStatusDTO->bridgeGuardians;
     }
 
-    public function getTimeChallenges(): array
+    public function getTimeChallenges(): Collection
     {
         return TimeChallenge::whereActive()
             ->whereHas('contractMethod', function ($query) {

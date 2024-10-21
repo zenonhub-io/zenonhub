@@ -4,35 +4,36 @@
     <div class="text-center text-muted mb-2">
         {{ $item->quorum_status }}
     </div>
-    <div class="progress bg-dark mb-3" style="height: 4px">
-        <div
-            class="progress-bar bg-faded-success"
-            role="progressbar"
-            aria-label="Yes"
-            style="width: {{ $item->total_yes_votes_percentage }}%"
-            aria-valuenow="{{ $item->total_yes_votes_percentage }}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-        ></div>
-        <div
-            class="progress-bar bg-danger"
-            role="progressbar"
-            aria-label="No"
-            style="width: {{ $item->total_no_votes_percentage }}%"
-            aria-valuenow="{{ $item->total_no_votes_percentage }}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-        ></div>
-        <div
-            class="progress-bar bg-light-subtle"
-            role="progressbar"
-            aria-label="Abstain"
-            style="width: {{ $item->total_abstain_votes_percentage }}%"
-            aria-valuenow="{{ $item->total_abstain_votes_percentage }}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-        ></div>
+    <div class="progress-stacked bg-dark-subtle mb-3" style="height: 4px">
+        <div class="progress" role="progressbar"
+             aria-label="{{ __('Yes') }}"
+             aria-valuenow="{{ $item->total_yes_votes_percentage }}"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             style="width: {{ $item->total_yes_votes_percentage }}%"
+        >
+            <div class="progress-bar bg-success"></div>
+        </div>
+        <div class="progress" role="progressbar"
+             aria-label="{{ __('No') }}"
+             aria-valuenow="{{ $item->total_no_votes_percentage }}"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             style="width: {{ $item->total_no_votes_percentage }}%"
+        >
+            <div class="progress-bar bg-danger"></div>
+        </div>
+        <div class="progress" role="progressbar"
+             aria-label="{{ __('Abstain') }}"
+             aria-valuenow="{{ $item->total_abstain_votes_percentage }}"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             style="width: {{ $item->total_abstain_votes_percentage }}%"
+        >
+            <div class="progress-bar bg-light-subtle"></div>
+        </div>
     </div>
+
     <div class="d-flex justify-content-evenly">
         <span class="badge bg-light-subtle text-muted">
             {{ $item->total_yes_votes }} Yes

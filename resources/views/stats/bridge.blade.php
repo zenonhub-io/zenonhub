@@ -12,6 +12,36 @@
     <div class="container-fluid px-3 px-md-6">
         @if ($tab === 'overview')
 
+            <x-alerts.alert :type="$status->isBridgeOnline() ? 'success' : 'warning'" class="mb-6 rounded-4 lead">
+                @if ($status->isBridgeOnline())
+                    <span class="d-block mb-4">
+                        <i class="bi bi-check-circle-fill me-2"></i> {{ __('The bridge and orchestrators are online') }}
+                    </span>
+                    <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-outline-success w-100">
+                        {{ __('Bridge tokens now') }}
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                @endif
+
+                @if (! $status->isBridgeOnline())
+                    <i class="bi bi-exclamation-circle-fill me-2"></i> The bridge is currently halted
+                    @if($status->getMomentumsToUnhalt())
+                        for another {{ $status->getTimeTouUhalt()->diffForHumans(['parts' => 2], true) }} ({{ number_format($status->getMomentumsToUnhalt()) }} momentums)
+                    @endif
+                    please wait until it is back online before interacting with it.
+                @endif
+
+                @if (! $status->isOrchestratorsOnline())
+                    <i class="bi bi-exclamation-circle-fill me-2"></i> Only {{ $status->bridgeStatusDTO->orchestratorsOnlinePercentage }}% of orchestrators are online, please wait until there are over {{ $status->bridgeStatusDTO->orchestratorsRequiredOnlinePercentage }}% before interacting with the bridge
+                @endif
+            </x-alerts.alert>
+
+            @foreach($status->getTimeChallenges() as $challenge)
+                <x-alerts.alert type="warning" class="mb-6 rounded-4">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
+                </x-alerts.alert>
+            @endforeach
+
             <div class="row mb-6 gy-6">
                 <div class="col-24 col-md-8">
                     <x-cards.card>
@@ -30,7 +60,7 @@
                                 :title="__('Orchestrators')"
                                 :info="$status->bridgeStatusDTO->orchestratorsOnlinePercentage .'% Online'">
                                 <x-stats.indicator :type="$status->isBridgeOnline() ? 'success' : 'warning'" />
-                                 {{ $status->isOrchestratorsOnline() ? __('Online') : __('Offline') }}
+                                {{ $status->isOrchestratorsOnline() ? __('Online') : __('Offline') }}
                             </x-stats.mini-stat>
                         </x-cards.body>
                     </x-cards.card>
@@ -40,51 +70,15 @@
                         <x-cards.body>
                             <x-stats.mini-stat
                                 :title="__('Pending')"
-                                :info="__('Number of pending incoming and outgoing transaction)')">
-                                {{ !is_null($status->bridgeStatusDTO->pendingIncomingTx) ? $status->bridgeStatusDTO->pendingIncomingTx : '-' }} / {{ !is_null($status->bridgeStatusDTO->pendingOutgoingTx) ? $status->bridgeStatusDTO->pendingOutgoingTx : '-' }}
+                                :info="__('Number of pending incoming and outgoing transaction')">
+                                {{ ! is_null($status->bridgeStatusDTO->pendingIncomingTx) ? $status->bridgeStatusDTO->pendingIncomingTx : '-' }} / {{ ! is_null($status->bridgeStatusDTO->pendingOutgoingTx) ? $status->bridgeStatusDTO->pendingOutgoingTx : '-' }}
                             </x-stats.mini-stat>
                         </x-cards.body>
                     </x-cards.card>
                 </div>
             </div>
 
-            @if (! $status->isBridgeOnline())
-                <x-alerts.alert type="warning" class="mb-4">
-                    <i class="bi bi-exclamation-circle-fill me-2"></i> The bridge is currently halted
-                    @if($status->getMomentumsToUnhalt())
-                        for another {{ $status->getTimeTouUhalt()->diffForHumans(['parts' => 2], true) }} ({{ number_format($status->getMomentumsToUnhalt()) }} momentums)
-                    @endif
-                    please wait until it is back online before interacting with it.
-                </x-alerts.alert>
-            @endif
-
-            @if (! $status->isOrchestratorsOnline())
-                <x-alerts.alert type="warning" class="mb-4">
-                    <i class="bi bi-exclamation-circle-fill me-2"></i> Only {{ $status->bridgeStatusDTO->orchestratorsOnlinePercentage }}% of orchestrators are online, please wait until there are over {{ $status->bridgeStatusDTO->orchestratorsRequiredOnlinePercentage }}% before interacting with the bridge
-                </x-alerts.alert>
-            @endif
-
-            @if ($status->isBridgeOnline())
-                <x-alerts.alert type="success" class="mb-4">
-                    <span class="d-block mb-4">
-                        <i class="bi bi-check-circle-fill me-2"></i> The bridge and orchestrators are online
-                    </span>
-
-                    <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-outline-success w-100">
-                        Bridge tokens now
-                        <i class="bi bi-arrow-right ms-2"></i>
-                    </a>
-                </x-alerts.alert>
-            @endif
-
-{{--            @foreach($timeChallenges as $challenge)--}}
-{{--                <x-alert--}}
-{{--                    message="A time challenge is in place for {{  $challenge['name'] }}. The challenge will expire in {{  number_format($challenge['endsIn']) }} momentums, {{ now()->addSeconds($challenge['endsIn'] * 10)->diffForHumans() }}"--}}
-{{--                    type="warning"--}}
-{{--                    icon="exclamation-octagon"--}}
-{{--                    class="d-flex justify-content-center mb-4"--}}
-{{--                />--}}
-{{--            @endforeach--}}
+            <livewire:stats.bridge.inflow-v-outflow />
 
         @endif
 

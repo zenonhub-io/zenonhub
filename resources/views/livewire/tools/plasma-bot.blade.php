@@ -19,25 +19,25 @@
                 </div>
                 <div class="col-24">
                     <div class="text-start text-md-center">
-                        <div class="progress bg-dark" style="height: 4px">
-                            <div
-                                class="progress-bar bg-secondary"
-                                role="progressbar"
-                                aria-label="No"
-                                style="width: {{ $percentageUsed }}%"
-                                aria-valuenow="{{ $percentageUsed }}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                            ></div>
-                            <div
-                                class="progress-bar bg-tertiary"
-                                role="progressbar"
-                                aria-label="Yes"
-                                style="width: {{ $percentageAvailable }}%"
-                                aria-valuenow="{{ $percentageAvailable }}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                            ></div>
+                        <div class="progress-stacked" style="height: 4px">
+                            <div class="progress" role="progressbar"
+                                 aria-label="{{ __('Available QSR') }}"
+                                 aria-valuenow="{{ $percentageAvailable }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 style="width: {{ $percentageAvailable }}%"
+                            >
+                                <div class="progress-bar bg-secondary"></div>
+                            </div>
+                            <div class="progress" role="progressbar"
+                                 aria-label="{{ __('Fused QSR') }}"
+                                 aria-valuenow="{{ $percentageUsed }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 style="width: {{ $percentageUsed }}%"
+                            >
+                                <div class="progress-bar bg-tertiary"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -20,4 +20,25 @@ trait Bridge
             throw new ZenonRpcException('Unable to getBridgeInfo');
         }
     }
+
+    public function getPendingIncoming(): int
+    {
+        try {
+            $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
+
+            return $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
+        } catch (Exception $e) {
+            throw new ZenonRpcException('Unable to getBridgeInfo');
+        }
+    }
+
+    public function getPendingOutgoing(): int
+    {
+        // TODO
+        try {
+            return $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
+        } catch (Exception $e) {
+            throw new ZenonRpcException('Unable to getBridgeInfo');
+        }
+    }
 }
