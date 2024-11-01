@@ -1,5 +1,5 @@
 import Singleton from '../abstracts/Singleton';
-import {Tab, Tooltip, Popover} from 'bootstrap';
+import {Dropdown, Tab, Tooltip, Popover} from 'bootstrap';
 import ClipboardJS from "clipboard";
 
 export default class Core extends Singleton {
@@ -56,6 +56,7 @@ export default class Core extends Singleton {
         this.onCopiers();
         this.onTooltips();
         this.onPopovers();
+        //this.onDropdowns();
         this.onSyntaxHighlight();
     }
 
@@ -66,6 +67,7 @@ export default class Core extends Singleton {
         this.offCopiers();
         this.offTooltips();
         this.offPopovers();
+        //this.offDropdowns();
     }
 
     reopenTab() {
@@ -168,6 +170,24 @@ export default class Core extends Singleton {
         this.popoverList.forEach(popover => {
             if (popover._element) {
                 popover.dispose();
+            }
+        });
+    }
+
+    onDropdowns() {
+        const dropdownTriggerList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+        this.dropdownList = [...dropdownTriggerList].map(dropdownTriggerEl => new Dropdown(dropdownTriggerEl));
+    }
+
+    offDropdowns() {
+
+        if (! this.dropdownList) {
+            return;
+        }
+
+        this.dropdownList.forEach(dropdown => {
+            if (dropdown._element) {
+                dropdown.dispose();
             }
         });
     }

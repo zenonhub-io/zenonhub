@@ -9,9 +9,8 @@
         ]" :active="$tab" />
     </x-includes.header>
 
-    <div class="container-fluid px-3 px-md-6">
-        @if ($tab === 'overview')
-
+    @if ($tab === 'overview')
+        <div class="container-fluid px-3 px-md-6">
             <x-alerts.alert :type="$status->isBridgeOnline() ? 'success' : 'warning'" class="mb-6 rounded-4 lead">
                 @if ($status->isBridgeOnline())
                     <span class="d-block mb-4">
@@ -35,13 +34,11 @@
                     <i class="bi bi-exclamation-circle-fill me-2"></i> Only {{ $status->bridgeStatusDTO->orchestratorsOnlinePercentage }}% of orchestrators are online, please wait until there are over {{ $status->bridgeStatusDTO->orchestratorsRequiredOnlinePercentage }}% before interacting with the bridge
                 @endif
             </x-alerts.alert>
-
             @foreach($status->getTimeChallenges() as $challenge)
                 <x-alerts.alert type="warning" class="mb-6 rounded-4">
                     <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
                 </x-alerts.alert>
             @endforeach
-
             <div class="row mb-6 gy-6">
                 <div class="col-24 col-md-8">
                     <x-cards.card>
@@ -77,19 +74,19 @@
                     </x-cards.card>
                 </div>
             </div>
+            <livewire:stats.bridge.inbound-outbound-volume />
+        </div>
+    @endif
 
-            <livewire:stats.bridge.inflow-v-outflow />
+    @if ($tab === 'security')
+    @endif
 
-        @endif
+    @if ($tab === 'actions')
+        <livewire:stats.bridge.admin-action-list />
+    @endif
 
-        @if ($tab === 'security')
-        @endif
-
-        @if ($tab === 'actions')
-        @endif
-
-        @if ($tab === 'orchestrators')
-        @endif
-    </div>
+    @if ($tab === 'orchestrators')
+        <livewire:stats.bridge.orchestrator-list />
+    @endif
 
 </x-app-layout>

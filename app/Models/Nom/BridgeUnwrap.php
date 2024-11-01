@@ -98,6 +98,16 @@ class BridgeUnwrap extends Model
         return $query->whereNull('redeemed_at');
     }
 
+    public function scopeWhereAffiliateReward($query)
+    {
+        return $query->where('log_index', '>=', '4000000000');
+    }
+
+    public function scopeWhereNotAffiliateReward($query)
+    {
+        return $query->where('log_index', '<', '4000000000');
+    }
+
     //
     // Relations
 
@@ -139,16 +149,6 @@ class BridgeUnwrap extends Model
             $start->startOfDay(),
             $end->endOfDay(),
         ]);
-    }
-
-    public function scopeWhereAffiliateReward($query)
-    {
-        return $query->where('log_index', '>=', '4000000000');
-    }
-
-    public function scopeWhereNotAffiliateReward($query)
-    {
-        return $query->where('log_index', '<', '4000000000');
     }
 
     //

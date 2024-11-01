@@ -12,6 +12,7 @@
         "ext-bcmath": "*",
         "ext-gmp": "*",
         "ext-json": "*",
+        "asantibanez/livewire-charts": "^4.1",
         "deployer/deployer": "*",
         "digitalsloth/znn-php": "@dev",
         "diglactic/laravel-breadcrumbs": "*",

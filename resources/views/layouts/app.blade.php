@@ -66,6 +66,7 @@
         <x-includes.footer-tags/>
         @stack('scripts')
         @rappasoftTableScripts
+        @livewireChartsScripts
 
         <script>
             window.onload = function () {

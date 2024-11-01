@@ -82,6 +82,21 @@ return new class extends Migration
             $table->timestamp('revoked_at')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('nom_bridge_stat_histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
+            $table->foreignId('token_id')->references('id')->on('nom_tokens');
+            $table->string('wrapped_tx')->default(0);
+            $table->string('wrapped_amount')->default(0);
+            $table->string('unwrapped_tx')->default(0);
+            $table->string('unwrapped_amount')->default(0);
+            $table->string('affiliate_tx')->default(0);
+            $table->string('affiliate_amount')->default(0);
+            $table->string('total_volume')->default(0);
+            $table->string('total_flow')->default(0);
+            $table->date('date');
+        });
     }
 
     public function down(): void

@@ -50,12 +50,8 @@ $primary: 		$zenon-green;
 $secondary:  	$zenon-blue;
 $tertiary: 		$zenon-pink;
 
-//$primary: 		$zenon-green;
-//$secondary:  	$blue;
-//$tertiary: 		$lime;
-
 $success:       $green;
-$info:          $cyan;
+$info:          $blue;
 $warning:       $orange;
 $danger:        $red;
 
@@ -65,7 +61,7 @@ $dark: 			$zenon-black; //$zenon-black;
 $theme-colors: (
     "primary":      $primary,
     "secondary":    $secondary,
-    "tertiary":    $tertiary,
+    "tertiary":     $tertiary,
     "success":      $success,
     "info":         $info,
     "warning":      $warning,
@@ -156,6 +152,7 @@ $sidebar-width:                 230px;
 $sidebar-compact-width:         100px;
 
 // Navbar
+$navbar-height:                 60px;
 $navbar-nav-link-padding-x:             1rem;
 $navbar-nav-link-padding-y:             .375rem;
 
