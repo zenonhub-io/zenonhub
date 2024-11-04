@@ -131,15 +131,6 @@ class BridgeUnwrap extends Model
         return $this->belongsTo(AccountBlock::class);
     }
 
-    public function scopeCreatedLast($query, ?string $limit)
-    {
-        if ($limit) {
-            return $query->where('created_at', '>=', $limit);
-        }
-
-        return $query;
-    }
-
     public function scopeCreatedBetweenDates($query, array $dates)
     {
         $start = ($dates[0] instanceof Carbon) ? $dates[0] : Carbon::parse($dates[0]);

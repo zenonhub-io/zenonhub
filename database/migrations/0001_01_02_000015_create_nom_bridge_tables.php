@@ -87,9 +87,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
-            $table->string('wrapped_tx')->default(0);
+            $table->string('wrap_tx')->default(0);
             $table->string('wrapped_amount')->default(0);
-            $table->string('unwrapped_tx')->default(0);
+            $table->string('unwrap_tx')->default(0);
             $table->string('unwrapped_amount')->default(0);
             $table->string('affiliate_tx')->default(0);
             $table->string('affiliate_amount')->default(0);

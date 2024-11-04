@@ -31,9 +31,9 @@ class SyncBridgeStats
             'bridge_network_id' => $network->id,
             'token_id' => $token->id,
         ], [
-            'wrapped_tx' => $this->getWrappedTx($network, $token, $date),
+            'wrap_tx' => $this->getWrapTx($network, $token, $date),
             'wrapped_amount' => $this->getWrappedAmount($network, $token, $date),
-            'unwrapped_tx' => $this->getUnWrappedTx($network, $token, $date),
+            'unwrap_tx' => $this->getUnWrapTx($network, $token, $date),
             'unwrapped_amount' => $this->getUnWrappedAmount($network, $token, $date),
             'affiliate_tx' => $this->getAffiliateTx($network, $token, $date),
             'affiliate_amount' => $this->getAffiliateAmount($network, $token, $date),
@@ -66,7 +66,7 @@ class SyncBridgeStats
         $progressBar->finish();
     }
 
-    private function getWrappedTx(BridgeNetwork $network, Token $token, Carbon $date): string
+    private function getWrapTx(BridgeNetwork $network, Token $token, Carbon $date): string
     {
         $totalTx = BridgeWrap::where('bridge_network_id', $network->id)
             ->where('token_id', $token->id)
@@ -86,7 +86,7 @@ class SyncBridgeStats
         return number_format($amount, 0, '.', '');
     }
 
-    private function getUnWrappedTx(BridgeNetwork $network, Token $token, Carbon $date): string
+    private function getUnWrapTx(BridgeNetwork $network, Token $token, Carbon $date): string
     {
         $totalTx = BridgeUnwrap::whereNotAffiliateReward()
             ->where('bridge_network_id', $network->id)
@@ -132,31 +132,31 @@ class SyncBridgeStats
 
     private function getTotalVolume(BridgeNetwork $network, Token $token, Carbon $date): string
     {
-        $totalWrap = BridgeWrap::where('bridge_network_id', $network->id)
+        $totalOutbound = BridgeWrap::where('bridge_network_id', $network->id)
             ->where('token_id', $token->id)
             ->whereDate('created_at', $date)
             ->sum('amount');
 
-        $totalWrapAmount = BridgeUnwrap::where('bridge_network_id', $network->id)
+        $totalInbound = BridgeUnwrap::where('bridge_network_id', $network->id)
             ->where('token_id', $token->id)
             ->whereDate('created_at', $date)
             ->sum('amount');
 
-        return number_format($totalWrap + $totalWrapAmount, 0, '.', '');
+        return number_format($totalOutbound + $totalInbound, 0, '.', '');
     }
 
     private function getTotalFlow(BridgeNetwork $network, Token $token, Carbon $date): string
     {
-        $totalWrap = BridgeWrap::where('bridge_network_id', $network->id)
+        $totalOutbound = BridgeWrap::where('bridge_network_id', $network->id)
             ->where('token_id', $token->id)
             ->whereDate('created_at', $date)
             ->sum('amount');
 
-        $totalWrapAmount = BridgeUnwrap::where('bridge_network_id', $network->id)
+        $totalInbound = BridgeUnwrap::where('bridge_network_id', $network->id)
             ->where('token_id', $token->id)
             ->whereDate('created_at', $date)
             ->sum('amount');
 
-        return number_format($totalWrapAmount - $totalWrap, 0, '.', '');
+        return number_format($totalInbound - $totalOutbound, 0, '.', '');
     }
 }

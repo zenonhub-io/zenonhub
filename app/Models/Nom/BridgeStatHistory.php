@@ -31,9 +31,9 @@ class BridgeStatHistory extends Model
     protected $fillable = [
         'bridge_network_id',
         'token_id',
-        'wrapped_tx',
+        'wrap_tx',
         'wrapped_amount',
-        'unwrapped_tx',
+        'unwrap_tx',
         'unwrapped_amount',
         'affiliate_tx',
         'affiliate_amount',
@@ -50,9 +50,9 @@ class BridgeStatHistory extends Model
     protected function casts(): array
     {
         return [
-            'wrapped_tx' => 'int',
+            'wrap_tx' => 'int',
             'wrapped_amount' => 'string',
-            'unwrapped_tx' => 'int',
+            'unwrap_tx' => 'int',
             'unwrapped_amount' => 'string',
             'affiliate_tx' => 'int',
             'affiliate_amount' => 'string',

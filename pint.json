@@ -28,6 +28,7 @@
             "order": [
                 "use_trait",
                 "case",
+                "booted",
                 "constant",
                 "constant_public",
                 "constant_protected",

@@ -73,7 +73,7 @@ return [
     ],
 
     'public-rpc-nodes' => [
-        'api_url' => 'https://github.com/sol-znn/znn-node-parser/releases/download/public_nodes/output_nodes.json',
+        'api_url' => 'https://github.com/digitalSloth/znn-node-parser/releases/download/public_nodes/output_nodes.json',
     ],
 
     'plasma-bot' => [

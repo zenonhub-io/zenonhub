@@ -5,7 +5,8 @@
             __('Overview') => route('stats.bridge'),
             __('Security') => route('stats.bridge', ['tab' => 'security']),
             __('Actions') => route('stats.bridge', ['tab' => 'actions']),
-            __('Orchestrators') => route('stats.bridge', ['tab' => 'orchestrators'])
+            __('Orchestrators') => route('stats.bridge', ['tab' => 'orchestrators']),
+            __('Affiliates') => route('stats.bridge', ['tab' => 'affiliates'])
         ]" :active="$tab" />
     </x-includes.header>
 
@@ -79,6 +80,72 @@
     @endif
 
     @if ($tab === 'security')
+        <div class="container-fluid px-3 px-md-6">
+
+            @if ($status->getTimeChallenges()->count())
+                @foreach($status->getTimeChallenges() as $challenge)
+                    <x-alerts.alert type="warning" class="mb-6 rounded-4">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
+                    </x-alerts.alert>
+                @endforeach
+            @else
+                <x-alerts.alert type="info" class="mb-6 rounded-4">
+                    <i class="bi bi-info-circle-fill me-2"></i> {{ __('No active time challenges') }}
+                </x-alerts.alert>
+            @endif
+
+            <h4>Admin</h4>
+            <div class="list-group mb-6 mt-2">
+                <div class="list-group-item">
+                    <div class="w-100">
+                        <x-address :account="$status->getBridgeAdmin()->account" :named="false"/>
+                        <div class="text-muted text-xs">
+                            Last Active @if($status->getBridgeAdmin()->account->last_active_at)
+                                <x-date-time.carbon :date="$status->getBridgeAdmin()->account->last_active_at" class="d-inline" />
+                            @else
+                                N/A
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Guardians</h4>
+            <div class="list-group mb-6 mt-2">
+                @foreach ($status->getBridgeGuardians() as $guardian)
+                    <div class="list-group-item">
+                        <div class="w-100">
+                            <x-address :account="$guardian->account" :named="false"/>
+                            <div class="text-muted text-xs">
+                                Last Active @if($guardian->account->last_active_at)
+                                    <x-date-time.carbon :date="$guardian->account->last_active_at" class="d-inline" />
+                                @else
+                                    N/A
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+
+            <div class="row">
+                <div class="col-24 col-sm-12">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat :title="__('Admin Delay')" :stat="number_format($status->getAdminDelay())" info="Number of momentums to delay appointing a new admin, allows for challenge by the guardians" />
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+                <div class="col-24 col-sm-12">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat :title="__('Soft Delay')" :stat="number_format($status->getSoftDelay())" info="Number of momentums to delay other time challenges, allows for challenge by the guardians" />
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+            </div>
+        </div>
     @endif
 
     @if ($tab === 'actions')
@@ -87,6 +154,10 @@
 
     @if ($tab === 'orchestrators')
         <livewire:stats.bridge.orchestrator-list />
+    @endif
+
+    @if ($tab === 'affiliates')
+        <livewire:stats.bridge.affiliate-list />
     @endif
 
 </x-app-layout>

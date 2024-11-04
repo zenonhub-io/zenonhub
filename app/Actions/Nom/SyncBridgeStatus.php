@@ -20,6 +20,8 @@ class SyncBridgeStatus
 {
     use AsAction;
 
+    public string $commandSignature = 'nom:sync-bridge-status';
+
     public function handle(): void
     {
         Log::debug('Sync Bridge Status - Start');

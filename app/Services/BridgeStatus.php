@@ -66,12 +66,12 @@ class BridgeStatus
 
     public function getBridgeAdmin(): BridgeAdmin
     {
-        return $this->bridgeStatusDTO->bridgeAdmin;
+        return $this->bridgeStatusDTO->bridgeAdmin->load('account');
     }
 
     public function getBridgeGuardians(): Collection
     {
-        return $this->bridgeStatusDTO->bridgeGuardians;
+        return $this->bridgeStatusDTO->bridgeGuardians->map(fn ($guardian) => $guardian->load('account'));
     }
 
     public function getTimeChallenges(): Collection

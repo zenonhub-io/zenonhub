@@ -93,7 +93,7 @@ class BridgeGuardian extends Model
 
     public static function getActiveGuardians(): Collection
     {
-        return self::whereActive()->get();
+        return self::with('account')->whereActive()->get();
     }
 
     //
