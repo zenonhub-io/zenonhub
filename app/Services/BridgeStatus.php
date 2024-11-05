@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DataTransferObjects\BridgeStatusDTO;
+use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\TimeChallenge;
 use Illuminate\Support\Carbon;
@@ -81,5 +82,19 @@ class BridgeStatus
                 $query->whereRelation('contract', 'name', 'Bridge');
             })
             ->get();
+    }
+
+    public function getLatestTx(): AccountBlock
+    {
+        return AccountBlock::whereRelation('contractMethod.contract', 'name', 'Bridge')
+//            ->whereHas('contractMethod', function ($q) {
+//                $q->whereIn('name', [
+//                    'WrapToken',
+//                    'UpdateWrapRequest',
+//                    'UnwrapToken',
+//                ]);
+//            })
+            ->latest('id')
+            ->first();
     }
 }

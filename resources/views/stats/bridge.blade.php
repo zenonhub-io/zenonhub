@@ -67,9 +67,9 @@
                     <x-cards.card>
                         <x-cards.body>
                             <x-stats.mini-stat
-                                :title="__('Pending')"
-                                :info="__('Number of pending incoming and outgoing transaction')">
-                                {{ ! is_null($status->bridgeStatusDTO->pendingIncomingTx) ? $status->bridgeStatusDTO->pendingIncomingTx : '-' }} / {{ ! is_null($status->bridgeStatusDTO->pendingOutgoingTx) ? $status->bridgeStatusDTO->pendingOutgoingTx : '-' }}
+                                :title="__('Latest TX')"
+                                :info="__('Time since last bridge interaction')">
+                                <x-date-time.carbon :date="$status->getLatestTx()->created_at" :human="true" :short="true" />
                             </x-stats.mini-stat>
                         </x-cards.body>
                     </x-cards.card>
@@ -127,7 +127,6 @@
                     </div>
                 @endforeach
             </div>
-
 
             <div class="row">
                 <div class="col-24 col-sm-12">

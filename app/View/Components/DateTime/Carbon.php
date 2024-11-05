@@ -17,6 +17,7 @@ class Carbon extends Component
         public bool $human = false,
         public int $parts = 2,
         public bool $syntax = false,
+        public bool $short = false,
         public bool $showTooltip = true
     ) {
         if (is_string($date)) {

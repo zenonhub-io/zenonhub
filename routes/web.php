@@ -10,6 +10,9 @@ use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SentinelsController;
+use App\Http\Controllers\Stats\AcceleratorZStatsController;
+use App\Http\Controllers\Stats\BridgeStatsController;
+use App\Http\Controllers\Stats\PublicNodesStatsController;
 use App\Http\Controllers\TimezoneController;
 use App\Http\Controllers\Tools\ApiPlaygroundController;
 use App\Http\Controllers\Tools\PlasmaBotController;
@@ -75,20 +78,20 @@ Route::middleware([
 
     Route::get('explorer', HomeController::class)->name('explorer');
     Route::get('explorer/momentums', HomeController::class)->name('explorer.momentum.list');
-    Route::get('explorer/momentum/{hash}', HomeController::class)->name('explorer.momentum.detail');
+    Route::get('explorer/momentum/{hash}/{tab?}', HomeController::class)->name('explorer.momentum.detail');
     Route::get('explorer/transactions', HomeController::class)->name('explorer.transaction.list');
-    Route::get('explorer/transaction/{hash}', HomeController::class)->name('explorer.transaction.detail');
+    Route::get('explorer/transaction/{hash}/{tab?}', HomeController::class)->name('explorer.transaction.detail');
     Route::get('explorer/accounts', HomeController::class)->name('explorer.account.list');
-    Route::get('explorer/account/{address}', HomeController::class)->name('explorer.account.detail');
+    Route::get('explorer/account/{address}/{tab?}', HomeController::class)->name('explorer.account.detail');
     Route::get('explorer/tokens', HomeController::class)->name('explorer.token.list');
-    Route::get('explorer/token/{zts}', HomeController::class)->name('explorer.token.detail');
-    Route::get('explorer/bridge', HomeController::class)->name('explorer.bridge.list');
+    Route::get('explorer/token/{zts}/{tab?}', HomeController::class)->name('explorer.token.detail');
+    Route::get('explorer/bridge/{tab?}', HomeController::class)->name('explorer.bridge.list');
     Route::get('explorer/stakes', HomeController::class)->name('explorer.stake.list');
     Route::get('explorer/plasma', HomeController::class)->name('explorer.plasma.list');
 
-    Route::get('stats/bridge', HomeController::class)->name('stats.bridge');
-    Route::get('stats/public-nodes', HomeController::class)->name('stats.public-nodes');
-    Route::get('stats/accelerator-z', HomeController::class)->name('stats.accelerator-z');
+    Route::get('stats/bridge/{tab?}', BridgeStatsController::class)->name('stats.bridge');
+    Route::get('stats/public-nodes/{tab?}', PublicNodesStatsController::class)->name('stats.public-nodes');
+    Route::get('stats/accelerator-z/{tab?}', AcceleratorZStatsController::class)->name('stats.accelerator-z');
 
     Route::get('tools/plasma-bot', PlasmaBotController::class)->name('tools.plasma-bot');
     Route::get('tools/api-playground', ApiPlaygroundController::class)->name('tools.api-playground');
