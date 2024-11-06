@@ -2,9 +2,22 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark">
     <head>
         <x-includes.meta/>
-        <x-includes.head-tags/>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://api.fontshare.com">
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f=satoshi@900,700,500,300,400&display=swap">
+
+        <!-- Scripts & Styles -->
+        @vite(['resources/scss/app.scss', 'resources/scss/utility.scss', 'resources/js/app.js'])
         @livewireStyles
+        @livewireScriptConfig
+
+        <!-- 3rd Party Scripts & Styles -->
         @rappasoftTableStyles
+        @rappasoftTableScripts
+        @livewireChartsScripts
+
+        @stack('styles')
     </head>
     <body class="bg-dark">
 
@@ -63,10 +76,7 @@
 
         <livewire:components.modal/>
         <livewire:components.offcanvas/>
-        <x-includes.footer-tags/>
         @stack('scripts')
-        @rappasoftTableScripts
-        @livewireChartsScripts
 
         <script>
             window.onload = function () {

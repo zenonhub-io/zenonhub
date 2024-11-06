@@ -1,6 +1,4 @@
-import Singleton from '../abstracts/Singleton';
-
-export default class Storage extends Singleton {
+export default class Storage {
 
     get(name) {
         const value = window.sessionStorage.getItem(name);

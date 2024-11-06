@@ -1,19 +1,14 @@
 import {Offcanvas as BSOffcanvas} from 'bootstrap';
-import Singleton from '../abstracts/Singleton';
+import { Livewire } from '../../vendor/livewire/livewire/dist/livewire.esm'
 
-export default class Offcanvas extends Singleton {
+export default class Offcanvas {
 
-    listens() {
-        return {
-            ready: 'ready',
-        };
+    init() {
+        this.initLivewireOffcanvas();
+        this.initInlineOffcanvas();
     }
 
-    ready() {
-
-        //
-        // Livewire offcanvas
-
+    initLivewireOffcanvas() {
         let livewireOffcanvasElement = document.getElementById('livewire-offcanvas');
 
         livewireOffcanvasElement.addEventListener('hidden.bs.offcanvas', () => {
@@ -22,34 +17,27 @@ export default class Offcanvas extends Singleton {
 
         Livewire.on('show-livewire-offcanvas', (e)  => {
             let offcanvas = BSOffcanvas.getOrCreateInstance(livewireOffcanvasElement);
-            window.zenonHub.debug('show offcanvas');
             offcanvas.show();
         });
 
         Livewire.on('hide-livewire-offcanvas', ({}) => {
             let offcanvas = BSOffcanvas.getInstance(livewireOffcanvasElement);
-            window.zenonHub.debug('hide offcanvas');
             offcanvas.hide();
             Livewire.dispatch('reset-livewire-offcanvas');
         });
+    }
 
-        //
-        // Inline offcanvas
-
+    initInlineOffcanvas() {
         Livewire.on('show-inline-offcanvas', params => {
             let offcanvasElement = document.getElementById(params.id);
-            let offcanvas = BSModal.getOrCreateInstance(offcanvasElement);
-            window.zenonHub.debug('show inline offcanvas');
+            let offcanvas = BSOffcanvas.getOrCreateInstance(offcanvasElement);
             offcanvas.show();
         });
 
         Livewire.on('hide-inline-offcanvas', params => {
             let offcanvasElement = document.getElementById(params.id);
-            let offcanvas = BSModal.getInstance(offcanvasElement);
-            window.zenonHub.debug('hide inline offcanvas');
+            let offcanvas = BSOffcanvas.getInstance(offcanvasElement);
             offcanvas.hide();
         });
-
-        window.zenonHub.debug('offcanvas ready');
     }
 }
