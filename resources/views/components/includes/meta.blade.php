@@ -12,3 +12,4 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#4277ff">
 <link rel="shortcut icon" href="/favicon.ico?v=1">
 <meta name="msapplication-TileColor" content="#da532c">
+<meta name="colours" content="{{ json_encode(config('zenon-hub.colours')) }}">
