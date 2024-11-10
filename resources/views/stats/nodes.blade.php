@@ -1,18 +1,14 @@
 <x-app-layout>
 
-    <x-includes.header :title="__('Node Stats')" class="mb-4">
-{{--        <x-navigation.header.responsive-nav :items="[--}}
-{{--            __('Overview') => route('stats.public-nodes'),--}}
-{{--            __('Networks') => route('stats.public-nodes', ['tab' => 'networks']),--}}
-{{--            __('Versions') => route('stats.public-nodes', ['tab' => 'versions']),--}}
-{{--            __('Historic') => route('stats.public-nodes', ['tab' => 'historic']),--}}
-{{--        ]" :active="$tab" />--}}
+    <x-includes.header :title="__('Public RPC Nodes')" class="mb-4">
+        <x-navigation.header.responsive-nav :items="[
+            __('Overview') => route('stats.public-nodes'),
+            __('List') => route('stats.public-nodes', ['tab' => 'list']),
+        ]" :active="$tab" />
     </x-includes.header>
 
     @if ($tab === 'overview')
-
         <div class="container-fluid px-3 px-md-6">
-
             <div class="row mb-6 gy-6">
                 <div class="col-12 col-lg-6">
                     <x-cards.card>
@@ -60,7 +56,6 @@
                 </div>
 
             </div>
-
             <div class="row">
                 <div class="col-24">
                     <x-cards.card>
@@ -140,11 +135,10 @@
                             </table>
                         </div>
                     </x-cards.card>
-                </div>
-                <div class="col-24 col-md-8 col-ld-8 d-none">
+
                     <x-cards.card class="mt-6">
                         <x-cards.heading class="border-0">
-                            {{ __('Top Versions') }}
+                            {{ __('Versions') }}
                         </x-cards.heading>
                         <div class="table-responsive px-4">
                             <table class="table table-nowrap table-flush">
@@ -156,7 +150,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($topVersions as $index => $node)
+                                @foreach($nodeVersions as $index => $node)
                                     <tr>
                                         <td class="text-center ps-3">
                                             {{ $index + 1 }}
@@ -174,21 +168,13 @@
                         </div>
                     </x-cards.card>
                 </div>
+
             </div>
         </div>
-
     @endif
 
-    @if ($tab === 'countries')
-    @endif
-
-    @if ($tab === 'networks')
-    @endif
-
-    @if ($tab === 'versions')
-    @endif
-
-    @if ($tab === 'historic')
+    @if ($tab === 'list')
+        <livewire:stats.nodes.node-list />
     @endif
 
     @pushOnce('scripts')

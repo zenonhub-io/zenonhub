@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <x-includes.header :title="__('Accelerator-Z Stats')" class="mb-4">
+    <x-includes.header :title="__('Accelerator-Z')" class="mb-4">
         <x-navigation.header.responsive-nav :items="[
             __('Overview') => route('stats.accelerator-z'),
             __('Engagement') => route('stats.accelerator-z', ['tab' => 'engagement']),
