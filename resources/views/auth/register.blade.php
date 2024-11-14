@@ -33,8 +33,8 @@
         </div>
         <x-forms.inputs.checkbox name="terms">
             {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                    'terms_of_service' => '<x-link target="_blank" href="'.route('terms').'" class="">'.__('Terms of Service').'</x-link>',
-                    'privacy_policy' => '<x-link target="_blank" href="'.route('policy').'" class="">'.__('Privacy Policy').'</x-link>',
+                'terms_of_service' => '<a href="'.route('terms').'" target="_blank">'.__('Terms of Service').'</a>',
+                'privacy_policy' => '<a href="'.route('policy').'" target="_blank">'.__('Privacy Policy').'</a>',
             ]) !!}
         </x-forms.inputs.checkbox>
         <hr class="my-6">
