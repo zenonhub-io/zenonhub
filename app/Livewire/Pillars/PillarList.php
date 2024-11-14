@@ -47,6 +47,8 @@ class PillarList extends BaseTable
 
         if ($this->tab === 'revoked') {
             $query->whereRevoked();
+        } else {
+            $query->whereActive();
         }
 
         return $query->orderBy(DB::raw('CASE WHEN revoked_at IS NULL THEN 0 ELSE 1 END'));

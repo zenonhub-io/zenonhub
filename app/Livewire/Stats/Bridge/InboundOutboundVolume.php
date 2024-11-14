@@ -94,9 +94,6 @@ class InboundOutboundVolume extends Component
             ],
             'yaxis' => [
                 'show' => true,
-                //                'labels' => [
-                //                    'formatter' => 'function(value) { return value.toFixed(0)}'
-                //                ]
             ],
         ];
     }

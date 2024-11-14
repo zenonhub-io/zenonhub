@@ -45,7 +45,7 @@ class ProjectVotes extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('pillar_name ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.accelerator-z.pillar')->withRow($row)
+                    fn ($row, Column $column) => view('tables.columns.pillar-link')->withRow($row->pillar)
                 ),
             Column::make('Vote')
                 ->label(

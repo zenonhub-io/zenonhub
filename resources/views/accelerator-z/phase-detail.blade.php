@@ -15,7 +15,47 @@
     </x-includes.header>
 
     <div class="container-fluid px-3 px-md-6">
-        <x-cards.card class="mb-6">
+
+        <div class="row mb-6 gy-6">
+            <div class="col-12 col-sm-8">
+                <x-cards.card>
+                    <x-cards.body>
+                        <x-stats.mini-stat :title="__('ZNN Request')">
+                                <span class="text-primary">
+                                    {{ $phase->display_znn_requested }}
+                                </span>
+                        </x-stats.mini-stat>
+                    </x-cards.body>
+                </x-cards.card>
+            </div>
+            <div class="col-12 col-sm-8">
+                <x-cards.card>
+                    <x-cards.body>
+                        <x-stats.mini-stat :title="__('QSR Request')">
+                                <span class="text-secondary">
+                                    {{ $phase->display_qsr_requested }}
+                                </span>
+                        </x-stats.mini-stat>
+                    </x-cards.body>
+                </x-cards.card>
+            </div>
+            <div class="col-24 col-sm-8">
+                <x-cards.card>
+                    <x-cards.body>
+                        <x-stats.mini-stat :title="__('USD Value')" :stat="$phase->display_usd_requested"/>
+                    </x-cards.body>
+                </x-cards.card>
+            </div>
+            <div class="col-24">
+                <x-cards.card>
+                    <x-cards.body>
+                        <x-accelerator-z.voting-info :item="$phase" />
+                    </x-cards.body>
+                </x-cards.card>
+            </div>
+        </div>
+
+        <x-cards.card class="mb-6 d-none">
             <x-cards.body>
                 <div class="row gy-4">
                     <div class="col-12 col-sm-8">

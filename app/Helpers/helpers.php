@@ -131,3 +131,11 @@ function progress_bar(int $percentage)
 
     return str_repeat($full, max(0, $fullBars)) . str_repeat($empty, max(0, $emptyBars)) . " {$percentage}%";
 }
+
+function hexToRgba(string $hex, ?float $alpha = 1): string
+{
+    $rgb = sscanf($hex, '#%02x%02x%02x');
+    $rgb[] = $alpha;
+
+    return implode(',', $rgb);
+}

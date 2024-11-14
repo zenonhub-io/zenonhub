@@ -1,7 +1,7 @@
 @props(['item'])
 
 <div class="text-start text-md-center">
-    <div class="text-center text-muted mb-2">
+    <div class="text-center text-muted text-sm mb-2">
         {{ $item->quorum_status }}
     </div>
     <div class="progress-stacked bg-dark-subtle mb-3" style="height: 4px">

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
-use Log;
 
 class UpdateSocialProfile extends Component
 {
@@ -139,10 +138,6 @@ class UpdateSocialProfile extends Component
         if ($userControlsAddress > 0) {
             $this->hasUserVerifiedAddress = true;
         }
-
-        Log::info('checkUserHasVerifiedAddress', [
-            'result' => $this->hasUserVerifiedAddress,
-        ]);
     }
 
     private function loadSocialProfile(): void

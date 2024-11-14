@@ -41,6 +41,9 @@ export default class NodeStats {
             zoomOnScroll: false,
             markers: JSON.parse(mapMarkers),
             markerStyle: {
+                initial: {
+                    fill: colours['zenon-green'],
+                },
                 hover: {
                     fill: colours['zenon-green'],
                 },

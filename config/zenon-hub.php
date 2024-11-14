@@ -16,5 +16,6 @@ return [
         'info' => '#0099FF',
         'warning' => '#FF8C00',
         'danger' => '#FF3366',
+        'bg-dark' => '#262626',
     ],
 ];
