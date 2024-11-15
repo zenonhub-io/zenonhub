@@ -138,7 +138,7 @@ class ZenonAprData
         $this->pillarsNotTop30 = Pillar::whereNotTop30()->whereActive()->get();
 
         $this->pillarCount = $this->pillars->count();
-        $this->pillarValue = (znn_price() * self::PILLAR_COLLATERAL_ZNN) + (qsr_price() * self::PILLAR_COLLATERAL_QSR);
+        $this->pillarValue = (app('znnToken')->price * self::PILLAR_COLLATERAL_ZNN) + (app('qsrToken')->price * self::PILLAR_COLLATERAL_QSR);
         $this->totalDelegatedZnn = $this->pillars->sum('weight');
         $this->totalDelegatedZnnTop30 = $this->pillarsTop30->sum('weight');
         $this->totalDelegatedZnnNotTop30 = $this->pillarsNotTop30->sum('weight');
@@ -169,7 +169,7 @@ class ZenonAprData
         $this->sentinels = Sentinel::whereActive()->get();
 
         $this->sentinelCount = $this->sentinels->count();
-        $this->sentinelValue = (znn_price() * self::SENTINEL_COLLATERAL_ZNN) + (qsr_price() * self::SENTINEL_COLLATERAL_QSR);
+        $this->sentinelValue = (app('znnToken')->price * self::SENTINEL_COLLATERAL_ZNN) + (app('qsrToken')->price * self::SENTINEL_COLLATERAL_QSR);
     }
 
     private function setStakeData(): void
@@ -195,7 +195,7 @@ class ZenonAprData
 
     private function setSentinelApr(): void
     {
-        $totalRewardsUsd = ($this->yearlyZnnRewardPoolForSentinels * znn_price()) + ($this->yearlyQsrRewardPoolForSentinels * qsr_price());
+        $totalRewardsUsd = ($this->yearlyZnnRewardPoolForSentinels * app('znnToken')->price) + ($this->yearlyQsrRewardPoolForSentinels * app('qsrToken')->price);
         $this->sentinelApr = $totalRewardsUsd / $this->sentinelCount / $this->sentinelValue * 100;
     }
 
@@ -210,7 +210,7 @@ class ZenonAprData
         $yearlyDelegateRewards *= (1 - $this->avgPillarMomentumRewardShareTop30);
 
         $pillarsTop30Count = $this->pillarsTop30->count();
-        $totalRewardsUsd = ($yearlyMomentumRewards * znn_price()) + ($yearlyDelegateRewards * znn_price());
+        $totalRewardsUsd = ($yearlyMomentumRewards * app('znnToken')->price) + ($yearlyDelegateRewards * app('znnToken')->price);
         $this->pillarTop30Apr = $totalRewardsUsd / $pillarsTop30Count / $this->pillarValue * 100;
     }
 
@@ -225,7 +225,7 @@ class ZenonAprData
         $yearlyDelegateRewards *= (1 - $this->avgPillarMomentumRewardShareNotTop30);
 
         $pillarsNotTop30Count = $this->pillarsNotTop30->count();
-        $totalRewardsUsd = ($yearlyMomentumRewards * znn_price()) + ($yearlyDelegateRewards * znn_price());
+        $totalRewardsUsd = ($yearlyMomentumRewards * app('znnToken')->price) + ($yearlyDelegateRewards * app('znnToken')->price);
         $this->pillarNotTop30Apr = $totalRewardsUsd / $pillarsNotTop30Count / $this->pillarValue * 100;
     }
 

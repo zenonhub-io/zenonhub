@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Services\BitQuery;
 use App\Services\BridgeStatus;
 use App\Services\Discord\DiscordWebHook;
 use App\Services\Seo\MetaTags;
+use App\Services\TokenPrice;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(BridgeStatus::class, fn ($app, $params) => new BridgeStatus);
 
-        $this->app->singleton(BitQuery::class, fn ($app, $params) => new BitQuery(config('services.bitquery.api_key')));
+        $this->app->singleton(TokenPrice::class, fn ($app, $params) => new TokenPrice);
 
         $this->app->singleton(DiscordWebHook::class, function ($app, $params) {
             $httpClient = new Client;

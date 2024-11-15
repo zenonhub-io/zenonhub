@@ -59,30 +59,6 @@ function lp_eth_token(): Token
     return Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
 }
 
-function znn_price(): float
-{
-    return 1.30;
-
-    return (float) Cache::get('znn-price');
-}
-
-function qsr_price(): float
-{
-    return znn_price() / 10;
-
-    return (float) Cache::get('qsr-price');
-}
-
-function eth_price(): float
-{
-    return (float) Cache::get('eth-price');
-}
-
-function btc_price(): float
-{
-    return (float) Cache::get('btc-price');
-}
-
 function short_address(Account $account)
 {
     if ($account->has_custom_label) {
@@ -132,7 +108,7 @@ function progress_bar(int $percentage)
     return str_repeat($full, max(0, $fullBars)) . str_repeat($empty, max(0, $emptyBars)) . " {$percentage}%";
 }
 
-function hexToRgba(string $hex, ?float $alpha = 1): string
+function hex_to_rgba(string $hex, ?float $alpha = 1): string
 {
     $rgb = sscanf($hex, '#%02x%02x%02x');
     $rgb[] = $alpha;

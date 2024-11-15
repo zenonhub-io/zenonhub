@@ -59,8 +59,10 @@ return new class extends Migration
         Schema::create('nom_currencies', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
-            $table->string('symbol')->index();
+            $table->string('code')->index();
+            $table->string('symbol')->nullable();
             $table->string('icon')->nullable();
+            $table->boolean('is_default')->default(false);
         });
     }
 

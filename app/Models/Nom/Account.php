@@ -286,8 +286,8 @@ class Account extends Model implements Sitemapable
         $znnBalance = app('znnToken')->getDisplayAmount($this->znn_balance);
         $qsrBalance = app('qsrToken')->getDisplayAmount($this->qsr_balance);
 
-        $znnPrice = znn_price();
-        $qsrPrice = qsr_price();
+        $znnPrice = app('znnToken')->price;
+        $qsrPrice = app('qsrToken')->price;
 
         $znnTotal = ($znnPrice * $znnBalance);
         $qsrTotal = ($qsrPrice * $qsrBalance);

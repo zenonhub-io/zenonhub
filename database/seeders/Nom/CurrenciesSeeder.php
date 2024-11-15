@@ -21,28 +21,36 @@ class CurrenciesSeeder extends Seeder
 
         Currency::create([
             'name' => 'Bitcoin',
+            'code' => 'btc',
             'symbol' => 'BTC',
+            'icon' => '₿',
         ]);
 
         Currency::create([
             'name' => 'Ethereum',
+            'code' => 'eth',
             'symbol' => 'ETH',
+            'icon' => 'Ξ',
         ]);
 
         Currency::create([
             'name' => 'Dollar (US)',
+            'code' => 'usd',
             'symbol' => 'USD',
             'icon' => '$',
+            'id_default' => true,
         ]);
 
         Currency::create([
             'name' => 'Pound',
+            'code' => 'gbp',
             'symbol' => 'GBP',
             'icon' => '£',
         ]);
 
         Currency::create([
             'name' => 'Euro',
+            'code' => 'eur',
             'symbol' => 'EUR',
             'icon' => '€',
         ]);

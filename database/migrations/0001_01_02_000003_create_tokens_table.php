@@ -35,7 +35,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('currency_id')->references('id')->on('nom_currencies');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
-            $table->decimal('value')->index();
+            $table->decimal('price', 24, 16)->index();
             $table->timestamp('timestamp')->nullable();
         });
 

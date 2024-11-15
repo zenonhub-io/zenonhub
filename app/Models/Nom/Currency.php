@@ -31,6 +31,7 @@ class Currency extends Model
         'name',
         'symbol',
         'icon',
+        'is_default',
     ];
 
     /**
@@ -40,7 +41,9 @@ class Currency extends Model
      */
     protected function casts(): array
     {
-        return [];
+        return [
+            'is_default' => 'bool',
+        ];
     }
 
     //

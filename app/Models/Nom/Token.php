@@ -144,7 +144,7 @@ class Token extends Model implements Sitemapable
             'nom_token_prices',
             'token_id',
             'currency_id'
-        )->withPivot('value', 'timestamp');
+        )->withPivot('price', 'timestamp');
     }
 
     public function mints(): HasMany
@@ -298,17 +298,15 @@ class Token extends Model implements Sitemapable
         return false;
     }
 
-    public function getUsdPriceAttribute(): float
+    public function getPriceAttribute(): string
     {
-        if ($this->token_standard === NetworkTokensEnum::ZNN->value) {
-            return znn_price();
-        }
+        $existingPrice = $this->prices()
+            ->withPivot('price', 'timestamp')
+            ->where('is_default', true)
+            ->orderByPivot('timestamp', 'desc')
+            ->first();
 
-        if ($this->token_standard === NetworkTokensEnum::QSR->value) {
-            return qsr_price();
-        }
-
-        return 0;
+        return $existingPrice ? $existingPrice->pivot->price : '0';
     }
 
     public function getRawJsonAttribute(): ?TokenDTO

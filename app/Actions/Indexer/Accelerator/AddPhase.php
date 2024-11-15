@@ -12,7 +12,6 @@ use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
 use App\Models\NotificationType;
-use App\Services\CoinGecko;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
@@ -36,14 +35,8 @@ class AddPhase extends AbstractContractMethodProcessor
             return;
         }
 
-        $priceService = app(CoinGecko::class);
-        $znnPrice = $priceService->historicPrice('zenon-2', 'usd', $accountBlock->created_at);
-        $qsrPrice = $priceService->historicPrice('quasar', 'usd', $accountBlock->created_at);
-
-        // Projects created before QSR price available
-        if (is_null($qsrPrice) && $znnPrice) {
-            $qsrPrice = $znnPrice / 10;
-        }
+        $znnPrice = app('znnToken')->price;
+        $qsrPrice = app('qsrToken')->price;
 
         $phase = $project->phases()->create([
             'hash' => $accountBlock->hash,
