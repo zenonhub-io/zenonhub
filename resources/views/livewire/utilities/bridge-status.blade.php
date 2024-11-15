@@ -1,5 +1,5 @@
 <div wire:poll.10s>
-    <x-link :href="route('explorer.momentum.list')" class="text-muted"
+    <x-link :href="route('stats.bridge')" class="text-muted"
             data-bs-toggle="tooltip" data-bs-title="{{ $message }}"
     >
         <span class="me-1">Online</span> <x-stats.indicator :type="$indicator" />
