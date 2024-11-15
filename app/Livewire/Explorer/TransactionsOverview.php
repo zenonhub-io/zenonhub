@@ -18,7 +18,7 @@ class TransactionsOverview extends Component
     public function mount(): void
     {
         $this->timeframe = '7d';
-        $this->endDate = now()->subMonths(3);
+        $this->endDate = now();
     }
 
     public function render(): View
