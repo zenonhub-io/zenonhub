@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Livewire\Explorer;
 
 use App\Livewire\DateRangePickerTrait;
-use App\Models\Nom\AccountBlock;
+use App\Models\Nom\Account;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\BaseChartModel;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class TransactionsOverview extends Component
+class ActiveAddressesOverview extends Component
 {
     use DateRangePickerTrait;
 
@@ -30,7 +30,7 @@ class TransactionsOverview extends Component
 
         $chartData = $this->addChartData($chartModel);
 
-        return view('livewire.explorer.transactions-overview', compact('chartData'), [
+        return view('livewire.explorer.active-addresses-overview', compact('chartData'), [
             'chartData' => $chartData,
             'dateRange' => $this->dateRange,
         ]);
@@ -78,7 +78,7 @@ class TransactionsOverview extends Component
         foreach ($this->dateRange as $date) {
             $chartModel->addColumn(
                 $date->format('jS M'),
-                AccountBlock::whereDate('created_at', $date)->count(),
+                Account::whereHas('sentBlocks', fn ($query) => $query->whereDate('created_at', '=', $date))->count(),
                 config('zenon-hub.colours.info')
             );
         }

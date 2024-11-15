@@ -49,7 +49,9 @@
             <div class="col-24 col-lg-12">
                 <livewire:explorer.transactions-overview />
             </div>
-            <div class="col-24 col-md-12"></div>
+            <div class="col-24 col-md-12">
+                <livewire:explorer.active-addresses-overview />
+            </div>
         </div>
     </div>
 
