@@ -5,7 +5,7 @@
     <x-navbar.item title="Accelerator Z" route="accelerator-z.list" :is-active="request()->routeIs('accelerator-z.*')" icon="rocket-takeoff-fill" />
 
     <x-navbar.dropdown title="Explorer" icon="search" isActive="{{ request()->routeIs('explorer.*') }}">
-        <x-navbar.dropdown-item title="Overview" route="explorer" />
+        <x-navbar.dropdown-item title="Overview" route="explorer.overview" />
         <x-navbar.dropdown-item title="Momentums" route="explorer.momentum.list" />
         <x-navbar.dropdown-item title="Transactions" route="explorer.transaction.list" />
         <x-navbar.dropdown-item title="Accounts" route="explorer.account.list" />

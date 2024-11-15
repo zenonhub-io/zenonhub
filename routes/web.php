@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorProjectController;
 use App\Http\Controllers\AcceleratorZController;
+use App\Http\Controllers\Explorer\ExplorerOverviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
@@ -78,7 +79,7 @@ Route::middleware([
     Route::get('accelerator-z/project/{hash}/{tab?}', AcceleratorProjectController::class)->name('accelerator-z.project.detail');
     Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorPhaseController::class)->name('accelerator-z.phase.detail');
 
-    Route::get('explorer', HomeController::class)->name('explorer');
+    Route::get('explorer', ExplorerOverviewController::class)->name('explorer.overview');
     Route::get('explorer/momentums', HomeController::class)->name('explorer.momentum.list');
     Route::get('explorer/momentum/{hash}/{tab?}', HomeController::class)->name('explorer.momentum.detail');
     Route::get('explorer/transactions', HomeController::class)->name('explorer.transaction.list');

@@ -20,17 +20,13 @@
         @stack('styles')
     </head>
     <body class="bg-dark">
-
         <header class="app-navbar navbar sticky-top p-1 justify-content-between" data-bs-theme="dark">
-
             <div class="navbar-brand px-3 d-flex align-items-center">
                 <x-includes.navbar.brand />
             </div>
-
             <div class="d-md-flex d-none align-items-center gap-6">
                 <x-includes.navbar.stats />
             </div>
-
             <div class="d-flex align-items-center gap-2 pe-1">
                 <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
                         x-data
@@ -50,7 +46,6 @@
         <div class="app-wrapper">
             <div class="offcanvas-md offcanvas-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
             <div class="app-sidebar-wrapper">
-
                     <div class="offcanvas-header">
                         <x-includes.navbar.brand />
                         <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
