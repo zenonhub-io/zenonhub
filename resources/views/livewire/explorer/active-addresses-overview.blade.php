@@ -13,8 +13,7 @@
                         @foreach([
                             '7d' => '7D',
                             '30d' => '30D',
-                            'w' => 'W',
-                            'm' => 'M',
+                            '90d' => '90D',
                         ] as $timeframeKey => $timeframeTitle)
                             <a href="#"
                                class="px-3 py-1 text-muted {{ $timeframeKey === $timeframe ? 'bg-dark' : 'bg-dark-hover bg-opacity-70-hover' }} rounded"
