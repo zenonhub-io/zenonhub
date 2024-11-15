@@ -32,8 +32,7 @@
             <x-forms.inputs.password name="password_confirmation" id="{{ $uuid }}" class="form-control-lg" required />
         </div>
         <x-forms.inputs.checkbox name="terms">
-            {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                'terms_of_service' => '<a href="'.route('terms').'" target="_blank">'.__('Terms of Service').'</a>',
+            {!! __('I agree to the :privacy_policy', [
                 'privacy_policy' => '<a href="'.route('policy').'" target="_blank">'.__('Privacy Policy').'</a>',
             ]) !!}
         </x-forms.inputs.checkbox>

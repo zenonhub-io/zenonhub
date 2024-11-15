@@ -1,5 +1,5 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Welcome back!')" centered>
+    <x-includes.header :title="__('Sign in!')" centered>
         <ul class="nav nav-tabs nav-fill nav-tabs-flush gap-6 overflow-x border-0">
             <li class="nav-item">
                 <x-link :href="route('login')" class="nav-link active">{{ __('Login') }}</x-link>

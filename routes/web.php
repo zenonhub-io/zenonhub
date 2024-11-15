@@ -8,11 +8,13 @@ use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SentinelsController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
 use App\Http\Controllers\Stats\PublicNodesStatsController;
+use App\Http\Controllers\TermsController;
 use App\Http\Controllers\TimezoneController;
 use App\Http\Controllers\Tools\ApiPlaygroundController;
 use App\Http\Controllers\Tools\PlasmaBotController;
@@ -59,8 +61,8 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/', HomeController::class)->name('home');
-    Route::get('terms-of-service', HomeController::class)->name('terms');
-    Route::get('privacy-policy', HomeController::class)->name('policy');
+    //Route::get('terms-of-service', TermsController::class)->name('terms');
+    Route::get('privacy-policy', PolicyController::class)->name('policy');
     Route::get('donate', HomeController::class)->name('donate');
     Route::get('sponsor', HomeController::class)->name('sponsor');
 
