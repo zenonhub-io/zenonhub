@@ -24,7 +24,7 @@ return new class extends Migration
             $table->bigInteger('height')->unique();
             $table->string('hash')->unique();
             $table->text('data')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->index();
         });
 
         Artisan::call('nom:create-or-update-latest-momentums-view');

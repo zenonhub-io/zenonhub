@@ -35,8 +35,8 @@ return new class extends Migration
             $table->bigInteger('total_momentums_produced')->default(0)->index();
             $table->boolean('is_legacy')->default(0);
             $table->timestamp('revoked_at')->nullable();
-            $table->timestamp('created_at')->default('2021-11-24 12:00:00');
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->default('2021-11-24 12:00:00')->index();
+            $table->timestamp('updated_at')->nullable()->index();
         });
 
         Schema::create('nom_pillar_update_histories', function (Blueprint $table) {
@@ -77,7 +77,7 @@ return new class extends Migration
             $table->text('post');
             $table->string('message');
             $table->string('signature');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->index();
         });
     }
 

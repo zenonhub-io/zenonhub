@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('version');
             $table->string('name');
             $table->boolean('is_active');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->index();
         });
 
         Schema::create('nom_contracts', function (Blueprint $table) {
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('votable');
             $table->integer('vote')->default(0)->index();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('created_at')->nullable()->index();
         });
 
         Schema::create('nom_time_challenges', function (Blueprint $table) {
@@ -52,8 +52,8 @@ return new class extends Migration
             $table->bigInteger('start_height')->nullable();
             $table->bigInteger('end_height')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestamp('expires_at')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('expires_at')->nullable()->index();
+            $table->timestamp('created_at')->nullable()->index();
         });
 
         Schema::create('nom_currencies', function (Blueprint $table) {

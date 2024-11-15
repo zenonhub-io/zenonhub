@@ -35,8 +35,8 @@ return new class extends Migration
             $table->integer('total_yes_votes')->default(0)->index();
             $table->integer('total_no_votes')->default(0)->index();
             $table->integer('total_abstain_votes')->default(0)->index();
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->index();
+            $table->timestamp('updated_at')->nullable()->index();
         });
 
         Schema::create('nom_accelerator_phases', function (Blueprint $table) {
@@ -58,8 +58,8 @@ return new class extends Migration
             $table->integer('total_no_votes')->default(0)->index();
             $table->integer('total_abstain_votes')->default(0)->index();
             $table->timestamp('accepted_at')->nullable();
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->index();
+            $table->timestamp('updated_at')->nullable()->index();
         });
     }
 

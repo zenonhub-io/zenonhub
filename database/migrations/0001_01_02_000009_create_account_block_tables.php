@@ -36,7 +36,7 @@ return new class extends Migration
             $table->bigInteger('difficulty')->default(0);
             $table->string('nonce')->nullable();
             $table->string('hash')->unique();
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->index();
 
             $table->index('account_id');
             $table->index('to_account_id');
