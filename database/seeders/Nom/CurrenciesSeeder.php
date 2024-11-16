@@ -38,7 +38,7 @@ class CurrenciesSeeder extends Seeder
             'code' => 'usd',
             'symbol' => 'USD',
             'icon' => '$',
-            'id_default' => true,
+            'is_default' => true,
         ]);
 
         Currency::create([
