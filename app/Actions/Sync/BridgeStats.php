@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\AccountBlock;
@@ -18,11 +18,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class SyncBridgeStats
+class BridgeStats
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-bridge-stats';
+    public string $commandSignature = 'sync:bridge-stats';
 
     public function handle(BridgeNetwork $network, Token $token, Carbon $date): void
     {

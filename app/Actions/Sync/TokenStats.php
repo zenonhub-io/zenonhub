@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Account;
@@ -19,11 +19,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class SyncTokenStats
+class TokenStats
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-token-stats';
+    public string $commandSignature = 'sync:token-stats';
 
     public function handle(Token $token, Carbon $date): void
     {

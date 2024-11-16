@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\Nom\SyncOrchestrators;
+use App\Actions\Sync\Orchestrators;
 use App\Models\Nom\Orchestrator;
 use App\Models\Nom\Pillar;
 use Database\Seeders\DatabaseSeeder;
@@ -38,7 +38,7 @@ beforeEach(function () {
 
 it('syncs orchestrators from the json data', function () {
 
-    (new SyncOrchestrators)->handle();
+    (new Orchestrators)->handle();
 
     $orchestrator = Orchestrator::with('pillar', 'account')->first();
     $pillar = Pillar::firstWhere('name', 'Pillar1');
@@ -52,7 +52,7 @@ it('syncs orchestrators from the json data', function () {
 
 it('correctly assigns online status', function () {
 
-    (new SyncOrchestrators)->handle();
+    (new Orchestrators)->handle();
 
     $orchestrator1 = Orchestrator::with('pillar', 'account')->find(1);
     $orchestrator2 = Orchestrator::with('pillar', 'account')->find(2);
@@ -74,7 +74,7 @@ it('removes inactive orchestrators', function () {
         'is_active' => false,
     ]);
 
-    (new SyncOrchestrators)->handle();
+    (new Orchestrators)->handle();
 
     expect(Orchestrator::count())->toBe(2);
 });

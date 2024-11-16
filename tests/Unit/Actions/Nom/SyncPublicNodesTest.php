@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\Nom\SyncPublicNodes;
+use App\Actions\Sync\PublicNodes;
 use App\Models\Nom\PublicNode;
 use App\Models\Nom\PublicNodeHistory;
 use Illuminate\Support\Facades\Http;
@@ -66,7 +66,7 @@ beforeEach(function () {
 
 it('sync public nodes from the json data', function () {
 
-    (new SyncPublicNodes)->handle();
+    (new PublicNodes)->handle();
 
     $publicNode = PublicNode::first();
 
@@ -78,7 +78,7 @@ it('sync public nodes from the json data', function () {
 
 it('populates location data for the node', function () {
 
-    (new SyncPublicNodes)->handle();
+    (new PublicNodes)->handle();
 
     $publicNode = PublicNode::first();
 
@@ -99,7 +99,7 @@ it('deactivates old nodes', function () {
         'discovered_at' => now(),
     ]);
 
-    (new SyncPublicNodes)->handle();
+    (new PublicNodes)->handle();
 
     expect(PublicNode::count())->toBe(3)
         ->and(PublicNode::whereActive()->count())->toEqual(2)
@@ -108,7 +108,7 @@ it('deactivates old nodes', function () {
 
 it('creates public node history', function () {
 
-    (new SyncPublicNodes)->handle();
+    (new PublicNodes)->handle();
 
     $history = PublicNodeHistory::first();
 

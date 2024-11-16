@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Exceptions\TokenPriceException;
@@ -16,11 +16,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class SyncTokenPrices
+class TokenPrices
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-token-prices';
+    public string $commandSignature = 'sync:token-prices';
 
     public function handle(Token $token): void
     {

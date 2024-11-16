@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Models\Nom\Account;
 use App\Models\Nom\Orchestrator;
@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class SyncOrchestrators
+class Orchestrators
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-orchestrators';
+    public string $commandSignature = 'sync:orchestrators';
 
     public function handle(): void
     {

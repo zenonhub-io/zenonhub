@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\DataTransferObjects\Nom\AcceleratorPhaseDTO;
 use App\DataTransferObjects\Nom\AcceleratorProjectDTO;
@@ -17,11 +17,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class SyncProjectStatus
+class ProjectStatus
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-project-status';
+    public string $commandSignature = 'sync:project-status';
 
     public function handle(AcceleratorProject $project): void
     {

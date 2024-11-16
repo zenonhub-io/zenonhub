@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\Nom\SyncPillarMetrics;
+use App\Actions\Sync\PillarMetrics;
 use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Nom\Pillar;
 use App\Services\ZenonSdk\ZenonSdk;
@@ -62,7 +62,7 @@ it('syncs pillar data', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new SyncPillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
 
     $pillar = $pillar->fresh();
 
@@ -77,9 +77,9 @@ it('counts missed momentums', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new SyncPillarMetrics)->handle($pillar);
-    (new SyncPillarMetrics)->handle($pillar);
-    (new SyncPillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
 
     $pillar = $pillar->fresh();
 
@@ -92,10 +92,10 @@ it('resets the missed momentum count', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new SyncPillarMetrics)->handle($pillar);
-    (new SyncPillarMetrics)->handle($pillar);
-    (new SyncPillarMetrics)->handle($pillar);
-    (new SyncPillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
+    (new PillarMetrics)->handle($pillar);
 
     $pillar = $pillar->fresh();
 

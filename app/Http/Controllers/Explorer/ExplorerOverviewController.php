@@ -19,7 +19,7 @@ class ExplorerOverviewController
 
         return view('explorer/overview', [
             'stats' => [
-                'momentums' => number_format(Momentum::count()),
+                'momentums' => number_format(Momentum::max('height')),
                 'transactions' => number_format(AccountBlock::count()),
                 'addresses' => number_format(Account::count()),
                 'tokens' => number_format(Token::count()),

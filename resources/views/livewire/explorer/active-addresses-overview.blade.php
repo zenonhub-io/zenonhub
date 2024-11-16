@@ -22,6 +22,18 @@
                                 {{ __($timeframeTitle) }}
                             </a>
                         @endforeach
+                        <a href="#"
+                           class="px-3 py-1 text-muted bg-dark-hover bg-opacity-70-hover rounded"
+                           wire:click="previousDate()"
+                        >
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        <a href="#"
+                           class="px-3 py-1 text-muted bg-dark-hover bg-opacity-70-hover rounded"
+                           wire:click="nextDate()"
+                        >
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="col-24">
@@ -29,9 +41,9 @@
                 </div>
             </div>
             <div class="mx-n4 h-100">
-                <livewire:livewire-column-chart
+                <livewire:livewire-line-chart
                     key="{{ $chartData->reactiveKey() }}"
-                    :column-chart-model="$chartData"
+                    :line-chart-model="$chartData"
                 />
             </div>
         </x-cards.body>

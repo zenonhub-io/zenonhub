@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Models\Nom\Pillar;
 use Illuminate\Console\Command;
@@ -10,11 +10,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class SyncPillarStats
+class PillarStats
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-pillar-stats';
+    public string $commandSignature = 'sync:pillar-stats';
 
     public function handle(Pillar $pillar): void
     {

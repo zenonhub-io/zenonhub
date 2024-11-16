@@ -36,7 +36,7 @@ trait AcceleratorVotesTrait
 
     public function getIsQuorumReachedAttribute(): bool
     {
-        return $this->total_more_votes_needed === 0;
+        return ! ($this->total_more_votes_needed > 0);
     }
 
     public function getVotesPercentageAttribute(): float

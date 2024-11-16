@@ -24,8 +24,8 @@ Schedule::call(function () {
     }
 })->everyFiveMinutes();
 
-Schedule::command('nom:sync-pillar-metrics')->everyFiveMinutes();
-Schedule::command('nom:sync-orchestrators')->everyFiveMinutes();
-Schedule::command('nom:sync-nodes')->cron('5 */6 * * *');
+Schedule::command('sync:pillar-metrics')->everyFiveMinutes();
+Schedule::command('sync:orchestrators')->everyFiveMinutes();
+Schedule::command('sync:nodes')->cron('5 */6 * * *');
 
 Schedule::command('site:generate-sitemap')->daily();

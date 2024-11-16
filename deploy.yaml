@@ -20,8 +20,8 @@ tasks:
     - artisan:view:cache
     - artisan:nom:update-contract-methods
     - artisan:nom:update-named-addresses
-    - artisan:nom:sync-orchestrators
-    - artisan:nom:sync-public-nodes
+    - artisan:sync:orchestrators
+    - artisan:sync:public-nodes
     - artisan:site:generate-sitemap
     - artisan:up
   artisan:schedule:interrupt:
@@ -30,8 +30,8 @@ tasks:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-contract-methods'
   artisan:nom:update-named-addresses:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-named-addresses'
-  artisan:nom:sync-orchestrators:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:sync-orchestrators'
+  artisan:sync:orchestrators:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:orchestrators'
   artisan:nom:public-nodes:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:public-nodes'
   artisan:site:generate-sitemap:

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\DataTransferObjects\BridgeStatusDTO;
 use App\DataTransferObjects\Nom\BridgeInfoDTO;
@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
 
-class SyncBridgeStatus
+class BridgeStatus
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-bridge-status';
+    public string $commandSignature = 'sync:bridge-status';
 
     public function handle(): void
     {

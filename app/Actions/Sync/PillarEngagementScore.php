@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
@@ -12,11 +12,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class UpdatePillarEngagementScore
+class PillarEngagementScore
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-pillar-engagement-scores';
+    public string $commandSignature = 'sync:pillar-engagement-scores';
 
     public function handle(Pillar $pillar): void
     {

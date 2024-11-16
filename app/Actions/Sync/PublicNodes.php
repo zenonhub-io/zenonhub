@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Models\Nom\PublicNode;
 use App\Models\Nom\PublicNodeHistory;
@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class SyncPublicNodes
+class PublicNodes
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-public-nodes';
+    public string $commandSignature = 'sync:public-nodes';
 
     public function handle(): void
     {

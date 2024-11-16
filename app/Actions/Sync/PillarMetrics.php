@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Nom;
+namespace App\Actions\Sync;
 
 use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\Pillar;
@@ -12,11 +12,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class SyncPillarMetrics
+class PillarMetrics
 {
     use AsAction;
 
-    public string $commandSignature = 'nom:sync-pillar-metrics';
+    public string $commandSignature = 'sync:pillar-metrics';
 
     public function handle(Pillar $pillar): void
     {

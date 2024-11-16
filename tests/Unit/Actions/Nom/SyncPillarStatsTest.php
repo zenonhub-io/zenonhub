@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\Nom\SyncPillarStats;
+use App\Actions\Sync\PillarStats;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\PillarStatHistory;
 use Database\Seeders\Nom\Test\PillarsSeeder;
@@ -19,7 +19,7 @@ it('creates pillar stat history', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new SyncPillarStats)->handle($pillar);
+    (new PillarStats)->handle($pillar);
 
     $stat = $pillar->statHistory()->first();
 

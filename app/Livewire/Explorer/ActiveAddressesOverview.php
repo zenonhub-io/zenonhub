@@ -24,7 +24,7 @@ class ActiveAddressesOverview extends Component
     public function render(): View
     {
         $this->setDateRange();
-        $chartModel = LivewireCharts::columnChartModel()
+        $chartModel = LivewireCharts::lineChartModel()
             ->setAnimated(true)
             ->setJsonConfig($this->getChartConfig());
 
@@ -40,29 +40,16 @@ class ActiveAddressesOverview extends Component
     {
         return [
             'chart' => [
-                'height' => '200px',
+                'height' => '150px',
             ],
-            'colors' => [
-                config('zenon-hub.colours.success'),
-                config('zenon-hub.colours.info'),
+            'stroke' => [
+                'curve' => 'smooth',
+            ],
+            'grid' => [
+                'show' => false,
             ],
             'legend' => [
                 'show' => false,
-                'position' => 'bottom',
-                'labels' => [
-                    'colors' => ['rgba(255, 255, 255, .8)'],
-                ],
-                'itemMargin' => [
-                    'horizontal' => 8,
-                    'vertical' => 8,
-                ],
-                'markers' => [
-                    'width' => 16,
-                    'height' => 16,
-                    'radius' => 2,
-                    'offsetY' => 0,
-                    'offsetX' => -4,
-                ],
             ],
             'tooltip' => [
                 'theme' => 'dark',
@@ -70,16 +57,48 @@ class ActiveAddressesOverview extends Component
             'yaxis' => [
                 'show' => true,
             ],
+            'xaxis' => [
+                'labels' => [
+                    'show' => false,
+                ],
+                'axisBorder' => [
+                    'show' => false,
+                ],
+                'axisTicks' => [
+                    'show' => false,
+                    'color' => config('zenon-hub.colours.bg-dark'),
+                ],
+            ],
         ];
     }
 
     private function addChartData(BaseChartModel $chartModel): BaseChartModel
     {
+        $startDate = $this->dateRange->first()->startOfDay();
+        $endDate = $this->dateRange->last()->endOfDay();
+
+        // Perform a single query to get the number of unique addresses with sent blocks grouped by date
+        $data = Account::selectRaw('DATE(nom_account_blocks.created_at) as date, COUNT(DISTINCT nom_accounts.id) as count')
+            ->join('nom_account_blocks', 'nom_accounts.id', '=', 'nom_account_blocks.account_id')
+            ->whereBetween('nom_account_blocks.created_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Prepare an associative array for quick lookup
+        $dataByDate = $data->keyBy('date');
+
+        // Loop through the date range
         foreach ($this->dateRange as $date) {
-            $chartModel->addColumn(
-                $date->format('jS M'),
-                Account::whereHas('sentBlocks', fn ($query) => $query->whereDate('created_at', '=', $date))->count(),
-                config('zenon-hub.colours.info')
+            $formattedDate = $date->format('Y-m-d');
+            $count = $dataByDate->has($formattedDate) ? $dataByDate[$formattedDate]->count : 0;
+
+            $chartModel->addPoint(
+                $date->format('jS M Y'),
+                $count,
+                [
+                    'tooltip' => sprintf('%s Active addresses', number_format($count)),
+                ]
             );
         }
 
