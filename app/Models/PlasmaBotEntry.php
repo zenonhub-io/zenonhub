@@ -54,7 +54,15 @@ class PlasmaBotEntry extends Model
 
     public function scopeWhereExpired(Builder $query): Builder
     {
-        return $query->where('expires_at', '<', now());
+        return $query->where('expires_at', '<', now())
+            ->orWhere(function ($query) {
+                $query->whereNull('expires_at')
+                    ->whereHas('account', function ($query2) {
+                        $query2->whereRaw('(SELECT MAX(created_at) FROM nom_account_blocks WHERE nom_account_blocks.account_id = accounts.id) < ?', [
+                            now()->subDays(30),
+                        ]);
+                    });
+            });
     }
 
     public function scopeWhereAddress(Builder $query, $address): Builder

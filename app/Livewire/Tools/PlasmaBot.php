@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Tools;
 
 use App\Actions\PlasmaBot\Fuse;
+use App\Exceptions\PlasmaBotException;
 use App\Models\PlasmaBotEntry;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
@@ -108,7 +109,13 @@ class PlasmaBot extends Component
 
         $duration = now()->timestamp - $expires->timestamp;
         $this->expires = now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
-        $this->result = Fuse::run($this->fuseForm['address'], $plasma, $expires);
+
+        try {
+            Fuse::run($this->fuseForm['address'], $plasma, $expires);
+            $this->result = true;
+        } catch (PlasmaBotException $exception) {
+            $this->result = false;
+        }
     }
 
     public function setPlasmaLevelInfo(): void

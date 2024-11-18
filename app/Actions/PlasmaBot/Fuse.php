@@ -33,12 +33,13 @@ class Fuse
             throw new PlasmaBotException($e->getMessage());
         }
 
+        $account = load_account($address);
+
         PlasmaBotEntry::create([
-            'address' => $address,
+            'account_id' => $account->id,
+            'address' => $account->address,
             'amount' => $amount,
             'expires_at' => $expires,
         ]);
-
-        return true;
     }
 }
