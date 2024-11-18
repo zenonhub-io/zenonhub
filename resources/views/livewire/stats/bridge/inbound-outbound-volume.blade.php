@@ -3,8 +3,8 @@
         <x-cards.body>
             <div class="row justify-content-between align-items-center">
                 <div class="col-24 col-lg">
-                    <h5>{{ __('Inbound Vs Outbound') }}</h5>
-                    <div class="d-block text-muted">
+                    <h4>{{ __('Inbound Vs Outbound') }}</h4>
+                    <div class="d-block text-muted text-sm">
                         <x-date-time.carbon :date="$dateRange->first()" format="jS M Y" :show-tooltip="false" class="d-inline" /> - <x-date-time.carbon :date="$dateRange->last()" format="jS M Y" :show-tooltip="false" class="d-inline" />
                     </div>
                 </div>

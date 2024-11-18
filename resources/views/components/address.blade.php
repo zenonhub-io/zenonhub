@@ -1,4 +1,10 @@
-@props([$account, $linked => true, $alwaysShort => false, $eitherSide => 10, $breakpoint => 'md'])
+@props([
+    'account',
+    'linked' => true,
+    'alwaysShort' => false,
+    'eitherSide' => 10,
+    'breakpoint' => 'md'
+])
 
 @if ($linked)
     <x-link :href="route('explorer.account.detail', ['address' => $account->address])">

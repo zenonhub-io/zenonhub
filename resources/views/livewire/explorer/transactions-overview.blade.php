@@ -2,17 +2,18 @@
     <x-cards.card>
         <x-cards.body>
             <div class="row justify-content-between align-items-center">
-                <div class="col-24 col-lg">
-                    <h5>{{ __('Transactions') }}</h5>
-                    <div class="d-block text-muted">
+                <div class="col-24 col-xl">
+                    <h4>{{ __('Transactions') }}</h4>
+                    <div class="d-block text-muted text-sm">
                         <x-date-time.carbon :date="$dateRange->first()" format="jS M Y" :show-tooltip="false" class="d-inline" /> - <x-date-time.carbon :date="$dateRange->last()" format="jS M Y" :show-tooltip="false" class="d-inline" />
                     </div>
                 </div>
-                <div class="col-24 col-lg-auto">
-                    <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-body-secondary rounded text-xs fw-semibold mt-3 mt-lg-0">
+                <div class="col-24 col-xl-auto">
+                    <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-body-secondary rounded text-xs fw-semibold mt-3 mt-xl-0">
                         @foreach([
                             '7d' => '7D',
                             '30d' => '30D',
+                            '60d' => '60D',
                             '90d' => '90D',
                         ] as $timeframeKey => $timeframeTitle)
                             <a href="#"
