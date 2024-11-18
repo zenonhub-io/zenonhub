@@ -61,8 +61,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
         }
 
         $challengeHashData = $blockData['administrator'];
-        $timeChallenge = (new CheckTimeChallenge)
-            ->handle($accountBlock, $challengeHashData, config('nom.bridge.minAdministratorDelay'));
+        $timeChallenge = CheckTimeChallenge::run($accountBlock, $challengeHashData, config('nom.bridge.minAdministratorDelay'));
 
         if ($timeChallenge->is_active) {
             throw new IndexerActionValidationException('Time challenge is still active');

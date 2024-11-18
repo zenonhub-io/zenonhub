@@ -71,7 +71,7 @@ it('unwraps a token', function () {
 
     $accountBlock = createUnwrapTokenAccountBlock();
 
-    (new UnwrapToken)->handle($accountBlock);
+    UnwrapToken::run($accountBlock);
 
     $unwrap = BridgeUnwrap::first();
 
@@ -97,7 +97,7 @@ it('dispatches the token unwrapped event', function () {
 
     Event::fake();
 
-    (new UnwrapToken)->handle($accountBlock);
+    UnwrapToken::run($accountBlock);
 
     Event::assertDispatched(TokenUnwraped::class);
 });
@@ -116,7 +116,7 @@ it('ensures unwraps only happen on valid bridge networks', function () {
         )
         ->once();
 
-    (new UnwrapToken)->handle($accountBlock);
+    UnwrapToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenUnwraped::class);
 
@@ -145,7 +145,7 @@ it('ensures only valid tokens can be unwrapped', function () {
         )
         ->once();
 
-    (new UnwrapToken)->handle($accountBlock);
+    UnwrapToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenUnwraped::class);
 
@@ -174,7 +174,7 @@ it('ensures only redeemable tokens can be unwrapped', function () {
         )
         ->once();
 
-    (new UnwrapToken)->handle($accountBlock);
+    UnwrapToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenUnwraped::class);
 

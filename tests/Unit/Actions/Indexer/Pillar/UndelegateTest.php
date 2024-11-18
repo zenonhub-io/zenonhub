@@ -57,7 +57,7 @@ it('undelegates to a pillar', function () {
         'started_at' => $accountBlock->created_at,
     ]);
 
-    (new Undelegate)->handle($accountBlock);
+    Undelegate::run($accountBlock);
 
     expect($pillar->delegators()->wherePivotNotNull('ended_at')->get())->toHaveCount(1)
         ->and($account->delegations()->wherePivotNotNull('ended_at')->get())->toHaveCount(1);
@@ -75,7 +75,7 @@ it('dispatches the account delegated event', function () {
 
     Event::fake();
 
-    (new Undelegate)->handle($accountBlock);
+    Undelegate::run($accountBlock);
 
     Event::assertDispatched(AccountUndelegated::class);
 });
@@ -98,7 +98,7 @@ it('ensure only active delegations can be undelegated', function () {
         )
         ->once();
 
-    (new Undelegate)->handle($accountBlock);
+    Undelegate::run($accountBlock);
 
     Event::assertNotDispatched(AccountUndelegated::class);
 

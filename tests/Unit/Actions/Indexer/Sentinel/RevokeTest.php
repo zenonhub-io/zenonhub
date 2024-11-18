@@ -52,7 +52,7 @@ it('revokes an existing sentinel', function () {
     ]);
     $accountBlock->created_at = now();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     $sentinel = Sentinel::first();
 
@@ -71,7 +71,7 @@ it('dispatches the sentinel registered event', function () {
 
     Event::fake();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     Event::assertDispatched(SentinelRevoked::class);
 });
@@ -93,7 +93,7 @@ it('ensure sentinels can only be revoked once', function () {
         )
         ->once();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     Event::assertNotDispatched(SentinelRevoked::class);
 
@@ -117,7 +117,7 @@ it('enforce the sentinel revocable time window', function () {
         )
         ->once();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     Event::assertNotDispatched(SentinelRevoked::class);
 

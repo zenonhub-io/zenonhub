@@ -60,7 +60,7 @@ it('cancels a stake', function () {
         ],
     ]);
 
-    (new Cancel)->handle($accountBlock);
+    Cancel::run($accountBlock);
 
     $stake = Stake::first();
 
@@ -83,7 +83,7 @@ it('dispatches the end stake event', function () {
 
     Event::fake();
 
-    (new Cancel)->handle($accountBlock);
+    Cancel::run($accountBlock);
 
     Event::assertDispatched(EndStake::class);
 });
@@ -108,7 +108,7 @@ it('ensures only stake owner can cancel stakes', function () {
         )
         ->once();
 
-    (new Cancel)->handle($accountBlock);
+    Cancel::run($accountBlock);
 
     Event::assertNotDispatched(EndStake::class);
 
@@ -136,7 +136,7 @@ it('enforces stake duration time', function () {
         )
         ->once();
 
-    (new Cancel)->handle($accountBlock);
+    Cancel::run($accountBlock);
 
     Event::assertNotDispatched(EndStake::class);
 

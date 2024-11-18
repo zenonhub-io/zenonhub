@@ -38,7 +38,7 @@ beforeEach(function () {
 
 it('syncs orchestrators from the json data', function () {
 
-    (new Orchestrators)->handle();
+    Orchestrators::run();
 
     $orchestrator = Orchestrator::with('pillar', 'account')->first();
     $pillar = Pillar::firstWhere('name', 'Pillar1');
@@ -52,7 +52,7 @@ it('syncs orchestrators from the json data', function () {
 
 it('correctly assigns online status', function () {
 
-    (new Orchestrators)->handle();
+    Orchestrators::run();
 
     $orchestrator1 = Orchestrator::with('pillar', 'account')->find(1);
     $orchestrator2 = Orchestrator::with('pillar', 'account')->find(2);
@@ -74,7 +74,7 @@ it('removes inactive orchestrators', function () {
         'is_active' => false,
     ]);
 
-    (new Orchestrators)->handle();
+    Orchestrators::run();
 
     expect(Orchestrator::count())->toBe(2);
 });
@@ -82,7 +82,7 @@ it('removes inactive orchestrators', function () {
 // TODO - This can be moved to the sync bridge status test
 //it('calculates online percent correctly', function () {
 //
-//    (new SyncOrchestrators)->handle();
+//    Orchestrators::run();
 //
 //    expect(Orchestrator::getOnlinePercent())->toBe(50.0);
 //});

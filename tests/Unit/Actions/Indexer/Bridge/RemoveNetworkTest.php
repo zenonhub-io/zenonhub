@@ -56,7 +56,7 @@ it('removes a bridge network', function () {
 
     $accountBlock = createRemoveNetworkAccountBlock();
 
-    (new RemoveNetwork)->handle($accountBlock);
+    RemoveNetwork::run($accountBlock);
 
     expect(BridgeNetwork::get())->toHaveCount(0);
 });
@@ -71,7 +71,7 @@ it('dispatches the network removed', function () {
 
     Event::fake();
 
-    (new RemoveNetwork)->handle($accountBlock);
+    RemoveNetwork::run($accountBlock);
 
     Event::assertDispatched(NetworkRemoved::class);
 });
@@ -94,7 +94,7 @@ it('ensures only the bridge admin can remove a network', function () {
         )
         ->once();
 
-    (new RemoveNetwork)->handle($accountBlock);
+    RemoveNetwork::run($accountBlock);
 
     Event::assertNotDispatched(NetworkRemoved::class);
 

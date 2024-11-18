@@ -62,7 +62,7 @@ it('syncs pillar data', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new PillarMetrics)->handle($pillar);
+    PillarMetrics::run($pillar);
 
     $pillar = $pillar->fresh();
 
@@ -77,9 +77,9 @@ it('counts missed momentums', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new PillarMetrics)->handle($pillar);
-    (new PillarMetrics)->handle($pillar);
-    (new PillarMetrics)->handle($pillar);
+    PillarMetrics::run($pillar);
+    PillarMetrics::run($pillar);
+    PillarMetrics::run($pillar);
 
     $pillar = $pillar->fresh();
 
@@ -92,10 +92,10 @@ it('resets the missed momentum count', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new PillarMetrics)->handle($pillar);
-    (new PillarMetrics)->handle($pillar);
-    (new PillarMetrics)->handle($pillar);
-    (new PillarMetrics)->handle($pillar);
+    PillarMetrics::run($pillar);
+    PillarMetrics::run($pillar);
+    PillarMetrics::run($pillar);
+    PillarMetrics::run($pillar);
 
     $pillar = $pillar->fresh();
 

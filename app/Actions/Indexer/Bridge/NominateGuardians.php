@@ -69,8 +69,7 @@ class NominateGuardians extends AbstractContractMethodProcessor
         }
 
         $challengeHashData = json_encode($blockData['guardians']);
-        $timeChallenge = (new CheckTimeChallenge)
-            ->handle($accountBlock, $challengeHashData, config('nom.bridge.minSoftDelay'));
+        $timeChallenge = CheckTimeChallenge::run($accountBlock, $challengeHashData, config('nom.bridge.minSoftDelay'));
 
         if ($timeChallenge->is_active) {
             throw new IndexerActionValidationException('Time challenge is still active');

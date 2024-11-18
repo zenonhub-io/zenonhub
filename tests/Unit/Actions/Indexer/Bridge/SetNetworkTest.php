@@ -55,7 +55,7 @@ it('sets a new bridge network', function () {
 
     $accountBlock = createSetNetworkAccountBlock();
 
-    (new SetNetwork)->handle($accountBlock);
+    SetNetwork::run($accountBlock);
 
     $network = BridgeNetwork::first();
 
@@ -75,7 +75,7 @@ it('dispatches the network set event', function () {
 
     Event::fake();
 
-    (new SetNetwork)->handle($accountBlock);
+    SetNetwork::run($accountBlock);
 
     Event::assertDispatched(NetworkSet::class);
 });
@@ -94,7 +94,7 @@ it('ensures only the bridge admin can set a new network', function () {
         )
         ->once();
 
-    (new SetNetwork)->handle($accountBlock);
+    SetNetwork::run($accountBlock);
 
     Event::assertNotDispatched(NetworkSet::class);
 
@@ -121,7 +121,7 @@ it('ensures only valid chain identifier can be used', function () {
         )
         ->once();
 
-    (new SetNetwork)->handle($accountBlock);
+    SetNetwork::run($accountBlock);
 
     Event::assertNotDispatched(NetworkSet::class);
 

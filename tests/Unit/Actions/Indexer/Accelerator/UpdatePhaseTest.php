@@ -62,7 +62,7 @@ it('updates an existing phase', function () {
 
     $accountBlock = createUpdatePhaseAccountBlock();
 
-    (new UpdatePhase)->handle($accountBlock);
+    UpdatePhase::run($accountBlock);
 
     $project = AcceleratorProject::first();
     $phase = AcceleratorPhase::first();
@@ -83,7 +83,7 @@ it('dispatches the phase updated event', function () {
 
     Event::fake();
 
-    (new UpdatePhase)->handle($accountBlock);
+    UpdatePhase::run($accountBlock);
 
     Event::assertDispatched(PhaseUpdated::class);
 });
@@ -102,7 +102,7 @@ it('ensures only project owner can update phase', function () {
         )
         ->once();
 
-    (new UpdatePhase)->handle($accountBlock);
+    UpdatePhase::run($accountBlock);
 
     Event::assertNotDispatched(PhaseUpdated::class);
 
@@ -128,7 +128,7 @@ it('ensures latest phase is open', function () {
         )
         ->once();
 
-    (new UpdatePhase)->handle($accountBlock);
+    UpdatePhase::run($accountBlock);
 
     Event::assertNotDispatched(PhaseUpdated::class);
 

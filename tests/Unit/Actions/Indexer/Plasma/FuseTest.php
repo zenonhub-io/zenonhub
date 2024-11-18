@@ -53,7 +53,7 @@ it('create a fuse', function () {
 
     $accountBlock = createFuseAccountBlock();
 
-    (new Fuse)->handle($accountBlock);
+    Fuse::run($accountBlock);
 
     $plasma = Plasma::first();
 
@@ -71,7 +71,7 @@ it('dispatches the fused event', function () {
 
     Event::fake();
 
-    (new Fuse)->handle($accountBlock);
+    Fuse::run($accountBlock);
 
     Event::assertDispatched(StartFuse::class);
 });
@@ -90,7 +90,7 @@ it('doesnt pass validation with invalid token', function () {
         )
         ->once();
 
-    (new Fuse)->handle($accountBlock);
+    Fuse::run($accountBlock);
 
     Event::assertNotDispatched(StartFuse::class);
 
@@ -111,7 +111,7 @@ it('doesnt pass validation with invalid amount of QSR', function () {
         )
         ->once();
 
-    (new Fuse)->handle($accountBlock);
+    Fuse::run($accountBlock);
 
     Event::assertNotDispatched(StartFuse::class);
 

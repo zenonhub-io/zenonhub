@@ -73,7 +73,7 @@ it('removes an existing network token', function () {
         ],
     ]);
 
-    (new RemoveTokenPair)->handle($accountBlock);
+    RemoveTokenPair::run($accountBlock);
 
     expect(BridgeNetworkToken::get())->toHaveCount(0);
 });
@@ -101,7 +101,7 @@ it('dispatches the network set event', function () {
 
     Event::fake();
 
-    (new RemoveTokenPair)->handle($accountBlock);
+    RemoveTokenPair::run($accountBlock);
 
     Event::assertDispatched(TokenPairRemoved::class);
 });
@@ -136,7 +136,7 @@ it('ensures only the bridge admin can set a new network', function () {
         )
         ->once();
 
-    (new RemoveTokenPair)->handle($accountBlock);
+    RemoveTokenPair::run($accountBlock);
 
     Event::assertNotDispatched(TokenPairRemoved::class);
 

@@ -56,7 +56,7 @@ it('creates a new project', function () {
 
     $accountBlock = createCreateProjectAccountBlock();
 
-    (new CreateProject)->handle($accountBlock);
+    CreateProject::run($accountBlock);
 
     $project = AcceleratorProject::first();
 
@@ -71,7 +71,7 @@ it('dispatches the project created event', function () {
 
     Event::fake();
 
-    (new CreateProject)->handle($accountBlock);
+    CreateProject::run($accountBlock);
 
     Event::assertDispatched(ProjectCreated::class);
 });
@@ -90,7 +90,7 @@ it('ensures the correct fee token is paid', function () {
         )
         ->once();
 
-    (new CreateProject)->handle($accountBlock);
+    CreateProject::run($accountBlock);
 
     Event::assertNotDispatched(ProjectCreated::class);
 
@@ -111,7 +111,7 @@ it('ensures the correct fee amount is paid', function () {
         )
         ->once();
 
-    (new CreateProject)->handle($accountBlock);
+    CreateProject::run($accountBlock);
 
     Event::assertNotDispatched(ProjectCreated::class);
 

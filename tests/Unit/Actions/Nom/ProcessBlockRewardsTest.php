@@ -58,7 +58,7 @@ it('doesnt process blocks to the liquidity contract', function () {
         ]),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::first();
     expect(AccountReward::get())->toHaveCount(0)
@@ -76,7 +76,7 @@ it('correctly assigns reward data', function () {
         ]),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::with('token')->first();
     expect(AccountReward::get())->toHaveCount(1)
@@ -98,7 +98,7 @@ it('correctly assigns reward token', function () {
         ]),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::with('token')->first();
     expect(AccountReward::get())->toHaveCount(1)
@@ -111,7 +111,7 @@ it('correctly assigns delegate rewards', function () {
         'account' => load_account(EmbeddedContractsEnum::PILLAR->value),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::first();
     expect(AccountReward::get())->toHaveCount(1)
@@ -135,7 +135,7 @@ it('correctly assigns pillar rewards', function () {
         ]),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::first();
     expect(AccountReward::get())->toHaveCount(1)
@@ -148,7 +148,7 @@ it('correctly assigns sentinel rewards', function () {
         'account' => load_account(EmbeddedContractsEnum::SENTINEL->value),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::first();
     expect(AccountReward::get())->toHaveCount(1)
@@ -161,7 +161,7 @@ it('correctly assigns stake rewards', function () {
         'account' => load_account(EmbeddedContractsEnum::STAKE->value),
     ]);
 
-    (new ProcessBlockRewards)->handle($accountBlock);
+    ProcessBlockRewards::run($accountBlock);
 
     $reward = AccountReward::with('token')->first();
     expect(AccountReward::get())->toHaveCount(1)

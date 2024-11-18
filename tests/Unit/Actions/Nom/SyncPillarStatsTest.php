@@ -19,7 +19,7 @@ it('creates pillar stat history', function () {
 
     $pillar = Pillar::firstWhere('name', 'Pillar1');
 
-    (new PillarStats)->handle($pillar);
+    PillarStats::run($pillar);
 
     $stat = $pillar->statHistory()->first();
 

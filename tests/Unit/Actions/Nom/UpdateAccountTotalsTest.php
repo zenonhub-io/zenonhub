@@ -34,7 +34,7 @@ it('updates an accounts current balance', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
     $receiverBalance = $receiver->balances()
@@ -59,7 +59,7 @@ it('updates an accounts current znn balance', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
 
@@ -87,7 +87,7 @@ it('updates an accounts znn send and received totals', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
 
@@ -110,7 +110,7 @@ it('updates an accounts current qsr balance', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
 
@@ -138,7 +138,7 @@ it('updates an accounts qsr send and received totals', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
 
@@ -163,7 +163,7 @@ it('accounts for an addresses genesis znn balance', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
 
@@ -186,7 +186,7 @@ it('accounts for an addresses genesis qsr balance', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new UpdateAccountTotals)->handle($receiver);
+    UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
 
@@ -203,7 +203,7 @@ it('updates an accounts staked znn', function () {
         'account_id' => $account->id,
     ]);
 
-    (new UpdateAccountTotals)->handle($account);
+    UpdateAccountTotals::run($account);
 
     $account->fresh();
 
@@ -224,7 +224,7 @@ it('updates an accounts fused qsr', function () {
         'to_account_id' => $account->id,
     ]);
 
-    (new UpdateAccountTotals)->handle($account);
+    UpdateAccountTotals::run($account);
 
     $account->fresh();
 

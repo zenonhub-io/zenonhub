@@ -54,7 +54,7 @@ it('revokes a unwrap request', function () {
 
     $accountBlock = createRevokeUnwrapRequestAccountBlock();
 
-    (new RevokeUnwrapRequest)->handle($accountBlock);
+    RevokeUnwrapRequest::run($accountBlock);
 
     $unwrap = BridgeUnwrap::first();
 
@@ -68,7 +68,7 @@ it('dispatches the unwrap request revoked event', function () {
 
     Event::fake();
 
-    (new RevokeUnwrapRequest)->handle($accountBlock);
+    RevokeUnwrapRequest::run($accountBlock);
 
     Event::assertDispatched(UnwrapRequestRevoked::class);
 });
@@ -90,7 +90,7 @@ it('ensures only valid unwraps can be revoked', function () {
         )
         ->once();
 
-    (new RevokeUnwrapRequest)->handle($accountBlock);
+    RevokeUnwrapRequest::run($accountBlock);
 
     Event::assertNotDispatched(UnwrapRequestRevoked::class);
 
@@ -111,7 +111,7 @@ it('ensures only bridge admin can revoke unwrap request', function () {
         )
         ->once();
 
-    (new RevokeUnwrapRequest)->handle($accountBlock);
+    RevokeUnwrapRequest::run($accountBlock);
 
     Event::assertNotDispatched(UnwrapRequestRevoked::class);
 

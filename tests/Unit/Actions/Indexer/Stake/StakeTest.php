@@ -51,7 +51,7 @@ it('create a new stake', function () {
 
     $accountBlock = createStakeAccountBlock();
 
-    (new StakeAction)->handle($accountBlock);
+    StakeAction::run($accountBlock);
 
     $stake = Stake::first();
 
@@ -69,7 +69,7 @@ it('dispatches the start stake event', function () {
 
     Event::fake();
 
-    (new StakeAction)->handle($accountBlock);
+    StakeAction::run($accountBlock);
 
     Event::assertDispatched(StartStake::class);
 });
@@ -88,7 +88,7 @@ it('doesnt pass validation with invalid token', function () {
         )
         ->once();
 
-    (new StakeAction)->handle($accountBlock);
+    StakeAction::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 
@@ -109,7 +109,7 @@ it('doesnt pass validation with invalid amount of ZNN', function () {
         )
         ->once();
 
-    (new StakeAction)->handle($accountBlock);
+    StakeAction::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 
@@ -133,7 +133,7 @@ it('doesnt pass validation with short duration', function () {
         )
         ->once();
 
-    (new StakeAction)->handle($accountBlock);
+    StakeAction::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 
@@ -157,7 +157,7 @@ it('doesnt pass validation with long duration', function () {
         )
         ->once();
 
-    (new StakeAction)->handle($accountBlock);
+    StakeAction::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 

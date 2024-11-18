@@ -60,7 +60,7 @@ it('revokes a pillar', function () {
         'createdAt' => now(),
     ]);
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     $pillar = Pillar::firstWhere('name', 'Test');
 
@@ -82,7 +82,7 @@ it('dispatches the pillar revoked event', function () {
 
     Event::fake();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     Event::assertDispatched(PillarRevoked::class);
 });
@@ -105,7 +105,7 @@ it('ensure pillars can only be revoked by owner', function () {
         )
         ->once();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     Event::assertNotDispatched(PillarRevoked::class);
 
@@ -131,7 +131,7 @@ it('enforce the pillars revocable time window', function () {
         )
         ->once();
 
-    (new Revoke)->handle($accountBlock);
+    Revoke::run($accountBlock);
 
     Event::assertNotDispatched(PillarRevoked::class);
 

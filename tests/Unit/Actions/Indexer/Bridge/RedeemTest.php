@@ -53,7 +53,7 @@ it('redeems a unwrap request', function () {
 
     $accountBlock = createRedeemRequestAccountBlock();
 
-    (new Redeem)->handle($accountBlock);
+    Redeem::run($accountBlock);
 
     $unwrap = BridgeUnwrap::first();
 
@@ -67,7 +67,7 @@ it('dispatches unwrap redeemed event', function () {
 
     Event::fake();
 
-    (new Redeem)->handle($accountBlock);
+    Redeem::run($accountBlock);
 
     Event::assertDispatched(UnwrapRedeemed::class);
 });
@@ -89,7 +89,7 @@ it('ensures only valid unwraps can be redeemed', function () {
         )
         ->once();
 
-    (new Redeem)->handle($accountBlock);
+    Redeem::run($accountBlock);
 
     Event::assertNotDispatched(UnwrapRedeemed::class);
 

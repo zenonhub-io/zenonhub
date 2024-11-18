@@ -68,7 +68,7 @@ it('create a new liquidity stake', function () {
 
     $accountBlock = createLiquidityStakeAccountBlock();
 
-    (new LiquidityStake)->handle($accountBlock);
+    LiquidityStake::run($accountBlock);
 
     $stake = Stake::first();
 
@@ -86,7 +86,7 @@ it('dispatches the start stake event', function () {
 
     Event::fake();
 
-    (new LiquidityStake)->handle($accountBlock);
+    LiquidityStake::run($accountBlock);
 
     Event::assertDispatched(StartStake::class);
 });
@@ -105,7 +105,7 @@ it('doesnt pass validation with invalid token', function () {
         )
         ->once();
 
-    (new LiquidityStake)->handle($accountBlock);
+    LiquidityStake::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 
@@ -126,7 +126,7 @@ it('doesnt pass validation with invalid amount', function () {
         )
         ->once();
 
-    (new LiquidityStake)->handle($accountBlock);
+    LiquidityStake::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 
@@ -149,7 +149,7 @@ it('doesnt pass validation with short duration', function () {
         )
         ->once();
 
-    (new LiquidityStake)->handle($accountBlock);
+    LiquidityStake::run($accountBlock);
 
     Event::assertNotDispatched(StartStake::class);
 

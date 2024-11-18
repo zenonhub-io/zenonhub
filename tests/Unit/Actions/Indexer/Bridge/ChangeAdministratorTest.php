@@ -64,7 +64,7 @@ it('changes the bridge admin address', function () {
         'created_at' => 2,
     ]);
 
-    (new ChangeAdministrator)->handle($accountBlock);
+    ChangeAdministrator::run($accountBlock);
 
     $newAdmin = BridgeAdmin::getActiveAdmin();
 
@@ -90,7 +90,7 @@ it('dispatches the admin changed event', function () {
 
     Event::fake();
 
-    (new ChangeAdministrator)->handle($accountBlock);
+    ChangeAdministrator::run($accountBlock);
 
     Event::assertDispatched(AdministratorChanged::class);
 });
@@ -107,7 +107,7 @@ it('ensures only current admin can change bridge admin', function () {
         )
         ->once();
 
-    (new ChangeAdministrator)->handle($accountBlock);
+    ChangeAdministrator::run($accountBlock);
 
     Event::assertNotDispatched(AdministratorChanged::class);
 
@@ -130,7 +130,7 @@ it('respects the time challenge', function () {
         )
         ->once();
 
-    (new ChangeAdministrator)->handle($accountBlock);
+    ChangeAdministrator::run($accountBlock);
 
     Event::assertNotDispatched(AdministratorChanged::class);
 

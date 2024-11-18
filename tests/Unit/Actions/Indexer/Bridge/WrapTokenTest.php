@@ -65,7 +65,7 @@ it('wraps a token', function () {
 
     $accountBlock = createWrapTokenAccountBlock();
 
-    (new WrapToken)->handle($accountBlock);
+    WrapToken::run($accountBlock);
 
     $wrap = BridgeWrap::first();
 
@@ -91,7 +91,7 @@ it('dispatches the token wrapped event', function () {
 
     Event::fake();
 
-    (new WrapToken)->handle($accountBlock);
+    WrapToken::run($accountBlock);
 
     Event::assertDispatched(TokenWrapped::class);
 });
@@ -110,7 +110,7 @@ it('ensures wraps only happen on valid bridge networks', function () {
         )
         ->once();
 
-    (new WrapToken)->handle($accountBlock);
+    WrapToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenWrapped::class);
 
@@ -140,7 +140,7 @@ it('ensures only valid tokens can be bridged', function () {
         )
         ->once();
 
-    (new WrapToken)->handle($accountBlock);
+    WrapToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenWrapped::class);
 
@@ -168,7 +168,7 @@ it('ensures only bridgeable tokens can be wrapped', function () {
         )
         ->once();
 
-    (new WrapToken)->handle($accountBlock);
+    WrapToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenWrapped::class);
 

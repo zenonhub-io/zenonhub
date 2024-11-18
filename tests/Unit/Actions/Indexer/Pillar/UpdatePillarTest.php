@@ -73,7 +73,7 @@ it('updates a pillar', function () {
         ],
     ]);
 
-    (new UpdatePillar)->handle($accountBlock);
+    UpdatePillar::run($accountBlock);
 
     $pillar = Pillar::firstWhere('name', 'Test');
 
@@ -96,7 +96,7 @@ it('dispatches the pillar updated event', function () {
 
     Event::fake();
 
-    (new UpdatePillar)->handle($accountBlock);
+    UpdatePillar::run($accountBlock);
 
     Event::assertDispatched(PillarUpdated::class);
 });
@@ -118,7 +118,7 @@ it('ensure updates can only come from pillar owner', function () {
         )
         ->once();
 
-    (new UpdatePillar)->handle($accountBlock);
+    UpdatePillar::run($accountBlock);
 
     Event::assertNotDispatched(PillarUpdated::class);
 });

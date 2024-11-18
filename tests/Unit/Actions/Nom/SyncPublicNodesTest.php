@@ -66,7 +66,7 @@ beforeEach(function () {
 
 it('sync public nodes from the json data', function () {
 
-    (new PublicNodes)->handle();
+    PublicNodes::run();
 
     $publicNode = PublicNode::first();
 
@@ -78,7 +78,7 @@ it('sync public nodes from the json data', function () {
 
 it('populates location data for the node', function () {
 
-    (new PublicNodes)->handle();
+    PublicNodes::run();
 
     $publicNode = PublicNode::first();
 
@@ -99,7 +99,7 @@ it('deactivates old nodes', function () {
         'discovered_at' => now(),
     ]);
 
-    (new PublicNodes)->handle();
+    PublicNodes::run();
 
     expect(PublicNode::count())->toBe(3)
         ->and(PublicNode::whereActive()->count())->toEqual(2)
@@ -108,7 +108,7 @@ it('deactivates old nodes', function () {
 
 it('creates public node history', function () {
 
-    (new PublicNodes)->handle();
+    PublicNodes::run();
 
     $history = PublicNodeHistory::first();
 

@@ -61,7 +61,7 @@ it('creates a a new vote', function () {
 
     $accountBlock = createVoteByNameAccountBlock();
 
-    (new VoteByName)->handle($accountBlock);
+    VoteByName::run($accountBlock);
 
     $project = AcceleratorProject::first();
     $vote = Vote::first();
@@ -77,7 +77,7 @@ it('dispatches the pillar voted event', function () {
 
     Event::fake();
 
-    (new VoteByName)->handle($accountBlock);
+    VoteByName::run($accountBlock);
 
     Event::assertDispatched(PillarVoted::class);
 });
@@ -96,7 +96,7 @@ it('ensures only the pillar owner and account block sender account match', funct
         )
         ->once();
 
-    (new VoteByName)->handle($accountBlock);
+    VoteByName::run($accountBlock);
 
     Event::assertNotDispatched(PillarVoted::class);
 

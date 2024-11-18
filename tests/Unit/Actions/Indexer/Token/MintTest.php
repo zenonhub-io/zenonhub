@@ -56,7 +56,7 @@ it('mints a token', function () {
         'account' => load_account(EmbeddedContractsEnum::PILLAR->value),
     ]);
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     $token = Token::firstWhere('name', 'ZNN');
     $mint = TokenMint::first();
@@ -85,7 +85,7 @@ it('updates a token total supply', function () {
         ],
     ]);
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     $token->refresh();
 
@@ -102,7 +102,7 @@ it('dispatches the token minted event', function () {
 
     Event::fake();
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     Event::assertDispatched(TokenMinted::class);
 });
@@ -128,7 +128,7 @@ it('doesnt pass validation if not mintable', function () {
         )
         ->once();
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     Event::assertNotDispatched(TokenMinted::class);
 
@@ -157,7 +157,7 @@ it('doesnt pass validation minting more than tne max supply', function () {
         )
         ->once();
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     Event::assertNotDispatched(TokenMinted::class);
 
@@ -183,7 +183,7 @@ it('doesnt pass validation minting network token from non-embedded contract', fu
         )
         ->once();
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     Event::assertNotDispatched(TokenMinted::class);
 
@@ -208,7 +208,7 @@ it('doesnt pass validation minting user tokens from non owner', function () {
         )
         ->once();
 
-    (new Mint)->handle($accountBlock);
+    Mint::run($accountBlock);
 
     Event::assertNotDispatched(TokenMinted::class);
 

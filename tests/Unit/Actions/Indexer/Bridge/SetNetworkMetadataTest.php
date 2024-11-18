@@ -57,7 +57,7 @@ it('updates a networks metadata', function () {
 
     $accountBlock = createSetNetworkMetadataAccountBlock();
 
-    (new SetNetworkMetadata)->handle($accountBlock);
+    SetNetworkMetadata::run($accountBlock);
 
     expect(BridgeNetwork::first()->meta_data)->toEqual([
         'Data' => 'Don\'t trust. Verify. <3',
@@ -74,7 +74,7 @@ it('dispatches the network metadata set event', function () {
 
     Event::fake();
 
-    (new SetNetworkMetadata)->handle($accountBlock);
+    SetNetworkMetadata::run($accountBlock);
 
     Event::assertDispatched(NetworkMetadataSet::class);
 });
@@ -97,7 +97,7 @@ it('ensures only admin can set the network metadata', function () {
         )
         ->once();
 
-    (new SetNetworkMetadata)->handle($accountBlock);
+    SetNetworkMetadata::run($accountBlock);
 
     Event::assertNotDispatched(NetworkMetadataSet::class);
 

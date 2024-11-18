@@ -53,7 +53,7 @@ it('updates a token wrap request', function () {
 
     $accountBlock = createUpdateWrapRequestAccountBlock();
 
-    (new UpdateWrapRequest)->handle($accountBlock);
+    UpdateWrapRequest::run($accountBlock);
 
     $wrap = BridgeWrap::first();
 
@@ -67,7 +67,7 @@ it('dispatches the wrap request updated event', function () {
 
     Event::fake();
 
-    (new UpdateWrapRequest)->handle($accountBlock);
+    UpdateWrapRequest::run($accountBlock);
 
     Event::assertDispatched(WrapRequestUpdated::class);
 });
@@ -89,7 +89,7 @@ it('ensures wraps only happen on valid bridge networks', function () {
         )
         ->once();
 
-    (new UpdateWrapRequest)->handle($accountBlock);
+    UpdateWrapRequest::run($accountBlock);
 
     Event::assertNotDispatched(WrapRequestUpdated::class);
 

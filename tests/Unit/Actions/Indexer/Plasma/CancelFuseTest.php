@@ -59,7 +59,7 @@ it('cancels a fuse', function () {
         ],
     ]);
 
-    (new CancelFuse)->handle($accountBlock);
+    CancelFuse::run($accountBlock);
 
     $plasma = Plasma::first();
 
@@ -81,7 +81,7 @@ it('dispatches the end fuse event', function () {
 
     Event::fake();
 
-    (new CancelFuse)->handle($accountBlock);
+    CancelFuse::run($accountBlock);
 
     Event::assertDispatched(EndFuse::class);
 });
@@ -105,7 +105,7 @@ it('ensures only plasma owners can cancel fuses', function () {
         )
         ->once();
 
-    (new CancelFuse)->handle($accountBlock);
+    CancelFuse::run($accountBlock);
 
     Event::assertNotDispatched(EndFuse::class);
 
@@ -132,7 +132,7 @@ it('enforces plasma minimum expiration time', function () {
         )
         ->once();
 
-    (new CancelFuse)->handle($accountBlock);
+    CancelFuse::run($accountBlock);
 
     Event::assertNotDispatched(EndFuse::class);
 

@@ -50,7 +50,7 @@ it('burns a token', function () {
 
     $accountBlock = createBurnAccountBlock();
 
-    (new Burn)->handle($accountBlock);
+    Burn::run($accountBlock);
 
     $token = Token::firstWhere('name', 'ZNN');
     $burn = TokenBurn::first();
@@ -73,7 +73,7 @@ it('burns a token if the sender is the owner', function () {
         'token' => $token,
     ]);
 
-    (new Burn)->handle($accountBlock);
+    Burn::run($accountBlock);
 
     $burn = TokenBurn::first();
 
@@ -96,7 +96,7 @@ it('updates a token total supply', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new Burn)->handle($accountBlock);
+    Burn::run($accountBlock);
 
     $token->refresh();
 
@@ -118,7 +118,7 @@ it('updates a token max supply', function () {
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
-    (new Burn)->handle($accountBlock);
+    Burn::run($accountBlock);
 
     $token->refresh();
 
@@ -133,7 +133,7 @@ it('dispatches the token burned event', function () {
 
     Event::fake();
 
-    (new Burn)->handle($accountBlock);
+    Burn::run($accountBlock);
 
     Event::assertDispatched(TokenBurned::class);
 });
@@ -155,7 +155,7 @@ it('doesnt pass validation if not burnable', function () {
         )
         ->once();
 
-    (new Burn)->handle($accountBlock);
+    Burn::run($accountBlock);
 
     Event::assertNotDispatched(TokenBurned::class);
 

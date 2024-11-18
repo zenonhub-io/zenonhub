@@ -76,7 +76,7 @@ it('sets a new bridge network token', function () {
         'created_at' => 2,
     ]);
 
-    (new SetTokenPair)->handle($accountBlock);
+    SetTokenPair::run($accountBlock);
 
     $networkToken = BridgeNetworkToken::first();
 
@@ -111,7 +111,7 @@ it('dispatches the network set event', function () {
 
     Event::fake();
 
-    (new SetTokenPair)->handle($accountBlock);
+    SetTokenPair::run($accountBlock);
 
     Event::assertDispatched(TokenPairSet::class);
 });
@@ -142,7 +142,7 @@ it('ensures only the bridge admin can set a new network', function () {
         )
         ->once();
 
-    (new SetTokenPair)->handle($accountBlock);
+    SetTokenPair::run($accountBlock);
 
     Event::assertNotDispatched(TokenPairSet::class);
 
@@ -187,7 +187,7 @@ it('ensures only valid tokens can be added', function () {
         )
         ->once();
 
-    (new SetTokenPair)->handle($accountBlock);
+    SetTokenPair::run($accountBlock);
 
     Event::assertNotDispatched(TokenPairSet::class);
 
@@ -210,7 +210,7 @@ it('ensures the time challenge is respected', function () {
         )
         ->once();
 
-    (new SetTokenPair)->handle($accountBlock);
+    SetTokenPair::run($accountBlock);
 
     Event::assertNotDispatched(TokenPairSet::class);
 

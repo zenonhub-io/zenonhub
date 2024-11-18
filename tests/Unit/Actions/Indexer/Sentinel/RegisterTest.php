@@ -48,7 +48,7 @@ it('registers a new sentinel', function () {
 
     $accountBlock = createSentinelRegisterAccountBlock();
 
-    (new Register)->handle($accountBlock);
+    Register::run($accountBlock);
 
     $sentinel = Sentinel::first();
 
@@ -62,7 +62,7 @@ it('dispatches the sentinel registered event', function () {
 
     Event::fake();
 
-    (new Register)->handle($accountBlock);
+    Register::run($accountBlock);
 
     Event::assertDispatched(SentinelRegistered::class);
 });
@@ -81,7 +81,7 @@ it('ensure sentinels can only be registered with ZNN tokens', function () {
         )
         ->once();
 
-    (new Register)->handle($accountBlock);
+    Register::run($accountBlock);
 
     Event::assertNotDispatched(SentinelRegistered::class);
 
@@ -102,7 +102,7 @@ it('enforces the required registration cost', function () {
         )
         ->once();
 
-    (new Register)->handle($accountBlock);
+    Register::run($accountBlock);
 
     Event::assertNotDispatched(SentinelRegistered::class);
 

@@ -60,7 +60,7 @@ it('updates an existing token', function () {
 
     $accountBlock = createUpdateTokenAccountBlock();
 
-    (new UpdateToken)->handle($accountBlock);
+    UpdateToken::run($accountBlock);
 
     $token = Token::firstWhere('name', 'Test');
 
@@ -76,7 +76,7 @@ it('dispatches the token issued event', function () {
 
     Event::fake();
 
-    (new UpdateToken)->handle($accountBlock);
+    UpdateToken::run($accountBlock);
 
     Event::assertDispatched(TokenUpdated::class);
 });
@@ -102,7 +102,7 @@ it('doesnt pass validation invalid token standard', function () {
         )
         ->once();
 
-    (new UpdateToken)->handle($accountBlock);
+    UpdateToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenUpdated::class);
 });
@@ -122,7 +122,7 @@ it('doesnt pass validation invalid token owner', function () {
         )
         ->once();
 
-    (new UpdateToken)->handle($accountBlock);
+    UpdateToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenUpdated::class);
 });

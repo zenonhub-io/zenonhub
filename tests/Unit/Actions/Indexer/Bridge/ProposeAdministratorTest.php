@@ -56,7 +56,7 @@ it('creates a admin proposal', function () {
 
     $accountBlock = createProposeAdminAccountBlock();
 
-    (new ProposeAdministrator)->handle($accountBlock);
+    ProposeAdministrator::run($accountBlock);
 
     expect(BridgeAdmin::whereProposed()->get())->toHaveCount(1)
         ->and(BridgeAdmin::getActiveAdmin()->account->address)->toEqual(config('nom.bridge.initialBridgeAdmin'))
@@ -67,7 +67,7 @@ it('changes the active admin if more than half the guardians vote for the same a
 
     $accountBlock = createProposeAdminAccountBlock();
 
-    (new ProposeAdministrator)->handle($accountBlock);
+    ProposeAdministrator::run($accountBlock);
 
     expect(BridgeAdmin::whereActive()->get())->toHaveCount(1)
         ->and(BridgeAdmin::getActiveAdmin()->account->address)->toEqual($accountBlock->data->decoded['address']);
@@ -79,7 +79,7 @@ it('dispatches the admin proposed event', function () {
 
     Event::fake();
 
-    (new ProposeAdministrator)->handle($accountBlock);
+    ProposeAdministrator::run($accountBlock);
 
     Event::assertDispatched(AdministratorProposed::class);
 });
@@ -98,7 +98,7 @@ it('ensures only guardians can propose admins', function () {
         )
         ->once();
 
-    (new ProposeAdministrator)->handle($accountBlock);
+    ProposeAdministrator::run($accountBlock);
 
     Event::assertNotDispatched(AdministratorProposed::class);
 

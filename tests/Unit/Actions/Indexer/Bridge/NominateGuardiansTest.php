@@ -67,7 +67,7 @@ it('nominates new bridge guardians', function () {
         'created_at' => 2,
     ]);
 
-    (new NominateGuardians)->handle($accountBlock);
+    NominateGuardians::run($accountBlock);
 
     $newGuardians = BridgeGuardian::with('account')->whereActive()->get();
 
@@ -92,7 +92,7 @@ it('dispatches the guardians nominated event', function () {
 
     Event::fake();
 
-    (new NominateGuardians)->handle($accountBlock);
+    NominateGuardians::run($accountBlock);
 
     Event::assertDispatched(GuardiansNominated::class);
 });
@@ -111,7 +111,7 @@ it('guardians can only be set from bridge admin account', function () {
         )
         ->once();
 
-    (new NominateGuardians)->handle($accountBlock);
+    NominateGuardians::run($accountBlock);
 
     Event::assertNotDispatched(GuardiansNominated::class);
 
@@ -136,7 +136,7 @@ it('ensures invalid action cannot be processed', function () {
         )
         ->once();
 
-    (new NominateGuardians)->handle($accountBlock);
+    NominateGuardians::run($accountBlock);
 
     Event::assertNotDispatched(GuardiansNominated::class);
 
@@ -156,7 +156,7 @@ it('respects the time challenge', function () {
         )
         ->once();
 
-    (new NominateGuardians)->handle($accountBlock);
+    NominateGuardians::run($accountBlock);
 
     Event::assertNotDispatched(GuardiansNominated::class);
 

@@ -56,7 +56,7 @@ it('delegates to a pillar', function () {
     ]);
     $accountBlock = createDelegateAccountBlock();
 
-    (new Delegate)->handle($accountBlock);
+    Delegate::run($accountBlock);
 
     $pillar = Pillar::firstWhere('name', 'Test');
     $account = $accountBlock->account;
@@ -77,7 +77,7 @@ it('dispatches the account delegated event', function () {
 
     Event::fake();
 
-    (new Delegate)->handle($accountBlock);
+    Delegate::run($accountBlock);
 
     Event::assertDispatched(AccountDelegated::class);
 });
@@ -95,7 +95,7 @@ it('ensure only valid pillars can be delegated to', function () {
         )
         ->once();
 
-    (new Delegate)->handle($accountBlock);
+    Delegate::run($accountBlock);
 
     Event::assertNotDispatched(AccountDelegated::class);
 
@@ -118,7 +118,7 @@ it('ensure only active pillars can be delegated to', function () {
         )
         ->once();
 
-    (new Delegate)->handle($accountBlock);
+    Delegate::run($accountBlock);
 
     Event::assertNotDispatched(AccountDelegated::class);
 

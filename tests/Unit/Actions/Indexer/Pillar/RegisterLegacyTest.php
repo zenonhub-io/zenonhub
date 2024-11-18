@@ -62,7 +62,7 @@ it('registers a new pillar', function () {
         'account' => $owner,
     ]);
 
-    (new RegisterLegacy)->handle($accountBlock);
+    RegisterLegacy::run($accountBlock);
 
     $pillar = Pillar::firstWhere('name', 'Test');
 
@@ -85,7 +85,7 @@ it('dispatches the pillar registered event', function () {
 
     Event::fake();
 
-    (new RegisterLegacy)->handle($accountBlock);
+    RegisterLegacy::run($accountBlock);
 
     Event::assertDispatched(PillarRegistered::class);
 });
@@ -104,7 +104,7 @@ it('ensure pillars can only be registered with ZNN tokens', function () {
         )
         ->once();
 
-    (new RegisterLegacy)->handle($accountBlock);
+    RegisterLegacy::run($accountBlock);
 
     Event::assertNotDispatched(PillarRegistered::class);
 
@@ -125,7 +125,7 @@ it('enforces the required registration cost', function () {
         )
         ->once();
 
-    (new RegisterLegacy)->handle($accountBlock);
+    RegisterLegacy::run($accountBlock);
 
     Event::assertNotDispatched(PillarRegistered::class);
 

@@ -59,7 +59,7 @@ it('create a new token', function () {
 
     $accountBlock = createIssueTokenAccountBlock();
 
-    (new IssueToken)->handle($accountBlock);
+    IssueToken::run($accountBlock);
 
     $token = Token::firstWhere('name', 'Test');
 
@@ -81,7 +81,7 @@ it('dispatches the token issued event', function () {
 
     Event::fake();
 
-    (new IssueToken)->handle($accountBlock);
+    IssueToken::run($accountBlock);
 
     Event::assertDispatched(TokenIssued::class);
 });
@@ -110,7 +110,7 @@ it('doesnt pass validation with reserved symbols', function () {
         )
         ->once();
 
-    (new IssueToken)->handle($accountBlock);
+    IssueToken::run($accountBlock);
 
     Event::assertNotDispatched(TokenIssued::class);
 

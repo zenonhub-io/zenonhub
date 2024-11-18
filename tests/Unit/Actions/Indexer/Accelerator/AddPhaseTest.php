@@ -59,7 +59,7 @@ it('creates a new phase', function () {
 
     $accountBlock = createAddPhaseAccountBlock();
 
-    (new AddPhase)->handle($accountBlock);
+    AddPhase::run($accountBlock);
 
     $project = AcceleratorProject::first();
     $phase = AcceleratorPhase::first();
@@ -75,7 +75,7 @@ it('dispatches the phase created event', function () {
 
     Event::fake();
 
-    (new AddPhase)->handle($accountBlock);
+    AddPhase::run($accountBlock);
 
     Event::assertDispatched(PhaseCreated::class);
 });
@@ -94,7 +94,7 @@ it('ensures only project owner can add phases', function () {
         )
         ->once();
 
-    (new AddPhase)->handle($accountBlock);
+    AddPhase::run($accountBlock);
 
     Event::assertNotDispatched(PhaseCreated::class);
 
@@ -129,7 +129,7 @@ it('ensures only project owner can add phases', function () {
 //        )
 //        ->once();
 //
-//    (new AddPhase)->handle($accountBlock);
+//    AddPhase::run($accountBlock);
 //
 //    Event::assertNotDispatched(PhaseCreated::class);
 //
