@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Http;
 
 class BridgeUnwrap extends Model
 {
@@ -74,37 +73,13 @@ class BridgeUnwrap extends Model
     }
 
     //
-    // Methods
+    // Statics
 
     public static function findByTxHashLog(string|int $hash, string|int $log): ?BridgeUnwrap
     {
         return static::where('transaction_hash', $hash)
             ->where('log_index', $log)
             ->first();
-    }
-
-    //
-    // Scopes
-
-    public static function scopeWhereTxHashLog($query, string $hash, int $log)
-    {
-        return $query->where('transaction_hash', $hash)
-            ->where('log_index', $log);
-    }
-
-    public static function scopeWhereUnredeemed($query)
-    {
-        return $query->whereNull('redeemed_at');
-    }
-
-    public function scopeWhereAffiliateReward($query)
-    {
-        return $query->where('log_index', '>=', '4000000000');
-    }
-
-    public function scopeWhereNotAffiliateReward($query)
-    {
-        return $query->where('log_index', '<', '4000000000');
     }
 
     //
@@ -131,6 +106,35 @@ class BridgeUnwrap extends Model
     }
 
     //
+    // Scopes
+
+    public function scopeWhereTxHashLog($query, string $hash, int $log)
+    {
+        return $query->where('transaction_hash', $hash)
+            ->where('log_index', $log);
+    }
+
+    public function scopeWhereUnredeemed($query)
+    {
+        return $query->whereNull('redeemed_at');
+    }
+
+    public function scopeWhereAffiliateReward($query)
+    {
+        return $query->where('log_index', '>=', '4000000000');
+    }
+
+    public function scopeWhereNotAffiliateReward($query)
+    {
+        return $query->where('log_index', '<', '4000000000');
+    }
+
+    public function scopeWhereIsProcessed($query)
+    {
+        return $query->whereNotNull('from_address');
+    }
+
+    //
     // Attributes
 
     public function getIsAffiliateRewardAttribute(): bool
@@ -151,21 +155,5 @@ class BridgeUnwrap extends Model
     public function getDisplayAmountAttribute(): string
     {
         return $this->token?->getFormattedAmount($this->amount);
-    }
-
-    public function setFromAddress(): void
-    {
-        if ($this->from_address) {
-            return;
-        }
-
-        $this->from_address = Http::get('https://api.etherscan.io/api', [
-            'module' => 'proxy',
-            'action' => 'eth_getTransactionByHash',
-            'txhash' => '0x' . $this->transaction_hash,
-            'apikey' => config('services.etherscan.api_key'),
-        ])->json('result.from');
-
-        $this->save();
     }
 }

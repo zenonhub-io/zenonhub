@@ -53,8 +53,6 @@ class UnwrapToken extends AbstractContractMethodProcessor
             $unwrap->save();
         }
 
-        //$unwrap->setFromAddress();
-
         TokenUnwraped::dispatch($accountBlock, $unwrap);
 
         Log::info('Contract Method Processor - Bridge: UnwrapToken complete', [
