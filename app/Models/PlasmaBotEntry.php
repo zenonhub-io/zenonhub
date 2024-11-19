@@ -69,17 +69,4 @@ class PlasmaBotEntry extends Model
     {
         return $query->where('address', $address);
     }
-
-    //
-    // Methods
-
-    public function confirm($hash = null)
-    {
-        if ($hash) {
-            $this->hash = $hash;
-        }
-
-        $this->is_confirmed = true;
-        $this->save();
-    }
 }
