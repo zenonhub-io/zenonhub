@@ -14,8 +14,10 @@ class ConfirmEntry
 
     public function handle(Plasma $plasma): void
     {
+        $plasma->load('toAccount', 'accountBlock');
+
         $entry = PlasmaBotEntry::whereUnConfirmed()
-            ->whereRelation('account', 'id', $plasma->to_account_id)
+            ->where('address', $plasma->toAccount->address)
             ->first();
 
         if (! $entry) {
