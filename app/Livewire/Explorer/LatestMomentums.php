@@ -13,8 +13,9 @@ class LatestMomentums extends Component
     public function render(): View
     {
         return view('livewire.explorer.latest-momentums', [
-            'momentums' => Momentum::withCount('accountBlocks')
-                ->limit(9)
+            'momentums' => Momentum::with('producerPillar')
+                ->withCount('accountBlocks')
+                ->limit(6)
                 ->latest('height')
                 ->get(),
         ]);

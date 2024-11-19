@@ -21,7 +21,7 @@
                             </a>
                             <x-date-time.carbon :date="$tx->created_at" :human="true" class="text-xs text-muted ms-2 ms-md-0" />
                         </div>
-                        <div class="d-block">
+                        <div class="d-block mb-3 mb-md-0">
                             <span class="d-flex justify-content-start justify-content-md-end align-items-center mb-1">
                                 <span class="text-muted text-sm me-1">
                                     {{ __('From') }}:
@@ -42,20 +42,16 @@
                             </span>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between mt-2">
-                        <div class="text-end">
-                            @if($tx->display_type)
-                                <div class="badge bg-light-subtle text-muted">
-                                    {{ $tx->display_type }}
-                                </div>
-                            @endif
-                            @if($tx->token && $tx->amount > 0)
-                                <div class="badge bg-light-subtle text-muted mt-2 ms-2">
-                                    {{ $tx->display_amount }} {{ $tx->token->symbol }}
-                                </div>
-                            @endif
+                    @if($tx->display_type)
+                        <div class="badge bg-light-subtle text-muted">
+                            {{ $tx->display_type }}
                         </div>
-                    </div>
+                    @endif
+                    @if($tx->token && $tx->amount > 0)
+                        <div class="badge bg-light-subtle text-muted mt-2 ms-2">
+                            {{ $tx->display_amount }} {{ $tx->token->symbol }}
+                        </div>
+                    @endif
                 </div>
             @endforeach
         </div>

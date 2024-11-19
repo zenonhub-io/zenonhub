@@ -13,8 +13,8 @@
 
         <div class="list-group list-group-flush">
             @foreach($momentums as $momentum)
-                <div class="list-group-item d-flex align-items-center px-6">
-                    <div class="d-flex flex-wrap w-100 justify-content-between">
+                <div class="list-group-item px-6">
+                    <div class="d-flex justify-content-between">
                         <div class="mb-2 mb-sm-0">
                             <a class="d-block" href="{{ route('explorer.momentum.detail', ['hash' => $momentum->hash]) }}">
                                 <x-hash :hash="$momentum->hash" :eitherSide="7" :alwaysShort="true" />
@@ -32,6 +32,11 @@
                             </span>
                         </div>
                     </div>
+                    @if($momentum->producerPillar)
+                        <div class="badge bg-light-subtle text-muted mt-2">
+                            {{ $momentum->producerPillar->name }}
+                        </div>
+                    @endif
                 </div>
             @endforeach
         </div>
