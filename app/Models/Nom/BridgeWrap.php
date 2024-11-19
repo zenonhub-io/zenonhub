@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models\Nom;
 
-use Carbon\Carbon;
 use Database\Factories\Nom\BridgeWrapFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -92,17 +91,6 @@ class BridgeWrap extends Model
 
     //
     // Scopes
-
-    public function scopeCreatedBetweenDates($query, array $dates)
-    {
-        $start = ($dates[0] instanceof Carbon) ? $dates[0] : Carbon::parse($dates[0]);
-        $end = ($dates[1] instanceof Carbon) ? $dates[1] : Carbon::parse($dates[1]);
-
-        return $query->whereBetween('created_at', [
-            $start->startOfDay(),
-            $end->endOfDay(),
-        ]);
-    }
 
     //
     // Attributes

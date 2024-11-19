@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\MomentumDTO;
-use App\Models\Markable\Favorite;
+use App\Models\MarkableFavorite;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\MomentumFactory;
@@ -21,8 +21,7 @@ use Throwable;
 
 class Momentum extends Model
 {
-    use HasFactory, ModelCacheKeyTrait;
-    //use Markable;
+    use HasFactory, Markable, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -55,7 +54,7 @@ class Momentum extends Model
     ];
 
     protected static array $marks = [
-        Favorite::class,
+        MarkableFavorite::class,
     ];
 
     /**
@@ -163,10 +162,10 @@ class Momentum extends Model
         return $data;
     }
 
-    public function getIsFavouritedAttribute(): bool
+    public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
+            return MarkableFavorite::has($this, $user);
         }
 
         return false;

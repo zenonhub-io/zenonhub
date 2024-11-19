@@ -7,7 +7,6 @@ namespace App\Models\Nom;
 use App\DataTransferObjects\Nom\AcceleratorProjectDTO;
 use App\Enums\Nom\AcceleratorPhaseStatusEnum;
 use App\Enums\Nom\AcceleratorProjectStatusEnum;
-use App\Models\Markable\Favorite;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\AcceleratorProjectFactory;
@@ -64,10 +63,6 @@ class AcceleratorProject extends Model implements Sitemapable
         'znn_price',
         'qsr_price',
         'created_at',
-    ];
-
-    protected static array $marks = [
-        Favorite::class,
     ];
 
     /**
@@ -263,14 +258,5 @@ class AcceleratorProject extends Model implements Sitemapable
         }
 
         return $data;
-    }
-
-    public function getIsFavouritedAttribute(): bool
-    {
-        if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
-        }
-
-        return false;
     }
 }

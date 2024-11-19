@@ -7,7 +7,7 @@ namespace App\Models\Nom;
 use App\DataTransferObjects\Nom\TokenDTO;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Enums\Nom\NetworkTokensEnum;
-use App\Models\Markable\Favorite;
+use App\Models\MarkableFavorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
 use Brick\Math\BigDecimal;
@@ -27,8 +27,7 @@ use Throwable;
 
 class Token extends Model implements Sitemapable
 {
-    //use Markable;
-    use HasFactory;
+    use HasFactory, Markable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -67,7 +66,7 @@ class Token extends Model implements Sitemapable
     ];
 
     protected static array $marks = [
-        Favorite::class,
+        MarkableFavorite::class,
     ];
 
     /**
@@ -269,30 +268,13 @@ class Token extends Model implements Sitemapable
             NetworkTokensEnum::ZNN->value,
             NetworkTokensEnum::QSR->value,
             NetworkTokensEnum::LP_ZNN_ETH->value,
-        ]);
+        ], true);
     }
 
-    public function getHasCustomLabelAttribute(): bool
-    {
-        return ($user = auth()->user()) && Favorite::findExisting($this, $user);
-    }
-
-    public function getCustomLabelAttribute(): string
+    public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            $favorite = Favorite::findExisting($this, $user);
-            if ($favorite) {
-                return $favorite->label;
-            }
-        }
-
-        return $this->name;
-    }
-
-    public function getIsFavouritedAttribute(): bool
-    {
-        if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
+            return MarkableFavorite::has($this, $user);
         }
 
         return false;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\AccountDTO;
-use App\Models\Markable\Favorite;
+use App\Models\MarkableFavorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
@@ -28,8 +28,7 @@ use Throwable;
 
 class Account extends Model implements Sitemapable
 {
-    //use Markable;
-    use HasFactory, ModelCacheKeyTrait;
+    use HasFactory, Markable, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -65,7 +64,7 @@ class Account extends Model implements Sitemapable
     ];
 
     protected static array $marks = [
-        Favorite::class,
+        MarkableFavorite::class,
     ];
 
     /**
@@ -99,25 +98,6 @@ class Account extends Model implements Sitemapable
     protected static function newFactory(): Factory
     {
         return AccountFactory::new();
-    }
-
-    //
-    // Static methods
-
-    public static function getAllPillarWithdrawAddresses()
-    {
-        $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
-        $pastWithdrawAddresses = PillarUpdateHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
-
-        return $withdrawAddresses->merge($pastWithdrawAddresses)->unique();
-    }
-
-    public static function getAllPillarProducerAddresses()
-    {
-        $producerAddresses = Pillar::select('producer_account_id')->distinct()->pluck('producer_account_id');
-        $pastProducerAddresses = PillarUpdateHistory::select('producer_account_id')->distinct()->pluck('producer_account_id');
-
-        return $producerAddresses->merge($pastProducerAddresses)->unique();
     }
 
     //
@@ -360,22 +340,28 @@ class Account extends Model implements Sitemapable
         return '0';
     }
 
-    public function getActiveStakesAttribute(): ?Model
-    {
-        return $this->stakes()->whereActive()->get();
-    }
-
+    // TODO
     public function getActiveDelegationAttribute(): ?Model
     {
         return $this->delegations()->whereActive()->first();
     }
 
+    // TODO
     public function getIsPillarWithdrawAddressAttribute(): bool
     {
         $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
         $pastWithdrawAddresses = PillarUpdateHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
 
         return $withdrawAddresses->merge($pastWithdrawAddresses)->unique()->contains($this->id);
+    }
+
+    // TODO
+    public function getIsPillarProducerAddressAttribute(): bool
+    {
+        $producerAddresses = Pillar::select('producer_account_id')->distinct()->pluck('producer_account_id');
+        $pastProducerAddresses = PillarUpdateHistory::select('producer_account_id')->distinct()->pluck('producer_account_id');
+
+        return $producerAddresses->merge($pastProducerAddresses)->unique()->contains($this->id);
     }
 
     public function getHasCustomLabelAttribute(): bool
@@ -387,10 +373,10 @@ class Account extends Model implements Sitemapable
         if ($user = auth()->user()) {
 
             // Check favorites
-            //            $favorite = Favorite::findExisting($this, $user);
-            //            if ($favorite) {
-            //                return true;
-            //            }
+            $favorite = MarkableFavorite::findExisting($this, $user);
+            if ($favorite) {
+                return true;
+            }
 
             // Check verified addresses
             $userAddress = $user->verifiedAccounts()
@@ -411,14 +397,6 @@ class Account extends Model implements Sitemapable
             return true;
         }
 
-        //        $pillarProducer = Pillar::where('producer_account_id', $this->id)
-        //            ->whereNull('revoked_at')
-        //            ->first();
-        //
-        //        if ($pillarProducer) {
-        //            return true;
-        //        }
-
         return false;
     }
 
@@ -430,11 +408,11 @@ class Account extends Model implements Sitemapable
 
         if ($user = auth()->user()) {
 
-            // Check favorites
-            //            $favorite = Favorite::findExisting($this, $user);
-            //            if ($favorite) {
-            //                return $favorite->label;
-            //            }
+            //Check favorites
+            $favorite = MarkableFavorite::findExisting($this, $user);
+            if ($favorite) {
+                return $favorite->label;
+            }
 
             // Check verified addresses
             $userAddress = $user->verifiedAccounts()
@@ -455,12 +433,13 @@ class Account extends Model implements Sitemapable
         return $pillar->name ?? $this->address;
     }
 
-    public function getShortAddressAttribute(): string
+    public function getIsFavouriteAttribute(): bool
     {
-        $start = mb_substr($this->address, 0, 6);
-        $end = mb_substr($this->address, -6);
+        if ($user = auth()->user()) {
+            return MarkableFavorite::has($this, $user);
+        }
 
-        return "{$start}....{$end}";
+        return false;
     }
 
     public function getRawJsonAttribute(): ?AccountDTO
@@ -478,22 +457,6 @@ class Account extends Model implements Sitemapable
         }
 
         return $data;
-    }
-
-    public function getIsStexTraderAttribute(): bool
-    {
-        return $this->sentBlocks()
-            ->whereRelation('toAccount', 'name', 'STEX Exchange')
-            ->count() > 0;
-    }
-
-    public function getIsFavouritedAttribute(): bool
-    {
-        if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
-        }
-
-        return false;
     }
 
     public function getIsFlaggedAttribute(): bool

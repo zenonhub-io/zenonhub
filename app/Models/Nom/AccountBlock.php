@@ -6,10 +6,9 @@ namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\AccountBlockDTO;
 use App\Enums\Nom\AccountBlockTypesEnum;
-use App\Models\Markable\Favorite;
+use App\Models\MarkableFavorite;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
-use Carbon\Carbon;
 use Database\Factories\Nom\AccountBlockFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,8 +22,7 @@ use Throwable;
 
 class AccountBlock extends Model
 {
-    //use Markable;
-    use HasFactory, ModelCacheKeyTrait;
+    use HasFactory, Markable, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -69,7 +67,7 @@ class AccountBlock extends Model
     ];
 
     protected static array $marks = [
-        Favorite::class,
+        MarkableFavorite::class,
     ];
 
     /**
@@ -156,17 +154,6 @@ class AccountBlock extends Model
         });
     }
 
-    public function scopeCreatedBetweenDates($query, array $dates)
-    {
-        $start = ($dates[0] instanceof Carbon) ? $dates[0] : Carbon::parse($dates[0]);
-        $end = ($dates[1] instanceof Carbon) ? $dates[1] : Carbon::parse($dates[1]);
-
-        return $query->whereBetween('created_at', [
-            $start->startOfDay(),
-            $end->endOfDay(),
-        ]);
-    }
-
     public function scopeInvolvingAccount($query, $account)
     {
         return $query->where(function ($q) use ($account) {
@@ -188,13 +175,6 @@ class AccountBlock extends Model
     public function scopeNotToEmpty($query)
     {
         return $query->where('to_account_id', '!=', '1');
-    }
-
-    public function scopeNotFromPillarProducer($query)
-    {
-        $producerIds = Account::getAllPillarProducerAddresses();
-
-        return $query->whereNotIn('account_id', $producerIds);
     }
 
     public function scopeNotContractUpdate($query)
@@ -262,15 +242,15 @@ class AccountBlock extends Model
         return $data->toJson();
     }
 
-    public function getWhereUnreceivedAttribute(): bool
+    public function getIsUnreceivedAttribute(): bool
     {
         return ! $this->paired_account_block_id;
     }
 
-    public function getIsFavouritedAttribute(): bool
+    public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
+            return MarkableFavorite::has($this, $user);
         }
 
         return false;
