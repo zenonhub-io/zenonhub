@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\MomentumDTO;
-use App\Models\MarkableFavorite;
+use App\Models\Favorite;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\MomentumFactory;
@@ -54,7 +54,7 @@ class Momentum extends Model
     ];
 
     protected static array $marks = [
-        MarkableFavorite::class,
+        Favorite::class,
     ];
 
     /**
@@ -165,7 +165,7 @@ class Momentum extends Model
     public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return MarkableFavorite::has($this, $user);
+            return Favorite::has($this, $user);
         }
 
         return false;

@@ -7,10 +7,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Maize\Markable\Mark;
 
-class MarkableFavorite extends Mark
+class Favorite extends Mark
 {
-    protected $table = 'markable_favorites';
-
     protected $casts = [
         'notes' => 'encrypted',
         'metadata' => 'array',
@@ -19,11 +17,6 @@ class MarkableFavorite extends Mark
     public static function markableRelationName(): string
     {
         return 'favoriters';
-    }
-
-    public static function markRelationName(): string
-    {
-        return 'favorites';
     }
 
     public static function findExisting(Model $markable, Model $user): ?Model

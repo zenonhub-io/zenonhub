@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\AccountDTO;
-use App\Models\MarkableFavorite;
+use App\Models\Favorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
@@ -64,7 +64,7 @@ class Account extends Model implements Sitemapable
     ];
 
     protected static array $marks = [
-        MarkableFavorite::class,
+        Favorite::class,
     ];
 
     /**
@@ -373,7 +373,7 @@ class Account extends Model implements Sitemapable
         if ($user = auth()->user()) {
 
             // Check favorites
-            $favorite = MarkableFavorite::findExisting($this, $user);
+            $favorite = Favorite::findExisting($this, $user);
             if ($favorite) {
                 return true;
             }
@@ -409,7 +409,7 @@ class Account extends Model implements Sitemapable
         if ($user = auth()->user()) {
 
             //Check favorites
-            $favorite = MarkableFavorite::findExisting($this, $user);
+            $favorite = Favorite::findExisting($this, $user);
             if ($favorite) {
                 return $favorite->label;
             }
@@ -436,7 +436,7 @@ class Account extends Model implements Sitemapable
     public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return MarkableFavorite::has($this, $user);
+            return Favorite::has($this, $user);
         }
 
         return false;

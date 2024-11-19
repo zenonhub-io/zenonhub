@@ -7,7 +7,7 @@ namespace App\Models\Nom;
 use App\DataTransferObjects\Nom\TokenDTO;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Enums\Nom\NetworkTokensEnum;
-use App\Models\MarkableFavorite;
+use App\Models\Favorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
 use Brick\Math\BigDecimal;
@@ -66,7 +66,7 @@ class Token extends Model implements Sitemapable
     ];
 
     protected static array $marks = [
-        MarkableFavorite::class,
+        Favorite::class,
     ];
 
     /**
@@ -274,7 +274,7 @@ class Token extends Model implements Sitemapable
     public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return MarkableFavorite::has($this, $user);
+            return Favorite::has($this, $user);
         }
 
         return false;

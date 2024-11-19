@@ -6,7 +6,7 @@ namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\AccountBlockDTO;
 use App\Enums\Nom\AccountBlockTypesEnum;
-use App\Models\MarkableFavorite;
+use App\Models\Favorite;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\AccountBlockFactory;
@@ -67,7 +67,7 @@ class AccountBlock extends Model
     ];
 
     protected static array $marks = [
-        MarkableFavorite::class,
+        Favorite::class,
     ];
 
     /**
@@ -250,7 +250,7 @@ class AccountBlock extends Model
     public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return MarkableFavorite::has($this, $user);
+            return Favorite::has($this, $user);
         }
 
         return false;

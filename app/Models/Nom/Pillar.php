@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\PillarDTO;
-use App\Models\MarkableFavorite;
+use App\Models\Favorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
@@ -65,7 +65,7 @@ class Pillar extends Model implements Sitemapable
     ];
 
     protected static array $marks = [
-        MarkableFavorite::class,
+        Favorite::class,
     ];
 
     /**
@@ -347,7 +347,7 @@ class Pillar extends Model implements Sitemapable
     public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return MarkableFavorite::has($this, $user);
+            return Favorite::has($this, $user);
         }
 
         return false;
