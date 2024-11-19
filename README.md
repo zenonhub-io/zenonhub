@@ -17,6 +17,13 @@ Clone the repo and install composer dependencies `composer install`
 
 Then install and compile frontend assets `npm i && npm run build`
 
+## 3rd Party libraries
+- Laravel Actions - https://github.com/lorisleiva/laravel-actions
+- Livewire Charts - https://github.com/asantibanez/livewire-charts
+- Livewire DataTables - https://github.com/rappasoft/laravel-livewire-tables
+- Markable/Favorites - https://github.com/maize-tech/laravel-markable
+
+
 ## Setup
 
 - Create a new database
