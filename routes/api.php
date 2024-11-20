@@ -37,9 +37,79 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
     Route::get('utilities/address-from-public-key', [Utilities::class, 'addressFromPublicKey'])->name('api.utilities.address-from-public-key');
     Route::get('utilities/zts-from-hash', [Utilities::class, 'ztsFromHash'])->name('api.utilities.zts-from-hash');
     Route::post('utilities/verify-signed-message', [Utilities::class, 'verifySignedMessage'])->name('api.utilities.verify-signed-message');
+
     Route::get('utilities/account-lp-balances', [Utilities::class, 'accountLpBalances'])->name('api.utilities.account-lp-balances');
     Route::get('utilities/token-supply/{token}/{value?}', [Utilities::class, 'tokenSupply'])->name('api.utilities.token-supply');
     Route::get('utilities/prices', [Utilities::class, 'tokenPrice'])->name('api.utilities.token-price');
+
+    Route::get('reward-totals', [Utilities::class, 'rewardTotals'])->name('rewardTotals');
+    Route::post('plasma-bot/fuse', [Utilities::class, 'plasmaBotFuse'])->name('plasmaBot.fuse');
+    Route::get('plasma-bot/expiration/{address}', [Utilities::class, 'plasmaBotExpiration'])->name('plasmaBot.expiration');
+
+    Route::get('tx-stats', function () {
+
+        $start = now()->subDays(15)->startOfDay()->format('Y-m-d H:i:s');
+        $end = now()->subDay()->endOfDay()->format('Y-m-d H:i:s');
+        $cacheKey = 'tx-stats-' . $start . '-' . $end;
+
+        return Cache::rememberForever($cacheKey, function () use ($start, $end) {
+            $results = [];
+            $contractMethods = App\Models\Nom\ContractMethod::get();
+            $contractMethodIds = $contractMethods->pluck('id');
+            $contractTxs = App\Models\Nom\AccountBlock::selectRaw('DATE(created_at) as date, COUNT(*) as totalTx, nom_contracts.name as contract_name, nom_contract_methods.name as contract_method_name')
+                ->leftJoin('nom_contract_methods', 'nom_contract_methods.id', '=', 'nom_account_blocks.contract_method_id')
+                ->leftJoin('nom_contracts', 'nom_contracts.id', '=', 'nom_contract_methods.contract_id')
+                ->whereIn('contract_method_id', $contractMethodIds)
+                ->whereBetween('created_at', [$start, $end])
+                ->groupBy('date', 'contract_method_id')
+                ->get();
+
+            $contractTxs->each(function ($statistic) use (&$results) {
+
+                if (! $statistic->totalTx) {
+                    return;
+                }
+
+                $arrayKey = $statistic->contract_name . '.' . $statistic->contract_method_name;
+                $results[$statistic->date]['contracts'][$arrayKey] = $statistic->totalTx;
+            });
+
+            $normalTxs = App\Models\Nom\AccountBlock::selectRaw('DATE(created_at) as date, COUNT(*) as totalTx, block_type')
+                ->whereNull('contract_method_id')
+                ->whereBetween('created_at', [$start, $end])
+                ->groupBy('date', 'block_type')
+                ->get();
+
+            $normalTxs->each(function ($statistic) use (&$results) {
+
+                if (! $statistic->totalTx) {
+                    return;
+                }
+
+                $arrayKey = 'Genesis';
+
+                if ($statistic->block_type === 2) {
+                    $arrayKey = 'Send';
+                }
+
+                if ($statistic->block_type === 3) {
+                    $arrayKey = 'Receive';
+                }
+
+                if ($statistic->block_type === 4) {
+                    $arrayKey = 'ContractSend';
+                }
+
+                if ($statistic->block_type === 5) {
+                    $arrayKey = 'ContractReceive';
+                }
+
+                $results[$statistic->date][$arrayKey] = $statistic->totalTx;
+            });
+
+            return json_encode($results);
+        });
+    });
 
     Route::get('nom/accelerator/get-all', [AcceleratorController::class, 'getAll'])->name('api.accelerator.get-all');
     Route::get('nom/accelerator/get-project-by-id', [AcceleratorController::class, 'getProjectById'])->name('api.accelerator.get-project-by-id');

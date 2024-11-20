@@ -25,7 +25,7 @@ class Fuse
     /**
      * @throws PlasmaBotException
      */
-    public function handle(string $address, int $amount, Carbon $expires): void
+    public function handle(string $address, int $amount, ?Carbon $expires = null): void
     {
         try {
             $this->cli->plasmaFuse($address, $amount);

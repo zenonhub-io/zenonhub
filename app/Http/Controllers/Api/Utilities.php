@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\PlasmaBot\Fuse;
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Account;
+use App\Models\Nom\AccountReward;
 use App\Models\Nom\Token;
+use App\Models\PlasmaBotEntry;
 use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use RuntimeException;
 use Validator;
 
 class Utilities extends ApiController
@@ -157,5 +161,136 @@ class Utilities extends ApiController
                 'usd' => app('qsrToken')->price,
             ],
         ]);
+    }
+
+    public function rewardTotals(): JsonResponse
+    {
+        $znnToken = znn_token();
+        $qsrToken = qsr_token();
+
+        $types = ['delegate', 'stake', 'pillar', 'sentinel', 'liquidity', 'bridge_affiliate'];
+        $tokens = ['znn' => $znnToken, 'qsr' => $qsrToken];
+        $result = [];
+
+        foreach ($types as $type) {
+            foreach ($tokens as $tokenName => $token) {
+                $typeConstant = constant('App\Models\Nom\AccountReward::TYPE_' . strtoupper($type));
+                $rewardSum = AccountReward::where('type', $typeConstant)
+                    ->where('token_id', $token->id)
+                    ->sum('amount');
+
+                $uniqueAddresses = AccountReward::where('type', $typeConstant)
+                    ->distinct('account_id')
+                    ->count();
+
+                $result[$type][$tokenName] = $token->getDisplayAmount($rewardSum);
+                $result[$type]['uniqueAddresses'] = $uniqueAddresses;
+            }
+        }
+
+        return $this->success($result);
+    }
+
+    public function plasmaBotFuse(Request $request): JsonResponse
+    {
+        try {
+            (new AccessKeyValidator)->execute($request->bearerToken());
+        } catch (RuntimeException) {
+            return $this->error(
+                'Invalid access token',
+                'Your API token is invalid',
+                403
+            );
+        }
+
+        $validator = Validator::make($request->input(), [
+            'address' => 'required|string|size:40',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        $fuseAmount = 100;
+        $address = $request->input('address');
+        $plasmaBotAccount = Account::findByAddress(config('plasma-bot.address'));
+
+        if ($plasmaBotAccount->qsr_balance < $fuseAmount) {
+            return $this->error(
+                'Unable to fuse QSR',
+                'Not enough QSR available in the bot, try again later',
+                400
+            );
+        }
+
+        $existingFuse = PlasmaBotEntry::whereAddress($address)
+            ->whereactive()
+            ->whereConfirmed()
+            ->exists();
+
+        if (! $existingFuse) {
+            $result = Fuse::run($address, $fuseAmount);
+
+            if (! $result) {
+                return $this->error(
+                    'Error fusing QSR',
+                    'An error occurred while fusing QSR, please try again',
+                    400
+                );
+            }
+        }
+
+        return $this->success('Success');
+    }
+
+    public function plasmaBotExpiration(Request $request, string $address): JsonResponse
+    {
+        try {
+            (new AccessKeyValidator)->execute($request->bearerToken());
+        } catch (RuntimeException) {
+            return $this->error(
+                'Invalid access token',
+                'Your API token is invalid',
+                403
+            );
+        }
+
+        $validator = Validator::make([
+            'address' => $address,
+        ], [
+            'address' => 'required|string|size:40',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        $fuse = PlasmaBotEntry::whereAddress($address)
+            ->whereActive()
+            ->isConfirmed()
+            ->first();
+
+        if (! $fuse) {
+            return $this->error(
+                'Address not found',
+                'The supplied address has not used the plasma bot service.',
+                404
+            );
+        }
+
+        $expirationDate = $fuse->expires_at;
+
+        if (! $expirationDate) {
+            $account = Account::findByAddress($address);
+            if ($account && $account->latest_block) {
+                $account->latest_block->created_at->addDays(30);
+            }
+        }
+
+        if (! $expirationDate) {
+            $expirationDate = now()->addDays(30);
+        }
+
+        return $this->success($expirationDate->format('Y-m-d H:i:s'));
     }
 }
