@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\Validator;
@@ -15,12 +14,7 @@ use Illuminate\Validation\Validator;
  */
 class ApiController
 {
-    protected Zenon $znn;
-
-    public function __construct()
-    {
-        $this->znn = app(Zenon::class);
-    }
+    public function __construct() {}
 
     /**
      * Returns a successful response to the client

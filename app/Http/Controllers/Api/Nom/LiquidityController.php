@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Nom;
 
-use App\Http\Controllers\Api\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Validator;
 
-class LiquidityController extends ApiController
+class LiquidityController extends NomController
 {
     public function getLiquidityInfo(Request $request): JsonResponse
     {

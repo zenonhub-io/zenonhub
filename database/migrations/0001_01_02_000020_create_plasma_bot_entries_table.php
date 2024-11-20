@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('plasma_bot_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_id')->nullable()->references('id')->on('nom_accounts');
-            $table->string('address')->index();
             $table->string('hash')->nullable()->index();
             $table->integer('amount');
             $table->boolean('is_confirmed')->default(0);

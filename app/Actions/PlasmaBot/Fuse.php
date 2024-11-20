@@ -37,7 +37,6 @@ class Fuse
 
         PlasmaBotEntry::create([
             'account_id' => $account->id,
-            'address' => $account->address,
             'amount' => $amount,
             'expires_at' => $expires,
         ]);

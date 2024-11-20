@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Nom;
 
-use App\Http\Controllers\Api\ApiController;
 use DigitalSloth\ZnnPhp\Exceptions\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class StatsController extends ApiController
+class StatsController extends NomController
 {
     public function runtimeInfo(Request $request): JsonResponse
     {

@@ -73,7 +73,7 @@ class PlasmaBot extends Component
         $this->message = null;
 
         $existing = PlasmaBotEntry::whereConfirmed()
-            ->whereAddress($this->fuseForm['address'])
+            ->whereRelation('account', 'address', $this->fuseForm['address'])
             ->first();
 
         if ($existing) {

@@ -20,7 +20,6 @@ class PlasmaBotEntry extends Model
      */
     protected $fillable = [
         'account_id',
-        'address',
         'hash',
         'amount',
         'is_confirmed',
@@ -63,10 +62,5 @@ class PlasmaBotEntry extends Model
                         ]);
                     });
             });
-    }
-
-    public function scopeWhereAddress(Builder $query, $address): Builder
-    {
-        return $query->where('address', $address);
     }
 }
