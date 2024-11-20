@@ -14,8 +14,14 @@ use App\Http\Controllers\Api\Nom\StakeController;
 use App\Http\Controllers\Api\Nom\StatsController;
 use App\Http\Controllers\Api\Nom\SwapController;
 use App\Http\Controllers\Api\Nom\TokenController;
+use App\Http\Controllers\Api\PlasmaBot\CreateFuseController;
+use App\Http\Controllers\Api\PlasmaBot\FuseExpirationController;
 use App\Http\Controllers\Api\Utilities;
-use Illuminate\Auth\Middleware\Authenticate;
+use App\Http\Controllers\Api\Utilities\AddressFromPublicKeyController;
+use App\Http\Controllers\Api\Utilities\TokenPriceController;
+use App\Http\Controllers\Api\Utilities\TokenSupplyController;
+use App\Http\Controllers\Api\Utilities\VerifySignedMessageController;
+use App\Http\Controllers\Api\Utilities\ZtsFromHashController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,22 +36,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', fn (Request $request) => $request->user())->middleware(Authenticate::using('sanctum'));
+Route::get('/user', fn (Request $request) => $request->user())->middleware(['auth:sanctum']);
 
 Route::group(['middleware' => ['throttle:60,1']], function () {
 
-    Route::get('utilities/address-from-public-key', [Utilities::class, 'addressFromPublicKey'])->name('api.utilities.address-from-public-key');
-    Route::get('utilities/zts-from-hash', [Utilities::class, 'ztsFromHash'])->name('api.utilities.zts-from-hash');
-    Route::post('utilities/verify-signed-message', [Utilities::class, 'verifySignedMessage'])->name('api.utilities.verify-signed-message');
-
+    // TODO
     Route::get('utilities/account-lp-balances', [Utilities::class, 'accountLpBalances'])->name('api.utilities.account-lp-balances');
-    Route::get('utilities/token-supply/{token}/{value?}', [Utilities::class, 'tokenSupply'])->name('api.utilities.token-supply');
-    Route::get('utilities/prices', [Utilities::class, 'tokenPrice'])->name('api.utilities.token-price');
-
     Route::get('reward-totals', [Utilities::class, 'rewardTotals'])->name('rewardTotals');
-    Route::post('plasma-bot/fuse', [Utilities::class, 'plasmaBotFuse'])->name('plasmaBot.fuse');
-    Route::get('plasma-bot/expiration/{address}', [Utilities::class, 'plasmaBotExpiration'])->name('plasmaBot.expiration');
-
     Route::get('tx-stats', function () {
 
         $start = now()->subDays(15)->startOfDay()->format('Y-m-d H:i:s');
@@ -109,6 +106,18 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
 
             return json_encode($results);
         });
+    });
+
+    Route::get('utilities/address-from-public-key', AddressFromPublicKeyController::class)->name('api.utilities.address-from-public-key');
+    Route::get('utilities/zts-from-hash', ZtsFromHashController::class)->name('api.utilities.zts-from-hash');
+    Route::post('utilities/verify-signed-message', VerifySignedMessageController::class)->name('api.utilities.verify-signed-message');
+
+    Route::get('utilities/token-supply/{token}/{value?}', TokenSupplyController::class)->name('api.utilities.token-supply');
+    Route::get('utilities/prices', TokenPriceController::class)->name('api.utilities.token-price');
+
+    Route::group(['middleware' => ['auth:sanctum', 'ability:plasma-bot']], function () {
+        Route::post('plasma-bot/fuse', CreateFuseController::class)->name('plasmaBot.fuse');
+        Route::get('plasma-bot/expiration/{address}', FuseExpirationController::class)->name('plasmaBot.expiration');
     });
 
     Route::get('nom/accelerator/get-all', [AcceleratorController::class, 'getAll'])->name('api.accelerator.get-all');
