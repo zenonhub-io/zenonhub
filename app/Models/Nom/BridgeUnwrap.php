@@ -134,6 +134,11 @@ class BridgeUnwrap extends Model
         return $query->whereNotNull('from_address');
     }
 
+    public function scopeWhereNotProcessed($query)
+    {
+        return $query->whereNull('from_address');
+    }
+
     //
     // Attributes
 
