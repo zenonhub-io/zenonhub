@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Notifications\Bots;
 
 use App\Channels\DiscordWebhookChannel;
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\AccountBlock;
+use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
 use App\Services\Discord\Embed;
 use App\Services\Discord\Message as DiscordWebhookMessage;
 use Illuminate\Bus\Queueable;
@@ -21,9 +21,7 @@ class BridgeAlert extends Notification
 {
     use Queueable;
 
-    public function __construct(protected AccountBlock $block)
-    {
-    }
+    public function __construct(protected AccountBlock $block) {}
 
     public function via($notifiable): array
     {

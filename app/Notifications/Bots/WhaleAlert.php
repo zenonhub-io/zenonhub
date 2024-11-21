@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Notifications\Bots;
 
 use App\Channels\DiscordWebhookChannel;
-use App\Domains\Nom\Enums\NetworkTokensEnum;
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\AccountBlock;
-use App\Domains\Nom\Models\Token;
+use App\Enums\Nom\NetworkTokensEnum;
+use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
 use App\Services\Discord\Embed;
 use App\Services\Discord\Message as DiscordWebhookMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\DiscordMessage;
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
 use NotificationChannels\Twitter\TwitterChannel;
@@ -24,9 +22,7 @@ class WhaleAlert extends Notification
 {
     use Queueable;
 
-    public function __construct(protected AccountBlock $block)
-    {
-    }
+    public function __construct(protected AccountBlock $block) {}
 
     public function via($notifiable): array
     {
@@ -46,26 +42,6 @@ class WhaleAlert extends Notification
 
         return $channels;
     }
-
-    //    public function toDiscord($notifiable): DiscordMessage
-    //    {
-    //        $senderAccount = $this->formatMarkdownAddressName($this->block->account);
-    //        $receiverAccount = $this->formatMarkdownAddressName($this->block->toAccount);
-    //        $amount = $this->block->token->getFormattedAmount($this->block->amount);
-    //        $token = $this->block->token->symbol;
-    //
-    //        return DiscordMessage::create()
-    //            ->embed(
-    //                Embed::make()
-    //                    ->color($this->getDiscordHighlightColour())
-    //                    ->title(':whale: :rotating_light:')
-    //                    ->description("**{$amount} \${$token}** was sent from {$senderAccount} to {$receiverAccount}")
-    //                    ->field('Sender', $this->formatMarkdownAddressLink($this->block->account, 'discord'))
-    //                    ->field('Receiver', $this->formatMarkdownAddressLink($this->block->toAccount, 'discord'))
-    //                    ->field('Transaction', $this->formatMarkdownTxLink('discord'))
-    //                    ->timestamp($this->block->created_at->format('c'))
-    //            );
-    //    }
 
     public function toDiscordWebhook($notifiable): DiscordWebhookMessage
     {
@@ -137,6 +113,13 @@ Tx: $txLink
         ]);
     }
 
+    private function formatMarkdownTxLink(string $channel): string
+    {
+        $link = $this->formatTxLink($channel);
+
+        return "[{$this->block->hash}]({$link})";
+    }
+
     private function formatAddressName(Account $account): string
     {
         if ($account->has_custom_label) {
@@ -146,22 +129,6 @@ Tx: $txLink
         return 'an unknown address';
     }
 
-    private function formatAddressLink(Account $account, string $channel): string
-    {
-        return route('explorer.account', [
-            'address' => $account->address,
-            'utm_source' => 'whale_bot',
-            'utm_medium' => $channel,
-        ]);
-    }
-
-    private function formatMarkdownTxLink(string $channel): string
-    {
-        $link = $this->formatTxLink($channel);
-
-        return "[{$this->block->hash}]({$link})";
-    }
-
     private function formatMarkdownAddressName(Account $account, $symbol = '**'): string
     {
         if ($account->has_custom_label) {
@@ -169,6 +136,15 @@ Tx: $txLink
         }
 
         return "an {$symbol}unknown address{$symbol}";
+    }
+
+    private function formatAddressLink(Account $account, string $channel): string
+    {
+        return route('explorer.account', [
+            'address' => $account->address,
+            'utm_source' => 'whale_bot',
+            'utm_medium' => $channel,
+        ]);
     }
 
     private function formatMarkdownAddressLink(Account $account, string $channel): string
@@ -182,9 +158,9 @@ Tx: $txLink
     {
         $colour = 0x607D8B; // Grey
         if ($this->block->token->token_standard === NetworkTokensEnum::ZNN->value) {
-            $colour = 0x6FF34D; // Zenon green
+            $colour = config('zenon-hub.colours.zenon-green');
         } elseif ($this->block->token->token_standard === NetworkTokensEnum::QSR->value) {
-            $colour = 0x0061EB; // Zenon blue
+            $colour = config('zenon-hub.colours.zenon-blue');
         }
 
         return $colour;

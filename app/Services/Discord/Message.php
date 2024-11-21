@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Discord;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -19,16 +21,16 @@ class Message implements Arrayable
 
     public ?array $embeds = null;
 
-    public static function make(?string $content = null): Message
-    {
-        return new self($content);
-    }
-
     protected function __construct(?string $content = null)
     {
         if ($content !== null) {
             $this->content($content);
         }
+    }
+
+    public static function make(?string $content = null): Message
+    {
+        return new self($content);
     }
 
     public function content(string $content): Message
@@ -82,15 +84,11 @@ class Message implements Arrayable
                 'tts' => $this->tts ? 'true' : 'false',
                 'file' => $this->file,
                 'embeds' => $this->serializeEmbeds(), ],
-            static function ($value) {
-                return $value !== null && $value !== [];
-            });
+            static fn ($value) => $value !== null && $value !== []);
     }
 
     protected function serializeEmbeds(): array
     {
-        return array_map(static function (Arrayable $embed) {
-            return $embed->toArray();
-        }, $this->embeds ?? []);
+        return array_map(static fn (Arrayable $embed) => $embed->toArray(), $this->embeds ?? []);
     }
 }

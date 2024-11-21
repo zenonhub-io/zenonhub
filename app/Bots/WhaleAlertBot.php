@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Bots;
 
 use Illuminate\Notifications\Notifiable;
@@ -18,12 +20,12 @@ class WhaleAlertBot
         ];
     }
 
-    public function routeNotificationForTelegram()
+    public function routeNotificationForTelegram(): string
     {
         return config('bots.whale-alerts.telegram.chat');
     }
 
-    public function routeNotificationForDiscordWebhook()
+    public function routeNotificationForDiscordWebhook(): string
     {
         return config('bots.whale-alerts.discord.webhook');
     }
