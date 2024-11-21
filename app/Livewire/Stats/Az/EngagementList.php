@@ -20,8 +20,6 @@ class EngagementList extends BaseTable
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('az_engagement', 'desc');
-
-        $this->setColumnSelectDisabled();
     }
 
     public function builder(): Builder

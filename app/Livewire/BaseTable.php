@@ -20,6 +20,8 @@ abstract class BaseTable extends DataTableComponent
         $this->setPerPageAccepted([10, 25, 50, 100, 150])
             ->setPerPage(25);
 
+        $this->setColumnSelectDisabled();
+
         $this->setComponentWrapperAttributes([
             'class' => 'table-responsive',
         ]);

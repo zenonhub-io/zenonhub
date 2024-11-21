@@ -6,6 +6,7 @@ use App\Http\Controllers\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorProjectController;
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\Explorer\ExplorerOverviewController;
+use App\Http\Controllers\Explorer\ExplorerPlasmaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
@@ -15,7 +16,6 @@ use App\Http\Controllers\SentinelsController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
 use App\Http\Controllers\Stats\PublicNodesStatsController;
-use App\Http\Controllers\TermsController;
 use App\Http\Controllers\TimezoneController;
 use App\Http\Controllers\Tools\ApiPlaygroundController;
 use App\Http\Controllers\Tools\PlasmaBotController;
@@ -90,7 +90,7 @@ Route::middleware([
     Route::get('explorer/token/{zts}/{tab?}', HomeController::class)->name('explorer.token.detail');
     Route::get('explorer/bridge/{tab?}', HomeController::class)->name('explorer.bridge.list');
     Route::get('explorer/stakes', HomeController::class)->name('explorer.stake.list');
-    Route::get('explorer/plasma', HomeController::class)->name('explorer.plasma.list');
+    Route::get('explorer/plasma', ExplorerPlasmaController::class)->name('explorer.plasma.list');
 
     Route::get('stats/bridge/{tab?}', BridgeStatsController::class)->name('stats.bridge');
     Route::get('stats/public-nodes/{tab?}', PublicNodesStatsController::class)->name('stats.public-nodes');

@@ -73,16 +73,14 @@ function float_number(mixed $number): float
     return (float) preg_replace('/[^\d.]/', '', $number);
 }
 
-function short_hash($hash, $eitherSide = 8, $startAndEnd = true): string
+function short_hash($hash, $eitherSide = 8, $includeEnd = true): string
 {
-    if ($startAndEnd) {
-        $start = mb_substr($hash, 0, $eitherSide);
+    $start = mb_substr($hash, 0, $eitherSide);
+    if ($includeEnd) {
         $end = mb_substr($hash, -$eitherSide);
 
         return "{$start}...{$end}";
     }
-
-    $start = mb_substr($hash, 0, $eitherSide);
 
     return "{$start}...";
 }
