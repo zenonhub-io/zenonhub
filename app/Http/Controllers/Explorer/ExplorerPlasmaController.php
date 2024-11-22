@@ -13,9 +13,16 @@ class ExplorerPlasmaController
 {
     public function __invoke(): View
     {
-        MetaTags::title('QSR (Plasma) Fusions')
+        MetaTags::title('Plasma (Fused QSR)')
             ->description('A list of all the addresses in the Zenon Network actively fusing QSR into plasma sorted by creation timestamp in descending order');
 
+        return view('explorer/plasma', [
+            'stats' => $this->getStats(),
+        ]);
+    }
+
+    private function getStats(): array
+    {
         $qsrToken = app('qsrToken');
         $totalPlasma = Plasma::whereActive()->sum('amount');
         $totalPlasma = $qsrToken->getDisplayAmount($totalPlasma);
@@ -26,12 +33,10 @@ class ExplorerPlasmaController
         $totalAccounts = Plasma::whereActive()->distinct('from_account_id')->count();
         $totalAccounts = number_format($totalAccounts);
 
-        return view('explorer/plasma', [
-            'stats' => [
-                'plasma_total' => Number::abbreviate($totalPlasma),
-                'fusions_count' => $totalFusions,
-                'account_count' => $totalAccounts,
-            ],
-        ]);
+        return [
+            'plasma_total' => Number::abbreviate($totalPlasma),
+            'fusions_count' => $totalFusions,
+            'account_count' => $totalAccounts,
+        ];
     }
 }

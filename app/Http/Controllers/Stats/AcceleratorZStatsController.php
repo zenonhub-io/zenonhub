@@ -8,6 +8,7 @@ use App\Enums\Nom\AcceleratorProjectStatusEnum;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Account;
+use App\Models\Nom\Pillar;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Number;
@@ -24,18 +25,18 @@ class AcceleratorZStatsController
 
         $tab = $tab ?: $this->defaultTab;
 
-        $data = null;
-        if ($tab === 'overview') {
-            $data = $this->getOverviewData();
-        }
-
         return view('stats.accelerator-z', [
             'tab' => $tab,
-            'data' => $data,
+            'stats' => match ($tab) {
+                'overview' => $this->getOverviewStats(),
+                'engagement' => $this->getEngagementStats(),
+                'contributors' => $this->getContributorStats(),
+                'default' => null
+            },
         ]);
     }
 
-    private function getOverviewData(): array
+    private function getOverviewStats(): array
     {
         $azContract = Account::firstWhere('address', EmbeddedContractsEnum::ACCELERATOR->value);
         $znnToken = app('znnToken');
@@ -119,6 +120,45 @@ class AcceleratorZStatsController
             'completeProjects' => AcceleratorProject::where('status', AcceleratorProjectStatusEnum::COMPLETE->value)->count(),
             'znnDonutChart' => $znnDonutChart,
             'qsrDonutChart' => $qsrDonutChart,
+        ];
+    }
+
+    private function getEngagementStats(): array
+    {
+        $totalProjects = AcceleratorProject::count();
+        $acceptedProjects = AcceleratorProject::whereIn('status', [
+            AcceleratorProjectStatusEnum::ACCEPTED->value,
+            AcceleratorProjectStatusEnum::COMPLETE->value,
+        ])->count();
+
+        $acceptedProjectsPercentage = ($acceptedProjects / $totalProjects) * 100;
+
+        $votingPillars = Pillar::whereActive()->whereHas('votes')->count();
+        $totalPillars = Pillar::whereActive()->count();
+        $votingPillarPercentage = ($votingPillars / $totalPillars) * 100;
+
+        $avgVoteTime = Pillar::avg('az_avg_vote_time');
+
+        return [
+            'votingPillars' => $votingPillars,
+            'percentageVotingPillars' => round($votingPillarPercentage),
+            'avgVoteTime' => now()->subSeconds($avgVoteTime)->diffForHumans(['parts' => 2], true),
+            'percentageAcceptedProjects' => round($acceptedProjectsPercentage),
+        ];
+    }
+
+    private function getContributorStats(): array
+    {
+        $znnToken = app('znnToken');
+        $qsrToken = app('qsrToken');
+        $znnPaid = AcceleratorProject::whereCompleted()->sum('znn_requested');
+        $qsrPaid = AcceleratorProject::whereCompleted()->sum('qsr_requested');
+
+        return [
+            'totalContributors' => Account::whereHas('projects')->count(),
+            'completeProjects' => AcceleratorProject::whereCompleted()->count(),
+            'znnPaid' => $znnToken->getFormattedAmount($znnPaid),
+            'qsrPaid' => $qsrToken->getFormattedAmount($qsrPaid),
         ];
     }
 }
