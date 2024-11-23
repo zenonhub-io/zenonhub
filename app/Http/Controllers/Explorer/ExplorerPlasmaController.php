@@ -34,9 +34,9 @@ class ExplorerPlasmaController
         $totalAccounts = number_format($totalAccounts);
 
         return [
-            'plasma_total' => Number::abbreviate($totalPlasma),
-            'fusions_count' => $totalFusions,
-            'account_count' => $totalAccounts,
+            'plasmaTotal' => Number::abbreviate($totalPlasma),
+            'fusionsCount' => $totalFusions,
+            'accountCount' => $totalAccounts,
         ];
     }
 }
