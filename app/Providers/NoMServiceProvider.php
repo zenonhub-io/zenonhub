@@ -56,6 +56,8 @@ class NoMServiceProvider extends ServiceProvider
 
         $this->app->singleton('qsrToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value));
 
+        $this->app->singleton('ethLpToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value));
+
         $this->app->singleton('currentChain', fn ($app, $params) => Chain::getCurrentChainId());
     }
 }

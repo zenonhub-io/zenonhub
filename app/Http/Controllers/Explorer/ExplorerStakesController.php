@@ -16,7 +16,7 @@ class ExplorerStakesController
         MetaTags::title('Staking')
             ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order');
 
-        return view('explorer/stakes', [
+        return view('explorer.stakes', [
             'stats' => $this->getStats(),
         ]);
     }

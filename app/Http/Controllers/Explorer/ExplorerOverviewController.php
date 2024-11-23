@@ -17,7 +17,7 @@ class ExplorerOverviewController
     {
         MetaTags::title('Zenon Hub | Explore the Zenon Network Blockchain with Ease', false);
 
-        return view('explorer/overview', [
+        return view('explorer.overview', [
             'stats' => $this->getStats(),
         ]);
     }

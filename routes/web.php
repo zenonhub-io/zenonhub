@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorProjectController;
 use App\Http\Controllers\AcceleratorZController;
+use App\Http\Controllers\Explorer\ExplorerBridgeController;
 use App\Http\Controllers\Explorer\ExplorerOverviewController;
 use App\Http\Controllers\Explorer\ExplorerPlasmaController;
 use App\Http\Controllers\Explorer\ExplorerStakesController;
@@ -89,7 +90,7 @@ Route::middleware([
     Route::get('explorer/account/{address}/{tab?}', HomeController::class)->name('explorer.account.detail');
     Route::get('explorer/tokens', HomeController::class)->name('explorer.token.list');
     Route::get('explorer/token/{zts}/{tab?}', HomeController::class)->name('explorer.token.detail');
-    Route::get('explorer/bridge/{tab?}', HomeController::class)->name('explorer.bridge.list');
+    Route::get('explorer/bridge/{tab?}', ExplorerBridgeController::class)->name('explorer.bridge.list');
     Route::get('explorer/stakes', ExplorerStakesController::class)->name('explorer.stake.list');
     Route::get('explorer/plasma', ExplorerPlasmaController::class)->name('explorer.plasma.list');
 

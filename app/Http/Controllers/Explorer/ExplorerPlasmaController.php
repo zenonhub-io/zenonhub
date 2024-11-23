@@ -16,7 +16,7 @@ class ExplorerPlasmaController
         MetaTags::title('Plasma (Fused QSR)')
             ->description('A list of all the addresses in the Zenon Network actively fusing QSR into plasma sorted by creation timestamp in descending order');
 
-        return view('explorer/plasma', [
+        return view('explorer.plasma', [
             'stats' => $this->getStats(),
         ]);
     }
