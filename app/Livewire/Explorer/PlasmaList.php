@@ -18,7 +18,7 @@ class PlasmaList extends BaseTable
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setDefaultSort('started_at');
+            ->setDefaultSort('started_at', 'desc');
     }
 
     public function builder(): Builder
@@ -36,6 +36,12 @@ class PlasmaList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => view('tables.columns.address')->withRow($row->fromAccount)
                 ),
+            Column::make('')
+                ->label(fn ($row, Column $column) => view('tables.columns.svg')->with([
+                    'svg' => 'explorer/send',
+                    'class' => 'text-success',
+                    'style' => 'transform: rotate(90deg);',
+                ])),
             Column::make('	Beneficiary', 'to_account_id')
                 ->label(
                     fn ($row, Column $column) => view('tables.columns.address')->withRow($row->toAccount)
