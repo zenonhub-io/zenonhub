@@ -17,7 +17,7 @@ trait Bridge
 
             return BridgeInfoDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getBridgeInfo');
+            throw new ZenonRpcException('Unable to getBridgeInfo - ' . $e->getMessage());
         }
     }
 
@@ -28,7 +28,7 @@ trait Bridge
 
             return $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getBridgeInfo');
+            throw new ZenonRpcException('Unable to getPendingIncoming - ' . $e->getMessage());
         }
     }
 
@@ -38,7 +38,7 @@ trait Bridge
         try {
             return $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getBridgeInfo');
+            throw new ZenonRpcException('Unable to getPendingOutgoing - ' . $e->getMessage());
         }
     }
 }

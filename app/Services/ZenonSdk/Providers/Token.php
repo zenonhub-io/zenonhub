@@ -20,7 +20,7 @@ trait Token
 
             return TokenDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getFrontierMomentum');
+            throw new ZenonRpcException('Unable to getByZts - ' . $e->getMessage());
         }
     }
 }

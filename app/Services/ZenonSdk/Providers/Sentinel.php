@@ -17,7 +17,7 @@ trait Sentinel
 
             return SentinelDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getByOwner');
+            throw new ZenonRpcException('Unable to getSentinelByOwner - ' . $e->getMessage());
         }
     }
 }

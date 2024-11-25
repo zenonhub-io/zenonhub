@@ -23,7 +23,7 @@ trait Ledger
 
             return MomentumDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getFrontierMomentum');
+            throw new ZenonRpcException('Unable to getFrontierMomentum - ' . $e->getMessage());
         }
     }
 
@@ -37,7 +37,7 @@ trait Ledger
 
             return MomentumDTO::collect($data, Collection::class);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getMomentumsByHeight');
+            throw new ZenonRpcException('Unable to getMomentumsByHeight - ' . $e->getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ trait Ledger
 
             return MomentumDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getMomentumsByHeight');
+            throw new ZenonRpcException('Unable to getMomentumsByHash - ' . $e->getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ trait Ledger
 
             return AccountBlockDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getFrontierAccountBlock');
+            throw new ZenonRpcException('Unable to getFrontierAccountBlock - ' . $e->getMessage());
         }
     }
 
@@ -83,7 +83,7 @@ trait Ledger
 
             return AccountBlockDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getAccountBlockByHash');
+            throw new ZenonRpcException('Unable to getAccountBlockByHash - ' . $e->getMessage());
         }
     }
 
@@ -94,7 +94,7 @@ trait Ledger
 
             return AccountDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getAccountInfoByAddress');
+            throw new ZenonRpcException('Unable to getAccountInfoByAddress - ' . $e->getMessage());
         }
     }
 }

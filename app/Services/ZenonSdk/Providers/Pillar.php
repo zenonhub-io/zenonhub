@@ -17,7 +17,7 @@ trait Pillar
 
             return PillarDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getProjectById');
+            throw new ZenonRpcException('Unable to getPillarByName - ' . $e->getMessage());
         }
     }
 
@@ -28,7 +28,7 @@ trait Pillar
 
             return PillarDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getProjectById');
+            throw new ZenonRpcException('Unable to getPillarByOwner - ' . $e->getMessage());
         }
     }
 }

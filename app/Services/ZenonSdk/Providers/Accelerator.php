@@ -18,7 +18,7 @@ trait Accelerator
 
             return AcceleratorProjectDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getProjectById');
+            throw new ZenonRpcException('Unable to getProjectById - ' . $e->getMessage());
         }
     }
 
@@ -29,7 +29,7 @@ trait Accelerator
 
             return AcceleratorPhaseDTO::from($data);
         } catch (Exception $e) {
-            throw new ZenonRpcException('Unable to getProjectById');
+            throw new ZenonRpcException('Unable to getPhaseById - ' . $e->getMessage());
         }
     }
 }
