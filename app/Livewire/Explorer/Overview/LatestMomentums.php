@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Explorer\Overview;
 
 use App\Models\Nom\Momentum;
 use Illuminate\Contracts\View\View;
@@ -12,7 +12,7 @@ class LatestMomentums extends Component
 {
     public function render(): View
     {
-        return view('livewire.explorer.latest-momentums', [
+        return view('livewire.explorer.overview.latest-momentums', [
             'momentums' => Momentum::with('producerPillar')
                 ->withCount('accountBlocks')
                 ->limit(6)

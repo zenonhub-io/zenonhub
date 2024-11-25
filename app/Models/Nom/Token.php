@@ -10,6 +10,7 @@ use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Favorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
+use App\Traits\ModelCacheKeyTrait;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Database\Factories\Nom\TokenFactory;
@@ -27,7 +28,7 @@ use Throwable;
 
 class Token extends Model implements Sitemapable
 {
-    use HasFactory, Markable;
+    use HasFactory, Markable, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -214,30 +215,6 @@ class Token extends Model implements Sitemapable
     public function getShortTokenStandardAttribute(): string
     {
         return short_hash($this->token_standard, 5);
-    }
-
-    public function getTotalMintedAttribute(): float
-    {
-        return $this->mints()->sum('amount');
-    }
-
-    public function getDisplayTotalMintedAttribute(): string
-    {
-        $minted = $this->mints()->sum('amount');
-
-        return $this->getFormattedAmount($minted);
-    }
-
-    public function getTotalBurnedAttribute(): float
-    {
-        return $this->burns()->sum('amount');
-    }
-
-    public function getDisplayTotalBurnedAttribute(): string
-    {
-        $burned = $this->burns()->sum('amount');
-
-        return $this->getFormattedAmount($burned);
     }
 
     public function getTotalLockedAttribute(): float

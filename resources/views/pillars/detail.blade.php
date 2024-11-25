@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">

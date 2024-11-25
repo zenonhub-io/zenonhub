@@ -6,10 +6,10 @@
 
     <x-navbar.dropdown title="Explorer" icon="search" isActive="{{ request()->routeIs('explorer.*') }}">
         <x-navbar.dropdown-item title="Overview" route="explorer.overview" />
-        <x-navbar.dropdown-item title="Momentums" route="explorer.momentum.list" />
-        <x-navbar.dropdown-item title="Transactions" route="explorer.transaction.list" />
-        <x-navbar.dropdown-item title="Accounts" route="explorer.account.list" />
-        <x-navbar.dropdown-item title="Tokens" route="explorer.token.list" />
+        <x-navbar.dropdown-item title="Momentums" route="explorer.momentum.list" isActive="{{ request()->routeIs('explorer.momentum.*') }}" />
+        <x-navbar.dropdown-item title="Transactions" route="explorer.transaction.list" isActive="{{ request()->routeIs('explorer.transaction.*') }}" />
+        <x-navbar.dropdown-item title="Accounts" route="explorer.account.list" isActive="{{ request()->routeIs('explorer.account.*') }}" />
+        <x-navbar.dropdown-item title="Tokens" route="explorer.token.list" isActive="{{ request()->routeIs('explorer.token.*') }}" />
         <x-navbar.dropdown-item title="Bridge" route="explorer.bridge.list" />
         <x-navbar.dropdown-item title="Stakes" route="explorer.stake.list" />
         <x-navbar.dropdown-item title="Plasma" route="explorer.plasma.list" />

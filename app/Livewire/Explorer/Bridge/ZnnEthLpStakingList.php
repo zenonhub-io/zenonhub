@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Explorer\Bridge;
 
 use App\Livewire\BaseTable;
 use App\Models\Nom\Stake;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class BridgeZnnEthLpStakingList extends BaseTable
+class ZnnEthLpStakingList extends BaseTable
 {
     public ?string $tab = 'all';
 

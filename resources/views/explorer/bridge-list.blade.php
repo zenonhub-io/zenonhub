@@ -8,11 +8,11 @@
     </x-includes.header>
 
     @if ($tab === 'inbound')
-        <livewire:explorer.bridge-inbound-list />
+        <livewire:explorer.bridge.inbound-list />
     @endif
 
     @if ($tab === 'outbound')
-        <livewire:explorer.bridge-outbound-list />
+        <livewire:explorer.bridge.outbound-list />
     @endif
 
     @if ($tab === 'znn-eth-lp')
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <livewire:explorer.bridge-znn-eth-lp-staking-list />
+        <livewire:explorer.bridge.znn-eth-lp-staking-list />
     @endif
 
 </x-app-layout>

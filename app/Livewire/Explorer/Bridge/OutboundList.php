@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Explorer\Bridge;
 
 use App\Livewire\BaseTable;
 use App\Models\Nom\BridgeWrap;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
-class BridgeOutboundList extends BaseTable
+class OutboundList extends BaseTable
 {
     public ?string $tab = 'all';
 

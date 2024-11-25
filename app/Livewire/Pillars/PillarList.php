@@ -16,8 +16,6 @@ class PillarList extends BaseTable
 {
     public ?string $tab = 'all';
 
-    public string $viewMode = 'default';
-
     public function configure(): void
     {
         parent::configure();

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Explorer\Overview;
 
 use App\Livewire\DateRangePickerTrait;
 use App\Models\Nom\Account;
@@ -11,7 +11,7 @@ use Asantibanez\LivewireCharts\Models\BaseChartModel;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class ActiveAddressesOverview extends Component
+class ActiveAddresses extends Component
 {
     use DateRangePickerTrait;
 
@@ -30,7 +30,7 @@ class ActiveAddressesOverview extends Component
 
         $chartData = $this->addChartData($chartModel);
 
-        return view('livewire.explorer.active-addresses-overview', compact('chartData'), [
+        return view('livewire.explorer.overview.active-addresses', compact('chartData'), [
             'chartData' => $chartData,
             'dateRange' => $this->dateRange,
         ]);

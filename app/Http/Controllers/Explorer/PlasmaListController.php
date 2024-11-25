@@ -9,14 +9,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Number;
 use MetaTags;
 
-class ExplorerPlasmaController
+class PlasmaListController
 {
     public function __invoke(): View
     {
         MetaTags::title('Plasma (Fused QSR)')
             ->description('A list of all the addresses in the Zenon Network actively fusing QSR into plasma sorted by creation timestamp in descending order');
 
-        return view('explorer.plasma', [
+        return view('explorer.plasma-list', [
             'stats' => $this->getStats(),
         ]);
     }

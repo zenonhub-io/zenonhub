@@ -11,7 +11,7 @@ use App\Models\Nom\Token;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
-class ExplorerOverviewController
+class OverviewController
 {
     public function __invoke(): View
     {

@@ -9,14 +9,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Number;
 use MetaTags;
 
-class ExplorerStakesController
+class StakeListController
 {
     public function __invoke(): View
     {
         MetaTags::title('Staking')
             ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order');
 
-        return view('explorer.stakes', [
+        return view('explorer.stake-list', [
             'stats' => $this->getStats(),
         ]);
     }

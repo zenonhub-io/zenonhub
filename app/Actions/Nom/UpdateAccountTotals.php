@@ -65,7 +65,11 @@ class UpdateAccountTotals implements ShouldBeUnique
             ->whereNotNull('token_id')
             ->distinct()
             ->get(['token_id'])
-            ->pluck('token_id');
+            ->pluck('token_id')
+            ->push(app('znnToken')->id, app('qsrToken')->id);
+        // Must include znn & qsr token ids above or it doesnt
+        // calculate genesis balances correctly
+        //
 
         $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
 
@@ -81,14 +85,14 @@ class UpdateAccountTotals implements ShouldBeUnique
 
             $balance = $received - $sent;
 
-            if ($tokenId === 1) {
+            if ($tokenId === app('znnToken')->id) {
                 $balance += $this->account->genesis_znn_balance;
                 $this->account->znn_balance = $balance;
                 $this->account->znn_sent = $sent ?: 0;
                 $this->account->znn_received = $received ?: 0;
             }
 
-            if ($tokenId === 2) {
+            if ($tokenId === app('qsrToken')->id) {
                 $balance += $this->account->genesis_qsr_balance;
                 $this->account->qsr_balance = $balance;
                 $this->account->qsr_sent = $sent ?: 0;

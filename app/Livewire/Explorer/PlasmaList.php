@@ -48,7 +48,7 @@ class PlasmaList extends BaseTable
                 ),
             Column::make('Amount')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderBy('amount', $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' QSR'

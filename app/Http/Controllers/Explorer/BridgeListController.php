@@ -8,7 +8,7 @@ use App\Models\Nom\Stake;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
-class ExplorerBridgeController
+class BridgeListController
 {
     private string $defaultTab = 'inbound';
 
@@ -19,7 +19,7 @@ class ExplorerBridgeController
 
         $tab = $tab ?: $this->defaultTab;
 
-        return view('explorer.bridge', [
+        return view('explorer.bridge-list', [
             'tab' => $tab,
             'stats' => match ($tab) {
                 'inbound' => $this->getInboundStats(),
