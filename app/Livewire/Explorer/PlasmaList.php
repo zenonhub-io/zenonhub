@@ -11,8 +11,6 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class PlasmaList extends BaseTable
 {
-    public ?string $tab = 'all';
-
     public function configure(): void
     {
         parent::configure();

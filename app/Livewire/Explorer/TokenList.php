@@ -48,6 +48,7 @@ class TokenList extends BaseTable
             Column::make('ID', 'id')
                 ->hideIf(true),
             Column::make('Name')
+                ->searchable()
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('name', $direction)
                 )
@@ -69,6 +70,7 @@ class TokenList extends BaseTable
                     fn ($row, Column $column) => $row->getFormattedAmount($row->total_supply)
                 ),
             Column::make('Token Standard')
+                ->searchable()
                 ->label(
                     fn ($row, Column $column) => $row->token_standard
                 ),

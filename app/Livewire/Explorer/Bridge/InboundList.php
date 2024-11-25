@@ -13,8 +13,6 @@ use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class InboundList extends BaseTable
 {
-    public ?string $tab = 'all';
-
     public function configure(): void
     {
         parent::configure();

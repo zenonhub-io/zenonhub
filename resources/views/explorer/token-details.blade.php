@@ -40,7 +40,6 @@
         </div>
     </x-includes.header>
 
-
     <div class="container-fluid px-3 px-md-8">
         <div class="row mb-6 gy-6">
             <div class="col-12 col-lg-8">
@@ -125,16 +124,12 @@
                                     <x-stats.indicator type="danger" /> {{ __('No') }}
                                 @endif
                             </x-stats.list-item>
-
                         </div>
                     </div>
                 </div>
             </x-cards.body>
         </x-cards.card>
     </div>
-
-
-
 
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[
@@ -147,7 +142,7 @@
     </x-includes.header>
 
     @if ($tab === 'holders')
-
+        <livewire:explorer.token.holders-list :tokenId="$token->id" />
     @endif
 
     @if ($tab === 'transactions')
