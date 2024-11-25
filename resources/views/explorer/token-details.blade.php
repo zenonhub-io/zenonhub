@@ -146,15 +146,15 @@
     @endif
 
     @if ($tab === 'transactions')
-
+        <livewire:explorer.token.transactions-list :tokenId="$token->id" />
     @endif
 
     @if ($tab === 'mints')
-
+        <livewire:explorer.token.mints-list :tokenId="$token->id" />
     @endif
 
     @if ($tab === 'burns')
-
+        <livewire:explorer.token.burns-list :tokenId="$token->id" />
     @endif
 
     @if ($tab === 'json')

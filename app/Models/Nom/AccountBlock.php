@@ -244,7 +244,12 @@ class AccountBlock extends Model
 
     public function getIsUnreceivedAttribute(): bool
     {
-        return ! $this->paired_account_block_id;
+        return $this->paired_account_block_id === null;
+    }
+
+    public function getIsReceivedAttribute(): bool
+    {
+        return $this->paired_account_block_id !== null;
     }
 
     public function getIsFavouriteAttribute(): bool

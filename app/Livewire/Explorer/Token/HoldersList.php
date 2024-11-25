@@ -26,7 +26,6 @@ class HoldersList extends BaseTable
     {
         return Token::find($this->tokenId)?->holders()
             ->select('*', DB::raw('CAST(balance AS INTEGER) as formatted_balance'))
-            //->withPivot('balance')
             ->wherePivot('balance', '>', 0)
             ->getQuery();
     }

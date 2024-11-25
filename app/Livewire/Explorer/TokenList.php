@@ -26,7 +26,6 @@ class TokenList extends BaseTable
 
     public function builder(): Builder
     {
-
         $query = Token::select('*')
             ->with('owner')
             ->withCount(['holders as holders_count' => fn ($query) => $query->where('balance', '>', '0')]);

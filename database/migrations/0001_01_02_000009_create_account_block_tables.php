@@ -44,6 +44,7 @@ return new class extends Migration
             $table->index(['account_id', 'to_account_id']);
             $table->index(['account_id', 'token_id']);
             $table->index(['to_account_id', 'token_id']);
+            $table->index(['token_id', 'amount']);
         });
 
         Schema::create('nom_account_block_data', function (Blueprint $table) {
