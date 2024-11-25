@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Explorer;
 
+use App\Models\Nom\Stake;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
@@ -14,7 +15,7 @@ class ExplorerBridgeController
     public function __invoke(?string $tab = null): View
     {
         MetaTags::title('Bridge')
-            ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order');
+            ->description('A list of all incoming and outgoing bridge transactions and a list of LP providers, showing sender and receiver addresses, amount and network');
 
         $tab = $tab ?: $this->defaultTab;
 
@@ -23,7 +24,7 @@ class ExplorerBridgeController
             'stats' => match ($tab) {
                 'inbound' => $this->getInboundStats(),
                 'outbound' => $this->getOutboundStats(),
-                'eth-lp' => $this->getEthLpStats(),
+                'znn-eth-lp' => $this->getEthLpStats(),
             },
         ]);
     }
@@ -40,6 +41,23 @@ class ExplorerBridgeController
 
     private function getEthLpStats(): array
     {
-        return [];
+        $znnEthLpToken = app('znnEthLpToken');
+        $query = Stake::whereActive()->where('token_id', $znnEthLpToken->id);
+
+        $totalStaked = $query->sum('amount');
+        $totalStaked = $znnEthLpToken->getDisplayAmount($totalStaked);
+
+        $totalStakes = $query->count();
+        $totalStakes = number_format($totalStakes);
+
+        $avgDuration = $query->avg('duration');
+        $endDate = now()->addSeconds((float) $avgDuration);
+        $avgDuration = now()->diffInDays($endDate);
+
+        return [
+            'stakedTotal' => $totalStaked,
+            'stakesCount' => $totalStakes,
+            'avgDuration' => number_format($avgDuration),
+        ];
     }
 }

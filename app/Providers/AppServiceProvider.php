@@ -21,9 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(BridgeStatus::class, fn ($app, $params) => new BridgeStatus);
+        $this->registerServices();
 
-        $this->app->singleton(TokenPrice::class, fn ($app, $params) => new TokenPrice);
+        //
+        // Old
 
         $this->app->singleton(DiscordWebHook::class, function ($app, $params) {
             $httpClient = new Client;
@@ -37,11 +38,6 @@ class AppServiceProvider extends ServiceProvider
                 config('services.discourse.key')
             );
         });
-
-        //
-        // Helpers
-
-        $this->app->singleton(MetaTags::class, fn () => new MetaTags);
     }
 
     /**
@@ -53,6 +49,15 @@ class AppServiceProvider extends ServiceProvider
         $this->configureModels();
 
         Paginator::useBootstrapFive();
+    }
+
+    private function registerServices(): void
+    {
+        $this->app->singleton(BridgeStatus::class, fn ($app, $params) => new BridgeStatus);
+
+        $this->app->singleton(TokenPrice::class, fn ($app, $params) => new TokenPrice);
+
+        $this->app->singleton(MetaTags::class, fn () => new MetaTags);
     }
 
     private function configureActions(): void

@@ -9,7 +9,7 @@ use App\Models\Nom\Stake;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class EthLpStakingList extends BaseTable
+class BridgeZnnEthLpStakingList extends BaseTable
 {
     public ?string $tab = 'all';
 
@@ -24,7 +24,7 @@ class EthLpStakingList extends BaseTable
     public function builder(): Builder
     {
         return Stake::select('*')
-            ->where('token_id', app('ethLpToken')->id)
+            ->where('token_id', app('znnEthLpToken')->id)
             ->with('account', 'token')->whereActive();
     }
 
@@ -42,7 +42,7 @@ class EthLpStakingList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => app('ethLpToken')->getFormattedAmount($row->amount) . ' ' . app('ethLpToken')->symbol
+                    fn ($row, Column $column) => app('znnEthLpToken')->getFormattedAmount($row->amount) . ' ' . app('znnEthLpToken')->symbol
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(

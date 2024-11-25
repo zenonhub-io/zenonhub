@@ -7,7 +7,6 @@ namespace App\Providers;
 use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Chain;
 use App\Models\Nom\Token;
-use App\Services\CoinGecko;
 use App\Services\ZenonCli\ZenonCli;
 use App\Services\ZenonSdk\ZenonSdk;
 use DigitalSloth\ZnnPhp\Zenon;
@@ -22,8 +21,6 @@ class NoMServiceProvider extends ServiceProvider
     {
         $this->registerSdkAndCli();
         $this->registerHelpers();
-
-        $this->app->singleton(CoinGecko::class, fn ($app, $params) => new CoinGecko);
     }
 
     /**
@@ -56,7 +53,7 @@ class NoMServiceProvider extends ServiceProvider
 
         $this->app->singleton('qsrToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value));
 
-        $this->app->singleton('ethLpToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value));
+        $this->app->singleton('znnEthLpToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value));
 
         $this->app->singleton('currentChain', fn ($app, $params) => Chain::getCurrentChainId());
     }

@@ -166,6 +166,16 @@ class Token extends Model implements Sitemapable
         return $this->hasMany(BridgeNetworkToken::class);
     }
 
+    public function bridgeUnwraps(): HasMany
+    {
+        return $this->hasMany(BridgeUnwrap::class);
+    }
+
+    public function bridgeWraps(): HasMany
+    {
+        return $this->hasMany(BridgeWrap::class);
+    }
+
     public function socialProfile(): MorphOne
     {
         return $this->morphOne(SocialProfile::class, 'profileable');
