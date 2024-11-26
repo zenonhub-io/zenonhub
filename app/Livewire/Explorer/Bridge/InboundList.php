@@ -50,9 +50,10 @@ class InboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
                         'link' => $row->from_address_link,
-                        'text' => $row->from_address,
+                        'hash' => $row->from_address,
+                        'alwaysShort' => true,
                         'navigate' => false,
                         'newTab' => true,
                     ])
@@ -66,7 +67,9 @@ class InboundList extends BaseTable
                 ])),
             Column::make('To')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->toAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address')
+                        ->with(['alwaysShort' => true])
+                        ->withRow($row->toAccount)
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -81,9 +84,10 @@ class InboundList extends BaseTable
                 ),
             Column::make('TX Hash', 'transaction_hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
                         'link' => $row->tx_hash_link,
-                        'text' => short_hash($row->transaction_hash),
+                        'hash' => $row->transaction_hash,
+                        'alwaysShort' => true,
                         'navigate' => false,
                         'newTab' => true,
                     ])

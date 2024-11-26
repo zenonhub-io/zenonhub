@@ -18,8 +18,8 @@ class MomentumList extends BaseTable
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
 
-        $this->setTableRowUrl(fn ($row) => route('explorer.momentum.detail', $row->hash))
-            ->setTableRowUrlTarget(fn ($row) => 'navigate');
+        //        $this->setTableRowUrl(fn ($row) => route('explorer.momentum.detail', $row->hash))
+        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
     }
 
     public function builder(): Builder
@@ -47,6 +47,15 @@ class MomentumList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => $row->display_height
                 ),
+            Column::make('Hash', 'hash')
+                ->searchable()
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
+                        'link' => route('explorer.momentum.detail', ['hash' => $row->hash]),
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                    ])
+                ),
             Column::make('Age')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
@@ -56,7 +65,7 @@ class MomentumList extends BaseTable
                 ),
             Column::make('Pillar')
                 ->label(
-                    fn ($row, Column $column) => $row->producerPillar->name
+                    fn ($row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row->producerPillar)
                 ),
             Column::make('Transactions')
                 ->sortable(
@@ -64,11 +73,6 @@ class MomentumList extends BaseTable
                 )
                 ->label(
                     fn ($row, Column $column) => number_format($row->account_blocks_count)
-                ),
-            Column::make('Hash', 'hash')
-                ->searchable()
-                ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash', ['hash' => $row->hash, 'alwaysShort' => true])
                 ),
             Column::make('Created')
                 ->sortable(

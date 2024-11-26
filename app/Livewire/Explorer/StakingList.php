@@ -33,7 +33,9 @@ class StakingList extends BaseTable
                 ->hideIf(true),
             Column::make('Address')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address')
+                        ->with(['alwaysShort' => true])
+                        ->withRow($row->account)
                 ),
             Column::make('Amount')
                 ->sortable(

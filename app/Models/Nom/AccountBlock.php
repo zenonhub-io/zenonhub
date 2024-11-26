@@ -101,12 +101,12 @@ class AccountBlock extends Model
 
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Account::class, 'account_id');
     }
 
     public function toAccount(): BelongsTo
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Account::class, 'to_account_id');
     }
 
     public function momentum(): BelongsTo
@@ -239,7 +239,7 @@ class AccountBlock extends Model
             // we will return previously cached data (retrieved at the start of the function).
         }
 
-        return $data->toJson();
+        return $data;
     }
 
     public function getIsUnreceivedAttribute(): bool

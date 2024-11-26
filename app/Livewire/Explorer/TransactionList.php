@@ -1,0 +1,102 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Livewire\Explorer;
+
+use App\Livewire\BaseTable;
+use App\Models\Nom\AccountBlock;
+use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Column;
+
+class TransactionList extends BaseTable
+{
+    public function configure(): void
+    {
+        parent::configure();
+
+        $this->setPrimaryKey('id')
+            ->setDefaultSort('created_at', 'desc');
+
+        //        $this->setTableRowUrl(fn ($row) => route('explorer.transaction.detail', $row->hash))
+        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
+    }
+
+    public function builder(): Builder
+    {
+        $model = new class extends AccountBlock
+        {
+            protected $table = 'view_latest_nom_account_blocks';
+        };
+
+        return $model::select('*')
+            ->with('account', 'toAccount', 'contractMethod', 'token');
+    }
+
+    public function columns(): array
+    {
+        return [
+            Column::make('ID', 'id')
+                ->hideIf(true),
+            Column::make('Hash')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
+                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                    ])
+                ),
+            Column::make('From')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.address')
+                        ->with(['alwaysShort' => true])
+                        ->withRow($row->account)
+                ),
+            Column::make('')
+                ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
+                    'svg' => $row->is_received ? 'explorer/send' : 'explorer/unreceived',
+                    'class' => $row->is_received ? 'text-success' : 'text-danger',
+                    'style' => $row->is_received ? 'transform: rotate(90deg);' : null,
+                    'tooltip' => $row->is_unreceived ? __('Unreceived') : null,
+                ])),
+            Column::make('	To')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.address')
+                        ->with(['alwaysShort' => true])
+                        ->withRow($row->toAccount)
+                ),
+            Column::make('Amount')
+                ->sortable(
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
+                )
+                ->label(
+                    fn ($row, Column $column) => $row->token?->getFormattedAmount($row->amount)
+                ),
+            Column::make('Token')
+                ->label(function ($row, Column $column) {
+                    if ($row->token) {
+                        return view('components.tables.columns.link', [
+                            'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                            'text' => $row->token->symbol,
+                        ]);
+                    }
+                }),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_type
+                ),
+            Column::make('Timestamp')
+                ->sortable(
+                    fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
+                )
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
+                ),
+        ];
+    }
+
+    public function filters(): array
+    {
+        return [];
+    }
+}

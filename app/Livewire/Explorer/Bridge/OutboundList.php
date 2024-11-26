@@ -49,7 +49,9 @@ class OutboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address')
+                        ->with(['alwaysShort' => true])
+                        ->withRow($row->account)
 
                 ),
             Column::make('')
@@ -60,9 +62,10 @@ class OutboundList extends BaseTable
                 ])),
             Column::make('To')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
                         'link' => $row->to_address_link,
-                        'text' => $row->to_address,
+                        'hash' => $row->to_address,
+                        'alwaysShort' => true,
                         'navigate' => false,
                         'newTab' => true,
                     ])
@@ -76,9 +79,10 @@ class OutboundList extends BaseTable
                 ),
             Column::make('TX Hash', 'transaction_hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
                         'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
-                        'text' => short_hash($row->accountBlock->hash),
+                        'hash' => $row->accountBlock->hash,
+                        'alwaysShort' => true,
                     ])
                 ),
             Column::make('Timestamp', 'created_at')

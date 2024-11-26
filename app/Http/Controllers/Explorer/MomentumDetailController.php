@@ -23,7 +23,7 @@ class MomentumDetailController
             abort(404);
         }
 
-        MetaTags::title(__('Momentum :height - Token details', ['height' => $momentum->height]))
+        MetaTags::title(__('Momentum #:height details (:hash)', ['height' => $momentum->height, 'hash' => $momentum->hash]))
             ->description(__('Momentum :height (:hash) detail page showing the network height, producing pillar and a list of transactions', ['height' => $momentum->height, 'hash' => $momentum->hash]));
 
         $tab = $tab ?: $this->defaultTab;

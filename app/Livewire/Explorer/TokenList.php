@@ -20,8 +20,8 @@ class TokenList extends BaseTable
         $this->setPrimaryKey('id')
             ->setDefaultSort('holders_count', 'desc');
 
-        $this->setTableRowUrl(fn ($row) => route('explorer.token.detail', $row->token_standard))
-            ->setTableRowUrlTarget(fn ($row) => 'navigate');
+        //        $this->setTableRowUrl(fn ($row) => route('explorer.token.detail', $row->token_standard))
+        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
     }
 
     public function builder(): Builder
@@ -52,7 +52,10 @@ class TokenList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('name', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => sprintf('%s <span class="text-xs text-muted">%s</span>', $row->name, $row->symbol)
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                        'link' => route('explorer.token.detail', ['zts' => $row->token_standard]),
+                        'text' => $row->name,
+                    ])
                 )->html(),
             Column::make('	Holders')
                 ->sortable(
@@ -72,6 +75,12 @@ class TokenList extends BaseTable
                 ->searchable()
                 ->label(
                     fn ($row, Column $column) => $row->token_standard
+                ),
+            Column::make('Owner')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.address')
+                        ->with(['alwaysShort' => true])
+                        ->withRow($row->owner)
                 ),
             Column::make('Created')
                 ->sortable(
