@@ -72,10 +72,10 @@ class PillarList extends BaseTable
                 ),
             Column::make('Engagement', 'az_engagement')
                 ->sortable()
-                ->view('tables.columns.pillar.az-engagement'),
+                ->view('components.tables.columns.pillar.az-engagement'),
             Column::make('Orchestrator')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.pillar.orchestrator')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar.orchestrator')->withRow($row)
                 ),
             Column::make('Rewards')
                 ->label(
@@ -83,7 +83,7 @@ class PillarList extends BaseTable
                 ),
             Column::make('Momentums')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.pillar.momentums')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar.momentums')->withRow($row)
                 ),
             Column::make('Delegators')
                 ->label(

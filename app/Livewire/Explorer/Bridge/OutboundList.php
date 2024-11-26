@@ -49,18 +49,18 @@ class OutboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->account)
 
                 ),
             Column::make('')
-                ->label(fn ($row, Column $column) => view('tables.columns.svg')->with([
+                ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
                     'svg' => 'explorer/send',
                     'class' => 'text-success',
                     'style' => 'transform: rotate(90deg);',
                 ])),
             Column::make('To')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
                         'link' => $row->to_address_link,
                         'text' => $row->to_address,
                         'navigate' => false,
@@ -76,9 +76,9 @@ class OutboundList extends BaseTable
                 ),
             Column::make('TX Hash', 'transaction_hash')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
                         'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
-                        'text' => $row->accountBlock->hash,
+                        'text' => short_hash($row->accountBlock->hash),
                     ])
                 ),
             Column::make('Timestamp', 'created_at')
@@ -86,7 +86,7 @@ class OutboundList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }

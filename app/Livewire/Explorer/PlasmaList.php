@@ -32,17 +32,17 @@ class PlasmaList extends BaseTable
                 ->hideIf(true),
             Column::make('From', 'from_account_id')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->fromAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->fromAccount)
                 ),
             Column::make('')
-                ->label(fn ($row, Column $column) => view('tables.columns.svg')->with([
+                ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
                     'svg' => 'explorer/send',
                     'class' => 'text-success',
                     'style' => 'transform: rotate(90deg);',
                 ])),
             Column::make('	Beneficiary', 'to_account_id')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->toAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->toAccount)
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -56,7 +56,7 @@ class PlasmaList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('started_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->started_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->started_at])
                 ),
             Column::make('Duration')
                 ->sortable(

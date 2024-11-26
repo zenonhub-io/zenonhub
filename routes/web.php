@@ -6,6 +6,8 @@ use App\Http\Controllers\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorProjectController;
 use App\Http\Controllers\AcceleratorZController;
 use App\Http\Controllers\Explorer\BridgeListController;
+use App\Http\Controllers\Explorer\MomentumDetailController;
+use App\Http\Controllers\Explorer\MomentumListController;
 use App\Http\Controllers\Explorer\OverviewController;
 use App\Http\Controllers\Explorer\PlasmaListController;
 use App\Http\Controllers\Explorer\StakeListController;
@@ -84,8 +86,8 @@ Route::middleware([
     Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorPhaseController::class)->name('accelerator-z.phase.detail');
 
     Route::get('explorer', OverviewController::class)->name('explorer.overview');
-    Route::get('explorer/momentums', HomeController::class)->name('explorer.momentum.list');
-    Route::get('explorer/momentum/{hash}/{tab?}', HomeController::class)->name('explorer.momentum.detail');
+    Route::get('explorer/momentums', MomentumListController::class)->name('explorer.momentum.list');
+    Route::get('explorer/momentum/{hash}/{tab?}', MomentumDetailController::class)->name('explorer.momentum.detail');
     Route::get('explorer/transactions', HomeController::class)->name('explorer.transaction.list');
     Route::get('explorer/transaction/{hash}/{tab?}', HomeController::class)->name('explorer.transaction.detail');
     Route::get('explorer/accounts', HomeController::class)->name('explorer.account.list');

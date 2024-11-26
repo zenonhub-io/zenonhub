@@ -33,7 +33,7 @@ class ZnnEthLpStakingList extends BaseTable
                 ->hideIf(true),
             Column::make('Address')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->account)
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -47,7 +47,7 @@ class ZnnEthLpStakingList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('started_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->started_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->started_at])
                 ),
             Column::make('Lockup')
                 ->sortable(
@@ -58,7 +58,7 @@ class ZnnEthLpStakingList extends BaseTable
                 ),
             Column::make('Available')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->end_date])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->end_date])
                 ),
             Column::make('Duration')
                 ->label(

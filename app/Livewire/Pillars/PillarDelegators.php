@@ -42,7 +42,7 @@ class PillarDelegators extends BaseTable
                 ->searchable(
                     fn (Builder $query, $searchTerm) => $query->where('address', 'like', "%{$searchTerm}%")
                 )
-                ->view('tables.columns.address'),
+                ->view('components.tables.columns.address'),
             Column::make('Weight')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS INTEGER) ' . $direction)
@@ -62,7 +62,7 @@ class PillarDelegators extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('nom_delegations.started_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->delegation_started_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->delegation_started_at])
                 ),
         ];
     }

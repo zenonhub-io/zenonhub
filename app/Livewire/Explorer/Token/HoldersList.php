@@ -39,7 +39,7 @@ class HoldersList extends BaseTable
                 ->hideIf(true),
             Column::make('Address')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row)
                 ),
             Column::make('Balance')
                 ->sortable(

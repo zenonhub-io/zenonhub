@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer\Token;
+namespace App\Livewire\Explorer\Momentum;
 
 use App\Livewire\BaseTable;
-use App\Models\Nom\Token;
+use App\Models\Nom\Momentum;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class TransactionsList extends BaseTable
 {
-    public string $tokenId;
+    public string $momentumId;
 
     public function configure(): void
     {
@@ -23,17 +23,14 @@ class TransactionsList extends BaseTable
 
     public function builder(): Builder
     {
-        return Token::find($this->tokenId)?->transactions()
+        return Momentum::find($this->momentumId)?->accountBlocks()
             ->select('*')
-            ->with('account', 'toAccount', 'contractMethod')
-            ->where('amount', '>', '0')
+            ->with('account', 'toAccount', 'contractMethod', 'token')
             ->getQuery();
     }
 
     public function columns(): array
     {
-        $token = Token::find($this->tokenId);
-
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
@@ -57,8 +54,17 @@ class TransactionsList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $token->getFormattedAmount($row->amount)
+                    fn ($row, Column $column) => $row->token?->getFormattedAmount($row->amount)
                 ),
+            Column::make('Token')
+                ->label(function ($row, Column $column) {
+                    if ($row->token) {
+                        return view('components.tables.columns.link', [
+                            'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                            'text' => $row->token->symbol,
+                        ]);
+                    }
+                }),
             Column::make('Type')
                 ->label(
                     fn ($row, Column $column) => $row->display_type

@@ -46,16 +46,16 @@ class PhaseVotes extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('pillar_name ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.pillar-link')->withRow($row->pillar)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row->pillar)
                 ),
             Column::make('Vote')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.vote')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.vote')->withRow($row)
                 ),
             Column::make('Timestamp', 'created_at')
                 ->sortable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($value, $row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }

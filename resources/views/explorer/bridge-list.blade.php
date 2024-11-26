@@ -3,7 +3,7 @@
         <x-navigation.header.responsive-nav :items="[
             __('Inbound') => route('explorer.bridge.list'),
             __('Outbound') => route('explorer.bridge.list', ['tab' => 'outbound']),
-            __('ETH LP') => route('explorer.bridge.list', ['tab' => 'znn-eth-lp']),
+            __('ZNN ETH LP') => route('explorer.bridge.list', ['tab' => 'znn-eth-lp']),
         ]" :active="$tab" />
     </x-includes.header>
 

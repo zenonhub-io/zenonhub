@@ -2,6 +2,7 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
+                <span class="text-muted text-xs">{{ __('Token') }}</span>
                 <div class="d-flex align-items-center mb-1">
                     @if ($token->socialProfile?->avatar)
                         <div class="w-24 w-md-32">
@@ -18,24 +19,24 @@
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$token->socialProfile" />
-                    <div class="dropdown">
-                        <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-token-{{ $token->token_standard }}">
-                                    <i class="bi bi-pencil-fill me-2"></i> {{ __('Edit') }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-token-{{ $token->token_standard }}">
+                            <i class="bi bi-pencil-fill me-2"></i> {{ __('Edit') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </x-includes.header>
@@ -86,13 +87,13 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
                             <x-stats.list-item :title="__('Token Standard')" :stat="$token->token_standard" />
+                            <x-stats.list-item :title="__('Decimals')" :stat="$token->decimals"/>
                             <x-stats.list-item :title="__('Domain')">
                                 <x-link :href="$token->domain" :new-tab="true" :navigate="false">{{ $token->domain }}</x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Owner')">
                                 <x-address :account="$token->owner"/>
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Decimals')" :stat="$token->decimals"/>
                             <x-stats.list-item :title="__('Created')" :hr="false">
                                 <x-date-time.carbon :date="$token->created_at" />
                             </x-stats.list-item>

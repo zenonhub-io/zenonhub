@@ -38,10 +38,10 @@ class MintsList extends BaseTable
                 ->hideIf(true),
             Column::make('Issuer')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->issuer)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->issuer)
                 ),
             Column::make('')
-                ->label(fn ($row, Column $column) => view('tables.columns.svg')->with([
+                ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
                     'svg' => $row->accountBlock->is_received ? 'explorer/send' : 'explorer/unreceived',
                     'class' => $row->accountBlock->is_received ? 'text-success' : 'text-danger',
                     'style' => $row->accountBlock->is_received ? 'transform: rotate(90deg);' : null,
@@ -49,7 +49,7 @@ class MintsList extends BaseTable
                 ])),
             Column::make('	Receiver')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->receiver)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->receiver)
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -60,7 +60,7 @@ class MintsList extends BaseTable
                 ),
             Column::make('TX Hash')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
                         'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
                         'text' => short_hash($row->accountBlock->hash),
                     ])
@@ -70,7 +70,7 @@ class MintsList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }

@@ -37,22 +37,22 @@ class OrchestratorList extends BaseTable
                 ->sortable()
                 ->searchable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('tables.columns.pillar-link')->withRow($row)
+                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row)
                 ),
             Column::make('Orchestrator')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.pillar.orchestrator')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar.orchestrator')->withRow($row)
                 ),
             Column::make('Address')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address', ['row' => $row->producerAccount])
+                    fn ($row, Column $column) => view('components.tables.columns.address', ['row' => $row->producerAccount])
                 ),
             Column::make('Last Active')
 //                ->sortable(
 //                    fn (Builder $query, string $direction) => $query->orderBy('nom_account.last_active_at', $direction)
 //                )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->producerAccount->last_active_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->producerAccount->last_active_at])
                 ),
         ];
     }

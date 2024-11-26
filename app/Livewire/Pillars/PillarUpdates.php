@@ -38,17 +38,17 @@ class PillarUpdates extends BaseTable
             Column::make('Rewards address')
                 ->searchable()
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address', ['row' => $row->withdrawAccount])
+                    fn ($row, Column $column) => view('components.tables.columns.address', ['row' => $row->withdrawAccount])
                 ),
             Column::make('Producer address')
                 ->searchable()
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address', ['row' => $row->producerAccount])
+                    fn ($row, Column $column) => view('components.tables.columns.address', ['row' => $row->producerAccount])
                 ),
             Column::make('Updated', 'updated_at')
                 ->sortable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('tables.columns.date', ['date' => $row->updated_at])
+                    fn ($value, $row, Column $column) => view('components.tables.columns.date', ['date' => $row->updated_at])
                 ),
         ];
     }

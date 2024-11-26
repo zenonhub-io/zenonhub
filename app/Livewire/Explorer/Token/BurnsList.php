@@ -38,7 +38,7 @@ class BurnsList extends BaseTable
                 ->hideIf(true),
             Column::make('Issuer')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->account)
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -49,7 +49,7 @@ class BurnsList extends BaseTable
                 ),
             Column::make('TX Hash')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
                         'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
                         'text' => short_hash($row->accountBlock->hash),
                     ])
@@ -59,7 +59,7 @@ class BurnsList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }

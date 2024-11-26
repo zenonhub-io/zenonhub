@@ -95,17 +95,17 @@ class Momentum extends Model
 
     public function producerAccount(): BelongsTo
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Account::class, 'producer_account_id');
     }
 
     public function producerPillar(): BelongsTo
     {
-        return $this->belongsTo(Pillar::class);
+        return $this->belongsTo(Pillar::class, 'producer_pillar_id');
     }
 
     public function accountBlocks(): HasMany
     {
-        return $this->hasMany(AccountBlock::class);
+        return $this->hasMany(AccountBlock::class, 'momentum_id');
     }
 
     //

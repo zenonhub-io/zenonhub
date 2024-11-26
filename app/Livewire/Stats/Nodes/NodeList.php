@@ -45,7 +45,7 @@ class NodeList extends BaseTable
                 ->sortable()
                 ->searchable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('tables.columns.country-flag', ['row' => $row])
+                    fn ($value, $row, Column $column) => view('components.tables.columns.country-flag', ['row' => $row])
                 ),
             Column::make('City')
                 ->sortable()

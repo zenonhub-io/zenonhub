@@ -78,7 +78,7 @@ class TokenList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }

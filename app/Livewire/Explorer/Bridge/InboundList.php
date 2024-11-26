@@ -50,7 +50,7 @@ class InboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
                         'link' => $row->from_address_link,
                         'text' => $row->from_address,
                         'navigate' => false,
@@ -58,7 +58,7 @@ class InboundList extends BaseTable
                     ])
                 ),
             Column::make('')
-                ->label(fn ($row, Column $column) => view('tables.columns.svg')->with([
+                ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
                     'svg' => $row->redeemed_at ? 'explorer/send' : 'explorer/unreceived',
                     'class' => $row->redeemed_at ? 'text-success' : 'text-danger',
                     'style' => $row->redeemed_at ? 'transform: rotate(90deg);' : null,
@@ -66,7 +66,7 @@ class InboundList extends BaseTable
                 ])),
             Column::make('To')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.address')->withRow($row->toAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->toAccount)
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -81,9 +81,9 @@ class InboundList extends BaseTable
                 ),
             Column::make('TX Hash', 'transaction_hash')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
                         'link' => $row->tx_hash_link,
-                        'text' => $row->transaction_hash,
+                        'text' => short_hash($row->transaction_hash),
                         'navigate' => false,
                         'newTab' => true,
                     ])
@@ -93,7 +93,7 @@ class InboundList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }

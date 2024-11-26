@@ -47,16 +47,16 @@ class PillarVotes extends BaseTable
                 ->hideIf(true),
             Column::make('Item')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.pillar.votes.az-item')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar.votes.az-item')->withRow($row)
                 ),
             Column::make('Vote')
                 ->label(
-                    fn ($row, Column $column) => view('tables.columns.vote')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.vote')->withRow($row)
                 ),
             Column::make('Timestamp', 'created_at')
                 ->sortable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('tables.columns.date', ['date' => $row->created_at])
+                    fn ($value, $row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at])
                 ),
         ];
     }
