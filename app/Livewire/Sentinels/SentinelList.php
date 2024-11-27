@@ -38,7 +38,10 @@ class SentinelList extends BaseTable
                     fn (Builder $query, $searchTerm) => $query->where('owner.address', 'like', "%{$searchTerm}%")
                 )
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', ['row' => $row->owner])
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->owner,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('ZNN Balance', 'owner.znn_balance')
                 ->sortable(

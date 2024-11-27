@@ -201,6 +201,19 @@ class AccountBlock extends Model
         return null;
     }
 
+    public function getDisplayActualTypeAttribute(): ?string
+    {
+        if ($this->contractMethod) {
+            return $this->contractMethod->name;
+        }
+
+        if ($this->amount > 0) {
+            return 'Transfer';
+        }
+
+        return $this->block_type->label();
+    }
+
     public function getDisplayAmountAttribute(): string
     {
         return $this->token?->getFormattedAmount($this->amount);

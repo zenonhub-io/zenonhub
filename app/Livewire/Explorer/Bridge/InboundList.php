@@ -67,9 +67,10 @@ class InboundList extends BaseTable
                 ])),
             Column::make('To')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->toAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->toAccount,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Amount')
                 ->sortable(

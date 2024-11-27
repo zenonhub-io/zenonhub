@@ -1,4 +1,4 @@
-@props(['title' => null, 'responsiveBorder' => false])
+@props(['title' => null, 'responsiveBorder' => true])
 
 @php($borderClass = $responsiveBorder ? 'border-bottom-0 border-bottom-md' : 'border-bottom')
 

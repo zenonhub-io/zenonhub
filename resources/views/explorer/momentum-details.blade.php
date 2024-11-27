@@ -4,7 +4,7 @@
             <div class="d-flex align-items-start flex-column">
                 <span class="text-muted text-xs">{{ __('Momentum') }}</span>
                 <div class="d-flex align-items-center mb-1">
-                    <x-includes.header-title title="# {{ number_format($momentum->height) }}" />
+                    <x-includes.header-title title="# {{ $momentum->display_height }}" />
                 </div>
             </div>
             <div class="dropdown">
@@ -22,7 +22,7 @@
         </div>
     </x-includes.header>
 
-    <div class="container-fluid px-3 px-md-8">
+    <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
             <div class="col-12">
                 <x-cards.card>
@@ -69,7 +69,7 @@
                                 <x-date-time.carbon :date="$momentum->created_at" :human="true" />
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Producer')" :hr="false">
-                                <x-address :account="$momentum->producerAccount" />
+                                <x-address :account="$momentum->producerAccount" :always-short="true" />
                             </x-stats.list-item>
                         </div>
                     </div>

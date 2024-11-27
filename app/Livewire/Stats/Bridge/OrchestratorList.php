@@ -45,7 +45,10 @@ class OrchestratorList extends BaseTable
                 ),
             Column::make('Address')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', ['row' => $row->producerAccount])
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->producerAccount,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Last Active')
 //                ->sortable(

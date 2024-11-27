@@ -42,7 +42,12 @@ class PillarDelegators extends BaseTable
                 ->searchable(
                     fn (Builder $query, $searchTerm) => $query->where('address', 'like', "%{$searchTerm}%")
                 )
-                ->view('components.tables.columns.address'),
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row,
+                        'alwaysShort' => true,
+                    ])
+                ),
             Column::make('Weight')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS INTEGER) ' . $direction)

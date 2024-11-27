@@ -41,7 +41,7 @@
         </div>
     </x-includes.header>
 
-    <div class="container-fluid px-3 px-md-8">
+    <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
             <div class="col-12 col-lg-8">
                 <x-cards.card>
@@ -92,7 +92,7 @@
                                 <x-link :href="$token->domain" :new-tab="true" :navigate="false">{{ $token->domain }}</x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Owner')">
-                                <x-address :account="$token->owner"/>
+                                <x-address :account="$token->owner" :always-short="true"/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Created')" :hr="false">
                                 <x-date-time.carbon :date="$token->created_at" />

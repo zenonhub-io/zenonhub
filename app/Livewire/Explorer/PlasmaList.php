@@ -32,9 +32,10 @@ class PlasmaList extends BaseTable
                 ->hideIf(true),
             Column::make('From', 'from_account_id')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->fromAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->fromAccount,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('')
                 ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
@@ -44,9 +45,10 @@ class PlasmaList extends BaseTable
                 ])),
             Column::make('	Beneficiary', 'to_account_id')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->toAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->toAccount,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Amount')
                 ->sortable(

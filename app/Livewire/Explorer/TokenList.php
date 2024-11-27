@@ -78,9 +78,10 @@ class TokenList extends BaseTable
                 ),
             Column::make('Owner')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->owner)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->owner,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Created')
                 ->sortable(

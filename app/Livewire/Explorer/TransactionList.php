@@ -48,9 +48,10 @@ class TransactionList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('')
                 ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
@@ -61,9 +62,10 @@ class TransactionList extends BaseTable
                 ])),
             Column::make('	To')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->toAccount)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->toAccount,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Amount')
                 ->sortable(
@@ -83,7 +85,7 @@ class TransactionList extends BaseTable
                 }),
             Column::make('Type')
                 ->label(
-                    fn ($row, Column $column) => $row->display_type
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('Timestamp')
                 ->sortable(

@@ -38,7 +38,10 @@ class BurnsList extends BaseTable
                 ->hideIf(true),
             Column::make('Issuer')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Amount')
                 ->sortable(

@@ -50,7 +50,10 @@ class ContributorsList extends BaseTable
             Column::make('Account')
                 ->searchable()
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', ['row' => $row])
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('ZNN Paid')
                 ->sortable(

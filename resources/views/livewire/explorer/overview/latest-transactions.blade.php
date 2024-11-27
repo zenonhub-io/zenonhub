@@ -42,11 +42,9 @@
                             </span>
                         </div>
                     </div>
-                    @if($tx->display_type)
-                        <div class="badge bg-light-subtle text-muted">
-                            {{ $tx->display_type }}
-                        </div>
-                    @endif
+                    <div class="badge bg-light-subtle text-muted">
+                        {{ $tx->display_actual_type }}
+                    </div>
                     @if($tx->token && $tx->amount > 0)
                         <div class="badge bg-light-subtle text-muted mt-2 ms-2">
                             {{ $tx->display_amount }} {{ $tx->token->symbol }}

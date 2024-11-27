@@ -15,7 +15,7 @@ class TransactionDetailController
     public function __invoke(string $hash, ?string $tab = null): View
     {
         $transaction = AccountBlock::where('hash', $hash)
-            ->with('account', 'toAccount', 'token', 'momentum', 'parent', 'pairedAccountBlock')
+            ->with('account', 'toAccount', 'token', 'momentum', 'parent', 'pairedAccountBlock', 'data')
             ->withCount('descendants')
             ->first();
 

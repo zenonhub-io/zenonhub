@@ -136,13 +136,13 @@
                                 <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in"/>
                             @endif
                             <x-stats.list-item :title="__('Owner')">
-                                <x-address :account="$pillar->owner" :named="false"/>
+                                <x-address :account="$pillar->owner" :named="false" :always-short="true"/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Producer')">
-                                <x-address :account="$pillar->producerAccount" :named="false"/>
+                                <x-address :account="$pillar->producerAccount" :named="false" :always-short="true"/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Withdraw')" :hr="false">
-                                <x-address :account="$pillar->withdrawAccount" :named="false"/>
+                                <x-address :account="$pillar->withdrawAccount" :named="false" :always-short="true"/>
                             </x-stats.list-item>
                         </div>
                     </div>

@@ -49,10 +49,10 @@ class OutboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->account)
-
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('')
                 ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([

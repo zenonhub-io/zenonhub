@@ -91,9 +91,7 @@
         <x-cards.card class="mb-6">
             <x-cards.body>
                 <p>{{ $project->description }}</p>
-
                 <hr>
-
                 <div class="row">
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
@@ -103,7 +101,7 @@
                                 </x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Owner')">
-                                <x-address :account="$project->owner" :named="false"/>
+                                <x-address :account="$project->owner" :always-short="true" :named="false"/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Total phases')" :hr="false">
                                 {{ $project->phases->count() }}

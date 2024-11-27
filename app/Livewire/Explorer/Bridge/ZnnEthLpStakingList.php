@@ -33,9 +33,10 @@ class ZnnEthLpStakingList extends BaseTable
                 ->hideIf(true),
             Column::make('Address')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address')
-                        ->with(['alwaysShort' => true])
-                        ->withRow($row->account)
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Amount')
                 ->sortable(
