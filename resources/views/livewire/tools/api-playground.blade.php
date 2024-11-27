@@ -106,7 +106,7 @@
                                 <span class="input-group-text">
                                     {{ Str::upper($method) }}
                                 </span>
-                                <x-forms.inputs.input id="{{ $uuid }}" name="url" wire:model="url"/>
+                                <x-forms.inputs.input id="{{ $uuid }}" name="url" wire:model="url "/>
                                 <span class="input-group-text js-copy" data-clipboard-target="#{{ $uuid }}" data-bs-toggle="tooltip" data-bs-title="Copy">
                                     <i class="bi-clipboard text-zenon-blue"></i>
                                 </span>

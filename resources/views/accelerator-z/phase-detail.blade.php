@@ -5,7 +5,7 @@
             <div class="d-flex align-items-start flex-column">
                 <span class="text-muted text-xs">{{ __('Phase') }}</span>
                 <div class="d-flex align-items-center">
-                    <x-svg file="zenon/az" class="me-4" style="height: 28px"/>
+                    <x-svg file="zenon/az" class="me-4" style="height: 28px "/>
                     <x-includes.header-title :title="$phase->name" />
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="col-24 col-sm-8">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('USD Value')" :stat="$phase->display_usd_requested"/>
+                        <x-stats.mini-stat :title="__('USD Value')" :stat="$phase->display_usd_requested "/>
                     </x-cards.body>
                 </x-cards.card>
             </div>

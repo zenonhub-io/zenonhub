@@ -8,11 +8,17 @@ use App\Models\Nom\AccountBlock;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
-class TransactionDetailController
+class TransactionsController
 {
-    private string $defaultTab = 'data';
+    public function index(): View
+    {
+        MetaTags::title('Transactions')
+            ->description('A list of transactions that have been confirmed on the Zenon Network. The list consists of transactions from sending and receiving tokens and the interactions with embedded smart contracts');
 
-    public function __invoke(string $hash, ?string $tab = null): View
+        return view('explorer.transaction-list');
+    }
+
+    public function show(string $hash, ?string $tab = 'data'): View
     {
         $transaction = AccountBlock::where('hash', $hash)
             ->with('account', 'toAccount', 'token', 'momentum', 'parent', 'pairedAccountBlock', 'data')

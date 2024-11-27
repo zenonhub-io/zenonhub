@@ -8,16 +8,12 @@ use App\Models\Nom\Stake;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
-class BridgeListController
+class BridgeController
 {
-    private string $defaultTab = 'inbound';
-
-    public function __invoke(?string $tab = null): View
+    public function __invoke(?string $tab = 'inbound'): View
     {
         MetaTags::title('Bridge')
             ->description('A list of all incoming and outgoing bridge transactions and a list of LP providers, showing sender and receiver addresses, amount and network');
-
-        $tab = $tab ?: $this->defaultTab;
 
         return view('explorer.bridge-list', [
             'tab' => $tab,

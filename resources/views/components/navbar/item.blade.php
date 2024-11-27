@@ -5,7 +5,7 @@
         @endisset
 
         @isset($svg)
-            <x-svg file="{{ $svg }}" class="link ms-n2 me-2" style="height: 16px"/>
+            <x-svg file="{{ $svg }}" class="link ms-n2 me-2" style="height: 16px "/>
         @endisset
 
         <span>{{ $title }}</span>

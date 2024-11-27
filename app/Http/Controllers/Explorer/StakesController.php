@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Number;
 use MetaTags;
 
-class StakeListController
+class StakesController
 {
     public function __invoke(): View
     {

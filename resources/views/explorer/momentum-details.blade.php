@@ -55,7 +55,7 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
                             <x-stats.list-item :title="__('Hash')">
-                                <x-hash :hash="$momentum->hash" :always-short="true"/>
+                                <x-hash :hash="$momentum->hash" :always-short="true "/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Created')" :hr="false">
                                 <x-date-time.carbon :date="$momentum->created_at" />

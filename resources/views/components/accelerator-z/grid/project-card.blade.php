@@ -49,8 +49,8 @@
                          data-bs-parent="#phases-{{ $project->hash }}"
                     >
                         <div class="mt-4">
-                            <x-accelerator-z.funding-info :item="$phase" class="bg-dark-subtle p-4 rounded-2 border shadow"/>
-                            <x-accelerator-z.voting-info :item="$phase"/>
+                            <x-accelerator-z.funding-info :item="$phase" class="bg-dark-subtle p-4 rounded-2 border shadow "/>
+                            <x-accelerator-z.voting-info :item="$phase "/>
                             <hr>
                             <p>{{ $phase->description }}</p>
                         </div>

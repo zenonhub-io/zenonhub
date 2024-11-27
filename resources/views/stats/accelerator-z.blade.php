@@ -37,7 +37,7 @@
                 <div class="col-24 col-sm-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('USD Value')" :stat="$stats['usdBalance']"/>
+                            <x-stats.mini-stat :title="__('USD Value')" :stat="$stats['usdBalance'] "/>
                         </x-cards.body>
                     </x-cards.card>
                 </div>
@@ -68,7 +68,7 @@
                 <div class="col-24 col-lg-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('Complete Projects')" :stat="$stats['completeProjects']"/>
+                            <x-stats.mini-stat :title="__('Complete Projects')" :stat="$stats['completeProjects'] "/>
                         </x-cards.body>
                     </x-cards.card>
                 </div>

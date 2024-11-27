@@ -6,10 +6,10 @@
                 <div class="d-flex align-items-center mb-1">
                     @if ($pillar->socialProfile?->avatar)
                         <div class="w-24 w-md-32">
-                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded float-start title-avatar me-2" alt="{{ $pillar->name }} Logo"/>
+                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded float-start title-avatar me-2" alt="{{ $pillar->name }} Logo "/>
                         </div>
                     @else
-                        <x-svg file="zenon/pillar" class="me-4" style="height: 28px"/>
+                        <x-svg file="zenon/pillar" class="me-4" style="height: 28px "/>
                     @endif
                     <x-includes.header-title :title="$pillar->name" />
                 </div>
@@ -117,9 +117,9 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR'"/>
+                            <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR' "/>
                             <x-stats.list-item :title="__('Produced momentums')" :stat="number_format($pillar->momentums()->count())" />
-                            <x-stats.list-item :title="__('Total delegators')" :stat="number_format($pillar->activeDelegators()->count())" :hr="false"/>
+                            <x-stats.list-item :title="__('Total delegators')" :stat="number_format($pillar->activeDelegators()->count())" :hr="false "/>
                             <hr class="d-block d-md-none my-0 mb-3">
                         </div>
                     </div>
@@ -133,16 +133,16 @@
                                     <x-date-time.carbon :date="$pillar->revoked_at" />
                                 </x-stats.list-item>
                             @else
-                                <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in"/>
+                                <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in "/>
                             @endif
                             <x-stats.list-item :title="__('Owner')">
-                                <x-address :account="$pillar->owner" :named="false" :always-short="true"/>
+                                <x-address :account="$pillar->owner" :named="false" :always-short="true "/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Producer')">
-                                <x-address :account="$pillar->producerAccount" :named="false" :always-short="true"/>
+                                <x-address :account="$pillar->producerAccount" :named="false" :always-short="true "/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Withdraw')" :hr="false">
-                                <x-address :account="$pillar->withdrawAccount" :named="false" :always-short="true"/>
+                                <x-address :account="$pillar->withdrawAccount" :named="false" :always-short="true "/>
                             </x-stats.list-item>
                         </div>
                     </div>

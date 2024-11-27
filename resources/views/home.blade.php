@@ -75,7 +75,7 @@
                     <div class="mb-3">
                         @php($uuid = Str::random(8))
                         <x-forms.label label="Text" for="{{ $uuid }}" />
-                        <x-forms.inputs.input name="text_input" id="{{ $uuid }}"/>
+                        <x-forms.inputs.input name="text_input" id="{{ $uuid }} "/>
                     </div>
                     <div class="mb-3">
                         @php($uuid = Str::random(8))
@@ -85,23 +85,23 @@
                     <div class="mb-3">
                         @php($uuid = Str::random(8))
                         <x-forms.label label="Password" for="{{ $uuid }}" />
-                        <x-forms.inputs.password name="password_input" id="{{ $uuid }}"/>
+                        <x-forms.inputs.password name="password_input" id="{{ $uuid }} "/>
                     </div>
                     <div class="mb-3">
                         @php($uuid = Str::random(8))
                         <x-forms.label label="Text area" for="{{ $uuid }}" />
-                        <x-forms.inputs.textarea name="textarea_input" id="{{ $uuid }}"/>
+                        <x-forms.inputs.textarea name="textarea_input" id="{{ $uuid }} "/>
                     </div>
                     <div class="mb-3">
-                        <x-forms.label label="Checkbox"/>
+                        <x-forms.label label="Checkbox "/>
                         <x-forms.inputs.checkbox label="Check me out!" name="checked_out" />
                     </div>
                     <div class="mb-3">
-                        <x-forms.label label="Switch"/>
+                        <x-forms.label label="Switch "/>
                         <x-forms.inputs.checkbox label="Off" name="switch_me_on" value="true" switch="true" />
                     </div>
                     <div>
-                        <x-forms.label label="Radio options"/>
+                        <x-forms.label label="Radio options "/>
                         <x-forms.inputs.radio label="Radio one" name="radio_buttons" value="one" />
                         <x-forms.inputs.radio label="Radio two" name="radio_buttons" value="two" />
                     </div>
@@ -110,10 +110,10 @@
         </x-cards.card>
 
         <div class="d-grid gap-4 my-5">
-            <x-alerts.alert message="Info alert"/>
-            <x-alerts.alert message="Success alert" type="success"/>
-            <x-alerts.alert message="Warning alert" type="warning"/>
-            <x-alerts.alert message="Danger alert" type="danger"/>
+            <x-alerts.alert message="Info alert "/>
+            <x-alerts.alert message="Success alert" type="success "/>
+            <x-alerts.alert message="Warning alert" type="warning "/>
+            <x-alerts.alert message="Danger alert" type="danger "/>
         </div>
 
         <x-date-time.carbon :date-="now()->subDays(2)->subMinutes(30)" class="mb-3" human />

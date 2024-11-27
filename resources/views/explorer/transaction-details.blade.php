@@ -29,19 +29,19 @@
                 <div class="d-md-flex align-items-center justify-content-start justify-content-md-between">
                     <div class="col-24 col-md-10 text-center">
                         <span class="text-muted text-sm d-block">{{ __('From') }}</span>
-                        <x-address :account="$transaction->account" :always-short="true"/>
+                        <x-address :account="$transaction->account" :always-short="true "/>
                     </div>
                     <div class="col-24 col-md-4 text-center py-4 py-md-0">
                         @if($transaction->is_received)
                             <span class="d-none d-md-block">
-                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(90deg);"/>
+                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(90deg); "/>
                             </span>
                             <span class="d-block d-md-none">
-                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(180deg);"/>
+                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(180deg); "/>
                             </span>
                         @else
                             <span data-bs-toggle="tooltip" data-bs-title="{{ __('Unreceived') }}">
-                                <x-svg file="explorer/unreceived" class="text-danger"/>
+                                <x-svg file="explorer/unreceived" class="text-danger "/>
                             </span>
                         @endif
                     </div>
@@ -81,7 +81,7 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Type')" :stat="$transaction->display_actual_type" :hr="false"/>
+                            <x-stats.list-item :title="__('Type')" :stat="$transaction->display_actual_type" :hr="false "/>
                             <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>
@@ -96,13 +96,13 @@
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Momentum')">
                                 <x-link :href="route('explorer.momentum.detail', ['hash' => $transaction->momentum->hash])">
-                                    <x-hash :hash="$transaction->momentum->hash"  :always-short="true"/>
+                                    <x-hash :hash="$transaction->momentum->hash"  :always-short="true "/>
                                 </x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Paired Block')">
                                 @if($transaction->pairedAccountBlock)
                                     <x-link :href="route('explorer.transaction.detail', ['hash' => $transaction->pairedAccountBlock->hash])">
-                                        <x-hash :hash="$transaction->pairedAccountBlock->hash" :always-short="true" :hr="false"/>
+                                        <x-hash :hash="$transaction->pairedAccountBlock->hash" :always-short="true" :hr="false "/>
                                     </x-link>
                                 @else
                                     -
@@ -111,7 +111,7 @@
                             <x-stats.list-item :title="__('Parent Block')" :hr="false">
                                 @if($transaction->parent)
                                     <x-link :href="route('explorer.transaction.detail', ['hash' => $transaction->parent->hash])">
-                                        <x-hash :hash="$transaction->parent->hash" :always-short="true" :hr="false"/>
+                                        <x-hash :hash="$transaction->parent->hash" :always-short="true" :hr="false "/>
                                     </x-link>
                                 @else
                                     -

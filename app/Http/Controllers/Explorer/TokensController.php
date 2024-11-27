@@ -8,11 +8,19 @@ use App\Models\Nom\Token;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
-class TokenDetailController
+class TokensController
 {
-    private string $defaultTab = 'holders';
+    public function index(?string $tab = 'all'): View
+    {
+        MetaTags::title('Tokens')
+            ->description('The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum');
 
-    public function __invoke(string $zts, ?string $tab = null): View
+        return view('explorer.token-list', [
+            'tab' => $tab,
+        ]);
+    }
+
+    public function show(string $zts, ?string $tab = 'holders'): View
     {
         $token = Token::where('token_standard', $zts)
             ->with('owner')
@@ -27,8 +35,6 @@ class TokenDetailController
 
         MetaTags::title(__(':name (:symbol) - Token details', ['name' => $token->name, 'symbol' => $token->symbol]))
             ->description(__('The :name (:symbol) token detail page shows total and current supply information, holder count and detailed lists of holders, transactions, mints and burns', ['name' => $token->name, 'symbol' => $token->symbol]));
-
-        $tab = $tab ?: $this->defaultTab;
 
         return view('explorer.token-details', [
             'tab' => $tab,

@@ -26,18 +26,18 @@
                                 <span class="text-muted text-sm me-1">
                                     {{ __('From') }}:
                                 </span>
-                                <x-address :account="$tx->account" :always-short="true" :either-side="6"/>
+                                <x-address :account="$tx->account" :always-short="true" :either-side="6 "/>
                                 <span class="ms-2">
-                                    <x-svg file="explorer/receive" style="height: 16px" class="text-warning"/>
+                                    <x-svg file="explorer/receive" style="height: 16px" class="text-warning "/>
                                 </span>
                             </span>
                             <span class="d-flex justify-content-start justify-content-md-end align-items-center">
                                 <span class="text-muted text-sm me-1">
                                     {{ __('To') }}:
                                 </span>
-                                <x-address :account="$tx->toAccount" :always-short="true" :either-side="6"/>
+                                <x-address :account="$tx->toAccount" :always-short="true" :either-side="6 "/>
                                 <span class="ms-2">
-                                    <x-svg file="explorer/send" style="height: 16px" class="text-success"/>
+                                    <x-svg file="explorer/send" style="height: 16px" class="text-success "/>
                                 </span>
                             </span>
                         </div>

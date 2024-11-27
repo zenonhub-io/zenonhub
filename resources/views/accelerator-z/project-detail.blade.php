@@ -5,7 +5,7 @@
             <div class="d-flex align-items-start flex-column">
                 <span class="text-muted text-xs">{{ __('Project') }}</span>
                 <div class="d-flex align-items-center">
-                    <x-svg file="zenon/az" class="me-4" style="height: 28px"/>
+                    <x-svg file="zenon/az" class="me-4" style="height: 28px "/>
                     <x-includes.header-title :title="$project->name" />
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="col-24 col-sm-8">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('USD Value')" :stat="$project->display_usd_requested"/>
+                        <x-stats.mini-stat :title="__('USD Value')" :stat="$project->display_usd_requested "/>
                     </x-cards.body>
                 </x-cards.card>
             </div>
@@ -101,7 +101,7 @@
                                 </x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Owner')">
-                                <x-address :account="$project->owner" :always-short="true" :named="false"/>
+                                <x-address :account="$project->owner" :always-short="true" :named="false "/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Total phases')" :hr="false">
                                 {{ $project->phases->count() }}

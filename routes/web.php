@@ -3,20 +3,16 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AcceleratorPhaseController;
-use App\Http\Controllers\AcceleratorProjectController;
-use App\Http\Controllers\AcceleratorZController;
-use App\Http\Controllers\Explorer\BridgeListController;
-use App\Http\Controllers\Explorer\MomentumDetailController;
-use App\Http\Controllers\Explorer\MomentumListController;
+use App\Http\Controllers\AcceleratorProjectsController;
+use App\Http\Controllers\Explorer\AccountsController;
+use App\Http\Controllers\Explorer\BridgeController;
+use App\Http\Controllers\Explorer\MomentumsController;
 use App\Http\Controllers\Explorer\OverviewController;
-use App\Http\Controllers\Explorer\PlasmaListController;
-use App\Http\Controllers\Explorer\StakeListController;
-use App\Http\Controllers\Explorer\TokenDetailController;
-use App\Http\Controllers\Explorer\TokenListController;
-use App\Http\Controllers\Explorer\TransactionDetailController;
-use App\Http\Controllers\Explorer\TransactionListController;
+use App\Http\Controllers\Explorer\PlasmaController;
+use App\Http\Controllers\Explorer\StakesController;
+use App\Http\Controllers\Explorer\TokensController;
+use App\Http\Controllers\Explorer\TransactionsController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PillarDetailController;
 use App\Http\Controllers\PillarsController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
@@ -75,30 +71,30 @@ Route::middleware([
     Route::get('donate', HomeController::class)->name('donate');
     Route::get('sponsor', HomeController::class)->name('sponsor');
 
-    Route::post('/timezone', [TimezoneController::class, 'update'])->name('timezone.update');
+    Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
 
-    Route::get('pillars/{tab?}', PillarsController::class)->name('pillar.list');
-    Route::get('pillar/{slug}/{tab?}', PillarDetailController::class)->name('pillar.detail');
+    Route::get('pillars/{tab?}', [PillarsController::class, 'index'])->name('pillar.list');
+    Route::get('pillar/{slug}/{tab?}', [PillarsController::class, 'show'])->name('pillar.detail');
 
     Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
-    Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
+    //Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
-    Route::get('accelerator-z/{tab?}', AcceleratorZController::class)->name('accelerator-z.list');
-    Route::get('accelerator-z/project/{hash}/{tab?}', AcceleratorProjectController::class)->name('accelerator-z.project.detail');
+    Route::get('accelerator-z/{tab?}', [AcceleratorProjectsController::class, 'index'])->name('accelerator-z.list');
+    Route::get('accelerator-z/project/{hash}/{tab?}', [AcceleratorProjectsController::class, 'show'])->name('accelerator-z.project.detail');
     Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorPhaseController::class)->name('accelerator-z.phase.detail');
 
     Route::get('explorer', OverviewController::class)->name('explorer.overview');
-    Route::get('explorer/momentums', MomentumListController::class)->name('explorer.momentum.list');
-    Route::get('explorer/momentum/{hash}/{tab?}', MomentumDetailController::class)->name('explorer.momentum.detail');
-    Route::get('explorer/transactions', TransactionListController::class)->name('explorer.transaction.list');
-    Route::get('explorer/transaction/{hash}/{tab?}', TransactionDetailController::class)->name('explorer.transaction.detail');
-    Route::get('explorer/accounts', HomeController::class)->name('explorer.account.list');
-    Route::get('explorer/account/{address}/{tab?}', HomeController::class)->name('explorer.account.detail');
-    Route::get('explorer/tokens/{tab?}', TokenListController::class)->name('explorer.token.list');
-    Route::get('explorer/token/{zts}/{tab?}', TokenDetailController::class)->name('explorer.token.detail');
-    Route::get('explorer/bridge/{tab?}', BridgeListController::class)->name('explorer.bridge.list');
-    Route::get('explorer/stakes', StakeListController::class)->name('explorer.stake.list');
-    Route::get('explorer/plasma', PlasmaListController::class)->name('explorer.plasma.list');
+    Route::get('explorer/momentums', [MomentumsController::class, 'index'])->name('explorer.momentum.list');
+    Route::get('explorer/momentum/{hash}/{tab?}', [MomentumsController::class, 'show'])->name('explorer.momentum.detail');
+    Route::get('explorer/transactions', [TransactionsController::class, 'index'])->name('explorer.transaction.list');
+    Route::get('explorer/transaction/{hash}/{tab?}', [TransactionsController::class, 'show'])->name('explorer.transaction.detail');
+    Route::get('explorer/accounts/{tab?}', [AccountsController::class, 'index'])->name('explorer.account.list');
+    Route::get('explorer/account/{address}/{tab?}', [AccountsController::class, 'show'])->name('explorer.account.detail');
+    Route::get('explorer/tokens/{tab?}', [TokensController::class, 'index'])->name('explorer.token.list');
+    Route::get('explorer/token/{zts}/{tab?}', [TokensController::class, 'show'])->name('explorer.token.detail');
+    Route::get('explorer/bridge/{tab?}', BridgeController::class)->name('explorer.bridge.list');
+    Route::get('explorer/stakes', StakesController::class)->name('explorer.stake.list');
+    Route::get('explorer/plasma', PlasmaController::class)->name('explorer.plasma.list');
 
     Route::get('stats/bridge/{tab?}', BridgeStatsController::class)->name('stats.bridge');
     Route::get('stats/public-nodes/{tab?}', PublicNodesStatsController::class)->name('stats.public-nodes');
