@@ -13,15 +13,13 @@ use MetaTags;
 
 class PublicNodesStatsController
 {
-    private string $defaultTab = 'overview';
-
-    public function __invoke(?string $tab = null): View
+    public function __invoke(?string $tab = 'overview'): View
     {
         MetaTags::title('Zenon RPC Node Stats')
             ->description('The Public RPC node stats page displays the Zenon Network public RPC node stats including their geographic distribution, version and network data');
 
         return view('stats.nodes', [
-            'tab' => $tab ?: $this->defaultTab,
+            'tab' => $tab,
             'nodes' => PublicNode::all(),
             'topCountries' => $this->getTopCountries(),
             'topNetworks' => $this->getTopNetworks(),

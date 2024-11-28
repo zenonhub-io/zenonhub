@@ -23,6 +23,7 @@ class AccountsController
     public function show(string $address, ?string $tab = 'transactions'): View
     {
         $account = Account::where('address', $address)
+            ->withCount('sentBlocks')
             ->first();
 
         if (! $account) {

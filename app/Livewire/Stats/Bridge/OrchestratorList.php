@@ -23,9 +23,9 @@ class OrchestratorList extends BaseTable
 
     public function builder(): Builder
     {
-        return Pillar::select('*')
-            ->whereHas('orchestrator')
-            ->with(['orchestrator', 'producerAccount']);
+        return Pillar::with('orchestrator', 'producerAccount')
+            ->select('*')
+            ->whereHas('orchestrator');
     }
 
     public function columns(): array

@@ -24,8 +24,8 @@ class MintsList extends BaseTable
     public function builder(): Builder
     {
         return Token::find($this->tokenId)?->mints()
-            ->select('*')
             ->with('issuer', 'receiver', 'accountBlock')
+            ->select('*')
             ->getQuery();
     }
 

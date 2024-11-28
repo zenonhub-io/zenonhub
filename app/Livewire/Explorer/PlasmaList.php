@@ -21,8 +21,9 @@ class PlasmaList extends BaseTable
 
     public function builder(): Builder
     {
-        return Plasma::select('*')
-            ->with('fromAccount', 'toAccount')->whereActive();
+        return Plasma::with('fromAccount', 'toAccount')
+            ->select('*')
+            ->whereActive();
     }
 
     public function columns(): array

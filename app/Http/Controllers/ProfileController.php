@@ -9,14 +9,12 @@ use MetaTags;
 
 class ProfileController
 {
-    private string $defaultTab = 'details';
-
-    public function __invoke(?string $tab = null): View
+    public function __invoke(?string $tab = 'details'): View
     {
         MetaTags::title('Manage your account');
 
         return view('profile', [
-            'tab' => $tab ?: $this->defaultTab,
+            'tab' => $tab,
         ]);
     }
 }

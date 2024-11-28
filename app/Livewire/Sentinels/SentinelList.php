@@ -23,8 +23,7 @@ class SentinelList extends BaseTable
 
     public function builder(): Builder
     {
-        return Sentinel::query()
-            ->with('owner')
+        return Sentinel::with('owner')
             ->select('*')
             ->whereActive();
     }

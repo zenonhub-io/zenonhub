@@ -10,15 +10,13 @@ use MetaTags;
 
 class BridgeStatsController
 {
-    private string $defaultTab = 'overview';
-
-    public function __invoke(?string $tab = null): View
+    public function __invoke(?string $tab = 'overview'): View
     {
         MetaTags::title('Bridge Stats')
             ->description('The Bridge Stats page shows a detailed overview of the Multi-Chain Bridge including its status, admin actions, security info and supported networks');
 
         return view('stats.bridge', [
-            'tab' => $tab ?: $this->defaultTab,
+            'tab' => $tab,
             'status' => app(BridgeStatus::class),
             'affiliateLink' => config('nom.bridge.affiliateLink'),
         ]);

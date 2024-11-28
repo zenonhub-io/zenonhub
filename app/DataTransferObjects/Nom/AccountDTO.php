@@ -13,6 +13,6 @@ class AccountDTO extends Data
         public string $address,
         public int $accountHeight,
         /** @var Collection<int, AccountTokenBalanceDTO> */
-        public ?Collection $balanceInfoMap
+        public ?object $balanceInfoMap
     ) {}
 }

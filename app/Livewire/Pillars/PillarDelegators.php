@@ -25,12 +25,12 @@ class PillarDelegators extends BaseTable
     public function builder(): Builder
     {
         return Pillar::find($this->pillarId)?->activeDelegators()
+            ->withPivot('started_at')
             ->select(
                 'nom_accounts.*',
                 'nom_delegations.started_at as delegation_started_at',
                 DB::raw('CAST(znn_balance AS INTEGER) as formatted_znn_balance')
             )
-            ->withPivot('started_at')
             ->getQuery();
     }
 

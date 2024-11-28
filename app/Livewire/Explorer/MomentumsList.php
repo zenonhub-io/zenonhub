@@ -9,7 +9,7 @@ use App\Models\Nom\Momentum;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class MomentumList extends BaseTable
+class MomentumsList extends BaseTable
 {
     public function configure(): void
     {
@@ -29,9 +29,9 @@ class MomentumList extends BaseTable
             protected $table = 'view_latest_nom_momentums';
         };
 
-        return $model::select('*')
-            ->with('producerPillar')
-            ->withCount('accountBlocks');
+        return $model::with('producerPillar')
+            ->withCount('accountBlocks')
+            ->select('*');
     }
 
     public function columns(): array

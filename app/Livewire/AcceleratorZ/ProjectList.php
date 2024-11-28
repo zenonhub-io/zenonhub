@@ -31,8 +31,8 @@ class ProjectList extends BaseTable
 
     public function builder(): Builder
     {
-        $query = AcceleratorProject::select('*')
-            ->with('phases');
+        $query = AcceleratorProject::with('phases')
+            ->select('*');
 
         if ($this->tab === 'open') {
             $query->whereOpen();

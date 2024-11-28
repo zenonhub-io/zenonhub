@@ -10,9 +10,7 @@ use MetaTags;
 
 class AcceleratorPhaseController
 {
-    private string $defaultTab = 'votes';
-
-    public function __invoke(string $hash, ?string $tab = null): View
+    public function __invoke(string $hash, ?string $tab = 'votes'): View
     {
         $phase = AcceleratorPhase::firstWhere('hash', $hash)?->load('project');
 
@@ -25,7 +23,7 @@ class AcceleratorPhaseController
 
         return view('accelerator-z.phase-detail', [
             'phase' => $phase,
-            'tab' => $tab ?: $this->defaultTab,
+            'tab' => $tab,
         ]);
     }
 }

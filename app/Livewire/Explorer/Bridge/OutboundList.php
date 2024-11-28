@@ -34,8 +34,8 @@ class OutboundList extends BaseTable
 
     public function builder(): Builder
     {
-        return BridgeWrap::select('*')
-            ->with('bridgeNetwork', 'token', 'account', 'accountBlock');
+        return BridgeWrap::with('bridgeNetwork', 'token', 'account', 'accountBlock')
+            ->select('*');
     }
 
     public function columns(): array

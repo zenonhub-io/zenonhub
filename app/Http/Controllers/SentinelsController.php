@@ -9,15 +9,13 @@ use MetaTags;
 
 class SentinelsController
 {
-    private string $defaultTab = 'all';
-
-    public function __invoke(?string $tab = null): View
+    public function __invoke(?string $tab = 'all'): View
     {
         //        MetaTags::title('')
         //            ->description('');
 
         return view('sentinels.list', [
-            'tab' => $tab ?: $this->defaultTab,
+            'tab' => $tab,
         ]);
     }
 }

@@ -32,8 +32,6 @@ class TransactionsController
         MetaTags::title(__('Transaction details (:hash)', ['hash' => $transaction->hash]))
             ->description(__('Detailed transaction info for hash :hash. The transaction status, block type, confirmation and token transfer are shown', ['hash' => $transaction->hash]));
 
-        $tab = $tab ?: $this->defaultTab;
-
         return view('explorer.transaction-details', [
             'tab' => $tab,
             'transaction' => $transaction,

@@ -24,8 +24,8 @@ class BurnsList extends BaseTable
     public function builder(): Builder
     {
         return Token::find($this->tokenId)?->burns()
-            ->select('*')
             ->with('account', 'accountBlock')
+            ->select('*')
             ->getQuery();
     }
 

@@ -7,5 +7,5 @@
             __('Sentinels') => route('explorer.account.list', ['tab' => 'sentinels']),
         ]" :active="$tab" />
     </x-includes.header>
-{{--    <livewire:explorer.account-list :tab="$tab" />--}}
+    <livewire:explorer.accounts-list :tab="$tab" />
 </x-app-layout>

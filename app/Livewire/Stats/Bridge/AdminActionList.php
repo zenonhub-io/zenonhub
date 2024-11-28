@@ -29,13 +29,11 @@ class AdminActionList extends BaseTable
 
     public function builder(): Builder
     {
-        $bridgeAdmin = BridgeAdmin::getActiveAdmin();
+        $bridgeAdmin = BridgeAdmin::getActiveAdmin()->load('account');
 
-        return $bridgeAdmin->load('account')
-            ->account
-            ->sentBlocks()
-            ->select('*')
+        return $bridgeAdmin->account->sentBlocks()
             ->with(['data', 'contractMethod', 'contractMethod.contract'])
+            ->select('*')
             ->whereNotNull('contract_method_id')
             ->getQuery();
     }

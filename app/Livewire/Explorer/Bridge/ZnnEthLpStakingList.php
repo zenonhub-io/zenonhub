@@ -21,9 +21,10 @@ class ZnnEthLpStakingList extends BaseTable
 
     public function builder(): Builder
     {
-        return Stake::select('*')
+        return Stake::with('account', 'token')
+            ->select('*')
             ->where('token_id', app('znnEthLpToken')->id)
-            ->with('account', 'token')->whereActive();
+            ->whereActive();
     }
 
     public function columns(): array

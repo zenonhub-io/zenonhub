@@ -21,9 +21,10 @@ class StakingList extends BaseTable
 
     public function builder(): Builder
     {
-        return Stake::select('*')
+        return Stake::with('account', 'token')
+            ->select('*')
             ->where('token_id', app('znnToken')->id)
-            ->with('account', 'token')->whereActive();
+            ->whereActive();
     }
 
     public function columns(): array

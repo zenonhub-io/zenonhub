@@ -251,6 +251,11 @@ class Account extends Model implements Sitemapable
         return ZnnUtilities::toHex($publicKey);
     }
 
+    public function getDisplayHeightAttribute(): string
+    {
+        return number_format($this->sent_blocks_count);
+    }
+
     public function getDisplayZnnBalanceAttribute($decimals = null): string
     {
         return app('znnToken')->getFormattedAmount($this->znn_balance, $decimals);
@@ -275,34 +280,43 @@ class Account extends Model implements Sitemapable
         return number_format(($znnTotal + $qsrTotal), 2);
     }
 
-    public function getDisplayZnnStakedAttribute($decimals = null): string
+    public function getDisplayZnnRewardsAttribute(): string
     {
-        return app('znnToken')->getFormattedAmount($this->znn_staked, $decimals);
+        $znnToken = app('znnToken');
+        $rewards = $this->rewards()
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+
+        return $znnToken->getFormattedAmount($rewards);
     }
 
-    public function getDisplayQsrFusedAttribute($decimals = null): string
+    public function getDisplayQsrRewardsAttribute(): string
     {
-        return app('qsrToken')->getFormattedAmount($this->qsr_fused, $decimals);
+        $znnToken = app('qsrToken');
+        $rewards = $this->rewards()
+            ->where('token_id', $znnToken->id)
+            ->sum('amount');
+
+        return $znnToken->getFormattedAmount($rewards);
     }
 
-    public function getDisplayZnnRewardsAttribute($decimals = null): string
+    public function getDisplayFusedQsrAttribute(): string
     {
-        return app('znnToken')->getFormattedAmount($this->znn_rewards, $decimals);
+        $fusions = $this->fusions()->whereActive()->sum('amount');
+
+        return app('qsrToken')->getFormattedAmount($fusions);
     }
 
-    public function getDisplayQsrRewardsAttribute($decimals = null): string
+    public function getDisplayStakedZnnAttribute(): string
     {
-        return app('qsrToken')->getFormattedAmount($this->qsr_rewards, $decimals);
-    }
+        $stakes = $this->stakes()->whereActive()->sum('amount');
 
-    public function getFusedQsrAttribute(): string
-    {
-        return app('qsrToken')->getFormattedAmount($this->fuses->sum('amount'));
+        return app('znnToken')->getFormattedAmount($stakes);
     }
 
     public function getPlasmaLevelAttribute(): string
     {
-        $fusedQsr = float_number($this->fused_qsr);
+        $fusedQsr = preg_replace('/[^\d.]/', '', $this->display_fused_qsr);
 
         if ($fusedQsr >= 120) {
             return 'High';
@@ -340,10 +354,20 @@ class Account extends Model implements Sitemapable
         return '0';
     }
 
-    // TODO
     public function getActiveDelegationAttribute(): ?Model
     {
         return $this->delegations()->whereActive()->first();
+    }
+
+    public function getFundingBlockAttribute(): ?AccountBlock
+    {
+        $znnToken = app('znnToken');
+
+        return $this->receivedBlocks()
+            ->where('token_id', $znnToken->id)
+            ->where('amount', '>', 0)
+            ->oldest()
+            ->first();
     }
 
     // TODO
@@ -444,7 +468,7 @@ class Account extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): ?AccountDTO
     {
-        $cacheKey = $this->cacheKey('rawJson');
+        $cacheKey = $this->cacheKey('rawJson', 'last_active_at');
         $data = Cache::get($cacheKey);
 
         try {

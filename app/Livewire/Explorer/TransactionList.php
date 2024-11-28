@@ -29,8 +29,8 @@ class TransactionList extends BaseTable
             protected $table = 'view_latest_nom_account_blocks';
         };
 
-        return $model::select('*')
-            ->with('account', 'toAccount', 'contractMethod', 'token');
+        return $model::with('account', 'toAccount', 'contractMethod', 'token')
+            ->select('*');
     }
 
     public function columns(): array
@@ -76,12 +76,14 @@ class TransactionList extends BaseTable
                 ),
             Column::make('Token')
                 ->label(function ($row, Column $column) {
-                    if ($row->token) {
-                        return view('components.tables.columns.link', [
-                            'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
-                            'text' => $row->token->symbol,
-                        ]);
+                    if (! $row->token) {
+                        return null;
                     }
+
+                    return view('components.tables.columns.link', [
+                        'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                        'text' => $row->token->symbol,
+                    ]);
                 }),
             Column::make('Type')
                 ->label(

@@ -30,12 +30,8 @@ class ContributorsList extends BaseTable
                 'projects as completed_projects_count' => fn ($query) => $query->where('status', AcceleratorProjectStatusEnum::COMPLETE->value),
                 'projects as rejected_projects_count' => fn ($query) => $query->where('status', AcceleratorProjectStatusEnum::REJECTED->value),
             ])
-            ->withSum(
-                'projects as znn_paid', 'znn_paid'
-            )
-            ->withSum(
-                'projects as qsr_paid', 'qsr_paid'
-            );
+            ->withSum('projects as znn_paid', 'znn_paid')
+            ->withSum('projects as qsr_paid', 'qsr_paid');
 
     }
 

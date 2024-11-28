@@ -34,8 +34,8 @@ class InboundList extends BaseTable
 
     public function builder(): Builder
     {
-        return BridgeUnwrap::select('*')
-            ->with('bridgeNetwork', 'token', 'toAccount')
+        return BridgeUnwrap::with('bridgeNetwork', 'token', 'toAccount')
+            ->select('*')
             ->whereIsProcessed();
     }
 
