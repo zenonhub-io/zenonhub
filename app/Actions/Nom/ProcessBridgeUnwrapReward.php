@@ -22,6 +22,7 @@ class ProcessBridgeUnwrapReward
 
         AccountReward::create([
             'chain_id' => $accountBlock->chain_id,
+            'account_block_id' => $accountBlock->id,
             'account_id' => $unwrap->to_account_id,
             'token_id' => $unwrap->token_id,
             'type' => AccountRewardTypesEnum::BRIDGE_AFFILIATE->value,

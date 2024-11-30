@@ -11,7 +11,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class DescendantsList extends BaseTable
 {
-    public string $transactionId;
+    public int $transactionId;
 
     public function configure(): void
     {

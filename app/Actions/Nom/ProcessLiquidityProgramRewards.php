@@ -17,6 +17,7 @@ class ProcessLiquidityProgramRewards
     {
         AccountReward::create([
             'chain_id' => $accountBlock->chain->id,
+            'account_block_id' => $accountBlock->id,
             'account_id' => $accountBlock->toAccount->id,
             'token_id' => $accountBlock->token->id,
             'type' => AccountRewardTypesEnum::LIQUIDITY_PROGRAM->value,

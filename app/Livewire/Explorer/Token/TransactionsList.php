@@ -11,7 +11,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class TransactionsList extends BaseTable
 {
-    public string $tokenId;
+    public int $tokenId;
 
     public function configure(): void
     {

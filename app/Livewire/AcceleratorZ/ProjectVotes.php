@@ -7,16 +7,14 @@ namespace App\Livewire\AcceleratorZ;
 use App\Enums\Nom\VoteEnum;
 use App\Livewire\BaseTable;
 use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Vote;
 use Illuminate\Database\Eloquent\Builder;
+use phpDocumentor\Reflection\Type;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class ProjectVotes extends BaseTable
 {
-    public string $projectId;
-
-    protected $model = Vote::class;
+    public int $projectId;
 
     public function configure(): void
     {

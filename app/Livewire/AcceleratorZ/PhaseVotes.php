@@ -8,16 +8,13 @@ use App\Enums\Nom\VoteEnum;
 use App\Livewire\BaseTable;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
-use App\Models\Nom\Vote;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class PhaseVotes extends BaseTable
 {
-    public string $phaseId;
-
-    protected $model = Vote::class;
+    public int $phaseId;
 
     public function configure(): void
     {

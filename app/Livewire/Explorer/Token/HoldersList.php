@@ -12,7 +12,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class HoldersList extends BaseTable
 {
-    public string $tokenId;
+    public int $tokenId;
 
     public function configure(): void
     {
@@ -56,7 +56,7 @@ class HoldersList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $row->tokenBalanceShare($token) . '%'
+                    fn ($row, Column $column) => $row->tokenBalanceShare($token)
                 ),
         ];
     }

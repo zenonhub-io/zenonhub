@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer\Token;
+namespace App\Livewire\Explorer\Account;
 
+use App\Enums\Nom\AccountRewardTypesEnum;
 use App\Livewire\BaseTable;
-use App\Models\Nom\Token;
+use App\Models\Nom\Account;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
-class BurnsList extends BaseTable
+class RewardsList extends BaseTable
 {
-    public int $tokenId;
+    public int $accountId;
 
     public function configure(): void
     {
@@ -23,38 +25,33 @@ class BurnsList extends BaseTable
 
     public function builder(): Builder
     {
-        return Token::find($this->tokenId)?->burns()
-            ->with(['account', 'accountBlock'])
+        return Account::find($this->accountId)?->rewards()
+            ->with(['account', 'token'])
             ->select('*')
             ->getQuery();
     }
 
     public function columns(): array
     {
-        $token = Token::find($this->tokenId);
-
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
-            Column::make('Issuer')
+            Column::make('Type')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', [
-                        'row' => $row->account,
-                        'alwaysShort' => true,
-                    ])
+                    fn ($row, Column $column) => $row->type->label()
                 ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $token->getFormattedAmount($row->amount)
+                    fn ($row, Column $column) => $row->amount > 0 ? $row->token?->getFormattedAmount($row->amount) : null
                 ),
-            Column::make('TX Hash')
+            Column::make('Token')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.link', [
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
-                        'text' => short_hash($row->accountBlock->hash),
+                        'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                        'text' => $row->token->symbol,
                     ])
                 ),
             Column::make('Timestamp')
@@ -69,6 +66,19 @@ class BurnsList extends BaseTable
 
     public function filters(): array
     {
-        return [];
+        $options = collect(AccountRewardTypesEnum::cases())
+            ->mapWithKeys(fn ($item) => [$item->value => $item->label()])
+            ->prepend(__('All'), '')
+            ->toArray();
+
+        return [
+            SelectFilter::make('Type')
+                ->options($options)
+                ->filter(function (Builder $builder, string $value) {
+                    if (! empty($value)) {
+                        $builder->where('type', $value);
+                    }
+                }),
+        ];
     }
 }

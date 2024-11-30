@@ -152,9 +152,9 @@
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[
             __('Transactions') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'transactions']),
+            __('Tokens') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'tokens']),
             __('Rewards') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'rewards']),
             __('Delegations') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'delegations']),
-            __('Tokens') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'tokens']),
             __('Stakes') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'stakes']),
             __('Plasma') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'plasma']),
             __('Projects') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'projects']),
@@ -166,25 +166,25 @@
         <livewire:explorer.account.transactions-list :accountId="$account->id" />
     @endif
 
-{{--    @if ($tab === 'rewards')--}}
-{{--        <livewire:explorer.account.rewards-list :accountId="$account->id" />--}}
-{{--    @endif--}}
+    @if ($tab === 'tokens')
+        <livewire:explorer.account.tokens-list :accountId="$account->id" />
+    @endif
 
-{{--    @if ($tab === 'delegations')--}}
-{{--        <livewire:explorer.account.delegations-list :accountId="$account->id" />--}}
-{{--    @endif--}}
+    @if ($tab === 'rewards')
+        <livewire:explorer.account.rewards-list :accountId="$account->id" />
+    @endif
 
-{{--    @if ($tab === 'tokens')--}}
-{{--        <livewire:explorer.account.tokens-list :accountId="$account->id" />--}}
-{{--    @endif--}}
+    @if ($tab === 'delegations')
+        <livewire:explorer.account.delegations-list :accountId="$account->id" />
+    @endif
 
-{{--    @if ($tab === 'stakes')--}}
-{{--        <livewire:explorer.account.stakes-list :accountId="$account->id" />--}}
-{{--    @endif--}}
+    @if ($tab === 'stakes')
+        <livewire:explorer.account.stakes-list :accountId="$account->id" />
+    @endif
 
-{{--    @if ($tab === 'plasma')--}}
-{{--        <livewire:explorer.account.plasma-list :accountId="$account->id" />--}}
-{{--    @endif--}}
+    @if ($tab === 'plasma')
+        <livewire:explorer.account.plasma-list :accountId="$account->id" />
+    @endif
 
 {{--    @if ($tab === 'projects')--}}
 {{--        <livewire:explorer.account.projects-list :accountId="$account->id" />--}}

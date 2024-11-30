@@ -8,11 +8,18 @@ use App\Enums\Nom\AccountRewardTypesEnum;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountReward;
+use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ProcessBlockRewards
 {
     use AsAction;
+
+    public string $commandSignature = 'nom:process-rewards';
 
     public function handle(AccountBlock $accountBlock): void
     {
@@ -48,5 +55,27 @@ class ProcessBlockRewards
             'amount' => $blockData['amount'],
             'created_at' => $accountBlock->created_at,
         ]);
+    }
+
+    public function asCommand(Command $command): void
+    {
+        DB::table('nom_account_rewards')->truncate();
+
+        $query = AccountBlock::with('data', 'account')
+            ->whereHas('parent')
+            ->whereRelation('contractMethod', 'name', 'Mint');
+
+        $totalBlocks = $query->count();
+        $progressBar = new ProgressBar(new ConsoleOutput, $totalBlocks);
+        $progressBar->start();
+
+        $query->chunk(1000, function (Collection $blocks) use ($progressBar) {
+            $blocks->each(function ($block) use ($progressBar) {
+                $this->handle($block);
+                $progressBar->advance();
+            });
+        });
+
+        $progressBar->finish();
     }
 }

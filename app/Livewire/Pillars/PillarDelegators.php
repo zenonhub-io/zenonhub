@@ -12,7 +12,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class PillarDelegators extends BaseTable
 {
-    public string $pillarId;
+    public int $pillarId;
 
     public function configure(): void
     {

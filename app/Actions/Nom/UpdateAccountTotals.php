@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Actions\Nom;
 
+use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Models\Nom\Account;
+use App\Models\Nom\Token;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Collection;
@@ -60,7 +62,7 @@ class UpdateAccountTotals implements ShouldBeUnique
 
     private function saveCurrentBalance(): void
     {
-        $accountTokenIds = $this->account->balances()->pluck('token_id');
+        $accountTokenIds = $this->account->tokens()->pluck('token_id');
         $tokenIds = $this->account->blocks()
             ->whereNotNull('token_id')
             ->distinct()
@@ -69,7 +71,6 @@ class UpdateAccountTotals implements ShouldBeUnique
             ->push(app('znnToken')->id, app('qsrToken')->id);
         // Must include znn & qsr token ids above or it doesnt
         // calculate genesis balances correctly
-        //
 
         $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
 
@@ -84,6 +85,19 @@ class UpdateAccountTotals implements ShouldBeUnique
                 ->first()->total;
 
             $balance = $received - $sent;
+
+            // Token contract behaves differently, it never holds tokens so balance is always 0
+            if ($this->account->address === EmbeddedContractsEnum::TOKEN->value) {
+
+                $balance = 0;
+
+                if ($tokenId === app('znnToken')->id) {
+                    // Token contract holds 1 znn per token created
+                    // Subtract two for the existing ZNN and QSR tokens
+                    $tokensCreated = Token::count() - 2;
+                    $balance = $tokensCreated * NOM_DECIMALS;
+                }
+            }
 
             if ($tokenId === app('znnToken')->id) {
                 $balance += $this->account->genesis_znn_balance;
@@ -100,12 +114,12 @@ class UpdateAccountTotals implements ShouldBeUnique
             }
 
             if ($accountTokenIds->contains($tokenId)) {
-                $this->account->balances()->updateExistingPivot($tokenId, [
+                $this->account->tokens()->updateExistingPivot($tokenId, [
                     'balance' => $balance,
                     'updated_at' => now(),
                 ]);
             } else {
-                $this->account->balances()->attach($tokenId, [
+                $this->account->tokens()->attach($tokenId, [
                     'balance' => $balance,
                     'updated_at' => now(),
                 ]);

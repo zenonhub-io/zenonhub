@@ -158,9 +158,14 @@ class Account extends Model implements Sitemapable
         return $this->hasMany(Sentinel::class, 'owner_id');
     }
 
-    public function tokens(): HasMany
+    public function tokens(): BelongsToMany
     {
-        return $this->hasMany(Token::class, 'owner_id');
+        return $this->belongsToMany(
+            Token::class,
+            'nom_account_tokens',
+            'account_id',
+            'token_id'
+        )->withPivot('balance', 'updated_at');
     }
 
     public function sentBlocks(): HasMany
@@ -191,16 +196,6 @@ class Account extends Model implements Sitemapable
     public function rewards(): HasMany
     {
         return $this->hasMany(AccountReward::class);
-    }
-
-    public function balances(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Token::class,
-            'nom_account_tokens',
-            'account_id',
-            'token_id'
-        )->withPivot('balance', 'updated_at');
     }
 
     public function socialProfile(): MorphOne
@@ -322,10 +317,11 @@ class Account extends Model implements Sitemapable
 
     public function getPlasmaLevelAttribute(): string
     {
-        $fusedQsr = app('qsrToken')->getDisplayAmount($this->qsr_fused);
+        $plasma = $this->plasma()->whereActive()->sum('amount');
+        $fusedQsr = app('qsrToken')->getDisplayAmount($plasma);
+        $fusedQsr = round($fusedQsr);
 
         if ($fusedQsr > 0) {
-            $fusedQsr = round($fusedQsr);
 
             if ($fusedQsr >= 120) {
                 return 'High';
@@ -521,7 +517,7 @@ class Account extends Model implements Sitemapable
 
     public function tokenBalance($token, $decimals = null): string
     {
-        $holdings = $this->balances()
+        $holdings = $this->tokens()
             ->where('token_id', $token->id)
             ->first();
 
@@ -532,18 +528,18 @@ class Account extends Model implements Sitemapable
         return '0';
     }
 
-    public function tokenBalanceShare($token): string
+    public function tokenBalanceShare($token, $prefix = '%'): string
     {
-        $holdings = $this->balances()
+        $holdings = $this->tokens()
             ->where('token_id', $token->id)
             ->first();
 
         if ($holdings && $holdings->pivot->balance > 0) {
             $percentage = ($holdings->pivot->balance / $token->total_supply) * 100;
 
-            return number_format($percentage, 2);
+            return number_format($percentage, 2) . $prefix;
         }
 
-        return '0';
+        return '0' . $prefix;
     }
 }

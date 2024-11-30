@@ -124,7 +124,11 @@ class Plasma extends Model
 
     public function getDisplayDurationAttribute(): string
     {
-        $duration = now()->timestamp - $this->started_at->timestamp;
+        if ($this->ended_at) {
+            $duration = $this->ended_at->timestamp - $this->started_at->timestamp;
+        } else {
+            $duration = now()->timestamp - $this->started_at->timestamp;
+        }
 
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
     }

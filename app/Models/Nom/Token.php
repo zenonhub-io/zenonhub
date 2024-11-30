@@ -236,7 +236,7 @@ class Token extends Model implements Sitemapable
 
         if ($this->token_standard === NetworkTokensEnum::LP_ZNN_ETH->value) {
             $liquidityAccount = Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value);
-            $totalLocked = $liquidityAccount->balances()
+            $totalLocked = $liquidityAccount->tokens()
                 ->where('token_id', $this->id)
                 ->first()?->pivot->balance;
         }

@@ -37,7 +37,7 @@ it('updates an accounts current balance', function () {
     UpdateAccountTotals::run($receiver);
 
     $receiver->fresh();
-    $receiverBalance = $receiver->balances()
+    $receiverBalance = $receiver->tokens()
         ->where('token_id', $token->id)
         ->first();
 

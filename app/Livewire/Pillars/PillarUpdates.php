@@ -11,7 +11,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class PillarUpdates extends BaseTable
 {
-    public string $pillarId;
+    public int $pillarId;
 
     public function configure(): void
     {

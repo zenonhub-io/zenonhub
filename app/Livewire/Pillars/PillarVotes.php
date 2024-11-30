@@ -9,16 +9,13 @@ use App\Livewire\BaseTable;
 use App\Models\Nom\AcceleratorPhase;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\Pillar;
-use App\Models\Nom\Vote;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class PillarVotes extends BaseTable
 {
-    public string $pillarId;
-
-    protected $model = Vote::class;
+    public int $pillarId;
 
     public function configure(): void
     {

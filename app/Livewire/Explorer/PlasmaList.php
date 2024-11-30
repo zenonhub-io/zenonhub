@@ -17,6 +17,16 @@ class PlasmaList extends BaseTable
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('started_at', 'desc');
+
+        $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
+            if ($column->getTitle() === '') {
+                return [
+                    'class' => 'px-0',
+                ];
+            }
+
+            return [];
+        });
     }
 
     public function builder(): Builder
@@ -56,7 +66,7 @@ class PlasmaList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' QSR'
+                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' ' . app('qsrToken')->symbol
                 ),
             Column::make('Timestamp', 'started_at')
                 ->sortable(
