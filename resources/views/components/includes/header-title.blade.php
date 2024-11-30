@@ -1,10 +1,8 @@
 @props(['title' => null])
 
-<div {{ $attributes->merge(['class' => 'row align-items-center']) }}>
+<div {{ $attributes->merge(['class' => 'd-flex align-items-center']) }}>
     @if ($slot->isEmpty())
-        <div class="col">
-            <h1 class="ls-tight">{{ $title }}</h1>
-        </div>
+        <h1 class="ls-tight text-wrap text-break">{{ $title }}</h1>
     @else
         {{ $slot }}
     @endif

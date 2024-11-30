@@ -88,8 +88,8 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Fused QSR')" :stat="$account->display_fused_qsr" />
-                            <x-stats.list-item :title="__('Staked ZNN')" :stat="$account->display_staked_znn" />
+                            <x-stats.list-item :title="__('Fused QSR')" :stat="$account->display_qsr_fused" />
+                            <x-stats.list-item :title="__('Staked ZNN')" :stat="$account->display_znn_staked" />
                             <x-stats.list-item :title="__('ZNN Rewards')" :stat="$account->display_znn_rewards" />
                             <x-stats.list-item :title="__('QSR Rewards')" :stat="$account->display_qsr_rewards" />
                             <x-stats.list-item :title="__('Delegating to')" :hr="false">
@@ -101,7 +101,7 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <hr class="d-block d-md-none my-0 mb-3">
+                            <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
@@ -124,12 +124,20 @@
                                 {{ $account->display_height }}
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Funded by')">
-                                <x-address :account="$account->fundingBlock?->account" :always-short="true "/>
+                                @if($account->fundingBlock)
+                                    <x-address :account="$account->fundingBlock->account" :always-short="true "/>
+                                @else
+                                    -
+                                @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Funding Tx')">
-                                <x-link :href="route('explorer.transaction.detail', ['hash' => $account->fundingBlock?->hash])">
-                                    <x-hash :hash="$account->fundingBlock?->hash" :always-short="true" />
-                                </x-link>
+                                @if($account->fundingBlock)
+                                    <x-link :href="route('explorer.transaction.detail', ['hash' => $account->fundingBlock->hash])">
+                                        <x-hash :hash="$account->fundingBlock->hash" :always-short="true" />
+                                    </x-link>
+                                @else
+                                    -
+                                @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Public Key')" :hr="false">
                                 <x-hash :hash="$account->decoded_public_key" :always-short="true" />

@@ -24,7 +24,7 @@ class DescendantsList extends BaseTable
     public function builder(): Builder
     {
         return AccountBlock::find($this->transactionId)?->descendants()
-            ->with('account', 'toAccount', 'contractMethod', 'token')
+            ->with(['account', 'toAccount', 'contractMethod', 'token'])
             ->select('*')
             ->getQuery();
     }

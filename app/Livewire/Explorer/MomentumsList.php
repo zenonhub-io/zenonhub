@@ -30,8 +30,8 @@ class MomentumsList extends BaseTable
         };
 
         return $model::with('producerPillar')
-            ->withCount('accountBlocks')
-            ->select('*');
+            ->select('*')
+            ->withCount('accountBlocks');
     }
 
     public function columns(): array

@@ -62,7 +62,7 @@ class AccountBlockInsertedListener
 
     private function dispatchAccountTotalsProcessor(Account $account): void
     {
-        if ($account->address === config('explorer.empty_address')) {
+        if ($account->address === config('explorer.burn_address')) {
             return;
         }
 

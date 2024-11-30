@@ -33,7 +33,7 @@ class CreateOrUpdateEmbeddedContractAccountBlocksViewCommand extends Command
         $contracts = Account::whereEmbedded()->get();
         $contracts->each(function (Account $account) {
 
-            $contractName = Str::slug($account->name, '_');
+            $contractName = Str::snake($account->name);
             $viewName = "view_nom_account_blocks_{$contractName}";
 
             DB::statement('DROP VIEW IF EXISTS ' . $viewName);

@@ -24,8 +24,8 @@ class AccountsSeeder extends Seeder
 
         Account::insert([
             'chain_id' => $chainId,
-            'address' => config('explorer.empty_address'),
-            'name' => 'Empty address',
+            'address' => config('explorer.burn_address'),
+            'name' => 'Burn address',
             'is_embedded_contract' => false,
         ]);
 

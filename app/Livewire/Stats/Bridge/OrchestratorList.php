@@ -55,7 +55,7 @@ class OrchestratorList extends BaseTable
 //                    fn (Builder $query, string $direction) => $query->orderBy('nom_account.last_active_at', $direction)
 //                )
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->producerAccount->last_active_at])
+                    fn ($row, Column $column) => $row->producerAccount->last_active_at ? view('components.tables.columns.date', ['date' => $row->producerAccount->last_active_at]) : null
                 ),
         ];
     }

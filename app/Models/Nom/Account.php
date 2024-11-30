@@ -280,53 +280,65 @@ class Account extends Model implements Sitemapable
         return number_format(($znnTotal + $qsrTotal), 2);
     }
 
+    public function getDisplayZnnSentAttribute(): string
+    {
+        return app('znnToken')->getFormattedAmount($this->znn_sent);
+    }
+
+    public function getDisplayZnnReceivedAttribute(): string
+    {
+        return app('znnToken')->getFormattedAmount($this->znn_received);
+    }
+
+    public function getDisplayQsrSentAttribute(): string
+    {
+        return app('qsrToken')->getFormattedAmount($this->qsr_sent);
+    }
+
+    public function getDisplayQsrReceivedAttribute(): string
+    {
+        return app('qsrToken')->getFormattedAmount($this->qsr_received);
+    }
+
+    public function getDisplayZnnStakedAttribute(): string
+    {
+        return app('znnToken')->getFormattedAmount($this->znn_staked);
+    }
+
+    public function getDisplayQsrFusedAttribute(): string
+    {
+        return app('qsrToken')->getFormattedAmount($this->qsr_fused);
+    }
+
     public function getDisplayZnnRewardsAttribute(): string
     {
-        $znnToken = app('znnToken');
-        $rewards = $this->rewards()
-            ->where('token_id', $znnToken->id)
-            ->sum('amount');
-
-        return $znnToken->getFormattedAmount($rewards);
+        return app('znnToken')->getFormattedAmount($this->znn_rewards);
     }
 
     public function getDisplayQsrRewardsAttribute(): string
     {
-        $znnToken = app('qsrToken');
-        $rewards = $this->rewards()
-            ->where('token_id', $znnToken->id)
-            ->sum('amount');
-
-        return $znnToken->getFormattedAmount($rewards);
-    }
-
-    public function getDisplayFusedQsrAttribute(): string
-    {
-        $fusions = $this->fusions()->whereActive()->sum('amount');
-
-        return app('qsrToken')->getFormattedAmount($fusions);
-    }
-
-    public function getDisplayStakedZnnAttribute(): string
-    {
-        $stakes = $this->stakes()->whereActive()->sum('amount');
-
-        return app('znnToken')->getFormattedAmount($stakes);
+        return app('qsrToken')->getFormattedAmount($this->qsr_rewards);
     }
 
     public function getPlasmaLevelAttribute(): string
     {
-        $fusedQsr = preg_replace('/[^\d.]/', '', $this->display_fused_qsr);
+        $fusedQsr = app('qsrToken')->getDisplayAmount($this->qsr_fused);
 
-        if ($fusedQsr >= 120) {
-            return 'High';
+        if ($fusedQsr > 0) {
+            $fusedQsr = round($fusedQsr);
+
+            if ($fusedQsr >= 120) {
+                return 'High';
+            }
+
+            if ($fusedQsr >= 40) {
+                return 'Medium';
+            }
+
+            return 'Low';
         }
 
-        if ($fusedQsr >= 40) {
-            return 'Medium';
-        }
-
-        return 'Low';
+        return 'None';
     }
 
     public function getDisplayDelegationPercentageShareAttribute(): string

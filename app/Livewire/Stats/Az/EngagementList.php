@@ -24,13 +24,13 @@ class EngagementList extends BaseTable
 
     public function builder(): Builder
     {
-        return Pillar::withCount([
-            'votes as total_yes' => fn ($query) => $query->where('vote', VoteEnum::YES->value),
-            'votes as total_no' => fn ($query) => $query->where('vote', VoteEnum::NO->value),
-            'votes as total_abstain' => fn ($query) => $query->where('vote', VoteEnum::ABSTAIN->value),
-            'votes as total_votes',
-        ])
-            ->select('slug')
+        return Pillar::select('slug')
+            ->withCount([
+                'votes as total_yes' => fn ($query) => $query->where('vote', VoteEnum::YES->value),
+                'votes as total_no' => fn ($query) => $query->where('vote', VoteEnum::NO->value),
+                'votes as total_abstain' => fn ($query) => $query->where('vote', VoteEnum::ABSTAIN->value),
+                'votes as total_votes',
+            ])
             ->whereNull('revoked_at')
             ->whereHas('votes', function ($query) {
                 $query->whereHasMorph('votable', [AcceleratorProject::class, AcceleratorPhase::class]);

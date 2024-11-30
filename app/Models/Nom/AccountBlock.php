@@ -172,7 +172,7 @@ class AccountBlock extends Model
         return $query->whereNull('paired_account_block_id');
     }
 
-    public function scopeNotToEmpty($query)
+    public function scopeNotToBurn($query)
     {
         return $query->where('to_account_id', '!=', '1');
     }

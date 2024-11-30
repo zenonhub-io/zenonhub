@@ -31,7 +31,7 @@ class PillarVotes extends BaseTable
     public function builder(): Builder
     {
         return Pillar::find($this->pillarId)?->votes()
-            ->with('votable')
+            ->with(['votable'])
             ->select('nom_votes.*')
             ->whereHasMorph(
                 'votable',

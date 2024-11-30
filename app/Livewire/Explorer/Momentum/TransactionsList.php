@@ -24,7 +24,7 @@ class TransactionsList extends BaseTable
     public function builder(): Builder
     {
         return Momentum::find($this->momentumId)?->accountBlocks()
-            ->with('account', 'toAccount', 'contractMethod', 'token')
+            ->with(['account', 'toAccount', 'contractMethod', 'token'])
             ->select('*')
             ->getQuery();
     }

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'empty_address' => 'z1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsggv2f',
+    'burn_address' => 'z1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsggv2f',
     'liquidity_program_distributor' => 'z1qqw8f3qxx9zg92xgckqdpfws3dw07d26afsj74',
 
     /*

@@ -24,7 +24,7 @@ class TransactionsList extends BaseTable
     public function builder(): Builder
     {
         return Token::find($this->tokenId)?->transactions()
-            ->with('account', 'toAccount', 'contractMethod')
+            ->with(['account', 'toAccount', 'contractMethod'])
             ->select('*')
             ->where('amount', '>', '0')
             ->getQuery();

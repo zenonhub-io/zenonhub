@@ -80,7 +80,7 @@ class InsertAccountBlock
 
         if (
             ! empty($accountBlockDTO->data) &&
-            $accountBlockDTO->toAddress !== config('explorer.empty_address') &&
+            $accountBlockDTO->toAddress !== config('explorer.burn_address') &&
             in_array($block->block_type, [
                 AccountBlockTypesEnum::SEND,
                 AccountBlockTypesEnum::CONTRACT_SEND,

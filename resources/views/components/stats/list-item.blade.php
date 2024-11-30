@@ -9,7 +9,7 @@
         </span>
     @endif
 
-    <div class="ms-auto text-wrap overflow-hidden">
+    <div class="ms-auto text-wrap">
         {{ $slot->isEmpty() ? $stat : $slot }}
     </div>
 </div>
