@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorProjectsController;
+use App\Http\Controllers\DonateController;
 use App\Http\Controllers\Explorer\AccountsController;
 use App\Http\Controllers\Explorer\BridgeController;
 use App\Http\Controllers\Explorer\MomentumsController;
@@ -13,10 +14,12 @@ use App\Http\Controllers\Explorer\StakesController;
 use App\Http\Controllers\Explorer\TokensController;
 use App\Http\Controllers\Explorer\TransactionsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InfoController;
 use App\Http\Controllers\PillarsController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SentinelsController;
+use App\Http\Controllers\Services\PublicNodesController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
 use App\Http\Controllers\Stats\PublicNodesStatsController;
@@ -68,7 +71,8 @@ Route::middleware([
     Route::get('/', HomeController::class)->name('home');
     //Route::get('terms-of-service', TermsController::class)->name('terms');
     Route::get('privacy-policy', PolicyController::class)->name('policy');
-    Route::get('donate', HomeController::class)->name('donate');
+    Route::get('donate', DonateController::class)->name('donate');
+    Route::get('info', InfoController::class)->name('info');
     Route::get('sponsor', HomeController::class)->name('sponsor');
 
     Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
@@ -105,10 +109,10 @@ Route::middleware([
     //Route::get('tools/broadcast-message', HomeController::class)->name('tools.broadcast-message');
     Route::get('tools/verify-signature', VerifySignatureController::class)->name('tools.verify-signature');
 
-    Route::get('services/public-nodes', HomeController::class)->name('services.public-nodes');
-    Route::get('services/plasma-bot', HomeController::class)->name('services.plasma-bot');
-    Route::get('services/whale-alerts', HomeController::class)->name('services.whale-alerts');
-    Route::get('services/bridge-alerts', HomeController::class)->name('services.bridge-alerts');
+    Route::get('services/public-nodes', PublicNodesController::class)->name('services.public-nodes');
+    //Route::get('services/plasma-bot', HomeController::class)->name('services.plasma-bot');
+    //Route::get('services/whale-alerts', HomeController::class)->name('services.whale-alerts');
+    //Route::get('services/bridge-alerts', HomeController::class)->name('services.bridge-alerts');
 });
 
 Route::middleware([

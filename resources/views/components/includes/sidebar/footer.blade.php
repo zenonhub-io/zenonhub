@@ -1,20 +1,20 @@
 <div class="row g-0 mx-3 mt-3 mb-2 text-center">
     <div class="col">
-        <x-link :href="route('services.public-nodes')" class="
-            btn w-full
-            rounded-pill
-            bg-body-secondary-hover fs-6
-        ">
-            <i class="bi-hdd-rack-fill me-2" style="font-size: 0.80rem;"></i>{{ __('Nodes') }}
+        <x-link :href="route('info')" data-bs-toggle="tooltip" data-bs-title="{{ __('Info') }}"
+                class="btn rounded-pill bg-body-secondary-hover">
+            <i class="bi-info-circle-fill" style="font-size: 1.1rem;"></i>
         </x-link>
     </div>
     <div class="col">
-        <x-link :href="route('donate')" class="
-            btn w-full
-            rounded-pill
-            bg-body-secondary-hover fs-6
-        ">
-            <i class="bi-heart-fill me-2" style="font-size: 0.80rem;"></i>{{ __('Donate') }}
+        <x-link :href="route('donate')" data-bs-toggle="tooltip" data-bs-title="{{ __('Donate') }}"
+                class="btn rounded-pill bg-body-secondary-hover">
+            <i class="bi-heart-fill" style="font-size: 1.1rem;"></i>
+        </x-link>
+    </div>
+    <div class="col">
+        <x-link :href="route('services.public-nodes')" data-bs-toggle="tooltip" data-bs-title="{{ __('Nodes') }}"
+                class="btn rounded-pill bg-body-secondary-hover">
+            <i class="bi-hdd-rack-fill" style="font-size: 1.1rem;"></i>
         </x-link>
     </div>
 </div>

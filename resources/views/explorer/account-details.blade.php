@@ -186,9 +186,9 @@
         <livewire:explorer.account.plasma-list :accountId="$account->id" />
     @endif
 
-{{--    @if ($tab === 'projects')--}}
-{{--        <livewire:explorer.account.projects-list :accountId="$account->id" />--}}
-{{--    @endif--}}
+    @if ($tab === 'projects')
+        <livewire:explorer.account.projects-list :accountId="$account->id" />
+    @endif
 
     @if ($tab === 'json')
         <div class="mx-3 mx-md-6">

@@ -28,7 +28,7 @@
                                 </span>
                                 <x-address :account="$tx->account" :always-short="true" :either-side="6 "/>
                                 <span class="ms-2">
-                                    <x-svg file="explorer/receive" style="height: 16px" class="text-warning "/>
+                                    <x-svg file="explorer/receive" style="height: 16px" class="text-info"/>
                                 </span>
                             </span>
                             <span class="d-flex justify-content-start justify-content-md-end align-items-center">
