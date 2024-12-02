@@ -12,7 +12,7 @@ trait ModelCacheKeyTrait
             '%s/%s-%s|%s',
             $this->getTable(),
             $this->getKey(),
-            $this->updated_at?->timestamp ?? $this->{$timestampColumn}->timestamp,
+            $this->{$timestampColumn}?->timestamp ?? now()->timestamp,
             $name
         );
     }

@@ -34,7 +34,7 @@ class Delegate extends AbstractContractMethodProcessor
             return;
         }
 
-        Cache::forget($pillar->cacheKey('pillar-rank'));
+        Cache::forget($pillar->cacheKey('pillar-rank', 'updated_at'));
 
         //        $accountBlock->account
         //            ->delegations()

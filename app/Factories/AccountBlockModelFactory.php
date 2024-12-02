@@ -14,6 +14,10 @@ class AccountBlockModelFactory
     public static function create(Account $account): AccountBlock|Builder
     {
         return match ($account->address) {
+            config('explorer.burn_address') => new class extends AccountBlock
+            {
+                protected $table = 'view_nom_account_blocks_burn_address';
+            },
             EmbeddedContractsEnum::ACCELERATOR->value => new class extends AccountBlock
             {
                 protected $table = 'view_nom_account_blocks_accelerator_contract';

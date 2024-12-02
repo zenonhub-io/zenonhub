@@ -30,10 +30,10 @@ class CreateOrUpdateEmbeddedContractAccountBlocksViewCommand extends Command
      */
     public function handle()
     {
-        $contracts = Account::whereEmbedded()->get();
+        $contracts = Account::whereEmbedded()->orWhere('address', config('explorer.burn_address'))->get();
         $contracts->each(function (Account $account) {
 
-            $contractName = Str::snake($account->name);
+            $contractName = Str::slug($account->name, '_');
             $viewName = "view_nom_account_blocks_{$contractName}";
 
             DB::statement('DROP VIEW IF EXISTS ' . $viewName);

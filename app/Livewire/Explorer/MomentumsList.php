@@ -50,10 +50,11 @@ class MomentumsList extends BaseTable
             Column::make('Hash', 'hash')
                 ->searchable()
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
-                        'link' => route('explorer.momentum.detail', ['hash' => $row->hash]),
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
-                        'alwaysShort' => true,
+                        'breakpoint' => 'xl',
+                        'copyable' => true,
+                        'link' => route('explorer.momentum.detail', ['hash' => $row->hash]),
                     ])
                 ),
             Column::make('Age')

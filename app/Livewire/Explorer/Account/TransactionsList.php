@@ -22,6 +22,16 @@ class TransactionsList extends BaseTable
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
 
+        $this->setThAttributes(function (Column $column) {
+            if ($column->getTitle() === '') {
+                return [
+                    'class' => 'pe-0',
+                ];
+            }
+
+            return [];
+        });
+
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($column->getTitle() === '') {
                 return [
@@ -41,10 +51,15 @@ class TransactionsList extends BaseTable
             abort(500);
         }
 
-        return AccountBlockModelFactory::create($account)
+        $query = AccountBlockModelFactory::create($account)
             ->with(['account', 'toAccount', 'contractMethod', 'token'])
-            ->select('*')
-            ->notToBurn();
+            ->select('*');
+
+        if ($account->address !== config('explorer.burn_address')) {
+            $query->notToBurn();
+        }
+
+        return $query;
     }
 
     public function columns(): array
@@ -54,9 +69,11 @@ class TransactionsList extends BaseTable
                 ->hideIf(true),
             Column::make('TX Hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                        'copyable' => false,
                         'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
-                        'text' => short_hash($row->hash),
                     ])
                 ),
             Column::make('')

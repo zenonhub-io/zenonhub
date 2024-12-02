@@ -29,7 +29,7 @@
                 <div class="d-md-flex align-items-center justify-content-start justify-content-md-between">
                     <div class="col-24 col-md-10 text-center">
                         <span class="text-muted text-sm d-block">{{ __('From') }}</span>
-                        <x-address :account="$transaction->account" :always-short="true "/>
+                        <x-address :account="$transaction->account" :always-short="true" :copyable="true" />
                     </div>
                     <div class="col-24 col-md-4 text-center py-4 py-md-0">
                         @if($transaction->is_received)
@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-24 col-md-10 text-center">
                         <span class="text-muted text-sm d-block">{{ __('To') }}</span>
-                        <x-address :account="$transaction->toAccount" :always-short="true" />
+                        <x-address :account="$transaction->toAccount" :always-short="true" :copyable="true" />
                     </div>
                 </div>
             </x-cards.body>
@@ -81,7 +81,7 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Type')" :stat="$transaction->display_actual_type" :hr="false "/>
+                            <x-stats.list-item :title="__('Type')" :stat="$transaction->display_actual_type" :hr="false" />
                             <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>
@@ -95,24 +95,18 @@
                                 @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Momentum')">
-                                <x-link :href="route('explorer.momentum.detail', ['hash' => $transaction->momentum->hash])">
-                                    <x-hash :hash="$transaction->momentum->hash"  :always-short="true "/>
-                                </x-link>
+                                <x-hash :hash="$transaction->momentum->hash"  :always-short="true" :copyable="true" :link="route('explorer.momentum.detail', ['hash' => $transaction->momentum->hash])"/>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Paired Block')">
                                 @if($transaction->pairedAccountBlock)
-                                    <x-link :href="route('explorer.transaction.detail', ['hash' => $transaction->pairedAccountBlock->hash])">
-                                        <x-hash :hash="$transaction->pairedAccountBlock->hash" :always-short="true" :hr="false "/>
-                                    </x-link>
+                                    <x-hash :hash="$transaction->pairedAccountBlock->hash" :always-short="true" :copyable="true" :link="route('explorer.transaction.detail', ['hash' => $transaction->pairedAccountBlock->hash])"/>
                                 @else
                                     -
                                 @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Parent Block')" :hr="false">
                                 @if($transaction->parent)
-                                    <x-link :href="route('explorer.transaction.detail', ['hash' => $transaction->parent->hash])">
-                                        <x-hash :hash="$transaction->parent->hash" :always-short="true" :hr="false "/>
-                                    </x-link>
+                                    <x-hash :hash="$transaction->parent->hash" :always-short="true" :copyable="true" :link="route('explorer.transaction.detail', ['hash' => $transaction->parent->hash])"/>
                                 @else
                                     -
                                 @endif

@@ -39,6 +39,7 @@ class UpdateAccountTotals implements ShouldBeUnique
         $this->saveCurrentBalance();
         $this->saveStakedZnn();
         $this->saveFusedQsr();
+        $this->savePlasmaAmount();
         $this->saveRewardTotals();
 
         $this->account->save();
@@ -82,6 +83,7 @@ class UpdateAccountTotals implements ShouldBeUnique
             $received = $this->account->receivedBlocks()
                 ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
                 ->where('token_id', $tokenId)
+                ->whereNotNull('paired_account_block_id')
                 ->first()->total;
 
             $balance = $received - $sent;
@@ -138,6 +140,15 @@ class UpdateAccountTotals implements ShouldBeUnique
     private function saveFusedQsr(): void
     {
         $this->account->qsr_fused = $this->account->fusions()
+            ->whereActive()
+            ->sum('amount');
+    }
+
+    // TODO - add this to test
+    private function savePlasmaAmount(): void
+    {
+        $this->account->plasma_amount = $this->account->plasma()
+            ->where('to_account_id', $this->account->id)
             ->whereActive()
             ->sum('amount');
     }

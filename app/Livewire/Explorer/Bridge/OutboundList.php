@@ -79,10 +79,11 @@ class OutboundList extends BaseTable
                 ),
             Column::make('TX Hash', 'transaction_hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->accountBlock->hash,
                         'alwaysShort' => true,
+                        'copyable' => false,
+                        'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
             Column::make('Timestamp', 'created_at')

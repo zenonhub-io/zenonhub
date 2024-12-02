@@ -1,3 +1,3 @@
-@props(['hash', 'alwaysShort' => false, 'breakpoint' => 'md'])
+@props(['hash', 'alwaysShort' => false, 'breakpoint' => 'md', 'copyable' => true, 'link' => null])
 
-<x-hash :hash="$hash" :always-short="$alwaysShort" :breakpoint="$breakpoint" />
+<x-hash :hash="$hash" :always-short="$alwaysShort" :breakpoint="$breakpoint" :copyable="$copyable" :link="$link" />

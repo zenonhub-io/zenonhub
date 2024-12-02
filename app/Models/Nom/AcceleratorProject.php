@@ -245,7 +245,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): ?AcceleratorProjectDTO
     {
-        $cacheKey = $this->cacheKey('rawJson');
+        $cacheKey = $this->cacheKey('rawJson', 'updated_at');
         $data = Cache::get($cacheKey);
 
         try {

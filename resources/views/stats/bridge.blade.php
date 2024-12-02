@@ -98,7 +98,7 @@
             <div class="list-group mb-6 mt-2">
                 <div class="list-group-item">
                     <div class="w-100">
-                        <x-address :account="$status->getBridgeAdmin()->account" :named="false "/>
+                        <x-address :account="$status->getBridgeAdmin()->account" :named="false" :copyable="true" />
                         <div class="text-muted text-xs">
                             Last Active @if($status->getBridgeAdmin()->account->last_active_at)
                                 <x-date-time.carbon :date="$status->getBridgeAdmin()->account->last_active_at" class="d-inline" />
@@ -115,7 +115,7 @@
                 @foreach ($status->getBridgeGuardians() as $guardian)
                     <div class="list-group-item">
                         <div class="w-100">
-                            <x-address :account="$guardian->account" :named="false "/>
+                            <x-address :account="$guardian->account" :named="false" :copyable="true" />
                             <div class="text-muted text-xs">
                                 Last Active @if($guardian->account->last_active_at)
                                     <x-date-time.carbon :date="$guardian->account->last_active_at" class="d-inline" />

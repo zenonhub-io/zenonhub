@@ -112,7 +112,7 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
                             <x-stats.list-item :title="__('ID')">
-                                <x-hash :hash="$phase->hash" :always-short="true" />
+                                <x-hash :hash="$phase->hash" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Created')">
                                 <x-date-time.carbon :date="$phase->created_at" />

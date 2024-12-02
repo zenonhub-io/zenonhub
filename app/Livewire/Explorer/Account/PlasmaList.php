@@ -21,6 +21,16 @@ class PlasmaList extends BaseTable
         $this->setPrimaryKey('id')
             ->setDefaultSort('started_at', 'desc');
 
+        $this->setThAttributes(function (Column $column) {
+            if ($column->getTitle() === '') {
+                return [
+                    'class' => 'pe-0',
+                ];
+            }
+
+            return [];
+        });
+
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($column->getTitle() === '') {
                 return [

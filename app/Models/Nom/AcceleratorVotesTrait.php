@@ -12,7 +12,7 @@ trait AcceleratorVotesTrait
 {
     public function getVotesNeededAttribute(): float
     {
-        return Cache::rememberForever($this->cacheKey('getVotesNeededAttribute'), function () {
+        return Cache::rememberForever($this->cacheKey('getVotesNeededAttribute', 'updated_at'), function () {
             $totalPillars = Pillar::whereActive()->where('created_at', '<=', $this->created_at)->count();
 
             // New projects or open phases can be voted on by all pillars so creation date shouldnt be accounted for

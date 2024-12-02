@@ -68,9 +68,12 @@ class DescendantsList extends BaseTable
                 ),
             Column::make('TX Hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.link', [
+
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                        'copyable' => false,
                         'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
-                        'text' => short_hash($row->hash),
                     ])
                 ),
             Column::make('Timestamp')

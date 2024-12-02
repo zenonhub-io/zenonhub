@@ -1,9 +1,11 @@
 @props([
     'account',
     'linked' => true,
+    'named' => true,
     'alwaysShort' => false,
     'eitherSide' => 10,
-    'breakpoint' => 'md'
+    'breakpoint' => 'md',
+    'copyable' => false
 ])
 
 @if ($linked)
@@ -31,4 +33,8 @@
 
 @if ($linked)
     </x-link>
+@endif
+
+@if($copyable)
+    <i class="bi bi-clipboard ms-1 js-copy" data-clipboard-text="{{ $account->address }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i>
 @endif

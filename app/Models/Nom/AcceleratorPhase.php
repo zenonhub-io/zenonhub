@@ -148,7 +148,7 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): ?AcceleratorPhaseDTO
     {
-        $cacheKey = $this->cacheKey('rawJson');
+        $cacheKey = $this->cacheKey('rawJson', 'updated_at');
         $data = Cache::get($cacheKey);
 
         try {

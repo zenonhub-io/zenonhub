@@ -101,7 +101,7 @@
                                 </x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Owner')">
-                                <x-address :account="$project->owner" :always-short="true" :named="false "/>
+                                <x-address :account="$project->owner" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Total phases')" :hr="false">
                                 {{ $project->phases->count() }}
@@ -112,7 +112,7 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
                             <x-stats.list-item :title="__('ID')">
-                                <x-hash :hash="$project->hash" :always-short="true" />
+                                <x-hash :hash="$project->hash" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Created')">
                                 <x-date-time.carbon :date="$project->created_at" />

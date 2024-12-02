@@ -18,8 +18,25 @@ class TransactionList extends BaseTable
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
 
-        //        $this->setTableRowUrl(fn ($row) => route('explorer.transaction.detail', $row->hash))
-        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
+        $this->setThAttributes(function (Column $column) {
+            if ($column->getTitle() === '') {
+                return [
+                    'class' => 'px-0',
+                ];
+            }
+
+            return [];
+        });
+
+        $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
+            if ($column->getTitle() === '') {
+                return [
+                    'class' => 'px-0',
+                ];
+            }
+
+            return [];
+        });
     }
 
     public function builder(): Builder
@@ -40,10 +57,11 @@ class TransactionList extends BaseTable
                 ->hideIf(true),
             Column::make('Hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
-                        'alwaysShort' => true,
+                        'breakpoint' => 'xl',
+                        'copyable' => true,
+                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
                     ])
                 ),
             Column::make('From')

@@ -87,6 +87,7 @@ class Account extends Model implements Sitemapable
             'qsr_fused' => 'string',
             'znn_rewards' => 'string',
             'qsr_rewards' => 'string',
+            'plasma_amount' => 'string',
             'first_active_at' => 'datetime',
             'last_active_at' => 'datetime',
         ];
@@ -241,6 +242,7 @@ class Account extends Model implements Sitemapable
         if (! $this->public_key) {
             return '-';
         }
+
         $publicKey = base64_decode($this->public_key);
 
         return ZnnUtilities::toHex($publicKey);
@@ -315,9 +317,14 @@ class Account extends Model implements Sitemapable
         return app('qsrToken')->getFormattedAmount($this->qsr_rewards);
     }
 
+    public function getDisplayPlasmaAmountAttribute(): string
+    {
+        return app('qsrToken')->getFormattedAmount($this->plasma_amount);
+    }
+
     public function getPlasmaLevelAttribute(): string
     {
-        $plasma = $this->plasma()->whereActive()->sum('amount');
+        $plasma = $this->plasma_amount;
         $fusedQsr = app('qsrToken')->getDisplayAmount($plasma);
         $fusedQsr = round($fusedQsr);
 
@@ -364,7 +371,10 @@ class Account extends Model implements Sitemapable
 
     public function getActiveDelegationAttribute(): ?Model
     {
-        return $this->delegations()->whereActive()->first();
+        return $this->delegations()
+            ->wherePivotNull('ended_at')
+            ->whereActive()
+            ->first();
     }
 
     public function getFundingBlockAttribute(): ?AccountBlock
@@ -534,7 +544,7 @@ class Account extends Model implements Sitemapable
             ->where('token_id', $token->id)
             ->first();
 
-        if ($holdings && $holdings->pivot->balance > 0) {
+        if ($holdings && $holdings->pivot->balance > 0 && $token->total_supply > 0) {
             $percentage = ($holdings->pivot->balance / $token->total_supply) * 100;
 
             return number_format($percentage, 2) . $prefix;
