@@ -3,16 +3,11 @@
 <x-cards.card class="card-hover h-100">
     <x-slot:heading>
         <div class="d-flex align-items-center mb-0">
-            <h4 class="card-title me-3 mb-0">
+            <h4 class="card-title me-3 mb-0 me-auto">
                 <x-link class="h4" :href="route('accelerator-z.project.detail', ['hash' => $project->hash])">
                     {{ $project->name }}
                 </x-link>
             </h4>
-            <div class="me-auto pe-3">
-                <x-link :href="$project->url" target="_blank" class="link-light">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                </x-link>
-            </div>
             <div>
                 <span class="badge text-bg-{{ $project->status->colour() }} bg-opacity-75">{{ $project->status->label() }}</span>
             </div>

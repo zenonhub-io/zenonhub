@@ -8,8 +8,6 @@
             __('Rejected') => route('accelerator-z.list', ['tab' => 'rejected']),
         ]" :active="$tab" />
     </x-includes.header>
-
     <livewire:accelerator-z.project-list :tab="$tab" />
-
 </x-app-layout>
 
