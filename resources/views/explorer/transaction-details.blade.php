@@ -56,7 +56,7 @@
         <x-cards.card class="mb-6">
             <x-cards.body>
                 <h6 class="mb-1 text-muted">{{ __('Hash') }}</h6>
-                <p>{{ $transaction->hash }}</p>
+                <p>{{ $transaction->hash }} <i class="bi bi-clipboard ms-1 js-copy" data-clipboard-text="{{ $transaction->hash }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i></p>
                 <hr>
                 <div class="row">
                     <div class="col-24 col-lg-12">

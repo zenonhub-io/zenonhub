@@ -1,6 +1,6 @@
 @props([
     'hash',
-    'link' => true,
+    'link' => null,
     'alwaysShort' => false,
     'eitherSide' => 10,
     'breakpoint' => 'md',
