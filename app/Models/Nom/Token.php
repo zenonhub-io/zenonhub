@@ -318,11 +318,16 @@ class Token extends Model implements Sitemapable
             return '-';
         }
 
-        $number = $this->getDisplayAmount($amount);
-        $outputDecimals = (! is_null($numDecimals) ? $numDecimals : $this->decimals);
-        $numberFormatted = number_format($number, $outputDecimals, $decimalsSeparator, $thousandsSeparator);
+        $displayAmount = $this->getDisplayAmount($amount);
+        $outputDecimals = $numDecimals ?? $this->decimals;
 
-        return rtrim(rtrim($numberFormatted, '0'), '.');
+        $numberFormatted = number_format($displayAmount, $outputDecimals, $decimalsSeparator, $thousandsSeparator);
+
+        if (str_contains($numberFormatted, $decimalsSeparator)) {
+            $numberFormatted = rtrim(rtrim($numberFormatted, '0'), $decimalsSeparator);
+        }
+
+        return $numberFormatted;
     }
 
     public function getDisplayUsdAmount($amount): float
