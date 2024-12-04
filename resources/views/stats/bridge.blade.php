@@ -148,7 +148,7 @@
     @endif
 
     @if ($tab === 'actions')
-        <livewire:stats.bridge.admin-action-list />
+        <livewire:stats.bridge.admin-action-list lazy />
     @endif
 
     @if ($tab === 'orchestrators')
@@ -185,11 +185,11 @@
             </div>
         </div>
 
-        <livewire:stats.bridge.orchestrator-list />
+        <livewire:stats.bridge.orchestrator-list lazy />
     @endif
 
     @if ($tab === 'affiliates')
-        <livewire:stats.bridge.affiliate-list />
+        <livewire:stats.bridge.affiliate-list lazy />
     @endif
 
 </x-app-layout>

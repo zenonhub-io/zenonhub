@@ -136,7 +136,7 @@
     </x-includes.header>
 
     @if ($tab === 'votes')
-        <livewire:accelerator-z.phase-votes :phase-id="$phase->id" />
+        <livewire:accelerator-z.phase-votes :phase-id="$phase->id" lazy />
     @endif
 
     @if ($tab === 'json')

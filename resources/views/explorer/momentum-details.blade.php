@@ -86,7 +86,7 @@
     </x-includes.header>
 
     @if ($tab === 'transactions')
-        <livewire:explorer.momentum.transactions-list :momentumId="$momentum->id" />
+        <livewire:explorer.momentum.transactions-list :momentumId="$momentum->id" lazy />
     @endif
 
     @if ($tab === 'json')

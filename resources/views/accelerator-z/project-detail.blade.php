@@ -164,7 +164,7 @@
     </x-includes.header>
 
     @if ($tab === 'votes')
-        <livewire:accelerator-z.project-votes :project-id="$project->id" />
+        <livewire:accelerator-z.project-votes :project-id="$project->id" lazy />
     @endif
 
     @if ($tab === 'json')

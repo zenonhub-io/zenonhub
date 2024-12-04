@@ -5,7 +5,7 @@
         ]" :active="$tab" />
     </x-includes.header>
 
-    <livewire:sentinels.sentinel-list :tab="$tab" />
+    <livewire:sentinels.sentinel-list :tab="$tab" lazy />
 
 </x-app-layout>
 

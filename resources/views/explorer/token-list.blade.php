@@ -6,5 +6,5 @@
             __('User') => route('explorer.token.list', ['tab' => 'user']),
         ]" :active="$tab" />
     </x-includes.header>
-    <livewire:explorer.token-list :tab="$tab" />
+    <livewire:explorer.token-list :tab="$tab" lazy />
 </x-app-layout>

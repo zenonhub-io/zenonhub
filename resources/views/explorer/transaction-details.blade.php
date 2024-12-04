@@ -55,12 +55,12 @@
 
         <x-cards.card class="mb-6">
             <x-cards.body>
-                <h6 class="mb-1 text-muted">{{ __('Hash') }}</h6>
-                <p>{{ $transaction->hash }} <i class="bi bi-clipboard ms-1 js-copy" data-clipboard-text="{{ $transaction->hash }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i></p>
-                <hr>
                 <div class="row">
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
+                            <x-stats.list-item :title="__('Hash')">
+                                <x-hash :hash="$transaction->hash" :always-short="true" :copyable="true" />
+                            </x-stats.list-item>
                             <x-stats.list-item :title="__('Timestamp')">
                                 <x-date-time.carbon :date="$transaction->created_at" />
                             </x-stats.list-item>
@@ -104,12 +104,15 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Parent Block')" :hr="false">
+                            <x-stats.list-item :title="__('Parent Block')">
                                 @if($transaction->parent)
                                     <x-hash :hash="$transaction->parent->hash" :always-short="true" :copyable="true" :link="route('explorer.transaction.detail', ['hash' => $transaction->parent->hash])"/>
                                 @else
                                     -
                                 @endif
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Descendants')" :hr="false">
+                                {{ $transaction->descendants_count }}
                             </x-stats.list-item>
                         </div>
                     </div>
@@ -148,7 +151,7 @@
     @endif
 
     @if ($tab === 'descendants')
-        <livewire:explorer.transaction.descendants-list :transactionId="$transaction->id" />
+        <livewire:explorer.transaction.descendants-list :transactionId="$transaction->id" lazy />
     @endif
 
     @if ($tab === 'json')

@@ -174,7 +174,7 @@
     @endif
 
     @if ($tab === 'list')
-        <livewire:stats.nodes.node-list />
+        <livewire:stats.nodes.node-list lazy />
     @endif
 
     @pushOnce('scripts')

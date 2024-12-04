@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Illuminate\Contracts\View\View;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 
 abstract class BaseTable extends DataTableComponent
@@ -37,5 +38,10 @@ abstract class BaseTable extends DataTableComponent
                 'class' => 'table-hover table-striped table-nowrap',
             ]);
         }
+    }
+
+    public function placeholder(): View
+    {
+        return view('livewire.placeholders.loading');
     }
 }

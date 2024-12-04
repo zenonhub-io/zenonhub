@@ -144,7 +144,7 @@
             </div>
         </div>
 
-        <livewire:stats.az.engagement-list />
+        <livewire:stats.az.engagement-list lazy />
     @endif
 
     @if ($tab === 'contributors')
@@ -194,7 +194,7 @@
             </div>
         </div>
 
-        <livewire:stats.az.contributors-list />
+        <livewire:stats.az.contributors-list lazy />
     @endif
 
 </x-app-layout>

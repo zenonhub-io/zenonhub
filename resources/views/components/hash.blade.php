@@ -2,6 +2,7 @@
     'hash',
     'link' => null,
     'alwaysShort' => false,
+    'alwaysLong' => false,
     'eitherSide' => 10,
     'breakpoint' => 'md',
     'copyable' => false
@@ -13,6 +14,8 @@
             <span data-bs-toggle="tooltip" data-bs-title="{{ $hash }}">
                 {{ short_hash($hash, $eitherSide) }}
             </span>
+        @elseif ($alwaysLong)
+            {{ $hash }}
         @else
             <span class="d-inline d-{{ $breakpoint }}-none" data-bs-toggle="tooltip" data-bs-title="{{ $hash }}">
                 {{ short_hash($hash, $eitherSide) }}
@@ -27,6 +30,8 @@
         <span data-bs-toggle="tooltip" data-bs-title="{{ $hash }}">
             {{ short_hash($hash, $eitherSide) }}
         </span>
+    @elseif ($alwaysLong)
+        {{ $hash }}
     @else
         <span class="d-inline d-{{ $breakpoint }}-none" data-bs-toggle="tooltip" data-bs-title="{{ $hash }}">
             {{ short_hash($hash, $eitherSide) }}

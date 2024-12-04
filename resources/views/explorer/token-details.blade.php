@@ -65,7 +65,6 @@
                                 <span data-bs-toggle="tooltip" data-bs-title="{{ $token->getFormattedAmount($token->max_supply) }}">
                                     {{ Number::abbreviate($token->getDisplayAmount($token->max_supply), 2) }}
                                 </span>
-
                         </x-stats.mini-stat>
                     </x-cards.body>
                 </x-cards.card>
@@ -86,7 +85,9 @@
                 <div class="row">
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
-                            <x-stats.list-item :title="__('Token Standard')" :stat="$token->token_standard" />
+                            <x-stats.list-item :title="__('Token Standard')">
+                                <x-hash :hash="$token->token_standard" :always-long="true" :copyable="true" />
+                            </x-stats.list-item>
                             <x-stats.list-item :title="__('Decimals')" :stat="$token->decimals "/>
                             <x-stats.list-item :title="__('Domain')">
                                 <x-link :href="$token->domain" :new-tab="true" :navigate="false">{{ $token->domain }}</x-link>
@@ -143,19 +144,19 @@
     </x-includes.header>
 
     @if ($tab === 'holders')
-        <livewire:explorer.token.holders-list :tokenId="$token->id" />
+        <livewire:explorer.token.holders-list :tokenId="$token->id" lazy />
     @endif
 
     @if ($tab === 'transactions')
-        <livewire:explorer.token.transactions-list :tokenId="$token->id" />
+        <livewire:explorer.token.transactions-list :tokenId="$token->id" lazy />
     @endif
 
     @if ($tab === 'mints')
-        <livewire:explorer.token.mints-list :tokenId="$token->id" />
+        <livewire:explorer.token.mints-list :tokenId="$token->id" lazy />
     @endif
 
     @if ($tab === 'burns')
-        <livewire:explorer.token.burns-list :tokenId="$token->id" />
+        <livewire:explorer.token.burns-list :tokenId="$token->id" lazy />
     @endif
 
     @if ($tab === 'json')

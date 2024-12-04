@@ -34,5 +34,5 @@
             </div>
         </div>
     </div>
-    <livewire:explorer.plasma-list />
+    <livewire:explorer.plasma-list lazy />
 </x-app-layout>

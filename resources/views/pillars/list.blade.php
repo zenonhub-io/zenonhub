@@ -8,7 +8,7 @@
         ]" :active="$tab" />
     </x-includes.header>
 
-    <livewire:pillars.pillar-list :tab="$tab" />
+    <livewire:pillars.pillar-list :tab="$tab" lazy />
 
 </x-app-layout>
 

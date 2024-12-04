@@ -34,5 +34,5 @@
             </div>
         </div>
     </div>
-    <livewire:explorer.staking-list />
+    <livewire:explorer.staking-list lazy />
 </x-app-layout>

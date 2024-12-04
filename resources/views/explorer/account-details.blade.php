@@ -37,7 +37,7 @@
 
     <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
-            <div class="col-24 col-md-8">
+            <div class="col-12 col-md-8">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat :title="__('ZNN')">
@@ -51,7 +51,7 @@
                     </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-24 col-md-8">
+            <div class="col-12 col-md-8">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat :title="__('QSR')">
@@ -77,6 +77,9 @@
                 <div class="row">
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-3">
+                            <x-stats.list-item :title="__('Address')">
+                                <x-hash :hash="$account->address" :always-short="true" :copyable="true" />
+                            </x-stats.list-item>
                             <x-stats.list-item :title="__('Plasma')">
                                 <span data-bs-toggle="tooltip" data-bs-title="{{ $account->display_plasma_amount }} QSR">
                                     @if ($account->plasma_level === 'High')
@@ -125,6 +128,9 @@
                             <x-stats.list-item :title="__('Chain Height')">
                                 {{ $account->display_height }}
                             </x-stats.list-item>
+                            <x-stats.list-item :title="__('Tokens')">
+                                {{ $account->tokens_count }}
+                            </x-stats.list-item>
                             <x-stats.list-item :title="__('Funded by')">
                                 @if($account->fundingBlock)
                                     <x-address :account="$account->fundingBlock->account" :always-short="true" :copyable="true" />
@@ -167,31 +173,31 @@
     </x-includes.header>
 
     @if ($tab === 'transactions')
-        <livewire:explorer.account.transactions-list :accountId="$account->id" />
+        <livewire:explorer.account.transactions-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'tokens')
-        <livewire:explorer.account.tokens-list :accountId="$account->id" />
+        <livewire:explorer.account.tokens-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'rewards')
-        <livewire:explorer.account.rewards-list :accountId="$account->id" />
+        <livewire:explorer.account.rewards-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'delegations')
-        <livewire:explorer.account.delegations-list :accountId="$account->id" />
+        <livewire:explorer.account.delegations-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'stakes')
-        <livewire:explorer.account.stakes-list :accountId="$account->id" />
+        <livewire:explorer.account.stakes-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'plasma')
-        <livewire:explorer.account.plasma-list :accountId="$account->id" />
+        <livewire:explorer.account.plasma-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'projects')
-        <livewire:explorer.account.projects-list :accountId="$account->id" />
+        <livewire:explorer.account.projects-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'json')
