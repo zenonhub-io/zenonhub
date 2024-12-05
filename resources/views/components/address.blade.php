@@ -36,5 +36,5 @@
 @endif
 
 @if($copyable)
-    <i class="bi bi-clipboard ms-1 js-copy" data-clipboard-text="{{ $account->address }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i>
+    <x-copy :text="$account->address" />
 @endif

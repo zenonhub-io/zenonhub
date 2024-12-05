@@ -43,5 +43,5 @@
 @endif
 
 @if($copyable)
-    <i class="bi bi-clipboard ms-1 js-copy" data-clipboard-text="{{ $hash }}" data-bs-toggle="tooltip" data-bs-title="Copy"></i>
+    <x-copy :text="$hash" />
 @endif

@@ -23,7 +23,8 @@ class AccountsController
     public function show(string $address, ?string $tab = 'transactions'): View
     {
         $account = Account::where('address', $address)
-            ->withCount(['sentBlocks', 'tokens'])
+            ->withCount('sentBlocks')
+            ->withCount(['tokens as tokens_count' => fn ($query) => $query->where('balance', '>', '0')])
             ->first();
 
         if (! $account) {
