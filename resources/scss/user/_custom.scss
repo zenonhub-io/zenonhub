@@ -65,20 +65,8 @@ a {
     }
 }
 
-//.app-content-wrapper {
-//    border-top: 2px solid $border-color-dark;
-//    border-left: none;
-//    @include media-breakpoint-up(lg) {
-//        border-top: 2px solid $border-color-dark;
-//        border-left: 2px solid $border-color-dark;
-//    }
-//}
-
-.auth-content-wrapper {
-    border-top: 2px solid $primary-border-subtle-dark;
-    @include media-breakpoint-up(md) {
-        border: 2px solid $border-color-dark;
-    }
+.pointer {
+    cursor: pointer;
 }
 
 

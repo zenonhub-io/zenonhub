@@ -25,9 +25,6 @@ class PillarList extends BaseTable
 
         $this->setPerPageAccepted([30, 50, 100, 150])
             ->setPerPage(30);
-
-        $this->setTableRowUrl(fn ($row) => route('pillar.detail', $row->slug))
-            ->setTableRowUrlTarget(fn ($row) => 'navigate');
     }
 
     public function builder(): Builder
@@ -64,7 +61,10 @@ class PillarList extends BaseTable
                 ),
             Column::make('Name', 'name')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->format(
+                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row)
+                ),
             Column::make('Weight')
                 ->sortable()
                 ->format(

@@ -2,7 +2,7 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-xs">{{ __('Momentum') }}</span>
+                <span class="text-muted text-sm">{{ __('Momentum') }}</span>
                 <div class="d-flex align-items-center mb-1">
                     <x-includes.header-title>
                         <h1 class="ls-tight text-wrap text-break">

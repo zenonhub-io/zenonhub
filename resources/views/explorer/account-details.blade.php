@@ -2,35 +2,35 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-xs">{{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}</span>
+                <span class="text-muted text-sm">{{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}</span>
                 <div class="d-flex align-items-center mb-1">
                     @if ($account->socialProfile?->avatar)
-                        <div class="w-24 w-md-32">
-                            <img src="{{ $token->socialProfile?->avatar }}" class="rounded float-start title-avatar me-2" alt="{{ $token->name }} Logo "/>
+                        <div class="me-3" style="height: 28px">
+                            <img src="{{ $account->socialProfile?->avatar }}" class="rounded title-avatar" alt="{{ $account->address }} Logo"/>
+                        </div>
+                    @else
+                        <div style="height: 28px; width: 28px" class="me-4 rounded overflow-hidden">
+                            {!! $account->avatar_svg !!}
                         </div>
                     @endif
-                    <x-includes.header-title :title="$account->address" />
+                    <x-includes.header-title class="mb-1">
+                        <h1 class="ls-tight text-wrap text-break">
+                            {{ $account->address }}
+                            <span class="text-lg">
+                            <x-copy :text="$account->address" class="mx-2 text-lg" />
+                            <span class="pointer text-lg ms-2" data-bs-toggle="tooltip"
+                                  data-bs-title="{{ __('Edit address') }}">
+                                <i class="bi bi-pencil-square"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#edit-account-{{ $account->address }}"></i>
+                            </span>
+                        </span>
+                        </h1>
+                    </x-includes.header-title>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$account->socialProfile" />
                 </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-account-{{ $account->address }}">
-                            <i class="bi bi-pencil-fill me-2"></i> {{ __('Edit') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </x-includes.header>

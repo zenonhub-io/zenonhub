@@ -2,7 +2,7 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-xs">{{ __('Transaction') }}</span>
+                <span class="text-muted text-sm">{{ __('Transaction') }}</span>
                 <div class="d-flex align-items-center mb-1">
                     <x-includes.header-title>
                         <h1 class="ls-tight text-wrap text-break">
@@ -127,10 +127,10 @@
                 <x-cards.card>
                     <x-cards.body>
                         <h4 class="mb-3">{{ __('Raw') }}</h4>
-                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow text-wrap">{{ $transaction->data->raw }}</pre>
+                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset text-wrap">{{ $transaction->data->raw }}</pre>
                         <hr class="my-6">
                         <h4 class="mb-3">{{ __('Decoded') }}</h4>
-                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow"><code class="lang-json">{{ json_encode($transaction->data->decoded, JSON_PRETTY_PRINT) }}</code></pre>
+                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset"><code class="lang-json">{{ json_encode($transaction->data->decoded, JSON_PRETTY_PRINT) }}</code></pre>
                     </x-cards.body>
                 </x-cards.card>
             @else

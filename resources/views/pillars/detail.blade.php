@@ -2,16 +2,26 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-xs">{{ __('Pillar') }}</span>
+                <span class="text-muted text-sm">{{ __('Pillar') }}</span>
                 <div class="d-flex align-items-center mb-1">
                     @if ($pillar->socialProfile?->avatar)
-                        <div class="w-24 w-md-32">
-                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded float-start title-avatar me-2" alt="{{ $pillar->name }} Logo "/>
+                        <div class="me-3" style="height: 28px">
+                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded title-avatar" alt="{{ $pillar->name }} Logo "/>
                         </div>
                     @else
-                        <x-svg file="zenon/pillar" class="me-4" style="height: 28px "/>
+                        <x-svg file="zenon/pillar" class="me-4" style="height: 28px"/>
                     @endif
-                    <x-includes.header-title :title="$pillar->name" />
+                    <x-includes.header-title>
+                        <h1 class="ls-tight text-wrap text-break">
+                            {{ $pillar->name }}
+                            <span class="pointer text-lg ms-2" data-bs-toggle="tooltip"
+                                  data-bs-title="{{ __('Edit address') }}">
+                                <i class="bi bi-pencil-square"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#edit-pillar-{{ $pillar->slug }}"></i>
+                            </span>
+                        </h1>
+                    </x-includes.header-title>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$pillar->socialProfile" />
@@ -19,24 +29,6 @@
             </div>
             <div class="d-flex align-items-end flex-column">
                 <span class="badge badge-md text-bg-{{ $pillar->status_colour }} mb-2">{{ $pillar->status_text }}</span>
-                <div class="dropdown">
-                    <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-three-dots"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-pillar-{{ $pillar->slug }}">
-                                <i class="bi bi-pencil-fill me-2"></i> {{ __('Edit') }}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
             </div>
         </div>
     </x-includes.header>

@@ -3,7 +3,7 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-xs">{{ __('Phase') }}</span>
+                <span class="text-muted text-sm">{{ __('Phase') }}</span>
                 <div class="d-flex align-items-center">
                     <x-svg file="zenon/az" class="me-4" style="height: 28px "/>
                     <x-includes.header-title :title="$phase->name" />

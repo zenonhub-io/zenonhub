@@ -2,7 +2,7 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-xs">{{ __('Token') }}</span>
+                <span class="text-muted text-sm">{{ __('Token') }}</span>
                 <div class="d-flex align-items-center mb-1">
                     @if ($token->socialProfile?->avatar)
                         <div class="w-24 w-md-32">

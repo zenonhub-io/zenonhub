@@ -43,5 +43,5 @@
 @endif
 
 @if($copyable)
-    <x-copy :text="$hash" />
+    <x-copy class="ms-1" :text="$hash" />
 @endif

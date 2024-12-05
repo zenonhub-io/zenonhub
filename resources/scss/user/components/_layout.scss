@@ -1,3 +1,10 @@
+.auth-content-wrapper {
+    border-top: 2px solid $primary-border-subtle-dark;
+    @include media-breakpoint-up(md) {
+        border: 2px solid $border-color-dark;
+    }
+}
+
 .app-wrapper {
     align-items: flex-start;
     display: flex;

@@ -515,11 +515,18 @@ class Account extends Model implements Sitemapable
 
     public function getAvatarSvgAttribute()
     {
-        $svg = Http::get('https://api.dicebear.com/9.x/identicon/svg', [
-            'seed' => $this->address,
-        ])->body();
+        $cacheKey = $this->cacheKey('avatar', 'first_active_at');
 
-        return $svg;
+        return Cache::rememberForever($cacheKey, function () {
+            return Http::get('https://api.dicebear.com/9.x/identicon/svg', [
+                'seed' => $this->address,
+            ])->body();
+
+            //        return Http::get('https://api.dicebear.com/9.x/bottts-neutral/svg', [
+            //            'seed' => $this->address,
+            //        ])->body();
+
+        });
     }
 
     //

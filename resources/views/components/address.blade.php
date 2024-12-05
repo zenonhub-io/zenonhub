@@ -36,5 +36,5 @@
 @endif
 
 @if($copyable)
-    <x-copy :text="$account->address" />
+    <x-copy class="ms-1" :text="$account->address" />
 @endif
