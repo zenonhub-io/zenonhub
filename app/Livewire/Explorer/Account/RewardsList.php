@@ -45,7 +45,7 @@ class RewardsList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $row->amount > 0 ? $row->token?->getFormattedAmount($row->amount) : null
+                    fn ($row, Column $column) => $row->token?->getFormattedAmount($row->amount)
                 ),
             Column::make('Token')
                 ->label(

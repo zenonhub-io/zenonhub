@@ -94,7 +94,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Link')">
                                 <x-link :href="$project->url" :navigate="false" _target="_blank">
                                     {{ $project->url }}
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('ID')">
                                 <x-hash :hash="$project->hash" :always-short="true" :copyable="true" />
                             </x-stats.list-item>

@@ -35,7 +35,7 @@ class TransactionsList extends BaseTable
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($column->getTitle() === '') {
                 return [
-                    'class' => 'pe-0',
+                    'class' => 'py-0 pt-1 pe-0',
                 ];
             }
 

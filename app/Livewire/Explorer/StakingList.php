@@ -44,7 +44,7 @@ class StakingList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => app('znnToken')->getFormattedAmount($row->amount) . ' ' . app('znnToken')->symbol
+                    fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount) . ' ' . $row->token->symbol
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(

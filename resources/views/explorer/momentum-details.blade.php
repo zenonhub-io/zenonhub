@@ -4,20 +4,12 @@
             <div class="d-flex align-items-start flex-column">
                 <span class="text-muted text-xs">{{ __('Momentum') }}</span>
                 <div class="d-flex align-items-center mb-1">
-                    <x-includes.header-title title="# {{ $momentum->display_height }}" />
+                    <x-includes.header-title>
+                        <h1 class="ls-tight text-wrap text-break">
+                            <x-hash :hash="$momentum->hash" :always-short="true" :either-side="6" />
+                        </h1>
+                    </x-includes.header-title>
                 </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </x-includes.header>
@@ -28,9 +20,9 @@
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
-                            :title="__('Transactions')"
-                            :info="__('The number of transactions in the momentum')"
-                            :stat="$momentum->account_blocks_count"
+                            :title="__('Height')"
+                            :info="__('Current height of the Network of Momentum')"
+                            :stat="$momentum->display_height"
                         />
                     </x-cards.body>
                 </x-cards.card>
@@ -53,7 +45,7 @@
             <x-cards.body>
                 <div class="row">
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Hash')">
                                 <x-hash :hash="$momentum->hash" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
@@ -64,13 +56,11 @@
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
-                            <x-stats.list-item :title="__('Age')">
-                                <x-date-time.carbon :date="$momentum->created_at" :human="true" />
-                            </x-stats.list-item>
-                            <x-stats.list-item :title="__('Producer')" :hr="false">
+                        <div class="vstack gap-2">
+                            <x-stats.list-item :title="__('Producer')">
                                 <x-address :account="$momentum->producerAccount" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
+                            <x-stats.list-item :title="__('Transactions')" :stat="$momentum->account_blocks_count" :hr="false" />
                         </div>
                     </div>
                 </div>

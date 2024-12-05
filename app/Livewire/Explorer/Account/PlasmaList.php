@@ -34,7 +34,7 @@ class PlasmaList extends BaseTable
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($column->getTitle() === '') {
                 return [
-                    'class' => 'pe-0',
+                    'class' => 'py-0 pt-1 pe-0',
                 ];
             }
 
@@ -90,7 +90,7 @@ class PlasmaList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' ZNN'
+                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' ' . app('qsrToken')->symbol
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(

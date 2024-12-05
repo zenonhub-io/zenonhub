@@ -48,14 +48,14 @@ class TokensList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) / POWER(10, decimals) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $row->balance > 0 ? $row->getFormattedAmount($row->balance) : null
+                    fn ($row, Column $column) => $row->getFormattedAmount($row->balance)
                 ),
             Column::make('Share')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) / POWER(10, decimals) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $row->balance > 0 ? Account::find($this->accountId)?->tokenBalanceShare($row) : null
+                    fn ($row, Column $column) => Account::find($this->accountId)?->tokenBalanceShare($row)
                 ),
         ];
     }

@@ -44,7 +44,14 @@ class ZnnEthLpStakingList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => app('znnEthLpToken')->getFormattedAmount($row->amount) . ' ' . app('znnEthLpToken')->symbol
+                    fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount)
+                ),
+            Column::make('Token')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                        'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                        'text' => $row->token->symbol,
+                    ])
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(

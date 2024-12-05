@@ -20,11 +20,20 @@ class InboundList extends BaseTable
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
 
-        $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
-
+        $this->setThAttributes(function (Column $column) {
             if ($column->getTitle() === '') {
                 return [
-                    'class' => 'py-0 px-0 ps-3 pt-1',
+                    'class' => 'px-0',
+                ];
+            }
+
+            return [];
+        });
+
+        $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
+            if ($column->getTitle() === '') {
+                return [
+                    'class' => 'py-0 pt-1 px-0',
                 ];
             }
 
@@ -77,7 +86,14 @@ class InboundList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount) . ' ' . $row->token->symbol
+                    fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount)
+                ),
+            Column::make('Token')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.link', [
+                        'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                        'text' => $row->token->symbol,
+                    ])
                 ),
             Column::make('Type')
                 ->label(

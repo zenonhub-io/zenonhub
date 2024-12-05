@@ -31,7 +31,7 @@ class TransactionList extends BaseTable
         $this->setTdAttributes(function (Column $column, $row, $columnIndex, $rowIndex) {
             if ($column->getTitle() === '') {
                 return [
-                    'class' => 'px-0',
+                    'class' => 'py-0 pt-1 px-0',
                 ];
             }
 
@@ -90,18 +90,18 @@ class TransactionList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $row->token?->getFormattedAmount($row->amount)
+                    fn ($row, Column $column) => $row->amount > 0 ? $row->token?->getFormattedAmount($row->amount) : null
                 ),
             Column::make('Token')
                 ->label(function ($row, Column $column) {
-                    if (! $row->token) {
-                        return null;
+                    if ($row->token && $row->amount > 0) {
+                        return view('components.tables.columns.link', [
+                            'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
+                            'text' => $row->token->symbol,
+                        ]);
                     }
 
-                    return view('components.tables.columns.link', [
-                        'link' => route('explorer.token.detail', ['zts' => $row->token->token_standard]),
-                        'text' => $row->token->symbol,
-                    ]);
+                    return null;
                 }),
             Column::make('Type')
                 ->label(

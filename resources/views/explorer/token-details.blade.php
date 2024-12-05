@@ -74,6 +74,7 @@
                     <x-cards.body>
                         <x-stats.mini-stat
                             :title="__('Holders')"
+                            :info="__('Total number of accounts with a balance of the token')"
                             :stat="number_format($token->holders_count)"
                         />
                     </x-cards.body>
@@ -84,7 +85,7 @@
             <x-cards.body>
                 <div class="row">
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Token Standard')">
                                 <x-hash :hash="$token->token_standard" :always-long="true" :copyable="true" />
                             </x-stats.list-item>
@@ -102,7 +103,7 @@
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Total Minted')" :stat="$token->getFormattedAmount($token->total_minted)" />
                             <x-stats.list-item :title="__('Total Burned')" :stat="$token->getFormattedAmount($token->total_burned)" />
                             <x-stats.list-item :title="__('Mintable')">

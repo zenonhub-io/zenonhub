@@ -107,7 +107,7 @@
             <x-cards.body>
                 <div class="row">
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Rank')" :stat="'# ' . $pillar->display_rank" />
                             <x-stats.list-item :title="__('Voting')" :info="__('% of Accelerator-Z projects and phases voted on')">
                                 @if (! is_null($pillar->az_engagement))
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Spawned')">
                                 <x-date-time.carbon :date="$pillar->created_at" />
                             </x-stats.list-item>

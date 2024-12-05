@@ -4,20 +4,12 @@
             <div class="d-flex align-items-start flex-column">
                 <span class="text-muted text-xs">{{ __('Transaction') }}</span>
                 <div class="d-flex align-items-center mb-1">
-                    <x-includes.header-title title="# {{ $transaction->display_height }}" />
+                    <x-includes.header-title>
+                        <h1 class="ls-tight text-wrap text-break">
+                            <x-hash :hash="$transaction->hash" :always-short="true" :either-side="6" />
+                        </h1>
+                    </x-includes.header-title>
                 </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </x-includes.header>
@@ -57,7 +49,7 @@
             <x-cards.body>
                 <div class="row">
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Hash')">
                                 <x-hash :hash="$transaction->hash" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
@@ -68,10 +60,11 @@
                                 @if($transaction->pairedAccountBlock)
                                     <x-date-time.carbon :date="$transaction->pairedAccountBlock->created_at" />
                                 @else
-                                    {{ __('Unreceived') }}
+                                    -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Amount')">
+                            <x-stats.list-item :title="__('Type')" :stat="$transaction->display_actual_type" />
+                            <x-stats.list-item :title="__('Amount')" :hr="false">
                                 @if ($transaction->token && $transaction->amount > 0)
                                     {{ $transaction->display_amount }}
                                     <x-link :href="route('explorer.token.detail', ['zts' => $transaction->token->token_standard])">
@@ -81,12 +74,11 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Type')" :stat="$transaction->display_actual_type" :hr="false" />
                             <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Confirmations')">
                                 @if ($transaction->raw_json?->confirmationDetail?->numConfirmations)
                                     {{ number_format($transaction->raw_json->confirmationDetail->numConfirmations) }}
@@ -120,7 +112,6 @@
             </x-cards.body>
         </x-cards.card>
     </div>
-
 
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[

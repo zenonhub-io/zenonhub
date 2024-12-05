@@ -76,7 +76,7 @@
             <x-cards.body>
                 <div class="row">
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Address')">
                                 <x-hash :hash="$account->address" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                     <div class="col-24 col-lg-12">
-                        <div class="vstack gap-3">
+                        <div class="vstack gap-2">
                             <x-stats.list-item :title="__('First Active')">
                                 @if($account->first_active_at)
                                     <x-date-time.carbon :date="$account->first_active_at" />

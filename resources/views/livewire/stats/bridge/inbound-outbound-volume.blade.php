@@ -57,7 +57,7 @@
             </div>
             <div class="row">
                 <div class="col-24 col-sm-12">
-                    <div class="vstack gap-3">
+                    <div class="vstack gap-2">
                         <x-stats.list-item :title="__('Volume')" :stat="$totalVolume" breakpoint="sm "/>
                         <x-stats.list-item :title="__('Inbound TX')" :stat="$inboundTx" breakpoint="sm "/>
                         <x-stats.list-item :title="__('Inbound Amount')" :stat="$inboundAmount" :hr="false" breakpoint="sm "/>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="col-24 col-sm-12">
-                    <div class="vstack gap-3">
+                    <div class="vstack gap-2">
                         <x-stats.list-item :title="__('Net Flow')" :stat="$netFlow" breakpoint="sm "/>
                         <x-stats.list-item :title="__('Outbound TX')" :stat="$outboundTx" breakpoint="sm "/>
                         <x-stats.list-item :title="__('Outbound Amount')" :stat="$outboundAmount" :hr="false" breakpoint="sm "/>
