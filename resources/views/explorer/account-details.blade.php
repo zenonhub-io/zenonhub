@@ -73,6 +73,8 @@
                                 <div class="grid gap-4 d-flex align-items-center">
                                     @if($account->is_embedded_contract)
                                         <i class="bi-file-binary-fill" data-bs-toggle="tooltip" data-bs-title="{{ __('Embedded contract') }}"></i>
+                                    @else
+                                        <i class="bi-wallet2 text-lg" data-bs-toggle="tooltip" data-bs-title="{{ __('Account') }}"></i>
                                     @endif
 
                                     @if($account->is_pillar)
