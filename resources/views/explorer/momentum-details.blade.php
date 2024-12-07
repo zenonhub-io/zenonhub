@@ -1,17 +1,52 @@
 <x-app-layout>
     <x-includes.header :responsive-border="false">
-        <div class="d-flex justify-content-between mb-4">
-            <div class="d-flex align-items-start flex-column">
-                <h5 class="text-muted">{{ __('Momentum') }}</h5>
-                <div class="d-flex align-items-center mb-1">
-                    <x-includes.header-title>
-                        <h1 class="ls-tight text-wrap text-break">
-                            {{ short_hash($momentum->hash, 6) }}
-                            <x-copy :text="$momentum->hash" class="ms-2 text-md" :tooltip="__('Copy hash')" />
-                        </h1>
-                    </x-includes.header-title>
+        <div class="row justify-content-between align-items-center mb-4">
+            <div class="col-24 col-sm">
+                <div class="d-flex align-items-start flex-column">
+                    <h5 class="text-muted">{{ __('Momentum') }}</h5>
+                    <div class="d-flex align-items-center mb-1">
+                        <x-includes.header-title>
+                            <h1 class="ls-tight text-wrap text-break">
+                                {{ short_hash($momentum->hash, 6) }}
+                                <x-copy :text="$momentum->hash" class="ms-2 text-md" :tooltip="__('Copy hash')" />
+                            </h1>
+                        </x-includes.header-title>
+                    </div>
                 </div>
             </div>
+            <div class="col-24 col-sm-auto">
+                <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-body-secondary rounded text-xs fw-semibold mt-1 mt-sm-0 shadow">
+                    @if($momentum->previous_momentum)
+                        <x-link
+                            :href="route('explorer.momentum.detail', ['hash' => $momentum->previous_momentum->hash])"
+                            class="px-3 py-1 text-muted bg-dark-hover bg-opacity-70-hover rounded"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="{{ __('Previous') }}"
+                        >
+                            <i class="bi bi-chevron-left"></i> <span class="d-inline d-sm-none">{{ __('Previous') }}</span>
+                        </x-link>
+                    @else
+                        <span class="px-3 py-1 text-muted bg-body-secondary rounded">
+                            <i class="bi bi-chevron-left"></i> <span class="d-inline d-sm-none">{{ __('Previous') }}</span>
+                        </span>
+                    @endif
+                    @if($momentum->next_momentum)
+                        <x-link
+                            :href="route('explorer.momentum.detail', ['hash' => $momentum->next_momentum->hash])"
+                            class="px-3 py-1 text-muted bg-dark-hover bg-opacity-70-hover rounded"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="{{ __('Next') }}"
+                        >
+                            <span class="d-inline d-sm-none">{{ __('Next') }}</span> <i class="bi bi-chevron-right"></i>
+                        </x-link>
+                    @else
+                        <span class="px-3 py-1 text-muted bg-body-secondary rounded">
+                            <span class="d-inline d-sm-none">{{ __('Next') }}</span> <i class="bi bi-chevron-right"></i>
+                        </span>
+                    @endif
+                </div>
+            </div>
+
         </div>
     </x-includes.header>
 
