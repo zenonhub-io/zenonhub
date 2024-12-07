@@ -72,7 +72,7 @@
 
     @if ($this->user->verifiedAccounts->isNotEmpty())
         <hr class="my-6">
-        <div class="list-group">
+        <div class="list-group shadow">
             @foreach ($this->user->verifiedAccounts->sortBy('verified_at') as $account)
                 <div class="list-group-item d-flex align-items-center">
                     <div class="flex-fill">
