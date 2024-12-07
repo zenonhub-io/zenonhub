@@ -23,9 +23,11 @@
                         </span>
                     </h1>
                 </x-includes.header-title>
-                <div class="d-flex align-items-center gap-3">
-                    <x-social-profile.links :social-profile="$pillar->socialProfile" />
-                </div>
+                @if ($pillar->socialProfile)
+                    <div class="d-flex align-items-center gap-3 mt-1">
+                        <x-social-profile.links :social-profile="$pillar->socialProfile" />
+                    </div>
+                @endif
             </div>
             <div class="d-flex align-items-end flex-column">
                 <span class="badge badge-md text-bg-{{ $pillar->status_colour }} mb-2">{{ $pillar->status_text }}</span>

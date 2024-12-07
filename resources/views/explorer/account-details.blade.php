@@ -41,9 +41,11 @@
                         @endauth
                     </h1>
                 </x-includes.header-title>
-                <div class="d-flex align-items-center gap-3">
-                    <x-social-profile.links :social-profile="$account->socialProfile" />
-                </div>
+                @if ($account->socialProfile)
+                    <div class="d-flex align-items-center gap-3 mt-1">
+                        <x-social-profile.links :social-profile="$account->socialProfile" />
+                    </div>
+                @endif
             </div>
         </div>
     </x-includes.header>

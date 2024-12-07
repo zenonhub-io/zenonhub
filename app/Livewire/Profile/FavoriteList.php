@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Profile;
 
 use App\Livewire\BaseTable;
 use App\Models\Nom\Account;
@@ -10,10 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class AccountsList extends BaseTable
+class FavoriteList extends BaseTable
 {
-    public ?string $tab = 'all';
-
     public function configure(): void
     {
         parent::configure();
@@ -32,27 +30,7 @@ class AccountsList extends BaseTable
             )
             ->withCount('sentBlocks');
 
-        if ($this->tab === 'contracts') {
-            $query->whereEmbedded();
-        }
-
-        if ($this->tab === 'pillars') {
-            $query->whereHas('pillars', function ($query) {
-                $query->whereActive();
-            });
-        }
-
-        if ($this->tab === 'sentinels') {
-            $query->whereHas('sentinels', function ($query) {
-                $query->whereActive();
-            });
-        }
-
-        if ($this->tab === 'favorites' && auth()->check()) {
-            $query->whereHasFavorite(auth()->user());
-        }
-
-        return $query;
+        return $query->whereHasFavorite(auth()->user());
     }
 
     public function columns(): array
