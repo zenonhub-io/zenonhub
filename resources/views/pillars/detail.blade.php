@@ -16,8 +16,7 @@
                     <h1 class="ls-tight text-wrap text-break">
                         {{ $pillar->name }}
                         <x-copy :text="route('pillar.detail', ['slug' => $pillar->slug])" class="ms-2 text-md" :tooltip="__('Copy URL')" />
-                        <span class="pointer ms-2 text-md" data-bs-toggle="tooltip"
-                              data-bs-title="{{ __('Edit pillar') }}">
+                        <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit pillar') }}">
                             <i class="bi bi-pencil-square"
                                data-bs-toggle="modal"
                                data-bs-target="#edit-pillar-{{ $pillar->slug }}"></i>

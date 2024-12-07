@@ -14,34 +14,18 @@
                     <h1 class="ls-tight text-wrap text-break">
                         {{ $token->name }} <span class="text-sm">{{ $token->symbol }}</span>
                         <x-copy :text="$token->token_standard" class="ms-2 text-md" :tooltip="__('Copy ZTS')" />
-                        <span class="pointer text-lg ms-2" data-bs-toggle="tooltip"
-                              data-bs-title="{{ __('Edit token') }}">
-                            <i class="bi bi-pencil-square"
-                               data-bs-toggle="modal"
-                               data-bs-target="#edit-token-{{ $token->token_standard }}"></i>
-                        </span>
+                        @if(! $token->is_network)
+                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit token') }}">
+                                <i class="bi bi-pencil-square"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#edit-token-{{ $token->token_standard }}"></i>
+                            </span>
+                        @endif
                     </h1>
                 </x-includes.header-title>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$token->socialProfile" />
                 </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-token-{{ $token->token_standard }}">
-                            <i class="bi bi-pencil-fill me-2"></i> {{ __('Edit') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-share-fill me-2"></i> {{ __('Share') }}
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </x-includes.header>

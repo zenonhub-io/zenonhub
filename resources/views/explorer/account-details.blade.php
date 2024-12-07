@@ -17,7 +17,7 @@
                         {{ $account->address }}
                         <x-copy :text="$account->address" class="ms-2 text-md" :tooltip="__('Copy Address')" />
                         @if (! $account->is_embedded_contract)
-                            <span class="pointer text-lg ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit address') }}">
+                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit address') }}">
                                 <i class="bi bi-pencil-square"
                                    data-bs-toggle="modal"
                                    data-bs-target="#edit-account-{{ $account->address }}"></i>
