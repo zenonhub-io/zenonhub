@@ -12,7 +12,6 @@
     </x-includes.header>
 
     <div class="px-3 px-lg-6">
-
         @if($tab === 'details')
             @livewire('profile.update-details')
             <hr class="my-6">
@@ -30,7 +29,7 @@
         @endif
 
         @if($tab === 'favorites')
-
+            @livewire('profile.manage-favorites')
         @endif
 
         @if($tab === 'addresses')
@@ -40,6 +39,5 @@
         @if($tab === 'api-keys')
             @livewire('profile.manage-api-tokens')
         @endif
-
     </div>
 </x-app-layout>

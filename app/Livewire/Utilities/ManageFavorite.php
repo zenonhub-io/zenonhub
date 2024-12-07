@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire\Utilities;
 
+use App\Livewire\Profile\ManageFavorites;
 use App\Models\Favorite;
-use App\Models\Nom\Token;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
@@ -59,7 +59,8 @@ class ManageFavorite extends Component
         $favorite->notes = $this->favoriteForm['notes'];
         $favorite->save();
 
-        $this->dispatch('favorite.updated');
+        $this->dispatch('hide-inline-modal', id: 'edit-favorite-address-' . $this->model->address);
+        $this->dispatch('favorite.updated')->to(ManageFavorites::class);
     }
 
     public function deleteFavorite(): void
@@ -68,7 +69,8 @@ class ManageFavorite extends Component
 
         Favorite::remove($this->model, auth()->user());
 
-        $this->dispatch('favorite.deleted');
+        $this->dispatch('hide-inline-modal', id: 'edit-favorite-address-' . $this->model->address);
+        $this->dispatch('favorite.deleted')->to(ManageFavorites::class);
     }
 
     private function loadFavorite(): void
@@ -82,7 +84,7 @@ class ManageFavorite extends Component
             }
 
             if ($this->itemType === 'token') {
-                $model = Token::firstWhere('token_standard', $this->itemId)?->load('owner');
+                $model = load_token($this->itemId)?->load('owner');
             }
 
             $favorite = Favorite::findExisting($model, auth()->user());
@@ -90,8 +92,10 @@ class ManageFavorite extends Component
             $this->model = $model;
             $this->favorite = $favorite;
             if ($favorite) {
-                $this->favoriteForm = $favorite?->toArray();
+                $this->favoriteForm = $favorite->toArray();
                 $this->hasUserFavorite = true;
+            } else {
+                $this->favoriteForm['label'] = $model->address;
             }
         }
     }

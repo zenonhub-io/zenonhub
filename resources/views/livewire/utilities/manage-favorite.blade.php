@@ -25,16 +25,6 @@
         </div>
     </div>
 
-    <div class="d-none d-md-block">
-        <x-alerts.response class="alert-success mx-6 mb-6" on="favorite.updated">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ __('Your favorite has been updated') }}
-        </x-alerts.response>
-
-        <x-alerts.response class="alert-danger mx-6 mb-6" on="favorite.deleted">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ __('Your favorite has been deleted') }}
-        </x-alerts.response>
-    </div>
-
     <div class="modal-footer">
         @if ($hasUserFavorite)
             <x-buttons.button class="btn btn-outline-danger me-auto" wire:click="deleteFavorite">

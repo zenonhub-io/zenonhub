@@ -28,7 +28,7 @@
                             <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Favorite') }}">
                                 <i class="bi {{ $account->is_favourite ? 'bi-star-fill' : 'bi-star' }}"
                                    data-bs-toggle="modal"
-                                   data-bs-target="#favorite-account-{{ $account->address }}"></i>
+                                   data-bs-target="#edit-favorite-address-{{ $account->address }}"></i>
                             </span>
                         @else
                             <x-link class="text-md ms-2 text-body" :href="route('login', ['redirect' => url()->current()])">
@@ -260,7 +260,7 @@
         <livewire:utilities.update-social-profile item-type="address" :item-id="$account->address" :address="$account->address" :title="$account->address" />
     </x-modals.modal>
 
-    <x-modals.modal class="modal-lg" id="favorite-account-{{ $account->address }}">
-        <livewire:utilities.manage-favorite item-type="address" :item-id="$account->address" :address="$account->address" :title="$account->address" />
+    <x-modals.modal class="modal-lg" id="edit-favorite-address-{{ $account->address }}">
+        <livewire:utilities.manage-favorite item-type="address" :item-id="$account->address" :title="$account->address" />
     </x-modals.modal>
 </x-app-layout>
