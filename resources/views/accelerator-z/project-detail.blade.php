@@ -1,13 +1,19 @@
 <x-app-layout>
-
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-sm">{{ __('Project') }}</span>
-                <div class="d-flex align-items-center">
-                    <x-svg file="zenon/az" class="me-4" style="height: 28px "/>
-                    <x-includes.header-title :title="$project->name" />
+                <div class="d-flex align-items-center mb-1">
+                    <div class="title-icon">
+                        <x-svg file="zenon/az" style="height: 24px "/>
+                    </div>
+                    <h5 class="text-muted ms-3">{{ __('Project') }}</h5>
                 </div>
+                <x-includes.header-title>
+                    <h1 class="ls-tight text-wrap text-break">
+                        {{ $project->name }}
+                        <x-copy :text="route('accelerator-z.project.detail', ['hash' => $project->hash])" class="ms-2 text-md" :tooltip="__('Copy URL')" />
+                    </h1>
+                </x-includes.header-title>
             </div>
             <div class="d-flex align-items-start">
                 <span class="badge badge-md text-bg-{{ $project->status->colour() }}">{{ $project->status->label() }}</span>

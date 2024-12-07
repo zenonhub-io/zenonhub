@@ -2,11 +2,12 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-sm">{{ __('Transaction') }}</span>
+                <h5 class="text-muted">{{ __('Transaction') }}</h5>
                 <div class="d-flex align-items-center mb-1">
                     <x-includes.header-title>
                         <h1 class="ls-tight text-wrap text-break">
-                            <x-hash :hash="$transaction->hash" :always-short="true" :either-side="6" />
+                            {{ short_hash($transaction->hash, 6) }}
+                            <x-copy :text="$transaction->hash" class="ms-2 text-md" :tooltip="__('Copy hash')" />
                         </h1>
                     </x-includes.header-title>
                 </div>

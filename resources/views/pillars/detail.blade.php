@@ -2,27 +2,28 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-sm">{{ __('Pillar') }}</span>
                 <div class="d-flex align-items-center mb-1">
-                    @if ($pillar->socialProfile?->avatar)
-                        <div class="me-3" style="height: 28px">
-                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded title-avatar" alt="{{ $pillar->name }} Logo "/>
-                        </div>
-                    @else
-                        <x-svg file="zenon/pillar" class="me-4" style="height: 28px"/>
-                    @endif
-                    <x-includes.header-title>
-                        <h1 class="ls-tight text-wrap text-break">
-                            {{ $pillar->name }}
-                            <span class="pointer text-lg ms-2" data-bs-toggle="tooltip"
-                                  data-bs-title="{{ __('Edit address') }}">
-                                <i class="bi bi-pencil-square"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#edit-pillar-{{ $pillar->slug }}"></i>
-                            </span>
-                        </h1>
-                    </x-includes.header-title>
+                    <div class="title-icon">
+                        @if ($pillar->socialProfile?->avatar)
+                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded" alt="{{ $pillar->name }} Logo"/>
+                        @else
+                            <x-svg file="zenon/pillar" style="height: 24px"/>
+                        @endif
+                    </div>
+                    <h5 class="text-muted ms-3">{{ __('Pillar') }}</h5>
                 </div>
+                <x-includes.header-title>
+                    <h1 class="ls-tight text-wrap text-break">
+                        {{ $pillar->name }}
+                        <x-copy :text="route('pillar.detail', ['slug' => $pillar->slug])" class="ms-2 text-md" :tooltip="__('Copy URL')" />
+                        <span class="pointer ms-2 text-md" data-bs-toggle="tooltip"
+                              data-bs-title="{{ __('Edit pillar') }}">
+                            <i class="bi bi-pencil-square"
+                               data-bs-toggle="modal"
+                               data-bs-target="#edit-pillar-{{ $pillar->slug }}"></i>
+                        </span>
+                    </h1>
+                </x-includes.header-title>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$pillar->socialProfile" />
                 </div>

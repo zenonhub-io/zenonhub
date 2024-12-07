@@ -2,32 +2,29 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-sm">{{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}</span>
                 <div class="d-flex align-items-center mb-1">
-                    @if ($account->socialProfile?->avatar)
-                        <div class="me-3" style="height: 28px">
-                            <img src="{{ $account->socialProfile?->avatar }}" class="rounded title-avatar" alt="{{ $account->address }} Logo"/>
-                        </div>
-                    @else
-                        <div style="height: 28px; width: 28px" class="me-4 rounded overflow-hidden">
+                    <div class="title-icon">
+                        @if ($account->socialProfile?->avatar)
+                            <img src="{{ $account->socialProfile?->avatar }}" class="rounded" alt="{{ $account->address }} Logo"/>
+                        @else
                             {!! $account->avatar_svg !!}
-                        </div>
-                    @endif
-                    <x-includes.header-title class="mb-1">
-                        <h1 class="ls-tight text-wrap text-break">
-                            {{ $account->address }}
-                            <span class="text-lg">
-                            <x-copy :text="$account->address" class="mx-2 text-lg" />
-                            <span class="pointer text-lg ms-2" data-bs-toggle="tooltip"
-                                  data-bs-title="{{ __('Edit address') }}">
+                        @endif
+                    </div>
+                    <h5 class="text-muted ms-3">{{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}</h5>
+                </div>
+                <x-includes.header-title>
+                    <h1 class="ls-tight text-wrap text-break">
+                        {{ $account->address }}
+                        <x-copy :text="$account->address" class="ms-2 text-md" :tooltip="__('Copy Address')" />
+                        @if (! $account->is_embedded_contract)
+                            <span class="pointer text-lg ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit address') }}">
                                 <i class="bi bi-pencil-square"
                                    data-bs-toggle="modal"
                                    data-bs-target="#edit-account-{{ $account->address }}"></i>
                             </span>
-                        </span>
-                        </h1>
-                    </x-includes.header-title>
-                </div>
+                        @endif
+                    </h1>
+                </x-includes.header-title>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$account->socialProfile" />
                 </div>

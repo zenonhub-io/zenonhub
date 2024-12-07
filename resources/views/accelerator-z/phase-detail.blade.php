@@ -1,13 +1,19 @@
 <x-app-layout>
-
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-sm">{{ __('Phase') }}</span>
-                <div class="d-flex align-items-center">
-                    <x-svg file="zenon/az" class="me-4" style="height: 28px "/>
-                    <x-includes.header-title :title="$phase->name" />
+                <div class="d-flex align-items-center mb-1">
+                    <div class="title-icon">
+                        <x-svg file="zenon/az" style="height: 24px"/>
+                    </div>
+                    <h5 class="text-muted ms-3">{{ __('Phase') }}</h5>
                 </div>
+                <x-includes.header-title>
+                    <h1 class="ls-tight text-wrap text-break">
+                        {{ $phase->name }}
+                        <x-copy :text="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="ms-2 text-md" :tooltip="__('Copy URL')" />
+                    </h1>
+                </x-includes.header-title>
             </div>
             <div class="d-flex align-items-start">
                 <span class="badge badge-md text-bg-{{ $phase->status->colour() }}">{{ $phase->status->label() }}</span>
@@ -16,7 +22,6 @@
     </x-includes.header>
 
     <div class="container-fluid px-3 px-md-6">
-
         <div class="row mb-6 gy-6">
             <div class="col-12 col-sm-8">
                 <x-cards.card>
@@ -125,7 +130,6 @@
                 </div>
             </x-cards.body>
         </x-cards.card>
-
     </div>
 
     <x-includes.header>

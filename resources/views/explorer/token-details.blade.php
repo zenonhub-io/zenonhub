@@ -2,21 +2,26 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <span class="text-muted text-sm">{{ __('Token') }}</span>
                 <div class="d-flex align-items-center mb-1">
                     @if ($token->socialProfile?->avatar)
-                        <div class="w-24 w-md-32">
-                            <img src="{{ $token->socialProfile?->avatar }}" class="rounded float-start title-avatar me-2" alt="{{ $token->name }} Logo "/>
+                        <div class="title-icon">
+                            <img src="{{ $token->socialProfile?->avatar }}" class="rounded" alt="{{ $token->name }} Logo"/>
                         </div>
                     @endif
-                    <x-includes.header-title>
-                        <div class="col">
-                            <h1 class="ls-tight">
-                                {{ $token->name }} <span class="text-sm">{{ $token->symbol }}</span>
-                            </h1>
-                        </div>
-                    </x-includes.header-title>
+                    <h5 class="text-muted">{{ __('Token') }}</h5>
                 </div>
+                <x-includes.header-title>
+                    <h1 class="ls-tight text-wrap text-break">
+                        {{ $token->name }} <span class="text-sm">{{ $token->symbol }}</span>
+                        <x-copy :text="$token->token_standard" class="ms-2 text-md" :tooltip="__('Copy ZTS')" />
+                        <span class="pointer text-lg ms-2" data-bs-toggle="tooltip"
+                              data-bs-title="{{ __('Edit token') }}">
+                            <i class="bi bi-pencil-square"
+                               data-bs-toggle="modal"
+                               data-bs-target="#edit-token-{{ $token->token_standard }}"></i>
+                        </span>
+                    </h1>
+                </x-includes.header-title>
                 <div class="d-flex align-items-center gap-3">
                     <x-social-profile.links :social-profile="$token->socialProfile" />
                 </div>
