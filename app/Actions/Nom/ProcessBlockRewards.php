@@ -35,7 +35,7 @@ class ProcessBlockRewards
             EmbeddedContractsEnum::SENTINEL->value => AccountRewardTypesEnum::SENTINEL->value,
             EmbeddedContractsEnum::STAKE->value => AccountRewardTypesEnum::STAKE->value,
             EmbeddedContractsEnum::LIQUIDITY->value => AccountRewardTypesEnum::LIQUIDITY->value,
-            EmbeddedContractsEnum::PILLAR->value => $rewardReceiver->is_pillar_withdraw_address
+            EmbeddedContractsEnum::PILLAR->value => $rewardReceiver->is_pillar_withdraw_address || $rewardReceiver->is_historic_pillar_withdraw_address
                 ? AccountRewardTypesEnum::PILLAR->value
                 : AccountRewardTypesEnum::DELEGATE->value,
         ];

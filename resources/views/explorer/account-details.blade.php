@@ -34,7 +34,7 @@
 
     <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
-            <div class="col-12 col-md-8">
+            <div class="col-12">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat :title="__('ZNN')">
@@ -48,22 +48,13 @@
                     </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat :title="__('QSR')">
                             <span class="text-secondary">
                                 {{ $account->display_qsr_balance }}
                             </span>
-                        </x-stats.mini-stat>
-                    </x-cards.body>
-                </x-cards.card>
-            </div>
-            <div class="col-24 col-md-8">
-                <x-cards.card>
-                    <x-cards.body>
-                        <x-stats.mini-stat :title="__('USD')">
-                            {{ $account->display_usd_balance }}
                         </x-stats.mini-stat>
                     </x-cards.body>
                 </x-cards.card>
@@ -76,6 +67,48 @@
                         <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Address')">
                                 <x-hash :hash="$account->address" :always-short="true" :copyable="true" />
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('USD')" :stat="'$' . $account->display_usd_balance" />
+                            <x-stats.list-item :title="__('Type')">
+                                <div class="grid gap-4 d-flex align-items-center">
+                                    @if($account->is_embedded_contract)
+                                        <i class="bi-file-binary-fill" data-bs-toggle="tooltip" data-bs-title="{{ __('Embedded contract') }}"></i>
+                                    @endif
+
+                                    @if($account->is_pillar)
+                                        <span class="me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('Pillar') }}">
+                                            <x-svg file="zenon/pillar" style="height: 20px; margin-top: 5px"/>
+                                        </span>
+                                    @endif
+
+                                    @if($account->is_sentinel)
+                                        <span class="me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('Sentinel') }}">
+                                            <x-svg file="zenon/sentinel" style="height: 20px; margin-top: 5px"/>
+                                        </span>
+                                    @endif
+
+                                    @if($account->is_contributor)
+                                        <span data-bs-toggle="tooltip" data-bs-title="{{ __('AZ Contributor') }}">
+                                            <x-svg file="zenon/az" style="height: 20px; margin-top: 5px"/>
+                                        </span>
+                                    @endif
+
+                                    @if($account->is_pillar_withdraw_address)
+                                        <i class="bi-bank text-lg" data-bs-toggle="tooltip" data-bs-title="{{ __('Pillar withdrawal') }}"></i>
+                                    @endif
+
+                                    @if($account->is_pillar_producer_address)
+                                        <i class="bi-box-fill text-lg" data-bs-toggle="tooltip" data-bs-title="{{ __('Pillar producer') }}"></i>
+                                    @endif
+
+                                    @if($account->is_staker)
+                                        <i class="bi-lock-fill text-lg" data-bs-toggle="tooltip" data-bs-title="{{ __('Staker') }}"></i>
+                                    @endif
+
+                                    @if($account->is_fuser)
+                                        <i class="bi-fire text-lg" data-bs-toggle="tooltip" data-bs-title="{{ __('Fuser') }}"></i>
+                                    @endif
+                                </div>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Plasma')">
                                 <span data-bs-toggle="tooltip" data-bs-title="{{ $account->display_plasma_amount }} QSR">
@@ -93,16 +126,7 @@
                             <x-stats.list-item :title="__('Fused QSR')" :stat="$account->display_qsr_fused" />
                             <x-stats.list-item :title="__('Staked ZNN')" :stat="$account->display_znn_staked" />
                             <x-stats.list-item :title="__('ZNN Rewards')" :stat="$account->display_znn_rewards" />
-                            <x-stats.list-item :title="__('QSR Rewards')" :stat="$account->display_qsr_rewards" />
-                            <x-stats.list-item :title="__('Delegating to')" :hr="false">
-                                @if($account->active_delegation)
-                                    <x-link :href="route('pillar.detail', ['slug' => $account->active_delegation->slug])">
-                                        {{ $account->active_delegation->name }}
-                                    </x-link>
-                                @else
-                                    -
-                                @endif
-                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('QSR Rewards')" :stat="$account->display_qsr_rewards" :hr="false" />
                             <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>
@@ -127,6 +151,15 @@
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Tokens')">
                                 {{ $account->tokens_count }}
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Delegating to')">
+                                @if($account->active_delegation)
+                                    <x-link :href="route('pillar.detail', ['slug' => $account->active_delegation->slug])">
+                                        {{ $account->active_delegation->name }}
+                                    </x-link>
+                                @else
+                                    -
+                                @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Funded by')">
                                 @if($account->fundingBlock)

@@ -388,22 +388,49 @@ class Account extends Model implements Sitemapable
             ->first();
     }
 
-    // TODO
-    public function getIsPillarWithdrawAddressAttribute(): bool
+    public function getIsPillarAttribute(): bool
     {
-        $withdrawAddresses = Pillar::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
-        $pastWithdrawAddresses = PillarUpdateHistory::select('withdraw_account_id')->distinct()->pluck('withdraw_account_id');
-
-        return $withdrawAddresses->merge($pastWithdrawAddresses)->unique()->contains($this->id);
+        return Pillar::whereActive()->where('owner_id', $this->id)->exists();
     }
 
-    // TODO
+    public function getIsPillarWithdrawAddressAttribute(): bool
+    {
+        return Pillar::whereActive()->where('withdraw_account_id', $this->id)->exists();
+    }
+
     public function getIsPillarProducerAddressAttribute(): bool
     {
-        $producerAddresses = Pillar::select('producer_account_id')->distinct()->pluck('producer_account_id');
-        $pastProducerAddresses = PillarUpdateHistory::select('producer_account_id')->distinct()->pluck('producer_account_id');
+        return Pillar::whereActive()->where('producer_account_id', $this->id)->exists();
+    }
 
-        return $producerAddresses->merge($pastProducerAddresses)->unique()->contains($this->id);
+    public function getIsSentinelAttribute(): bool
+    {
+        return Sentinel::whereActive()->where('owner_id', $this->id)->exists();
+    }
+
+    public function getIsStakerAttribute(): bool
+    {
+        return $this->stakes()->whereActive()->exists();
+    }
+
+    public function getIsFuserAttribute(): bool
+    {
+        return $this->fusions()->whereActive()->exists();
+    }
+
+    public function getIsContributorAttribute(): bool
+    {
+        return $this->projects()->whereCompleted()->exists() || $this->projects()->whereOpen()->exists();
+    }
+
+    public function getIsHistoricPillarWithdrawAddressAttribute(): bool
+    {
+        return PillarUpdateHistory::where('withdraw_account_id', $this->id)->exists();
+    }
+
+    public function getIsHistoricPillarProducerAddressAttribute(): bool
+    {
+        return PillarUpdateHistory::where('producer_account_id', $this->id)->exists();
     }
 
     public function getHasCustomLabelAttribute(): bool
