@@ -43,6 +43,7 @@ class IssueToken extends AbstractContractMethodProcessor
             'symbol' => $blockData['tokenSymbol'],
             'domain' => $blockData['tokenDomain'],
             'total_supply' => $blockData['totalSupply'],
+            'initial_supply' => $blockData['totalSupply'],
             'max_supply' => $blockData['maxSupply'],
             'decimals' => $blockData['decimals'],
             'is_burnable' => $blockData['isBurnable'],

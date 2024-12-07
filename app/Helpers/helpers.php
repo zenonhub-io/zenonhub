@@ -42,7 +42,6 @@ function load_token(?string $zts): ?Token
             'name' => $data->name,
             'symbol' => $data->symbol,
             'domain' => $data->domain,
-            'total_supply' => $data->totalSupply,
             'max_supply' => $data->maxSupply,
             'decimals' => $data->decimals,
             'is_burnable' => $data->isBurnable,

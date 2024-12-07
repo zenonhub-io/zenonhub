@@ -32,6 +32,7 @@ class TokensSeeder extends Seeder
                 'domain' => $tokenData['tokenDomain'],
                 'token_standard' => $tokenData['tokenStandard'],
                 'total_supply' => $tokenData['totalSupply'],
+                'initial_supply' => $tokenData['totalSupply'],
                 'max_supply' => $tokenData['maxSupply'],
                 'decimals' => $tokenData['decimals'],
                 'is_burnable' => $tokenData['isBurnable'],

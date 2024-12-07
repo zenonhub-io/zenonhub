@@ -57,6 +57,7 @@ class Token extends Model implements Sitemapable
         'domain',
         'token_standard',
         'total_supply',
+        'initial_supply',
         'max_supply',
         'decimals',
         'is_burnable',
@@ -212,9 +213,11 @@ class Token extends Model implements Sitemapable
     //
     // Attributes
 
-    public function getShortTokenStandardAttribute(): string
+    public function getIsNetworkAttribute()
     {
-        return short_hash($this->token_standard, 5);
+        $this->loadMissing('owner');
+
+        return $this->owner->is_embedded_contract;
     }
 
     public function getTotalLockedAttribute(): float
@@ -304,6 +307,10 @@ class Token extends Model implements Sitemapable
         $number = BigDecimal::of(10)->power($this->decimals);
         $bigDecimal = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
         $number = $bigDecimal->toScale($this->decimals, RoundingMode::DOWN);
+
+        if ($bigDecimal->isGreaterThan(PHP_INT_MAX) || $bigDecimal->isLessThan(PHP_INT_MIN)) {
+            return $number->toFloat();
+        }
 
         if ($this->decimals === 0 || $bigDecimal->getScale() === 0) {
             return $bigDecimal->toBigInteger()->toInt();

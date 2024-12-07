@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('domain');
             $table->string('token_standard')->unique();
             $table->string('total_supply')->default(0);
+            $table->string('initial_supply')->default(0);
             $table->string('max_supply')->default(0);
             $table->integer('decimals');
             $table->boolean('is_burnable')->default(1);
