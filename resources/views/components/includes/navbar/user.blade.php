@@ -35,7 +35,7 @@
                 <i class="bi bi-key-fill me-3"></i>{{ __('API Keys') }}
             </x-link>
             <div class="dropdown-divider"></div>
-            <x-buttons.logout :action="route('logout')" class="dropdown-item">
+            <x-buttons.logout :action="route('logout', ['redirect' => url()->current()])" class="dropdown-item">
                 <i class="bi bi-lock-fill me-1"></i> {{ __('Logout') }}
             </x-buttons.logout>
         </div>

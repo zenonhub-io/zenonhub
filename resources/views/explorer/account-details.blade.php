@@ -15,14 +15,30 @@
                 <x-includes.header-title>
                     <h1 class="ls-tight text-wrap text-break">
                         {{ $account->address }}
-                        <x-copy :text="$account->address" class="ms-2 text-md" :tooltip="__('Copy Address')" />
+
                         @if (! $account->is_embedded_contract)
-                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit address') }}">
+                            <span class="pointer text-md ms-3" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
                                 <i class="bi bi-pencil-square"
                                    data-bs-toggle="modal"
                                    data-bs-target="#edit-account-{{ $account->address }}"></i>
                             </span>
                         @endif
+                        <x-copy :text="$account->address" class="ms-3 text-md" :tooltip="__('Copy Address')" />
+                        @auth
+                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Favorite') }}">
+                                <i class="bi {{ $account->is_favourite ? 'bi-star-fill' : 'bi-star' }}"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#favorite-account-{{ $account->address }}"></i>
+                            </span>
+                        @else
+                            <x-link class="text-md ms-2 text-body" :href="route('login', ['redirect' => url()->current()])">
+                                <i
+                                    class="bi bi-star"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="Add Favorite"
+                                ></i>
+                            </x-link>
+                        @endauth
                     </h1>
                 </x-includes.header-title>
                 <div class="d-flex align-items-center gap-3">
@@ -84,7 +100,7 @@
                                     @endif
 
                                     @if($account->is_sentinel)
-                                        <span class="me-1" data-bs-toggle="tooltip" data-bs-title="{{ __('Sentinel') }}">
+                                        <span class="ms-1" data-bs-toggle="tooltip" data-bs-title="{{ __('Sentinel') }}">
                                             <x-svg file="zenon/sentinel" style="height: 20px; margin-top: 5px"/>
                                         </span>
                                     @endif
@@ -240,5 +256,9 @@
 
     <x-modals.modal class="modal-lg" id="edit-account-{{ $account->address }}">
         <livewire:utilities.update-social-profile item-type="address" :item-id="$account->address" :address="$account->address" :title="$account->address" />
+    </x-modals.modal>
+
+    <x-modals.modal class="modal-lg" id="favorite-account-{{ $account->address }}">
+        <livewire:utilities.manage-favorite item-type="address" :item-id="$account->address" :address="$account->address" :title="$account->address" />
     </x-modals.modal>
 </x-app-layout>

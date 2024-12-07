@@ -15,7 +15,7 @@
                         {{ $token->name }} <span class="text-sm">{{ $token->symbol }}</span>
                         <x-copy :text="$token->token_standard" class="ms-2 text-md" :tooltip="__('Copy ZTS')" />
                         @if(! $token->is_network)
-                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit token') }}">
+                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
                                 <i class="bi bi-pencil-square"
                                    data-bs-toggle="modal"
                                    data-bs-target="#edit-token-{{ $token->token_standard }}"></i>

@@ -48,6 +48,10 @@ class AccountsList extends BaseTable
             });
         }
 
+        if ($this->tab === 'favorites' && auth()->check()) {
+            $query->whereHasFavorite(auth()->user());
+        }
+
         return $query;
     }
 

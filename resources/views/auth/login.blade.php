@@ -18,6 +18,7 @@
 
     <x-forms.form :action="route('login')" class="needs-validation">
         <x-honeypot />
+        <x-forms.inputs.hidden name="redirect" value="{{ request()->input('redirect') }}" />
         <div class="mb-4">
             @php($uuid = Str::random(8))
             <x-forms.label :label="__('Email')" for="{{ $uuid }}" />

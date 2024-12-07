@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -31,6 +33,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureLoginRedirect();
+        $this->configureLogoutRedirect();
+
         Fortify::viewPrefix('auth.');
         Fortify::authenticateUsing([new AuthenticateLoginAttempt, '__invoke']);
         Fortify::createUsersUsing(CreateNewUser::class);
@@ -45,5 +50,35 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('two-factor', fn (Request $request) => Limit::perMinute(5)->by($request->session()->get('login.id')));
+    }
+
+    private function configureLoginRedirect(): void
+    {
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse
+        {
+            public function toResponse($request)
+            {
+                if ($request->input('redirect')) {
+                    return redirect()->to($request->input('redirect'));
+                }
+
+                return redirect('/');
+            }
+        });
+    }
+
+    private function configureLogoutRedirect(): void
+    {
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse
+        {
+            public function toResponse($request)
+            {
+                if ($request->input('redirect')) {
+                    return redirect()->to($request->input('redirect'));
+                }
+
+                return redirect('/');
+            }
+        });
     }
 }
