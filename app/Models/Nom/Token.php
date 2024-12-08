@@ -220,7 +220,7 @@ class Token extends Model implements Sitemapable
         return $this->owner->is_embedded_contract;
     }
 
-    public function getTotalLockedAttribute(): float
+    public function getLockedSupplyAttribute(): float
     {
         $totalLocked = 0;
 
@@ -247,9 +247,9 @@ class Token extends Model implements Sitemapable
         return $totalLocked;
     }
 
-    public function getDisplayTotalLockedAttribute(): string
+    public function getCirculatingSupplyAttribute(): int|float
     {
-        return $this->getFormattedAmount($this->total_locked);
+        return $this->total_supply - $this->locked_supply;
     }
 
     public function getHasLockedTokensAttribute(): bool

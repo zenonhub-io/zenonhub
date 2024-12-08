@@ -7,7 +7,7 @@
                         @if ($pillar->socialProfile?->avatar)
                             <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded" alt="{{ $pillar->name }} Logo"/>
                         @else
-                            <x-svg file="zenon/pillar" style="height: 24px"/>
+                            <x-svg file="zenon/pillar" />
                         @endif
                     </div>
                     <h5 class="text-muted ms-3">{{ __('Pillar') }}</h5>

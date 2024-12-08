@@ -4,7 +4,7 @@
             <div class="d-flex align-items-start flex-column">
                 <div class="d-flex align-items-center mb-1">
                     <div class="title-icon">
-                        <x-svg file="zenon/az" style="height: 24px"/>
+                        <x-svg file="zenon/az" />
                     </div>
                     <h5 class="text-muted ms-3">{{ __('Phase') }}</h5>
                 </div>

@@ -4,7 +4,7 @@
             <div class="d-flex align-items-start flex-column">
                 <div class="d-flex align-items-center mb-1">
                     <div class="title-icon">
-                        <x-svg file="zenon/az" style="height: 24px "/>
+                        <x-svg file="zenon/az" />
                     </div>
                     <h5 class="text-muted ms-3">{{ __('Project') }}</h5>
                 </div>
@@ -135,7 +135,7 @@
                     <div class="list-group list-group-flush gap-4 mt-6">
                         @foreach ($project->phases as $phase)
                             <div class="list-group-item border rounded d-flex gap-3 p-4 bg-body-secondary-hover bg-body-tertiary card-hover">
-                                <div class=" w-100">
+                                <div class="w-100">
                                     <div class="d-flex align-items-center flex-fill">
                                         <x-link :href="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="stretched-link text-heading">
                                             <div class="me-auto mb-0">
