@@ -80,7 +80,7 @@
                             <x-stats.list-item :title="__('Token Standard')">
                                 <x-hash :hash="$token->token_standard" :always-long="true" :copyable="true" />
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Decimals')" :stat="$token->decimals "/>
+                            <x-stats.list-item :title="__('Decimals')" :stat="$token->decimals" />
                             <x-stats.list-item :title="__('Domain')">
                                 <x-link :href="$token->domain" :new-tab="true" :navigate="false">{{ $token->domain }}</x-link>
                             </x-stats.list-item>

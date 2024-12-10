@@ -111,7 +111,7 @@
                                     -
                                 @endif
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR' "/>
+                            <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR'" />
                             <x-stats.list-item :title="__('Produced momentums')" :stat="number_format($pillar->momentums()->count())" />
                             <x-stats.list-item :title="__('Total delegators')" :stat="number_format($pillar->activeDelegators()->count())" :hr="false" />
                             <hr class="d-block d-md-none my-0 mb-3">
@@ -127,7 +127,7 @@
                                     <x-date-time.carbon :date="$pillar->revoked_at" />
                                 </x-stats.list-item>
                             @else
-                                <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in "/>
+                                <x-stats.list-item :title="__('Revocable in')" :stat="$pillar->display_revocable_in" />
                             @endif
                             <x-stats.list-item :title="__('Owner')">
                                 <x-address :account="$pillar->owner" :named="false" :always-short="true" :copyable="true" />

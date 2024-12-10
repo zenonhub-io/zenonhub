@@ -32,12 +32,17 @@ class StakesController
         $totalStakes = $query->count();
         $totalStakes = number_format($totalStakes);
 
+        // TODO - need to duplicate the query, using this breaks the avg time below
+        //        $totalStakers = $query->distinct('account_id')->count();
+        //        $totalStakers = number_format($totalStakers);
+
         $avgDuration = $query->avg('duration');
         $endDate = now()->addSeconds((float) $avgDuration);
         $avgDuration = now()->diffInDays($endDate);
 
         return [
             'stakedTotal' => Number::abbreviate($totalStaked),
+            //'stakersCount' => $totalStakers,
             'stakesCount' => $totalStakes,
             'avgDuration' => number_format($avgDuration),
         ];

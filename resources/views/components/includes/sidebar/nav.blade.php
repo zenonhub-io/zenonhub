@@ -1,7 +1,7 @@
 <x-navbar.nav>
     <x-navbar.item title="Home" icon="house-fill" />
     <x-navbar.item title="Pillars" route="pillar.list" :is-active="request()->routeIs('pillar.*')" svg="zenon/pillar" />
-    <x-navbar.item title="Sentinels" route="sentinel.list"  svg="zenon/sentinel" />
+{{--    <x-navbar.item title="Sentinels" route="sentinel.list"  svg="zenon/sentinel" />--}}
     <x-navbar.item title="Accelerator Z" route="accelerator-z.list" :is-active="request()->routeIs('accelerator-z.*')" icon="rocket-takeoff-fill" />
 
     <x-navbar.dropdown title="Explorer" icon="search" isActive="{{ request()->routeIs('explorer.*') }}">

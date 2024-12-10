@@ -18,11 +18,11 @@
         </div>
 
         <div class="row mb-6 gy-6">
-            <div class="col-24 col-lg-12">
-
+            <div class="col-24 col-lg-16">
+                <livewire:tiles.daily-transactions lazy />
             </div>
-            <div class="col-24 col-lg-12">
-
+            <div class="col-24 col-lg-8">
+                <livewire:tiles.latest-projects lazy />
             </div>
         </div>
     </div>

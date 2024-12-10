@@ -44,7 +44,9 @@
                 <div class="col-24 col-md-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('Bridge')">
+                            <x-stats.mini-stat
+                                :title="__('Bridge')"
+                                :info="__('Bridge is currently :status', ['status' => $status->isBridgeOnline() ? 'Online' : 'Offline'])">
                                 <x-stats.indicator :type="$status->isBridgeOnline() ? 'success' : 'warning'" />
                                 {{ $status->isBridgeOnline() ? __('Online') : __('Offline') }}
                             </x-stats.mini-stat>

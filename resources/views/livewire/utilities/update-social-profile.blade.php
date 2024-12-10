@@ -30,7 +30,7 @@
                     <x-forms.label :label="__('Avatar')" for="{{ $uuid }}" />
                 </div>
                 <div class="col-md-20">
-                    <x-forms.inputs.input name="avatar" id="{{ $uuid }}" placeholder="https://example.com/avatar.png" wire:model="socialProfileForm.avatar "/>
+                    <x-forms.inputs.input name="avatar" id="{{ $uuid }}" placeholder="https://example.com/avatar.png" wire:model="socialProfileForm.avatar" />
                 </div>
             </div>
 
@@ -42,7 +42,7 @@
                     <x-forms.label :label="__('Website')" for="{{ $uuid }}" />
                 </div>
                 <div class="col-md-20">
-                    <x-forms.inputs.input name="website" id="{{ $uuid }}" placeholder="https://example.com" wire:model="socialProfileForm.website "/>
+                    <x-forms.inputs.input name="website" id="{{ $uuid }}" placeholder="https://example.com" wire:model="socialProfileForm.website" />
                 </div>
             </div>
             <div class="row align-items-center">
@@ -60,7 +60,7 @@
                     <x-forms.label :label="__('X')" for="{{ $uuid }}" />
                 </div>
                 <div class="col-md-20">
-                    <x-forms.inputs.input name="x" id="{{ $uuid }}" placeholder="https://x.com/username" wire:model="socialProfileForm.x "/>
+                    <x-forms.inputs.input name="x" id="{{ $uuid }}" placeholder="https://x.com/username" wire:model="socialProfileForm.x" />
                 </div>
             </div>
             <div class="row align-items-center">
@@ -69,7 +69,7 @@
                     <x-forms.label :label="__('Telegram')" for="{{ $uuid }}" />
                 </div>
                 <div class="col-md-20">
-                    <x-forms.inputs.input name="telegram" id="{{ $uuid }}" placeholder="https://t.me/username" wire:model="socialProfileForm.telegram "/>
+                    <x-forms.inputs.input name="telegram" id="{{ $uuid }}" placeholder="https://t.me/username" wire:model="socialProfileForm.telegram" />
                 </div>
             </div>
             <div class="row align-items-center">
@@ -78,7 +78,7 @@
                     <x-forms.label :label="__('GitHub')" for="{{ $uuid }}" />
                 </div>
                 <div class="col-md-20">
-                    <x-forms.inputs.input name="github" id="{{ $uuid }}" placeholder="https://github.com/username" wire:model="socialProfileForm.github "/>
+                    <x-forms.inputs.input name="github" id="{{ $uuid }}" placeholder="https://github.com/username" wire:model="socialProfileForm.github" />
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
                     <x-forms.label :label="__('Medium')" for="{{ $uuid }}" />
                 </div>
                 <div class="col-md-20">
-                    <x-forms.inputs.input name="medium" id="{{ $uuid }}" placeholder="https://medium.com/username" wire:model="socialProfileForm.medium "/>
+                    <x-forms.inputs.input name="medium" id="{{ $uuid }}" placeholder="https://medium.com/username" wire:model="socialProfileForm.medium" />
                 </div>
             </div>
 

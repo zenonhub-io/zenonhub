@@ -5,10 +5,10 @@
                 <i class="bi bi-box me-2"></i>
                 {{ __('Momentums') }}
             </h4>
-            <a href="{{ route('explorer.momentum.list') }}" class="btn btn-sm btn-outline-primary float-end">
+            <x-link :href="route('explorer.momentum.list')" class="btn btn-sm btn-outline-primary float-end">
                 {{ __('All') }}
                 <i class="bi bi-arrow-right ms-2"></i>
-            </a>
+            </x-link>
         </x-cards.heading>
 
         <div class="list-group list-group-flush">
@@ -16,9 +16,9 @@
                 <div class="list-group-item px-6">
                     <div class="d-flex justify-content-between">
                         <div class="mb-2 mb-sm-0">
-                            <a class="d-block" href="{{ route('explorer.momentum.detail', ['hash' => $momentum->hash]) }}">
+                            <x-link :href="route('explorer.momentum.detail', ['hash' => $momentum->hash])" class="d-block">
                                 <x-hash :hash="$momentum->hash" :eitherSide="7" :alwaysShort="true" />
-                            </a>
+                            </x-link>
                             <span class="text-xs text-muted">
                                 <x-date-time.carbon :date="$momentum->created_at" :human="true" />
                             </span>

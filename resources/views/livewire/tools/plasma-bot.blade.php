@@ -62,7 +62,7 @@
             <x-alerts.alert type="success" class="mb-6">
                 <i class="bi bi-check-circle-fill me-2"></i> {{ __('Generating plasma...') }}
                 <hr>
-                <p class="mb-4">Plasma is being generated for <a class="fw-bold" href="{{ route('explorer.account.detail', ['address' => $fuseForm['address']]) }}">{{ $fuseForm['address'] }}</a> please wait a few minutes for it to arrive.</p>
+                <p class="mb-4">Plasma is being generated for <x-link :href="route('explorer.account.detail', ['address' => $fuseForm['address']])" class="fw-bold">{{ $fuseForm['address'] }}</x-link> please wait a few minutes for it to arrive.</p>
                 <p>Your plasma will expire in {{ $expires }} after which you'll be able to fuse some more.</p>
             </x-alerts.alert>
         @else

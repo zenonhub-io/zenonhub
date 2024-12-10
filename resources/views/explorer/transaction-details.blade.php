@@ -61,14 +61,14 @@
                     <div class="col-24 col-md-4 text-center py-4 py-md-0">
                         @if($transaction->is_received)
                             <span class="d-none d-md-block">
-                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(90deg); "/>
+                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(90deg);" />
                             </span>
                             <span class="d-block d-md-none">
-                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(180deg); "/>
+                                <x-svg file="explorer/send" class="text-success" style="transform: rotate(180deg);" />
                             </span>
                         @else
                             <span data-bs-toggle="tooltip" data-bs-title="{{ __('Unreceived') }}">
-                                <x-svg file="explorer/unreceived" class="text-danger "/>
+                                <x-svg file="explorer/unreceived" class="text-danger" />
                             </span>
                         @endif
                     </div>

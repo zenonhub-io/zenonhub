@@ -88,7 +88,7 @@
                                         </td>
                                         <td>
                                             @if($node->country)
-                                                <x-svg file="flags/{{ Str::lower($node->country_code) }}" style="height: 11px" class="me-2 "/> {{ $node->country }}
+                                                <x-svg file="flags/{{ Str::lower($node->country_code) }}" style="height: 11px" class="me-2" /> {{ $node->country }}
                                             @else
                                                 {{ __('Unknown') }}
                                             @endif

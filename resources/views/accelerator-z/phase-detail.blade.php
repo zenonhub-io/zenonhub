@@ -48,7 +48,7 @@
             <div class="col-24 col-sm-8">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('USD Value')" :stat="$phase->display_usd_requested "/>
+                        <x-stats.mini-stat :title="__('USD Value')" :stat="$phase->display_usd_requested" />
                     </x-cards.body>
                 </x-cards.card>
             </div>
