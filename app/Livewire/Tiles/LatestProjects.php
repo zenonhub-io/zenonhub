@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Livewire\Tiles;
 
-use App\Livewire\BaseTile;
+use App\Livewire\BaseComponent;
 use App\Models\Nom\AcceleratorProject;
 use Illuminate\Database\Eloquent\Builder;
 
-class LatestProjects extends BaseTile
+class LatestProjects extends BaseComponent
 {
     public function render()
     {

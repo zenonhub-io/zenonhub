@@ -11,13 +11,12 @@ use Asantibanez\LivewireCharts\Models\BaseChartModel;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class DailyTransactions extends Component
+class TransactionsDaily extends Component
 {
     use DateRangePickerTrait;
 
     public function mount(): void
     {
-        $this->timeframe = '30d';
         $this->endDate = now();
     }
 
@@ -29,7 +28,7 @@ class DailyTransactions extends Component
 
         $chartData = $this->addChartData($chartModel);
 
-        return view('livewire.tiles.daily-transactions', compact('chartData'), [
+        return view('livewire.tiles.transactions-daily', compact('chartData'), [
             'chartData' => $chartData,
             'dateRange' => $this->dateRange,
         ]);
@@ -86,8 +85,8 @@ class DailyTransactions extends Component
         $endDate = $this->dateRange->last()->endOfDay();
 
         // Perform a single query to get count account block grouped by date
-        $data = AccountBlock::whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        $data = AccountBlock::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date')
             ->get();

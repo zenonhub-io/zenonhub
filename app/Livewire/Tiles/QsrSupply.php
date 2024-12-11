@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire\Tiles;
 
-use App\Livewire\BaseTile;
+use App\Livewire\BaseComponent;
 use Illuminate\Support\Number;
 
-class QsrSupply extends BaseTile
+class QsrSupply extends BaseComponent
 {
     public function render()
     {

@@ -7,7 +7,7 @@ namespace App\Livewire;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-abstract class BaseTile extends Component
+abstract class BaseComponent extends Component
 {
     public function placeholder(): View
     {

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Livewire\Explorer\Overview;
 
+use App\Livewire\BaseComponent;
 use App\Models\Nom\AccountBlock;
-use Livewire\Component;
+use Illuminate\Contracts\View\View;
 
-class LatestTransactions extends Component
+class TransactionsLatest extends BaseComponent
 {
-    public function render()
+    public function render(): View
     {
-        return view('livewire.explorer.overview.latest-transactions', [
+        return view('livewire.explorer.overview.transactions-latest', [
             'transactions' => AccountBlock::with('token', 'account', 'toAccount', 'contractMethod')
                 ->notToBurn()
                 //->notContractUpdate()

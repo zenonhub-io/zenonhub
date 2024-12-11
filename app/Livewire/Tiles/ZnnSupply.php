@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire\Tiles;
 
-use App\Livewire\BaseTile;
+use App\Livewire\BaseComponent;
 use Illuminate\Support\Number;
 
-class ZnnSupply extends BaseTile
+class ZnnSupply extends BaseComponent
 {
     public function render()
     {

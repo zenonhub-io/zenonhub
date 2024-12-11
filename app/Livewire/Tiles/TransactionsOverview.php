@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Livewire\Tiles;
 
-use App\Livewire\BaseTile;
+use App\Livewire\BaseComponent;
 use App\Models\Nom\AccountBlock;
 use Illuminate\Support\Number;
 
-class TransactionsOverview extends BaseTile
+class TransactionsOverview extends BaseComponent
 {
     public function render()
     {

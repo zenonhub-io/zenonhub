@@ -63,12 +63,7 @@ class StakesList extends BaseTable
                 ),
             Column::make('Duration')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.date', [
-                        'date' => $row->started_at,
-                        'human' => true,
-                        'tooltip' => false,
-                        'syntax' => true,
-                    ])
+                    fn ($row, Column $column) => $row->display_current_duration
                 ),
             Column::make('Ended', 'ended_at')
                 ->sortable(

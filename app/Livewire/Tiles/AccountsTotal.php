@@ -2,35 +2,34 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer\Overview;
+namespace App\Livewire\Tiles;
 
 use App\Livewire\DateRangePickerTrait;
-use App\Models\Nom\AccountBlock;
+use App\Models\Nom\NetworkStatHistory;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\BaseChartModel;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class DailyTransactions extends Component
+class AccountsTotal extends Component
 {
     use DateRangePickerTrait;
 
     public function mount(): void
     {
-        $this->timeframe = '7d';
         $this->endDate = now();
     }
 
     public function render(): View
     {
         $this->setDateRange();
-        $chartModel = LivewireCharts::lineChartModel()
+        $chartModel = LivewireCharts::columnChartModel()
             ->setAnimated(true)
             ->setJsonConfig($this->getChartConfig());
 
         $chartData = $this->addChartData($chartModel);
 
-        return view('livewire.explorer.overview.daily-transactions', compact('chartData'), [
+        return view('livewire.tiles.accounts-total', compact('chartData'), [
             'chartData' => $chartData,
             'dateRange' => $this->dateRange,
         ]);
@@ -40,7 +39,7 @@ class DailyTransactions extends Component
     {
         return [
             'chart' => [
-                'height' => '150px',
+                'height' => '257px',
             ],
             'stroke' => [
                 'curve' => 'smooth',
@@ -56,16 +55,25 @@ class DailyTransactions extends Component
             ],
             'yaxis' => [
                 'show' => true,
+                'axisBorder' => [
+                    'show' => true,
+                    'color' => config('zenon-hub.colours.bg-dark'),
+                ],
+                'axisTicks' => [
+                    'show' => true,
+                    'color' => config('zenon-hub.colours.bg-dark'),
+                ],
             ],
             'xaxis' => [
                 'labels' => [
                     'show' => false,
                 ],
                 'axisBorder' => [
-                    'show' => false,
+                    'show' => true,
+                    'color' => config('zenon-hub.colours.bg-dark'),
                 ],
                 'axisTicks' => [
-                    'show' => false,
+                    'show' => true,
                     'color' => config('zenon-hub.colours.bg-dark'),
                 ],
             ],
@@ -77,26 +85,26 @@ class DailyTransactions extends Component
         $startDate = $this->dateRange->first()->startOfDay();
         $endDate = $this->dateRange->last()->endOfDay();
 
-        // Perform a single query to get count account block grouped by date
-        $data = AccountBlock::whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
+        // Perform a single query to get the number of unique addresses with sent blocks grouped by date
+        $data = NetworkStatHistory::selectRaw('total_addresses, DATE(date) as formatted_date')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->orderBy('formatted_date')
             ->get();
 
         // Prepare an associative array for quick lookup
-        $dataByDate = $data->keyBy('date');
+        $dataByDate = $data->keyBy('formatted_date');
 
         // Loop through the date range
         foreach ($this->dateRange as $date) {
             $formattedDate = $date->format('Y-m-d');
-            $count = $dataByDate->has($formattedDate) ? $dataByDate[$formattedDate]->count : 0;
+            $count = $dataByDate->has($formattedDate) ? (int) $dataByDate[$formattedDate]->total_addresses : 0;
 
-            $chartModel->addPoint(
+            $chartModel->addColumn(
                 $date->format('jS M Y'),
                 $count,
+                config('zenon-hub.colours.zenon-blue'),
                 [
-                    'tooltip' => sprintf('%s Transactions', number_format($count)),
+                    'tooltip' => sprintf('%s Total addresses', number_format($count)),
                 ]
             );
         }

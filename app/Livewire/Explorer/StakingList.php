@@ -72,12 +72,7 @@ class StakingList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderBy('started_at', $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.date', [
-                        'date' => $row->started_at,
-                        'human' => true,
-                        'tooltip' => false,
-                        'syntax' => true,
-                    ])
+                    fn ($row, Column $column) => $row->display_current_duration
                 ),
         ];
     }

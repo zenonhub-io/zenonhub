@@ -53,18 +53,18 @@
         </div>
         <div class="row mb-6 gy-6">
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.daily-transactions />
+                <livewire:explorer.overview.transactions-daily lazy />
             </div>
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.active-addresses />
+                <livewire:explorer.overview.accounts-active lazy />
             </div>
         </div>
         <div class="row mb-6 gy-6">
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.latest-momentums />
+                <livewire:explorer.overview.momentums-latest lazy wire:poll.10s />
             </div>
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.latest-transactions />
+                <livewire:explorer.overview.transactions-latest />
             </div>
         </div>
     </div>

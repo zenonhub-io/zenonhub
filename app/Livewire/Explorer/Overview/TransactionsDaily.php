@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Livewire\Explorer\Overview;
 
+use App\Livewire\BaseComponent;
 use App\Livewire\DateRangePickerTrait;
-use App\Models\Nom\Account;
+use App\Models\Nom\AccountBlock;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\BaseChartModel;
 use Illuminate\View\View;
-use Livewire\Component;
 
-class ActiveAddresses extends Component
+class TransactionsDaily extends BaseComponent
 {
     use DateRangePickerTrait;
 
@@ -30,7 +30,7 @@ class ActiveAddresses extends Component
 
         $chartData = $this->addChartData($chartModel);
 
-        return view('livewire.explorer.overview.active-addresses', compact('chartData'), [
+        return view('livewire.explorer.overview.transactions-daily', compact('chartData'), [
             'chartData' => $chartData,
             'dateRange' => $this->dateRange,
         ]);
@@ -77,10 +77,9 @@ class ActiveAddresses extends Component
         $startDate = $this->dateRange->first()->startOfDay();
         $endDate = $this->dateRange->last()->endOfDay();
 
-        // Perform a single query to get the number of unique addresses with sent blocks grouped by date
-        $data = Account::selectRaw('DATE(nom_account_blocks.created_at) as date, COUNT(DISTINCT nom_accounts.id) as count')
-            ->join('nom_account_blocks', 'nom_accounts.id', '=', 'nom_account_blocks.account_id')
-            ->whereBetween('nom_account_blocks.created_at', [$startDate, $endDate])
+        // Perform a single query to get count account block grouped by date
+        $data = AccountBlock::whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -97,7 +96,7 @@ class ActiveAddresses extends Component
                 $date->format('jS M Y'),
                 $count,
                 [
-                    'tooltip' => sprintf('%s Active addresses', number_format($count)),
+                    'tooltip' => sprintf('%s Transactions', number_format($count)),
                 ]
             );
         }

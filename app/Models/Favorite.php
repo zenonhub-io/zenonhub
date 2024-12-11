@@ -19,8 +19,12 @@ class Favorite extends Mark
         return 'favoriters';
     }
 
-    public static function findExisting(Model $markable, Model $user): ?Model
+    public static function findExisting(Model $markable, ?Model $user): ?Model
     {
+        if (! $user) {
+            return null;
+        }
+
         return static::where([
             app(static::class)->getUserIdColumn() => $user->getKey(),
             'markable_id' => $markable->getKey(),
