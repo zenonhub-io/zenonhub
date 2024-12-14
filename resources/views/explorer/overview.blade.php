@@ -1,5 +1,5 @@
 <x-app-layout>
-{{--    <x-includes.header :title="__('Overview')" class="mb-4" />--}}
+    <x-includes.header :title="__('Explorer Overview')" class="mb-4" />
     <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
             <div class="col-12 col-lg-6">
@@ -64,7 +64,7 @@
                 <livewire:explorer.overview.momentums-latest lazy wire:poll.10s />
             </div>
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.transactions-latest />
+                <livewire:explorer.overview.transactions-latest lazy wire:poll.10s />
             </div>
         </div>
     </div>

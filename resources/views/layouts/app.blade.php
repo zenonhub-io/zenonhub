@@ -30,7 +30,7 @@
             <div class="d-flex align-items-center gap-2 pe-1">
                 <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
                         x-data
-                        x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {},static: false, keyboard: false })">
+                        x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false })">
                     <i class="bi bi-search fs-3"></i>
                 </button>
                 <x-includes.navbar.user />
@@ -45,7 +45,7 @@
 
         <div class="app-wrapper">
             <div class="offcanvas-md offcanvas-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
-            <div class="app-sidebar-wrapper">
+                <div class="app-sidebar-wrapper">
                     <div class="offcanvas-header">
                         <x-includes.navbar.brand />
                         <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
@@ -69,8 +69,13 @@
             </div>
         </div>
 
-        <livewire:components.modal/>
-        <livewire:components.offcanvas/>
+        @persist('modal')
+            <livewire:components.modal/>
+        @endpersist
+        @persist('offcanvas')
+            <livewire:components.offcanvas/>
+        @endpersist
+        
         @stack('scripts')
 
         <script>
