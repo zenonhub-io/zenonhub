@@ -8,17 +8,17 @@ use App\Livewire\BaseComponent;
 use App\Models\Nom\AcceleratorProject;
 use Illuminate\Database\Eloquent\Builder;
 
-class LatestProjects extends BaseComponent
+class ProjectsLatest extends BaseComponent
 {
     public function render()
     {
-        return view('livewire.tiles.latest-projects', [
+        return view('livewire.tiles.projects-latest', [
             'projects' => AcceleratorProject::whereNew()
                 ->orWhere(function (Builder $query) {
                     $query->whereAccepted();
                 })
                 ->latest('updated_at')
-                ->limit(4)
+                ->limit(5)
                 ->get(),
         ]);
     }

@@ -22,18 +22,18 @@ enum EmbeddedContractsEnum: string
     public function label(): string
     {
         return match ($this) {
-            self::PLASMA => 'Plasma contract',
-            self::PILLAR => 'Pillar contract',
-            self::TOKEN => 'Token contract',
-            self::SENTINEL => 'Sentinel contract',
-            self::SWAP => 'Swap contract',
-            self::STAKE => 'Stake contract',
-            self::SPORK => 'Spork contract',
-            self::ACCELERATOR => 'Accelerator contract',
-            self::LIQUIDITY => 'Liquidity contract',
-            self::BRIDGE => 'Bridge contract',
-            self::HTLC => 'HTLC contract',
-            self::PTLC => 'PTLC contract',
+            self::PLASMA => 'Plasma Contract',
+            self::PILLAR => 'Pillar Contract',
+            self::TOKEN => 'Token Contract',
+            self::SENTINEL => 'Sentinel Contract',
+            self::SWAP => 'Swap Contract',
+            self::STAKE => 'Stake Contract',
+            self::SPORK => 'Spork Contract',
+            self::ACCELERATOR => 'Accelerator Contract',
+            self::LIQUIDITY => 'Liquidity Contract',
+            self::BRIDGE => 'Bridge Contract',
+            self::HTLC => 'HTLC Contract',
+            self::PTLC => 'PTLC Contract',
         };
     }
 }

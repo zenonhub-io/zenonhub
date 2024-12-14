@@ -2,19 +2,17 @@
 
 <x-cards.card class="card-hover h-100">
     <x-slot:heading>
-        <div class="d-flex align-items-center mb-0">
-            <h4 class="card-title me-3 mb-0 me-auto">
-                <x-link class="h4" :href="route('accelerator-z.project.detail', ['hash' => $project->hash])">
+        <x-link class="h4 me-auto" :href="route('accelerator-z.project.detail', ['hash' => $project->hash])">
+            <div class="d-flex align-items-center mb-0">
+                <h4 class="card-title me-3 mb-0 me-auto">
                     {{ $project->name }}
-                </x-link>
-            </h4>
-            <div>
+                </h4>
                 <span class="badge text-bg-{{ $project->status->colour() }} bg-opacity-75">{{ $project->status->label() }}</span>
             </div>
-        </div>
+        </x-link>
     </x-slot>
     <x-slot:body>
-        <x-accelerator-z.funding-info :item="$project" class="bg-dark-subtle p-4 rounded-2 border shadow" />
+        <x-accelerator-z.funding-info :item="$project" class="bg-dark-subtle p-4 rounded-2 border shadow-inset" />
         <x-accelerator-z.voting-info :item="$project" />
         <hr>
         <p>{{ $project->description }}</p>
@@ -45,7 +43,7 @@
                              data-bs-parent="#phases-{{ $project->hash }}"
                         >
                             <div class="mt-4">
-                                <x-accelerator-z.funding-info :item="$phase" class="bg-dark-subtle p-4 rounded-2 border shadow" />
+                                <x-accelerator-z.funding-info :item="$phase" class="bg-dark-subtle p-4 rounded-2 border shadow-inset" />
                                 <x-accelerator-z.voting-info :item="$phase" />
                                 <hr>
                                 <p>{{ $phase->description }}</p>

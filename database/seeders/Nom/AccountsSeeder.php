@@ -22,17 +22,19 @@ class AccountsSeeder extends Seeder
 
         $chainId = app('currentChain')->id;
 
-        Account::insert([
+        Account::updateOrCreate([
             'chain_id' => $chainId,
             'address' => config('explorer.burn_address'),
-            'name' => 'Burn address',
+        ], [
+            'name' => 'Burn Address',
             'is_embedded_contract' => false,
         ]);
 
         foreach (EmbeddedContractsEnum::cases() as $address) {
-            Account::insert([
+            Account::updateOrCreate([
                 'chain_id' => $chainId,
                 'address' => $address->value,
+            ], [
                 'name' => $address->label(),
                 'is_embedded_contract' => true,
             ]);

@@ -134,7 +134,7 @@
                     <hr>
                     <div class="list-group list-group-flush gap-4 mt-6">
                         @foreach ($project->phases as $phase)
-                            <div class="list-group-item border rounded d-flex gap-3 p-4 bg-body-secondary-hover bg-body-tertiary card-hover">
+                            <div class="list-group-item border rounded d-flex gap-3 p-4 bg-body-secondary-hover bg-body-tertiary shadow-inset">
                                 <div class="w-100">
                                     <div class="d-flex align-items-center flex-fill">
                                         <x-link :href="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="stretched-link text-heading">

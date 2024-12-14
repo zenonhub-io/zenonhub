@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="col-24 col-sm-auto">
-                <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-body-secondary rounded text-xs fw-semibold mt-1 mt-sm-0 shadow">
+                <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-dark-subtle rounded text-xs fw-semibold mt-1 mt-sm-0 shadow-inset border">
                     @if($momentum->previous_momentum)
                         <x-link
                             :href="route('explorer.momentum.detail', ['hash' => $momentum->previous_momentum->hash])"
@@ -26,7 +26,7 @@
                             <i class="bi bi-chevron-left"></i> <span class="d-inline d-sm-none">{{ __('Previous') }}</span>
                         </x-link>
                     @else
-                        <span class="px-3 py-1 text-muted bg-body-secondary rounded">
+                        <span class="px-3 py-1 text-muted bg-dark-subtle rounded">
                             <i class="bi bi-chevron-left"></i> <span class="d-inline d-sm-none">{{ __('Previous') }}</span>
                         </span>
                     @endif
@@ -40,7 +40,7 @@
                             <span class="d-inline d-sm-none">{{ __('Next') }}</span> <i class="bi bi-chevron-right"></i>
                         </x-link>
                     @else
-                        <span class="px-3 py-1 text-muted bg-body-secondary rounded">
+                        <span class="px-3 py-1 text-muted bg-dark-subtle rounded">
                             <span class="d-inline d-sm-none">{{ __('Next') }}</span> <i class="bi bi-chevron-right"></i>
                         </span>
                     @endif
