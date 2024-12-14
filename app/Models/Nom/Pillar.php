@@ -21,13 +21,14 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
+use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Throwable;
 
 class Pillar extends Model implements Sitemapable
 {
-    use HasFactory, Markable, ModelCacheKeyTrait;
+    use HasFactory, Markable, ModelCacheKeyTrait, Searchable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -98,6 +99,17 @@ class Pillar extends Model implements Sitemapable
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
         return route('pillars.detail', ['slug' => $this->slug]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'slug' => $this->slug,
+        ];
     }
 
     //

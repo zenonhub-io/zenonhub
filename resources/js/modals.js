@@ -15,6 +15,13 @@ export default class Modals {
             Livewire.dispatch('reset-livewire-modal');
         });
 
+        livewireModalElement.addEventListener('shown.bs.modal', (event) => {
+            let autofocusField = livewireModalElement.querySelector('[autofocus]');
+            if (autofocusField) {
+                autofocusField.focus();
+            }
+        });
+
         Livewire.on('show-livewire-modal', (e) => {
             let modal = BSModal.getOrCreateInstance(livewireModalElement);
             modal.show();

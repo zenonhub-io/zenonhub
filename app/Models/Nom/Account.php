@@ -22,13 +22,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Throwable;
 
 class Account extends Model implements Sitemapable
 {
-    use HasFactory, Markable, ModelCacheKeyTrait;
+    use HasFactory, Markable, ModelCacheKeyTrait, Searchable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -107,6 +108,17 @@ class Account extends Model implements Sitemapable
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
         return route('explorer.account', ['address' => $this->address]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'address' => $this->address,
+            'name' => $this->name,
+        ];
     }
 
     //

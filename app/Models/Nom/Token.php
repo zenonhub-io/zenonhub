@@ -22,13 +22,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Throwable;
 
 class Token extends Model implements Sitemapable
 {
-    use HasFactory, Markable, ModelCacheKeyTrait;
+    use HasFactory, Markable, ModelCacheKeyTrait, Searchable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -113,6 +114,18 @@ class Token extends Model implements Sitemapable
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
         return route('explorer.token', ['zts' => $this->token_standard]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'token_standard' => $this->token_standard,
+            'name' => $this->name,
+            'symbol' => $this->symbol,
+        ];
     }
 
     //

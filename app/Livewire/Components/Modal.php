@@ -20,18 +20,21 @@ class Modal extends Component
 
     public string $activeModal;
 
+    public string $size;
+
     public function render(): View
     {
         return view('livewire.components.modal');
     }
 
     #[On('open-livewire-modal')]
-    public function showModal($alias, $params = [], $static = true, $keyboard = true): void
+    public function showModal($alias, $params = [], $static = true, $keyboard = true, $size = null): void
     {
         $this->alias = $alias;
         $this->params = $params;
         $this->static = $static;
         $this->keyboard = $keyboard;
+        $this->size = $size;
 
         $this->activeModal = 'modal-id-' . mt_rand();
 

@@ -30,7 +30,7 @@
             <div class="d-flex align-items-center gap-2 pe-1">
                 <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
                         x-data
-                        x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false })">
+                        x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false, size: 'modal-lg'})">
                     <i class="bi bi-search fs-3"></i>
                 </button>
                 <x-includes.navbar.user />
@@ -75,7 +75,7 @@
         @persist('offcanvas')
             <livewire:components.offcanvas/>
         @endpersist
-        
+
         @stack('scripts')
 
         <script>

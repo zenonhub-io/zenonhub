@@ -20,13 +20,14 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 use Throwable;
 
 class AcceleratorProject extends Model implements Sitemapable
 {
-    use AcceleratorFundingTrait, AcceleratorVotesTrait, HasFactory, ModelCacheKeyTrait;
+    use AcceleratorFundingTrait, AcceleratorVotesTrait, HasFactory, ModelCacheKeyTrait, Searchable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -93,6 +94,17 @@ class AcceleratorProject extends Model implements Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return route('az.project', ['hash' => $this->hash]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
     }
 
     //

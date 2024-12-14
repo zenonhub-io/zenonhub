@@ -3,7 +3,7 @@
          {{ ($static ? 'data-bs-backdrop="static"' : '') }}
          {{ ($keyboard ? 'data-bs-keyboard="false"' : '') }}
          wire:ignore.self>
-        <div class="modal-dialog">
+        <div class="modal-dialog {{ ($size ?: null) }}">
             <div class="modal-content">
                 @if ($alias)
                     @livewire($alias, $params, key($activeModal))
