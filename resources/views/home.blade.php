@@ -47,7 +47,7 @@
                                 'site_name' => config('app.name')
                             ]) }}
                         </p>
-                        <x-link :href="route('register')" class="btn btn-outline-primary w-100 mt-3">
+                        <x-link :href="route('register')" class="btn btn-outline-primary btn-sm w-100 mt-3">
                             {{ __('Sign up') }}
                             <i class="bi bi-arrow-right ms-2"></i>
                         </x-link>

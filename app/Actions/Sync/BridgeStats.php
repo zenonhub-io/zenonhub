@@ -24,43 +24,44 @@ class BridgeStats
 
     public string $commandSignature = 'sync:bridge-stats';
 
-    public function handle(BridgeNetwork $network, Token $token, Carbon $date): void
-    {
-        BridgeStatHistory::updateOrCreate([
-            'date' => $date->format('Y-m-d'),
-            'bridge_network_id' => $network->id,
-            'token_id' => $token->id,
-        ], [
-            'wrap_tx' => $this->getWrapTx($network, $token, $date),
-            'wrapped_amount' => $this->getWrappedAmount($network, $token, $date),
-            'unwrap_tx' => $this->getUnWrapTx($network, $token, $date),
-            'unwrapped_amount' => $this->getUnWrappedAmount($network, $token, $date),
-            'affiliate_tx' => $this->getAffiliateTx($network, $token, $date),
-            'affiliate_amount' => $this->getAffiliateAmount($network, $token, $date),
-            'total_volume' => $this->getTotalVolume($network, $token, $date),
-            'total_flow' => $this->getTotalFlow($network, $token, $date),
-        ]);
-    }
-
-    public function asCommand(Command $command): void
+    public function handle(Carbon $date): void
     {
         $networks = BridgeNetwork::get();
         $tokens = Token::whereIn('token_standard', [
             NetworkTokensEnum::ZNN->value,
             NetworkTokensEnum::QSR->value,
         ])->get();
+
+        $tokens->each(function (Token $token) use ($date, $networks): void {
+            $networks->each(function (BridgeNetwork $bridgeNetwork) use ($token, $date) {
+                BridgeStatHistory::updateOrCreate([
+                    'date' => $date->format('Y-m-d'),
+                    'bridge_network_id' => $bridgeNetwork->id,
+                    'token_id' => $token->id,
+                ], [
+                    'wrap_tx' => $this->getWrapTx($bridgeNetwork, $token, $date),
+                    'wrapped_amount' => $this->getWrappedAmount($bridgeNetwork, $token, $date),
+                    'unwrap_tx' => $this->getUnWrapTx($bridgeNetwork, $token, $date),
+                    'unwrapped_amount' => $this->getUnWrappedAmount($bridgeNetwork, $token, $date),
+                    'affiliate_tx' => $this->getAffiliateTx($bridgeNetwork, $token, $date),
+                    'affiliate_amount' => $this->getAffiliateAmount($bridgeNetwork, $token, $date),
+                    'total_volume' => $this->getTotalVolume($bridgeNetwork, $token, $date),
+                    'total_flow' => $this->getTotalFlow($bridgeNetwork, $token, $date),
+                ]);
+            });
+        });
+    }
+
+    public function asCommand(Command $command): void
+    {
         $period = CarbonPeriod::create(AccountBlock::min('created_at'), AccountBlock::max('created_at'));
 
-        $progressBar = new ProgressBar(new ConsoleOutput, ($period->count() * $networks->count() * $tokens->count()));
+        $progressBar = new ProgressBar(new ConsoleOutput, $period->count());
         $progressBar->start();
 
         foreach ($period as $date) {
-            $tokens->each(function (Token $token) use ($progressBar, $date, $networks): void {
-                $networks->each(function (BridgeNetwork $bridgeNetwork) use ($token, $date, $progressBar) {
-                    $this->handle($bridgeNetwork, $token, $date);
-                    $progressBar->advance();
-                });
-            });
+            $this->handle($date);
+            $progressBar->advance();
         }
 
         $progressBar->finish();

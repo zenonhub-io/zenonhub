@@ -14,9 +14,9 @@
         </x-cards.heading>
         <ul class="list-group list-group-flush mb-0">
             @foreach ($projects as $project)
-                <li class="list-group-item d-flex align-items-start justify-content-between px-4">
+                <li class="list-group-item d-flex align-items-start justify-content-between px-6 bg-body-secondary-hover">
                     <div class="d-block">
-                        <x-link :href="route('accelerator-z.project.detail', ['hash' => $project->hash])">
+                        <x-link class="stretched-link" :href="route('accelerator-z.project.detail', ['hash' => $project->hash])">
                             {{ $project->name }}
                         </x-link>
                         <span class="text-xs d-block text-muted">{{ $project->phases()->count() }} {{ Str::plural('Phase', $project->phases()->count()) }}</span>

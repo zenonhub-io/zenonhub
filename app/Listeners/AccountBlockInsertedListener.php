@@ -31,12 +31,12 @@ class AccountBlockInsertedListener
     public function handle(AccountBlock $accountBlock): void
     {
         $this->dispatchContractMethodProcessor($accountBlock);
-        //$this->dispatchAccountTotalsProcessor($accountBlock->account);
-        //$this->dispatchAccountTotalsProcessor($accountBlock->toAccount);
+        $this->dispatchAccountTotalsProcessor($accountBlock->account);
+        $this->dispatchAccountTotalsProcessor($accountBlock->toAccount);
         $this->dispatchBlockRewardProcessor($accountBlock);
         $this->dispatchLiquidityProgramProcessor($accountBlock);
-        //$this->dispatchWhaleAlerts($accountBlock);
-        //$this->dispatchBridgeAlerts($accountBlock);
+        $this->dispatchWhaleAlerts($accountBlock);
+        $this->dispatchBridgeAlerts($accountBlock);
     }
 
     public function asListener(AccountBlockInserted $accountBlockInsertedEvent): void
@@ -102,8 +102,12 @@ class AccountBlockInsertedListener
 
     private function dispatchWhaleAlerts(AccountBlock $accountBlock): void
     {
-        $znnValue = config('bots.whale-alerts.znn_cutoff') * NOM_DECIMALS;
-        $qsrValue = config('bots.whale-alerts.qsr_cutoff') * NOM_DECIMALS;
+        if (! config('bots.whale-alerts.enabled')) {
+            return;
+        }
+
+        $znnValue = config('bots.whale-alerts.settings.znn_cutoff') * NOM_DECIMALS;
+        $qsrValue = config('bots.whale-alerts.settings.qsr_cutoff') * NOM_DECIMALS;
 
         if (! $accountBlock->token) {
             return;
@@ -119,8 +123,12 @@ class AccountBlockInsertedListener
 
     private function dispatchBridgeAlerts(AccountBlock $accountBlock): void
     {
-        $watchAddresses = config('bots.bridge-alerts.watch_addresses');
-        $watchMethods = config('bots.bridge-alerts.watch_methods');
+        if (! config('bots.bridge-alerts.enabled')) {
+            return;
+        }
+
+        $watchAddresses = config('bots.bridge-alerts.settings.watch_addresses');
+        $watchMethods = config('bots.bridge-alerts.settings.watch_methods');
 
         if (! in_array($accountBlock->toAccount->address, [
             EmbeddedContractsEnum::BRIDGE->value,

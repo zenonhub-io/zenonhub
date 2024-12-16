@@ -19,4 +19,14 @@ class NetworkAlertBot
             config('bots.network-alerts.twitter.access_token_secret'),
         ];
     }
+
+    public function routeNotificationForTelegram(): string
+    {
+        return config('bots.network-alerts.telegram.chat');
+    }
+
+    public function routeNotificationForDiscordWebhook(): string
+    {
+        return config('bots.network-alerts.discord.webhook');
+    }
 }

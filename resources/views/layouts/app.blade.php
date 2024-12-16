@@ -18,6 +18,17 @@
         @livewireChartsScripts
 
         @stack('styles')
+
+        @if (app()->isProduction())
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('zenon-hub.google_analytics_id') }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '{{ config('zenon-hub.google_analytics_id') }}');
+            </script>
+        @endif
     </head>
     <body class="bg-dark">
         <header class="app-navbar navbar sticky-top p-1 justify-content-between" data-bs-theme="dark">

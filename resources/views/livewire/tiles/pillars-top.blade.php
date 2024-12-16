@@ -14,20 +14,18 @@
         </x-cards.heading>
         <ul class="list-group list-group-flush mb-0">
             @foreach ($pillars as $pillar)
-                <li class="list-group-item d-flex align-items-start justify-content-between px-4">
+                <li class="list-group-item d-flex align-items-start justify-content-between px-6 bg-body-secondary-hover">
                     <div class="d-block">
-                        <x-link :href="route('pillar.detail', ['slug' => $pillar->slug])">
-                            <div class="d-flex align-items-center mb-1">
+                        <div class="d-flex align-items-center mb-1">
+                            @if ($pillar->socialProfile?->avatar)
                                 <div class="title-icon me-2">
-                                    @if ($pillar->socialProfile?->avatar)
-                                        <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded" alt="{{ $pillar->name }} Logo"/>
-                                    @else
-                                        <x-svg file="zenon/pillar" />
-                                    @endif
+                                    <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded" alt="{{ $pillar->name }} Logo"/>
                                 </div>
+                            @endif
+                            <x-link class="stretched-link" :href="route('pillar.detail', ['slug' => $pillar->slug])">
                                 {{ $pillar->name }}
-                            </div>
-                        </x-link>
+                            </x-link>
+                        </div>
                         <span class="text-xs d-block text-muted">{{ __('Weight') }} {{ $pillar->display_weight }}</span>
                     </div>
                     <div class="d-block text-end">
