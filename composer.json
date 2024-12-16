@@ -34,7 +34,9 @@
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-honeypot": "^4.5",
         "spatie/laravel-permission": "*",
-        "spatie/laravel-sitemap": "*"
+        "spatie/laravel-sitemap": "*",
+        "symfony/http-client": "^7.2",
+        "symfony/mailgun-mailer": "^7.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

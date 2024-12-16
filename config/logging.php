@@ -20,7 +20,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'single'),
 
     /*
     |--------------------------------------------------------------------------
@@ -134,6 +134,13 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'discord' => [
+            'driver' => 'custom',
+            'via' => MarvinLabs\DiscordLogger\Logger::class,
+            'level' => 'error',
+            'url' => env('LOG_DISCORD_WEBHOOK_URL'),
         ],
 
     ],

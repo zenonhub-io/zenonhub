@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\AcceleratorPhaseController;
-use App\Http\Controllers\AcceleratorProjectsController;
+use App\Http\Controllers\AcceleratorZ\AcceleratorPhaseController;
+use App\Http\Controllers\AcceleratorZ\AcceleratorProjectsController;
 use App\Http\Controllers\DonateController;
 use App\Http\Controllers\Explorer\AccountsController;
 use App\Http\Controllers\Explorer\BridgeController;
@@ -15,10 +15,9 @@ use App\Http\Controllers\Explorer\TokensController;
 use App\Http\Controllers\Explorer\TransactionsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfoController;
-use App\Http\Controllers\PillarsController;
+use App\Http\Controllers\Pillars\PillarsController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SentinelsController;
 use App\Http\Controllers\Services\PublicNodesController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
@@ -33,35 +32,6 @@ use App\Http\Middleware\VerifiedIfLoggedInMiddleware;
 use Illuminate\Support\Facades\Route;
 
 include 'redirects.php';
-
-Route::get('test', function () {
-
-    $cli = app(App\Services\ZenonCli\ZenonCli::class);
-
-    dd($cli);
-
-    //$cli->setKeystore(config('services.plasma-bot.keystore'));
-    //$cli->setPassphrase(config('services.plasma-bot.passphrase'));
-
-    $wallets = $cli->walletList();
-
-    dd($wallets);
-
-    $cli->walletCreateNew(
-        config('services.plasma-bot.keystore'),
-        config('services.plasma-bot.passphrase'),
-    );
-
-    dd('dome');
-
-    $token = 'Uzj87ixm14JnNXMflMsM0oneRlwEBx7ZfpEzIkk00090759b';
-    $response = Http::withToken($token)
-        ->accept('application/json')
-        ->get('http://zenonhub2.test/api/user')
-        ->json();
-
-    dd($response);
-});
 
 Route::middleware([
     VerifiedIfLoggedInMiddleware::class,
@@ -80,7 +50,7 @@ Route::middleware([
     Route::get('pillars/{tab?}', [PillarsController::class, 'index'])->name('pillar.list');
     Route::get('pillar/{slug}/{tab?}', [PillarsController::class, 'show'])->name('pillar.detail');
 
-    Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
+    //Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
     //Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
     Route::get('accelerator-z/{tab?}', [AcceleratorProjectsController::class, 'index'])->name('accelerator-z.list');
@@ -110,9 +80,6 @@ Route::middleware([
     Route::get('tools/verify-signature', VerifySignatureController::class)->name('tools.verify-signature');
 
     Route::get('services/public-nodes', PublicNodesController::class)->name('services.public-nodes');
-    //Route::get('services/plasma-bot', HomeController::class)->name('services.plasma-bot');
-    //Route::get('services/whale-alerts', HomeController::class)->name('services.whale-alerts');
-    //Route::get('services/bridge-alerts', HomeController::class)->name('services.bridge-alerts');
 });
 
 Route::middleware([

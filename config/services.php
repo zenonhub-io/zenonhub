@@ -33,6 +33,13 @@ return [
         ],
     ],
 
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
+
     'zenon' => [
         'http_node_url' => env('ZNN_HTTP_NODE_URL', 'http://127.0.0.1:35997'),
         'ws_node_url' => env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997'),
