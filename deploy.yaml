@@ -20,10 +20,10 @@ tasks:
     - artisan:view:cache
     - artisan:nom:update-contract-methods
     - artisan:nom:update-named-addresses
-    - artisan:sync:bridge-status
     - artisan:sync:orchestrators
     - artisan:sync:pillar-metrics
     - artisan:sync:public-nodes
+    - artisan:sync:bridge-status
     - artisan:up
   artisan:schedule:interrupt:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan schedule:interrupt'
