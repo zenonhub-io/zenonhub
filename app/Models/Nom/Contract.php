@@ -31,6 +31,7 @@ class Contract extends Model
      */
     protected $fillable = [
         'chain_id',
+        'account_id',
         'name',
     ];
 

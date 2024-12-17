@@ -24,7 +24,6 @@ tasks:
     - artisan:sync:orchestrators
     - artisan:sync:pillar-metrics
     - artisan:sync:public-nodes
-    - artisan:site:generate-sitemap
     - artisan:up
   artisan:schedule:interrupt:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan schedule:interrupt'
