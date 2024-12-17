@@ -74,7 +74,11 @@ class NetworkStats
      */
     private function getTotalAddresses(Carbon $date): int
     {
-        return Account::whereDate('first_active_at', '<=', $date)->count();
+        return Account::whereHas('sentBlocks', function ($query) use ($date) {
+            $query->whereDate('created_at', '<=', $date);
+        })->orWhereHas('receivedBlocks', function ($query) use ($date) {
+            $query->whereDate('created_at', '<=', $date);
+        })->count();
     }
 
     /**
