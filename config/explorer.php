@@ -5,8 +5,6 @@ declare(strict_types=1);
 return [
 
     'enabled' => env('EXPLORER_ENABLE_INDEXER', true),
-    'alerts' => env('EXPLORER_ENABLE_ALERTS', true),
-    'balances' => env('EXPLORER_ENABLE_BALANCES', true),
 
     /*
     |--------------------------------------------------------------------------

@@ -71,22 +71,18 @@ return [
         'api_key' => env('ETHERSCAN_API_KEY'),
     ],
 
-    'bitquery' => [
-        'api_key' => env('BITQUERY_API_KEY'),
-    ],
-
     'orchestrators-status' => [
-        'api_url' => 'http://137.184.138.90:8080/api',
+        'api_url' => env('ORCHESTRATORS_STATUS_API'),
     ],
 
     'public-rpc-nodes' => [
-        'api_url' => 'https://github.com/digitalSloth/znn-node-parser/releases/download/public_nodes/output_nodes.json',
+        'api_url' => env('PUBLIC_RPC_NODE_STATS_API'),
     ],
 
     'plasma-bot' => [
         'node' => env('PLASMA_BOT_NODE_URL', env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997')),
-        'keystore' => env('PLASMA_BOT_KEYSTORE', 'plasma-bot-dev'),
-        'passphrase' => env('PLASMA_BOT_PASSPHRASE', 'test'),
-        'address' => env('PLASMA_BOT_ADDRESS', 'z1qzzavvq2zywv77ts2e9yntc3y24qetjh0x0aj4'),
+        'keystore' => env('PLASMA_BOT_KEYSTORE'),
+        'passphrase' => env('PLASMA_BOT_PASSPHRASE'),
+        'address' => env('PLASMA_BOT_ADDRESS'),
     ],
 ];
