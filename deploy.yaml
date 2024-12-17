@@ -20,7 +20,9 @@ tasks:
     - artisan:view:cache
     - artisan:nom:update-contract-methods
     - artisan:nom:update-named-addresses
+    - artisan:sync:bridge-status
     - artisan:sync:orchestrators
+    - artisan:sync:pillar-metrics
     - artisan:sync:public-nodes
     - artisan:site:generate-sitemap
     - artisan:up
@@ -30,10 +32,14 @@ tasks:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-contract-methods'
   artisan:nom:update-named-addresses:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-named-addresses'
+  artisan:sync:bridge-status:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:bridge-status'
   artisan:sync:orchestrators:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:orchestrators'
-  artisan:nom:public-nodes:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:public-nodes'
+  artisan:sync:public-nodes:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:public-nodes'
+  artisan:sync:pillar-metrics:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:pillar-metrics'
   artisan:site:generate-sitemap:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan site:generate-sitemap'
   npx:build:production:
