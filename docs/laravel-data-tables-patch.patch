@@ -1,0 +1,346 @@
+diff --git forkSrcPrefix/resources/views/vendor/livewire-tables/components/pagination.blade.php forkDstPrefix/resources/views/vendor/livewire-tables/components/pagination.blade.php
+index 82a87b3739b4813b0d1ef35c249c5eb8a77e929b..caeed9fd5e6ce8757e21c69d78d4d0536ace5597 100644
+--- forkSrcPrefix/resources/views/vendor/livewire-tables/components/pagination.blade.php
++++ forkDstPrefix/resources/views/vendor/livewire-tables/components/pagination.blade.php
+@@ -104,16 +104,14 @@
+     <div >
+         @if ($component->paginationVisibilityIsEnabled())
+             @if ($component->paginationIsEnabled() && $component->isPaginationMethod('standard') && $rows->lastPage() > 1)
+-                <div class="row mt-3">
+-                    <div class="col-12 col-md-6 overflow-auto">
+-                        {{ $rows->links('livewire-tables::specific.bootstrap-4.pagination') }}
+-                    </div>
+-                    <div class="col-12 col-md-6 text-center text-md-end text-muted">
++                <div class="d-lg-flex justify-content-md-between align-items-md-center text-center">
++                    {{ $rows->onEachSide(1)->links('livewire-tables::specific.bootstrap-4.pagination') }}
++                    <div class="small text-muted d-block text-nowrap order-lg-first mt-3 mt-lg-0">
+                         @if($component->showPaginationDetails())
+                             <span>@lang('Showing')</span>
+-                            <strong>{{ $rows->count() ? $rows->firstItem() : 0 }}</strong>
++                            <strong>{{ $rows->count() ? number_format($rows->firstItem()) : 0 }}</strong>
+                             <span>@lang('to')</span>
+-                            <strong>{{ $rows->count() ? $rows->lastItem() : 0 }}</strong>
++                            <strong>{{ $rows->count() ? number_format($rows->lastItem()) : 0 }}</strong>
+                             <span>@lang('of')</span>
+                             <strong><span x-text="paginationTotalItemCount"></span></strong>
+                             <span>@lang('results')</span>
+@@ -121,16 +119,14 @@
+                     </div>
+                 </div>
+             @elseif ($component->paginationIsEnabled() && $component->isPaginationMethod('simple'))
+-                <div class="row mt-3">
+-                    <div class="col-12 col-md-6 overflow-auto">
+-                        {{ $rows->links('livewire-tables::specific.bootstrap-4.simple-pagination') }}
+-                    </div>
+-                    <div class="col-12 col-md-6 text-center text-md-end text-muted">
++                <div class="d-lg-flex justify-content-md-between align-items-md-center text-center">
++                    {{ $rows->links('pagination::simple-bootstrap-5') }}
++                    <div class="small text-muted d-block text-nowrap order-lg-first mt-3 mt-lg-0">
+                         @if($component->showPaginationDetails())
+                             <span>@lang('Showing')</span>
+-                            <strong>{{ $rows->count() ? $rows->firstItem() : 0 }}</strong>
++                            <strong>{{ $rows->count() ? number_format($rows->firstItem()) : 0 }}</strong>
+                             <span>@lang('to')</span>
+-                            <strong>{{ $rows->count() ? $rows->lastItem() : 0 }}</strong>
++                            <strong>{{ $rows->count() ? number_format($this->getRows->lastItem()) : 0 }}</strong>
+                         @endif
+                     </div>
+                 </div>
+@@ -155,4 +151,4 @@
+ 
+ @if ($component->hasConfigurableAreaFor('after-pagination'))
+     @include($component->getConfigurableAreaFor('after-pagination'), $component->getParametersForConfigurableArea('after-pagination'))
+-@endif
+\ No newline at end of file
++@endif
+diff --git forkSrcPrefix/resources/views/vendor/livewire-tables/specific/bootstrap-4/pagination.blade.php forkDstPrefix/resources/views/vendor/livewire-tables/specific/bootstrap-4/pagination.blade.php
+index 35f76cd59831942b33a1f979ecd9993d1d0bb825..1b09170d56bd62b54044b4cbd5770461988affcb 100644
+--- forkSrcPrefix/resources/views/vendor/livewire-tables/specific/bootstrap-4/pagination.blade.php
++++ forkDstPrefix/resources/views/vendor/livewire-tables/specific/bootstrap-4/pagination.blade.php
+@@ -2,51 +2,72 @@
+     @if ($paginator->hasPages())
+         @php(isset($this->numberOfPaginatorsRendered[$paginator->getPageName()]) ? $this->numberOfPaginatorsRendered[$paginator->getPageName()]++ : $this->numberOfPaginatorsRendered[$paginator->getPageName()] = 1)
+ 
+-        <nav>
+-            <ul class="pagination">
+-                {{-- Previous Page Link --}}
+-                @if ($paginator->onFirstPage())
+-                    <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+-                        <span class="page-link" aria-hidden="true">&lsaquo;</span>
+-                    </li>
+-                @else
+-                    <li class="page-item">
+-                        <button type="button" dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}" class="page-link" wire:click="previousPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</button>
+-                    </li>
+-                @endif
++        <ul class="pagination justify-content-center justify-content-lg-end">
++            {{-- Previous Page Link --}}
++            @if ($paginator->onFirstPage())
++                <li class="page-item disabled" aria-disabled="true">
++                    <a class="page-link" href="#" tabindex="-1">
++                        <i class="bi bi-chevron-left fs-6"></i>
++                    </a>
++                </li>
++            @else
++                <li class="page-item">
++                    <a class="page-link js-scroll" id="pagination-{{$paginator->getPageName()}}-previous" dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}" wire:click="previousPage('{{ $paginator->getPageName() }}')" rel="prev" aria-label="@lang('pagination.previous')">
++                        <i class="bi bi-chevron-left fs-6"></i>
++                    </a>
++                </li>
++            @endif
+ 
+-                {{-- Pagination Elements --}}
+-                @if ($elements ?? null)
+-                    @foreach ($elements as $element)
+-                        {{-- "Three Dots" Separator --}}
+-                        @if (is_string($element))
+-                            <li class="page-item disabled" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+-                        @endif
++            @if($paginator->currentPage() > 3)
++                <li class="page-item {{ ($paginator->currentPage() !== $paginator->lastPage() ? 'd-none d-sm-block' : '') }}" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-1">
++                    <a class="page-link js-scroll" id="pagination-{{$paginator->getPageName()}}-first" wire:click="gotoPage(1, '{{ $paginator->getPageName() }}')">1</a>
++                </li>
++            @endif
++            @if($paginator->currentPage() > 4)
++                <li class="page-item disabled">
++                    <span class="page-link">...</span>
++                </li>
++            @endif
+ 
+-                        {{-- Array Of Links --}}
+-                        @if (is_array($element))
+-                            @foreach ($element as $page => $url)
+-                                @if ($page == $paginator->currentPage())
+-                                    <li class="page-item active" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+-                                @else
+-                                    <li class="page-item" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}"><button type="button" class="page-link" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')">{{ $page }}</button></li>
+-                                @endif
+-                            @endforeach
+-                        @endif
+-                    @endforeach
++            @foreach(range(1, $paginator->lastPage()) as $page)
++                @if($page >= $paginator->currentPage() - 2 && $page <= $paginator->currentPage() + 2)
++                    @if ($page == $paginator->currentPage())
++                        <li class="page-item active" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}" aria-current="page">
++                            <span class="page-link">{{ number_format($page) }}</span>
++                        </li>
++                    @else
++                        <li class="page-item {{ ($page === $paginator->currentPage() - 2 || $page === $paginator->currentPage() + 2 ? 'd-none d-md-block' : '') }}" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}">
++                            <a class="page-link js-scroll" id="pagination-{{$paginator->getPageName()}}-page-{{ $page }}" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')">{{ number_format($page) }}</a>
++                        </li>
++                    @endif
+                 @endif
++            @endforeach
+ 
+-                {{-- Next Page Link --}}
+-                @if ($paginator->hasMorePages())
+-                    <li class="page-item">
+-                        <button type="button" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}" class="page-link" wire:click="nextPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</button>
+-                    </li>
+-                @else
+-                    <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+-                        <span class="page-link" aria-hidden="true">&rsaquo;</span>
+-                    </li>
+-                @endif
+-            </ul>
+-        </nav>
++            @if($paginator->currentPage() < $paginator->lastPage() - 3)
++                <li class="page-item disabled">
++                    <span class="page-link">...</span>
++                </li>
++            @endif
++            @if($paginator->currentPage() < $paginator->lastPage() - 2)
++                <li class="page-item {{ ($paginator->currentPage() !== 1 ? 'd-none d-sm-block' : '') }}" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $paginator->lastPage() }}">
++                    <a class="page-link js-scroll" id="pagination-{{$paginator->getPageName()}}-last" wire:click="gotoPage({{$paginator->lastPage()}}, '{{ $paginator->getPageName() }}')">{{ number_format($paginator->lastPage()) }}</a>
++                </li>
++            @endif
++
++            {{-- Next Page Link --}}
++            @if ($paginator->hasMorePages())
++                <li class="page-item">
++                    <a class="page-link js-scroll" id="pagination-{{$paginator->getPageName()}}-next" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}" wire:click="nextPage('{{ $paginator->getPageName() }}')" rel="next" aria-label="@lang('pagination.next')">
++                        <i class="bi bi-chevron-right fs-6"></i>
++                    </a>
++                </li>
++            @else
++                <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
++                    <span class="page-link" aria-hidden="true">
++                        <i class="bi bi-chevron-right fs-6"></i>
++                    </span>
++                </li>
++            @endif
++        </ul>
+     @endif
+ </div>
+diff --git forkSrcPrefix/resources/views/vendor/livewire-tables/datatable.blade.php forkDstPrefix/resources/views/vendor/livewire-tables/datatable.blade.php
+index e66dfc715ec1bdfdc199d6bf2d917fc2c89ed34a..29e14469f19bffbd6d4ecdbf14f73f049b86398a 100644
+--- forkSrcPrefix/resources/views/vendor/livewire-tables/datatable.blade.php
++++ forkDstPrefix/resources/views/vendor/livewire-tables/datatable.blade.php
+@@ -1,4 +1,5 @@
+ @php($tableName = $this->getTableName())
++@php($viewMode = $this->viewMode ?? 'default')
+ 
+ <div>
+     <x-livewire-tables::wrapper :component="$this" :tableName="$tableName">
+@@ -6,88 +7,96 @@
+             @include($this->getConfigurableAreaFor('before-tools'), $this->getParametersForConfigurableArea('before-tools'))
+         @endif
+ 
+-        <x-livewire-tables::tools>
+-            @if ($this->showSortPillsSection)
+-                <x-livewire-tables::tools.sorting-pills />
+-            @endif
+-            @if($this->showFilterPillsSection)
+-                <x-livewire-tables::tools.filter-pills />
+-            @endif
+-            <x-livewire-tables::tools.toolbar :$filterGenericData />
+-        </x-livewire-tables::tools>
+-
+-        <x-livewire-tables::table>
+-            
+-            <x-slot name="thead">
+-                @if($this->getCurrentlyReorderingStatus)
+-                    <x-livewire-tables::table.th.reorder x-cloak x-show="currentlyReorderingStatus" />
+-                @endif
+-                @if($this->showBulkActionsSections)
+-                    <x-livewire-tables::table.th.bulk-actions :displayMinimisedOnReorder="true" />
++        <div class="px-3 px-md-6 {{ $viewMode !== 'custom' ? 'border-bottom' : '' }}">
++            <x-livewire-tables::tools>
++                @if ($this->showSortPillsSection)
++                    <x-livewire-tables::tools.sorting-pills />
+                 @endif
+-                @if ($this->showCollapsingColumnSections)
+-                    <x-livewire-tables::table.th.collapsed-columns />
++                @if($this->showFilterPillsSection)
++                    <x-livewire-tables::tools.filter-pills />
+                 @endif
++                <x-livewire-tables::tools.toolbar :$filterGenericData />
++            </x-livewire-tables::tools>
++        </div>
+ 
+-                @foreach($selectedVisibleColumns as $index => $column)
+-                    <x-livewire-tables::table.th wire:key="{{ $tableName.'-table-head-'.$index }}" :column="$column" :index="$index" />
+-                @endforeach
+-            </x-slot>
+-
+-            @if($this->secondaryHeaderIsEnabled() && $this->hasColumnsWithSecondaryHeader())
+-                <x-livewire-tables::table.tr.secondary-header :rows="$rows" :$filterGenericData :$selectedVisibleColumns  />
+-            @endif
+-            @if($this->hasDisplayLoadingPlaceholder())
+-                <x-livewire-tables::includes.loading colCount="{{ $this->columns->count()+1 }}" />
+-            @endif
+-
++        @if ($viewMode === 'custom')
++            {!! $this->renderCustomView($rows) !!}
++        @else
++            <x-livewire-tables::table>
+ 
+-            @if($this->showBulkActionsSections)
+-                <x-livewire-tables::table.tr.bulk-actions :rows="$rows" :displayMinimisedOnReorder="true" />
+-            @endif
+-
+-            @forelse ($rows as $rowIndex => $row)
+-                <x-livewire-tables::table.tr wire:key="{{ $tableName }}-row-wrap-{{ $row->{$this->getPrimaryKey()} }}" :row="$row" :rowIndex="$rowIndex">
++                <x-slot name="thead">
+                     @if($this->getCurrentlyReorderingStatus)
+-                        <x-livewire-tables::table.td.reorder x-cloak x-show="currentlyReorderingStatus" wire:key="{{ $tableName }}-row-reorder-{{ $row->{$this->getPrimaryKey()} }}" :rowID="$tableName.'-'.$row->{$this->getPrimaryKey()}" :rowIndex="$rowIndex" />
++                        <x-livewire-tables::table.th.reorder x-cloak x-show="currentlyReorderingStatus" />
+                     @endif
+                     @if($this->showBulkActionsSections)
+-                        <x-livewire-tables::table.td.bulk-actions wire:key="{{ $tableName }}-row-bulk-act-{{ $row->{$this->getPrimaryKey()} }}" :row="$row" :rowIndex="$rowIndex"/>
++                        <x-livewire-tables::table.th.bulk-actions :displayMinimisedOnReorder="true" />
+                     @endif
+                     @if ($this->showCollapsingColumnSections)
+-                        <x-livewire-tables::table.td.collapsed-columns wire:key="{{ $tableName }}-row-collapsed-{{ $row->{$this->getPrimaryKey()} }}" :rowIndex="$rowIndex" />
++                        <x-livewire-tables::table.th.collapsed-columns />
+                     @endif
+ 
+-                    @foreach($selectedVisibleColumns as $colIndex => $column)
+-                        <x-livewire-tables::table.td wire:key="{{ $tableName . '-' . $row->{$this->getPrimaryKey()} . '-datatable-td-' . $column->getSlug() }}"  :column="$column" :colIndex="$colIndex">
+-                            @if($column->isHtml())                            
+-                                {!! $column->renderContents($row) !!}
+-                            @else
+-                                {{ $column->renderContents($row) }}
+-                            @endif
+-                        </x-livewire-tables::table.td>
++                    @foreach($selectedVisibleColumns as $index => $column)
++                        <x-livewire-tables::table.th wire:key="{{ $tableName.'-table-head-'.$index }}" :column="$column" :index="$index" />
+                     @endforeach
+-                </x-livewire-tables::table.tr>
++                </x-slot>
+ 
+-                @if ($this->showCollapsingColumnSections)
+-                    <x-livewire-tables::table.collapsed-columns :row="$row" :rowIndex="$rowIndex" />
++                @if($this->secondaryHeaderIsEnabled() && $this->hasColumnsWithSecondaryHeader())
++                    <x-livewire-tables::table.tr.secondary-header :rows="$rows" :$filterGenericData :$selectedVisibleColumns  />
++                @endif
++                @if($this->hasDisplayLoadingPlaceholder())
++                    <x-livewire-tables::includes.loading colCount="{{ $this->columns->count()+1 }}" />
+                 @endif
+-            @empty
+-                <x-livewire-tables::table.empty />
+-            @endforelse
+ 
+-            @if ($this->footerIsEnabled() && $this->hasColumnsWithFooter())
+-                <x-slot name="tfoot">
+-                    @if ($this->useHeaderAsFooterIsEnabled())
+-                        <x-livewire-tables::table.tr.secondary-header :rows="$rows" :$filterGenericData />
+-                    @else
+-                        <x-livewire-tables::table.tr.footer :rows="$rows"  :$filterGenericData />
++
++                @if($this->showBulkActionsSections)
++                    <x-livewire-tables::table.tr.bulk-actions :rows="$rows" :displayMinimisedOnReorder="true" />
++                @endif
++
++                @forelse ($rows as $rowIndex => $row)
++                    <x-livewire-tables::table.tr wire:key="{{ $tableName }}-row-wrap-{{ $row->{$this->getPrimaryKey()} }}" :row="$row" :rowIndex="$rowIndex">
++                        @if($this->getCurrentlyReorderingStatus)
++                            <x-livewire-tables::table.td.reorder x-cloak x-show="currentlyReorderingStatus" wire:key="{{ $tableName }}-row-reorder-{{ $row->{$this->getPrimaryKey()} }}" :rowID="$tableName.'-'.$row->{$this->getPrimaryKey()}" :rowIndex="$rowIndex" />
++                        @endif
++                        @if($this->showBulkActionsSections)
++                            <x-livewire-tables::table.td.bulk-actions wire:key="{{ $tableName }}-row-bulk-act-{{ $row->{$this->getPrimaryKey()} }}" :row="$row" :rowIndex="$rowIndex"/>
++                        @endif
++                        @if ($this->showCollapsingColumnSections)
++                            <x-livewire-tables::table.td.collapsed-columns wire:key="{{ $tableName }}-row-collapsed-{{ $row->{$this->getPrimaryKey()} }}" :rowIndex="$rowIndex" />
++                        @endif
++
++                        @foreach($selectedVisibleColumns as $colIndex => $column)
++                            <x-livewire-tables::table.td wire:key="{{ $tableName . '-' . $row->{$this->getPrimaryKey()} . '-datatable-td-' . $column->getSlug() }}"  :column="$column" :colIndex="$colIndex">
++                                @if($column->isHtml())
++                                    {!! $column->renderContents($row) !!}
++                                @else
++                                    {{ $column->renderContents($row) }}
++                                @endif
++                            </x-livewire-tables::table.td>
++                        @endforeach
++                    </x-livewire-tables::table.tr>
++
++                    @if ($this->showCollapsingColumnSections)
++                        <x-livewire-tables::table.collapsed-columns :row="$row" :rowIndex="$rowIndex" />
+                     @endif
+-                </x-slot>
+-            @endif
+-        </x-livewire-tables::table>
++                @empty
++                    <x-livewire-tables::table.empty />
++                @endforelse
++
++                @if ($this->footerIsEnabled() && $this->hasColumnsWithFooter())
++                    <x-slot name="tfoot">
++                        @if ($this->useHeaderAsFooterIsEnabled())
++                            <x-livewire-tables::table.tr.secondary-header :rows="$rows" :$filterGenericData />
++                        @else
++                            <x-livewire-tables::table.tr.footer :rows="$rows"  :$filterGenericData />
++                        @endif
++                    </x-slot>
++                @endif
++            </x-livewire-tables::table>
++        @endif
+ 
+-        <x-livewire-tables::pagination :rows="$rows" />
++        <div class="px-3 px-md-6 mt-3">
++            <x-livewire-tables::pagination :rows="$rows" />
++        </div>
+ 
+         @includeIf($customView)
+     </x-livewire-tables::wrapper>

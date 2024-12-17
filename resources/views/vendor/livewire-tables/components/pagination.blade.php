@@ -104,16 +104,14 @@
     <div >
         @if ($component->paginationVisibilityIsEnabled())
             @if ($component->paginationIsEnabled() && $component->isPaginationMethod('standard') && $rows->lastPage() > 1)
-                <div class="row mt-3">
-                    <div class="col-12 col-md-6 overflow-auto">
-                        {{ $rows->links('livewire-tables::specific.bootstrap-4.pagination') }}
-                    </div>
-                    <div class="col-12 col-md-6 text-center text-md-end text-muted">
+                <div class="d-lg-flex justify-content-md-between align-items-md-center text-center">
+                    {{ $rows->onEachSide(1)->links('livewire-tables::specific.bootstrap-4.pagination') }}
+                    <div class="small text-muted d-block text-nowrap order-lg-first mt-3 mt-lg-0">
                         @if($component->showPaginationDetails())
                             <span>@lang('Showing')</span>
-                            <strong>{{ $rows->count() ? $rows->firstItem() : 0 }}</strong>
+                            <strong>{{ $rows->count() ? number_format($rows->firstItem()) : 0 }}</strong>
                             <span>@lang('to')</span>
-                            <strong>{{ $rows->count() ? $rows->lastItem() : 0 }}</strong>
+                            <strong>{{ $rows->count() ? number_format($rows->lastItem()) : 0 }}</strong>
                             <span>@lang('of')</span>
                             <strong><span x-text="paginationTotalItemCount"></span></strong>
                             <span>@lang('results')</span>
@@ -121,16 +119,14 @@
                     </div>
                 </div>
             @elseif ($component->paginationIsEnabled() && $component->isPaginationMethod('simple'))
-                <div class="row mt-3">
-                    <div class="col-12 col-md-6 overflow-auto">
-                        {{ $rows->links('livewire-tables::specific.bootstrap-4.simple-pagination') }}
-                    </div>
-                    <div class="col-12 col-md-6 text-center text-md-end text-muted">
+                <div class="d-lg-flex justify-content-md-between align-items-md-center text-center">
+                    {{ $rows->links('pagination::simple-bootstrap-5') }}
+                    <div class="small text-muted d-block text-nowrap order-lg-first mt-3 mt-lg-0">
                         @if($component->showPaginationDetails())
                             <span>@lang('Showing')</span>
-                            <strong>{{ $rows->count() ? $rows->firstItem() : 0 }}</strong>
+                            <strong>{{ $rows->count() ? number_format($rows->firstItem()) : 0 }}</strong>
                             <span>@lang('to')</span>
-                            <strong>{{ $rows->count() ? $rows->lastItem() : 0 }}</strong>
+                            <strong>{{ $rows->count() ? number_format($this->getRows->lastItem()) : 0 }}</strong>
                         @endif
                     </div>
                 </div>

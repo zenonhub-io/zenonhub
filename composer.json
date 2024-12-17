@@ -30,7 +30,7 @@
         "livewire/livewire": "^3.0",
         "lorisleiva/laravel-actions": "^2.8",
         "maize-tech/laravel-markable": "^2.2",
-        "rappasoft/laravel-livewire-tables": "^3.4",
+        "rappasoft/laravel-livewire-tables": "^3.5",
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-honeypot": "^4.5",
         "spatie/laravel-permission": "*",
