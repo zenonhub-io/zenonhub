@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5331357a31807f404826543b43155740",
+    "content-hash": "61758a393ea650893500c2362b950205",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -1840,11 +1840,17 @@
         },
         {
             "name": "digitalsloth/znn-php",
-            "version": "1.0.1",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digitalSloth/znn-php.git",
+                "reference": "982a639d0b3fe9a2ac009bd8beaa301b1c212c52"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../../Development/ZNN/znn-php",
-                "reference": "dcd73959a98b05480d6b46af30bc4b892722dda3"
+                "type": "zip",
+                "url": "https://api.github.com/repos/digitalSloth/znn-php/zipball/982a639d0b3fe9a2ac009bd8beaa301b1c212c52",
+                "reference": "982a639d0b3fe9a2ac009bd8beaa301b1c212c52",
+                "shasum": ""
             },
             "require": {
                 "bitwasp/bech32": "^0.0.1",
@@ -1861,18 +1867,14 @@
                 "phpunit/phpunit": "^8.0",
                 "roave/security-advisories": "dev-latest"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "DigitalSloth\\ZnnPhp\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "DigitalSloth\\ZnnPhp\\Examples\\": "examples",
-                    "DigitalSloth\\ZnnPhp\\Test\\": "test"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "mit"
             ],
@@ -1883,10 +1885,11 @@
                 }
             ],
             "description": "A PHP SDK for JSON-RPC endpoints of the zenon.network",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/digitalSloth/znn-php/issues",
+                "source": "https://github.com/digitalSloth/znn-php/tree/main"
+            },
+            "time": "2024-12-17T21:20:13+00:00"
         },
         {
             "name": "diglactic/laravel-breadcrumbs",

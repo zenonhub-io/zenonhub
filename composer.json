@@ -52,15 +52,6 @@
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-ignition": "^2.4"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../../../Development/ZNN/znn-php",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "autoload": {
         "files": [
             "app/Helpers/helpers.php"
