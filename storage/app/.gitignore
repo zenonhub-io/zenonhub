@@ -1,4 +1,4 @@
 *
-!/public/
-!/nom-json/
+!public/*
+!nom-json/*
 !.gitignore
