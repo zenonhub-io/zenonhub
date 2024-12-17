@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications\Nom\Token;
 
 use App\Bots\NetworkAlertBot;
-use App\Domains\Nom\Models\Token;
+use App\Models\Nom\Token;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

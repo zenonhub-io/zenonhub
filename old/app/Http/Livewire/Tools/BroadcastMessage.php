@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire\Tools;
 
-use App\Domains\Nom\Models\Account;
-use App\Domains\Nom\Models\Pillar;
-use App\Services\ZenonSdk;
+use App\Models\Nom\Account;
+use App\Models\Nom\Pillar;
+use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Livewire\Component;

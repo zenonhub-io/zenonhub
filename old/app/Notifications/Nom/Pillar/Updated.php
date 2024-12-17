@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications\Nom\Pillar;
 
 use App\Bots\NetworkAlertBot;
-use App\Domains\Nom\Models\Pillar;
+use App\Models\Nom\Pillar;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Utilities;
 
-use App\Domains\Nom\Models\AcceleratorPhase;
-use App\Domains\Nom\Models\AcceleratorProject;
-use App\Domains\Nom\Models\Pillar;
+use App\Models\Nom\AcceleratorPhase;
+use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\Pillar;
 
 class MissingVotes
 {

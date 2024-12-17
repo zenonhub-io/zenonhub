@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Domains\Nom\Models\Account;
+use App\Models\Nom\Account;
 use Meta;
 
 class Donate

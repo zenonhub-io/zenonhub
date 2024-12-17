@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications\Nom\Accelerator;
 
 use App\Bots\NetworkAlertBot;
-use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Models\Nom\AcceleratorPhase;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

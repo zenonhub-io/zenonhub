@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Domains\Nom\Models\Account;
+use App\Models\Nom\Account;
 use Meta;
 
 class Accounts

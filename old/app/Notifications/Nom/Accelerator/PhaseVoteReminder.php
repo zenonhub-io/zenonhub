@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\Nom\Accelerator;
 
-use App\Domains\Nom\Models\AcceleratorPhase;
+use App\Models\Nom\AcceleratorPhase;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -17,9 +17,7 @@ class PhaseVoteReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected AcceleratorPhase $phase)
-    {
-    }
+    public function __construct(protected AcceleratorPhase $phase) {}
 
     public function via($notifiable): array
     {

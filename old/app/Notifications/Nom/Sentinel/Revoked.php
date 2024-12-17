@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications\Nom\Sentinel;
 
 use App\Bots\NetworkAlertBot;
-use App\Domains\Nom\Models\Sentinel;
+use App\Models\Nom\Sentinel;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

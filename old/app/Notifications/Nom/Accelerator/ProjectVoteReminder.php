@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\Nom\Accelerator;
 
-use App\Domains\Nom\Models\AcceleratorProject;
+use App\Models\Nom\AcceleratorProject;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -17,9 +17,7 @@ class ProjectVoteReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected AcceleratorProject $project)
-    {
-    }
+    public function __construct(protected AcceleratorProject $project) {}
 
     public function via($notifiable): array
     {

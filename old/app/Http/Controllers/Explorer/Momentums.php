@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Domains\Nom\Models\Momentum;
+use App\Models\Nom\Momentum;
 use Meta;
 
 class Momentums

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\Nom\Pillar;
 
-use App\Domains\Nom\Models\Pillar;
+use App\Models\Nom\Pillar;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;

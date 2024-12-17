@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Exports;
 
-use App\Domains\Nom\Models\AcceleratorPhase;
-use App\Domains\Nom\Models\AcceleratorProject;
-use App\Domains\Nom\Models\Pillar;
+use App\Models\Nom\AcceleratorPhase;
+use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\Pillar;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;

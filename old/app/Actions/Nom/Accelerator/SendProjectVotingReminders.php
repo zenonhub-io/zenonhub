@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Nom\Accelerator;
 
 use App\Bots\NetworkAlertBot;
-use App\Domains\Nom\Models\AcceleratorProject;
+use App\Models\Nom\AcceleratorProject;
 use App\Notifications\Nom\Accelerator\ProjectVoteReminder;
 use Illuminate\Support\Facades\Notification;
 

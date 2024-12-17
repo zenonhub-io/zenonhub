@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Domains\Nom\Models\Token;
+use App\Models\Nom\Token;
 use Meta;
 
 class Tokens

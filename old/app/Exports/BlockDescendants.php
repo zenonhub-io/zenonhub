@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Exports;
 
-use App\Domains\Nom\Models\AccountBlock;
+use App\Models\Nom\AccountBlock;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
