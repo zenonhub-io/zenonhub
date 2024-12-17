@@ -1,131 +1,132 @@
 <div>
-    <div class="card shadow mb-4">
-        <div class="card-header border-bottom">
-            <h4 class="mb-0">Plasma bot</h4>
-        </div>
-        <div class="card-body">
-            <div class="bg-secondary shadow rounded-3 mb-4 p-3">
-                <div class="d-block d-md-flex justify-content-md-evenly mb-3">
-                    <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                        <span class="d-inline d-md-block text-muted fs-sm">Available QSR</span>
-                        <span class="float-end float-md-none">{{ ($account->display_qsr_balance ?: '-') }}</span>
-                    </div>
-                    <div class="text-start text-md-center mb-2 mb-md-0 order-0">
-                        <span class="d-inline d-md-block text-muted fs-sm">Fused QSR</span>
-                        <span class="float-end float-md-none">{{ ($account->display_qsr_fused ?: '-') }}</span>
-                    </div>
+
+    <x-cards.card class="my-6">
+        <x-cards.body>
+            <div class="row gy-4">
+                <div class="col-12">
+                    <x-stats.mini-stat :title="__('Available QSR')" :centered="true">
+                        <span class="text-secondary">
+                            {{ ($account->display_qsr_balance ?: '-') }}
+                        </span>
+                    </x-stats.mini-stat>
                 </div>
-                <div class="text-start text-md-center">
-                    <div class="progress bg-dark" style="height: 4px">
-                        <div
-                            class="progress-bar bg-success"
-                            role="progressbar"
-                            aria-label="No"
-                            style="width: {{ $percentageUsed }}%"
-                            aria-valuenow="{{ $percentageUsed }}"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                        ></div>
-                        <div
-                            class="progress-bar bg-zenon-pink"
-                            role="progressbar"
-                            aria-label="Yes"
-                            style="width: {{ $percentageAvailable }}%"
-                            aria-valuenow="{{ $percentageAvailable }}"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                        ></div>
+                <div class="col-12">
+                    <x-stats.mini-stat :title="__('Fused QSR')" :centered="true">
+                        <span class="text-tertiary">
+                            {{ ($account->display_qsr_fused ?: '-') }}
+                        </span>
+                    </x-stats.mini-stat>
+                </div>
+                <div class="col-24">
+                    <div class="text-start text-md-center">
+                        <div class="progress-stacked" style="height: 4px">
+                            <div class="progress" role="progressbar"
+                                 aria-label="{{ __('Available QSR') }}"
+                                 aria-valuenow="{{ $percentageAvailable }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 style="width: {{ $percentageAvailable }}%"
+                            >
+                                <div class="progress-bar bg-secondary"></div>
+                            </div>
+                            <div class="progress" role="progressbar"
+                                 aria-label="{{ __('Fused QSR') }}"
+                                 aria-valuenow="{{ $percentageUsed }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 style="width: {{ $percentageUsed }}%"
+                            >
+                                <div class="progress-bar bg-tertiary"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <hr class="border-secondary my-4">
-            @if ($account->qsr_balance > 2000000000)
+        </x-cards.body>
+    </x-cards.card>
+
+    <hr class="mb-6">
+
+    @if ($account->qsr_balance > 200 * NOM_DECIMALS)
+        <div class="row">
+            <div class="col-lg-16">
                 <div class="w-100" wire:loading.delay>
-                    <x-alert
-                        message="Processing request..."
-                        type="info"
-                        icon="arrow-repeat spin"
-                        class="mb-0"
-                    />
+                    <x-alerts.alert type="info" class="mb-6" >
+                        <i class="bi bi-arrow-repeat spin me-2"></i> {{ __('Processing request...') }}
+                    </x-alerts.alert>
                 </div>
-                @if ($result === true)
-                    <x-alert
-                        message="Generating plasma..."
-                        type="success"
-                        icon="check-circle-fill"
-                        class="mb-4"
-                    />
-                    <p>Plasma is being generated for <a class="fw-bold" href="{{ route('explorer.account', ['address' => $address]) }}">{{ $address }}</a> please wait a few minutes for it to arrive.</p>
-                    <p>Your plasma will expire in {{ $expires }} after which you'll be able to fuse some more.</p>
-                @else
-                    @if($result === false)
-                        @if ($message)
-                            <x-alert
-                                message="{{$message}}"
-                                type="info"
-                                icon="info-circle"
-                                class="mb-4"
-                            />
-                        @else
-                            <x-alert
-                                message="Error fusing, please try again"
-                                type="danger"
-                                icon="exclamation-octagon"
-                                class="mb-4"
-                            />
-                        @endif
-                    @endif
-                    <form wire:loading.remove wire:submit.prevent="submit">
-                        <x-honeypot livewire-model="extraFields" />
-                        <p class="mb-4">
-                            Need some plasma to speed up a transaction? Enter an address below to temporarily fuse some QSR and generate plasma.
-                        </p>
-                        <div class="row mb-4 align-items-center">
-                            <label for="form-address" class="form-label col-md-6">Address</label>
-                            <div class="col-md-18">
-                                <input
-                                    type="text"
-                                    id="form-address"
-                                    name="address"
-                                    class="form-control @error('address')is-invalid @enderror"
-                                    wire:model="address"
-                                >
-                                <div class="invalid-feedback">
-                                    @error('address') {{ $message }} @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-4 align-items-center">
-                            <label class="form-label col-md-6">Plasma</label>
-                            <div class="col-md-18">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-low" name="plasma" value="low" wire:model="plasma" checked>
-                                    <label class="form-check-label" for="plasma-low">Low</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-medium" name="plasma" value="medium" wire:model="plasma">
-                                    <label class="form-check-label" for="plasma-medium">Medium</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input @error('plasma')is-invalid @enderror" type="radio" id="plasma-high" name="plasma" value="high" wire:model="plasma">
-                                    <label class="form-check-label" for="plasma-high">High</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn w-100 btn-outline-primary">
-                            <i class="bi bi-fire me-2"></i>
-                            Get plasma
-                        </button>
-                    </form>
-                @endif
-            @else
-                <x-alert
-                    message="The bot has run out of QSR for the next {{ $nextExpiring?->expires_at->diffForHumans(['parts' => 2], true) }}, please check back later"
-                    type="info"
-                    icon="info-circle"
-                    class="mb-0"
-                />
-            @endif
+            </div>
         </div>
-    </div>
+
+        @if ($result === true)
+            <x-alerts.alert type="success" class="mb-6">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ __('Generating plasma...') }}
+                <hr>
+                <p class="mb-4">Plasma is being generated for <x-link :href="route('explorer.account.detail', ['address' => $fuseForm['address']])" class="fw-bold">{{ $fuseForm['address'] }}</x-link> please wait a few minutes for it to arrive.</p>
+                <p>Your plasma will expire in {{ $expires }} after which you'll be able to fuse some more.</p>
+            </x-alerts.alert>
+        @else
+            @if($result === false)
+                <div class="row">
+                    <div class="col-lg-16">
+                        @if ($message)
+                            <x-alerts.alert type="info" class="mb-6">
+                                <i class="bi bi-info-circle-fill me-2"></i> {{ __($message) }}
+                            </x-alerts.alert>
+                        @else
+                            <x-alerts.alert type="danger" class="mb-6">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> {{ __('Error fusing, please try again') }}
+                            </x-alerts.alert>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
+            <form wire:submit="fusePlasma">
+                <x-honeypot livewire-model="extraFields" />
+                <div class="vstack gap-6">
+                    <div class="row align-items-center">
+                        @php($uuid = Str::random(8))
+                        <div class="col-lg-4">
+                            <x-forms.label :label="__('Address')" for="{{ $uuid }}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <x-forms.inputs.input name="fuseForm.address" id="{{ $uuid }}" wire:model="fuseForm.address" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        @php($uuid = Str::random(8))
+                        <div class="col-lg-4">
+                            <x-forms.label :label="__('Plasma')" for="{{ $uuid }}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="btn-group w-100" role="group" aria-label="Plasma level selection">
+                                <input type="radio" class="btn-check @error('fuseForm.amount')is-invalid @enderror" name="fuseForm.amount" id="amount-low" autocomplete="off" value="low" wire:model="fuseForm.amount" wire:change="setPlasmaLevelInfo" checked>
+                                <label class="btn btn-outline-primary" for="amount-low">{{ __('Low') }}</label>
+
+                                <input type="radio" class="btn-check @error('fuseForm.amount')is-invalid @enderror" name="fuseForm.amount" id="amount-medium" autocomplete="off" value="medium" wire:model="fuseForm.amount" wire:change="setPlasmaLevelInfo">
+                                <label class="btn btn-outline-primary" for="amount-medium">{{ __('Medium') }}</label>
+
+                                <input type="radio" class="btn-check @error('fuseForm.amount')is-invalid @enderror" name="fuseForm.amount" id="amount-high" autocomplete="off" value="high" wire:model="fuseForm.amount" wire:change="setPlasmaLevelInfo">
+                                <label class="btn btn-outline-primary" for="amount-high">{{ __('High') }}</label>
+                            </div>
+                            <p class="text-muted text-sm mt-1">{{ $plasmaLevelInfo }}</p>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-lg-16">
+                            <button type="submit" class="btn w-100 btn-outline-primary">
+                                <i class="bi bi-fire me-2"></i>
+                                {{ __('Get Plasma') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endif
+    @else
+        <x-alerts.alert type="info">
+            <i class="bi bi-info-circle-fill me-2"></i> The bot has run out of QSR for the next {{ $nextExpiring?->expires_at->diffForHumans(['parts' => 2], true) }}, please check back later
+        </x-alerts.alert>
+    @endif
 </div>

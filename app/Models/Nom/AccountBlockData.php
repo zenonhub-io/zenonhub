@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
+use Database\Factories\Nom\AccountBlockDataFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,13 +15,6 @@ class AccountBlockData extends Model
     use HasFactory;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_account_block_data';
-
-    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -25,11 +22,18 @@ class AccountBlockData extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_account_block_data';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'account_block_id',
         'raw',
         'decoded',
@@ -37,31 +41,43 @@ class AccountBlockData extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'decoded' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'decoded' => 'array',
+            'is_processed' => 'boolean',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AccountBlockDataFactory::new();
+    }
 
     //
     // Relations
 
-    public function account_block(): BelongsTo
+    public function accountBlock(): BelongsTo
     {
-        return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+        return $this->belongsTo(AccountBlock::class);
     }
 
     //
     // Attributes
 
-    public function getJsonAttribute()
+    public function getJsonAttribute(): string
     {
-        return json_encode($this->decoded, JSON_PRETTY_PRINT);
+        return json_encode($this->decoded, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
-    public function getParsedAttribute()
+    public function getParsedAttribute(): string
     {
         return base64_decode($this->raw);
     }

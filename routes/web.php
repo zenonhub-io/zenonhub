@@ -1,76 +1,99 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\AcceleratorZ\AcceleratorPhaseController;
+use App\Http\Controllers\AcceleratorZ\AcceleratorProjectsController;
+use App\Http\Controllers\DonateController;
+use App\Http\Controllers\Explorer\AccountsController;
+use App\Http\Controllers\Explorer\BridgeController;
+use App\Http\Controllers\Explorer\MomentumsController;
+use App\Http\Controllers\Explorer\OverviewController;
+use App\Http\Controllers\Explorer\PlasmaController;
+use App\Http\Controllers\Explorer\StakesController;
+use App\Http\Controllers\Explorer\TokensController;
+use App\Http\Controllers\Explorer\TransactionsController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InfoController;
+use App\Http\Controllers\Pillars\PillarsController;
+use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Services\PublicNodesController;
+use App\Http\Controllers\Stats\AcceleratorZStatsController;
+use App\Http\Controllers\Stats\BridgeStatsController;
+use App\Http\Controllers\Stats\PublicNodesStatsController;
+use App\Http\Controllers\TimezoneController;
+use App\Http\Controllers\Tools\ApiPlaygroundController;
+use App\Http\Controllers\Tools\PlasmaBotController;
+use App\Http\Controllers\Tools\VerifySignatureController;
+use App\Http\Middleware\AuthenticateSessionMiddleware;
+use App\Http\Middleware\UserLastSeenMiddleware;
+use App\Http\Middleware\VerifiedIfLoggedInMiddleware;
 use Illuminate\Support\Facades\Route;
 
 include 'redirects.php';
-include 'auth.php';
 
-//
-// Pages
-Route::group(['middleware' => ['throttle:60,1']], function () {
+Route::middleware([
+    VerifiedIfLoggedInMiddleware::class,
+    UserLastSeenMiddleware::class,
+])->group(function () {
 
-    Route::get('/', [\App\Http\Controllers\Home::class, 'show'])->name('home');
+    Route::get('/', HomeController::class)->name('home');
+    //Route::get('terms-of-service', TermsController::class)->name('terms');
+    Route::get('privacy-policy', PolicyController::class)->name('policy');
+    Route::get('donate', DonateController::class)->name('donate');
+    Route::get('info', InfoController::class)->name('info');
+    Route::get('sponsor', HomeController::class)->name('sponsor');
 
-    Route::get('donate', [\App\Http\Controllers\Donate::class, 'show'])->name('donate');
+    Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
 
-    Route::get('privacy', [\App\Http\Controllers\Privacy::class, 'show'])->name('privacy');
+    Route::get('pillars/{tab?}', [PillarsController::class, 'index'])->name('pillar.list');
+    Route::get('pillar/{slug}/{tab?}', [PillarsController::class, 'show'])->name('pillar.detail');
 
-    Route::middleware(['auth', 'verified'])->group(function () {
-        Route::get('account', [\App\Http\Controllers\Account\Overview::class, 'show'])->name('account.overview');
-        Route::get('account/details', [\App\Http\Controllers\Account\Details::class, 'show'])->name('account.details');
-        Route::get('account/favorites', [\App\Http\Controllers\Account\Favorites::class, 'show'])->name('account.favorites');
-        Route::get('account/notifications', [\App\Http\Controllers\Account\Notifications::class, 'show'])->name('account.notifications');
-        Route::get('account/addresses', [\App\Http\Controllers\Account\Addresses::class, 'show'])->name('account.addresses');
-    });
+    //Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
+    //Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
-    Route::get('pillars', [\App\Http\Controllers\Pillar\Pillars::class, 'show'])->name('pillars.overview');
-    Route::get('pillars/{slug}', [\App\Http\Controllers\Pillar\Pillars::class, 'detail'])->name('pillars.detail');
+    Route::get('accelerator-z/{tab?}', [AcceleratorProjectsController::class, 'index'])->name('accelerator-z.list');
+    Route::get('accelerator-z/project/{hash}/{tab?}', [AcceleratorProjectsController::class, 'show'])->name('accelerator-z.project.detail');
+    Route::get('accelerator-z/phase/{hash}/{tab?}', AcceleratorPhaseController::class)->name('accelerator-z.phase.detail');
 
-    Route::get('accelerator-z', [\App\Http\Controllers\Accelerator\Projects::class, 'show'])->name('az.overview');
-    Route::get('accelerator-z/project/{hash}', [\App\Http\Controllers\Accelerator\Projects::class, 'detail'])->name('az.project');
-    Route::get('accelerator-z/phase/{hash}', [\App\Http\Controllers\Accelerator\Phases::class, 'detail'])->name('az.phase');
+    Route::get('explorer', OverviewController::class)->name('explorer.overview');
+    Route::get('explorer/momentums', [MomentumsController::class, 'index'])->name('explorer.momentum.list');
+    Route::get('explorer/momentum/{hash}/{tab?}', [MomentumsController::class, 'show'])->name('explorer.momentum.detail');
+    Route::get('explorer/transactions', [TransactionsController::class, 'index'])->name('explorer.transaction.list');
+    Route::get('explorer/transaction/{hash}/{tab?}', [TransactionsController::class, 'show'])->name('explorer.transaction.detail');
+    Route::get('explorer/accounts/{tab?}', [AccountsController::class, 'index'])->name('explorer.account.list');
+    Route::get('explorer/account/{address}/{tab?}', [AccountsController::class, 'show'])->name('explorer.account.detail');
+    Route::get('explorer/tokens/{tab?}', [TokensController::class, 'index'])->name('explorer.token.list');
+    Route::get('explorer/token/{zts}/{tab?}', [TokensController::class, 'show'])->name('explorer.token.detail');
+    Route::get('explorer/bridge/{tab?}', BridgeController::class)->name('explorer.bridge.list');
+    Route::get('explorer/stakes', StakesController::class)->name('explorer.stake.list');
+    Route::get('explorer/plasma', PlasmaController::class)->name('explorer.plasma.list');
 
-    Route::get('explorer', [\App\Http\Controllers\Explorer\Explorer::class, 'show'])->name('explorer.overview');
-    Route::get('explorer/momentums', [\App\Http\Controllers\Explorer\Momentums::class, 'show'])->name('explorer.momentums');
-    Route::get('explorer/momentum/{hash}', [\App\Http\Controllers\Explorer\Momentums::class, 'detail'])->name('explorer.momentum');
-    Route::get('explorer/transactions', [\App\Http\Controllers\Explorer\Transactions::class, 'show'])->name('explorer.transactions');
-    Route::get('explorer/transaction/{hash}', [\App\Http\Controllers\Explorer\Transactions::class, 'detail'])->name('explorer.transaction');
-    Route::get('explorer/accounts', [\App\Http\Controllers\Explorer\Accounts::class, 'show'])->name('explorer.accounts');
-    Route::get('explorer/account/{address}', [\App\Http\Controllers\Explorer\Accounts::class, 'detail'])->name('explorer.account');
-    Route::get('explorer/tokens', [\App\Http\Controllers\Explorer\Tokens::class, 'show'])->name('explorer.tokens');
-    Route::get('explorer/token/{zts}', [\App\Http\Controllers\Explorer\Tokens::class, 'detail'])->name('explorer.token');
-    Route::get('explorer/bridge', [\App\Http\Controllers\Explorer\Bridge::class, 'show'])->name('explorer.bridge');
-    Route::get('explorer/staking', [\App\Http\Controllers\Explorer\Staking::class, 'show'])->name('explorer.staking');
-    Route::get('explorer/fusions', [\App\Http\Controllers\Explorer\Fusions::class, 'show'])->name('explorer.fusions');
+    Route::get('stats/bridge/{tab?}', BridgeStatsController::class)->name('stats.bridge');
+    Route::get('stats/public-nodes/{tab?}', PublicNodesStatsController::class)->name('stats.public-nodes');
+    Route::get('stats/accelerator-z/{tab?}', AcceleratorZStatsController::class)->name('stats.accelerator-z');
 
-    Route::get('stats', [\App\Http\Controllers\Stats\Overview::class, 'show'])->name('stats.overview');
-    Route::get('stats/nodes', [\App\Http\Controllers\Stats\Nodes::class, 'show'])->name('stats.nodes');
-    Route::get('stats/accelerator', [\App\Http\Controllers\Stats\Accelerator::class, 'show'])->name('stats.accelerator');
-    Route::get('stats/bridge', [\App\Http\Controllers\Stats\Bridge::class, 'show'])->name('stats.bridge');
+    Route::get('tools/plasma-bot', PlasmaBotController::class)->name('tools.plasma-bot');
+    Route::get('tools/api-playground', ApiPlaygroundController::class)->name('tools.api-playground');
+    //Route::get('tools/broadcast-message', HomeController::class)->name('tools.broadcast-message');
+    Route::get('tools/verify-signature', VerifySignatureController::class)->name('tools.verify-signature');
 
-    Route::get('tools', [\App\Http\Controllers\Tools\Overview::class, 'show'])->name('tools.overview');
-    Route::get('tools/plasma-bot', [\App\Http\Controllers\Tools\PlasmaBot::class, 'show'])->name('tools.plasma-bot');
-    Route::get('tools/api-playground', [\App\Http\Controllers\Tools\ApiPlayground::class, 'show'])->name('tools.api-playground');
-    Route::get('tools/verify-signature', [\App\Http\Controllers\Tools\VerifySignature::class, 'show'])->name('tools.verify-signature');
-    Route::get('tools/broadcast-message', [\App\Http\Controllers\Tools\BroadcastMessage::class, 'show'])->name('tools.broadcast-message');
-
-    Route::get('services', [\App\Http\Controllers\Services\Overview::class, 'show'])->name('services.overview');
-    Route::get('services/whale-alerts', [\App\Http\Controllers\Services\WhaleAlerts::class, 'show'])->name('services.whale-alerts');
-    Route::get('services/bridge-alerts', [\App\Http\Controllers\Services\BridgeAlerts::class, 'show'])->name('services.bridge-alerts');
-    Route::get('services/public-nodes', [\App\Http\Controllers\Services\PublicNodes::class, 'show'])->name('services.public-nodes');
-    Route::get('services/plasma-bot', [\App\Http\Controllers\Services\PlasmaBot::class, 'show'])->name('services.plasma-bot');
-
-    if (! app()->isProduction()) {
-        Route::get('utilities/missing-votes', [\App\Http\Controllers\Utilities\MissingVotes::class, 'show'])->name('utilities.missing-votes');
-    }
-
-    //
-    // Sitemap
-    Route::get('/sitemap.xml', function () {
-        $file = storage_path('app/sitemap/sitemap.xml');
-
-        return response()->file($file, [
-            'Content-Type' => 'application/xml',
-        ]);
-    })->name('sitemap');
+    Route::get('services/public-nodes', PublicNodesController::class)->name('services.public-nodes');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    AuthenticateSessionMiddleware::class,
+    UserLastSeenMiddleware::class,
+])->group(function () {
+    Route::get('profile/{tab?}', ProfileController::class)->name('profile');
+});
+
+Route::get('sitemap.xml', function () {
+    $file = storage_path('app/sitemap/sitemap.xml');
+
+    return response()->file($file, [
+        'Content-Type' => 'application/xml',
+    ]);
+})->name('sitemap');

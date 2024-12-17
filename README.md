@@ -5,16 +5,24 @@
 
 ## Requirements
 
-This is built on [Laravel](https://laravel.com/) 
+This is built on [Laravel](https://laravel.com/)
 
-- PHP 8.2
+- PHP 8.3
 - MariaDB/MySQL
+- NPM 18
 
 ## Install
 
 Clone the repo and install composer dependencies `composer install`
 
-Then install and compile frontend assets `npm i && npm mix`
+Then install and compile frontend assets `npm i && npm run build`
+
+## 3rd Party libraries
+- Laravel Actions - https://github.com/lorisleiva/laravel-actions
+- Livewire Charts - https://github.com/asantibanez/livewire-charts
+- Livewire DataTables - https://github.com/rappasoft/laravel-livewire-tables
+- Markable/Favorites - https://github.com/maize-tech/laravel-markable
+
 
 ## Setup
 
@@ -22,7 +30,7 @@ Then install and compile frontend assets `npm i && npm mix`
 - Copy the `example.env` to `.env` and fill in the details
 - Next run migrations `php artisan migrate`
 - Then seed the database `php artisan db:seed --class=DatabaseSeeder`
-- Finally run the genesis data `php artisan db:seed --class=GenesisSeeder`
+- Finally, run the genesis data `php artisan db:seed --class=GenesisSeeder`
 
 ## Indexer
 
@@ -32,7 +40,7 @@ To run these locally run this command:
 artisan queue:work --queue=default,indexer
 ```
 
-Next you'll need to run the indexer, it will index the network to the current height and exit. On a server configure [short-schedule](https://github.com/spatie/laravel-short-schedule) and the indexer will be run every 10 seconds. Or locally run:
+Next you'll need to run the indexer, on a server this is handled by a scheduled task every 10 seconds, locally you need to run:
 ```bash
 php artisan zenon:index
 ```

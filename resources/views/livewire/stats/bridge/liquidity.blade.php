@@ -1,3 +1,0 @@
-<div>
-    Bridge liquidity
-</div>

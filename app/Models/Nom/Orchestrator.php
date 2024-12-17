@@ -1,14 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Orchestrator extends Model
 {
-    use HasFactory;
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The table associated with the model.
@@ -18,13 +24,6 @@ class Orchestrator extends Model
     protected $table = 'nom_orchestrators';
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
@@ -32,25 +31,19 @@ class Orchestrator extends Model
     protected $fillable = [
         'pillar_id',
         'account_id',
-        'status',
+        'is_active',
     ];
 
-    public static function getOnlinePercent(): float
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        $total = self::count();
-        $online = self::isActive()->count();
-        $percent = ($online / $total) * 100;
-
-        return round($percent, 1);
-    }
-
-    public static function getRequiredOnlinePercent(): float
-    {
-        $total = self::count();
-        $required = ceil($total * 0.66) + 1;
-        $percent = ($required / $total) * 100;
-
-        return round($percent, 1);
+        return [
+            'is_active' => 'boolean',
+        ];
     }
 
     //
@@ -58,24 +51,24 @@ class Orchestrator extends Model
 
     public function pillar(): BelongsTo
     {
-        return $this->belongsTo(Pillar::class, 'pillar_id', 'id');
+        return $this->belongsTo(Pillar::class);
     }
 
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'account_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
-        return $query->where('status', true);
+        return $query->where('is_active', true);
     }
 
-    public function scopeIsInactive($query)
+    public function scopeWhereInactive($query)
     {
-        return $query->where('status', false);
+        return $query->where('is_active', false);
     }
 }

@@ -1,13 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Chain extends Model
 {
-    use HasFactory;
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The table associated with the model.
@@ -17,18 +23,11 @@ class Chain extends Model
     protected $table = 'nom_chains';
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_identifier',
         'version',
         'name',
@@ -37,13 +36,24 @@ class Chain extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
+
+    public static function getCurrentChainId(): Chain
+    {
+        return self::first();
+    }
+
+    //
+    // Attributes
 
     //
     // Relations
@@ -51,17 +61,9 @@ class Chain extends Model
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('is_active');
-    }
-
-    //
-    // Attributes
-
-    public static function getCurrentChainId(): Chain
-    {
-        return self::first();
     }
 
     //

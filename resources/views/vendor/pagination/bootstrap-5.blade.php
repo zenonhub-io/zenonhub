@@ -1,12 +1,4 @@
-<nav class="d-md-flex justify-content-sm-between align-items-sm-center text-center">
-    <p class="small text-muted d-block mb-4 mb-md-0 text-nowrap">
-        <span class="font-medium">{{ number_format($paginator->firstItem()) }}</span>
-        {!! __('to') !!}
-        <span class="font-medium">{{ number_format($paginator->lastItem()) }}</span>
-        {!! __('of') !!}
-        <span class="font-medium">{{ number_format($paginator->total()) }}</span>
-        {!! __('results') !!}
-    </p>
+<div>
     @if ($paginator->hasPages())
         <ul class="pagination mod-pagination justify-content-center justify-content-md-end mb-0">
             @if ($paginator->onFirstPage())
@@ -57,5 +49,4 @@
             @endif
         </ul>
     @endif
-</nav>
-
+</div>

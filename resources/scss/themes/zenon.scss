@@ -1,0 +1,42 @@
+/**
+ * Theme: zenon
+ */
+
+// Variables
+@import "zenon/variables";
+@import "zenon/variables-dark";
+
+// Mixins
+@import "zenon/light";
+@import "zenon/dark";
+@import "zenon/styles";
+
+.theme-zenon {
+	@include zenon-styles;
+}
+
+[data-bs-theme="light"],
+:root:not([data-bs-theme="dark"]) {
+  .theme-zenon {
+    @include zenon-light;
+  }
+}
+
+// Dark theme (Auto)
+// Automatically enabled if user has Dark mode enabled
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-bs-theme]) {
+    .theme-zenon {
+      @include zenon-dark;
+    }
+  }
+}
+
+// Dark theme (Forced)
+// Enabled if forced with data-theme="dark"
+[data-bs-theme="dark"] {
+  .theme-zenon {
+    @include zenon-dark;
+  }
+}

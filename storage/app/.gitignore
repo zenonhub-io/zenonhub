@@ -1,4 +1,4 @@
 *
-!public/
-!exports/
+!/public/
+!/nom-json/
 !.gitignore

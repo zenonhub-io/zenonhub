@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Bots;
 
 use Illuminate\Notifications\Notifiable;
@@ -16,5 +18,15 @@ class NetworkAlertBot
             config('bots.network-alerts.twitter.access_token'),
             config('bots.network-alerts.twitter.access_token_secret'),
         ];
+    }
+
+    public function routeNotificationForTelegram(): string
+    {
+        return config('bots.network-alerts.telegram.chat');
+    }
+
+    public function routeNotificationForDiscordWebhook(): string
+    {
+        return config('bots.network-alerts.discord.webhook');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-// routes/breadcrumbs.php
+declare(strict_types=1);
 
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
@@ -137,10 +137,6 @@ Breadcrumbs::for('explorer.fusions', function (BreadcrumbTrail $trail) {
 
 //
 // Stats
-Breadcrumbs::for('stats', function (BreadcrumbTrail $trail) {
-    $trail->push('Stats', route('stats.overview'));
-});
-
 Breadcrumbs::for('stats.nodes', function (BreadcrumbTrail $trail) {
     $trail->parent('stats');
     $trail->push('Nodes', route('stats.nodes'));
@@ -158,11 +154,6 @@ Breadcrumbs::for('stats.bridge', function (BreadcrumbTrail $trail) {
 
 //
 // Tools
-Breadcrumbs::for('tools', function (BreadcrumbTrail $trail) {
-    //$trail->parent('home');
-    $trail->push('Tools', route('tools.overview'));
-});
-
 Breadcrumbs::for('tools.plasma-bot', function (BreadcrumbTrail $trail) {
     $trail->parent('tools');
     $trail->push('Plasma Bot', route('tools.plasma-bot'));
@@ -173,11 +164,6 @@ Breadcrumbs::for('tools.api-playground', function (BreadcrumbTrail $trail) {
     $trail->push('API Playground', route('tools.api-playground'));
 });
 
-Breadcrumbs::for('tools.broadcast-message', function (BreadcrumbTrail $trail) {
-    $trail->parent('tools');
-    $trail->push('Broadcast message', route('tools.broadcast-message'));
-});
-
 Breadcrumbs::for('tools.verify-signature', function (BreadcrumbTrail $trail) {
     $trail->parent('tools');
     $trail->push('Verify signature', route('tools.verify-signature'));
@@ -185,27 +171,7 @@ Breadcrumbs::for('tools.verify-signature', function (BreadcrumbTrail $trail) {
 
 //
 // Services
-Breadcrumbs::for('services', function (BreadcrumbTrail $trail) {
-    //$trail->parent('home');
-    $trail->push('Services', route('services.overview'));
-});
-
-Breadcrumbs::for('services.whale-alerts', function (BreadcrumbTrail $trail) {
-    $trail->parent('services');
-    $trail->push('Whale Alerts', route('services.whale-alerts'));
-});
-
-Breadcrumbs::for('services.bridge-alerts', function (BreadcrumbTrail $trail) {
-    $trail->parent('services');
-    $trail->push('Bridge Alerts', route('services.bridge-alerts'));
-});
-
 Breadcrumbs::for('services.public-nodes', function (BreadcrumbTrail $trail) {
     $trail->parent('services');
     $trail->push('Public Nodes', route('services.public-nodes'));
-});
-
-Breadcrumbs::for('services.plasma-bot', function (BreadcrumbTrail $trail) {
-    $trail->parent('services');
-    $trail->push('Plasma Bot', route('services.plasma-bot'));
 });

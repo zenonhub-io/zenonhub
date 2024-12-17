@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Str;
 
 return [
@@ -56,7 +58,7 @@ return [
 
     'prefix' => env(
         'HORIZON_PREFIX',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_horizon:'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'
     ),
 
     /*
@@ -180,7 +182,7 @@ return [
     */
 
     'defaults' => [
-        'queue-default' => [
+        'default' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
@@ -191,9 +193,20 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
-        'queue-indexer' => [
+        'indexer' => [
             'connection' => 'redis',
             'queue' => ['indexer'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 1,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
+        'blockProcessor' => [
+            'connection' => 'redis',
+            'queue' => ['blockProcessor'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,
@@ -206,11 +219,7 @@ return [
 
     'environments' => [
         'production' => [],
-        'staging' => [
-            'queue-default' => [
-                'maxProcesses' => 1,
-            ],
-        ],
+        'staging' => [],
         'local' => [],
     ],
 ];

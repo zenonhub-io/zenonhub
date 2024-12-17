@@ -1,163 +1,100 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Exceptions\ApplicationException;
-use App\Models\Nom\Momentum;
-use Illuminate\Support\Facades\App;
+use App\DataTransferObjects\BridgeStatusDTO;
+use App\Models\Nom\AccountBlock;
+use App\Models\Nom\BridgeAdmin;
+use App\Models\Nom\TimeChallenge;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class BridgeStatus
 {
-    protected $sdk;
-
-    protected ?object $bridgeInfoJson;
-
-    protected ?array $timeChallengesJson;
-
-    protected ?object $bridgeSecurityJson;
+    public BridgeStatusDTO $bridgeStatusDTO;
 
     public function __construct()
     {
-        $this->sdk = App::make(ZenonSdk::class);
-        $this->loadCaches();
+        $this->bridgeStatusDTO = Cache::get('nom.bridge-status');
     }
 
-    //
-    // Public
-
-    public function clearCache(): void
+    public function isBridgeOnline(): bool
     {
-        $bridgeInfoJson = $this->bridgeInfoJson;
-        $timeChallengesJson = $this->timeChallengesJson;
-        $bridgeSecurityJson = $this->bridgeSecurityJson;
-
-        try {
-            Cache::forget('service.bridgeStatus.bridgeInfoJson');
-            Cache::forget('service.bridgeStatus.timeChallengesJson');
-            Cache::forget('service.bridgeStatus.bridgeSecurityJson');
-            $this->loadCaches();
-        } catch (\Throwable $exception) {
-            Log::warning($exception->getMessage());
-            Cache::forever('service.bridgeStatus.bridgeInfoJson', $bridgeInfoJson);
-            Cache::forever('service.bridgeStatus.timeChallengesJson', $timeChallengesJson);
-            Cache::forever('service.bridgeStatus.bridgeSecurityJson', $bridgeSecurityJson);
-        }
+        return $this->bridgeStatusDTO->bridgeOnline;
     }
 
-    public function getAdministrator(): string
+    public function isOrchestratorsOnline(): bool
     {
-        return $this->bridgeInfoJson->administrator;
+        return $this->bridgeStatusDTO->orchestratorsOnline;
     }
 
-    public function getGuardians(): array
+    public function isKeyGenAllowed(): bool
     {
-        return $this->bridgeSecurityJson->guardians;
-    }
-
-    public function getIsHalted(): bool
-    {
-        if ($this->getEstimatedUnhaltMonemtum()) {
-            return true;
-        }
-
-        return $this->bridgeInfoJson->halted;
-    }
-
-    public function getEstimatedUnhaltMonemtum(): ?int
-    {
-        $adminUnhalted = $this->bridgeInfoJson->unhaltedAt;
-        $unhaltDelay = $this->bridgeInfoJson->unhaltDurationInMomentums;
-        $currentHeight = Momentum::max('height');
-        $unhaltAt = ($adminUnhalted + $unhaltDelay);
-        $unhaltIn = ($unhaltAt - $currentHeight);
-
-        if ($unhaltAt > $currentHeight && $unhaltIn > 0) {
-            return $unhaltIn;
-        }
-
-        return null;
-    }
-
-    public function getAllowKeygen(): bool
-    {
-        return $this->bridgeInfoJson->allowKeyGen;
+        return $this->bridgeStatusDTO->allowKeyGen;
     }
 
     public function getAdminDelay(): int
     {
-        return $this->bridgeSecurityJson->administratorDelay;
+        return config('nom.bridge.minAdministratorDelay');
     }
 
     public function getSoftDelay(): int
     {
-        return $this->bridgeSecurityJson->softDelay;
+        return config('nom.bridge.minSoftDelay');
     }
 
-    public function getTimeChallenges(): array
+    public function getUnhaltHeight(): ?int
     {
-        $activeChallenges = [];
-        $networkHeight = Momentum::max('height');
+        return $this->bridgeStatusDTO->estimatedUnhaltHeight;
+    }
 
-        foreach ($this->timeChallengesJson as $challenge) {
-            $startHeight = $challenge->ChallengeStartHeight;
-            $endHeight = $startHeight + $this->getSoftDelay();
+    public function getMomentumsToUnhalt(): ?int
+    {
+        return $this->bridgeStatusDTO->estimatedMomentumsUntilUnhalt;
+    }
 
-            $activeChallenges[] = [
-                'name' => $challenge->MethodName,
-                'isActive' => ($networkHeight < $endHeight),
-                'startHeight' => $startHeight,
-                'endHeight' => $endHeight,
-                'endsIn' => $endHeight - $networkHeight,
-            ];
+    public function getTimeTouUhalt(): ?Carbon
+    {
+        if (! $this->bridgeStatusDTO->estimatedMomentumsUntilUnhalt) {
+            return null;
         }
 
-        return $activeChallenges;
+        return now()->addSeconds($this->bridgeStatusDTO->estimatedMomentumsUntilUnhalt * 10);
     }
 
-    //
-    // Private
-
-    private function loadCaches(): void
+    public function getBridgeAdmin(): BridgeAdmin
     {
-        $this->bridgeInfoJson = Cache::rememberForever('service.bridgeStatus.bridgeInfoJson', function () {
-            return $this->getBridgeInfo();
-        });
-
-        $this->timeChallengesJson = Cache::rememberForever('service.bridgeStatus.timeChallengesJson', function () {
-            return $this->getBridgeTimeChallenges();
-        });
-
-        $this->bridgeSecurityJson = Cache::rememberForever('service.bridgeStatus.bridgeSecurityJson', function () {
-            return $this->getSecurityInfo();
-        });
+        return $this->bridgeStatusDTO->bridgeAdmin->load('account');
     }
 
-    protected function getBridgeInfo()
+    public function getBridgeGuardians(): Collection
     {
-        try {
-            return $this->sdk->bridge->getBridgeInfo()['data'];
-        } catch (\Throwable $exception) {
-            throw new ApplicationException('Unable to call getBridgeInfo');
-        }
+        return $this->bridgeStatusDTO->bridgeGuardians->map(fn ($guardian) => $guardian->load('account'));
     }
 
-    protected function getBridgeTimeChallenges()
+    public function getTimeChallenges(): Collection
     {
-        try {
-            return $this->sdk->bridge->getTimeChallengesInfo()['data']->list;
-        } catch (\Throwable $exception) {
-            throw new ApplicationException('Unable to call getTimeChallengesInfo');
-        }
+        return TimeChallenge::whereActive()
+            ->whereHas('contractMethod', function ($query) {
+                $query->whereRelation('contract', 'name', 'Bridge');
+            })
+            ->get();
     }
 
-    protected function getSecurityInfo()
+    public function getLatestTx(): AccountBlock
     {
-        try {
-            return $this->sdk->bridge->getSecurityInfo()['data'];
-        } catch (\Throwable $exception) {
-            throw new ApplicationException('Unable to call getSecurityInfo');
-        }
+        return AccountBlock::whereRelation('contractMethod.contract', 'name', 'Bridge')
+//            ->whereHas('contractMethod', function ($q) {
+//                $q->whereIn('name', [
+//                    'WrapToken',
+//                    'UpdateWrapRequest',
+//                    'UnwrapToken',
+//                ]);
+//            })
+            ->latest('id')
+            ->first();
     }
 }

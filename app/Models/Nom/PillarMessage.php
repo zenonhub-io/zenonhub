@@ -1,20 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Mail\Markdown;
+use Illuminate\Support\HtmlString;
 
 class PillarMessage extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_pillar_messages';
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -23,11 +19,18 @@ class PillarMessage extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_pillar_messages';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'pillar_id',
         'title',
         'post',
@@ -37,20 +40,23 @@ class PillarMessage extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
 
     //
     // Relations
 
     public function pillar(): BelongsTo
     {
-        return $this->belongsTo(Pillar::class, 'pillar_id', 'id');
+        return $this->belongsTo(Pillar::class);
     }
 
     //
@@ -68,7 +74,7 @@ class PillarMessage extends Model
     //
     // Attributes
 
-    public function getFormattedMessageAttribute()
+    public function getFormattedMessageAttribute(): HtmlString
     {
         $text = "```
 # Proof of Pillar

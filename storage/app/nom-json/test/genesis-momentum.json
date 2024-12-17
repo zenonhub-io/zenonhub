@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "chainIdentifier": 1,
+    "hash": "momentum00000000000000000000000000000000000000000000000000000001",
+    "previousHash": "momentum00000000000000000000000000000000000000000000000000000000",
+    "height": 1,
+    "timestamp": 1637755200,
+    "data": "",
+    "content": [],
+    "changesHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "publicKey": null,
+    "signature": null,
+    "producer": "z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod0"
+}

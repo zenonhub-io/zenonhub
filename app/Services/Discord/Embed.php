@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Discord;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -27,13 +29,11 @@ class Embed implements Arrayable
 
     public ?string $timestamp = null;
 
+    protected function __construct() {}
+
     public static function make(): Embed
     {
-        return new self();
-    }
-
-    protected function __construct()
-    {
+        return new self;
     }
 
     public function title(string $title, string $url = ''): Embed
@@ -123,15 +123,11 @@ class Embed implements Arrayable
                 'fields' => $this->serializeFields(),
                 'timestamp' => $this->timestamp,
             ],
-            static function ($value) {
-                return $value !== null && $value !== '' && $value !== [];
-            });
+            static fn ($value) => $value !== null && $value !== '' && $value !== []);
     }
 
     protected function serializeFields(): array
     {
-        return array_map(static function (Arrayable $field) {
-            return $field->toArray();
-        }, $this->fields ?? []);
+        return array_map(static fn (Arrayable $field) => $field->toArray(), $this->fields ?? []);
     }
 }

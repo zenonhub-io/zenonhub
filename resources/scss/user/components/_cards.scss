@@ -1,0 +1,6 @@
+.card-hover:not(.bg-transparent) {
+    transition: $card-transition;
+    &:hover {
+        transform: translateY(-.25rem);
+    }
+}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Discord;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -12,16 +14,16 @@ class EmbedField implements Arrayable
 
     public bool $inline;
 
-    public static function make(string $name = '', string $value = '', bool $inline = false): EmbedField
-    {
-        return new self($name, $value, $inline);
-    }
-
     protected function __construct(string $name, string $value, bool $inline = false)
     {
         $this->name = $name;
         $this->value = $value;
         $this->inline = $inline;
+    }
+
+    public static function make(string $name = '', string $value = '', bool $inline = false): EmbedField
+    {
+        return new self($name, $value, $inline);
     }
 
     public function name(string $name): EmbedField

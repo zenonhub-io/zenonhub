@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
+use Database\Factories\Nom\TokenMintFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,13 +15,6 @@ class TokenMint extends Model
     use HasFactory;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_token_mints';
-
-    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -25,11 +22,18 @@ class TokenMint extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_token_mints';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_id',
         'token_id',
         'issuer_id',
@@ -40,40 +44,51 @@ class TokenMint extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TokenMintFactory::new();
+    }
 
     //
     // Relations
 
     public function chain(): BelongsTo
     {
-        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+        return $this->belongsTo(Chain::class);
     }
 
     public function token(): BelongsTo
     {
-        return $this->belongsTo(Token::class, 'token_id', 'id');
+        return $this->belongsTo(Token::class);
     }
 
     public function issuer(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'issuer_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
     public function receiver(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'receiver_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
-    public function account_block(): BelongsTo
+    public function accountBlock(): BelongsTo
     {
-        return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+        return $this->belongsTo(AccountBlock::class);
     }
 
     //
@@ -82,8 +97,8 @@ class TokenMint extends Model
     //
     // Attributes
 
-    public function getDisplayAmountAttribute()
+    public function getDisplayAmountAttribute(): string
     {
-        return $this->token->getDisplayAmount($this->amount);
+        return $this->token->getFormattedAmount($this->amount);
     }
 }

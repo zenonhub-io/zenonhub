@@ -1,35 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\PlasmaBot;
 
+use App\Exceptions\PlasmaBotException;
+use App\Exceptions\ZenonCliException;
 use App\Models\PlasmaBotEntry;
-use App\Services\PlasmaBot;
+use App\Services\ZenonCli\ZenonCli;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\App;
-use Spatie\QueueableAction\QueueableAction;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class Fuse
 {
-    use QueueableAction;
+    use AsAction;
 
-    public function execute(
-        string $address,
-        int $amount,
-        ?Carbon $expires
-    ): bool {
-        $plasmaBot = App::make(PlasmaBot::class);
-        $result = $plasmaBot->fuse($address, $amount);
+    public function __construct(
+        private readonly ZenonCli $cli
+    ) {
+        $this->cli->setKeystore(config('services.plasma-bot.keystore'));
+        $this->cli->setPassphrase(config('services.plasma-bot.passphrase'));
+    }
 
-        if (! $result) {
-            return false;
+    /**
+     * @throws PlasmaBotException
+     */
+    public function handle(string $address, int $amount, ?Carbon $expires = null): void
+    {
+        try {
+            $this->cli->plasmaFuse($address, $amount);
+        } catch (ZenonCliException $e) {
+            throw new PlasmaBotException($e->getMessage());
         }
 
+        $account = load_account($address);
+
         PlasmaBotEntry::create([
-            'address' => $address,
+            'account_id' => $account->id,
             'amount' => $amount,
             'expires_at' => $expires,
         ]);
-
-        return true;
     }
 }

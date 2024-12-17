@@ -1,0 +1,47 @@
+@import '@webpixels/css/variables/colors';
+
+$min-contrast-ratio: 3;
+$prefix: x-;
+
+$white:     #FFF;
+$gray-50:   #f8fafc;
+$gray-100:  #f1f5f9;
+$gray-200:  #e2e8f0;
+$gray-300:  #cbd5e1;
+$gray-400:  #94a3b8;
+$gray-500:  #64748b;
+$gray-600:  #475569;
+$gray-700:  #334155; // Used for text color
+$gray-800:  #1e293b; // Used for headings color
+$gray-900:  #0f172a;
+
+// Theme colors
+$primary: 	$purple;
+$secondary: $orange;
+$tertiary: 	$lime;
+
+$success: 	$green;
+$info:      $cyan;
+$warning: 	$orange;
+$danger: 	$red;
+
+$light: 	lighten($gray-100, 1%);
+$dark: 		$gray-900;
+
+// Typography
+$font-display: 					        'Satoshi', sans-serif;
+$headings-font-family: 			        $font-display;
+$headings-font-weight: 			        600;
+
+// Navbar
+$navbar-nav-link-padding-x:             1rem;
+$navbar-nav-link-padding-y:             .375rem;
+
+$navbar-vertical-nav-link-padding-x:    1rem;
+$navbar-vertical-nav-link-padding-y:    .5rem;
+
+// Table
+$table-border-color: 	var(--#{$prefix}border-color);
+$table-light-th-bg: 	var(--#{$prefix}body-bg);
+$table-light-th-color: 	var(--#{$prefix}body-color);
+

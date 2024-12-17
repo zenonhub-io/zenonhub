@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\AccountCollection;
@@ -29,7 +31,7 @@ class Accounts extends ApiController
 
     public function find(Request $request, string $address)
     {
-        $account = Account::findByAddress($address);
+        $account = Account::firstWhere('address', $address);
 
         if (! $account) {
             return $this->error('Not found');
