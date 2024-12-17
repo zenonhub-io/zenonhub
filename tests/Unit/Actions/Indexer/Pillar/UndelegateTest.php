@@ -82,7 +82,7 @@ it('dispatches the account delegated event', function () {
 
 it('ensure only active delegations can be undelegated', function () {
 
-    $accountBlock = createDelegateAccountBlock();
+    $accountBlock = createUndelegateAccountBlock();
     $account = $accountBlock->account;
 
     $account->delegations()->attach(Pillar::first()->id, [
