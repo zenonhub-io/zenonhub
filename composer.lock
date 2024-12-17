@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e45a922d507ecc693389a2349aa56a50",
+    "content-hash": "5331357a31807f404826543b43155740",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -7535,16 +7535,16 @@
         },
         {
             "name": "rappasoft/laravel-livewire-tables",
-            "version": "v3.4.0",
+            "version": "v3.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rappasoft/laravel-livewire-tables.git",
-                "reference": "ea22d63410acd2cb1254ec23e3213914695a4d21"
+                "reference": "692d780ef56aba7ac4c57fde677c636a66024189"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rappasoft/laravel-livewire-tables/zipball/ea22d63410acd2cb1254ec23e3213914695a4d21",
-                "reference": "ea22d63410acd2cb1254ec23e3213914695a4d21",
+                "url": "https://api.github.com/repos/rappasoft/laravel-livewire-tables/zipball/692d780ef56aba7ac4c57fde677c636a66024189",
+                "reference": "692d780ef56aba7ac4c57fde677c636a66024189",
                 "shasum": ""
             },
             "require": {
@@ -7604,7 +7604,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rappasoft/laravel-livewire-tables/issues",
-                "source": "https://github.com/rappasoft/laravel-livewire-tables/tree/v3.4.0"
+                "source": "https://github.com/rappasoft/laravel-livewire-tables/tree/v3.5.10"
             },
             "funding": [
                 {
@@ -7612,7 +7612,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-04T04:03:35+00:00"
+            "time": "2024-12-11T01:58:37+00:00"
         },
         {
             "name": "revolt/event-loop",
