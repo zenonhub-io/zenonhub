@@ -91,7 +91,10 @@ class BridgeStatus
     {
         $total = Orchestrator::count();
         $online = Orchestrator::whereActive()->count();
-        $percent = ($online / $total) * 100;
+        $percent = 0;
+        if ($online > 0) {
+            $percent = ($online / $total) * 100;
+        }
 
         return round($percent, 1);
     }
