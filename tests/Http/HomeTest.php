@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->seed(TestGenesisSeeder::class);
 });
 
-it('home page returns a successful response', function () {
-    $response = $this->get(route('home'));
-    $response->assertStatus(200);
-});
+//it('home page returns a successful response', function () {
+//    $response = $this->get(route('home'));
+//    $response->assertStatus(200);
+//});

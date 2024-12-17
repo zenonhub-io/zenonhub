@@ -38,7 +38,10 @@ return new class extends Migration
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->nullable()->index();
 
-            $table->fullText('description');
+            if (! app()->environment('testing')) {
+                $table->fullText('description');
+            }
+
         });
 
         Schema::create('nom_accelerator_phases', function (Blueprint $table) {
@@ -63,7 +66,9 @@ return new class extends Migration
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->nullable()->index();
 
-            $table->fullText('description');
+            if (! app()->environment('testing')) {
+                $table->fullText('description');
+            }
         });
     }
 

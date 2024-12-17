@@ -31,6 +31,7 @@ it('updates an accounts current balance', function () {
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
@@ -56,6 +57,7 @@ it('updates an accounts current znn balance', function () {
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
@@ -76,6 +78,7 @@ it('updates an accounts znn send and received totals', function () {
     AccountBlock::factory()->count(3)->create([
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'token_id' => $token->id,
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
@@ -83,6 +86,7 @@ it('updates an accounts znn send and received totals', function () {
     AccountBlock::factory()->count(2)->create([
         'account_id' => $receiver->id,
         'to_account_id' => $sender->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'token_id' => $token->id,
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
@@ -107,6 +111,7 @@ it('updates an accounts current qsr balance', function () {
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
@@ -128,6 +133,7 @@ it('updates an accounts qsr send and received totals', function () {
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
@@ -135,6 +141,7 @@ it('updates an accounts qsr send and received totals', function () {
         'account_id' => $receiver->id,
         'to_account_id' => $sender->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
@@ -160,6 +167,7 @@ it('accounts for an addresses genesis znn balance', function () {
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
@@ -183,6 +191,7 @@ it('accounts for an addresses genesis qsr balance', function () {
         'account_id' => $sender->id,
         'to_account_id' => $receiver->id,
         'token_id' => $token->id,
+        'paired_account_block_id' => AccountBlock::factory(),
         'amount' => (string) (1 * NOM_DECIMALS),
     ]);
 
