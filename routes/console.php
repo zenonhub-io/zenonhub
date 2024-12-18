@@ -25,10 +25,10 @@ Artisan::command('site:after-deploy', function () {
     //Artisan::call('site:generate-sitemap');
 })->purpose('Resets all NoM data back to genesis');
 
-Schedule::command('indexer:run')
-    ->everyTenSeconds()
-    ->withoutOverlapping(3)
-    ->runInBackground();
+//Schedule::command('indexer:run')
+//    ->everyTenSeconds()
+//    ->withoutOverlapping(3)
+//    ->runInBackground();
 
 Schedule::call(function () {
     App\Actions\Sync\BridgeStatus::run();
