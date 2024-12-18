@@ -38,11 +38,6 @@ class Indexer
 
     public function run(): void
     {
-        $lock = Cache::lock('indexerLock', 0, 'indexer');
-        $emergencyLock = Cache::lock('indexerEmergencyLock', 0, 'indexer');
-        $lock->release();
-        $emergencyLock->release();
-
         $this->setCurrentHeight();
 
         if (! $momentum = $this->loadFrontierMomentum()) {
