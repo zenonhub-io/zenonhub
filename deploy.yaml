@@ -18,29 +18,12 @@ tasks:
     - artisan:event:cache
     - artisan:route:cache
     - artisan:view:cache
-    - artisan:nom:update-contract-methods
-    - artisan:nom:update-named-addresses
-    - artisan:sync:orchestrators
-    - artisan:sync:pillar-metrics
-    - artisan:sync:public-nodes
-    - artisan:sync:bridge-status
+    - artisan:site:after-deploy
     - artisan:up
   artisan:schedule:interrupt:
     - run: '{{bin/php}} {{release_or_current_path}}/artisan schedule:interrupt'
-  artisan:nom:update-contract-methods:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-contract-methods'
-  artisan:nom:update-named-addresses:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan nom:update-named-addresses'
-  artisan:sync:bridge-status:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:bridge-status'
-  artisan:sync:orchestrators:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:orchestrators'
-  artisan:sync:public-nodes:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:public-nodes'
-  artisan:sync:pillar-metrics:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan sync:pillar-metrics'
-  artisan:site:generate-sitemap:
-    - run: '{{bin/php}} {{release_or_current_path}}/artisan site:generate-sitemap'
+  artisan:site:after-deploy:
+    - run: '{{bin/php}} {{release_or_current_path}}/artisan site:after-deploy'
   npx:build:production:
     - run: 'cd {{release_or_current_path}} && npm ci && npm run build'
   npx:build:cleanup:
