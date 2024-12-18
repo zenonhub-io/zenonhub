@@ -15,6 +15,16 @@ Artisan::command('nom:reset-db', function () {
     Artisan::call('db:seed --class=GenesisSeeder');
 })->purpose('Resets all NoM data back to genesis');
 
+Artisan::command('site:after-deploy', function () {
+    Artisan::call('nom:update-contract-methods');
+    Artisan::call('nom:update-named-addresses');
+    Artisan::call('sync:orchestrators');
+    Artisan::call('sync:bridge-status');
+    Artisan::call('sync:public-nodes');
+    //Artisan::call('sync:pillar-metrics');
+    //Artisan::call('site:generate-sitemap');
+})->purpose('Resets all NoM data back to genesis');
+
 Schedule::command('indexer:run')
     ->everyTenSeconds()
     ->withoutOverlapping(3)
