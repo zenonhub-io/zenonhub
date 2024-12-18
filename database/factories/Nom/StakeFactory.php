@@ -28,7 +28,7 @@ class StakeFactory extends Factory
             'account_id' => Account::factory(),
             'token_id' => load_token(NetworkTokensEnum::ZNN->value),
             'account_block_id' => AccountBlock::factory(),
-            'amount' => (string) (1 * NOM_DECIMALS),
+            'amount' => (string) (1 * config('nom.decimals')),
             'duration' => '31104000',
             'hash' => fn (array $attributes) => AccountBlock::find($attributes['account_block_id'])->hash,
             'started_at' => fn (array $attributes) => AccountBlock::find($attributes['account_block_id'])->created_at,

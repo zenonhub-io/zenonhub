@@ -29,7 +29,7 @@ class PillarFactory extends Factory
             'rank' => Pillar::max('rank') + 1,
             'name' => fake()->word(),
             'slug' => fn (array $attributes) => Str::slug($attributes['name']),
-            'qsr_burn' => Pillar::max('qsr_burn') + (10000 * NOM_DECIMALS),
+            'qsr_burn' => Pillar::max('qsr_burn') + (10000 * config('nom.decimals')),
             'momentum_rewards' => 0,
             'delegate_rewards' => 0,
             'is_legacy' => 0,
@@ -41,7 +41,7 @@ class PillarFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'qsr_burn' => 150000 * NOM_DECIMALS,
+                'qsr_burn' => 150000 * config('nom.decimals'),
                 'is_legacy' => 1,
             ];
         });

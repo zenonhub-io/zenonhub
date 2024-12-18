@@ -31,7 +31,7 @@ class BridgeUnwrapFactory extends Factory
             'from_address' => '0x' . bin2hex(random_bytes(20)),
             'transaction_hash' => '0x' . bin2hex(random_bytes(32)),
             'log_index' => 1,
-            'amount' => fake()->randomDigit() * NOM_DECIMALS,
+            'amount' => fake()->randomDigit() * config('nom.decimals'),
             'created_at' => now(),
             'updated_at' => now(),
         ];

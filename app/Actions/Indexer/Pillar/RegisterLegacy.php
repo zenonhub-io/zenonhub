@@ -42,7 +42,7 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         ], [
             'producer_account_id' => load_account($blockData['producerAddress'])->id,
             'withdraw_account_id' => load_account(($blockData['withdrawAddress'] ?? $blockData['rewardAddress']))->id,
-            'qsr_burn' => 150000 * NOM_DECIMALS,
+            'qsr_burn' => 150000 * config('nom.decimals'),
             'momentum_rewards' => $blockData['giveBlockRewardPercentage'],
             'delegate_rewards' => $blockData['giveDelegateRewardPercentage'],
             'is_legacy' => true,

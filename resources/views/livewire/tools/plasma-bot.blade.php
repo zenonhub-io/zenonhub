@@ -47,7 +47,7 @@
 
     <hr class="mb-6">
 
-    @if ($account->qsr_balance > 200 * NOM_DECIMALS)
+    @if ($account->qsr_balance > 200 * config('nom.decimals'))
         <div class="row">
             <div class="col-lg-16">
                 <div class="w-100" wire:loading.delay>

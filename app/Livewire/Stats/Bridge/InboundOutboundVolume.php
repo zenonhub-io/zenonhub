@@ -113,10 +113,10 @@ class InboundOutboundVolume extends Component
                 $title = $date->format('jS M');
             }
 
-            $data = $query->selectRaw('CAST(SUM(unwrapped_amount) AS INTEGER) as inbound_amount')
-                ->selectRaw('CAST(SUM(wrapped_amount) AS INTEGER) as outbound_amount')
-                ->selectRaw('CAST(SUM(unwrap_tx) AS INTEGER) as inbound_tx')
-                ->selectRaw('CAST(SUM(wrap_tx) AS INTEGER) as outbound_tx')
+            $data = $query->selectRaw('CAST(SUM(unwrapped_amount) AS SIGNED) as inbound_amount')
+                ->selectRaw('CAST(SUM(wrapped_amount) AS SIGNED) as outbound_amount')
+                ->selectRaw('CAST(SUM(unwrap_tx) AS SIGNED) as inbound_tx')
+                ->selectRaw('CAST(SUM(wrap_tx) AS SIGNED) as outbound_tx')
                 ->groupBy('token_id')
                 ->first();
 

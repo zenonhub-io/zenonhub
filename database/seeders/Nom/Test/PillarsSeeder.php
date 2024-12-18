@@ -40,7 +40,7 @@ class PillarsSeeder extends Seeder
                 'withdraw_account_id' => $withdraw->id,
                 'name' => $pillarDTO->name,
                 'slug' => Str::slug($pillarDTO->name),
-                'qsr_burn' => 150000 * NOM_DECIMALS,
+                'qsr_burn' => 150000 * config('nom.decimals'),
                 'weight' => 0,
                 'produced_momentums' => 0,
                 'expected_momentums' => 0,

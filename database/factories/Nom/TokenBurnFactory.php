@@ -27,7 +27,7 @@ class TokenBurnFactory extends Factory
             'token_id' => Token::factory()->create(),
             'account_id' => Account::factory()->create(),
             'account_block_id' => AccountBlock::factory()->create(),
-            'amount' => 100 * NOM_DECIMALS,
+            'amount' => 100 * config('nom.decimals'),
             'created_at' => now(),
         ];
     }

@@ -31,8 +31,8 @@ class AcceleratorPhaseFactory extends Factory
             'description' => fake()->paragraph(),
             'status' => AcceleratorPhaseStatusEnum::OPEN,
             'phase_number' => fn (array $attributes) => AcceleratorPhase::where('project_id', $attributes['project_id'])->max('phase_number') + 1,
-            'znn_requested' => (string) (5000 * NOM_DECIMALS),
-            'qsr_requested' => (string) (50000 * NOM_DECIMALS),
+            'znn_requested' => (string) (5000 * config('nom.decimals')),
+            'qsr_requested' => (string) (50000 * config('nom.decimals')),
             'created_at' => now(),
         ];
     }

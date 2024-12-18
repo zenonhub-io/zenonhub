@@ -29,7 +29,7 @@ class BridgeWrapFactory extends Factory
             'token_id' => Token::factory(),
             'account_block_id' => AccountBlock::factory(),
             'to_address' => '0x' . bin2hex(random_bytes(20)),
-            'amount' => fake()->randomDigit() * NOM_DECIMALS,
+            'amount' => fake()->randomDigit() * config('nom.decimals'),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -30,7 +30,7 @@
             @endif
 
             @foreach(range(1, $paginator->lastPage()) as $page)
-                @if($page >= $paginator->currentPage() - 2 && $page <= $paginator->currentPage() + 2)
+                @if($page >= $paginator->currentPage() - 1 && $page <= $paginator->currentPage() + 1)
                     @if ($page == $paginator->currentPage())
                         <li class="page-item active" wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}" aria-current="page">
                             <span class="page-link">{{ number_format($page) }}</span>

@@ -29,7 +29,7 @@ class PillarDelegators extends BaseTable
             ->select(
                 'nom_accounts.*',
                 'nom_delegations.started_at as delegation_started_at',
-                DB::raw('CAST(znn_balance AS INTEGER) as formatted_znn_balance')
+                DB::raw('CAST(znn_balance AS SIGNED) as formatted_znn_balance')
             )
             ->getQuery();
     }
@@ -50,14 +50,14 @@ class PillarDelegators extends BaseTable
                 ),
             Column::make('Weight')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $row->display_znn_balance
                 ),
             Column::make('Share')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $row->display_delegation_percentage_share . '%'
