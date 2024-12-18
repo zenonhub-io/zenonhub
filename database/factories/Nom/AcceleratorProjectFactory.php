@@ -31,8 +31,8 @@ class AcceleratorProjectFactory extends Factory
             'url' => fake()->url(),
             'description' => fake()->paragraph(),
             'status' => AcceleratorProjectStatusEnum::NEW,
-            'znn_requested' => (string) (5000 * NOM_DECIMALS),
-            'qsr_requested' => (string) (50000 * NOM_DECIMALS),
+            'znn_requested' => (string) (5000 * config('nom.decimals')),
+            'qsr_requested' => (string) (50000 * config('nom.decimals')),
             'created_at' => now(),
         ];
     }

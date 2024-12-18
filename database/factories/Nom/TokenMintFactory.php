@@ -28,7 +28,7 @@ class TokenMintFactory extends Factory
             'issuer_id' => Account::factory()->create(),
             'receiver_id' => Account::factory()->create(),
             'account_block_id' => AccountBlock::factory()->create(),
-            'amount' => 100 * NOM_DECIMALS,
+            'amount' => 100 * config('nom.decimals'),
             'created_at' => now(),
         ];
     }

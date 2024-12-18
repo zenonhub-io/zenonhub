@@ -35,7 +35,7 @@ class StakesList extends BaseTable
             Column::make('ID', 'id')->hideIf(true),
             Column::make('Amount')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => app('znnToken')->getFormattedAmount($row->amount) . ' ZNN'

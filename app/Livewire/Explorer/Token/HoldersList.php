@@ -25,7 +25,7 @@ class HoldersList extends BaseTable
     public function builder(): Builder
     {
         return Token::find($this->tokenId)?->holders()
-            ->select('*', DB::raw('CAST(balance AS INTEGER) as formatted_balance'))
+            ->select('*', DB::raw('CAST(balance AS SIGNED) as formatted_balance'))
             ->wherePivot('balance', '>', 0)
             ->getQuery();
     }
@@ -46,14 +46,14 @@ class HoldersList extends BaseTable
                 ),
             Column::make('Balance')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $token->getFormattedAmount($row->balance)
                 ),
             Column::make('Share')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $row->tokenBalanceShare($token)

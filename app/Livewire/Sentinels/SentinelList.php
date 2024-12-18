@@ -44,14 +44,14 @@ class SentinelList extends BaseTable
                 ),
             Column::make('ZNN Balance', 'owner.znn_balance')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(owner.znn_balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(owner.znn_balance AS SIGNED) ' . $direction)
                 )
                 ->format(
                     fn ($value, $row, Column $column) => $row->owner->display_znn_balance
                 ),
             Column::make('QSR Balance', 'owner.qsr_balance')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(owner.qsr_balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(owner.qsr_balance AS SIGNED) ' . $direction)
                 )
                 ->format(
                     fn ($value, $row, Column $column) => $row->owner->display_qsr_balance

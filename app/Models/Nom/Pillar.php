@@ -235,7 +235,7 @@ class Pillar extends Model implements Sitemapable
     {
         $weight = $this->weight;
 
-        if ($weight < 1 * NOM_DECIMALS) {
+        if ($weight < 1 * config('nom.decimals')) {
             return (string) $weight;
         }
 

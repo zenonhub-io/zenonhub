@@ -106,8 +106,8 @@ class AccountBlockInsertedListener
             return;
         }
 
-        $znnValue = config('bots.whale-alerts.settings.znn_cutoff') * NOM_DECIMALS;
-        $qsrValue = config('bots.whale-alerts.settings.qsr_cutoff') * NOM_DECIMALS;
+        $znnValue = config('bots.whale-alerts.settings.znn_cutoff') * config('nom.decimals');
+        $qsrValue = config('bots.whale-alerts.settings.qsr_cutoff') * config('nom.decimals');
 
         if (! $accountBlock->token) {
             return;

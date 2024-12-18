@@ -26,7 +26,7 @@ class TokensList extends BaseTable
         return Account::find($this->accountId)?->tokens()
             ->withPivot(['balance', 'updated_at'])
             ->select('*')
-            ->selectRaw('CAST(balance AS INTEGER) / POWER(10, decimals) as sort_balance')
+            ->selectRaw('CAST(balance AS SIGNED) / POWER(10, decimals) as sort_balance')
             ->where('balance', '>', '0')
             ->getQuery();
     }
@@ -45,14 +45,14 @@ class TokensList extends BaseTable
                 ),
             Column::make('Amount')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) / POWER(10, decimals) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS SIGNED) / POWER(10, decimals) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $row->getFormattedAmount($row->balance)
                 ),
             Column::make('Share')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS INTEGER) / POWER(10, decimals) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(balance AS SIGNED) / POWER(10, decimals) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => Account::find($this->accountId)?->tokenBalanceShare($row)

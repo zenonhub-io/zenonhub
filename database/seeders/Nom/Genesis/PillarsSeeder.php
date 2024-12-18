@@ -32,7 +32,7 @@ class PillarsSeeder extends Seeder
                 'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
                 'name' => $pillarData['Name'],
                 'slug' => Str::slug($pillarData['Name']),
-                'qsr_burn' => 150000 * NOM_DECIMALS,
+                'qsr_burn' => 150000 * config('nom.decimals'),
                 'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],
                 'delegate_rewards' => $pillarData['GiveDelegateRewardPercentage'],
                 'is_legacy' => 1,

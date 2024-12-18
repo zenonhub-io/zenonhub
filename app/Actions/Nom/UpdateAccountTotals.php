@@ -76,12 +76,12 @@ class UpdateAccountTotals implements ShouldBeUnique
         $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
 
             $sent = $this->account->sentBlocks()
-                ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
+                ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
                 ->where('token_id', $tokenId)
                 ->first()->total;
 
             $received = $this->account->receivedBlocks()
-                ->selectRaw('CAST(SUM(amount) AS INTEGER) as total')
+                ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
                 ->where('token_id', $tokenId)
                 ->whereNotNull('paired_account_block_id')
                 ->first()->total;
@@ -97,7 +97,7 @@ class UpdateAccountTotals implements ShouldBeUnique
                     // Token contract holds 1 znn per token created
                     // Subtract two for the existing ZNN and QSR tokens
                     $tokensCreated = Token::count() - 2;
-                    $balance = $tokensCreated * NOM_DECIMALS;
+                    $balance = $tokensCreated * config('nom.decimals');
                 }
             }
 

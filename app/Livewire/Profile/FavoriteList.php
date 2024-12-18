@@ -25,8 +25,8 @@ class FavoriteList extends BaseTable
         $query = Account::with('firstBlock', 'latestBlock')
             ->select(
                 '*',
-                DB::raw('CAST(znn_balance AS INTEGER) as formatted_znn_balance'),
-                DB::raw('CAST(qsr_balance AS INTEGER) as formatted_qsr_balance'),
+                DB::raw('CAST(znn_balance AS SIGNED) as formatted_znn_balance'),
+                DB::raw('CAST(qsr_balance AS SIGNED) as formatted_qsr_balance'),
             )
             ->withCount('sentBlocks');
 
@@ -54,14 +54,14 @@ class FavoriteList extends BaseTable
                 ),
             Column::make('ZNN')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $znnToken->getFormattedAmount($row->znn_balance)
                 ),
             Column::make('QSR')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(qsr_balance AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(qsr_balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $qsrToken->getFormattedAmount($row->qsr_balance)

@@ -42,7 +42,7 @@ class RewardsList extends BaseTable
                 ),
             Column::make('Amount')
                 ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS INTEGER) ' . $direction)
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $row->token?->getFormattedAmount($row->amount)
