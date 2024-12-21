@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
-use App\Actions\Nom\ProcessBlockRewards;
 use App\Actions\Nom\ProcessLiquidityProgramRewards;
 use App\Actions\Nom\UpdateAccountTotals;
 use App\Bots\BridgeAlertBot;
@@ -33,7 +32,6 @@ class AccountBlockInsertedListener
         $this->dispatchContractMethodProcessor($accountBlock);
         $this->dispatchAccountTotalsProcessor($accountBlock->account);
         $this->dispatchAccountTotalsProcessor($accountBlock->toAccount);
-        $this->dispatchBlockRewardProcessor($accountBlock);
         $this->dispatchLiquidityProgramProcessor($accountBlock);
         $this->dispatchWhaleAlerts($accountBlock);
         $this->dispatchBridgeAlerts($accountBlock);
@@ -72,19 +70,6 @@ class AccountBlockInsertedListener
 
         UpdateAccountTotals::dispatch($account)
             ->delay($delay->diffInSeconds(now()));
-    }
-
-    private function dispatchBlockRewardProcessor(AccountBlock $accountBlock): void
-    {
-        if (! $accountBlock->parent || ! $accountBlock->contractMethod) {
-            return;
-        }
-
-        if ($accountBlock->contractMethod->name !== 'Mint' || $accountBlock->contractMethod->contract->name !== 'Token') {
-            return;
-        }
-
-        ProcessBlockRewards::dispatch($accountBlock);
     }
 
     private function dispatchLiquidityProgramProcessor(AccountBlock $accountBlock): void

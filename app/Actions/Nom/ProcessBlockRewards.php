@@ -6,8 +6,8 @@ namespace App\Actions\Nom;
 
 use App\Enums\Nom\AccountRewardTypesEnum;
 use App\Enums\Nom\EmbeddedContractsEnum;
-use App\Models\Nom\AccountBlock;
 use App\Models\Nom\AccountReward;
+use App\Models\Nom\TokenMint;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +21,11 @@ class ProcessBlockRewards
 
     public string $commandSignature = 'nom:process-rewards';
 
-    public function handle(AccountBlock $accountBlock): void
+    public function handle(TokenMint $mint): void
     {
-        $blockData = $accountBlock->data->decoded;
-        $token = load_token($blockData['tokenStandard']);
-        $rewardReceiver = load_account($blockData['receiveAddress']);
+        $mint->loadMissing('accountBlock', 'token', 'issuer', 'receiver');
+        $token = $mint->token;
+        $rewardReceiver = $mint->receiver;
 
         if ($rewardReceiver->address === EmbeddedContractsEnum::LIQUIDITY->value) {
             return;
@@ -40,20 +40,20 @@ class ProcessBlockRewards
                 : AccountRewardTypesEnum::DELEGATE->value,
         ];
 
-        $rewardType = $rewardMapping[$accountBlock->account->address] ?? null;
+        $rewardType = $rewardMapping[$mint->issuer->address] ?? null;
 
         if (! $rewardType) {
             return;
         }
 
         AccountReward::create([
-            'chain_id' => $accountBlock->chain_id,
-            'account_block_id' => $accountBlock->id,
+            'chain_id' => $mint->chain_id,
+            'account_block_id' => $mint->accountBlock->id,
             'account_id' => $rewardReceiver->id,
             'token_id' => $token->id,
             'type' => $rewardType,
-            'amount' => $blockData['amount'],
-            'created_at' => $accountBlock->created_at,
+            'amount' => $mint->amount,
+            'created_at' => $mint->accountBlock->created_at,
         ]);
     }
 
@@ -61,17 +61,15 @@ class ProcessBlockRewards
     {
         DB::table('nom_account_rewards')->truncate();
 
-        $query = AccountBlock::with('data', 'account')
-            ->whereHas('parent')
-            ->whereRelation('contractMethod', 'name', 'Mint');
+        $query = TokenMint::with('accountBlock', 'token', 'receiver');
 
         $totalBlocks = $query->count();
         $progressBar = new ProgressBar(new ConsoleOutput, $totalBlocks);
         $progressBar->start();
 
-        $query->chunk(1000, function (Collection $blocks) use ($progressBar) {
-            $blocks->each(function ($block) use ($progressBar) {
-                $this->handle($block);
+        $query->chunk(1000, function (Collection $mints) use ($progressBar) {
+            $mints->each(function ($mint) use ($progressBar) {
+                $this->handle($mint);
                 $progressBar->advance();
             });
         });
