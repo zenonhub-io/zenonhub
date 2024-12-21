@@ -11,14 +11,10 @@
         @vite(['resources/scss/app.scss', 'resources/scss/utility.scss', 'resources/js/app.js'])
         @livewireStyles
         @livewireScriptConfig
-
-        <!-- 3rd Party Scripts & Styles -->
-        @rappasoftTableStyles
-        @rappasoftTableScripts
         @livewireChartsScripts
-
         @stack('styles')
 
+        <!-- GA Tracking -->
         @if (app()->isProduction())
             <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('zenon-hub.google_analytics_id') }}"></script>
             <script>

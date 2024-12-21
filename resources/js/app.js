@@ -5,7 +5,7 @@ import {docReady} from "./helpers.js";
 import Core from "./core.js";
 import Modals from "./modals.js";
 import Offcanvas from "./offcanvas.js";
-//import '../../vendor/rappasoft/laravel-livewire-tables/resources/imports/laravel-livewire-tables.js';
+import '../../vendor/rappasoft/laravel-livewire-tables/resources/imports/laravel-livewire-tables.js';
 //import '../../vendor/asantibanez/livewire-charts/resources/js/app.js';
 
 window.Alpine = Alpine
