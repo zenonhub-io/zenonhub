@@ -23,7 +23,7 @@ class IndexContract
 
     public function handle(Contract $contract): void
     {
-        $blockCount = AccountBlock::whereRelation('contractMethod.contract', 'name', $contract->name)->count();
+        $blockCount = AccountBlock::whereRelation('contractMethod', 'contract_id', $contract->id)->count();
 
         $progressBar = new ProgressBar(new ConsoleOutput, $blockCount);
         $progressBar->start();
@@ -56,7 +56,7 @@ class IndexContract
             0
         );
 
-        $contract = Contract::where('name', $contractName)->sole();
+        $contract = Contract::firstWhere('name', $contractName);
 
         $this->handle($contract);
     }
