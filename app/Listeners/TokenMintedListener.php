@@ -19,7 +19,7 @@ class TokenMintedListener
      */
     public function handle(AccountBlock $accountBlock, TokenMint $tokenMint): void
     {
-        $this->dispatchBlockRewardProcessor($accountBlock, $tokenMint);
+        $this->dispatchBlockRewardProcessor($tokenMint);
     }
 
     public function asListener(TokenMinted $tokenMintedEvent): void
@@ -27,12 +27,12 @@ class TokenMintedListener
         $this->handle($tokenMintedEvent->accountBlock, $tokenMintedEvent->tokenMint);
     }
 
-    private function dispatchBlockRewardProcessor(AccountBlock $accountBlock, TokenMint $tokenMint): void
+    private function dispatchBlockRewardProcessor(TokenMint $tokenMint): void
     {
         //        if (! $accountBlock->parent || $accountBlock->parent->pairedAccountBlock->contractMethod->name !== 'CollectReward') {
         //            return;
         //        }
 
-        ProcessBlockRewards::dispatch($accountBlock);
+        ProcessBlockRewards::dispatch($tokenMint);
     }
 }

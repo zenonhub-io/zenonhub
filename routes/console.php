@@ -14,6 +14,7 @@ Artisan::command('nom:reset-db', function () {
     Artisan::call('db:seed --class=DatabaseSeeder');
     Artisan::call('db:seed --class=NomSeeder');
     Artisan::call('db:seed --class=GenesisSeeder');
+    Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
 })->purpose('Resets all NoM data back to genesis');
 
 Artisan::command('site:after-deploy', function () {
@@ -22,7 +23,7 @@ Artisan::command('site:after-deploy', function () {
     Artisan::call('sync:orchestrators');
     Artisan::call('sync:bridge-status');
     Artisan::call('sync:public-nodes');
-    //Artisan::call('sync:pillar-metrics');
+    Artisan::call('sync:pillar-metrics');
     //Artisan::call('site:generate-sitemap');
 })->purpose('Sets up the site after a deploy');
 
@@ -33,10 +34,10 @@ Artisan::command('indexer:remove-locks', function () {
     $emergencyLock->release();
 });
 
-//Schedule::command('indexer:run')
-//    ->everyTenSeconds()
-//    ->withoutOverlapping(3)
-//    ->runInBackground();
+Schedule::command('indexer:run')
+    ->everyTenSeconds()
+    ->withoutOverlapping(3)
+    ->runInBackground();
 
 Schedule::call(function () {
     App\Actions\Sync\BridgeStatus::run();
