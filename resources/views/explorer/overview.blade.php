@@ -61,10 +61,10 @@
         </div>
         <div class="row mb-6 gy-6">
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.momentums-latest lazy wire:poll.10s />
+                <livewire:explorer.overview.momentums-latest lazy />
             </div>
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.transactions-latest lazy wire:poll.10s />
+                <livewire:explorer.overview.transactions-latest lazy />
             </div>
         </div>
     </div>
