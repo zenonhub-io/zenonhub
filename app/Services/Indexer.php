@@ -113,19 +113,24 @@ class Indexer
 
     private function obtainLock(): ?Lock
     {
-        $lock = Cache::lock('indexerLock', 0, 'indexer');
         $emergencyLock = Cache::lock('indexerEmergencyLock', 0, 'indexer');
 
-        if (! $lock->get() || ! $emergencyLock->get()) {
-            Log::debug('Indexer - Locked', [
-                'lock' => $lock->get(),
-                'emergency' => $emergencyLock->get(),
-            ]);
+        // If the emergency lock is active, stop immediately
+        if (! $emergencyLock->get()) {
+            Log::debug('Indexer - Emergency lock active, operation aborted.');
 
             return null;
         }
 
-        return $lock;
+        $regularLock = Cache::lock('indexerLock', 0, 'indexer');
+
+        if (! $regularLock->get()) {
+            Log::debug('Indexer - Regular lock active, process already running.');
+
+            return null;
+        }
+
+        return $regularLock;
     }
 
     private function initProgressBar(int $total): ?ProgressBar
