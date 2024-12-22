@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.10s>
     <x-cards.card>
         <x-cards.heading class="d-flex align-items-center">
             <h4 class="card-title flex-grow-1 mb-0">
