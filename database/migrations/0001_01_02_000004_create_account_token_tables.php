@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('balance')->default(0)->index();
             $table->timestamp('updated_at')->index();
 
-            $table->index(['account_id', 'token_id'], 'account_token_id');
+            $table->unique(['account_id', 'token_id'], 'unique_account_token_id');
+            $table->index(['account_id', 'token_id', 'balance'], 'account_token_balance_id');
         });
 
         Schema::create('nom_account_rewards', function (Blueprint $table) {

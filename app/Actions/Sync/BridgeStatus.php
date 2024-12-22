@@ -60,8 +60,8 @@ class BridgeStatus
         $estimatedUnhaltHeight = $this->getEstimatedUnhaltHeight($bridgeInfo->unhaltedAt, $bridgeInfo->unhaltDurationInMomentums);
         $estimatedMomentumsUntilUnhalt = $this->getEstimatedMomentumsUntilUnhalt($estimatedUnhaltHeight);
         $bridgeOnline = $this->getBridgeOnline($bridgeInfo->halted, $estimatedUnhaltHeight);
-        $pendingIncomingTx = $this->getPendingIncomingTx();
-        $pendingOutgoingTx = $this->getPendingOutgoingTx();
+        //$pendingIncomingTx = $this->getPendingIncomingTx();
+        //$pendingOutgoingTx = $this->getPendingOutgoingTx();
 
         return BridgeStatusDTO::from([
             'bridgeOnline' => $bridgeOnline,
@@ -76,8 +76,8 @@ class BridgeStatus
             'unhaltDurationInMomentums' => $bridgeInfo->unhaltDurationInMomentums,
             'estimatedUnhaltHeight' => $estimatedUnhaltHeight,
             'estimatedMomentumsUntilUnhalt' => $estimatedMomentumsUntilUnhalt,
-            'pendingIncomingTx' => $pendingIncomingTx,
-            'pendingOutgoingTx' => $pendingOutgoingTx,
+            //'pendingIncomingTx' => $pendingIncomingTx,
+            //'pendingOutgoingTx' => $pendingOutgoingTx,
             'allowKeyGen' => $bridgeInfo->allowKeyGen,
             'compressedTssECDSAPubKey' => $bridgeInfo->compressedTssECDSAPubKey,
             'decompressedTssECDSAPubKey' => $bridgeInfo->decompressedTssECDSAPubKey,

@@ -182,14 +182,14 @@
                                 @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Funded by')">
-                                @if($account->fundingBlock)
+                                @if(! $account->is_embedded_contract && $account->fundingBlock)
                                     <x-address :account="$account->fundingBlock->account" :always-short="true" :copyable="true" />
                                 @else
                                     -
                                 @endif
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Funding Tx')">
-                                @if($account->fundingBlock)
+                                @if(! $account->is_embedded_contract && $account->fundingBlock)
                                     <x-hash :hash="$account->fundingBlock->hash" :always-short="true" :copyable="true" :link="route('explorer.transaction.detail', ['hash' => $account->fundingBlock->hash])" />
                                 @else
                                     -

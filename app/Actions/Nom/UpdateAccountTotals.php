@@ -10,6 +10,7 @@ use App\Models\Nom\Token;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -34,15 +35,19 @@ class UpdateAccountTotals implements ShouldBeUnique
             'address' => $account->address,
         ]);
 
-        $this->account = $account->refresh();
+        DB::transaction(function () use ($account) {
 
-        $this->saveCurrentBalance();
-        $this->saveStakedZnn();
-        $this->saveFusedQsr();
-        $this->savePlasmaAmount();
-        $this->saveRewardTotals();
+            $this->account = $account->refresh();
 
-        $this->account->save();
+            $this->saveCurrentBalance();
+            $this->saveStakedZnn();
+            $this->saveFusedQsr();
+            $this->savePlasmaAmount();
+            $this->saveRewardTotals();
+
+            $this->account->save();
+
+        }, 3);
     }
 
     public function asCommand(Command $command): void
@@ -69,7 +74,8 @@ class UpdateAccountTotals implements ShouldBeUnique
             ->distinct()
             ->get(['token_id'])
             ->pluck('token_id')
-            ->push(app('znnToken')->id, app('qsrToken')->id);
+            ->push(app('znnToken')->id, app('qsrToken')->id)
+            ->unique();
         // Must include znn & qsr token ids above or it doesnt
         // calculate genesis balances correctly
 
