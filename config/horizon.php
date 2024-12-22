@@ -204,9 +204,9 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
-        'blockProcessor' => [
+        'scout' => [
             'connection' => 'redis',
-            'queue' => ['blockProcessor'],
+            'queue' => ['scout'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,
