@@ -122,6 +122,8 @@ class Indexer
             return null;
         }
 
+        $emergencyLock->release();
+
         $regularLock = Cache::lock('indexerLock', 0, 'indexer');
 
         if (! $regularLock->get()) {
