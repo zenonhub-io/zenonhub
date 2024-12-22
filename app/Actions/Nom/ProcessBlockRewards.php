@@ -53,7 +53,7 @@ class ProcessBlockRewards
             'token_id' => $token->id,
             'type' => $rewardType,
             'amount' => $mint->amount,
-            'created_at' => $mint->accountBlock->created_at,
+            'created_at' => $mint->created_at,
         ]);
     }
 
