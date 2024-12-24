@@ -42,7 +42,7 @@ return new class extends Migration
         });
 
         Schema::create('nom_bridge_network_tokens', function (Blueprint $table) {
-            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks')->onDelete('cascade');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->string('token_address');
             $table->string('min_amount');
