@@ -26,7 +26,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $network, $token);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: UnwrapToken failed', [
+            Log::error('Contract Method Processor - Bridge: UnwrapToken failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -55,7 +55,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
 
         TokenUnwraped::dispatch($accountBlock, $unwrap);
 
-        Log::info('Contract Method Processor - Bridge: UnwrapToken complete', [
+        Log::error('Contract Method Processor - Bridge: UnwrapToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

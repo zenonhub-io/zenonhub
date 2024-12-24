@@ -22,7 +22,7 @@ class SetNetworkMetadata extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $bridgeNetwork);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: SetNetworkMetadata failed', [
+            Log::error('Contract Method Processor - Bridge: SetNetworkMetadata failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -36,7 +36,7 @@ class SetNetworkMetadata extends AbstractContractMethodProcessor
 
         NetworkMetadataSet::dispatch($accountBlock, $bridgeNetwork);
 
-        Log::info('Contract Method Processor - Bridge: SetNetworkMetadata complete', [
+        Log::error('Contract Method Processor - Bridge: SetNetworkMetadata complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

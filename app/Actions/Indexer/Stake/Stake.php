@@ -22,7 +22,7 @@ class Stake extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Stake: Stake failed', [
+            Log::error('Contract Method Processor - Stake: Stake failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -44,7 +44,7 @@ class Stake extends AbstractContractMethodProcessor
 
         StartStake::dispatch($accountBlock, $stake);
 
-        Log::info('Contract Method Processor - Stake: Stake complete', [
+        Log::error('Contract Method Processor - Stake: Stake complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'stake' => $stake,

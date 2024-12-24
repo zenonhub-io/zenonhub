@@ -21,7 +21,7 @@ class Burn extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Token: Burn failed', [
+            Log::error('Contract Method Processor - Token: Burn failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -51,7 +51,7 @@ class Burn extends AbstractContractMethodProcessor
 
         TokenBurned::dispatch($accountBlock, $burn);
 
-        Log::info('Contract Method Processor - Token: Burn complete', [
+        Log::error('Contract Method Processor - Token: Burn complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'burn' => $burn,

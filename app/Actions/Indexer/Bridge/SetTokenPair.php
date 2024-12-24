@@ -27,7 +27,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $bridgeNetwork, $token);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: SetTokenPair failed', [
+            Log::error('Contract Method Processor - Bridge: SetTokenPair failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -53,7 +53,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
 
         TokenPairSet::dispatch($accountBlock, $bridgeNetwork, $token);
 
-        Log::info('Contract Method Processor - Bridge: SetTokenPair complete', [
+        Log::error('Contract Method Processor - Bridge: SetTokenPair complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

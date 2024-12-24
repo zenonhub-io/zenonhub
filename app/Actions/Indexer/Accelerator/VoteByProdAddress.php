@@ -28,7 +28,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $pillar, $item);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Accelerator: VoteByProdAddress failed', [
+            Log::error('Contract Method Processor - Accelerator: VoteByProdAddress failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -58,7 +58,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
 
         PillarVoted::dispatch($accountBlock, $pillar, $item);
 
-        Log::info('Contract Method Processor - Accelerator: VoteByProdAddress complete', [
+        Log::error('Contract Method Processor - Accelerator: VoteByProdAddress complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

@@ -23,7 +23,7 @@ class UpdatePillar extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $pillar);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Pillar: UpdatePillar failed', [
+            Log::error('Contract Method Processor - Pillar: UpdatePillar failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -61,7 +61,7 @@ class UpdatePillar extends AbstractContractMethodProcessor
 
         PillarUpdated::dispatch($accountBlock, $pillar);
 
-        Log::info('Contract Method Processor - Pillar: UpdatePillar complete', [
+        Log::error('Contract Method Processor - Pillar: UpdatePillar complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

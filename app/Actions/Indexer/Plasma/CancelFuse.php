@@ -21,7 +21,7 @@ class CancelFuse extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $plasma);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Plasma: CancelFuse failed', [
+            Log::error('Contract Method Processor - Plasma: CancelFuse failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -35,7 +35,7 @@ class CancelFuse extends AbstractContractMethodProcessor
 
         EndFuse::dispatch($accountBlock, $plasma);
 
-        Log::info('Contract Method Processor - Plasma: CancelFuse complete', [
+        Log::error('Contract Method Processor - Plasma: CancelFuse complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'plasma' => $plasma,

@@ -29,7 +29,7 @@ class Undelegate extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $delegation);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Pillar: Undelegate failed', [
+            Log::error('Contract Method Processor - Pillar: Undelegate failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -48,7 +48,7 @@ class Undelegate extends AbstractContractMethodProcessor
 
         AccountUndelegated::dispatch($accountBlock, $accountBlock->account, $delegation);
 
-        Log::info('Contract Method Processor - Pillar: Undelegate complete', [
+        Log::error('Contract Method Processor - Pillar: Undelegate complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'account' => $accountBlock->account->address,

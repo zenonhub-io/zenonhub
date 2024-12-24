@@ -26,7 +26,7 @@ class AddPhase extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $project);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Accelerator: AddPhase failed', [
+            Log::error('Contract Method Processor - Accelerator: AddPhase failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -57,7 +57,7 @@ class AddPhase extends AbstractContractMethodProcessor
 
         PhaseCreated::dispatch($accountBlock, $phase);
 
-        Log::info('Contract Method Processor - Accelerator: AddPhase complete', [
+        Log::error('Contract Method Processor - Accelerator: AddPhase complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'phase' => $phase,

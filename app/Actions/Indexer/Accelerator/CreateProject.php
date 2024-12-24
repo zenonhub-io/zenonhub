@@ -25,7 +25,7 @@ class CreateProject extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Accelerator: CreateProject failed', [
+            Log::error('Contract Method Processor - Accelerator: CreateProject failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -56,7 +56,7 @@ class CreateProject extends AbstractContractMethodProcessor
 
         ProjectCreated::dispatch($accountBlock, $project);
 
-        Log::info('Contract Method Processor - Accelerator: CreateProject complete', [
+        Log::error('Contract Method Processor - Accelerator: CreateProject complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'project' => $project,

@@ -23,7 +23,7 @@ class Mint extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $token);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Token: Mint failed', [
+            Log::error('Contract Method Processor - Token: Mint failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -48,7 +48,7 @@ class Mint extends AbstractContractMethodProcessor
 
         TokenMinted::dispatch($accountBlock, $mint);
 
-        Log::info('Contract Method Processor - Token: Mint complete', [
+        Log::error('Contract Method Processor - Token: Mint complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'mint' => $mint,

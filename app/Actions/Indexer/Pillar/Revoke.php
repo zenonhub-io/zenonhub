@@ -23,7 +23,7 @@ class Revoke extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $pillar);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Pillar: Revoke failed', [
+            Log::error('Contract Method Processor - Pillar: Revoke failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -41,7 +41,7 @@ class Revoke extends AbstractContractMethodProcessor
 
         PillarRevoked::dispatch($accountBlock, $pillar);
 
-        Log::info('Contract Method Processor - Pillar: Revoke complete', [
+        Log::error('Contract Method Processor - Pillar: Revoke complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

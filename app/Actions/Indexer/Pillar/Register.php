@@ -25,7 +25,7 @@ class Register extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Pillar: Register failed', [
+            Log::error('Contract Method Processor - Pillar: Register failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -58,7 +58,7 @@ class Register extends AbstractContractMethodProcessor
 
         PillarRegistered::dispatch($accountBlock, $pillar);
 
-        Log::info('Contract Method Processor - Pillar: Register complete', [
+        Log::error('Contract Method Processor - Pillar: Register complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

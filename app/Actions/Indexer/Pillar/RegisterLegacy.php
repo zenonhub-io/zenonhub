@@ -25,7 +25,7 @@ class RegisterLegacy extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Pillar: RegisterLegacy failed', [
+            Log::error('Contract Method Processor - Pillar: RegisterLegacy failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -51,7 +51,7 @@ class RegisterLegacy extends AbstractContractMethodProcessor
 
         PillarRegistered::dispatch($accountBlock, $pillar);
 
-        Log::info('Contract Method Processor - Pillar: RegisterLegacy complete', [
+        Log::error('Contract Method Processor - Pillar: RegisterLegacy complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

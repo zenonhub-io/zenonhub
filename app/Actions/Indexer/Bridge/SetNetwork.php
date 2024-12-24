@@ -10,7 +10,6 @@ use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeAdmin;
 use App\Models\Nom\BridgeNetwork;
-use App\Models\Nom\Chain;
 use Illuminate\Support\Facades\Log;
 
 class SetNetwork extends AbstractContractMethodProcessor
@@ -22,7 +21,7 @@ class SetNetwork extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: SetNetwork failed', [
+            Log::error('Contract Method Processor - Bridge: SetNetwork failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -31,7 +30,7 @@ class SetNetwork extends AbstractContractMethodProcessor
             return;
         }
 
-        $chain = Chain::where('chain_identifier', $blockData['chainId'])->first();
+        $chain = app('currentChain');
         $bridgeNetwork = BridgeNetwork::firstOrNew([
             'chain_id' => $chain->id,
             'network_class' => $blockData['networkClass'],
@@ -51,7 +50,7 @@ class SetNetwork extends AbstractContractMethodProcessor
 
         NetworkSet::dispatch($accountBlock, $bridgeNetwork);
 
-        Log::info('Contract Method Processor - Bridge: SetNetwork complete', [
+        Log::error('Contract Method Processor - Bridge: SetNetwork complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);
@@ -84,10 +83,10 @@ class SetNetwork extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Invalid networkClass or chainId');
         }
 
-        $chain = Chain::where('chain_identifier', $blockData['chainId'])->first();
-        if (! $chain) {
-            throw new IndexerActionValidationException('Invalid chain identifier');
-        }
+        //        $chain = Chain::where('chain_identifier', $blockData['chainId'])->first();
+        //        if (! $chain) {
+        //            throw new IndexerActionValidationException('Invalid chain identifier');
+        //        }
 
         //        if (! isHex($blockData['contractAddress'])) {
         //            throw new IndexerActionValidationException('Invalid contractAddress');

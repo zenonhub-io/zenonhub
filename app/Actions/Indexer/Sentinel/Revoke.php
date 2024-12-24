@@ -23,7 +23,7 @@ class Revoke extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $sentinel);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Sentinel: Revoke failed', [
+            Log::error('Contract Method Processor - Sentinel: Revoke failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -37,7 +37,7 @@ class Revoke extends AbstractContractMethodProcessor
 
         SentinelRevoked::dispatch($accountBlock, $sentinel);
 
-        Log::info('Contract Method Processor - Sentinel: Revoke complete', [
+        Log::error('Contract Method Processor - Sentinel: Revoke complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'sentinel' => $sentinel,

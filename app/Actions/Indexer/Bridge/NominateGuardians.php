@@ -22,7 +22,7 @@ class NominateGuardians extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: NominateGuardians failed', [
+            Log::error('Contract Method Processor - Bridge: NominateGuardians failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -35,7 +35,7 @@ class NominateGuardians extends AbstractContractMethodProcessor
 
         GuardiansNominated::dispatch($accountBlock, $nominatedGuardians);
 
-        Log::info('Contract Method Processor - Bridge: NominateGuardians complete', [
+        Log::error('Contract Method Processor - Bridge: NominateGuardians complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);
