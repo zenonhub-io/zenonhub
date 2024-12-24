@@ -57,7 +57,7 @@ return new class extends Migration
 
         Schema::create('nom_bridge_wraps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks')->onDelete('cascade');
             $table->foreignId('account_id')->references('id')->on('nom_accounts');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
@@ -69,7 +69,7 @@ return new class extends Migration
 
         Schema::create('nom_bridge_unwraps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks')->onDelete('cascade');
             $table->foreignId('to_account_id')->references('id')->on('nom_accounts');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
