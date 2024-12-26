@@ -30,7 +30,7 @@
                 @endif
             </div>
             <div class="d-flex align-items-end flex-column">
-                <span class="badge badge-md text-bg-{{ $pillar->status_colour }} mb-2">{{ $pillar->status_text }}</span>
+                <span class="badge badge-md text-bg-{{ $pillar->status_colour }} mb-2" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}">{{ $pillar->status_text }}</span>
             </div>
         </div>
     </x-includes.header>
@@ -66,14 +66,10 @@
                             :title="__('Momentums')"
                             :info="__('Produced / Expected momentums in the current epoch')">
                             @if (! $pillar->revoked_at)
-                                @if ($pillar->is_producing)
-                                    <x-stats.indicator type="success" data-bs-toggle="tooltip" data-bs-title="Producing momentums" />
-                                @else
-                                    <x-stats.indicator type="danger" data-bs-toggle="tooltip" data-bs-title="Not producing momentums" />
-                                @endif
+                                <x-stats.indicator type="{{ $pillar->status_colour }}" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}" />
                                 {{ $pillar->produced_momentums }} / {{ $pillar->expected_momentums }}
                             @else
-                                <x-stats.indicator type="danger" data-bs-toggle="tooltip" data-bs-title="Not producing momentums" />
+                                <x-stats.indicator type="{{ $pillar->status_colour }}" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}" />
                                 0 / 0
                             @endif
                         </x-stats.mini-stat>

@@ -305,7 +305,7 @@ class Pillar extends Model implements Sitemapable
 
     public function getIsProducingAttribute(): bool
     {
-        return is_null($this->revoked_at) && $this->missed_momentums <= config('zenon.pillar_missed_momentum_limit');
+        return is_null($this->revoked_at) && $this->missed_momentums <= config('zenon-hub.pillar_missed_momentum_limit');
     }
 
     public function getStatusColourAttribute(): string
@@ -314,11 +314,11 @@ class Pillar extends Model implements Sitemapable
             return 'danger';
         }
 
-        if ($this->is_producing) {
-            return 'primary';
+        if (! $this->is_producing) {
+            return 'warning';
         }
 
-        return 'warning';
+        return 'primary';
     }
 
     public function getStatusTextAttribute(): string
@@ -327,11 +327,24 @@ class Pillar extends Model implements Sitemapable
             return __('Revoked');
         }
 
-        if ($this->is_producing) {
-            return __('Active');
+        if (! $this->is_producing) {
+            return __('Inactive');
         }
 
-        return __('Not producing momentums');
+        return __('Active');
+    }
+
+    public function getStatusTooltipAttribute(): string
+    {
+        if ($this->revoked_at) {
+            return __('Pillar is revoked');
+        }
+
+        if ($this->is_producing) {
+            return __('Pillar is producing momentums');
+        }
+
+        return __('Pillar is not producing momentums');
     }
 
     public function getAzStatusIndicatorAttribute(): string
