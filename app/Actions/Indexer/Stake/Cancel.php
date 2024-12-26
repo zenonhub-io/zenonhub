@@ -35,7 +35,7 @@ class Cancel extends AbstractContractMethodProcessor
 
         EndStake::dispatch($accountBlock, $stake);
 
-        Log::error('Contract Method Processor - Stake: Cancel complete', [
+        Log::info('Contract Method Processor - Stake: Cancel complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $stake,
         ]);

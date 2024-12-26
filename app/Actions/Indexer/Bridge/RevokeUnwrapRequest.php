@@ -36,7 +36,7 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
 
         UnwrapRequestRevoked::dispatch($accountBlock, $unwrap);
 
-        Log::error('Contract Method Processor - Bridge: RemoveUnwrapRequest complete', [
+        Log::info('Contract Method Processor - Bridge: RemoveUnwrapRequest complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

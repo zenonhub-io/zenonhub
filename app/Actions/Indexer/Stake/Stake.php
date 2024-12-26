@@ -44,7 +44,7 @@ class Stake extends AbstractContractMethodProcessor
 
         StartStake::dispatch($accountBlock, $stake);
 
-        Log::error('Contract Method Processor - Stake: Stake complete', [
+        Log::info('Contract Method Processor - Stake: Stake complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'stake' => $stake,

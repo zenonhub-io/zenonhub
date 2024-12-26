@@ -57,7 +57,7 @@ class AddPhase extends AbstractContractMethodProcessor
 
         PhaseCreated::dispatch($accountBlock, $phase);
 
-        Log::error('Contract Method Processor - Accelerator: AddPhase complete', [
+        Log::info('Contract Method Processor - Accelerator: AddPhase complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'phase' => $phase,

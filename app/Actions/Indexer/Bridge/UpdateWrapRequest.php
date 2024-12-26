@@ -37,7 +37,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
 
         WrapRequestUpdated::dispatch($accountBlock, $wrap);
 
-        Log::error('Contract Method Processor - Bridge: UpdateWrapRequest complete', [
+        Log::info('Contract Method Processor - Bridge: UpdateWrapRequest complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

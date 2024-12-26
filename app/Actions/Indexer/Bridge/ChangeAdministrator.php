@@ -35,7 +35,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
 
         AdministratorChanged::dispatch($accountBlock, $newAdmin);
 
-        Log::error('Contract Method Processor - Bridge: ChangeAdministrator complete', [
+        Log::info('Contract Method Processor - Bridge: ChangeAdministrator complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

@@ -50,7 +50,7 @@ class SetNetwork extends AbstractContractMethodProcessor
 
         NetworkSet::dispatch($accountBlock, $bridgeNetwork);
 
-        Log::error('Contract Method Processor - Bridge: SetNetwork complete', [
+        Log::info('Contract Method Processor - Bridge: SetNetwork complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

@@ -37,7 +37,7 @@ class Revoke extends AbstractContractMethodProcessor
 
         SentinelRevoked::dispatch($accountBlock, $sentinel);
 
-        Log::error('Contract Method Processor - Sentinel: Revoke complete', [
+        Log::info('Contract Method Processor - Sentinel: Revoke complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'sentinel' => $sentinel,

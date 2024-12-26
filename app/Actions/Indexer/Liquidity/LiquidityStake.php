@@ -44,7 +44,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
 
         StartStake::dispatch($accountBlock, $stake);
 
-        Log::error('Contract Method Processor - Liquidity: LiquidityStake complete', [
+        Log::info('Contract Method Processor - Liquidity: LiquidityStake complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'stake' => $stake,

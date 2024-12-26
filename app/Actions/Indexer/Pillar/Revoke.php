@@ -41,7 +41,7 @@ class Revoke extends AbstractContractMethodProcessor
 
         PillarRevoked::dispatch($accountBlock, $pillar);
 
-        Log::error('Contract Method Processor - Pillar: Revoke complete', [
+        Log::info('Contract Method Processor - Pillar: Revoke complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

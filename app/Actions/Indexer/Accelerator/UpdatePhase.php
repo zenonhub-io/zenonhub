@@ -49,7 +49,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
 
         PhaseUpdated::dispatch($accountBlock, $phase);
 
-        Log::error('Contract Method Processor - Accelerator: UpdatePhase complete', [
+        Log::info('Contract Method Processor - Accelerator: UpdatePhase complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'phase' => $phase,

@@ -35,7 +35,7 @@ class NominateGuardians extends AbstractContractMethodProcessor
 
         GuardiansNominated::dispatch($accountBlock, $nominatedGuardians);
 
-        Log::error('Contract Method Processor - Bridge: NominateGuardians complete', [
+        Log::info('Contract Method Processor - Bridge: NominateGuardians complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

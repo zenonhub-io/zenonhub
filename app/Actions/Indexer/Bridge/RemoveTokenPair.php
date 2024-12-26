@@ -37,7 +37,7 @@ class RemoveTokenPair extends AbstractContractMethodProcessor
 
         TokenPairRemoved::dispatch($accountBlock, $bridgeNetwork, $token);
 
-        Log::error('Contract Method Processor - Bridge: RemoveTokenPair complete', [
+        Log::info('Contract Method Processor - Bridge: RemoveTokenPair complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

@@ -54,7 +54,7 @@ class IssueToken extends AbstractContractMethodProcessor
 
         TokenIssued::dispatch($accountBlock, $token);
 
-        Log::error('Contract Method Processor - Token: IssueToken complete', [
+        Log::info('Contract Method Processor - Token: IssueToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'token' => $token,

@@ -61,7 +61,7 @@ class UpdatePillar extends AbstractContractMethodProcessor
 
         PillarUpdated::dispatch($accountBlock, $pillar);
 
-        Log::error('Contract Method Processor - Pillar: UpdatePillar complete', [
+        Log::info('Contract Method Processor - Pillar: UpdatePillar complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

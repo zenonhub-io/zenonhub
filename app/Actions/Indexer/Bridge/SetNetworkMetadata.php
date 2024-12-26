@@ -36,7 +36,7 @@ class SetNetworkMetadata extends AbstractContractMethodProcessor
 
         NetworkMetadataSet::dispatch($accountBlock, $bridgeNetwork);
 
-        Log::error('Contract Method Processor - Bridge: SetNetworkMetadata complete', [
+        Log::info('Contract Method Processor - Bridge: SetNetworkMetadata complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

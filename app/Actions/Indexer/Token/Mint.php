@@ -48,7 +48,7 @@ class Mint extends AbstractContractMethodProcessor
 
         TokenMinted::dispatch($accountBlock, $mint);
 
-        Log::error('Contract Method Processor - Token: Mint complete', [
+        Log::info('Contract Method Processor - Token: Mint complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'mint' => $mint,

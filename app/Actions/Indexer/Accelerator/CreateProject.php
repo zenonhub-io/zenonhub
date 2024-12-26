@@ -56,7 +56,7 @@ class CreateProject extends AbstractContractMethodProcessor
 
         ProjectCreated::dispatch($accountBlock, $project);
 
-        Log::error('Contract Method Processor - Accelerator: CreateProject complete', [
+        Log::info('Contract Method Processor - Accelerator: CreateProject complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'project' => $project,
