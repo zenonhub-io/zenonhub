@@ -106,7 +106,7 @@ it('ensures only valid chain identifier can be used', function () {
     $accountBlock = createSetNetworkAccountBlock([
         'data' => [
             'networkClass' => '321',
-            'chainId' => '2',
+            'chainId' => '0',
             'name' => 'Test',
             'contractAddress' => '0x' . bin2hex(random_bytes(20)),
             'metadata' => '{}',
@@ -117,7 +117,7 @@ it('ensures only valid chain identifier can be used', function () {
     Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: SetNetwork failed',
-            Mockery::on(fn ($data) => $data['error'] === 'Invalid chain identifier')
+            Mockery::on(fn ($data) => $data['error'] === 'Invalid networkClass or chainId')
         )
         ->once();
 
