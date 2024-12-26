@@ -87,7 +87,7 @@ it('ensures only project owner can add phases', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Accelerator: AddPhase failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not project owner')
@@ -122,7 +122,7 @@ it('ensures only project owner can add phases', function () {
 //    ]);
 //
 //    Event::fake();
-//    Log::shouldReceive('info')
+//    Log::shouldReceive('error')
 //        ->with(
 //            'Contract Method Processor - Accelerator: AddPhase failed',
 //            Mockery::on(fn ($data) => $data['error'] === 'Latest phase has not been paid')

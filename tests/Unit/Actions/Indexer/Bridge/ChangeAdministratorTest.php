@@ -100,7 +100,7 @@ it('ensures only current admin can change bridge admin', function () {
     $accountBlock = createChangeAdminAccountBlock();
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: ChangeAdministrator failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')
@@ -123,7 +123,7 @@ it('respects the time challenge', function () {
 
     Event::fake();
     Log::shouldReceive('debug'); // Called in CheckTimeChallenge Action
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: ChangeAdministrator failed',
             Mockery::on(fn ($data) => $data['error'] === 'Time challenge is still active')

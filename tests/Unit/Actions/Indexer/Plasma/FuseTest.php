@@ -83,7 +83,7 @@ it('doesnt pass validation with invalid token', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Plasma: Fuse failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid token, must be QSR')
@@ -104,7 +104,7 @@ it('doesnt pass validation with invalid amount of QSR', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Plasma: Fuse failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid amount of QSR')

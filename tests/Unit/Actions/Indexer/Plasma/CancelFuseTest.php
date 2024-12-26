@@ -98,7 +98,7 @@ it('ensures only plasma owners can cancel fuses', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Plasma: CancelFuse failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not plasma owner')
@@ -125,7 +125,7 @@ it('enforces plasma minimum expiration time', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Plasma: CancelFuse failed',
             Mockery::on(fn ($data) => $data['error'] === 'Plasma not yet cancelable')

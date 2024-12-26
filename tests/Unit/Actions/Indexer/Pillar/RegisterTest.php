@@ -95,7 +95,7 @@ it('ensure pillars can only be registered with ZNN tokens', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Register failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token must be ZNN')
@@ -116,7 +116,7 @@ it('enforces the required registration cost', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Register failed',
             Mockery::on(fn ($data) => $data['error'] === 'Amount doesnt match pillar registration cost')

@@ -129,7 +129,7 @@ it('ensures only the bridge admin can set a new network', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: RemoveTokenPair failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')

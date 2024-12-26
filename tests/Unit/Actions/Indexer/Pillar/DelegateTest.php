@@ -88,7 +88,7 @@ it('ensure only valid pillars can be delegated to', function () {
     $account = $accountBlock->account;
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Delegate failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid pillar')
@@ -111,7 +111,7 @@ it('ensure only active pillars can be delegated to', function () {
     $account = $accountBlock->account;
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Delegate failed',
             Mockery::on(fn ($data) => $data['error'] === 'Pillar is revoked')

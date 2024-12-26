@@ -148,7 +148,7 @@ it('doesnt pass validation if not burnable', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: Burn failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token is not burnable, or owner doesnt match')

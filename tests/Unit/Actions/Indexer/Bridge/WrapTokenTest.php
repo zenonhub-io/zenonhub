@@ -103,7 +103,7 @@ it('ensures wraps only happen on valid bridge networks', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: WrapToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid bridge network')
@@ -133,7 +133,7 @@ it('ensures only valid tokens can be bridged', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: WrapToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid token')
@@ -161,7 +161,7 @@ it('ensures only bridgeable tokens can be wrapped', function () {
     $accountBlock = createWrapTokenAccountBlock();
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: WrapToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token is not bridgeable')

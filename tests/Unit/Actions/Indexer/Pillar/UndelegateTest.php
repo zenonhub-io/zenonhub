@@ -91,7 +91,7 @@ it('ensure only active delegations can be undelegated', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Undelegate failed',
             Mockery::on(fn ($data) => $data['error'] === 'Delegating pillar not found')

@@ -103,7 +103,7 @@ it('doesnt pass validation with reserved symbols', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: IssueToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token symbol is reserved')

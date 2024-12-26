@@ -82,7 +82,7 @@ it('ensures only valid unwraps can be redeemed', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: Redeem failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid unwrap')

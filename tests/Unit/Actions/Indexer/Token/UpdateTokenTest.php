@@ -95,7 +95,7 @@ it('doesnt pass validation invalid token standard', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: UpdateToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'No token found')
@@ -115,7 +115,7 @@ it('doesnt pass validation invalid token owner', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: UpdateToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token owner mismatch')

@@ -111,7 +111,7 @@ it('ensure updates can only come from pillar owner', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: UpdatePillar failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not pillar owner')

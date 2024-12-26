@@ -121,7 +121,7 @@ it('doesnt pass validation if not mintable', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: Mint failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token is not mintable')
@@ -150,7 +150,7 @@ it('doesnt pass validation minting more than tne max supply', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: Mint failed',
             Mockery::on(fn ($data) => $data['error'] === 'Attempt to mint more than max supply')
@@ -176,7 +176,7 @@ it('doesnt pass validation minting network token from non-embedded contract', fu
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: Mint failed',
             Mockery::on(fn ($data) => $data['error'] === 'Normal account trying to mint network owned token')
@@ -201,7 +201,7 @@ it('doesnt pass validation minting user tokens from non owner', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Token: Mint failed',
             Mockery::on(fn ($data) => $data['error'] === 'Attempt to mint token by an unauthorized account')

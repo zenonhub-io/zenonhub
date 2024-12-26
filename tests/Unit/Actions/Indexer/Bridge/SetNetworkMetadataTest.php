@@ -90,7 +90,7 @@ it('ensures only admin can set the network metadata', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: SetNetworkMetadata failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')

@@ -82,7 +82,7 @@ it('ensures wraps only happen on valid bridge networks', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: UpdateWrapRequest failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid wrap')
