@@ -66,25 +66,33 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-24 col-md-12">
+                <div class="col-24">
                     <x-cards.card class="mt-6">
                         <x-cards.heading class="border-0">
-                            {{ __('Top Countries') }}
+                            {{ __('Top Cities') }}
                         </x-cards.heading>
                         <div class="table-responsive px-4">
                             <table class="table table-nowrap table-flush">
                                 <thead class="table-dark">
                                 <tr>
                                     <th scope="col" class="text-center ps-3">#</th>
+                                    <th scope="col">{{ __('City') }}</th>
                                     <th scope="col">{{ __('Country') }}</th>
                                     <th scope="col">{{ __('Nodes') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($topCountries as $index => $node)
+                                @foreach($topCities as $index => $node)
                                     <tr>
                                         <td class="text-center ps-3">
                                             {{ $index + 1 }}
+                                        </td>
+                                        <td>
+                                            @if($node->city)
+                                                {{ $node->city }}
+                                            @else
+                                                {{ __('Unknown') }}
+                                            @endif
                                         </td>
                                         <td>
                                             @if($node->country)
@@ -135,7 +143,8 @@
                             </table>
                         </div>
                     </x-cards.card>
-
+                </div>
+                <div class="col-24 col-md-12">
                     <x-cards.card class="mt-6">
                         <x-cards.heading class="border-0">
                             {{ __('Versions') }}
@@ -168,7 +177,6 @@
                         </div>
                     </x-cards.card>
                 </div>
-
             </div>
         </div>
     @endif

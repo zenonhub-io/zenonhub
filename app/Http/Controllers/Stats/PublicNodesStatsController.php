@@ -22,6 +22,7 @@ class PublicNodesStatsController
             'tab' => $tab,
             'nodes' => PublicNode::all(),
             'topCountries' => $this->getTopCountries(),
+            'topCities' => $this->getTopCities(),
             'topNetworks' => $this->getTopNetworks(),
             'nodeVersions' => $this->getNodeVersions(),
             'mapMarkers' => $this->getMapMarkers(),
@@ -56,6 +57,19 @@ class PublicNodesStatsController
                 ->selectRaw('COUNT(*) AS count')
                 ->whereNotNull('country')
                 ->groupBy('country', 'country_code')
+                ->orderBy('count', 'desc')
+                ->limit('10')
+                ->get();
+        });
+    }
+
+    private function getTopCities(): Collection
+    {
+        return Cache::remember('stats.nodes.top-cities', now()->addDay(), function () {
+            return PublicNode::select('city', 'country', 'country_code')
+                ->selectRaw('COUNT(*) AS count')
+                ->whereNotNull('city')
+                ->groupBy('city')
                 ->orderBy('count', 'desc')
                 ->limit('10')
                 ->get();
