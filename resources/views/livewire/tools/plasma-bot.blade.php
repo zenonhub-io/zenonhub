@@ -50,7 +50,7 @@
     @if ($account->qsr_balance > 200 * config('nom.decimals'))
         <div class="row">
             <div class="col-lg-16">
-                <div class="w-100" wire:loading.delay.long>
+                <div class="w-100" wire:loading.delay.longer>
                     <x-alerts.alert type="info" class="mb-6" >
                         <i class="bi bi-arrow-repeat spin me-2"></i> {{ __('Processing request...') }}
                     </x-alerts.alert>
