@@ -1,11 +1,6 @@
-@if (! $row->revoked_at)
-    @if ($row->is_producing)
-        <span class="legend-indicator bg-success" data-bs-toggle="tooltip" data-bs-title="{{ __('Producing momentums') }}"></span>
-    @else
-        <span class="legend-indicator bg-danger" data-bs-toggle="tooltip" data-bs-title="{{ __('Possible production issues') }}"></span>
-    @endif
-    {{ $row->produced_momentums }} / {{ $row->expected_momentums }}
+<x-stats.indicator type="{{ $pillar->status_colour }}" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}" />
+@if (! $pillar->revoked_at)
+    {{ $pillar->produced_momentums }} / {{ $pillar->expected_momentums }}
 @else
-    <span class="legend-indicator bg-danger" data-bs-toggle="tooltip" data-bs-title="{{ __('Not producing momentums') }}"></span>
     0 / 0
 @endif

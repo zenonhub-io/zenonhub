@@ -65,11 +65,10 @@
                         <x-stats.mini-stat
                             :title="__('Momentums')"
                             :info="__('Produced / Expected momentums in the current epoch')">
+                            <x-stats.indicator type="{{ $pillar->status_colour }}" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}" />
                             @if (! $pillar->revoked_at)
-                                <x-stats.indicator type="{{ $pillar->status_colour }}" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}" />
                                 {{ $pillar->produced_momentums }} / {{ $pillar->expected_momentums }}
                             @else
-                                <x-stats.indicator type="{{ $pillar->status_colour }}" data-bs-toggle="tooltip" data-bs-title="{{ $pillar->status_tooltip }}" />
                                 0 / 0
                             @endif
                         </x-stats.mini-stat>
