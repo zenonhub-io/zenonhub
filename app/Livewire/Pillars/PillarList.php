@@ -83,7 +83,9 @@ class PillarList extends BaseTable
                 ),
             Column::make('Momentums')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.pillar.momentums')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar.momentums', [
+                        'pillar' => $row,
+                    ])
                 ),
             Column::make('Delegators')
                 ->label(
