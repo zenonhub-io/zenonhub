@@ -13,6 +13,8 @@ class ReceiveAll
 {
     use AsAction;
 
+    public string $commandSignature = 'plasma-bot:receive-all';
+
     public function __construct(
         private readonly ZenonCli $cli
     ) {

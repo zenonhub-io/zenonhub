@@ -64,7 +64,7 @@ class PlasmaBotEntry extends Model
             ->orWhere(function ($query) {
                 $query->whereNull('expires_at')
                     ->whereHas('account', function ($query2) {
-                        $query2->whereRaw('(SELECT MAX(created_at) FROM nom_account_blocks WHERE nom_account_blocks.account_id = accounts.id) < ?', [
+                        $query2->whereRaw('(SELECT MAX(created_at) FROM nom_account_blocks WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id) < ?', [
                             now()->subDays(30),
                         ]);
                     });

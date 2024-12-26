@@ -11,6 +11,8 @@ class CancelExpired
 {
     use AsAction;
 
+    public string $commandSignature = 'plasma-bot:cancel-expired';
+
     public function handle(): void
     {
         $expiredEntries = PlasmaBotEntry::whereExpired()->whereConfirmed()->get();

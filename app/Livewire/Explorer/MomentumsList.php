@@ -52,7 +52,7 @@ class MomentumsList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
-                        'breakpoint' => 'xxl',
+                        'alwaysShort' => true,
                         'copyable' => true,
                         'link' => route('explorer.momentum.detail', ['hash' => $row->hash]),
                     ])
