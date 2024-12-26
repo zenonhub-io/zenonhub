@@ -184,7 +184,7 @@ return [
     'defaults' => [
         'default' => [
             'connection' => 'redis',
-            'queue' => ['default'],
+            'queue' => ['default', 'scout'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 3,
@@ -196,17 +196,6 @@ return [
         'indexer' => [
             'connection' => 'redis',
             'queue' => ['indexer'],
-            'balance' => 'auto',
-            'autoScalingStrategy' => 'time',
-            'maxProcesses' => 1,
-            'memory' => 128,
-            'tries' => 1,
-            'timeout' => 60,
-            'nice' => 0,
-        ],
-        'scout' => [
-            'connection' => 'redis',
-            'queue' => ['scout'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,

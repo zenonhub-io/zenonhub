@@ -98,7 +98,7 @@ class TokenStats
     // TODO - This is way to slow...
     private function getTotalHolders(Token $token, Carbon $date): int
     {
-        //return $token->holders()->count();
+        return $token->holders()->count();
 
         $accountCount = 0;
 

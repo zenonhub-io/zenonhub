@@ -39,10 +39,11 @@ return new class extends Migration
             $table->string('explorer_address_link')->nullable();
             $table->text('meta_data')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('nom_bridge_network_tokens', function (Blueprint $table) {
-            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks')->onDelete('cascade');
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->string('token_address');
             $table->string('min_amount');
@@ -57,7 +58,7 @@ return new class extends Migration
 
         Schema::create('nom_bridge_wraps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks')->onDelete('cascade');
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
             $table->foreignId('account_id')->references('id')->on('nom_accounts');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
@@ -69,7 +70,7 @@ return new class extends Migration
 
         Schema::create('nom_bridge_unwraps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks')->onDelete('cascade');
+            $table->foreignId('bridge_network_id')->references('id')->on('nom_bridge_networks');
             $table->foreignId('to_account_id')->references('id')->on('nom_accounts');
             $table->foreignId('token_id')->references('id')->on('nom_tokens');
             $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
