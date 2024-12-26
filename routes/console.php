@@ -24,8 +24,17 @@ Artisan::command('site:after-deploy', function () {
     Artisan::call('sync:bridge-status');
     Artisan::call('sync:public-nodes');
     Artisan::call('sync:pillar-metrics');
+    Artisan::call('sync:token-prices');
     //Artisan::call('site:generate-sitemap');
 })->purpose('Sets up the site after a deploy');
+
+Artisan::command('site:create-stats', function () {
+    Artisan::call('sync:token-stats');
+    Artisan::call('sync:network-stats');
+    Artisan::call('sync:bridge-stats');
+    Artisan::call('sync:project-status');
+    Artisan::call('sync:pillar-engagement-scores');
+})->purpose('Create initial stats for the site');
 
 Artisan::command('indexer:remove-locks', function () {
     $lock = Cache::lock('indexerLock', 0, 'indexer');
@@ -40,15 +49,14 @@ Schedule::command('indexer:run')
     ->runInBackground();
 
 Schedule::call(function () {
-    App\Actions\Sync\BridgeStatus::run();
-    App\Actions\Sync\Orchestrators::run();
-
     Artisan::call('sync:pillar-metrics');
     Artisan::call('sync:pillar-stats');
     Artisan::call('sync:token-prices');
+    Artisan::call('sync:bridge-status');
+    Artisan::call('sync:orchestrators');
 
-    App\Actions\PlasmaBot\CancelExpired::run();
-    App\Actions\PlasmaBot\ReceiveAll::run();
+    Artisan::call('plasma-bot:cancel-expired');
+    Artisan::call('plasma-bot:receive-all');
 
     // Check the indexer has inserted a momentum in the last 15 minutes
     $latestMomentum = Momentum::getFrontier();
