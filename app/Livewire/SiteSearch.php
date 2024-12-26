@@ -124,7 +124,10 @@ class SiteSearch extends Component
 
     private function searchProjects(): Collection
     {
-        return AcceleratorProject::search($this->search)->get()
+        $searchResults = AcceleratorProject::search($this->search)->get();
+        $hashResults = AcceleratorProject::where('hash', $this->search)->get();
+
+        return $searchResults->merge($hashResults)
             ->map(function (AcceleratorProject $project) {
                 return SearchResultDTO::from([
                     'group' => 'projects',
@@ -137,7 +140,10 @@ class SiteSearch extends Component
 
     private function searchPhases(): Collection
     {
-        return AcceleratorPhase::search($this->search)->get()
+        $searchResults = AcceleratorPhase::search($this->search)->get();
+        $hashResults = AcceleratorPhase::where('hash', $this->search)->get();
+
+        return $searchResults->merge($hashResults)
             ->map(function (AcceleratorPhase $phase) {
                 $phase->load('project');
 
