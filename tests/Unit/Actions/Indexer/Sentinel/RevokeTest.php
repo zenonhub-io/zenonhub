@@ -86,7 +86,7 @@ it('ensure sentinels can only be revoked once', function () {
     $accountBlock->created_at = now();
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Sentinel: Revoke failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid sentinel')
@@ -110,7 +110,7 @@ it('enforce the sentinel revocable time window', function () {
     $accountBlock->created_at = now()->subDays(31);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Sentinel: Revoke failed',
             Mockery::on(fn ($data) => $data['error'] === 'Sentinel not revocable')

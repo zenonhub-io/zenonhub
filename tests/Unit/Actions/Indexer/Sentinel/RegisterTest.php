@@ -74,7 +74,7 @@ it('ensure sentinels can only be registered with ZNN tokens', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Sentinel: Register failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid token')
@@ -95,7 +95,7 @@ it('enforces the required registration cost', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Sentinel: Register failed',
             Mockery::on(fn ($data) => $data['error'] === 'Amount doesnt match sentinel registration cost')

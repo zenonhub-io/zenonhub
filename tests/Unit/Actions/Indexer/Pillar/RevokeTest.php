@@ -98,7 +98,7 @@ it('ensure pillars can only be revoked by owner', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Revoke failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not pillar owner')
@@ -124,7 +124,7 @@ it('enforce the pillars revocable time window', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Revoke failed',
             Mockery::on(fn ($data) => $data['error'] === 'Pillar not currently revocable')

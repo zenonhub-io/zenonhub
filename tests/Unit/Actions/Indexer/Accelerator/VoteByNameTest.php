@@ -89,7 +89,7 @@ it('ensures only the pillar owner and account block sender account match', funct
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Accelerator: VoteByName failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not pillar owner')

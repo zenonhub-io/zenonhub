@@ -109,7 +109,7 @@ it('ensures unwraps only happen on valid bridge networks', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: UnwrapToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid bridge network')
@@ -138,7 +138,7 @@ it('ensures only valid tokens can be unwrapped', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: UnwrapToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid token')
@@ -167,7 +167,7 @@ it('ensures only redeemable tokens can be unwrapped', function () {
     $accountBlock = createUnwrapTokenAccountBlock();
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: UnwrapToken failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token is not redeemable')

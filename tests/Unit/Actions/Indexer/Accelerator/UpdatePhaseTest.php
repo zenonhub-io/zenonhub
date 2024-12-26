@@ -95,7 +95,7 @@ it('ensures only project owner can update phase', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Accelerator: UpdatePhase failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not project owner')
@@ -121,7 +121,7 @@ it('ensures latest phase is open', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Accelerator: UpdatePhase failed',
             Mockery::on(fn ($data) => $data['error'] === 'Latest phase is not open')

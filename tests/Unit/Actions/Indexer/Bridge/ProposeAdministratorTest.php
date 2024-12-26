@@ -91,7 +91,7 @@ it('ensures only guardians can propose admins', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: ProposeAdministrator failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non guardian')

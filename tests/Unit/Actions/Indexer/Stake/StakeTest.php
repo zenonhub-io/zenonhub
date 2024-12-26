@@ -81,7 +81,7 @@ it('doesnt pass validation with invalid token', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake token')
@@ -102,7 +102,7 @@ it('doesnt pass validation with invalid amount of ZNN', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake amount')
@@ -126,7 +126,7 @@ it('doesnt pass validation with short duration', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake duration')
@@ -150,7 +150,7 @@ it('doesnt pass validation with long duration', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Stake: Stake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake duration')

@@ -98,7 +98,7 @@ it('doesnt pass validation with invalid token', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Liquidity: LiquidityStake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake token')
@@ -119,7 +119,7 @@ it('doesnt pass validation with invalid amount', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Liquidity: LiquidityStake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake amount')
@@ -142,7 +142,7 @@ it('doesnt pass validation with short duration', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Liquidity: LiquidityStake failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid stake duration')

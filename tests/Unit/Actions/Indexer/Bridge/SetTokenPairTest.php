@@ -135,7 +135,7 @@ it('ensures only the bridge admin can set a new network', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: SetTokenPair failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')
@@ -180,7 +180,7 @@ it('ensures only valid tokens can be added', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: SetTokenPair failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid token')
@@ -203,7 +203,7 @@ it('ensures the time challenge is respected', function () {
 
     Event::fake();
     Log::shouldReceive('debug');
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: SetTokenPair failed',
             Mockery::on(fn ($data) => $data['error'] === 'Time challenge is still active')

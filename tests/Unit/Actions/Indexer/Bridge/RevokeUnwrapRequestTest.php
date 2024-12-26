@@ -83,7 +83,7 @@ it('ensures only valid unwraps can be revoked', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: RevokeUnwrapRequest failed',
             Mockery::on(fn ($data) => $data['error'] === 'Invalid unwrap')
@@ -104,7 +104,7 @@ it('ensures only bridge admin can revoke unwrap request', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: RevokeUnwrapRequest failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')

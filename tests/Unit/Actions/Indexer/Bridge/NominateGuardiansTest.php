@@ -104,7 +104,7 @@ it('guardians can only be set from bridge admin account', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: NominateGuardians failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')
@@ -129,7 +129,7 @@ it('ensures invalid action cannot be processed', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: NominateGuardians failed',
             Mockery::on(fn ($data) => $data['error'] === 'Not enough guardians nominated')
@@ -149,7 +149,7 @@ it('respects the time challenge', function () {
 
     Event::fake();
     Log::shouldReceive('debug');
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: NominateGuardians failed',
             Mockery::on(fn ($data) => $data['error'] === 'Time challenge is still active')

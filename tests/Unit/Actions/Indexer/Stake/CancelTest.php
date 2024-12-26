@@ -101,7 +101,7 @@ it('ensures only stake owner can cancel stakes', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Stake: Cancel failed',
             Mockery::on(fn ($data) => $data['error'] === 'Account is not stake owner')
@@ -129,7 +129,7 @@ it('enforces stake duration time', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Stake: Cancel failed',
             Mockery::on(fn ($data) => $data['error'] === 'Stake end date in the future')

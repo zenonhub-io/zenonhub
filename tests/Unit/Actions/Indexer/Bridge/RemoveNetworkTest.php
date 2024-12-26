@@ -87,7 +87,7 @@ it('ensures only the bridge admin can remove a network', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Bridge: RemoveNetwork failed',
             Mockery::on(fn ($data) => $data['error'] === 'Action sent from non admin')

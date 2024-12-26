@@ -83,7 +83,7 @@ it('ensures the correct fee token is paid', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Accelerator: CreateProject failed',
             Mockery::on(fn ($data) => $data['error'] === 'Token fee must be ZNN')
@@ -104,7 +104,7 @@ it('ensures the correct fee amount is paid', function () {
     ]);
 
     Event::fake();
-    Log::shouldReceive('info')
+    Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Accelerator: CreateProject failed',
             Mockery::on(fn ($data) => $data['error'] === 'Creation fee amount is invalid')
