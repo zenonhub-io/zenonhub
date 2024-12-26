@@ -25,7 +25,7 @@ class Redeem extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $unwrap);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: Redeem failed', [
+            Log::error('Contract Method Processor - Bridge: Redeem failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -39,7 +39,7 @@ class Redeem extends AbstractContractMethodProcessor
 
         UnwrapRedeemed::dispatch($accountBlock, $unwrap);
 
-        Log::info('Contract Method Processor - Bridge: Redeem complete', [
+        Log::error('Contract Method Processor - Bridge: Redeem complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

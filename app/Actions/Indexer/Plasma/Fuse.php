@@ -22,7 +22,7 @@ class Fuse extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Plasma: Fuse failed', [
+            Log::error('Contract Method Processor - Plasma: Fuse failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -43,7 +43,7 @@ class Fuse extends AbstractContractMethodProcessor
 
         StartFuse::dispatch($accountBlock, $plasma);
 
-        Log::info('Contract Method Processor - Plasma: Fuse complete', [
+        Log::error('Contract Method Processor - Plasma: Fuse complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'plasma' => $plasma,

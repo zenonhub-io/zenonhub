@@ -28,7 +28,7 @@ class VoteByName extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $pillar, $item);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Accelerator: VoteByName failed', [
+            Log::error('Contract Method Processor - Accelerator: VoteByName failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -58,7 +58,7 @@ class VoteByName extends AbstractContractMethodProcessor
 
         PillarVoted::dispatch($accountBlock, $pillar, $item);
 
-        Log::info('Contract Method Processor - Accelerator: VoteByName complete', [
+        Log::error('Contract Method Processor - Accelerator: VoteByName complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

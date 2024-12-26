@@ -21,7 +21,7 @@ class Update extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Accelerator: Donate failed', [
+            Log::error('Contract Method Processor - Accelerator: Donate failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),

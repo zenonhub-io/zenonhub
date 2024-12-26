@@ -21,7 +21,7 @@ class Cancel extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $stake);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Stake: Cancel failed', [
+            Log::error('Contract Method Processor - Stake: Cancel failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -35,7 +35,7 @@ class Cancel extends AbstractContractMethodProcessor
 
         EndStake::dispatch($accountBlock, $stake);
 
-        Log::info('Contract Method Processor - Stake: Cancel complete', [
+        Log::error('Contract Method Processor - Stake: Cancel complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $stake,
         ]);

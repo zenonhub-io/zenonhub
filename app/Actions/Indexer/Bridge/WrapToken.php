@@ -24,7 +24,7 @@ class WrapToken extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $network, $token);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: WrapToken failed', [
+            Log::error('Contract Method Processor - Bridge: WrapToken failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -45,7 +45,7 @@ class WrapToken extends AbstractContractMethodProcessor
 
         TokenWrapped::dispatch($accountBlock, $wrap);
 
-        Log::info('Contract Method Processor - Bridge: WrapToken complete', [
+        Log::error('Contract Method Processor - Bridge: WrapToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

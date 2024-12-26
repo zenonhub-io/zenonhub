@@ -48,7 +48,7 @@ class TokenStats
             NetworkTokensEnum::QSR->value,
         ])->get();
         $period = CarbonPeriod::create(AccountBlock::min('created_at'), AccountBlock::max('created_at'));
-        $progressBar = new ProgressBar(new ConsoleOutput, $period->count());
+        $progressBar = new ProgressBar(new ConsoleOutput, $period->count() * $tokens->count());
         $progressBar->start();
 
         foreach ($period as $date) {
@@ -95,8 +95,11 @@ class TokenStats
         return number_format((($genesisSupply + $totalMints) - $totalBurns), 0, '.', '');
     }
 
+    // TODO - This is way to slow...
     private function getTotalHolders(Token $token, Carbon $date): int
     {
+        return $token->holders()->count();
+
         $accountCount = 0;
 
         $token->holders()
@@ -105,16 +108,18 @@ class TokenStats
                 foreach ($accounts as $account) {
 
                     $sent = $account->sentBlocks()
-                        ->where('token_id', $token->id)
+                        ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
                         ->whereDate('created_at', '<=', $date)
+                        ->where('token_id', $token->id)
                         ->where('amount', '>', '0')
-                        ->sum('amount');
+                        ->first()->total;
 
                     $received = $account->receivedBlocks()
-                        ->where('token_id', $token->id)
+                        ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
                         ->whereDate('created_at', '<=', $date)
+                        ->where('token_id', $token->id)
                         ->where('amount', '>', '0')
-                        ->sum('amount');
+                        ->first()->total;
 
                     $genesisBalance = 0;
 

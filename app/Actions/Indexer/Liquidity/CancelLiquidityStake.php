@@ -21,7 +21,7 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $stake);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Liquidity: CancelLiquidityStake failed', [
+            Log::error('Contract Method Processor - Liquidity: CancelLiquidityStake failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -35,7 +35,7 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
 
         EndStake::dispatch($accountBlock, $stake);
 
-        Log::info('Contract Method Processor - Liquidity: CancelLiquidityStake complete', [
+        Log::error('Contract Method Processor - Liquidity: CancelLiquidityStake complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'stake' => $stake,

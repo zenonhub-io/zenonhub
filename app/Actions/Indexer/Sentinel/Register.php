@@ -24,7 +24,7 @@ class Register extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Sentinel: Register failed', [
+            Log::error('Contract Method Processor - Sentinel: Register failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -41,7 +41,7 @@ class Register extends AbstractContractMethodProcessor
 
         SentinelRegistered::dispatch($accountBlock, $sentinel);
 
-        Log::info('Contract Method Processor - Sentinel: Register complete', [
+        Log::error('Contract Method Processor - Sentinel: Register complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'sentinel' => $sentinel,

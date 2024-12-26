@@ -22,7 +22,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Liquidity: LiquidityStake failed', [
+            Log::error('Contract Method Processor - Liquidity: LiquidityStake failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -44,7 +44,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
 
         StartStake::dispatch($accountBlock, $stake);
 
-        Log::info('Contract Method Processor - Liquidity: LiquidityStake complete', [
+        Log::error('Contract Method Processor - Liquidity: LiquidityStake complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'stake' => $stake,

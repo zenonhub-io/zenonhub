@@ -23,7 +23,7 @@ class RemoveTokenPair extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $bridgeNetwork);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: RemoveTokenPair failed', [
+            Log::error('Contract Method Processor - Bridge: RemoveTokenPair failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -37,7 +37,7 @@ class RemoveTokenPair extends AbstractContractMethodProcessor
 
         TokenPairRemoved::dispatch($accountBlock, $bridgeNetwork, $token);
 
-        Log::info('Contract Method Processor - Bridge: RemoveTokenPair complete', [
+        Log::error('Contract Method Processor - Bridge: RemoveTokenPair complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

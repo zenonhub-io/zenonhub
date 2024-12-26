@@ -22,7 +22,7 @@ class ProposeAdministrator extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: ProposeAdministrator failed', [
+            Log::error('Contract Method Processor - Bridge: ProposeAdministrator failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -42,7 +42,7 @@ class ProposeAdministrator extends AbstractContractMethodProcessor
 
         AdministratorProposed::dispatch($accountBlock, $proposedAdmin);
 
-        Log::info('Contract Method Processor - Bridge: ProposeAdministrator complete', [
+        Log::error('Contract Method Processor - Bridge: ProposeAdministrator complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

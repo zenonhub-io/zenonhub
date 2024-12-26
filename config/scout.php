@@ -44,7 +44,10 @@ return [
     |
     */
 
-    'queue' => env('SCOUT_QUEUE', true),
+    'queue' => [
+        'connection' => env('QUEUE_CONNECTION', 'database'),
+        'queue' => 'scout',
+    ],
 
     /*
     |--------------------------------------------------------------------------

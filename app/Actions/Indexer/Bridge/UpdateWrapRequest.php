@@ -22,7 +22,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $wrap);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: UpdateWrapRequest failed', [
+            Log::error('Contract Method Processor - Bridge: UpdateWrapRequest failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -37,7 +37,7 @@ class UpdateWrapRequest extends AbstractContractMethodProcessor
 
         WrapRequestUpdated::dispatch($accountBlock, $wrap);
 
-        Log::info('Contract Method Processor - Bridge: UpdateWrapRequest complete', [
+        Log::error('Contract Method Processor - Bridge: UpdateWrapRequest complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

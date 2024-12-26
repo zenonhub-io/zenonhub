@@ -21,7 +21,7 @@ class UpdateToken extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $token);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Token: UpdateToken failed', [
+            Log::error('Contract Method Processor - Token: UpdateToken failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -38,7 +38,7 @@ class UpdateToken extends AbstractContractMethodProcessor
 
         TokenUpdated::dispatch($accountBlock, $token);
 
-        Log::info('Contract Method Processor - Token: UpdateToken complete', [
+        Log::error('Contract Method Processor - Token: UpdateToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'token' => $token,

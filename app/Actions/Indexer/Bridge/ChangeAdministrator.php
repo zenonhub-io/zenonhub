@@ -21,7 +21,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: ChangeAdministrator failed', [
+            Log::error('Contract Method Processor - Bridge: ChangeAdministrator failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -35,7 +35,7 @@ class ChangeAdministrator extends AbstractContractMethodProcessor
 
         AdministratorChanged::dispatch($accountBlock, $newAdmin);
 
-        Log::info('Contract Method Processor - Bridge: ChangeAdministrator complete', [
+        Log::error('Contract Method Processor - Bridge: ChangeAdministrator complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

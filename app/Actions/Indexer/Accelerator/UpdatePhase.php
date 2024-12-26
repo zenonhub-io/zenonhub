@@ -24,7 +24,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $project, $phase);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Accelerator: UpdatePhase failed', [
+            Log::error('Contract Method Processor - Accelerator: UpdatePhase failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -49,7 +49,7 @@ class UpdatePhase extends AbstractContractMethodProcessor
 
         PhaseUpdated::dispatch($accountBlock, $phase);
 
-        Log::info('Contract Method Processor - Accelerator: UpdatePhase complete', [
+        Log::error('Contract Method Processor - Accelerator: UpdatePhase complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'phase' => $phase,

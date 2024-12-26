@@ -22,7 +22,7 @@ class RemoveNetwork extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $bridgeNetwork);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: RemoveNetwork failed', [
+            Log::error('Contract Method Processor - Bridge: RemoveNetwork failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -35,7 +35,7 @@ class RemoveNetwork extends AbstractContractMethodProcessor
 
         NetworkRemoved::dispatch($accountBlock);
 
-        Log::info('Contract Method Processor - Bridge: RemoveNetwork complete', [
+        Log::error('Contract Method Processor - Bridge: RemoveNetwork complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

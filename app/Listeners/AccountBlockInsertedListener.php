@@ -52,7 +52,7 @@ class AccountBlockInsertedListener
             $jobDelay = now()->addMinute()->diffInSeconds(now());
             $blockProcessorClass = ContractMethodProcessorFactory::create($accountBlock->contractMethod);
             $blockProcessorClass::dispatch($accountBlock)
-                ->onQueue('blockProcessor')
+                ->onQueue('indexer')
                 ->delay($jobDelay);
         } catch (Throwable $exception) {
         }

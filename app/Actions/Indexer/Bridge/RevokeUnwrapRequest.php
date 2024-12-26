@@ -22,7 +22,7 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $unwrap);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Bridge: RevokeUnwrapRequest failed', [
+            Log::error('Contract Method Processor - Bridge: RevokeUnwrapRequest failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -36,7 +36,7 @@ class RevokeUnwrapRequest extends AbstractContractMethodProcessor
 
         UnwrapRequestRevoked::dispatch($accountBlock, $unwrap);
 
-        Log::info('Contract Method Processor - Bridge: RemoveUnwrapRequest complete', [
+        Log::error('Contract Method Processor - Bridge: RemoveUnwrapRequest complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

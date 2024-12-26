@@ -25,7 +25,7 @@ class Delegate extends AbstractContractMethodProcessor
         try {
             $this->validateAction($accountBlock, $pillar);
         } catch (IndexerActionValidationException $e) {
-            Log::info('Contract Method Processor - Pillar: Delegate failed', [
+            Log::error('Contract Method Processor - Pillar: Delegate failed', [
                 'accountBlock' => $accountBlock->hash,
                 'blockData' => $blockData,
                 'error' => $e->getMessage(),
@@ -48,7 +48,7 @@ class Delegate extends AbstractContractMethodProcessor
 
         AccountDelegated::dispatch($accountBlock, $accountBlock->account, $pillar);
 
-        Log::info('Contract Method Processor - Pillar: Delegate complete', [
+        Log::error('Contract Method Processor - Pillar: Delegate complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'account' => $accountBlock->account->address,
