@@ -48,7 +48,7 @@ class Delegate extends AbstractContractMethodProcessor
 
         AccountDelegated::dispatch($accountBlock, $accountBlock->account, $pillar);
 
-        Log::error('Contract Method Processor - Pillar: Delegate complete', [
+        Log::info('Contract Method Processor - Pillar: Delegate complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'account' => $accountBlock->account->address,

@@ -58,7 +58,7 @@ class Register extends AbstractContractMethodProcessor
 
         PillarRegistered::dispatch($accountBlock, $pillar);
 
-        Log::error('Contract Method Processor - Pillar: Register complete', [
+        Log::info('Contract Method Processor - Pillar: Register complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

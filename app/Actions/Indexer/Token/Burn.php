@@ -51,7 +51,7 @@ class Burn extends AbstractContractMethodProcessor
 
         TokenBurned::dispatch($accountBlock, $burn);
 
-        Log::error('Contract Method Processor - Token: Burn complete', [
+        Log::info('Contract Method Processor - Token: Burn complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'burn' => $burn,

@@ -35,7 +35,7 @@ class CancelFuse extends AbstractContractMethodProcessor
 
         EndFuse::dispatch($accountBlock, $plasma);
 
-        Log::error('Contract Method Processor - Plasma: CancelFuse complete', [
+        Log::info('Contract Method Processor - Plasma: CancelFuse complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'plasma' => $plasma,

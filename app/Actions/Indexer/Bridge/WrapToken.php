@@ -45,7 +45,7 @@ class WrapToken extends AbstractContractMethodProcessor
 
         TokenWrapped::dispatch($accountBlock, $wrap);
 
-        Log::error('Contract Method Processor - Bridge: WrapToken complete', [
+        Log::info('Contract Method Processor - Bridge: WrapToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

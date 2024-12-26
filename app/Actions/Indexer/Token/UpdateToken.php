@@ -38,7 +38,7 @@ class UpdateToken extends AbstractContractMethodProcessor
 
         TokenUpdated::dispatch($accountBlock, $token);
 
-        Log::error('Contract Method Processor - Token: UpdateToken complete', [
+        Log::info('Contract Method Processor - Token: UpdateToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'token' => $token,

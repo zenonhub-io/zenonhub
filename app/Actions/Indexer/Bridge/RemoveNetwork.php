@@ -35,7 +35,7 @@ class RemoveNetwork extends AbstractContractMethodProcessor
 
         NetworkRemoved::dispatch($accountBlock);
 
-        Log::error('Contract Method Processor - Bridge: RemoveNetwork complete', [
+        Log::info('Contract Method Processor - Bridge: RemoveNetwork complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

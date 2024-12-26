@@ -39,7 +39,7 @@ class Redeem extends AbstractContractMethodProcessor
 
         UnwrapRedeemed::dispatch($accountBlock, $unwrap);
 
-        Log::error('Contract Method Processor - Bridge: Redeem complete', [
+        Log::info('Contract Method Processor - Bridge: Redeem complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

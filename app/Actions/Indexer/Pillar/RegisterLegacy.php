@@ -51,7 +51,7 @@ class RegisterLegacy extends AbstractContractMethodProcessor
 
         PillarRegistered::dispatch($accountBlock, $pillar);
 
-        Log::error('Contract Method Processor - Pillar: RegisterLegacy complete', [
+        Log::info('Contract Method Processor - Pillar: RegisterLegacy complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'pillar' => $pillar,

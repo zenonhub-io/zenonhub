@@ -58,7 +58,7 @@ class VoteByName extends AbstractContractMethodProcessor
 
         PillarVoted::dispatch($accountBlock, $pillar, $item);
 
-        Log::error('Contract Method Processor - Accelerator: VoteByName complete', [
+        Log::info('Contract Method Processor - Accelerator: VoteByName complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

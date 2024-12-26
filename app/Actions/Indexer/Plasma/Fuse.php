@@ -43,7 +43,7 @@ class Fuse extends AbstractContractMethodProcessor
 
         StartFuse::dispatch($accountBlock, $plasma);
 
-        Log::error('Contract Method Processor - Plasma: Fuse complete', [
+        Log::info('Contract Method Processor - Plasma: Fuse complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'plasma' => $plasma,

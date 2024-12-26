@@ -42,7 +42,7 @@ class ProposeAdministrator extends AbstractContractMethodProcessor
 
         AdministratorProposed::dispatch($accountBlock, $proposedAdmin);
 
-        Log::error('Contract Method Processor - Bridge: ProposeAdministrator complete', [
+        Log::info('Contract Method Processor - Bridge: ProposeAdministrator complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

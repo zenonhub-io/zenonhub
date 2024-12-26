@@ -53,7 +53,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
 
         TokenPairSet::dispatch($accountBlock, $bridgeNetwork, $token);
 
-        Log::error('Contract Method Processor - Bridge: SetTokenPair complete', [
+        Log::info('Contract Method Processor - Bridge: SetTokenPair complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

@@ -58,7 +58,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
 
         PillarVoted::dispatch($accountBlock, $pillar, $item);
 
-        Log::error('Contract Method Processor - Accelerator: VoteByProdAddress complete', [
+        Log::info('Contract Method Processor - Accelerator: VoteByProdAddress complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

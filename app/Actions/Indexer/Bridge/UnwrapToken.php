@@ -55,7 +55,7 @@ class UnwrapToken extends AbstractContractMethodProcessor
 
         TokenUnwraped::dispatch($accountBlock, $unwrap);
 
-        Log::error('Contract Method Processor - Bridge: UnwrapToken complete', [
+        Log::info('Contract Method Processor - Bridge: UnwrapToken complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
         ]);

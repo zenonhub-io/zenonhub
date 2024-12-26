@@ -35,7 +35,7 @@ class CancelLiquidityStake extends AbstractContractMethodProcessor
 
         EndStake::dispatch($accountBlock, $stake);
 
-        Log::error('Contract Method Processor - Liquidity: CancelLiquidityStake complete', [
+        Log::info('Contract Method Processor - Liquidity: CancelLiquidityStake complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'stake' => $stake,
