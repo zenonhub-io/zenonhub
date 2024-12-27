@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5331357a31807f404826543b43155740",
+    "content-hash": "a19829b13d20db13ae83881699278c01",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -968,12 +968,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "Asantibanez\\LivewireCharts\\LivewireChartsServiceProvider"
-                    ],
                     "aliases": {
                         "LivewireCharts": "Asantibanez\\LivewireCharts\\LivewireChartsFacade"
-                    }
+                    },
+                    "providers": [
+                        "Asantibanez\\LivewireCharts\\LivewireChartsServiceProvider"
+                    ]
                 }
             },
             "autoload": {
@@ -1789,11 +1789,17 @@
         },
         {
             "name": "digitalsloth/znn-php",
-            "version": "1.0.1",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digitalSloth/znn-php.git",
+                "reference": "d2073424f09038f2e2ec310e77e44e2f282e60f2"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../../Development/ZNN/znn-php",
-                "reference": "982a639d0b3fe9a2ac009bd8beaa301b1c212c52"
+                "type": "zip",
+                "url": "https://api.github.com/repos/digitalSloth/znn-php/zipball/d2073424f09038f2e2ec310e77e44e2f282e60f2",
+                "reference": "d2073424f09038f2e2ec310e77e44e2f282e60f2",
+                "shasum": ""
             },
             "require": {
                 "bitwasp/bech32": "^0.0.1",
@@ -1816,12 +1822,7 @@
                     "DigitalSloth\\ZnnPhp\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "DigitalSloth\\ZnnPhp\\Examples\\": "examples",
-                    "DigitalSloth\\ZnnPhp\\Test\\": "test"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "mit"
             ],
@@ -1832,10 +1833,11 @@
                 }
             ],
             "description": "A PHP SDK for JSON-RPC endpoints of the zenon.network",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/digitalSloth/znn-php/issues",
+                "source": "https://github.com/digitalSloth/znn-php/tree/1.0.0"
+            },
+            "time": "2024-12-27T12:02:11+00:00"
         },
         {
             "name": "diglactic/laravel-breadcrumbs",
@@ -2296,16 +2298,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "4.0.2",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "ebaaf5be6c0286928352e054f2d5125608e5405e"
+                "reference": "b115554301161fa21467629f1e1391c1936de517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/ebaaf5be6c0286928352e054f2d5125608e5405e",
-                "reference": "ebaaf5be6c0286928352e054f2d5125608e5405e",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/b115554301161fa21467629f1e1391c1936de517",
+                "reference": "b115554301161fa21467629f1e1391c1936de517",
                 "shasum": ""
             },
             "require": {
@@ -2351,7 +2353,7 @@
             ],
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/4.0.2"
+                "source": "https://github.com/egulias/EmailValidator/tree/4.0.3"
             },
             "funding": [
                 {
@@ -2359,7 +2361,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-06T06:47:41+00:00"
+            "time": "2024-12-27T00:36:43+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -5530,16 +5532,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.8.3",
+            "version": "3.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "f01cfa96468f4c38325f507ab81a4f1d2cd93cfe"
+                "reference": "129700ed449b1f02d70272d2ac802357c8c30c58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f01cfa96468f4c38325f507ab81a4f1d2cd93cfe",
-                "reference": "f01cfa96468f4c38325f507ab81a4f1d2cd93cfe",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/129700ed449b1f02d70272d2ac802357c8c30c58",
+                "reference": "129700ed449b1f02d70272d2ac802357c8c30c58",
                 "shasum": ""
             },
             "require": {
@@ -5632,7 +5634,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-21T18:03:19+00:00"
+            "time": "2024-12-27T09:25:35+00:00"
         },
         {
             "name": "nette/schema",
@@ -7930,16 +7932,16 @@
         },
         {
             "name": "spatie/color",
-            "version": "1.6.2",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/color.git",
-                "reference": "b4fac074a9e5999dcca12cbfab0f7c73e2684d6d"
+                "reference": "45c4354ffa7e65f05c502b009834ecac7928daa3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/color/zipball/b4fac074a9e5999dcca12cbfab0f7c73e2684d6d",
-                "reference": "b4fac074a9e5999dcca12cbfab0f7c73e2684d6d",
+                "url": "https://api.github.com/repos/spatie/color/zipball/45c4354ffa7e65f05c502b009834ecac7928daa3",
+                "reference": "45c4354ffa7e65f05c502b009834ecac7928daa3",
                 "shasum": ""
             },
             "require": {
@@ -7977,7 +7979,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/color/issues",
-                "source": "https://github.com/spatie/color/tree/1.6.2"
+                "source": "https://github.com/spatie/color/tree/1.6.3"
             },
             "funding": [
                 {
@@ -7985,7 +7987,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-09T16:20:38+00:00"
+            "time": "2024-12-23T11:00:34+00:00"
         },
         {
             "name": "spatie/crawler",
@@ -13696,12 +13698,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "abbccc97f36a9c78f033525c019d310433f22b57"
+                "reference": "98c1896d2a14ae3176e31eafc6d5e66f80a32aeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/abbccc97f36a9c78f033525c019d310433f22b57",
-                "reference": "abbccc97f36a9c78f033525c019d310433f22b57",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/98c1896d2a14ae3176e31eafc6d5e66f80a32aeb",
+                "reference": "98c1896d2a14ae3176e31eafc6d5e66f80a32aeb",
                 "shasum": ""
             },
             "conflict": {
@@ -13990,7 +13992,7 @@
                 "james-heinrich/phpthumb": "<1.7.12",
                 "jasig/phpcas": "<1.3.3",
                 "jcbrand/converse.js": "<3.3.3",
-                "joelbutcher/socialstream": "<6.2",
+                "joelbutcher/socialstream": "<5.6|>=6,<6.2",
                 "johnbillion/wp-crontrol": "<1.16.2",
                 "joomla/application": "<1.0.13",
                 "joomla/archive": "<1.1.12|>=2,<2.0.1",
@@ -14251,7 +14253,7 @@
                 "shopware/storefront": "<=6.4.8.1|>=6.5.8,<6.5.8.7-dev",
                 "shopxo/shopxo": "<=6.1",
                 "showdoc/showdoc": "<2.10.4",
-                "shuchkin/simplexlsx": ">=1.0.12,<1.1.12",
+                "shuchkin/simplexlsx": ">=1.0.12,<1.1.13",
                 "silverstripe-australia/advancedreports": ">=1,<=2",
                 "silverstripe/admin": "<1.13.19|>=2,<2.1.8",
                 "silverstripe/assets": ">=1,<1.11.1",
@@ -14374,6 +14376,7 @@
                 "tinymce/tinymce": "<7.2",
                 "tinymighty/wiki-seo": "<1.2.2",
                 "titon/framework": "<9.9.99",
+                "tltneon/lgsl": "<7",
                 "tobiasbg/tablepress": "<=2.0.0.0-RC1",
                 "topthink/framework": "<6.0.17|>=6.1,<=8.0.4",
                 "topthink/think": "<=6.1.1",
@@ -14541,7 +14544,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-20T16:05:39+00:00"
+            "time": "2024-12-26T21:04:44+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -16083,7 +16086,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "digitalsloth/znn-php": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,

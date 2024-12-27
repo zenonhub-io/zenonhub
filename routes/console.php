@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 Artisan::command('nom:reset-db', function () {
     //Artisan::call('migrate:rollback');
-    Artisan::call('migrate');
+    //Artisan::call('migrate');
     Artisan::call('db:seed --class=DatabaseSeeder');
     Artisan::call('db:seed --class=NomSeeder');
     Artisan::call('db:seed --class=GenesisSeeder');

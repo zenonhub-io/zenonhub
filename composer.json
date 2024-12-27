@@ -14,7 +14,7 @@
         "ext-json": "*",
         "asantibanez/livewire-charts": "^4.1",
         "deployer/deployer": "*",
-        "digitalsloth/znn-php": "@dev",
+        "digitalsloth/znn-php": "^1.0",
         "diglactic/laravel-breadcrumbs": "*",
         "filament/filament": "^3.2",
         "guzzlehttp/guzzle": "^7.8",
