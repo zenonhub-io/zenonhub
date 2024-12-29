@@ -40,7 +40,9 @@ class UpdateContractMethods
                 'name' => $contract,
                 'chain_id' => 1,
             ], [
-                'account_id' => Account::where('name', 'LIKE', "{$contract}%")->first()?->id,
+                'account_id' => Account::where('name', 'LIKE', "{$contract}%")
+                    ->where('is_embedded_contract', 1)
+                    ->first()?->id,
             ]);
 
             foreach ($methods as $method) {
