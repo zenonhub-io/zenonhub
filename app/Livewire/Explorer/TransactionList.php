@@ -85,6 +85,10 @@ class TransactionList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
+                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
@@ -103,10 +107,6 @@ class TransactionList extends BaseTable
 
                     return null;
                 }),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
             Column::make('Timestamp')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)

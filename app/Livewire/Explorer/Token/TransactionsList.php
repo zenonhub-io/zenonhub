@@ -78,16 +78,16 @@ class TransactionsList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
+                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $token->getFormattedAmount($row->amount)
-                ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('TX Hash')
                 ->label(
