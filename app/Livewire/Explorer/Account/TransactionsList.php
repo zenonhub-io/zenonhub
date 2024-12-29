@@ -111,6 +111,10 @@ class TransactionsList extends BaseTable
 
                     return sprintf('%s: %s', $label, $address);
                 })->html(),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_type
+                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
@@ -129,10 +133,6 @@ class TransactionsList extends BaseTable
 
                     return null;
                 }),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_type
-                ),
             Column::make('Timestamp')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)
