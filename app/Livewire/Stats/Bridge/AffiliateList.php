@@ -28,11 +28,16 @@ class AffiliateList extends BaseTable
         $qsrToken = app('qsrToken');
 
         return Account::select(['nom_accounts.address', 'nom_accounts.name'])
-            ->selectRaw("COALESCE(SUM(CASE WHEN nom_account_rewards.token_id = {$znnToken->id} THEN amount END), 0) AS total_znn")
-            ->selectRaw("COALESCE(SUM(CASE WHEN nom_account_rewards.token_id = {$qsrToken->id} THEN amount END), 0) AS total_qsr")
-            ->join('nom_account_rewards', 'nom_account_rewards.account_id', '=', 'nom_accounts.id')
-            ->whereRelation('rewards', 'type', AccountRewardTypesEnum::BRIDGE_AFFILIATE)
-            ->groupBy('nom_accounts.id', 'nom_accounts.address', 'nom_accounts.name');
+            ->withSum(['rewards as total_znn' => function ($query) use ($znnToken) {
+                $query->where('token_id', $znnToken->id)
+                    ->where('type', AccountRewardTypesEnum::BRIDGE_AFFILIATE);
+            }], 'amount')
+            ->withSum(['rewards as total_qsr' => function ($query) use ($qsrToken) {
+                $query->where('token_id', $qsrToken->id)
+                    ->where('type', AccountRewardTypesEnum::BRIDGE_AFFILIATE);
+            }], 'amount')
+            ->orderByDesc('total_znn')
+            ->groupBy('nom_accounts.address', 'nom_accounts.name');
     }
 
     public function columns(): array
