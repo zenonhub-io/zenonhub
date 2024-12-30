@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Explorer\Bridge;
 
 use App\Livewire\BaseTable;
+use App\Models\Nom\BridgeNetwork;
 use App\Models\Nom\BridgeWrap;
 use App\Models\Nom\Token;
 use Illuminate\Database\Eloquent\Builder;
@@ -114,8 +115,13 @@ class OutboundList extends BaseTable
 
     public function filters(): array
     {
-        $tokens = Token::whereHas('bridgeUnwraps')
+        $tokens = Token::whereHas('bridgeWraps')
             ->orderBy('id')
+            ->pluck('name', 'id')
+            ->prepend(__('All'), '')
+            ->toArray();
+
+        $networks = BridgeNetwork::orderBy('created_at')
             ->pluck('name', 'id')
             ->prepend(__('All'), '')
             ->toArray();
@@ -128,17 +134,11 @@ class OutboundList extends BaseTable
                         $builder->where('token_id', $value);
                     }
                 }),
-            SelectFilter::make('Type')
-                ->options([
-                    '' => 'All',
-                    'redeem' => 'Redeem',
-                    'affiliate' => 'Affiliate',
-                ])
+            SelectFilter::make('Network')
+                ->options($networks)
                 ->filter(function (Builder $builder, string $value) {
-                    if ($value === 'redeem') {
-                        $builder->whereNotAffiliateReward();
-                    } elseif ($value === 'affiliate') {
-                        $builder->whereAffiliateReward();
+                    if (! empty($value)) {
+                        $builder->where('bridge_network_id', $value);
                     }
                 }),
         ];
