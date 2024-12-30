@@ -28,6 +28,7 @@ class AffiliateList extends BaseTable
         $qsrToken = app('qsrToken');
 
         return Account::select(['nom_accounts.address', 'nom_accounts.name'])
+            ->whereRelation('rewards', 'type', AccountRewardTypesEnum::BRIDGE_AFFILIATE)
             ->withSum(['rewards as total_znn' => function ($query) use ($znnToken) {
                 $query->where('token_id', $znnToken->id)
                     ->where('type', AccountRewardTypesEnum::BRIDGE_AFFILIATE);
