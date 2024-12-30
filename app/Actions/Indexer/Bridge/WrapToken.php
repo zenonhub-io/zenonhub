@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Bridge;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
+use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Bridge\TokenWrapped;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -42,6 +43,18 @@ class WrapToken extends AbstractContractMethodProcessor
             'amount' => $accountBlock->amount,
             'created_at' => $accountBlock->created_at,
         ]);
+
+        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+            $network->total_znn_wrapped += $wrap->amount;
+            $network->total_znn_held += $wrap->amount;
+            $network->save();
+        }
+
+        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+            $network->total_qsr_wrapped += $wrap->amount;
+            $network->total_qsr_held += $wrap->amount;
+            $network->save();
+        }
 
         TokenWrapped::dispatch($accountBlock, $wrap);
 

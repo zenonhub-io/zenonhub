@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Bridge;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
+use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Bridge\TokenUnwraped;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -51,6 +52,18 @@ class UnwrapToken extends AbstractContractMethodProcessor
         if (! $unwrap->created_at) {
             $unwrap->created_at = $accountBlock->created_at;
             $unwrap->save();
+        }
+
+        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+            $network->total_znn_unwrapped += $unwrap->amount;
+            $network->total_znn_held -= $unwrap->amount;
+            $network->save();
+        }
+
+        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+            $network->total_qsr_unwrapped += $unwrap->amount;
+            $network->total_qsr_held -= $unwrap->amount;
+            $network->save();
         }
 
         TokenUnwraped::dispatch($accountBlock, $unwrap);
