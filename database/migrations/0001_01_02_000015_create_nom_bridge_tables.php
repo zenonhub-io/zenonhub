@@ -37,6 +37,13 @@ return new class extends Migration
             $table->string('explorer_url')->nullable();
             $table->string('explorer_tx_link')->nullable();
             $table->string('explorer_address_link')->nullable();
+            $table->string('explorer_api_url')->nullable();
+            $table->string('total_znn_wrapped')->nullable();
+            $table->string('total_znn_unwrapped')->nullable();
+            $table->string('total_znn_held')->nullable();
+            $table->string('total_qsr_wrapped')->nullable();
+            $table->string('total_qsr_unwrapped')->nullable();
+            $table->string('total_qsr_held')->nullable();
             $table->text('meta_data')->nullable();
             $table->timestamps();
             $table->softDeletes();
