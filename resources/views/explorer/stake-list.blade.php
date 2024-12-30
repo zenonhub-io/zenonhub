@@ -1,18 +1,35 @@
 <x-app-layout>
-    <x-includes.header :title="__('Staking')" class="mb-4" />
+
+    <x-includes.header :title="__('Staking')">
+        <x-navigation.header.responsive-nav :items="[
+            __('ZNN') => route('explorer.stake.list'),
+            __('ZNN-ETH-LP') => route('explorer.stake.list', ['tab' => 'znn-eth-lp']),
+        ]" :active="$tab" />
+    </x-includes.header>
+
     <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
                             :title="__('Total Staked')"
-                            :stat="$stats['stakedTotal'] . ' ZNN'"
+                            :stat="$stats['stakedTotal']"
                         />
                     </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-6">
+                <x-cards.card>
+                    <x-cards.body>
+                        <x-stats.mini-stat
+                            :title="__('Total Stakers')"
+                            :stat="$stats['stakersCount']"
+                        />
+                    </x-cards.body>
+                </x-cards.card>
+            </div>
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
@@ -22,7 +39,7 @@
                     </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-6">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
@@ -34,5 +51,5 @@
             </div>
         </div>
     </div>
-    <livewire:explorer.staking-list lazy />
+    <livewire:explorer.staking-list lazy :tab="$tab" />
 </x-app-layout>

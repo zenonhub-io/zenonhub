@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Explorer;
 
-use App\Models\Nom\Stake;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
@@ -20,7 +19,7 @@ class BridgeController
             'stats' => match ($tab) {
                 'inbound' => $this->getInboundStats(),
                 'outbound' => $this->getOutboundStats(),
-                'znn-eth-lp' => $this->getEthLpStats(),
+                'networks' => $this->getNetworkStats(),
             },
         ]);
     }
@@ -35,25 +34,8 @@ class BridgeController
         return [];
     }
 
-    private function getEthLpStats(): array
+    private function getNetworkStats(): array
     {
-        $znnEthLpToken = app('znnEthLpToken');
-        $query = Stake::whereActive()->where('token_id', $znnEthLpToken->id);
-
-        $totalStaked = $query->sum('amount');
-        $totalStaked = $znnEthLpToken->getDisplayAmount($totalStaked);
-
-        $totalStakes = $query->count();
-        $totalStakes = number_format($totalStakes);
-
-        $avgDuration = $query->avg('duration');
-        $endDate = now()->addSeconds((float) $avgDuration);
-        $avgDuration = now()->diffInDays($endDate);
-
-        return [
-            'stakedTotal' => $totalStaked,
-            'stakesCount' => $totalStakes,
-            'avgDuration' => number_format($avgDuration),
-        ];
+        return [];
     }
 }

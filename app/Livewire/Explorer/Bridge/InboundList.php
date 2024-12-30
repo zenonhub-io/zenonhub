@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Explorer\Bridge;
 
 use App\Livewire\BaseTable;
+use App\Models\Nom\BridgeNetwork;
 use App\Models\Nom\BridgeUnwrap;
 use App\Models\Nom\Token;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,8 +45,7 @@ class InboundList extends BaseTable
     public function builder(): Builder
     {
         return BridgeUnwrap::with('bridgeNetwork', 'token', 'toAccount')
-            ->select('*')
-            ->whereIsProcessed();
+            ->select('*');
     }
 
     public function columns(): array
@@ -59,13 +59,21 @@ class InboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash-link', [
-                        'link' => $row->from_address_link,
-                        'hash' => $row->from_address,
-                        'alwaysShort' => true,
-                        'navigate' => false,
-                        'newTab' => true,
-                    ])
+
+                    function ($row, Column $column) {
+                        if (! $row->from_address) {
+                            return __('Unknown');
+                        }
+
+                        return view('components.tables.columns.hash-link', [
+                            'link' => $row->from_address_link,
+                            'hash' => $row->from_address,
+                            'alwaysShort' => true,
+                            'navigate' => false,
+                            'newTab' => true,
+                        ]);
+
+                    }
                 ),
             Column::make('')
                 ->label(fn ($row, Column $column) => view('components.tables.columns.svg')->with([
@@ -127,12 +135,24 @@ class InboundList extends BaseTable
             ->prepend(__('All'), '')
             ->toArray();
 
+        $networks = BridgeNetwork::orderBy('created_at')
+            ->pluck('name', 'id')
+            ->prepend(__('All'), '')
+            ->toArray();
+
         return [
             SelectFilter::make('Token')
                 ->options($tokens)
                 ->filter(function (Builder $builder, string $value) {
                     if (! empty($value)) {
                         $builder->where('token_id', $value);
+                    }
+                }),
+            SelectFilter::make('Network')
+                ->options($networks)
+                ->filter(function (Builder $builder, string $value) {
+                    if (! empty($value)) {
+                        $builder->where('bridge_network_id', $value);
                     }
                 }),
             SelectFilter::make('Type')

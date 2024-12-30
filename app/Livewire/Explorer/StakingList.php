@@ -11,6 +11,8 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class StakingList extends BaseTable
 {
+    public ?string $tab = 'znn';
+
     public function configure(): void
     {
         parent::configure();
@@ -21,9 +23,15 @@ class StakingList extends BaseTable
 
     public function builder(): Builder
     {
+        $tokenId = app('znnToken')->id;
+
+        if ($this->tab === 'znn-eth-lp') {
+            $tokenId = app('znnEthLpToken')->id;
+        }
+
         return Stake::with('account', 'token')
             ->select('*')
-            ->where('token_id', app('znnToken')->id)
+            ->where('token_id', $tokenId)
             ->whereActive();
     }
 

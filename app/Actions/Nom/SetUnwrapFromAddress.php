@@ -59,6 +59,15 @@ class SetUnwrapFromAddress
             ])->json('result.from');
         }
 
+        if ($unwrap->bridgeNetwork->name === 'BNB Chain') {
+            return Http::get('https://api.bscscan.com/api', [
+                'module' => 'proxy',
+                'action' => 'eth_getTransactionByHash',
+                'txhash' => '0x' . $unwrap->transaction_hash,
+                'apikey' => config('services.bscscan.api_key'),
+            ])->json('result.from');
+        }
+
         return null;
     }
 }
