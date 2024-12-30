@@ -19,6 +19,7 @@ use App\Http\Controllers\Pillars\PillarsController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Services\PublicNodesController;
+use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
 use App\Http\Controllers\Stats\PublicNodesStatsController;
@@ -43,7 +44,7 @@ Route::middleware([
     Route::get('privacy-policy', PolicyController::class)->name('policy');
     Route::get('donate', DonateController::class)->name('donate');
     Route::get('info', InfoController::class)->name('info');
-    Route::get('sponsor', HomeController::class)->name('sponsor');
+    Route::get('sponsor', SponsorController::class)->name('sponsor');
 
     Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
 
@@ -67,7 +68,7 @@ Route::middleware([
     Route::get('explorer/tokens/{tab?}', [TokensController::class, 'index'])->name('explorer.token.list');
     Route::get('explorer/token/{zts}/{tab?}', [TokensController::class, 'show'])->name('explorer.token.detail');
     Route::get('explorer/bridge/{tab?}', BridgeController::class)->name('explorer.bridge.list');
-    Route::get('explorer/stakes', StakesController::class)->name('explorer.stake.list');
+    Route::get('explorer/stakes/{tab?}', StakesController::class)->name('explorer.stake.list');
     Route::get('explorer/plasma', PlasmaController::class)->name('explorer.plasma.list');
 
     Route::get('stats/bridge/{tab?}', BridgeStatsController::class)->name('stats.bridge');
