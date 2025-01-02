@@ -24,17 +24,14 @@ class AffiliateList extends BaseTable
 
     public function builder(): Builder
     {
-        $znnToken = app('znnToken');
-        $qsrToken = app('qsrToken');
-
         return Account::select(['nom_accounts.address', 'nom_accounts.name'])
             ->whereRelation('rewards', 'type', AccountRewardTypesEnum::BRIDGE_AFFILIATE)
-            ->withSum(['rewards as total_znn' => function ($query) use ($znnToken) {
-                $query->where('token_id', $znnToken->id)
+            ->withSum(['rewards as total_znn' => function ($query) {
+                $query->where('token_id', app('znnToken')->id)
                     ->where('type', AccountRewardTypesEnum::BRIDGE_AFFILIATE);
             }], 'amount')
-            ->withSum(['rewards as total_qsr' => function ($query) use ($qsrToken) {
-                $query->where('token_id', $qsrToken->id)
+            ->withSum(['rewards as total_qsr' => function ($query) {
+                $query->where('token_id', app('qsrToken')->id)
                     ->where('type', AccountRewardTypesEnum::BRIDGE_AFFILIATE);
             }], 'amount')
             ->orderByDesc('total_znn')
@@ -43,9 +40,6 @@ class AffiliateList extends BaseTable
 
     public function columns(): array
     {
-        $znnToken = app('znnToken');
-        $qsrToken = app('qsrToken');
-
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
@@ -61,14 +55,14 @@ class AffiliateList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('total_znn ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $znnToken->getFormattedAmount($row->total_znn)
+                    fn ($row, Column $column) => app('znnToken')->getFormattedAmount($row->total_znn)
                 ),
             Column::make('Total QSR')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('total_qsr ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => $qsrToken->getFormattedAmount($row->total_qsr)
+                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->total_qsr)
                 ),
         ];
     }
