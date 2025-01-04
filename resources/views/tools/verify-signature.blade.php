@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <x-includes.header :title="__('Verify Signature')" class="mb-4" />
+    <x-includes.header :title="__('Verify Signature')" :responsive-border="false" />
 
     <div class="container-fluid px-3 px-md-6">
         <p>

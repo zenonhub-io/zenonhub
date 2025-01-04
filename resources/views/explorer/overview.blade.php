@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-includes.header :title="__('Explorer Overview')" class="mb-4" />
+    <x-includes.header :title="__('Explorer Overview')" :responsive-border="false" />
     <div class="container-fluid px-3 px-md-6">
         <div class="row mb-6 gy-6">
             <div class="col-12 col-lg-6">

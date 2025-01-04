@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <x-includes.header :title="__('API Playground')" class="mb-4" />
+    <x-includes.header :title="__('API Playground')" :responsive-border="false" />
 
     <div class="container-fluid px-3 px-md-6">
         <p>
