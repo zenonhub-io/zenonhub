@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Models\Nom\Account;
+use App\Models\Nom\ContractMethod;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -28,14 +30,22 @@ class CreateOrUpdateLatestAccountBlocksViewCommand extends Command
      */
     public function handle()
     {
+        $burnAddress = config('explorer.burn_address');
+        $burnAccount = Account::firstWhere('address', $burnAddress);
+
+        $updateContractMethodIds = ContractMethod::where('name', 'Update')
+            ->pluck('id')
+            ->implode(',');
+
         DB::statement('DROP VIEW IF EXISTS view_latest_nom_account_blocks');
-        DB::statement('
+        DB::statement("
             CREATE VIEW view_latest_nom_account_blocks AS
                 SELECT *
                 FROM nom_account_blocks
-                WHERE to_account_id != 1 AND (contract_method_id NOT IN (36, 68) OR contract_method_id IS null)
+                WHERE to_account_id != {$burnAccount->id}
+                AND (contract_method_id IS NULL OR contract_method_id NOT IN ({$updateContractMethodIds}) )
                 ORDER BY id DESC
                 LIMIT 50000
-        ');
+        ");
     }
 }

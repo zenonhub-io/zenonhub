@@ -180,7 +180,7 @@ class AccountBlock extends Model
     public function scopeNotContractUpdate($query)
     {
         return $query->where(function ($q) {
-            $q->whereNotIn('contract_method_id', [36, 68]) // Ignore update contract calls
+            $q->whereNotIn('contract_method_id', ContractMethod::where('name', 'Update')->pluck('id')) // Ignore update contract calls
                 ->orWhereNull('contract_method_id');
         });
     }
