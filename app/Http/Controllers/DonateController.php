@@ -24,7 +24,6 @@ class DonateController
             ->whereNotIn('account_id', $excludeAddresses)
             ->whereIn('token_id', [app('znnToken')->id, app('qsrToken')->id])
             ->orderBy('id', 'desc')
-            ->limit(10)
             ->get();
 
         return view('donate', [
