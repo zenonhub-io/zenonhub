@@ -1,6 +1,7 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Sign up!')" centered>
-        <ul class="nav nav-tabs nav-fill nav-tabs-flush gap-6 overflow-x border-0">
+    <header class="header mb-6 border-bottom-0 border-bottom-md">
+        <x-includes.header-title :title="__('Sign up!')" class="mb-4" />
+        <ul class="nav nav-tabs nav-fill nav-tabs-flush gap-6 overflow-x border-0 lead">
             <li class="nav-item">
                 <x-link :href="route('login')" class="nav-link">{{ __('Login') }}</x-link>
             </li>
@@ -8,7 +9,7 @@
                 <x-link :href="route('register')" class="nav-link active">{{ __('Register') }}</x-link>
             </li>
         </ul>
-    </x-includes.header>
+    </header>
     <x-forms.form :action="route('register')" class="needs-validation">
         <x-honeypot />
         <div class="mb-4">

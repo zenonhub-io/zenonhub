@@ -4,20 +4,27 @@
         <x-includes.meta/>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="//api.fontshare.com">
-        <link rel="stylesheet" href="//api.fontshare.com/v2/css?f=satoshi@900,700,500,300,400&display=swap">
+        <link rel="preconnect" href="https://api.fontshare.com">
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f=satoshi@900,700,500,300,400&display=swap">
 
         <!-- Scripts & Styles -->
         @vite(['resources/scss/app.scss', 'resources/scss/utility.scss', 'resources/js/app.js'])
         @livewireStyles
         @livewireScriptConfig
-
-        <!-- 3rd Party Scripts & Styles -->
-        @rappasoftTableStyles
-        @rappasoftTableScripts
         @livewireChartsScripts
-
         @stack('styles')
+
+        <!-- GA Tracking -->
+        @if (app()->isProduction())
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('zenon-hub.google_analytics_id') }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '{{ config('zenon-hub.google_analytics_id') }}');
+            </script>
+        @endif
     </head>
     <body class="bg-body">
 
@@ -41,8 +48,13 @@
             </main>
         </div>
 
-        <livewire:components.modal/>
-        <livewire:components.offcanvas/>
+        @persist('modal')
+            <livewire:components.modal/>
+        @endpersist
+        @persist('offcanvas')
+            <livewire:components.offcanvas/>
+        @endpersist
+
         @stack('scripts')
 
         <script>
