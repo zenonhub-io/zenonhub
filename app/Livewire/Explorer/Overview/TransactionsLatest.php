@@ -15,7 +15,7 @@ class TransactionsLatest extends BaseComponent
         return view('livewire.explorer.overview.transactions-latest', [
             'transactions' => AccountBlock::with('token', 'account', 'toAccount', 'contractMethod')
                 ->notToBurn()
-                //->notContractUpdate()
+                ->notContractUpdate()
                 ->limit(6)
                 ->latest('id')
                 ->get(),
