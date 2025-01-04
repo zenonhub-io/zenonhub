@@ -6,8 +6,10 @@ return [
 
     'google_analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-68QQY4TT6Z'),
 
-    'pillar_missed_momentum_limit' => 15,
     'donation_address' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',
+
+    'public_node_https' => env('PUBLIC_NODE_HTTPS', 'https://node.zenonhub.io:35997'),
+    'public_node_wss' => env('PUBLIC_NODE_WSS', 'wss://node.zenonhub.io:35998'),
 
     'colours' => [
         'zenon-green' => '#00D557',

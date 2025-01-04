@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
 
-    'enabled' => env('EXPLORER_ENABLE_INDEXER', true),
+    'pillar_missed_momentum_limit' => 15,
 
     /*
     |--------------------------------------------------------------------------

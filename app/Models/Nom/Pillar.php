@@ -196,13 +196,13 @@ class Pillar extends Model implements Sitemapable
 
     public function scopeWhereProducing($query)
     {
-        return $query->where('missed_momentums', '<=', config('zenon-hub.pillar_missed_momentum_limit'))
+        return $query->where('missed_momentums', '<=', config('explorer.pillar_missed_momentum_limit'))
             ->whereNull('revoked_at');
     }
 
     public function scopeWhereNotProducing($query)
     {
-        return $query->where('missed_momentums', '>', config('zenon-hub.pillar_missed_momentum_limit'));
+        return $query->where('missed_momentums', '>', config('explorer.pillar_missed_momentum_limit'));
     }
 
     public function scopeWhereRevoked($query)
@@ -305,7 +305,7 @@ class Pillar extends Model implements Sitemapable
 
     public function getIsProducingAttribute(): bool
     {
-        return is_null($this->revoked_at) && $this->missed_momentums <= config('zenon-hub.pillar_missed_momentum_limit');
+        return is_null($this->revoked_at) && $this->missed_momentums <= config('explorer.pillar_missed_momentum_limit');
     }
 
     public function getStatusColourAttribute(): string
