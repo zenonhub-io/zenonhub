@@ -19,7 +19,7 @@
                 @foreach($items as $name => $tab)
                     <li>
                         <a href="#{{ $tab }}" class="dropdown-item" wire:click="$dispatch('tab-changed', { tab: '{{ $tab }}'})">
-                            {{ $tab }}
+                            {{ $name }}
                         </a>
                     </li>
                 @endforeach

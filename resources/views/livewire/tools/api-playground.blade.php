@@ -116,7 +116,11 @@
 
                     <div class="row align-items-center mt-6">
                         <div class="col-md-24">
-                            <x-code-highlighters.json :code="$result" />
+                            <x-cards.card>
+                                <x-cards.body>
+                                    <x-code-highlighters.json :code="$result" />
+                                </x-cards.body>
+                            </x-cards.card>
                         </div>
                     </div>
                 </div>

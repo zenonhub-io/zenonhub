@@ -5,5 +5,7 @@
         <h4 class="mb-1 mb-md-0">{{ ($action->display_type ?: '-') }} > {{ $action->contractMethod->contract->name }}</h4>
         <span class="text-sm text-muted"><x-date-time.carbon :date="$action->created_at" /></span>
     </div>
-    <x-code-highlighters.json :code="$action->data->decoded" />
+    <div class="bg-dark-subtle p-4 rounded-2 border shadow-inset">
+        <pre class="line-numbers mb-0"><code class="lang-json">{{ json_encode($action->data->decoded, JSON_PRETTY_PRINT) }}</code></pre>
+    </div>
 </x-link>

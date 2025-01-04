@@ -145,7 +145,11 @@
 
     @if ($tab === 'json')
         <div class="mx-3 mx-md-6">
-            <x-code-highlighters.json :code="$phase->raw_json" />
+            <x-cards.card>
+                <x-cards.body>
+                    <x-code-highlighters.json :code="$phase->raw_json" />
+                </x-cards.body>
+            </x-cards.card>
         </div>
     @endif
 </x-app-layout>
