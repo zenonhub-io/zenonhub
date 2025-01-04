@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-includes.header :title="__('Public Nodes')" />
+    <x-includes.header :title="__('Public Nodes')" :responsive-border="false"  />
 
     <div class="container-fluid px-3 px-md-6 mb-6">
         <p>

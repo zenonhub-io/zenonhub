@@ -198,7 +198,9 @@
                     <x-cards.card>
                         <x-cards.body>
                             <x-stats.mini-stat :title="__('ZNN Paid')">
-                                {{ $stats['znn_paid'] }}
+                                <span class="text-primary">
+                                    {{ $stats['znn_paid'] }}
+                                </span>
                             </x-stats.mini-stat>
                         </x-cards.body>
                     </x-cards.card>
@@ -207,7 +209,9 @@
                     <x-cards.card>
                         <x-cards.body>
                             <x-stats.mini-stat :title="__('QSR Paid')">
-                                {{ $stats['qsr_paid'] }}
+                                <span class="text-secondary">
+                                    {{ $stats['qsr_paid'] }}
+                                </span>
                             </x-stats.mini-stat>
                         </x-cards.body>
                     </x-cards.card>
