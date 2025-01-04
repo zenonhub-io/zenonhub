@@ -1,6 +1,6 @@
 <x-app-layout>
-    <x-includes.header :responsive-border="false" >
-        <div class="d-flex justify-content-between align-items-center">
+    <x-includes.header :responsive-border="false">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="ls-tight text-wrap text-break">{{ __('About us') }}</h1>
             <div class="d-flex justify-content-center gap-6">
                 <a target="_blank" href="https://github.com/zenonhub-io">
