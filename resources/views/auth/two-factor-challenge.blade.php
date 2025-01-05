@@ -1,5 +1,7 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Confirm Access')" centered />
+
+    <x-includes.auth-header :title="__('Confirm Access')" :responsive-border="true" />
+
     <div x-data="{ recovery: false }">
         <div class="mb-4" x-show="! recovery">
             {{ __('Please confirm access to your account by entering the authentication code provided by your authenticator application.') }}

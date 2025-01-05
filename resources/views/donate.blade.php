@@ -35,10 +35,10 @@
                     <td>
                         <div class="text-end">
                             <span class="d-block">
-                                <x-date-time.carbon :date="$donation->created_at" :show-tooltip="false" />
+                                <x-date-time.carbon :date="$donation->created_at" :show-tooltip="false" :human="true" />
                             </span>
                             <span class="d-block text-muted fs-sm">
-                                <x-date-time.carbon :date="$donation->created_at" :show-tooltip="false" :human="true" />
+                                <x-date-time.carbon :date="$donation->created_at" :show-tooltip="false" />
                             </span>
                         </div>
                     </td>

@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="col-24 col-lg-auto">
-                    <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-body-secondary rounded text-xs fw-semibold mt-3 mt-lg-0">
+                    <div class="d-flex justify-content-between gap-1 p-1 align-items-center bg-body-secondary rounded text-xs fw-semibold mt-3 mt-lg-0 overflow-x-auto">
                         <div class="dropdown">
                             <button class="btn btn-neutral btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ Str::upper($token) }}

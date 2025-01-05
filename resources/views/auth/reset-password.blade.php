@@ -1,5 +1,6 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Reset your password')" centered />
+
+    <x-includes.auth-header :title="__('Reset your password')" :responsive-border="true" />
 
     @if (session('status'))
         <x-alerts.alert type="success" class="mb-4">

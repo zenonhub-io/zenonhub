@@ -23,6 +23,16 @@
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
+                            :title="__('Avg. Duration')"
+                            :stat="$stats['avgDuration'] .' ' . __('Days')"
+                        />
+                    </x-cards.body>
+                </x-cards.card>
+            </div>
+            <div class="col-12 col-lg-6">
+                <x-cards.card>
+                    <x-cards.body>
+                        <x-stats.mini-stat
                             :title="__('Total Stakers')"
                             :stat="$stats['stakersCount']"
                         />
@@ -35,16 +45,6 @@
                         <x-stats.mini-stat
                             :title="__('Total Stakes')"
                             :stat="$stats['stakesCount']"
-                        />
-                    </x-cards.body>
-                </x-cards.card>
-            </div>
-            <div class="col-12 col-lg-6">
-                <x-cards.card>
-                    <x-cards.body>
-                        <x-stats.mini-stat
-                            :title="__('Avg Duration')"
-                            :stat="$stats['avgDuration'] .' ' . __('Days')"
                         />
                     </x-cards.body>
                 </x-cards.card>

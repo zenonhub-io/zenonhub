@@ -1,5 +1,6 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Forgot your password?')" centered />
+
+    <x-includes.auth-header :title="__('Forgot your password?')" :responsive-border="true" />
 
     <div class="mb-4">
         {{ __('Just let us know your email address and we will send you a password reset link that will allow you to choose a new one.') }}

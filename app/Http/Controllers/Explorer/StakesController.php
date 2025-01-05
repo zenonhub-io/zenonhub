@@ -31,9 +31,13 @@ class StakesController
 
     private function getStats($token): array
     {
-        return Cache::remember('explorer.stakes.stats-' . $token->id, now()->addHour(), function () use ($token) {
+        return Cache::remember('explorer.stakes-list.stats-' . $token->id, now()->addHour(), function () use ($token) {
             $totalStaked = Stake::whereActive()->where('token_id', $token->id)->sum('amount');
             $totalStaked = $token->getDisplayAmount($totalStaked);
+
+            $avgDuration = Stake::whereActive()->where('token_id', $token->id)->avg('duration');
+            $endDate = now()->addSeconds((float) $avgDuration);
+            $avgDuration = now()->diffInDays($endDate);
 
             $totalStakes = Stake::whereActive()->where('token_id', $token->id)->count();
             $totalStakes = number_format($totalStakes);
@@ -41,15 +45,11 @@ class StakesController
             $totalStakers = Stake::whereActive()->where('token_id', $token->id)->distinct('account_id')->count();
             $totalStakers = number_format($totalStakers);
 
-            $avgDuration = Stake::whereActive()->where('token_id', $token->id)->avg('duration');
-            $endDate = now()->addSeconds((float) $avgDuration);
-            $avgDuration = now()->diffInDays($endDate);
-
             return [
                 'stakedTotal' => $totalStaked > 1 ? Number::abbreviate($totalStaked) : $totalStaked,
+                'avgDuration' => number_format($avgDuration),
                 'stakersCount' => $totalStakers,
                 'stakesCount' => $totalStakes,
-                'avgDuration' => number_format($avgDuration),
             ];
         });
     }

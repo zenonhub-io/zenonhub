@@ -154,24 +154,6 @@
                 <div class="col-12 col-lg-6">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('Total Contributors')">
-                                {{ $stats['totalContributors'] }}
-                            </x-stats.mini-stat>
-                        </x-cards.body>
-                    </x-cards.card>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <x-cards.card>
-                        <x-cards.body>
-                            <x-stats.mini-stat :title="__('Complete Projects')">
-                                {{ $stats['completeProjects'] }}
-                            </x-stats.mini-stat>
-                        </x-cards.body>
-                    </x-cards.card>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <x-cards.card>
-                        <x-cards.body>
                             <x-stats.mini-stat :title="__('ZNN Paid')">
                                 <span class="text-primary">
                                     {{ $stats['znnPaid'] }}
@@ -187,6 +169,24 @@
                                 <span class="text-secondary">
                                     {{ $stats['qsrPaid'] }}
                                 </span>
+                            </x-stats.mini-stat>
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat :title="__('Total Contributors')">
+                                {{ $stats['totalContributors'] }}
+                            </x-stats.mini-stat>
+                        </x-cards.body>
+                    </x-cards.card>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <x-cards.card>
+                        <x-cards.body>
+                            <x-stats.mini-stat :title="__('Complete Projects')">
+                                {{ $stats['completeProjects'] }}
                             </x-stats.mini-stat>
                         </x-cards.body>
                     </x-cards.card>
