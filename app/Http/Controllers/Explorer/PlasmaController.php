@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Explorer;
 
 use App\Models\Nom\Plasma;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use MetaTags;
 
@@ -23,20 +24,27 @@ class PlasmaController
 
     private function getStats(): array
     {
-        $qsrToken = app('qsrToken');
-        $totalPlasma = Plasma::whereActive()->sum('amount');
-        $totalPlasma = $qsrToken->getDisplayAmount($totalPlasma);
+        return Cache::remember('explorer.plasma-list.stats', now()->addHour(), function () {
+            $qsrToken = app('qsrToken');
+            $totalPlasma = Plasma::whereActive()->sum('amount');
+            $totalPlasma = $qsrToken->getDisplayAmount($totalPlasma);
 
-        $totalFusions = Plasma::whereActive()->count();
-        $totalFusions = number_format($totalFusions);
+            $avgAmount = Plasma::whereActive()->avg('amount');
+            $avgAmount = round($avgAmount);
+            $avgAmount = $qsrToken->getFormattedAmount($avgAmount, 2);
 
-        $totalAccounts = Plasma::whereActive()->distinct('from_account_id')->count();
-        $totalAccounts = number_format($totalAccounts);
+            $totalFusions = Plasma::whereActive()->count();
+            $totalFusions = number_format($totalFusions);
 
-        return [
-            'plasmaTotal' => Number::abbreviate($totalPlasma),
-            'fusionsCount' => $totalFusions,
-            'accountCount' => $totalAccounts,
-        ];
+            $totalFusers = Plasma::whereActive()->distinct('from_account_id')->count();
+            $totalFusers = number_format($totalFusers);
+
+            return [
+                'plasmaTotal' => Number::abbreviate($totalPlasma),
+                'avgAmount' => $avgAmount,
+                'fusersCount' => $totalFusers,
+                'fusionsCount' => $totalFusions,
+            ];
+        });
     }
 }

@@ -60,7 +60,7 @@
                     </x-cards.body>
                 </x-cards.card>
             </div>
-            <div class="col-12 col-lg-8">
+            <div class="col-24 col-lg-8">
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
