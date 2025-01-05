@@ -1,5 +1,6 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Verify your email')" centered />
+
+    <x-includes.auth-header :title="__('Verify your email')" :responsive-border="true" />
 
     <div class="mb-4">
         {{ __('Before continuing, please verify your email address by clicking on the link we emailed to you. If you didn\'t receive the email, you can request another to be sent.') }}

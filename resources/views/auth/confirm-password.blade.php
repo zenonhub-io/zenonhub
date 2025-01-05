@@ -1,5 +1,6 @@
 <x-auth-layout>
-    <x-includes.header :title="__('Confirm your password')" centered />
+
+    <x-includes.auth-header :title="__('Confirm your password')" :responsive-border="true" />
 
     <div class="mb-4">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
