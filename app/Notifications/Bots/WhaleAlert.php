@@ -96,9 +96,7 @@ class WhaleAlert extends Notification
 
         return new TwitterStatusUpdate("{$amount} \${$token} was sent from {$senderAccount} to {$receiverAccount}
 
-Tx: $txLink
-
-#ZenonWhaleAlert #Zenon #Bitcoin #NoM \$ZNN \$QSR \$BTC");
+Tx: $txLink");
     }
 
     //

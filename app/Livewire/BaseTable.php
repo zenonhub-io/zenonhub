@@ -23,8 +23,17 @@ abstract class BaseTable extends DataTableComponent
 
         $this->setColumnSelectDisabled();
 
-        $this->setComponentWrapperAttributes([
-            'class' => 'table-responsive',
+        //        $this->setTableWrapperAttributes([
+        //            'default' => false,
+        //            'class' => '',
+        //        ]);
+        //
+        //        $this->setTableAttributes([
+        //            'class' => 'w-full overflow-x-auto',
+        //        ]);
+
+        $this->setTheadAttributes([
+            'class' => 'sticky-top',
         ]);
 
         if ($this->viewMode === 'spaced') {
