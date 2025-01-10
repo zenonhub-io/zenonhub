@@ -11,6 +11,8 @@ return [
     'public_node_https' => env('PUBLIC_NODE_HTTPS', 'https://node.zenonhub.io:35997'),
     'public_node_wss' => env('PUBLIC_NODE_WSS', 'wss://node.zenonhub.io:35998'),
 
+    'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg',
+
     'colours' => [
         'zenon-green' => '#00D557',
         'zenon-blue' => '#0061EB',

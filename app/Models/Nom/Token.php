@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -310,6 +311,20 @@ class Token extends Model implements Sitemapable
 
         return $data;
     }
+
+    public function getAvatarSvgAttribute()
+    {
+        $cacheKey = $this->cacheKey('avatar');
+
+        return Cache::rememberForever($cacheKey, function () {
+            return Http::get(config('zenon-hub.avatar_url'), [
+                'seed' => $this->token_standard,
+            ])->body();
+        });
+    }
+
+    //
+    // Methods
 
     public function getDisplayAmount(mixed $amount): int|float
     {

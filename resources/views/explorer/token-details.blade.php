@@ -3,12 +3,14 @@
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
                 <div class="d-flex align-items-center mb-1">
-                    @if ($token->socialProfile?->avatar)
-                        <div class="title-icon">
+                    <div class="title-icon">
+                        @if ($token->socialProfile?->avatar)
                             <img src="{{ $token->socialProfile?->avatar }}" class="rounded" alt="{{ $token->name }} Logo"/>
-                        </div>
-                    @endif
-                    <h5 class="text-muted">{{ __('Token') }}</h5>
+                        @else
+                            {!! $token->avatar_svg !!}
+                        @endif
+                    </div>
+                    <h5 class="text-muted ms-3">{{ __('Token') }}</h5>
                 </div>
                 <x-includes.header-title>
                     <h1 class="ls-tight text-wrap text-break">
