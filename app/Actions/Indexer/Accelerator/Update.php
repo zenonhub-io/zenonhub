@@ -18,17 +18,17 @@ class Update extends AbstractContractMethodProcessor
     {
         $blockData = $accountBlock->data->decoded;
 
-        try {
-            $this->validateAction($accountBlock);
-        } catch (IndexerActionValidationException $e) {
-            Log::error('Contract Method Processor - Accelerator: Donate failed', [
-                'accountBlock' => $accountBlock->hash,
-                'blockData' => $blockData,
-                'error' => $e->getMessage(),
-            ]);
-
-            return;
-        }
+        //        try {
+        //            $this->validateAction($accountBlock);
+        //        } catch (IndexerActionValidationException $e) {
+        //            Log::error('Contract Method Processor - Accelerator: Donate failed', [
+        //                'accountBlock' => $accountBlock->hash,
+        //                'blockData' => $blockData,
+        //                'error' => $e->getMessage(),
+        //            ]);
+        //
+        //            return;
+        //        }
 
         $projects = AcceleratorProject::with('phases')
             ->whereIn('status', [
@@ -42,7 +42,7 @@ class Update extends AbstractContractMethodProcessor
             if ($project->status === AcceleratorProjectStatusEnum::NEW) {
                 if (! $project->getIsVotingOpenAttribute($accountBlock->created_at)) {
 
-                    $project->status = ($project->total_yes_votes > $project->total_no_votes)
+                    $project->status = ($project->is_quorum_reached && $project->total_yes_votes > $project->total_no_votes)
                         ? AcceleratorProjectStatusEnum::ACCEPTED
                         : AcceleratorProjectStatusEnum::REJECTED;
 
