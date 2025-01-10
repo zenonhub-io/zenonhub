@@ -94,8 +94,8 @@ return [
     'whale-alerts' => [
         'enabled' => env('WHALE_ALERTS_ENABLED', false),
         'settings' => [
-            'znn_cutoff' => env('WHALE_ALERTS_ZNN_LIMIT', 100),
-            'qsr_cutoff' => env('WHALE_ALERTS_QSR_LIMIT', 1000),
+            'znn_cutoff' => env('WHALE_ALERTS_ZNN_LIMIT', 5000),
+            'qsr_cutoff' => env('WHALE_ALERTS_QSR_LIMIT', 50000),
         ],
         'discord' => [
             'enabled' => env('WHALE_ALERTS_ENABLE_DISCORD', false),

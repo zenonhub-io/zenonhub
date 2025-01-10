@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="ms-auto d-flex gap-4 align-items-center">
-                        <x-buttons.button class="btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#edit-favorite-address-{{ $account->address }}">
+                        <x-buttons.button class="btn-outline-info btn-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#edit-favorite-address-{{ $account->address }}">
                             {{ __('Edit') }} <i class="bi bi-pencil-square ms-2"></i>
                         </x-buttons.button>
                     </div>

@@ -11,6 +11,7 @@ use App\Models\Nom\AccountBlock;
 use App\Services\Discord\Embed;
 use App\Services\Discord\Message as DiscordWebhookMessage;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -18,11 +19,14 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class WhaleAlert extends Notification
+class WhaleAlert extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected AccountBlock $block) {}
+    public function __construct(protected AccountBlock $block)
+    {
+        $this->onQueue('alerts');
+    }
 
     public function via($notifiable): array
     {
@@ -104,7 +108,7 @@ Tx: $txLink");
 
     private function formatTxLink(string $channel): string
     {
-        return route('explorer.transaction', [
+        return route('explorer.transaction.detail', [
             'hash' => $this->block->hash,
             'utm_source' => 'whale_bot',
             'utm_medium' => $channel,
@@ -138,7 +142,7 @@ Tx: $txLink");
 
     private function formatAddressLink(Account $account, string $channel): string
     {
-        return route('explorer.account', [
+        return route('explorer.account.detail', [
             'address' => $account->address,
             'utm_source' => 'whale_bot',
             'utm_medium' => $channel,
@@ -161,6 +165,6 @@ Tx: $txLink");
             $colour = config('zenon-hub.colours.zenon-blue');
         }
 
-        return $colour;
+        return (int) $colour;
     }
 }

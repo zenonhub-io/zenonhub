@@ -204,6 +204,17 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
+        'alerts' => [
+            'connection' => 'redis',
+            'queue' => ['alerts'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 3,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
     ],
 
     'environments' => [

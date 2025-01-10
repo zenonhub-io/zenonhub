@@ -37,10 +37,10 @@ Then install and compile frontend assets `npm i && npm run build`
 The system uses queues for most processing, we use [horizon](https://laravel.com/docs/6.x/horizon) for managing queues on a production environment.
 To run these locally run this command:
 ```bash
-artisan queue:work --queue=default,indexer
+php artisan queue:work --queue=default,indexer
 ```
 
 Next you'll need to run the indexer, on a server this is handled by a scheduled task every 10 seconds, locally you need to run:
 ```bash
-php artisan zenon:index
+php artisan indexer:run
 ```

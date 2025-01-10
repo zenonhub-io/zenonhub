@@ -8,6 +8,7 @@ use App\Models\Nom\Pillar;
 use App\Models\Nom\Token;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -44,7 +45,7 @@ class UpdateSocialProfile extends Component
         'discord' => '',
     ];
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.utilities.update-social-profile');
     }

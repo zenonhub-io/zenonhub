@@ -2,7 +2,7 @@
     <div class="d-flex align-items-end justify-content-between align-items-center">
         <div>
             <h4 class="mb-1">{{ __('Verified Addresses') }}</h4>
-            <p class="text-muted">{{ __('Verify your addresses for enhanced functionality.') }}</p>
+            <p class="text-muted">{{ __('Verify your addresses to easily manage its profile.') }}</p>
         </div>
         <div class="d-none d-md-flex gap-2">
             <x-buttons.button class="btn btn-outline-primary" wire:click="verifyAddress" wire:loading.attr="disabled">
