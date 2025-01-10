@@ -11,7 +11,6 @@ use App\Services\ZenonSdk\ZenonSdk;
 use App\Traits\ModelCacheKeyTrait;
 use Database\Factories\Nom\AccountFactory;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
-use Http;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -547,7 +547,7 @@ class Account extends Model implements Sitemapable
         return in_array($this->address, $flaggedAccounts);
     }
 
-    public function getFlaggedDetailsAttribute(): string
+    public function getFlaggedDetailsAttribute(): ?string
     {
         return collect(config('explorer.flagged_accounts'))->where($this->account)->first();
     }
@@ -557,14 +557,9 @@ class Account extends Model implements Sitemapable
         $cacheKey = $this->cacheKey('avatar', 'first_active_at');
 
         return Cache::rememberForever($cacheKey, function () {
-            return Http::get('https://api.dicebear.com/9.x/identicon/svg', [
+            return Http::get(config('zenon-hub.avatar_url'), [
                 'seed' => $this->address,
             ])->body();
-
-            //        return Http::get('https://api.dicebear.com/9.x/bottts-neutral/svg', [
-            //            'seed' => $this->address,
-            //        ])->body();
-
         });
     }
 
@@ -577,11 +572,11 @@ class Account extends Model implements Sitemapable
             ->where('token_id', $token->id)
             ->first();
 
-        if ($holdings) {
-            return $token->getFormattedAmount($holdings->pivot->balance, $decimals);
+        if (! $holdings) {
+            return '0';
         }
 
-        return '0';
+        return $token->getFormattedAmount($holdings->pivot->balance, $decimals);
     }
 
     public function tokenBalanceShare($token, $prefix = '%'): string
