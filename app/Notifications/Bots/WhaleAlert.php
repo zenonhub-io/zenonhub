@@ -23,7 +23,10 @@ class WhaleAlert extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected AccountBlock $block) {}
+    public function __construct(protected AccountBlock $block)
+    {
+        $this->onQueue('alerts');
+    }
 
     public function via($notifiable): array
     {
