@@ -52,7 +52,7 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
     Route::get('utilities/reward-totals', RewardTotalsController::class)->name('api.utilities.reward-totals');
 
     // Misc
-    Route::get('utilities/tx-stats', TransactionStatsController::class)->name('api.utilities.reward-totals');
+    Route::get('utilities/tx-stats', TransactionStatsController::class)->name('api.utilities.tx-stats');
 
     // CMC/CG
     Route::get('utilities/token-supply/{token}/{value?}', TokenSupplyController::class)->name('api.utilities.token-supply');
