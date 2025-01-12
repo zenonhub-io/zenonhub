@@ -66,7 +66,9 @@ class MomentumsList extends BaseTable
                 ),
             Column::make('Pillar')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row->producerPillar)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar-link', [
+                        'pillar' => $row->producerPillar,
+                    ])
                 ),
             Column::make('Transactions')
                 ->sortable(

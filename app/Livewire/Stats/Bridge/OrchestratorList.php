@@ -37,7 +37,9 @@ class OrchestratorList extends BaseTable
                 ->sortable()
                 ->searchable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row)
+                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link', [
+                        'pillar' => $row,
+                    ])
                 ),
             Column::make('Orchestrator')
                 ->label(

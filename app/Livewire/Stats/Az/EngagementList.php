@@ -46,7 +46,9 @@ class EngagementList extends BaseTable
                 ->sortable()
                 ->searchable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row)
+                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link', [
+                        'pillar' => $row,
+                    ])
                 ),
             Column::make('Engagement', 'az_engagement')
                 ->sortable()

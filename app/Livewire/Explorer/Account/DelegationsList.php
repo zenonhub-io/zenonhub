@@ -41,7 +41,9 @@ class DelegationsList extends BaseTable
                     fn (Builder $query, $searchTerm) => $query->where('name', 'like', "%{$searchTerm}%")
                 )
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row)
+                    fn ($row, Column $column) => view('components.tables.columns.pillar-link', [
+                        'pillar' => $row,
+                    ])
                 ),
             Column::make('Started')
                 ->sortable(
