@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $min-contrast-ratio: 3;
 $prefix: x-;
 
@@ -16,15 +18,15 @@ $prefix: x-;
 $white:    #FFF;
 $black:    #000;
 $gray-900: #151515;
-$gray-800: lighten($gray-900, 15%); // Used for headings color
-$gray-700: lighten($gray-900, 25%); // Used for text color
-$gray-600: lighten($gray-900, 35%);
-$gray-500: lighten($gray-900, 45%);
-$gray-400: lighten($gray-900, 55%);
-$gray-300: lighten($gray-900, 65%);
-$gray-200: lighten($gray-900, 75%);
-$gray-100: lighten($gray-900, 85%);
-$gray-50:  lighten($gray-900, 95%);
+$gray-800: color.adjust($gray-900, $lightness: 15%); // Used for headings color
+$gray-700: color.adjust($gray-900, $lightness: 25%); // Used for text color
+$gray-600: color.adjust($gray-900, $lightness: 35%);
+$gray-500: color.adjust($gray-900, $lightness: 45%);
+$gray-400: color.adjust($gray-900, $lightness: 55%);
+$gray-300: color.adjust($gray-900, $lightness: 65%);
+$gray-200: color.adjust($gray-900, $lightness: 75%);
+$gray-100: color.adjust($gray-900, $lightness: 85%);
+$gray-50:  color.adjust($gray-900, $lightness: 95%);
 
 // Theme colors
 
@@ -55,8 +57,8 @@ $info:          $blue;
 $warning:       $orange;
 $danger:        $red;
 
-$light: 		lighten($gray-100, 1%);
-$dark: 			$zenon-black; //$zenon-black;
+$light: 		color.adjust($gray-100, $lightness: 1%);
+$dark: 			$zenon-black;
 
 $theme-colors: (
     "primary":      $primary,
@@ -70,13 +72,15 @@ $theme-colors: (
     "dark":         $dark,
 );
 
+//
 // Body
 $body-bg-dark: $dark;
 
+//
 // Grid
 $grid-columns: 24;
 
-
+//
 // Typography
 //$path-to-fonts:                         '//fonts.googleapis.com/css2?family=Figtree:wght@900,700,500,300,400&display=swap';
 $font-display: 				'Satoshi', sans-serif;
@@ -93,6 +97,7 @@ $font-weight-black:         900;
 
 $font-weight-base:          $font-weight-normal;
 
+//
 // Link
 $link-color:                              $primary;
 $link-decoration:                         none;
@@ -101,7 +106,7 @@ $link-hover-decoration:                   none;
 // Darken percentage for links with `.text-*` class (e.g. `.text-success`)
 $emphasized-link-hover-darken-percentage: 15%;
 
-
+//
 // Box shadow
 //$box-shadow-sm:             0px 1px 1px 0px rgba($black, 50%), 0px 0px 1px 0px rgb($black, 12%);
 //$box-shadow:                  0px 3px 3px -1px rgba($black, 50%), 0px 0px 1px 0px rgb($black, 12%);
@@ -133,6 +138,7 @@ $box-shadow-outline:          0 0 0 3px rgba(66, 153, 225, 0.5);
 $box-shadow-focus:            0 0 0 3px rgba(66, 153, 225, 0.5);
 $box-shadow-transparent:      0 0 0 0 rgba(0, 0, 0, 0);
 
+//
 // Borders
 $border-width:              1px;
 $border-color:              $gray-900;
@@ -144,13 +150,16 @@ $border-radius-xl:            1rem;
 $border-radius-xxl:           2rem;
 $border-radius-pill:          50rem;
 
+//
 // Icons
 //$bootstrap-icons-font-dir:              '/build/fonts';
 
+//
 // Sidebar
 $sidebar-width:                 230px;
 $sidebar-compact-width:         100px;
 
+//
 // Navbar
 $navbar-height:                 60px;
 $navbar-nav-link-padding-x:             1rem;
@@ -162,27 +171,32 @@ $navbar-vertical-nav-link-padding-y:    .5rem;
 $navbar-vertical-width:                 230px;
 $navbar-vertical-open-width:            230px;
 
+//
 // Cards
 $card-border-radius:                    $border-radius-xl;
 
+//
 // Lists
 $list-group-border-radius:              $border-radius-xl;
 
+//
 // Table
 $table-border-color: 		            var(--#{$prefix}border-color);
 $table-light-th-bg: 		            var(--#{$prefix}body-bg);
 $table-light-th-color: 	                var(--#{$prefix}body-color);
 
+//
 // Tooltips
 //$tooltip-bg:                            var(--#{$prefix}body-bg);
 //$tooltip-color:                         var(--#{$prefix}body-color);
 $tooltip-max-width:   1000px;
 
+//
 // Modals
 $modal-backdrop-bg:         rgba($zenon-black, .85);
 $modal-backdrop-opacity:    1;
 
-
+//
 // Transitions
 $link-transition:           color .30s ease-in-out;
 $input-transition:          border-color .30s ease-in-out,
@@ -201,6 +215,7 @@ $card-transition:           transform .30s ease-in-out,
                             box-shadow .30s ease-in-out;
 
 
+//
 // Legend indicator
 $legend-indicator-bg-color:                 $gray-400;
 $legend-indicator-border-radius:            $border-radius;
@@ -208,3 +223,21 @@ $legend-indicator-width:                    .5rem;
 $legend-indicator-height:                   $legend-indicator-width;
 $legend-indicator-margin-y:                 .5rem;
 $legend-indicator-margin-x:                 .4375rem;
+
+//
+// Breadcrumbs
+$breadcrumb-font-size:              null;
+$breadcrumb-padding-y:              0;
+$breadcrumb-padding-x:              0;
+$breadcrumb-item-padding-x:         .5rem;
+$breadcrumb-margin-bottom:          1rem;
+$breadcrumb-bg:                     null;
+$breadcrumb-divider-color:          var(--#{$prefix}secondary-color);
+$breadcrumb-active-color:           var(--#{$prefix}secondary-color);
+$breadcrumb-divider:                quote("\ea55");
+$breadcrumb-divider-flipped:        quote("\ed3f");
+//$breadcrumb-divider:                quote("/");
+//$breadcrumb-divider-flipped:        $breadcrumb-divider;
+$breadcrumb-border-radius:          null;
+
+
