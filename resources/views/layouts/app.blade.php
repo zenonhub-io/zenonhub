@@ -13,6 +13,7 @@
         @livewireScriptConfig
         @livewireChartsScripts
         @stack('styles')
+        @stack('headTags')
 
         <!-- GA Tracking -->
         @if (app()->isProduction())
@@ -70,6 +71,11 @@
             </div>
 
             <div class="app-content-wrapper bg-body-tertiary shadow-inset">
+{{--                @if (isset($breadcrumbs))--}}
+{{--                    <div class="border-bottom px-6 py-2">--}}
+{{--                        {{ $breadcrumbs }}--}}
+{{--                    </div>--}}
+{{--                @endif--}}
                 <main {{ $attributes->merge(['class' => 'mt-5 mb-3']) }}>
                     {{ $slot }}
                 </main>

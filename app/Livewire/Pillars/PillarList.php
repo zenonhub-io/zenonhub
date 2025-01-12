@@ -29,7 +29,7 @@ class PillarList extends BaseTable
 
     public function builder(): Builder
     {
-        $query = Pillar::with('orchestrator')
+        $query = Pillar::with('orchestrator', 'socialProfile')
             ->withCount('activeDelegators');
 
         if ($this->tab === 'active') {
@@ -63,7 +63,10 @@ class PillarList extends BaseTable
                 ->sortable()
                 ->searchable()
                 ->format(
-                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link')->withRow($row)
+                    fn ($value, $row, Column $column) => view('components.tables.columns.pillar-link', [
+                        'pillar' => $row,
+                        'showImage' => true,
+                    ])
                 ),
             Column::make('Weight')
                 ->sortable()

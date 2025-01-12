@@ -34,4 +34,11 @@ export default defineConfig({
             '@webpixels': path.resolve(__dirname, 'node_modules/@webpixels'),
         }
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: ['mixed-decls'],
+            },
+        },
+    },
 });

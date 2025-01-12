@@ -1,4 +1,9 @@
 <x-app-layout>
+
+    <x-slot:breadcrumbs>
+        {{ Breadcrumbs::render('pillar.list') }}
+    </x-slot>
+
     <x-includes.header :title="__('Pillars')" class="mb-4">
         <x-navigation.header.responsive-nav :items="[
             __('All') => route('pillar.list'),
