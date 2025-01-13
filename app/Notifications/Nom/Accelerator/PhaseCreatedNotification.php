@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications\Nom\Accelerator;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\AcceleratorProject;
+use App\Models\Nom\AcceleratorPhase;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,25 +15,24 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class ProjectCreated extends Notification implements ShouldQueue
+class PhaseCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected AcceleratorProject $project;
+    protected AcceleratorPhase $phase;
 
-    public function __construct(AcceleratorProject $project)
+    public function __construct(AcceleratorPhase $phase)
     {
-        $this->project = $project;
+        $this->onQueue('notifications');
+        $this->phase = $phase->loadMissing('project');
     }
 
     public function via($notifiable): array
     {
         $channels = [];
 
-        if ($notifiable instanceof NetworkAlertBot) {
-            if (config('bots.network-alerts.twitter.enabled')) {
-                $channels[] = TwitterChannel::class;
-            }
+        if (($notifiable instanceof NetworkAlertBot) && config('bots.network-alerts.twitter.enabled')) {
+            $channels[] = TwitterChannel::class;
         }
 
         if ($notifiable instanceof User) {
@@ -46,26 +45,23 @@ class ProjectCreated extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . 'New project')
-            ->markdown('mail.notifications.nom.az.project-created', [
+            ->subject(get_env_prefix() . 'New phase')
+            ->markdown('mail.notifications.nom.accelerator.phase-created', [
                 'user' => $notifiable,
-                'project' => $this->project,
+                'phase' => $this->phase,
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $accountName = short_address($this->project->owner);
-        $link = route('az.project', [
-            'hash' => $this->project->hash,
+        $link = route('accelerator-z.phase.detail', [
+            'hash' => $this->phase->hash,
             'utm_source' => 'network_bot',
             'utm_medium' => 'twitter',
         ]);
 
-        return new TwitterStatusUpdate("ℹ️ A new project has been submitted! {$this->project->name} was created by {$accountName}
+        return new TwitterStatusUpdate("ℹ️ A new phase has been created! {$this->phase->name} was added to the {$this->phase->project->name} project
 
-🔗 $link
-
-#ZenonNetworkAlert #Zenon #AcceleratorZ");
+🔗 $link");
     }
 }

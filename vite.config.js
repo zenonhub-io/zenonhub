@@ -4,8 +4,6 @@ import path from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import glob from 'fast-glob';
 
-const extraInputFiles = glob.sync('resources/js/pages/*.js');
-
 export default defineConfig({
     plugins: [
         laravel({
@@ -13,7 +11,7 @@ export default defineConfig({
                 'resources/scss/app.scss',
                 'resources/scss/utility.scss',
                 'resources/js/app.js',
-                ...extraInputFiles,
+                ...glob.sync('resources/js/pages/*.js'),
             ],
             refresh: true
         }),

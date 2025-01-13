@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationType extends Model
@@ -50,11 +49,6 @@ class NotificationType extends Model
     //
     // Methods
 
-    public static function getSubscribedUsers(string $code)
-    {
-        return self::firstWhere('code', $code)->subscribed_users;
-    }
-
     //
     // Scopes
 
@@ -65,11 +59,6 @@ class NotificationType extends Model
 
     //
     // Attributes
-
-    public function getSubscribedUsersAttribute(): Collection
-    {
-        return User::whereRelation('notification_types', 'code', $this->code)->get();
-    }
 
     public function checkUserSubscribed(User $user): bool
     {
