@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Accelerator;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\AcceleratorPhaseStatusEnum;
-use App\Enums\Nom\AcceleratorProjectStatusEnum;
 use App\Events\Indexer\Accelerator\PhaseCreated;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class AddPhase extends AbstractContractMethodProcessor
@@ -63,8 +59,6 @@ class AddPhase extends AbstractContractMethodProcessor
             'phase' => $phase,
         ]);
 
-        //(new UpdatePillarEngagementScores)->execute();
-
         $this->setBlockAsProcessed($accountBlock);
     }
 
@@ -79,6 +73,11 @@ class AddPhase extends AbstractContractMethodProcessor
          */
         [$accountBlock, $project] = func_get_args();
         $blockData = $accountBlock->data->decoded;
+
+        if (! $project) {
+            throw new IndexerActionValidationException('Invalid project');
+        }
+
         $latestPhase = $project->phases()->latest()->first();
 
         if ($project->owner_id !== $accountBlock->account_id) {
@@ -108,16 +107,5 @@ class AddPhase extends AbstractContractMethodProcessor
         if ($blockData['qsrFundsNeeded'] > config('nom.accelerator.projectQsrMaximumFunds')) {
             throw new IndexerActionValidationException('Max QSR funds exceeded');
         }
-    }
-
-    private function notifyUsers(): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Accelerator\PhaseAdded($this->phase)
-        );
     }
 }

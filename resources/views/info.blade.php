@@ -21,7 +21,7 @@
             Zenon Hub is a community-driven project supported by Accelerator-Z. Our mission is to provide a reliable and feature-rich blockchain explorer for the Zenon Network, built by the community, for the community.
         </p>
         <p class="mb-3">
-            We are dedicated to continuously building, developing, and enhancing the platform to meet the evolving needs of Zenon enthusiasts worldwide, ensuring the best possible experience for our community.
+            We are dedicated to continuously building, developing, and enhancing the platform to meet the evolving needs of the Network of Momentum, ensuring the best possible experience for our community.
         </p>
         <p class="mb-3">
             Our codebase is open source, reflecting our commitment to transparency and collaboration. We warmly welcome contributions from the community—whether it’s through code, feedback, or ideas—to help improve and expand Zenon Hub.

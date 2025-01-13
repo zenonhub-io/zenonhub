@@ -10,9 +10,7 @@ use App\Events\Indexer\Accelerator\ProjectCreated;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AcceleratorProject;
 use App\Models\Nom\AccountBlock;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class CreateProject extends AbstractContractMethodProcessor
@@ -62,8 +60,6 @@ class CreateProject extends AbstractContractMethodProcessor
             'project' => $project,
         ]);
 
-        //(new UpdatePillarEngagementScores)->execute();
-
         $this->setBlockAsProcessed($accountBlock);
     }
 
@@ -101,16 +97,5 @@ class CreateProject extends AbstractContractMethodProcessor
         if ($accountBlock->amount !== config('nom.accelerator.projectCreationAmount')) {
             throw new IndexerActionValidationException('Creation fee amount is invalid');
         }
-    }
-
-    private function notifyUsers(): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-az');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Accelerator\ProjectCreated($this->project)
-        );
     }
 }
