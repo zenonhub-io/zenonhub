@@ -31,8 +31,10 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
     {
         $channels = [];
 
-        if (($notifiable instanceof NetworkAlertBot) && config('bots.network-alerts.twitter.enabled')) {
-            $channels[] = TwitterChannel::class;
+        if ($notifiable instanceof NetworkAlertBot) {
+            if (config('bots.network-alerts.twitter.enabled')) {
+                $channels[] = TwitterChannel::class;
+            }
         }
 
         if ($notifiable instanceof User) {
@@ -49,20 +51,26 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
             ->markdown('mail.notifications.nom.accelerator.project-created', [
                 'user' => $notifiable,
                 'project' => $this->project,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
         $accountName = short_address($this->project->owner);
-        $link = route('az.project', [
-            'hash' => $this->project->hash,
-            'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
-        ]);
+        $link = $this->getItemLink('twitter');
 
         return new TwitterStatusUpdate("ℹ️ A new Accelerator-Z project has been submitted! {$this->project->name} was created by {$accountName}
 
 🔗 $link");
+    }
+
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('accelerator-z.project.detail', [
+            'hash' => $this->project->hash,
+            'utm_source' => 'network_bot',
+            'utm_medium' => $source,
+        ]);
     }
 }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications\Nom\Pillar;
+namespace App\Notifications\Nom\Sentinel;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Pillar;
+use App\Models\Nom\Sentinel;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,15 +15,16 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Revoked extends Notification implements ShouldQueue
+class RevokedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Pillar $pillar;
+    protected Sentinel $sentinel;
 
-    public function __construct(Pillar $pillar)
+    public function __construct(Sentinel $sentinel)
     {
-        $this->pillar = $pillar;
+        $this->onQueue('notifications');
+        $this->sentinel = $sentinel;
     }
 
     public function via($notifiable): array
@@ -46,26 +47,29 @@ class Revoked extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . 'Pillar revoked')
-            ->markdown('mail.notifications.nom.pillar.revoked', [
+            ->subject(get_env_prefix() . 'Sentinel revoked')
+            ->markdown('mail.notifications.nom.sentinel.revoked', [
                 'user' => $notifiable,
-                'pillar' => $this->pillar,
+                'sentinel' => $this->sentinel,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $accountName = short_address($this->pillar->owner);
-        $link = route('pillars.detail', [
-            'slug' => $this->pillar->slug,
+        $link = $this->getItemLink('twitter');
+
+        return new TwitterStatusUpdate("ℹ️ A sentinel has been revoked!
+
+🔗 $link");
+    }
+
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('explorer.account.detail', [
+            'address' => $this->sentinel->owner->address,
             'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
+            'utm_medium' => $source,
         ]);
-
-        return new TwitterStatusUpdate("ℹ️ A pillar has been revoked! {$this->pillar->name} was dismantled by {$accountName}
-
-🔗 $link
-
-#ZenonNetworkAlert #Zenon");
     }
 }

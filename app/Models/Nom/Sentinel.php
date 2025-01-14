@@ -100,7 +100,7 @@ class Sentinel extends Model
 
     public function getRawJsonAttribute(): ?SentinelDTO
     {
-        $cacheKey = $this->cacheKey('rawJson');
+        $cacheKey = $this->cacheKey('raw-json');
         $data = Cache::get($cacheKey);
 
         try {

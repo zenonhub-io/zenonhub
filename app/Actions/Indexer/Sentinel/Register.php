@@ -10,9 +10,7 @@ use App\Events\Indexer\Sentinel\SentinelRegistered;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Sentinel;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class Register extends AbstractContractMethodProcessor
 {
@@ -67,16 +65,5 @@ class Register extends AbstractContractMethodProcessor
         if ($accountBlock->amount !== config('nom.sentinel.znnRegisterAmount')) {
             throw new IndexerActionValidationException('Amount doesnt match sentinel registration cost');
         }
-    }
-
-    private function notifyUsers($sentinel): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-sentinel');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Sentinel\Registered($sentinel)
-        );
     }
 }

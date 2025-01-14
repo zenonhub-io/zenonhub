@@ -5,11 +5,7 @@
 
 {{ $phase->description }}
 
-@component('mail::button', ['url' => route('az.phase', [
-    'hash' => $phase->hash,
-    'utm_source' => 'notifications',
-    'utm_medium' => 'email'
-])])
+@component('mail::button', ['url' => $link])
     View phase
 @endcomponent
 @endcomponent

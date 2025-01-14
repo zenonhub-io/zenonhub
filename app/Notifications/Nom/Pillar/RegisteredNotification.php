@@ -15,7 +15,7 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Registered extends Notification implements ShouldQueue
+class RegisteredNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -23,6 +23,7 @@ class Registered extends Notification implements ShouldQueue
 
     public function __construct(Pillar $pillar)
     {
+        $this->onQueue('notifications');
         $this->pillar = $pillar;
     }
 
@@ -50,21 +51,25 @@ class Registered extends Notification implements ShouldQueue
             ->markdown('mail.notifications.nom.pillar.registered', [
                 'user' => $notifiable,
                 'pillar' => $this->pillar,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $link = route('pillars.detail', [
-            'slug' => $this->pillar->slug,
-            'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
-        ]);
+        $link = $this->getItemLink('twitter');
 
         return new TwitterStatusUpdate("ℹ️ A new pillar has been registered! Welcome to the network {$this->pillar->name}!
 
-🔗 $link
+🔗 $link");
+    }
 
-#ZenonNetworkAlert #Zenon");
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('pillar.detail', [
+            'slug' => $this->pillar->slug,
+            'utm_source' => 'network_bot',
+            'utm_medium' => $source,
+        ]);
     }
 }

@@ -147,7 +147,7 @@ class Momentum extends Model
 
     public function getRawJsonAttribute(): ?MomentumDTO
     {
-        $cacheKey = $this->cacheKey('rawJson');
+        $cacheKey = $this->cacheKey('raw-json');
         $data = Cache::get($cacheKey);
 
         try {

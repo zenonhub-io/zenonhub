@@ -31,8 +31,10 @@ class PhaseCreatedNotification extends Notification implements ShouldQueue
     {
         $channels = [];
 
-        if (($notifiable instanceof NetworkAlertBot) && config('bots.network-alerts.twitter.enabled')) {
-            $channels[] = TwitterChannel::class;
+        if ($notifiable instanceof NetworkAlertBot) {
+            if (config('bots.network-alerts.twitter.enabled')) {
+                $channels[] = TwitterChannel::class;
+            }
         }
 
         if ($notifiable instanceof User) {
@@ -49,19 +51,25 @@ class PhaseCreatedNotification extends Notification implements ShouldQueue
             ->markdown('mail.notifications.nom.accelerator.phase-created', [
                 'user' => $notifiable,
                 'phase' => $this->phase,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $link = route('accelerator-z.phase.detail', [
-            'hash' => $this->phase->hash,
-            'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
-        ]);
+        $link = $this->getItemLink('twitter');
 
         return new TwitterStatusUpdate("ℹ️ A new phase has been created! {$this->phase->name} was added to the {$this->phase->project->name} project
 
 🔗 $link");
+    }
+
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('accelerator-z.phase.detail', [
+            'hash' => $this->phase->hash,
+            'utm_source' => 'network_bot',
+            'utm_medium' => $source,
+        ]);
     }
 }

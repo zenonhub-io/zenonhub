@@ -9,9 +9,7 @@ use App\Events\Indexer\Pillar\PillarUpdated;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class UpdatePillar extends AbstractContractMethodProcessor
 {
@@ -101,33 +99,5 @@ class UpdatePillar extends AbstractContractMethodProcessor
         if ($blockData['giveDelegateRewardPercentage'] > 100 || $blockData['giveDelegateRewardPercentage'] < 0) {
             throw new IndexerActionValidationException('Invalid delegate reward percentage');
         }
-    }
-
-    private function notifyUsers($pillar): void
-    {
-        // any pillar updated
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Pillar\Updated($pillar)
-        );
-
-        // delegating pillar updated
-        //        $notificationType = NotificationType::findByCode('delegating-pillar-updated');
-        //        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', $notificationType->code))
-        //            ->whereHas('nom_accounts', function ($query) use ($pillar) {
-        //                $query->whereHas('delegations', function ($query2) use ($pillar) {
-        //                    $query2->where('pillar_id', $pillar->id)
-        //                        ->whereNull('ended_at');
-        //                });
-        //            })
-        //            ->get();
-        //
-        //        Notification::send(
-        //            $subscribedUsers,
-        //            new \App\Notifications\Pillar\DelegatingUpdated($pillar)
-        //        );
     }
 }

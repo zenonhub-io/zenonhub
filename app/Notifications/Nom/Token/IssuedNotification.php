@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications\Nom\Pillar;
+namespace App\Notifications\Nom\Token;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Pillar;
+use App\Models\Nom\Token;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,15 +15,16 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Updated extends Notification implements ShouldQueue
+class IssuedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Pillar $pillar;
+    protected Token $token;
 
-    public function __construct(Pillar $pillar)
+    public function __construct(Token $token)
     {
-        $this->pillar = $pillar;
+        $this->onQueue('notifications');
+        $this->token = $token;
     }
 
     public function via($notifiable): array
@@ -46,25 +47,30 @@ class Updated extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . 'Pillar updated')
-            ->markdown('mail.notifications.nom.pillar.updated', [
+            ->subject(get_env_prefix() . 'New token issued')
+            ->markdown('mail.notifications.nom.token.issued', [
                 'user' => $notifiable,
-                'pillar' => $this->pillar,
+                'token' => $this->token,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $link = route('pillars.detail', [
-            'slug' => $this->pillar->slug,
+        $accountName = short_address($this->token->owner);
+        $link = $this->getItemLink('twitter');
+
+        return new TwitterStatusUpdate("ℹ️ A new token has been issued! {$this->token->name} was created by {$accountName}
+
+🔗 $link");
+    }
+
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('explorer.token.detail', [
+            'zts' => $this->token->token_standard,
             'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
+            'utm_medium' => $source,
         ]);
-
-        return new TwitterStatusUpdate("ℹ️ A pillar has been updated! {$this->pillar->name} changed their rewards to {$this->pillar->momentum_rewards }% / {$this->pillar->delegate_rewards}%
-
-🔗 $link
-
-#ZenonNetworkAlert #Zenon");
     }
 }

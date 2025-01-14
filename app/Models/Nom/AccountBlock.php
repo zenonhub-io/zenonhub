@@ -240,7 +240,7 @@ class AccountBlock extends Model
 
     public function getRawJsonAttribute(): ?AccountBlockDTO
     {
-        $cacheKey = $this->cacheKey('rawJson');
+        $cacheKey = $this->cacheKey('raw-json');
         $data = Cache::get($cacheKey);
 
         try {

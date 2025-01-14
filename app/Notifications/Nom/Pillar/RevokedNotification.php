@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications\Nom\Token;
+namespace App\Notifications\Nom\Pillar;
 
 use App\Bots\NetworkAlertBot;
-use App\Models\Nom\Token;
+use App\Models\Nom\Pillar;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,15 +15,16 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Issued extends Notification implements ShouldQueue
+class RevokedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Token $token;
+    protected Pillar $pillar;
 
-    public function __construct(Token $token)
+    public function __construct(Pillar $pillar)
     {
-        $this->token = $token;
+        $this->onQueue('notifications');
+        $this->pillar = $pillar;
     }
 
     public function via($notifiable): array
@@ -46,26 +47,30 @@ class Issued extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject(get_env_prefix() . 'New token issued')
-            ->markdown('mail.notifications.nom.token.issued', [
+            ->subject(get_env_prefix() . 'Pillar revoked')
+            ->markdown('mail.notifications.nom.pillar.revoked', [
                 'user' => $notifiable,
-                'token' => $this->token,
+                'pillar' => $this->pillar,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $accountName = short_address($this->token->owner);
-        $link = route('explorer.token', [
-            'zts' => $this->token->token_standard,
+        $accountName = short_address($this->pillar->owner);
+        $link = $this->getItemLink('twitter');
+
+        return new TwitterStatusUpdate("ℹ️ A pillar has been revoked! {$this->pillar->name} was dismantled by {$accountName}
+
+🔗 $link");
+    }
+
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('pillar.detail', [
+            'slug' => $this->pillar->slug,
             'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
+            'utm_medium' => $source,
         ]);
-
-        return new TwitterStatusUpdate("ℹ️ A new token has been issued! {$this->token->name} was created by {$accountName}
-
-🔗 $link
-
-#ZenonNetworkAlert #Zenon");
     }
 }

@@ -10,9 +10,7 @@ use App\Events\Indexer\Pillar\PillarRegistered;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class Register extends AbstractContractMethodProcessor
@@ -101,16 +99,5 @@ class Register extends AbstractContractMethodProcessor
         if ($accountBlock->amount !== config('nom.pillar.znnStakeAmount')) {
             throw new IndexerActionValidationException('Amount doesnt match pillar registration cost');
         }
-    }
-
-    private function notifyUsers($pillar): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Pillar\Registered($pillar)
-        );
     }
 }

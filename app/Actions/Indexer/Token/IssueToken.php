@@ -10,10 +10,8 @@ use App\Events\Indexer\Token\TokenIssued;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Token;
-use App\Models\NotificationType;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class IssueToken extends AbstractContractMethodProcessor
 {
@@ -118,16 +116,5 @@ class IssueToken extends AbstractContractMethodProcessor
         if ($accountBlock->amount !== config('nom.token.issueAmount')) {
             throw new IndexerActionValidationException('Invalid issue amount');
         }
-    }
-
-    private function notifyUsers($token): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-token');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Token\Issued($token)
-        );
     }
 }

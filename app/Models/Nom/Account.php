@@ -525,7 +525,7 @@ class Account extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): ?AccountDTO
     {
-        $cacheKey = $this->cacheKey('rawJson', 'last_active_at');
+        $cacheKey = $this->cacheKey('raw-json', 'last_active_at');
         $data = Cache::get($cacheKey);
 
         try {
