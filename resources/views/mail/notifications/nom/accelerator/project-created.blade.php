@@ -5,11 +5,7 @@
 
 {{ $project->description }}
 
-@component('mail::button', ['url' => route('accelerator-z.project.detail', [
-    'hash' => $project->hash,
-    'utm_source' => 'notifications',
-    'utm_medium' => 'email'
-])])
+@component('mail::button', ['url' => $link])
     View project
 @endcomponent
 @endcomponent

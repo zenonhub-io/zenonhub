@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use App\Services\ZenonSdk\ZenonSdk;
@@ -53,11 +52,6 @@ function load_token(?string $zts): ?Token
     return $token;
 }
 
-function lp_eth_token(): Token
-{
-    return Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
-}
-
 function short_address(Account $account)
 {
     if ($account->has_custom_label) {
@@ -65,11 +59,6 @@ function short_address(Account $account)
     }
 
     return short_hash($account->address);
-}
-
-function float_number(mixed $number): float
-{
-    return (float) preg_replace('/[^\d.]/', '', $number);
 }
 
 function short_hash($hash, $eitherSide = 8, $includeEnd = true): string

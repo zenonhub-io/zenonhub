@@ -9,9 +9,7 @@ use App\Events\Indexer\Pillar\PillarRevoked;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Pillar;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class Revoke extends AbstractContractMethodProcessor
 {
@@ -76,16 +74,5 @@ class Revoke extends AbstractContractMethodProcessor
         if (! $pillar->getIsRevokableAttribute($accountBlock->created_at)) {
             throw new IndexerActionValidationException('Pillar not currently revocable');
         }
-    }
-
-    private function notifyUsers($pillar): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-pillar');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Pillar\Revoked($pillar)
-        );
     }
 }

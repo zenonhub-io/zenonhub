@@ -9,9 +9,7 @@ use App\Events\Indexer\Sentinel\SentinelRevoked;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Sentinel;
-use App\Models\NotificationType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class Revoke extends AbstractContractMethodProcessor
 {
@@ -64,16 +62,5 @@ class Revoke extends AbstractContractMethodProcessor
         if (! $sentinel->getIsRevokableAttribute($accountBlock->created_at)) {
             throw new IndexerActionValidationException('Sentinel not revocable');
         }
-    }
-
-    private function notifyUsers($sentinel): void
-    {
-        $subscribedUsers = NotificationType::getSubscribedUsers('network-sentinel');
-        $networkBot = new \App\Bots\NetworkAlertBot;
-
-        Notification::send(
-            $subscribedUsers->prepend($networkBot),
-            new \App\Notifications\Nom\Sentinel\Revoked($sentinel)
-        );
     }
 }

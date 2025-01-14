@@ -111,7 +111,7 @@ class Stake extends Model
 
     public function scopeWhereEthLp($query)
     {
-        return $query->where('token_id', lp_eth_token()->id);
+        return $query->where('token_id', app('znnEthLpToken')->id);
     }
 
     public function scopeWhereEnded($query)

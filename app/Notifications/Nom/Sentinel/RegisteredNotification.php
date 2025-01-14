@@ -15,7 +15,7 @@ use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class Registered extends Notification implements ShouldQueue
+class RegisteredNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -23,7 +23,8 @@ class Registered extends Notification implements ShouldQueue
 
     public function __construct(Sentinel $sentinel)
     {
-        $this->sentinel = $sentinel;
+        $this->onQueue('notifications');
+        $this->sentinel = $sentinel->loadMissing('owner');
     }
 
     public function via($notifiable): array
@@ -50,21 +51,25 @@ class Registered extends Notification implements ShouldQueue
             ->markdown('mail.notifications.nom.sentinel.registered', [
                 'user' => $notifiable,
                 'sentinel' => $this->sentinel,
+                'link' => $this->getItemLink(),
             ]);
     }
 
     public function toTwitter($notifiable): TwitterMessage
     {
-        $link = route('explorer.account', [
-            'address' => $this->sentinel->owner->address,
-            'utm_source' => 'network_bot',
-            'utm_medium' => 'twitter',
-        ]);
+        $link = $this->getItemLink('twitter');
 
         return new TwitterStatusUpdate("ℹ️ A new sentinel has been registered!
 
-🔗 $link
+🔗 $link");
+    }
 
-#ZenonNetworkAlert #Zenon");
+    private function getItemLink(string $source = 'email'): string
+    {
+        return route('explorer.account.detail', [
+            'address' => $this->sentinel->owner->address,
+            'utm_source' => 'network_bot',
+            'utm_medium' => $source,
+        ]);
     }
 }

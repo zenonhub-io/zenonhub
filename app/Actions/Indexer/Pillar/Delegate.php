@@ -36,12 +36,6 @@ class Delegate extends AbstractContractMethodProcessor
 
         Cache::forget($pillar->cacheKey('pillar-rank', 'updated_at'));
 
-        //        $accountBlock->account
-        //            ->delegations()
-        //            ->newPivotStatementForId($accountBlock->account_id)
-        //            ->where('ended_at', null)
-        //            ->update(['ended_at' => $accountBlock->created_at]);
-
         $accountBlock->account->delegations()->attach($pillar->id, [
             'started_at' => $accountBlock->created_at,
         ]);
@@ -78,18 +72,4 @@ class Delegate extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Pillar is revoked');
         }
     }
-
-    //    private function notifyUsers(): void
-    //    {
-    //        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-delegator-added'))
-    //            ->whereHas('nom_accounts', function ($query) {
-    //                $query->whereHas('pillars', fn ($query) => $query->where('id', $this->pillar->id));
-    //            })
-    //            ->get();
-    //
-    //        Notification::send(
-    //            $subscribedUsers,
-    //            new \App\Notifications\Nom\Pillar\NewDelegator($this->pillar, $accountBlock->account)
-    //        );
-    //    }
 }
