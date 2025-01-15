@@ -71,12 +71,15 @@ svg, img {
 
 .title-icon {
     min-height: 20px !important;
-    //min-width: 24px !important;
     height: 20px !important;
-    //width: 24px !important;
-
     svg {
         height: 20px;
     }
 }
 
+// Temp fix because webpixels is overwriting the variables in
+// node_modules/@webpixels/css/variables/_variables.scss:750
+.modal-backdrop {
+    background-color: $modal-backdrop-bg-fixed !important;
+    opacity: $modal-backdrop-opacity-fixed !important;
+}
