@@ -15,7 +15,7 @@ class OverviewController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Zenon Hub | Explore the Zenon Network Blockchain with Ease', false);
+        MetaTags::title('Zenon Hub | Explore the Zenon Network (Network of Momentum)', false);
 
         return view('explorer.overview', [
             'stats' => $this->getStats(),
