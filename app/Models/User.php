@@ -17,10 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-    use HasApiTokens;
-    use HasFactory;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +31,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'password',
         'registration_ip',
         'last_seen_at',
+        'email_verified_at',
         'privacy_confirmed_at',
+        'last_login_at',
+        'created_at',
+        'updated_at',
     ];
 
     /**

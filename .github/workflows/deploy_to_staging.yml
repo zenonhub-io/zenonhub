@@ -15,7 +15,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -39,12 +39,12 @@ jobs:
 
       - name: Create deploy env file
         run: |
-          echo "${{ secrets.ENV_DEPLOY }}" > ./deploy/.env
+          echo "${{ secrets.STAGING_DEPLOY_ENV }}" > ./deploy/.env
 
       - name: Deploy
         uses: deployphp/action@v1
         with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
+          private-key: ${{ secrets.STAGING_DEPLOY_PRIVATE_KEY }}
           dep: deploy develop
 
       - name: Discord notification

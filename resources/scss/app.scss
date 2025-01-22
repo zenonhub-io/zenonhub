@@ -13,6 +13,9 @@
 @import "@webpixels/css/core";
 @import "@webpixels/css/base";
 
+// Temp fix for styling issues
+@import "themes/zenon/variables-overwrite";
+
 //@import "user/utilities";
 
 // Bootstrap components
