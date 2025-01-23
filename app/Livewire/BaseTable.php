@@ -32,9 +32,9 @@ abstract class BaseTable extends DataTableComponent
         //            'class' => 'w-full overflow-x-auto',
         //        ]);
 
-        $this->setTheadAttributes([
-            'class' => 'sticky-top',
-        ]);
+        //        $this->setTheadAttributes([
+        //            'class' => 'sticky-top',
+        //        ]);
 
         if ($this->viewMode === 'spaced') {
             $this->setTableAttributes([
