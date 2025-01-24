@@ -24,4 +24,11 @@ return [
         'danger' => '#FF3366',
         'bg-dark' => '#262626',
     ],
+
+    'socials' => [
+        'x' => 'https://x.com/zenonhub',
+        'telegram' => 'https://t.me/digitalSloth',
+        'github' => 'https://github.com/zenonhub-io',
+        'email' => 'digitals1oth@proton.me',
+    ],
 ];

@@ -7,12 +7,12 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\View;
 use MetaTags;
 
-class SponsorController
+class AdvertisingController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Sponsor Zenon Hub', false);
+        MetaTags::title('Advertise on Zenon Hub', false);
 
-        return view('sponsor');
+        return view('advertise');
     }
 }

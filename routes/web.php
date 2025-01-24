@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AcceleratorZ\AcceleratorPhaseController;
 use App\Http\Controllers\AcceleratorZ\AcceleratorProjectsController;
+use App\Http\Controllers\AdvertisingController;
 use App\Http\Controllers\DonateController;
 use App\Http\Controllers\Explorer\AccountsController;
 use App\Http\Controllers\Explorer\BridgeController;
@@ -19,7 +20,6 @@ use App\Http\Controllers\Pillars\PillarsController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Services\PublicNodesController;
-use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
 use App\Http\Controllers\Stats\PublicNodesStatsController;
@@ -44,7 +44,7 @@ Route::middleware([
     Route::get('privacy-policy', PolicyController::class)->name('policy');
     Route::get('donate', DonateController::class)->name('donate');
     Route::get('info', InfoController::class)->name('info');
-    Route::get('sponsor', SponsorController::class)->name('sponsor');
+    Route::get('advertise', AdvertisingController::class)->name('advertise');
 
     Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
 

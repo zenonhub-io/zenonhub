@@ -3,13 +3,13 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="ls-tight text-wrap text-break">{{ __('About us') }}</h1>
             <div class="d-flex justify-content-center gap-6">
-                <a target="_blank" href="https://github.com/zenonhub-io">
+                <a target="_blank" href="{{ config('zenon-hub.socials.github') }}">
                     <i class="bi-github" style="font-size: 1.35rem;"></i>
                 </a>
-                <a target="_blank" href="https://twitter.com/zenonhub">
+                <a target="_blank" href="{{ config('zenon-hub.socials.x') }}">
                     <i class="bi-twitter-x" style="font-size: 1.35rem;"></i>
                 </a>
-                <a target="_blank" href="https://t.me/digitalSloth">
+                <a target="_blank" href="{{ config('zenon-hub.socials.telegram') }}">
                     <i class="bi-telegram" style="font-size: 1.35rem;"></i>
                 </a>
             </div>

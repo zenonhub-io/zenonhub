@@ -30,7 +30,7 @@ class GenerateSitemap
         Sitemap::create()
             ->add($this->addItem('home'))
             ->add($this->addItem('donate'))
-            ->add($this->addItem('sponsor'))
+            ->add($this->addItem('advertise'))
             ->add($this->addItem('terms'))
             ->add($this->addItem('policy'))
 
