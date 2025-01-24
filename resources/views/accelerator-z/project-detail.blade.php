@@ -124,7 +124,11 @@
                                 <x-date-time.carbon :date="$project->created_at" />
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Updated')" :hr="false">
-                                <x-date-time.carbon :date="$project->updated_at" />
+                                @if($project->updated_at)
+                                    <x-date-time.carbon :date="$project->updated_at" />
+                                @else
+                                    -
+                                @endif
                             </x-stats.list-item>
                         </div>
                     </div>
