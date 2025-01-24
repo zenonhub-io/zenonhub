@@ -63,7 +63,7 @@
                             <x-includes.sidebar.nav />
                         </nav>
                         <div class="mt-auto w-100 pt-6 pt-md-4 border-top">
-                            <x-includes.sidebar.sponsor />
+                            <x-includes.sidebar.adverts />
                             <x-includes.sidebar.footer />
                         </div>
                     </div>

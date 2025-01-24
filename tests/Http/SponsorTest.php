@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-uses()->group('site', 'routes', 'sponsor');
+uses()->group('site', 'routes', 'advertise');
 
-//it('sponsor page returns a successful response', function () {
-//    $response = $this->get(route('sponsor'));
+//it('advertise page returns a successful response', function () {
+//    $response = $this->get(route('advertise'));
 //    $response->assertStatus(200);
 //});
