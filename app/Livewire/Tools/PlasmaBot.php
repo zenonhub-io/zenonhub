@@ -7,6 +7,7 @@ namespace App\Livewire\Tools;
 use App\Actions\PlasmaBot\Fuse;
 use App\Exceptions\PlasmaBotException;
 use App\Models\PlasmaBotEntry;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
@@ -85,7 +86,7 @@ class PlasmaBot extends Component
         }
 
         $rateLimitKey = 'plasma-bot-fuse:' . request()->ip();
-        if (RateLimiter::tooManyAttempts($rateLimitKey, 1)) {
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 1) && app()->isProduction()) {
             $seconds = RateLimiter::availableIn($rateLimitKey);
             $this->result = false;
             $this->message = "Too many requests, please try again in {$seconds} seconds";
@@ -114,6 +115,7 @@ class PlasmaBot extends Component
             Fuse::run($this->fuseForm['address'], $plasma, $expires);
             $this->result = true;
         } catch (PlasmaBotException $exception) {
+            Log::error('Plasma bot error: ' . $exception->getMessage());
             $this->result = false;
         }
     }
