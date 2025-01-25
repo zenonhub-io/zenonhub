@@ -8,6 +8,11 @@ use App\Models\Nom\Token;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
+Artisan::command('site:migrate-old-data', function () {
+    App\Actions\Tools\MigrateJsonData::run();
+    App\Actions\PlasmaBot\ImportEnvApiKeys::run();
+})->purpose('Resets all NoM data back to genesis');
+
 Artisan::command('nom:reset-db', function () {
     //Artisan::call('migrate:rollback');
     //Artisan::call('migrate');
@@ -19,6 +24,8 @@ Artisan::command('nom:reset-db', function () {
 })->purpose('Resets all NoM data back to genesis');
 
 Artisan::command('site:after-deploy', function () {
+    Artisan::call('nom:create-or-update-latest-account-blocks-view');
+    Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
     Artisan::call('nom:update-contract-methods');
     Artisan::call('nom:update-named-addresses');
     Artisan::call('sync:orchestrators');
@@ -26,9 +33,7 @@ Artisan::command('site:after-deploy', function () {
     Artisan::call('sync:public-nodes');
     Artisan::call('sync:pillar-metrics');
     Artisan::call('sync:token-prices');
-    Artisan::call('nom:create-or-update-latest-account-blocks-view');
-    Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
-    //Artisan::call('site:generate-sitemap');
+    Artisan::call('site:generate-sitemap');
 })->purpose('Sets up the site after a deploy');
 
 Artisan::command('site:create-stats', function () {

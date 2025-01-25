@@ -114,7 +114,7 @@ class Token extends Model implements Sitemapable
 
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('explorer.token', ['zts' => $this->token_standard]);
+        return route('explorer.token.detail', ['zts' => $this->token_standard]);
     }
 
     /**

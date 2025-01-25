@@ -22,20 +22,18 @@ class RewardTotalsController extends ApiController
 
         foreach ($types as $type) {
             foreach ($tokens as $tokenName => $token) {
+                $typeConstant = strtoupper($type);
+                $rewardType = AccountRewardTypesEnum::{$typeConstant}->value;
+                $rewardSum = AccountReward::where('type', $rewardType)
+                    ->where('token_id', $token->id)
+                    ->sum('amount');
 
-                // TODO - enable after php update
-                //                $typeConstant = strtoupper($type);
-                //                $rewardType = AccountRewardTypesEnum::{$typeConstant}->value;
-                //                $rewardSum = AccountReward::where('type', $rewardType)
-                //                    ->where('token_id', $token->id)
-                //                    ->sum('amount');
-                //
-                //                $uniqueAddresses = AccountReward::where('type', $typeConstant)
-                //                    ->distinct('account_id')
-                //                    ->count();
-                //
-                //                $result[$type][$tokenName] = $token->getDisplayAmount($rewardSum);
-                //                $result[$type]['uniqueAddresses'] = $uniqueAddresses;
+                $uniqueAddresses = AccountReward::where('type', $typeConstant)
+                    ->distinct('account_id')
+                    ->count();
+
+                $result[$type][$tokenName] = $token->getDisplayAmount($rewardSum);
+                $result[$type]['uniqueAddresses'] = $uniqueAddresses;
             }
         }
 

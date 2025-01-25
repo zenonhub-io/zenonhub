@@ -40,11 +40,11 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/', HomeController::class)->name('home');
-    //Route::get('terms-of-service', TermsController::class)->name('terms');
-    Route::get('privacy-policy', PolicyController::class)->name('policy');
-    Route::get('donate', DonateController::class)->name('donate');
     Route::get('info', InfoController::class)->name('info');
+    Route::get('donate', DonateController::class)->name('donate');
     Route::get('advertise', AdvertisingController::class)->name('advertise');
+    Route::get('privacy-policy', PolicyController::class)->name('policy');
+    //Route::get('terms-of-service', TermsController::class)->name('terms');
 
     Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
 

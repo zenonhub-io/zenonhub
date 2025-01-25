@@ -87,7 +87,7 @@ class AcceleratorPhase extends Model implements Sitemapable
 
     public function toSitemapTag(): Url|string|array
     {
-        return route('az.phase', ['hash' => $this->hash]);
+        return route('accelerator-z.phase.detail', ['hash' => $this->hash]);
     }
 
     /**

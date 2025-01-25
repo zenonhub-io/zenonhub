@@ -28,9 +28,9 @@ class TokenSupplyController extends ApiController
         }
 
         if ($value === 'total' || $value === 'circulating') {
-            $supply = $token->raw_json->totalSupply;
+            $supply = $token->total_supply;
         } else {
-            $supply = $token->raw_json->maxSupply;
+            $supply = $token->max_supply;
         }
 
         return $token->getFormattedAmount($supply, $token->decimals, '.', '');
