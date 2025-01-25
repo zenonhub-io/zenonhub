@@ -55,7 +55,7 @@ class PlasmaBot extends Component
         $totalQsrAvailable = $account->qsr_balance;
         $fusedQsr = $account->fusions()->whereActive()->sum('amount');
         $percentageUsed = ($fusedQsr / $totalQsrAvailable) * 100;
-        $nextExpiring = PlasmaBotEntry::orderBy('expires_at', 'desc')->first();
+        $nextExpiring = PlasmaBotEntry::whereNotNull('expires_at')->orderBy('expires_at', 'desc')->first();
 
         return view('livewire.tools.plasma-bot', [
             'account' => $account,
@@ -121,9 +121,9 @@ class PlasmaBot extends Component
     public function setPlasmaLevelInfo(): void
     {
         $this->plasmaLevelInfo = match ($this->fuseForm['amount']) {
-            'low' => '20 QSR fused for 48 hours',
-            'medium' => '80 QSR fused for 24 hours',
-            'high' => '120 QSR fused for 12 hours',
+            'low' => __('20 QSR fused for 48 hours'),
+            'medium' => __('80 QSR fused for 24 hours'),
+            'high' => __('120 QSR fused for 12 hours'),
         };
     }
 }

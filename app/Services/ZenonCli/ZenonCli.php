@@ -35,6 +35,11 @@ class ZenonCli
         $this->passphrase = $passphrase;
     }
 
+    public function setNodeUrl(string $nodeUrl): void
+    {
+        $this->nodeUrl = $nodeUrl;
+    }
+
     public function send(string $toAddress, int $amount): bool
     {
         $result = $this->runCommand("send {$toAddress} {$amount}");
