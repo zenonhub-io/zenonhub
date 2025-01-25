@@ -93,7 +93,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function toSitemapTag(): Url|string|array
     {
-        return route('az.project', ['hash' => $this->hash]);
+        return route('accelerator-z.project.detail', ['hash' => $this->hash]);
     }
 
     /**

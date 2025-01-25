@@ -107,7 +107,7 @@ class Account extends Model implements Sitemapable
 
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('explorer.account', ['address' => $this->address]);
+        return route('explorer.account.detail', ['address' => $this->address]);
     }
 
     /**

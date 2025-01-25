@@ -98,7 +98,7 @@ class Pillar extends Model implements Sitemapable
 
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('pillars.detail', ['slug' => $this->slug]);
+        return route('pillar.detail', ['slug' => $this->slug]);
     }
 
     /**
