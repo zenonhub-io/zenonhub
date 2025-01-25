@@ -195,6 +195,8 @@ $tooltip-max-width:   1000px;
 // Modals
 $modal-backdrop-bg:             rgba($zenon-black, 85%);
 $modal-backdrop-opacity:        1;
+$modal-backdrop-bg-fixed:       $modal-backdrop-bg;
+$modal-backdrop-opacity-fixed:  $modal-backdrop-opacity;
 
 //
 // Transitions

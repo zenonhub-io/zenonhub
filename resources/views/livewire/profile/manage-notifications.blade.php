@@ -23,6 +23,27 @@
                     <label class="form-label mb-0">{{ $categoryName }}</label>
                 </div>
                 <div class="col-md-10">
+                    @if($categoryKey === 'zenonhub')
+                        <div class="d-flex mb-5">
+                            @php($uuid = Str::random(8))
+                            <div class="me-3">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="{{ $uuid }}"
+                                       disabled
+                                       checked
+                                >
+                            </div>
+                            <div>
+                                <label class="form-label mb-0" for="{{ $uuid }}">
+                                    {{ __('Account Updates') }}
+                                </label>
+                                <p class="text-sm text-muted">
+                                    {{ __('Important account & security information') }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                     @foreach($this->getNotificationTypesProperty($categoryKey) as $notificationType)
                         <div class="d-flex mb-5">
                             @php($uuid = Str::random(8))
