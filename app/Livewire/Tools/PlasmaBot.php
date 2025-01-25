@@ -29,7 +29,7 @@ class PlasmaBot extends Component
         ],
     ])]
     public array $fuseForm = [
-        'address' => '123',
+        'address' => '',
         'amount' => 'low',
     ];
 
