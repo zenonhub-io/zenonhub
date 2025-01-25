@@ -21,7 +21,7 @@ class ImportEnvApiKeys
             $token = $user->tokens()->create([
                 'name' => $key,
                 'token' => hash('sha256', $key),
-                'abilities' => ['*'],
+                'abilities' => ['plasma-bot'],
                 'expires_at' => null,
             ]);
         }

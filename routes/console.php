@@ -8,6 +8,11 @@ use App\Models\Nom\Token;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
+Artisan::command('site:migrate-old-data', function () {
+    App\Actions\Tools\MigrateJsonData::run();
+    App\Actions\PlasmaBot\ImportEnvApiKeys::run();
+})->purpose('Resets all NoM data back to genesis');
+
 Artisan::command('nom:reset-db', function () {
     //Artisan::call('migrate:rollback');
     //Artisan::call('migrate');
