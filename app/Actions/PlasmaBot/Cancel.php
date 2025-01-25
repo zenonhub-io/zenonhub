@@ -17,6 +17,7 @@ class Cancel
     public function __construct(
         private readonly ZenonCli $cli
     ) {
+        $this->cli->setNodeUrl(config('services.plasma-bot.node'));
         $this->cli->setKeystore(config('services.plasma-bot.keystore'));
         $this->cli->setPassphrase(config('services.plasma-bot.passphrase'));
     }
