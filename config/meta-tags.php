@@ -7,7 +7,7 @@ return [
     'defaults' => [
         'title' => env('APP_NAME', 'Zenon Hub'),
         'description' => 'Explore the Zenon Network with Zenon Hub. Track transactions, addresses, tokens, and discover all the activity on the cutting-edge Network of Momentum',
-        'keywords' => ['Zenon Network', 'NoM', 'explorer', 'ZNN', 'QSR'],
+        'keywords' => ['Zenon Network', 'Network of Momentum', 'NoM', 'explorer', 'ZNN', 'QSR'],
     ],
 
     'title_separator' => ' | ',
