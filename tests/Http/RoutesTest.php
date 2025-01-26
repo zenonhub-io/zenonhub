@@ -11,7 +11,7 @@ beforeEach(function () {
     $this->seed(NomSeeder::class);
 });
 
-//it('pillar pages return a successful response', function () {
+// it('pillar pages return a successful response', function () {
 //
 //    $this->seed(PillarsSeeder::class);
 //
@@ -28,9 +28,9 @@ beforeEach(function () {
 //
 //        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
 //    }
-//});
+// });
 //
-//it('sentinel pages return a successful response', function () {
+// it('sentinel pages return a successful response', function () {
 //
 //    $routes = [
 //        'sentinel.list' => [],
@@ -45,9 +45,9 @@ beforeEach(function () {
 //
 //        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
 //    }
-//});
+// });
 //
-//it('accelerator-z pages return a successful response', function () {
+// it('accelerator-z pages return a successful response', function () {
 //
 //    $routes = [
 //        'accelerator-z.list' => [],
@@ -65,9 +65,9 @@ beforeEach(function () {
 //
 //        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
 //    }
-//});
+// });
 //
-//it('explorer pages return a successful response', function () {
+// it('explorer pages return a successful response', function () {
 //
 //    $routes = [
 //        'explorer' => [],
@@ -98,9 +98,9 @@ beforeEach(function () {
 //
 //        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
 //    }
-//});
+// });
 //
-//it('stats pages return a successful response', function () {
+// it('stats pages return a successful response', function () {
 //
 //    $routes = [
 //        'stats.bridge',
@@ -115,9 +115,9 @@ beforeEach(function () {
 //
 //        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
 //    }
-//});
+// });
 //
-//it('tool pages return a successful response', function () {
+// it('tool pages return a successful response', function () {
 //
 //    $routes = [
 //        'tools.plasma-bot',
@@ -133,4 +133,4 @@ beforeEach(function () {
 //
 //        $this->assertSame(200, $response->status(), "Route [$routeName] returned status: " . $response->status());
 //    }
-//});
+// });

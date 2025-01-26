@@ -29,19 +29,15 @@ class BridgeAdminFactory extends Factory
 
     public function accepted(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'accepted_at' => now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'accepted_at' => now(),
+        ]);
     }
 
     public function revoked(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'revoked_at' => now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'revoked_at' => now(),
+        ]);
     }
 }

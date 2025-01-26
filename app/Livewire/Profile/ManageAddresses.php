@@ -36,13 +36,13 @@ class ManageAddresses extends Component
             'nickname' => $this->verifyAddressForm['nickname'],
             'message' => $this->verifyAddressForm['message'],
             'signature' => $this->verifyAddressForm['signature'],
-            //'public_key' => $this->verifyAddressForm['public_key'],
+            // 'public_key' => $this->verifyAddressForm['public_key'],
         ], [
             'address' => ['required', 'string', 'max:40', 'exists:nom_accounts,address'],
             'nickname' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:8'],
             'signature' => ['required', 'string'],
-            //'public_key' => ['required', 'string'],
+            // 'public_key' => ['required', 'string'],
         ])->validateWithBag('verifyAddress');
 
         $zenonSdk = app(ZenonSdk::class);

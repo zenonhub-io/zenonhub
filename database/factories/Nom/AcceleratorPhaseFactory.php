@@ -39,10 +39,8 @@ class AcceleratorPhaseFactory extends Factory
 
     public function paid(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => AcceleratorPhaseStatusEnum::PAID,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'status' => AcceleratorPhaseStatusEnum::PAID,
+        ]);
     }
 }

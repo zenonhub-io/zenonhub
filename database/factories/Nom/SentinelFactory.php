@@ -29,10 +29,8 @@ class SentinelFactory extends Factory
 
     public function revoked(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'revoked_at' => now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'revoked_at' => now(),
+        ]);
     }
 }

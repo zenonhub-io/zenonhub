@@ -32,12 +32,10 @@ class AppServiceProvider extends ServiceProvider
             return new DiscordWebHook($httpClient, $params['webhook']);
         });
 
-        $this->app->singleton('discourse.api', function ($app, $params) {
-            return new DiscourseAPI(
-                config('services.discourse.host'),
-                config('services.discourse.key')
-            );
-        });
+        $this->app->singleton('discourse.api', fn ($app, $params) => new DiscourseAPI(
+            config('services.discourse.host'),
+            config('services.discourse.key')
+        ));
     }
 
     /**

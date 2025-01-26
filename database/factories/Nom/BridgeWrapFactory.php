@@ -37,10 +37,8 @@ class BridgeWrapFactory extends Factory
 
     public function withSignature(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'signature' => base64_decode(bin2hex(random_bytes(10))),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'signature' => base64_decode(bin2hex(random_bytes(10))),
+        ]);
     }
 }

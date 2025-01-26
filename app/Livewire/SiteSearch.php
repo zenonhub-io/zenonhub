@@ -64,62 +64,52 @@ class SiteSearch extends Component
     private function searchTransactions(): Collection
     {
         return AccountBlock::where('hash', $this->search)->get()
-            ->map(function (AccountBlock $tx) {
-                return SearchResultDTO::from([
-                    'group' => 'transactions',
-                    'title' => $tx->hash,
-                    'link' => route('explorer.transaction.detail', ['hash' => $tx->hash]),
-                ]);
-            });
+            ->map(fn (AccountBlock $tx) => SearchResultDTO::from([
+                'group' => 'transactions',
+                'title' => $tx->hash,
+                'link' => route('explorer.transaction.detail', ['hash' => $tx->hash]),
+            ]));
     }
 
     private function searchMomentums(): Collection
     {
         return Momentum::where('hash', $this->search)->get()
-            ->map(function (Momentum $momentum) {
-                return SearchResultDTO::from([
-                    'group' => 'momentums',
-                    'title' => $momentum->hash,
-                    'link' => route('explorer.momentum.detail', ['hash' => $momentum->hash]),
-                ]);
-            });
+            ->map(fn (Momentum $momentum) => SearchResultDTO::from([
+                'group' => 'momentums',
+                'title' => $momentum->hash,
+                'link' => route('explorer.momentum.detail', ['hash' => $momentum->hash]),
+            ]));
     }
 
     private function searchAccounts(): Collection
     {
         return Account::search($this->search)->get()
-            ->map(function (Account $account) {
-                return SearchResultDTO::from([
-                    'group' => 'accounts',
-                    'title' => $account->name ?: $account->address,
-                    'link' => route('explorer.account.detail', ['address' => $account->address]),
-                ]);
-            });
+            ->map(fn (Account $account) => SearchResultDTO::from([
+                'group' => 'accounts',
+                'title' => $account->name ?: $account->address,
+                'link' => route('explorer.account.detail', ['address' => $account->address]),
+            ]));
     }
 
     private function searchPillars(): Collection
     {
         return Pillar::search($this->search)->get()
-            ->map(function (Pillar $pillar) {
-                return SearchResultDTO::from([
-                    'group' => 'pillars',
-                    'title' => $pillar->name,
-                    'link' => route('pillar.detail', ['slug' => $pillar->slug]),
-                ]);
-            });
+            ->map(fn (Pillar $pillar) => SearchResultDTO::from([
+                'group' => 'pillars',
+                'title' => $pillar->name,
+                'link' => route('pillar.detail', ['slug' => $pillar->slug]),
+            ]));
     }
 
     private function searchTokens(): Collection
     {
         return Token::search($this->search)->get()
-            ->map(function (Token $token) {
-                return SearchResultDTO::from([
-                    'group' => 'pillars',
-                    'title' => $token->name,
-                    'comment' => $token->token_standard,
-                    'link' => route('explorer.token.detail', ['zts' => $token->token_standard]),
-                ]);
-            });
+            ->map(fn (Token $token) => SearchResultDTO::from([
+                'group' => 'pillars',
+                'title' => $token->name,
+                'comment' => $token->token_standard,
+                'link' => route('explorer.token.detail', ['zts' => $token->token_standard]),
+            ]));
     }
 
     private function searchProjects(): Collection
@@ -128,14 +118,12 @@ class SiteSearch extends Component
         $hashResults = AcceleratorProject::where('hash', $this->search)->get();
 
         return $searchResults->merge($hashResults)
-            ->map(function (AcceleratorProject $project) {
-                return SearchResultDTO::from([
-                    'group' => 'projects',
-                    'title' => $project->name,
-                    'comment' => $project->status->label(),
-                    'link' => route('accelerator-z.project.detail', ['hash' => $project->hash]),
-                ]);
-            });
+            ->map(fn (AcceleratorProject $project) => SearchResultDTO::from([
+                'group' => 'projects',
+                'title' => $project->name,
+                'comment' => $project->status->label(),
+                'link' => route('accelerator-z.project.detail', ['hash' => $project->hash]),
+            ]));
     }
 
     private function searchPhases(): Collection

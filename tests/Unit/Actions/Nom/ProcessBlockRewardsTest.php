@@ -24,7 +24,7 @@ beforeEach(function () {
 });
 
 // TODO - Fix test
-//it('doesnt process blocks to the liquidity contract', function () {
+// it('doesnt process blocks to the liquidity contract', function () {
 //
 //    $mint = TokenMint::factory()->create([
 //        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
@@ -38,7 +38,7 @@ beforeEach(function () {
 //    $reward = AccountReward::first();
 //    expect(AccountReward::get())->toHaveCount(0)
 //        ->and($reward)->toBeNull();
-//});
+// });
 
 it('correctly assigns reward data', function () {
 

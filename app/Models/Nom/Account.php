@@ -489,7 +489,7 @@ class Account extends Model implements Sitemapable
 
         if ($user = auth()->user()) {
 
-            //Check favorites
+            // Check favorites
             $favorite = Favorite::findExisting($this, $user);
             if ($favorite) {
                 return $favorite->label;
@@ -556,11 +556,9 @@ class Account extends Model implements Sitemapable
     {
         $cacheKey = $this->cacheKey('avatar', 'first_active_at');
 
-        return Cache::rememberForever($cacheKey, function () {
-            return Http::get(config('zenon-hub.avatar_url'), [
-                'seed' => $this->address,
-            ])->body();
-        });
+        return Cache::rememberForever($cacheKey, fn () => Http::get(config('zenon-hub.avatar_url'), [
+            'seed' => $this->address,
+        ])->body());
     }
 
     //

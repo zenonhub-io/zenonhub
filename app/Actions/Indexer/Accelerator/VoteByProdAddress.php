@@ -54,7 +54,7 @@ class VoteByProdAddress extends AbstractContractMethodProcessor
         $item->updated_at = $accountBlock->created_at;
         $item->save();
 
-        //$pillar->updateAzEngagementScores();
+        // $pillar->updateAzEngagementScores();
 
         PillarVoted::dispatch($accountBlock, $pillar, $item);
 

@@ -42,7 +42,7 @@ class GenerateApiPlaygroundJson
         Liquidity::class,
         Pillar::class,
         Plasma::class,
-        //Ptlc::class,
+        // Ptlc::class,
         Sentinel::class,
         Stake::class,
         Stats::class,

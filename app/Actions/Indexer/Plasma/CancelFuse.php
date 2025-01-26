@@ -41,7 +41,7 @@ class CancelFuse extends AbstractContractMethodProcessor
             'plasma' => $plasma,
         ]);
 
-        //\App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
+        // \App\Events\Nom\Plasma\CancelFuse::dispatch($this->block, $blockData);
 
         $this->setBlockAsProcessed($accountBlock);
     }

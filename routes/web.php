@@ -44,15 +44,15 @@ Route::middleware([
     Route::get('donate', DonateController::class)->name('donate');
     Route::get('advertise', AdvertisingController::class)->name('advertise');
     Route::get('privacy-policy', PolicyController::class)->name('policy');
-    //Route::get('terms-of-service', TermsController::class)->name('terms');
+    // Route::get('terms-of-service', TermsController::class)->name('terms');
 
     Route::post('timezone', [TimezoneController::class, 'update'])->name('timezone.update');
 
     Route::get('pillars/{tab?}', [PillarsController::class, 'index'])->name('pillar.list');
     Route::get('pillar/{slug}/{tab?}', [PillarsController::class, 'show'])->name('pillar.detail');
 
-    //Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
-    //Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
+    // Route::get('sentinels', SentinelsController::class)->name('sentinel.list');
+    // Route::get('sentinel/{address}', SentinelsController::class)->name('sentinel.detail');
 
     Route::get('accelerator-z/{tab?}', [AcceleratorProjectsController::class, 'index'])->name('accelerator-z.list');
     Route::get('accelerator-z/project/{hash}/{tab?}', [AcceleratorProjectsController::class, 'show'])->name('accelerator-z.project.detail');
@@ -77,7 +77,7 @@ Route::middleware([
 
     Route::get('tools/plasma-bot', PlasmaBotController::class)->name('tools.plasma-bot');
     Route::get('tools/api-playground', ApiPlaygroundController::class)->name('tools.api-playground');
-    //Route::get('tools/broadcast-message', HomeController::class)->name('tools.broadcast-message');
+    // Route::get('tools/broadcast-message', HomeController::class)->name('tools.broadcast-message');
     Route::get('tools/verify-signature', VerifySignatureController::class)->name('tools.verify-signature');
 
     Route::get('services/public-nodes', PublicNodesController::class)->name('services.public-nodes');

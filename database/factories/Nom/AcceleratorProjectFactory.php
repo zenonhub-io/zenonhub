@@ -39,32 +39,26 @@ class AcceleratorProjectFactory extends Factory
 
     public function accepted(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => AcceleratorProjectStatusEnum::ACCEPTED,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'status' => AcceleratorProjectStatusEnum::ACCEPTED,
+        ]);
     }
 
     public function rejected(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => AcceleratorProjectStatusEnum::REJECTED,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'status' => AcceleratorProjectStatusEnum::REJECTED,
+        ]);
     }
 
     public function complete(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'znn_remaining' => 0,
-                'qsr_remaining' => 0,
-                'znn_paid' => $attributes['znn_requested'],
-                'qsr_paid' => $attributes['qsr_requested'],
-                'status' => AcceleratorProjectStatusEnum::COMPLETE,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'znn_remaining' => 0,
+            'qsr_remaining' => 0,
+            'znn_paid' => $attributes['znn_requested'],
+            'qsr_paid' => $attributes['qsr_requested'],
+            'status' => AcceleratorProjectStatusEnum::COMPLETE,
+        ]);
     }
 }

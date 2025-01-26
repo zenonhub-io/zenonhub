@@ -39,20 +39,16 @@ class PillarFactory extends Factory
 
     public function legacy(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'qsr_burn' => 150000 * config('nom.decimals'),
-                'is_legacy' => 1,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'qsr_burn' => 150000 * config('nom.decimals'),
+            'is_legacy' => 1,
+        ]);
     }
 
     public function revoked(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'revoked_at' => now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'revoked_at' => now(),
+        ]);
     }
 }

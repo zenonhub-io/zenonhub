@@ -33,7 +33,7 @@ class GenerateSitemap
             ->add($this->addItem('donate'))
             ->add($this->addItem('advertise'))
             ->add($this->addItem('policy'))
-            //->add($this->addItem('terms'))
+            // ->add($this->addItem('terms'))
 
             ->add($this->addItem('pillar.list'))
             ->add($this->addItem('pillar.list', ['tab' => 'active']))
@@ -86,7 +86,7 @@ class GenerateSitemap
             ->add($this->addItem('tools.plasma-bot'))
             ->add($this->addItem('tools.api-playground'))
             ->add($this->addItem('tools.verify-signature'))
-            //->add($this->addItem('tools.broadcast-message'))
+            // ->add($this->addItem('tools.broadcast-message'))
 
             ->add($this->addItem('services.public-nodes'))
 //            ->add($this->addItem('services.plasma-bot'))

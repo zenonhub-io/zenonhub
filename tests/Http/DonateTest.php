@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->seed(TestGenesisSeeder::class);
 });
 
-//it('donate page returns a successful response', function () {
+// it('donate page returns a successful response', function () {
 //    $response = $this->get(route('donate'));
 //    $response->assertStatus(200);
-//});
+// });

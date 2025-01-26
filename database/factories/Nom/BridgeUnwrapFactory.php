@@ -39,37 +39,29 @@ class BridgeUnwrapFactory extends Factory
 
     public function withSignature(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'signature' => base64_decode(bin2hex(random_bytes(10))),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'signature' => base64_decode(bin2hex(random_bytes(10))),
+        ]);
     }
 
     public function affiliate(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'log_index' => 4000000001,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'log_index' => 4000000001,
+        ]);
     }
 
     public function redeemed(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'redeemed_at' => now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'redeemed_at' => now(),
+        ]);
     }
 
     public function revoked(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'revoked_at' => now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'revoked_at' => now(),
+        ]);
     }
 }

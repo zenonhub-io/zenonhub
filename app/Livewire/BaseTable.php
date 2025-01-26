@@ -13,7 +13,7 @@ abstract class BaseTable extends DataTableComponent
 
     public function configure(): void
     {
-        //$this->setDebugStatus(true);
+        // $this->setDebugStatus(true);
 
         $this->setSortingPillsStatus(false)
             ->setFilterPillsStatus(false);

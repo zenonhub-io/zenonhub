@@ -6,23 +6,23 @@ uses()->group('site', 'architecture');
 
 arch('php presets')->preset()->php();
 
-//arch('laravel presets')->preset()->laravel();
+// arch('laravel presets')->preset()->laravel();
 
 arch('strict types')
     ->expect('App')
     ->toUseStrictTypes();
 
-//arch('avoid open for extension')
+// arch('avoid open for extension')
 //    ->expect('App')
 //    ->classes()
 //    ->toBeFinal();
 
-//arch('ensure no extends')
+// arch('ensure no extends')
 //    ->expect('App')
 //    ->classes()
 //    ->not->toBeAbstract();
 
-//arch('annotations')
+// arch('annotations')
 //    ->expect('App')
 //    ->toHavePropertiesDocumented()
 //    ->toHaveMethodsDocumented();

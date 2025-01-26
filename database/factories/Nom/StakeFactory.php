@@ -38,10 +38,8 @@ class StakeFactory extends Factory
 
     public function ended(?Carbon $endDate = null): Factory
     {
-        return $this->state(function (array $attributes) use ($endDate) {
-            return [
-                'ended_at' => $endDate ?: now(),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'ended_at' => $endDate ?: now(),
+        ]);
     }
 }

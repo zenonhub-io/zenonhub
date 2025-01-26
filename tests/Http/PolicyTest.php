@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->seed(TestGenesisSeeder::class);
 });
 
-//it('privacy policy page returns a successful response', function () {
+// it('privacy policy page returns a successful response', function () {
 //    $response = $this->get(route('policy'));
 //    $response->assertStatus(200);
-//});
+// });

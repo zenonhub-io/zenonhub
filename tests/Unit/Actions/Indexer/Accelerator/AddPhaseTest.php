@@ -102,7 +102,7 @@ it('ensures only project owner can add phases', function () {
 });
 
 // TODO - check this
-//it('ensures phases can only be added to accepted projects', function () {
+// it('ensures phases can only be added to accepted projects', function () {
 //
 //    $project = AcceleratorProject::factory()
 //        ->has(AcceleratorPhase::factory()->count(1), 'phases')
@@ -134,4 +134,4 @@ it('ensures only project owner can add phases', function () {
 //    Event::assertNotDispatched(PhaseCreated::class);
 //
 //    expect(AcceleratorPhase::get())->toHaveCount(1);
-//});
+// });

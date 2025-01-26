@@ -27,7 +27,7 @@ Breadcrumbs::for('policy', function (BreadcrumbTrail $trail) {
 //
 // Account
 Breadcrumbs::for('account', function (BreadcrumbTrail $trail) {
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('Account', route('account.overview'));
 });
 
@@ -76,7 +76,7 @@ Breadcrumbs::for('pillar.detail', function (BreadcrumbTrail $trail, App\Models\N
 //
 // Accelerator Z
 Breadcrumbs::for('accelerator-z.list', function (BreadcrumbTrail $trail) {
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('Accelerator-Z', route('accelerator-z.list'));
 });
 
@@ -93,7 +93,7 @@ Breadcrumbs::for('accelerator-z.phase.detail', function (BreadcrumbTrail $trail,
 //
 // Explorer
 Breadcrumbs::for('explorer', function (BreadcrumbTrail $trail) {
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('Explorer', route('explorer.overview'));
 });
 
@@ -173,19 +173,19 @@ Breadcrumbs::for('stats.bridge', function (BreadcrumbTrail $trail) {
 // Tools
 Breadcrumbs::for('tools.plasma-bot', function (BreadcrumbTrail $trail) {
     $trail->parent('tools');
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('Plasma Bot', route('tools.plasma-bot'));
 });
 
 Breadcrumbs::for('tools.api-playground', function (BreadcrumbTrail $trail) {
     $trail->parent('tools');
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('API Playground', route('tools.api-playground'));
 });
 
 Breadcrumbs::for('tools.verify-signature', function (BreadcrumbTrail $trail) {
     $trail->parent('tools');
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('Verify signature', route('tools.verify-signature'));
 });
 
@@ -193,6 +193,6 @@ Breadcrumbs::for('tools.verify-signature', function (BreadcrumbTrail $trail) {
 // Services
 Breadcrumbs::for('services.public-nodes', function (BreadcrumbTrail $trail) {
     $trail->parent('services');
-    //$trail->parent('home');
+    // $trail->parent('home');
     $trail->push('Public Nodes', route('services.public-nodes'));
 });

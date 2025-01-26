@@ -17,7 +17,7 @@ class CancelExpired
     {
         $expiredEntries = PlasmaBotEntry::whereExpired()->whereConfirmed()->get();
         $expiredEntries->each(function ($entry) {
-            Cancel::run($entry->hash);
+            Cancel::run($entry);
         });
     }
 }
