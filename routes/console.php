@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 Artisan::command('site:migrate-old-data', function () {
-    App\Actions\Tools\MigrateJsonData::run();
-    App\Actions\PlasmaBot\ImportEnvApiKeys::run();
+    App\Actions\Temp\MigrateJsonData::run();
+    App\Actions\Temp\ImportEnvApiKeys::run();
 })->purpose('Resets all NoM data back to genesis');
 
 Artisan::command('nom:reset-db', function () {
