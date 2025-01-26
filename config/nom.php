@@ -94,7 +94,6 @@ return [
         'minAdministratorDelay' => 2 * NOM_MOMENTUMS_PER_EPOCH,
         'minSoftDelay' => NOM_MOMENTUMS_PER_EPOCH,
         'minGuardians' => 5,
-        'affiliateLink' => '123',
     ],
 
     // Rewards
