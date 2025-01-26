@@ -23,7 +23,6 @@ class BridgeStatsController
         return view('stats.bridge', [
             'tab' => $tab,
             'status' => app(BridgeStatus::class),
-            'affiliateLink' => config('nom.bridge.affiliateLink'),
             'stats' => match ($tab) {
                 'affiliates' => $this->getAffiliateStats(),
                 default => [],

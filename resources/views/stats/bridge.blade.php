@@ -17,7 +17,7 @@
                     <span class="d-block mb-4">
                         <i class="bi bi-check-circle-fill me-2"></i> {{ __('The bridge and orchestrators are online') }}
                     </span>
-                    <a href="{{ $affiliateLink }}" target="_blank" class="btn btn-outline-success w-100">
+                    <a href="{{ config('zenon-hub.bridge_affiliate_link') }}" target="_blank" class="btn btn-outline-success w-100">
                         {{ __('Bridge tokens now') }}
                         <i class="bi bi-arrow-right ms-2"></i>
                     </a>
