@@ -14,8 +14,8 @@ Artisan::command('site:migrate-old-data', function () {
 })->purpose('Resets all NoM data back to genesis');
 
 Artisan::command('nom:reset-db', function () {
-    //Artisan::call('migrate:rollback');
-    //Artisan::call('migrate');
+    // Artisan::call('migrate:rollback');
+    // Artisan::call('migrate');
     Artisan::call('db:seed --class=DatabaseSeeder');
     Artisan::call('db:seed --class=NomSeeder');
     Artisan::call('db:seed --class=GenesisSeeder');
@@ -24,7 +24,6 @@ Artisan::command('nom:reset-db', function () {
 })->purpose('Resets all NoM data back to genesis');
 
 Artisan::command('site:after-deploy', function () {
-    Artisan::call('down');
     Artisan::call('nom:create-or-update-latest-account-blocks-view');
     Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
     Artisan::call('nom:update-contract-methods');
