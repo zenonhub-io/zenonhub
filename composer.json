@@ -32,7 +32,7 @@
         "lorisleiva/laravel-actions": "^2.8",
         "maize-tech/laravel-markable": "^2.2",
         "marvinlabs/laravel-discord-logger": "^1.4",
-        "rappasoft/laravel-livewire-tables": "^3.5",
+        "rappasoft/laravel-livewire-tables": "3.5.10",
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-honeypot": "^4.5",
         "spatie/laravel-permission": "*",
