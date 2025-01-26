@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\PlasmaBot;
+namespace App\Actions\Temp;
 
 use App\Models\User;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -18,7 +18,7 @@ class ImportEnvApiKeys
         $user = User::first();
 
         foreach ($keys as $key) {
-            $token = $user->tokens()->create([
+            $user->tokens()->create([
                 'name' => $key,
                 'token' => hash('sha256', $key),
                 'abilities' => ['plasma-bot'],
