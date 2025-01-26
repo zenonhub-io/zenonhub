@@ -82,6 +82,13 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'discord' => [
+            'driver' => 'custom',
+            'via' => MarvinLabs\DiscordLogger\Logger::class,
+            'level' => 'error',
+            'url' => env('LOG_DISCORD_WEBHOOK_URL'),
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
@@ -135,14 +142,6 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
-
-        'discord' => [
-            'driver' => 'custom',
-            'via' => MarvinLabs\DiscordLogger\Logger::class,
-            'level' => 'error',
-            'url' => env('LOG_DISCORD_WEBHOOK_URL'),
-        ],
-
     ],
 
 ];
