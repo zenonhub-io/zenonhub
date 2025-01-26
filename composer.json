@@ -1,5 +1,5 @@
 {
-    "name": "ZenonHub.io",
+    "name": "zenonhub-io/zenonhub",
     "type": "project",
     "description": "An explorer for the Zenon Network build with Laravel & MySQL.",
     "version": "2.0.0",
@@ -31,6 +31,7 @@
         "livewire/livewire": "^3.0",
         "lorisleiva/laravel-actions": "^2.8",
         "maize-tech/laravel-markable": "^2.2",
+        "marvinlabs/laravel-discord-logger": "^1.4",
         "rappasoft/laravel-livewire-tables": "^3.5",
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-honeypot": "^4.5",
