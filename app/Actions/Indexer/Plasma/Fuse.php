@@ -49,9 +49,6 @@ class Fuse extends AbstractContractMethodProcessor
             'plasma' => $plasma,
         ]);
 
-        // TODO - refactor event into new listener
-        // \App\Events\Nom\Plasma\Fuse::dispatch($accountBlock, $blockData);
-
         $this->setBlockAsProcessed($accountBlock);
     }
 

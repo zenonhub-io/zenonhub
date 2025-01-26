@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Tools;
+namespace App\Actions\Temp;
 
 use App\Actions\Profile\UpdateUserNotificationSubscriptions;
 use App\Models\Favorite;
