@@ -1,7 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "ZenonHub.io",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "An explorer for the Zenon Network build with Laravel & MySQL.",
+    "version": "2.0.0",
     "keywords": [
         "laravel",
         "framework"

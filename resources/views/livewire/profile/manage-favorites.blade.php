@@ -10,7 +10,7 @@
         <hr class="my-6">
         <div class="list-group shadow">
             @foreach ($favoritesAccounts as $account)
-                <div class="list-group-item d-flex align-items-center">
+                <div class="list-group-item d-flex align-items-baseline">
                     <div class="flex-fill">
                         <span class="d-block text-sm text-heading fw-semibold">{{ $account->custom_label }}</span>
                         <span class="d-block text-sm text-heading fw-semibold"><x-address :account="$account" :named="false" /></span>
