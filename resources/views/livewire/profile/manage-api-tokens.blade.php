@@ -38,7 +38,7 @@
         <hr class="my-6">
         <div class="list-group shadow">
             @foreach ($this->user->tokens->sortBy('name') as $token)
-                <div class="list-group-item d-flex align-items-center">
+                <div class="list-group-item d-flex align-items-baseline">
                     <div class="flex-fill">
                         <span class="d-block text-sm text-heading fw-semibold">{{ $token->name }}</span>
                         @if ($token->last_used_at)
@@ -48,7 +48,7 @@
                         @endif
                     </div>
                     <div class="ms-auto d-flex gap-4 align-items-center">
-                        <x-buttons.button wire:click="confirmApiTokenDeletion({{ $token->id }})" class="btn-outline-danger btn-sm">
+                        <x-buttons.button wire:click="confirmApiTokenDeletion({{ $token->id }})" class="btn-outline-danger btn-sm text-nowrap">
                             {{ __('Delete') }} <i class="bi bi-trash-fill ms-2"></i>
                         </x-buttons.button>
                     </div>
