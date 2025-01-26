@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders\Nom;
 
-use App\Classes\Utilities;
+use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Models\Nom\Account;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class AccountsSeeder extends Seeder
 {
@@ -13,32 +16,27 @@ class AccountsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Empty address
-        Account::insert([
-            'chain_id' => Utilities::loadChain()->id,
-            'address' => Account::ADDRESS_EMPTY,
-            'name' => 'Empty address',
+        Schema::disableForeignKeyConstraints();
+        Account::truncate();
+        Schema::enableForeignKeyConstraints();
+
+        $chainId = app('currentChain')->id;
+
+        Account::updateOrCreate([
+            'chain_id' => $chainId,
+            'address' => config('explorer.burn_address'),
+        ], [
+            'name' => 'Burn Address',
             'is_embedded_contract' => false,
         ]);
 
-        // Embedded contracts
-        foreach (Account::EMBEDDED_CONTRACTS as $address => $name) {
-            Account::insert([
-                'chain_id' => Utilities::loadChain()->id,
-                'address' => $address,
-                'name' => $name,
+        foreach (EmbeddedContractsEnum::cases() as $address) {
+            Account::updateOrCreate([
+                'chain_id' => $chainId,
+                'address' => $address->value,
+            ], [
+                'name' => $address->label(),
                 'is_embedded_contract' => true,
-            ]);
-        }
-
-        // Named addresses
-        $namedAccounts = config('explorer.named_accounts');
-        foreach ($namedAccounts as $address => $name) {
-            Account::insert([
-                'chain_id' => Utilities::loadChain()->id,
-                'address' => $address,
-                'name' => $name,
-                'is_embedded_contract' => false,
             ]);
         }
     }

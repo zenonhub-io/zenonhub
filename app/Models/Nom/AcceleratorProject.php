@@ -1,45 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use App\Models\Markable\Favorite;
-use App\Services\CoinGecko;
-use App\Services\ZenonSdk;
-use App\Traits\AzVotes;
+use App\DataTransferObjects\Nom\AcceleratorProjectDTO;
+use App\Enums\Nom\AcceleratorPhaseStatusEnum;
+use App\Enums\Nom\AcceleratorProjectStatusEnum;
+use App\Services\ZenonSdk\ZenonSdk;
+use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\Nom\AcceleratorProjectFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Maize\Markable\Markable;
+use Laravel\Scout\Searchable;
 use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
+use Throwable;
 
 class AcceleratorProject extends Model implements Sitemapable
 {
-    use AzVotes, HasFactory, Markable;
-
-    public const STATUS_NEW = 0;
-
-    public const STATUS_ACCEPTED = 1;
-
-    public const STATUS_REJECTED = 3;
-
-    public const STATUS_COMPLETE = 4;
-
-    protected static array $marks = [
-        Favorite::class,
-    ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_accelerator_projects';
+    use AcceleratorFundingTrait, AcceleratorVotesTrait, HasFactory, ModelCacheKeyTrait, Searchable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -49,11 +37,18 @@ class AcceleratorProject extends Model implements Sitemapable
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_accelerator_projects';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_id',
         'owner_id',
         'hash',
@@ -64,37 +59,52 @@ class AcceleratorProject extends Model implements Sitemapable
         'status',
         'znn_requested',
         'qsr_requested',
-        'znn_paid',
-        'qsr_paid',
         'znn_remaining',
         'qsr_remaining',
         'znn_price',
         'qsr_price',
-        'vote_total',
-        'vote_yes',
-        'vote_no',
         'created_at',
-        'updated_at',
-        'modified_at',
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'modified_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'status' => AcceleratorProjectStatusEnum::class,
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AcceleratorProjectFactory::new();
+    }
 
     //
     // Config
 
-    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
+    public function toSitemapTag(): Url|string|array
     {
-        return route('az.project', ['hash' => $this->hash]);
+        return route('accelerator-z.project.detail', ['hash' => $this->hash]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
     }
 
     //
@@ -107,66 +117,66 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function owner(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'owner_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
     public function phases(): HasMany
     {
-        return $this->hasMany(AcceleratorPhase::class, 'accelerator_project_id', 'id');
+        return $this->hasMany(AcceleratorPhase::class, 'project_id');
     }
 
-    public function latest_phase(): HasOne
+    public function latestPhase(): HasOne
     {
-        return $this->hasOne(AcceleratorPhase::class, 'accelerator_project_id', 'id')->latestOfMany();
+        return $this->hasOne(AcceleratorPhase::class)->latestOfMany();
     }
 
     public function votes(): MorphMany
     {
-        return $this->morphMany(AcceleratorVote::class, 'votable');
+        return $this->morphMany(Vote::class, 'votable');
     }
 
     //
     // Scopes
 
-    public function scopeIsNew($query)
+    public function scopeWhereNew($query)
     {
-        return $query->where('status', self::STATUS_NEW);
+        return $query->where('status', AcceleratorProjectStatusEnum::NEW->value);
     }
 
-    public function scopeIsAccepted($query)
+    public function scopeWhereAccepted($query)
     {
-        return $query->where('status', self::STATUS_ACCEPTED);
+        return $query->where('status', AcceleratorProjectStatusEnum::ACCEPTED->value);
     }
 
-    public function scopeIsRejected($query)
+    public function scopeWhereRejected($query)
     {
-        return $query->where('status', self::STATUS_REJECTED);
+        return $query->where('status', AcceleratorProjectStatusEnum::REJECTED->value);
     }
 
-    public function scopeIsNotRejected($query)
+    public function scopeWhereNotRejected($query)
     {
-        return $query->where('status', '!=', self::STATUS_REJECTED);
+        return $query->where('status', '!=', AcceleratorProjectStatusEnum::REJECTED->value);
     }
 
-    public function scopeIsCompleted($query)
+    public function scopeWhereCompleted($query)
     {
-        return $query->where('status', self::STATUS_COMPLETE);
+        return $query->where('status', AcceleratorProjectStatusEnum::COMPLETE->value);
     }
 
-    public function scopeIsOpen($query)
+    public function scopeWhereOpen($query)
     {
-        return $query->where('status', self::STATUS_NEW)
+        return $query->where('status', AcceleratorProjectStatusEnum::NEW->value)
             ->orWhere(function ($q) {
-                $q->where('status', self::STATUS_ACCEPTED)
+                $q->where('status', AcceleratorProjectStatusEnum::ACCEPTED->value)
                     ->whereHas('phases', function ($q2) {
-                        $q2->where('status', AcceleratorPhase::STATUS_OPEN);
+                        $q2->where('status', AcceleratorPhaseStatusEnum::OPEN->value);
                     });
             });
     }
 
     public function scopeAwaitingPhases($query)
     {
-        return $query->where('status', self::STATUS_ACCEPTED)
+        return $query->where('status', AcceleratorProjectStatusEnum::ACCEPTED->value)
             ->doesntHave('phases');
     }
 
@@ -176,19 +186,19 @@ class AcceleratorProject extends Model implements Sitemapable
             $q->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('description', 'LIKE', "%{$search}%")
                 ->orWhere('url', 'LIKE', "%{$search}%")
-                ->orWhere('hash', '=', "{$search}");
+                ->orWhere('hash', '=', $search);
         })->orWhereHas('phases', function ($q) use ($search) {
             $q->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('description', 'LIKE', "%{$search}%")
                 ->orWhere('url', 'LIKE', "%{$search}%")
-                ->orWhere('hash', '=', "{$search}");
+                ->orWhere('hash', '=', $search);
         });
     }
 
     public function scopeOrderByLatest($query)
     {
         return $query->orderByRaw('(status = 0) DESC')
-            ->orderBy('modified_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->orderBy('slug', 'desc');
     }
 
@@ -202,7 +212,7 @@ class AcceleratorProject extends Model implements Sitemapable
 
     public function scopeShouldSendVotingReminder($query)
     {
-        $query
+        return $query
             ->whereTime('created_at', '>=', now()->subHour()->startOfHour()->format('H:i:s'))
             ->whereTime('created_at', '<', now()->subHour()->endOfHour()->format('H:i:s'))
             ->where(function ($q) {
@@ -215,145 +225,50 @@ class AcceleratorProject extends Model implements Sitemapable
     //
     // Attributes
 
-    public function getDisplayStatusAttribute()
+    public function getIsVotingOpenAttribute(?Carbon $dateTime): bool
     {
-        if ($this->status === self::STATUS_NEW) {
-            return 'New';
-        }
+        $relativeTo = $dateTime ?? now();
+        $votingPeriod = config('nom.accelerator.acceleratorProjectVotingPeriod');
 
-        if ($this->status === self::STATUS_ACCEPTED) {
-            return 'Accepted';
-        }
-
-        if ($this->status === self::STATUS_REJECTED) {
-            return 'Rejected';
-        }
-
-        if ($this->status === self::STATUS_COMPLETE) {
-            return 'Completed';
-        }
+        return $this->created_at->addSeconds($votingPeriod) >= $relativeTo;
     }
 
-    public function getDisplayColourStatusAttribute()
+    public function getOpenForTimeAttribute(): string
     {
-        if ($this->status === self::STATUS_NEW) {
-            return 'light';
-        }
+        $votingPeriod = config('nom.accelerator.acceleratorProjectVotingPeriod');
 
-        if ($this->status === self::STATUS_ACCEPTED) {
-            return 'primary';
-        }
-
-        if ($this->status === self::STATUS_REJECTED) {
-            return 'danger';
-        }
-
-        if ($this->status === self::STATUS_COMPLETE) {
-            return 'success';
-        }
+        return $this->created_at->addSeconds($votingPeriod)->diffForHumans(['parts' => 2], true);
     }
 
-    public function getDisplayBadgeAttribute()
+    public function getQuorumStatusAttribute(): string
     {
-        $text = $this->getDisplayStatusAttribute();
-        $colour = $this->getDisplayColourStatusAttribute();
+        if ($this->is_voting_open && ! $this->is_quorum_reached) {
+            $votesText = Str::plural('vote', $this->total_more_votes_needed);
 
-        return "<span class=\"badge bg-{$colour}\">{$text}</span>";
-    }
-
-    public function getQuorumStautsAttribute()
-    {
-        if ($this->status === self::STATUS_NEW && $this->total_more_votes_needed > 0) {
-            return $this->total_more_votes_needed.' '.Str::plural('vote', $this->total_more_votes_needed).' needed in '.$this->open_for_time;
+            return "{$this->total_more_votes_needed} {$votesText} needed in {$this->open_for_time}";
         }
 
-        if ($this->total_more_votes_needed > 0) {
+        if (! $this->is_quorum_reached) {
             return 'Quorum not reached';
         }
 
         return 'Quorum reached';
     }
 
-    public function getIsQuorumReachedAttribute()
+    public function getRawJsonAttribute(): ?AcceleratorProjectDTO
     {
-        return ! ($this->total_more_votes_needed > 0);
-    }
-
-    public function getDisplayZnnRequestedAttribute()
-    {
-        return znn_token()->getDisplayAmount($this->znn_requested);
-    }
-
-    public function getDisplayQsrRequestedAttribute()
-    {
-        return qsr_token()->getDisplayAmount($this->qsr_requested);
-    }
-
-    public function getDisplayUsdRequestedAttribute()
-    {
-        if (! $this->znn_price || ! $this->qsr_price) {
-            $znnPrice = App::make(CoinGecko::class)->historicPrice('zenon-2', 'usd', $this->created_at->timestamp);
-            $qsrPrice = App::make(CoinGecko::class)->historicPrice('quasar', 'usd', $this->created_at->timestamp);
-
-            // Projects created before QSR price available
-            if (is_null($qsrPrice) && $znnPrice > 0) {
-                $qsrPrice = $znnPrice / 10;
-            }
-
-            if ($znnPrice > 0) {
-                $this->znn_price = $znnPrice;
-                $this->saveQuietly();
-            }
-
-            if ($qsrPrice > 0) {
-                $this->qsr_price = $qsrPrice;
-                $this->saveQuietly();
-            }
-        }
-
-        $znn = float_number(znn_token()->getDisplayAmount($this->znn_requested));
-        $qsr = float_number(qsr_token()->getDisplayAmount($this->qsr_requested));
-
-        $znnTotal = ($this->znn_price * $znn);
-        $qsrTotal = ($this->qsr_price * $qsr);
-
-        return number_format(($znnTotal + $qsrTotal), 2);
-    }
-
-    public function getRawJsonAttribute()
-    {
-        $cacheKey = "nom.acceleratorProject.rawJson.{$this->id}";
+        $cacheKey = $this->cacheKey('raw-json', 'updated_at');
+        $data = Cache::get($cacheKey);
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->accelerator->getProjectById($this->hash)['data'];
-            Cache::forever($cacheKey, $data);
-        } catch (\Throwable $throwable) {
-            $data = Cache::get($cacheKey);
+            $newData = app(ZenonSdk::class)->getProjectById($this->hash);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
+        } catch (Throwable $throwable) {
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;
-    }
-
-    public function getIsFavouritedAttribute()
-    {
-        if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
-        }
-
-        return false;
-    }
-
-    //
-    // Methods
-
-    public static function findBySlug(string $slug): ?AcceleratorProject
-    {
-        return static::where('slug', $slug)->first();
-    }
-
-    public static function findByHash($hash)
-    {
-        return static::where('hash', $hash)->first();
     }
 }

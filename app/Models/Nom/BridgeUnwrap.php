@@ -1,28 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use Carbon\Carbon;
+use Database\Factories\Nom\BridgeUnwrapFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Http;
 
 class BridgeUnwrap extends Model
 {
-    protected $table = 'nom_bridge_unwraps';
+    use HasFactory;
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
     public $timestamps = false;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_bridge_unwraps';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
     protected $fillable = [
         'bridge_network_id',
-        'bridge_network_token_id',
         'to_account_id',
         'token_id',
         'account_block_id',
         'from_address',
         'transaction_hash',
         'log_index',
-        'token_address',
         'signature',
         'amount',
         'redeemed_at',
@@ -31,62 +49,74 @@ class BridgeUnwrap extends Model
         'revoked_at',
     ];
 
-    protected $casts = [
-        'redeemed_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'revoked_at' => 'datetime',
-    ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'redeemed_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'revoked_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return BridgeUnwrapFactory::new();
+    }
+
+    //
+    // Statics
+
+    public static function findByTxHashLog(string|int $hash, string|int $log): ?BridgeUnwrap
+    {
+        return static::where('transaction_hash', $hash)
+            ->where('log_index', $log)
+            ->first();
+    }
 
     //
     // Relations
 
-    public function bridge_network(): BelongsTo
+    public function bridgeNetwork(): BelongsTo
     {
-        return $this->belongsTo(BridgeNetwork::class, 'bridge_network_id', 'id');
+        return $this->belongsTo(BridgeNetwork::class);
     }
 
-    public function bridge_network_token(): BelongsTo
+    public function toAccount(): BelongsTo
     {
-        return $this->belongsTo(BridgeNetworkToken::class, 'bridge_network_token_id', 'id');
-    }
-
-    public function to_account(): BelongsTo
-    {
-        return $this->belongsTo(Account::class, 'to_account_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
     public function token(): BelongsTo
     {
-        return $this->belongsTo(Token::class, 'token_id', 'id');
+        return $this->belongsTo(Token::class);
     }
 
-    public function account_block(): BelongsTo
+    public function accountBlock(): BelongsTo
     {
-        return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+        return $this->belongsTo(AccountBlock::class);
     }
 
     //
     // Scopes
 
-    public function scopeCreatedLast($query, ?string $limit)
+    public function scopeWhereTxHashLog($query, string $hash, int $log)
     {
-        if ($limit) {
-            return $query->where('created_at', '>=', $limit);
-        }
-
-        return $query;
+        return $query->where('transaction_hash', $hash)
+            ->where('log_index', $log);
     }
 
-    public function scopeCreatedBetweenDates($query, array $dates)
+    public function scopeWhereUnredeemed($query)
     {
-        $start = ($dates[0] instanceof Carbon) ? $dates[0] : Carbon::parse($dates[0]);
-        $end = ($dates[1] instanceof Carbon) ? $dates[1] : Carbon::parse($dates[1]);
-
-        return $query->whereBetween('created_at', [
-            $start->startOfDay(),
-            $end->endOfDay(),
-        ]);
+        return $query->whereNull('redeemed_at');
     }
 
     public function scopeWhereAffiliateReward($query)
@@ -99,6 +129,16 @@ class BridgeUnwrap extends Model
         return $query->where('log_index', '<', '4000000000');
     }
 
+    public function scopeWhereIsProcessed($query)
+    {
+        return $query->whereNotNull('from_address');
+    }
+
+    public function scopeWhereNotProcessed($query)
+    {
+        return $query->whereNull('from_address');
+    }
+
     //
     // Attributes
 
@@ -107,34 +147,18 @@ class BridgeUnwrap extends Model
         return $this->log_index > 4000000000;
     }
 
-    public function getFromAddressLinkAttribute(): ?string
+    public function getFromAddressLinkAttribute(): string
     {
-        return $this->bridge_network->explorer_url.'address/'.$this->from_address;
+        return $this->bridgeNetwork->explorer_url . '/' . $this->bridgeNetwork->explorer_address_link . '/' . $this->from_address;
     }
 
-    public function getTxHashLinkAttribute(): ?string
+    public function getTxHashLinkAttribute(): string
     {
-        return $this->bridge_network->explorer_url.'tx/0x'.$this->transaction_hash;
+        return $this->bridgeNetwork->explorer_url . '/' . $this->bridgeNetwork->explorer_tx_link . '/0x' . $this->transaction_hash;
     }
 
     public function getDisplayAmountAttribute(): string
     {
-        return $this->token?->getDisplayAmount($this->amount);
-    }
-
-    public function setFromAddress(): void
-    {
-        if ($this->from_address) {
-            return;
-        }
-
-        $this->from_address = Http::get('https://api.etherscan.io/api', [
-            'module' => 'proxy',
-            'action' => 'eth_getTransactionByHash',
-            'txhash' => '0x'.$this->transaction_hash,
-            'apikey' => config('services.etherscan.api_key'),
-        ])->json('result.from');
-
-        $this->save();
+        return $this->token?->getFormattedAmount($this->amount);
     }
 }

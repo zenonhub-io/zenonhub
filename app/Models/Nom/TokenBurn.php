@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
+use Database\Factories\Nom\TokenBurnFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,13 +15,6 @@ class TokenBurn extends Model
     use HasFactory;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_token_burns';
-
-    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -25,11 +22,18 @@ class TokenBurn extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_token_burns';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_id',
         'token_id',
         'account_id',
@@ -39,35 +43,46 @@ class TokenBurn extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TokenBurnFactory::new();
+    }
 
     //
     // Relations
 
     public function chain(): BelongsTo
     {
-        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+        return $this->belongsTo(Chain::class);
     }
 
     public function token(): BelongsTo
     {
-        return $this->belongsTo(Token::class, 'token_id', 'id');
+        return $this->belongsTo(Token::class);
     }
 
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'account_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
-    public function account_block(): BelongsTo
+    public function accountBlock(): BelongsTo
     {
-        return $this->belongsTo(AccountBlock::class, 'account_block_id', 'id');
+        return $this->belongsTo(AccountBlock::class);
     }
 
     //
@@ -76,8 +91,8 @@ class TokenBurn extends Model
     //
     // Attributes
 
-    public function getDisplayAmountAttribute()
+    public function getDisplayAmountAttribute(): string
     {
-        return $this->token->getDisplayAmount($this->amount);
+        return $this->token->getFormattedAmount($this->amount);
     }
 }

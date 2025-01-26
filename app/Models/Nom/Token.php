@@ -1,43 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
+use App\DataTransferObjects\Nom\TokenDTO;
+use App\Enums\Nom\EmbeddedContractsEnum;
+use App\Enums\Nom\NetworkTokensEnum;
+use App\Models\Favorite;
+use App\Models\SocialProfile;
+use App\Services\ZenonSdk\ZenonSdk;
+use App\Traits\ModelCacheKeyTrait;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
+use Database\Factories\Nom\TokenFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\App;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
 use Spatie\Sitemap\Contracts\Sitemapable;
+use Throwable;
 
 class Token extends Model implements Sitemapable
 {
-    use HasFactory, Markable;
-
-    public const ZTS_EMPTY = 'zts1qqqqqqqqqqqqqqqqtq587y';
-
-    public const ZTS_ZNN = 'zts1znnxxxxxxxxxxxxx9z4ulx';
-
-    public const ZTS_QSR = 'zts1qsrxxxxxxxxxxxxxmrhjll';
-
-    public const ZTS_LP_ETH = 'zts17d6yr02kh0r9qr566p7tg6';
-
-    protected static array $marks = [
-        Favorite::class,
-    ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_tokens';
+    use HasFactory, Markable, ModelCacheKeyTrait, Searchable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -47,11 +40,18 @@ class Token extends Model implements Sitemapable
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_tokens';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_id',
         'owner_id',
         'name',
@@ -59,6 +59,7 @@ class Token extends Model implements Sitemapable
         'domain',
         'token_standard',
         'total_supply',
+        'initial_supply',
         'max_supply',
         'decimals',
         'is_burnable',
@@ -68,22 +69,64 @@ class Token extends Model implements Sitemapable
         'updated_at',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+    protected static array $marks = [
+        Favorite::class,
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'total_supply' => 'string',
+            'max_supply' => 'string',
+            'is_burnable' => 'boolean',
+            'is_mintable' => 'boolean',
+            'is_utility' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return TokenFactory::new();
+    }
+
+    //
+    // Methods
+
+    public static function findByZtsWithHolders(string $zts): ?Token
+    {
+        return static::withCount(['holders' => function ($q) {
+            $q->where('balance', '>', '0');
+        }])->where('token_standard', $zts)->first();
+    }
 
     //
     // config
 
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('explorer.token', ['zts' => $this->token_standard]);
+        return route('explorer.token.detail', ['zts' => $this->token_standard]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'token_standard' => $this->token_standard,
+            'name' => $this->name,
+            'symbol' => $this->symbol,
+        ];
     }
 
     //
@@ -91,12 +134,12 @@ class Token extends Model implements Sitemapable
 
     public function chain(): BelongsTo
     {
-        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+        return $this->belongsTo(Chain::class);
     }
 
     public function owner(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'owner_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
     public function holders(): BelongsToMany
@@ -109,33 +152,58 @@ class Token extends Model implements Sitemapable
         )->withPivot('balance', 'updated_at');
     }
 
+    public function prices(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Currency::class,
+            'nom_token_prices',
+            'token_id',
+            'currency_id'
+        )->withPivot('price', 'timestamp');
+    }
+
     public function mints(): HasMany
     {
-        return $this->hasMany(TokenMint::class, 'token_id', 'id');
+        return $this->hasMany(TokenMint::class);
     }
 
     public function burns(): HasMany
     {
-        return $this->hasMany(TokenBurn::class, 'token_id', 'id');
+        return $this->hasMany(TokenBurn::class);
     }
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(AccountBlock::class, 'token_id', 'id');
+        return $this->hasMany(AccountBlock::class);
     }
 
-    public function bridge_network_tokens(): HasMany
+    public function bridgeNetworkTokens(): HasMany
     {
-        return $this->hasMany(BridgeNetworkToken::class, 'token_id', 'id');
+        return $this->hasMany(BridgeNetworkToken::class);
+    }
+
+    public function bridgeUnwraps(): HasMany
+    {
+        return $this->hasMany(BridgeUnwrap::class);
+    }
+
+    public function bridgeWraps(): HasMany
+    {
+        return $this->hasMany(BridgeWrap::class);
+    }
+
+    public function socialProfile(): MorphOne
+    {
+        return $this->morphOne(SocialProfile::class, 'profileable');
+    }
+
+    public function statHistory(): HasMany
+    {
+        return $this->hasMany(TokenStatHistory::class);
     }
 
     //
     // Scopes
-
-    public function scopeWhereZts($query, $zts)
-    {
-        return $query->where('token_standard', $zts);
-    }
 
     public function scopeWhereListSearch($query, $search)
     {
@@ -146,54 +214,46 @@ class Token extends Model implements Sitemapable
         });
     }
 
+    public function scopeWhereNetwork($query)
+    {
+        return $query->whereRelation('owner', 'is_embedded_contract', '1');
+    }
+
+    public function scopeWhereUser($query)
+    {
+        return $query->whereRelation('owner', 'is_embedded_contract', '0');
+    }
+
     //
     // Attributes
 
-    public function getShortTokenStandardAttribute()
+    public function getIsNetworkAttribute()
     {
-        return short_hash($this->token_standard, 5);
+        $this->loadMissing('owner');
+
+        return $this->owner->is_embedded_contract;
     }
 
-    public function getTotalMintedAttribute()
-    {
-        return $this->mints()->sum('amount');
-    }
-
-    public function getDisplayTotalMintedAttribute()
-    {
-        return $this->getDisplayAmount($this->mints()->sum('amount'));
-    }
-
-    public function getTotalBurnedAttribute()
-    {
-        return $this->burns()->sum('amount');
-    }
-
-    public function getDisplayTotalBurnedAttribute()
-    {
-        return $this->getDisplayAmount($this->burns()->sum('amount'));
-    }
-
-    public function getTotalLockedAttribute()
+    public function getLockedSupplyAttribute(): float
     {
         $totalLocked = 0;
 
-        if ($this->token_standard === self::ZTS_ZNN) {
-            $pillarLockup = Account::findByAddress(Account::ADDRESS_PILLAR)->znn_balance;
-            $sentinelLockup = Account::findByAddress(Account::ADDRESS_SENTINEL)->znn_balance;
-            $stakingLockup = Account::findByAddress(Account::ADDRESS_STAKE)->znn_balance;
+        if ($this->token_standard === NetworkTokensEnum::ZNN->value) {
+            $pillarLockup = Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->znn_balance;
+            $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->znn_balance;
+            $stakingLockup = Account::firstWhere('address', EmbeddedContractsEnum::STAKE->value)->znn_balance;
             $totalLocked = ($pillarLockup + $sentinelLockup + $stakingLockup);
         }
 
-        if ($this->token_standard === self::ZTS_QSR) {
-            $sentinelLockup = Account::findByAddress(Account::ADDRESS_SENTINEL)->qsr_balance;
-            $plasmaLockup = Account::findByAddress(Account::ADDRESS_PLASMA)->qsr_balance;
+        if ($this->token_standard === NetworkTokensEnum::QSR->value) {
+            $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->qsr_balance;
+            $plasmaLockup = Account::firstWhere('address', EmbeddedContractsEnum::PLASMA->value)->qsr_balance;
             $totalLocked = ($sentinelLockup + $plasmaLockup);
         }
 
-        if ($this->token_standard === self::ZTS_LP_ETH) {
-            $liquidityAccount = Account::findByAddress(Account::ADDRESS_LIQUIDITY);
-            $totalLocked = $liquidityAccount->balances()
+        if ($this->token_standard === NetworkTokensEnum::LP_ZNN_ETH->value) {
+            $liquidityAccount = Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value);
+            $totalLocked = $liquidityAccount->tokens()
                 ->where('token_id', $this->id)
                 ->first()?->pivot->balance;
         }
@@ -201,120 +261,110 @@ class Token extends Model implements Sitemapable
         return $totalLocked;
     }
 
-    public function getDisplayTotalLockedAttribute()
+    public function getCirculatingSupplyAttribute(): int|float
     {
-        return $this->getDisplayAmount($this->total_locked);
+        return $this->total_supply - $this->locked_supply;
     }
 
-    public function getHasLockedTokensAttribute()
+    public function getHasLockedTokensAttribute(): bool
     {
-        return in_array($this->token_standard, [self::ZTS_ZNN, self::ZTS_QSR, self::ZTS_LP_ETH]);
+        return in_array($this->token_standard, [
+            NetworkTokensEnum::ZNN->value,
+            NetworkTokensEnum::QSR->value,
+            NetworkTokensEnum::LP_ZNN_ETH->value,
+        ], true);
     }
 
-    public function getHasCustomLabelAttribute()
+    public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            $favorite = Favorite::findExisting($this, $user);
-            if ($favorite) {
-                return true;
-            }
+            return Favorite::has($this, $user);
         }
 
         return false;
     }
 
-    public function getCustomLabelAttribute()
+    public function getPriceAttribute(): string
     {
-        if ($user = auth()->user()) {
-            $favorite = Favorite::findExisting($this, $user);
-            if ($favorite) {
-                return $favorite->label;
-            }
-        }
+        $existingPrice = $this->prices()
+            ->withPivot('price', 'timestamp')
+            ->where('is_default', true)
+            ->orderByPivot('timestamp', 'desc')
+            ->first();
 
-        return $this->name;
+        return $existingPrice ? $existingPrice->pivot->price : '0';
     }
 
-    public function getIsFavouritedAttribute()
+    public function getRawJsonAttribute(): ?TokenDTO
     {
-        if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
+        $cacheKey = $this->cacheKey('raw-json', 'updated_at');
+        $data = Cache::get($cacheKey);
+
+        try {
+            $newData = app(ZenonSdk::class)->getByZts($this->token_standard);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
+        } catch (Throwable $throwable) {
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
-        return false;
+        return $data;
     }
 
-    public function getUsdPriceAttribute()
+    public function getAvatarSvgAttribute()
     {
-        if ($this->token_standard === self::ZTS_ZNN) {
-            return znn_price();
-        }
+        $cacheKey = $this->cacheKey('avatar');
 
-        if ($this->token_standard === self::ZTS_QSR) {
-            return qsr_price();
-        }
-
-        return 0;
+        return Cache::rememberForever($cacheKey, fn () => Http::get(config('zenon-hub.avatar_url'), [
+            'seed' => $this->token_standard,
+        ])->body());
     }
 
     //
     // Methods
 
-    public static function findByZts(string $zts): ?Token
+    public function getDisplayAmount(mixed $amount): int|float
     {
-        return static::where('token_standard', $zts)->first();
+        if (is_null($amount)) {
+            return 0;
+        }
+
+        $number = BigDecimal::of(10)->power($this->decimals);
+        $bigDecimal = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
+        $number = $bigDecimal->toScale($this->decimals, RoundingMode::DOWN);
+
+        if ($bigDecimal->isGreaterThan(PHP_INT_MAX) || $bigDecimal->isLessThan(PHP_INT_MIN)) {
+            return $number->toFloat();
+        }
+
+        if ($this->decimals === 0 || $bigDecimal->getScale() === 0) {
+            return $bigDecimal->toBigInteger()->toInt();
+        }
+
+        return $number->toFloat();
     }
 
-    public static function findByZtsWithHolders(string $zts): ?Token
-    {
-        return static::withCount(['holders' => function ($q) {
-            $q->where('balance', '>', '0');
-        }])->where('token_standard', $zts)->first();
-    }
-
-    public function getDisplayAmount($amount, $numDecimals = null, ?string $decimalsSeparator = '.', ?string $thousandsSeparator = ',')
+    public function getFormattedAmount($amount, $numDecimals = null, ?string $decimalsSeparator = '.', ?string $thousandsSeparator = ','): string
     {
         if (is_null($amount)) {
             return '-';
         }
 
-        $outputDecimals = (! is_null($numDecimals) ? $numDecimals : $this->decimals);
-        $number = BigDecimal::of(10)->power($this->decimals);
-        $amount = BigDecimal::of($amount)->dividedBy($number, $this->decimals);
-        $number = $amount->toScale($outputDecimals, RoundingMode::DOWN);
+        $displayAmount = $this->getDisplayAmount($amount);
+        $outputDecimals = $numDecimals ?? $this->decimals;
 
-        if ($this->decimals === 0 || $amount->getScale() === 0) {
-            return number_format((string) $amount->toBigInteger(), ($numDecimals ?: 0), $decimalsSeparator, $thousandsSeparator);
+        $numberFormatted = number_format($displayAmount, $outputDecimals, $decimalsSeparator, $thousandsSeparator);
+
+        if (str_contains($numberFormatted, $decimalsSeparator)) {
+            $numberFormatted = rtrim(rtrim($numberFormatted, '0'), $decimalsSeparator);
         }
 
-        if ($number->isGreaterThan(BigDecimal::of(1))) {
-            $number = number_format($number->toFloat(), $outputDecimals, $decimalsSeparator, $thousandsSeparator);
-        }
-
-        return rtrim(rtrim((string) $number, '0'), '.');
+        return $numberFormatted;
     }
 
-    public function getDisplayUsdAmount($amount)
+    public function getDisplayUsdAmount($amount): float
     {
-        $amount = $this->getDisplayAmount($amount);
-        $amount = (float) preg_replace('/[^\d.]/', '', $amount);
-        $price = $this->usd_price;
-
-        return $amount * $price;
-    }
-
-    public function getRawJsonAttribute()
-    {
-        $cacheKey = "nom.token.rawJson.{$this->id}";
-
-        try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->token->getByZts($this->token_standard)['data'];
-            Cache::forever($cacheKey, $data);
-        } catch (\Throwable $throwable) {
-            $data = Cache::get($cacheKey);
-        }
-
-        return $data;
+        return $this->getDisplayAmount($amount) * $this->usd_price;
     }
 }

@@ -1,0 +1,85 @@
+// Custom styles
+//
+// This is the place where you should place all additional styles and imports.
+// This will allow you to take advantage of future updates with lower time consumed on the upgrade process.
+
+@import "components/cards";
+@import "components/inputs";
+@import "components/legend-indicator";
+@import "components/code-highliter";
+@import "components/images";
+@import "components/layout";
+@import "components/animations";
+@import "components/jsvectormap";
+
+// Load custom font
+@if variable-exists(path-to-fonts) {
+    @import url($path-to-fonts);
+}
+
+// Scrollbar
+
+/* Firefox */
+.scrollbar {
+    scrollbar-color: $gray-300 transparent;
+    scrollbar-width: thin;
+}
+
+/* WebKit and Chromiums */
+.scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: none;
+    background-color: $gray-300;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: shade-color($gray-300, 5%);
+}
+
+a {
+    transition: $link-transition;
+}
+
+.nav-tabs .nav-link.active {
+    background: transparent;
+}
+
+svg, img {
+    display: block;
+    height: inherit;
+    width: inherit;
+}
+
+.svg-icon {
+    display: inline-block;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.title-icon {
+    min-height: 20px !important;
+    height: 20px !important;
+    svg {
+        height: 20px;
+    }
+}
+
+// Temp fix because webpixels is overwriting the variables in
+// node_modules/@webpixels/css/variables/_variables.scss:750
+.modal-backdrop {
+    background-color: $modal-backdrop-bg-fixed !important;
+    opacity: $modal-backdrop-opacity-fixed !important;
+}

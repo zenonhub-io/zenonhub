@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
-use App\Services\ZenonSdk;
-use DigitalSloth\ZnnPhp\Zenon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Validator;
 
 /**
@@ -15,17 +14,12 @@ use Illuminate\Validation\Validator;
  */
 class ApiController
 {
-    protected Zenon $znn;
-
-    public function __construct()
-    {
-        $this->znn = App::make(ZenonSdk::class);
-    }
+    public function __construct() {}
 
     /**
      * Returns a successful response to the client
      *
-     * @param  mixed  $result The result data.
+     * @param  mixed  $result  The result data.
      */
     protected function success(mixed $result): JsonResponse|JsonResource
     {
@@ -43,9 +37,9 @@ class ApiController
     /**
      * Returns errors to the client
      *
-     * @param  ?string  $detail Detailed error message
-     * @param  int  $code HTTP Error code, defaults to 404.
-     * @param  array  $data Custom data to include with the response.
+     * @param  ?string  $detail  Detailed error message
+     * @param  int  $code  HTTP Error code, defaults to 404.
+     * @param  array  $data  Custom data to include with the response.
      */
     protected function error(string $title, ?string $detail = null, int $code = 404, array $data = []): JsonResponse
     {
@@ -66,7 +60,7 @@ class ApiController
     /**
      * Returns validation errors to the client
      *
-     * @param  Validator  $validator The validator object.
+     * @param  Validator  $validator  The validator object.
      */
     protected function validationError(Validator $validator): JsonResponse
     {

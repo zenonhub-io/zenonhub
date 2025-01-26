@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\StakeCollection;
@@ -31,7 +33,7 @@ class Stakes extends ApiController
 
     public function find(Request $request, string $hash)
     {
-        $stake = Stake::findByHash($hash);
+        $stake = Stake::firstWhere('hash', $hash);
 
         if (! $stake) {
             return $this->error('Not found');
@@ -48,11 +50,11 @@ class Stakes extends ApiController
 
         if ($state = $request->input('state')) {
             if ($state === 'active') {
-                $query->isActive();
+                $query->whereActive();
             }
 
             if ($state === 'ended') {
-                $query->isEnded();
+                $query->whereEnded();
             }
         }
 

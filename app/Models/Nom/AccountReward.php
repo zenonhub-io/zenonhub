@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
+use App\Enums\Nom\AccountRewardTypesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,27 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AccountReward extends Model
 {
     use HasFactory;
-
-    public const TYPE_DELEGATE = 1;
-
-    public const TYPE_STAKE = 2;
-
-    public const TYPE_PILLAR = 3;
-
-    public const TYPE_SENTINEL = 4;
-
-    public const TYPE_LIQUIDITY = 5;
-
-    public const TYPE_LIQUIDITY_PROGRAM = 6;
-
-    public const TYPE_BRIDGE_AFFILIATE = 7;
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_account_rewards';
 
     /**
      * Indicates if the model should be timestamped.
@@ -39,11 +21,20 @@ class AccountReward extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_account_rewards';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
+        'chain_id',
+        'account_block_id',
         'account_id',
         'token_id',
         'type',
@@ -52,25 +43,39 @@ class AccountReward extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'type' => AccountRewardTypesEnum::class,
+        ];
+    }
 
     //
     // Relations
 
+    public function chain(): BelongsTo
+    {
+        return $this->belongsTo(Chain::class);
+    }
+
+    public function accountBlock(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class);
+    }
+
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'account_id', 'id');
+        return $this->belongsTo(Account::class);
     }
 
     public function token(): BelongsTo
     {
-        return $this->belongsTo(Token::class, 'token_id', 'id');
+        return $this->belongsTo(Token::class);
     }
 
     //
@@ -79,49 +84,8 @@ class AccountReward extends Model
     //
     // Attributes
 
-    public function getDisplayAmountAttribute()
+    public function getDisplayAmountAttribute(): string
     {
-        return $this->token->getDisplayAmount($this->amount);
-    }
-
-    public function getDisplayTypeAttribute()
-    {
-        if ($this->type === self::TYPE_DELEGATE) {
-            return 'Delegate';
-        }
-
-        if ($this->type === self::TYPE_STAKE) {
-            return 'Stake';
-        }
-
-        if ($this->type === self::TYPE_PILLAR) {
-            return 'Pillar';
-        }
-
-        if ($this->type === self::TYPE_SENTINEL) {
-            return 'Sentinel';
-        }
-
-        if ($this->type === self::TYPE_LIQUIDITY) {
-            return 'Liquidity';
-        }
-
-        if ($this->type === self::TYPE_LIQUIDITY_PROGRAM) {
-            return 'Liquidity Program';
-        }
-
-        if ($this->type === self::TYPE_BRIDGE_AFFILIATE) {
-            return 'Bridge Affiliate';
-        }
-
-        return null;
-    }
-
-    //
-    // Methods
-
-    public function displayAmount($decimals)
-    {
-        return $this->token->getDisplayAmount($this->amount, $decimals);
+        return $this->token->getFormattedAmount($this->amount);
     }
 }

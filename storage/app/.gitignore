@@ -1,4 +1,6 @@
 *
+!nom-json/
+!nom-json/**
+!private/
 !public/
-!exports/
 !.gitignore

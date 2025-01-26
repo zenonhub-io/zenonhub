@@ -1,14 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ContractMethod extends Model
 {
-    use HasFactory;
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * The table associated with the model.
@@ -18,45 +24,34 @@ class ContractMethod extends Model
     protected $table = 'nom_contract_methods';
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'contract_id',
         'name',
         'signature',
         'fingerprint',
     ];
 
+    public static function findByContractMethod(string $contract, string $method): ?ContractMethod
+    {
+        return self::whereRelation('contract', 'name', $contract)
+            ->firstWhere('name', $method);
+    }
+
     //
     // Relations
 
     public function contract(): BelongsTo
     {
-        return $this->belongsTo(Contract::class, 'contract_id', 'id');
+        return $this->belongsTo(Contract::class);
     }
 
     //
     // Attributes
 
-    public function getJobClassNameAttribute()
-    {
-        return "App\Jobs\Nom\\{$this->contract->name}\\{$this->name}";
-    }
-
     //
     // Methods
-
-    public static function findByFingerprint(string $fingerprint): ?ContractMethod
-    {
-        return static::where('fingerprint', $fingerprint)->first();
-    }
 }

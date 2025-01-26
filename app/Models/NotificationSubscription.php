@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -40,11 +42,11 @@ class NotificationSubscription extends Pivot
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
 
     public function type()
     {
-        return $this->belongsTo(NotificationType::class, 'type_id', 'id');
+        return $this->belongsTo(NotificationType::class);
     }
 }

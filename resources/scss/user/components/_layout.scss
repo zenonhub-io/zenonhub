@@ -1,0 +1,84 @@
+.auth-content-wrapper {
+    border-top: 2px solid $border-color-dark;
+    @include media-breakpoint-up(md) {
+        border: 2px solid $border-color-dark;
+    }
+}
+
+.app-wrapper {
+    align-items: flex-start;
+    display: flex;
+    height: calc(100vh - $navbar-height);
+    position: relative;
+}
+
+.app-navbar {
+    background: $body-bg-dark;
+    border-bottom: 2px solid $border-color-dark;
+
+    .navbar-brand {
+        margin-right: 0;
+    }
+
+    @include media-breakpoint-up(md) {
+        border-bottom: none;
+    }
+}
+
+.app-sidebar-wrapper {
+    background: $body-bg-dark;
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+
+    .offcanvas-body {
+        padding-top: 0;
+        padding-bottom: 0;
+
+        @include media-breakpoint-down(md) {
+            height: calc(100vh - 88px);
+        }
+    }
+
+    //.navbar-vertical.navbar-expand > ul.navbar-nav:after {
+    //    content: "";
+    //    position: absolute;
+    //    bottom: 0;
+    //    left: 0;
+    //    pointer-events: none;
+    //    background-image: linear-gradient(to bottom, rgba($body-bg-dark,0), rgba($body-bg-dark, 1) 90%);
+    //    width: 100%;
+    //    height: 4em;
+    //}
+
+    @include media-breakpoint-up(md) {
+        height: calc(100vh - $navbar-height);
+        top: $navbar-height;
+        width: $sidebar-width;
+
+        .offcanvas-body {
+            height: calc(100vh - $navbar-height);
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        .navbar-vertical.navbar-expand {
+            max-width: 100%;
+            padding: 0;
+        }
+    }
+}
+
+.app-content-wrapper {
+    border-top-left-radius: 0;
+    height: calc(100vh - $navbar-height);
+    overflow-y: auto;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        border-top: 2px solid $border-color-dark;
+        border-left: 2px solid $border-color-dark;
+        border-top-left-radius: 1rem;
+        width: calc(100% - 230px);
+    }
+}

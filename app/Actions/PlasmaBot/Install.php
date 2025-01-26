@@ -1,17 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\PlasmaBot;
 
-use Illuminate\Support\Facades\App;
-use Spatie\QueueableAction\QueueableAction;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class Install
 {
-    use QueueableAction;
+    use AsAction;
 
     public function execute(): void
     {
-        $plasmaBot = App::make(\App\Services\PlasmaBot::class);
-        $plasmaBot->install();
+        // TODO
     }
 }

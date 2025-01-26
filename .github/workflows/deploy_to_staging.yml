@@ -15,14 +15,14 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.4'
 
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -33,18 +33,18 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run tests
-        run: ./vendor/bin/phpunit
+        run: ./vendor/bin/pest --parallel
         env:
           APP_ENV: testing
 
       - name: Create deploy env file
         run: |
-          echo "${{ secrets.ENV_DEPLOY }}" > ./deploy/.env
+          echo "${{ secrets.STAGING_DEPLOY_ENV }}" > ./deploy/.env
 
       - name: Deploy
         uses: deployphp/action@v1
         with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
+          private-key: ${{ secrets.STAGING_DEPLOY_PRIVATE_KEY }}
           dep: deploy develop
 
       - name: Discord notification

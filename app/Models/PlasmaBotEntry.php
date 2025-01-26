@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Models\Nom\Account;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PlasmaBotEntry extends Model
@@ -18,7 +22,6 @@ class PlasmaBotEntry extends Model
      */
     protected $fillable = [
         'account_id',
-        'address',
         'hash',
         'amount',
         'is_confirmed',
@@ -37,47 +40,34 @@ class PlasmaBotEntry extends Model
     //
     // Relations
 
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
+
     //
     // Scopes
 
-    public function scopeIsUnConfirmed(Builder $query): Builder
+    public function scopeWhereUnConfirmed(Builder $query): Builder
     {
         return $query->where('is_confirmed', 0);
     }
 
-    public function scopeIsConfirmed(Builder $query): Builder
+    public function scopeWhereConfirmed(Builder $query): Builder
     {
         return $query->where('is_confirmed', '1');
     }
 
-    public function scopeIsExpired(Builder $query): Builder
+    public function scopeWhereExpired(Builder $query): Builder
     {
-        return $query->where('expires_at', '<', now());
-    }
-
-    public function scopeWhereActive(Builder $query): Builder
-    {
-        return $query->where(function (Builder $q) {
-            $q->whereNull('expires_at')
-                ->orWhere('expires_at', '>', now());
-        });
-    }
-
-    public function scopeWhereAddress(Builder $query, $address): Builder
-    {
-        return $query->where('address', $address);
-    }
-
-    //
-    // Methods
-
-    public function confirm($hash = null)
-    {
-        if ($hash) {
-            $this->hash = $hash;
-        }
-
-        $this->is_confirmed = true;
-        $this->save();
+        return $query->where('expires_at', '<', now())
+            ->orWhere(function ($query) {
+                $query->whereNull('expires_at')
+                    ->whereHas('account', function ($query2) {
+                        $query2->whereRaw('(SELECT MAX(created_at) FROM nom_account_blocks WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id) < ?', [
+                            now()->subDays(30),
+                        ]);
+                    });
+            });
     }
 }

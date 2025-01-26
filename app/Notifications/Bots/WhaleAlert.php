@@ -1,28 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications\Bots;
 
 use App\Channels\DiscordWebhookChannel;
+use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Token;
 use App\Services\Discord\Embed;
 use App\Services\Discord\Message as DiscordWebhookMessage;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\DiscordMessage;
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
 use NotificationChannels\Twitter\TwitterChannel;
 use NotificationChannels\Twitter\TwitterMessage;
 use NotificationChannels\Twitter\TwitterStatusUpdate;
 
-class WhaleAlert extends Notification
+class WhaleAlert extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public function __construct(protected AccountBlock $block)
     {
+        $this->onQueue('alerts');
     }
 
     public function via($notifiable): array
@@ -44,31 +47,11 @@ class WhaleAlert extends Notification
         return $channels;
     }
 
-    //    public function toDiscord($notifiable): DiscordMessage
-    //    {
-    //        $senderAccount = $this->formatMarkdownAddressName($this->block->account);
-    //        $receiverAccount = $this->formatMarkdownAddressName($this->block->to_account);
-    //        $amount = $this->block->token->getDisplayAmount($this->block->amount);
-    //        $token = $this->block->token->symbol;
-    //
-    //        return DiscordMessage::create()
-    //            ->embed(
-    //                Embed::make()
-    //                    ->color($this->getDiscordHighlightColour())
-    //                    ->title(':whale: :rotating_light:')
-    //                    ->description("**{$amount} \${$token}** was sent from {$senderAccount} to {$receiverAccount}")
-    //                    ->field('Sender', $this->formatMarkdownAddressLink($this->block->account, 'discord'))
-    //                    ->field('Receiver', $this->formatMarkdownAddressLink($this->block->to_account, 'discord'))
-    //                    ->field('Transaction', $this->formatMarkdownTxLink('discord'))
-    //                    ->timestamp($this->block->created_at->format('c'))
-    //            );
-    //    }
-
     public function toDiscordWebhook($notifiable): DiscordWebhookMessage
     {
         $senderAccount = $this->formatMarkdownAddressName($this->block->account);
-        $receiverAccount = $this->formatMarkdownAddressName($this->block->to_account);
-        $amount = $this->block->token->getDisplayAmount($this->block->amount);
+        $receiverAccount = $this->formatMarkdownAddressName($this->block->toAccount);
+        $amount = $this->block->token->getFormattedAmount($this->block->amount);
         $token = $this->block->token->symbol;
 
         return DiscordWebhookMessage::make()
@@ -79,7 +62,7 @@ class WhaleAlert extends Notification
                     ->title(':whale: :rotating_light:')
                     ->description("**{$amount} \${$token}** was sent from {$senderAccount} to {$receiverAccount}")
                     ->field('Sender', $this->formatMarkdownAddressLink($this->block->account, 'discord'))
-                    ->field('Receiver', $this->formatMarkdownAddressLink($this->block->to_account, 'discord'))
+                    ->field('Receiver', $this->formatMarkdownAddressLink($this->block->toAccount, 'discord'))
                     ->field('Transaction', $this->formatMarkdownTxLink('discord'))
                     ->timestamp($this->block->created_at->format('c'))
             );
@@ -88,12 +71,12 @@ class WhaleAlert extends Notification
     public function toTelegram($notifiable): TelegramMessage
     {
         $senderAccount = $this->formatMarkdownAddressName($this->block->account, '*');
-        $receiverAccount = $this->formatMarkdownAddressName($this->block->to_account, '*');
-        $amount = $this->block->token->getDisplayAmount($this->block->amount);
+        $receiverAccount = $this->formatMarkdownAddressName($this->block->toAccount, '*');
+        $amount = $this->block->token->getFormattedAmount($this->block->amount);
         $token = $this->block->token->symbol;
 
         $senderLink = $this->formatMarkdownAddressLink($this->block->account, 'telegram');
-        $receiverLink = $this->formatMarkdownAddressLink($this->block->to_account, 'telegram');
+        $receiverLink = $this->formatMarkdownAddressLink($this->block->toAccount, 'telegram');
         $txLink = $this->formatMarkdownTxLink('telegram');
 
         return TelegramMessage::create()
@@ -110,16 +93,14 @@ class WhaleAlert extends Notification
     public function toTwitter($notifiable): TwitterMessage
     {
         $senderAccount = $this->formatAddressName($this->block->account);
-        $receiverAccount = $this->formatAddressName($this->block->to_account);
-        $amount = $this->block->token->getDisplayAmount($this->block->amount);
+        $receiverAccount = $this->formatAddressName($this->block->toAccount);
+        $amount = $this->block->token->getFormattedAmount($this->block->amount);
         $token = $this->block->token->symbol;
         $txLink = $this->formatTxLink('twitter');
 
         return new TwitterStatusUpdate("{$amount} \${$token} was sent from {$senderAccount} to {$receiverAccount}
 
-Tx: $txLink
-
-#ZenonWhaleAlert #Zenon #Bitcoin #NoM \$ZNN \$QSR \$BTC");
+Tx: $txLink");
     }
 
     //
@@ -127,26 +108,8 @@ Tx: $txLink
 
     private function formatTxLink(string $channel): string
     {
-        return route('explorer.transaction', [
+        return route('explorer.transaction.detail', [
             'hash' => $this->block->hash,
-            'utm_source' => 'whale_bot',
-            'utm_medium' => $channel,
-        ]);
-    }
-
-    private function formatAddressName(Account $account): string
-    {
-        if ($account->has_custom_label) {
-            return $account->custom_label;
-        }
-
-        return 'an unknown address';
-    }
-
-    private function formatAddressLink(Account $account, string $channel): string
-    {
-        return route('explorer.account', [
-            'address' => $account->address,
             'utm_source' => 'whale_bot',
             'utm_medium' => $channel,
         ]);
@@ -159,6 +122,15 @@ Tx: $txLink
         return "[{$this->block->hash}]({$link})";
     }
 
+    private function formatAddressName(Account $account): string
+    {
+        if ($account->has_custom_label) {
+            return $account->custom_label;
+        }
+
+        return 'an unknown address';
+    }
+
     private function formatMarkdownAddressName(Account $account, $symbol = '**'): string
     {
         if ($account->has_custom_label) {
@@ -166,6 +138,15 @@ Tx: $txLink
         }
 
         return "an {$symbol}unknown address{$symbol}";
+    }
+
+    private function formatAddressLink(Account $account, string $channel): string
+    {
+        return route('explorer.account.detail', [
+            'address' => $account->address,
+            'utm_source' => 'whale_bot',
+            'utm_medium' => $channel,
+        ]);
     }
 
     private function formatMarkdownAddressLink(Account $account, string $channel): string
@@ -178,12 +159,12 @@ Tx: $txLink
     private function getDiscordHighlightColour(): int
     {
         $colour = 0x607D8B; // Grey
-        if ($this->block->token->token_standard === Token::ZTS_ZNN) {
-            $colour = 0x6FF34D; // Zenon green
-        } elseif ($this->block->token->token_standard === Token::ZTS_QSR) {
-            $colour = 0x0061EB; // Zenon blue
+        if ($this->block->token->token_standard === NetworkTokensEnum::ZNN->value) {
+            $colour = config('zenon-hub.colours.zenon-green');
+        } elseif ($this->block->token->token_standard === NetworkTokensEnum::QSR->value) {
+            $colour = config('zenon-hub.colours.zenon-blue');
         }
 
-        return $colour;
+        return (int) $colour;
     }
 }

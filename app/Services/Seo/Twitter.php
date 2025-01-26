@@ -1,44 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Seo;
 
 trait Twitter
 {
-    /**
-     * Fill the Twitter meta tags from the configuration.
-     */
-    protected function fillTwitterDefaults(): void
-    {
-        $this
-            ->twitterCard(config('meta_tags.twitter.card') ?: '')
-            ->twitterSite(config('meta_tags.twitter.site') ?: '')
-            ->twitterTitle(config('meta_tags.twitter.title') ?: '')
-            ->twitterDescription(config('meta_tags.twitter.description') ?: '')
-            ->twitterImage(config('meta_tags.twitter.image') ?: '');
-    }
-
-    /**
-     * Update the Twitter Title and Description based on the regular title.
-     */
-    protected function autoFillTwitter(bool $overwrite = false): void
-    {
-        if (! config('meta_tags.twitter.auto_fill')) {
-            return;
-        }
-
-        if ($this->title) {
-            if ($overwrite || ! $this->getMetaByName('twitter:title')->first()?->content) {
-                $this->twitterTitle($this->title);
-            }
-        }
-
-        if ($meta = $this->getMetaByName('description')->first()) {
-            if ($overwrite || ! $this->getMetaByName('twitter:description')->first()?->content) {
-                $this->twitterDescription($meta->content);
-            }
-        }
-    }
-
     /**
      * Setter for the 'twitter:card' Meta Name.
      */
@@ -87,5 +54,40 @@ trait Twitter
         $this->metaByName('twitter:image', trim($value));
 
         return $this;
+    }
+
+    /**
+     * Fill the Twitter meta tags from the configuration.
+     */
+    protected function fillTwitterDefaults(): void
+    {
+        $this
+            ->twitterCard(config('meta-tags.twitter.card') ?: '')
+            ->twitterSite(config('meta-tags.twitter.site') ?: '')
+            ->twitterTitle(config('meta-tags.twitter.title') ?: '')
+            ->twitterDescription(config('meta-tags.twitter.description') ?: '')
+            ->twitterImage(config('meta-tags.twitter.image') ?: '');
+    }
+
+    /**
+     * Update the Twitter Title and Description based on the regular title.
+     */
+    protected function autoFillTwitter(bool $overwrite = false): void
+    {
+        if (! config('meta-tags.twitter.auto_fill')) {
+            return;
+        }
+
+        if ($this->title) {
+            if ($overwrite || ! $this->getMetaByName('twitter:title')->first()?->content) {
+                $this->twitterTitle($this->title);
+            }
+        }
+
+        if ($meta = $this->getMetaByName('description')->first()) {
+            if ($overwrite || ! $this->getMetaByName('twitter:description')->first()?->content) {
+                $this->twitterDescription($meta->content);
+            }
+        }
     }
 }

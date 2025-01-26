@@ -1,18 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationType extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'notification_types';
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -25,14 +20,22 @@ class NotificationType extends Model
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'name',
         'code',
         'category',
         'description',
         'data',
+        'is_configurable',
         'is_active',
     ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'notification_types';
 
     /**
      * The attributes that should be cast.
@@ -44,9 +47,12 @@ class NotificationType extends Model
     ];
 
     //
+    // Methods
+
+    //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->where('is_active', '1');
     }
@@ -54,34 +60,8 @@ class NotificationType extends Model
     //
     // Attributes
 
-    public function getSubscribedUsersAttribute()
+    public function checkUserSubscribed(User $user): bool
     {
-        return User::whereHas('notification_types', function ($query) {
-            return $query->where('code', $this->code);
-        })->get();
-    }
-
-    //
-    // Methods
-
-    public static function findByCode(string $code): ?NotificationType
-    {
-        return static::where('code', $code)->first();
-    }
-
-    public static function getSubscribedUsers(string $code)
-    {
-        return self::findByCode($code)->subscribed_users;
-    }
-
-    public static function getAllCategories()
-    {
-        return self::select('category')->groupBy('category')->pluck('category')->sortBy(function ($item, $key) {
-            if ($item === 'network') {
-                return -1;
-            }
-
-            return $key;
-        });
+        return $user->notificationTypes->contains('id', $this->id);
     }
 }

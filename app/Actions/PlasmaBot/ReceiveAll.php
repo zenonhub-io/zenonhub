@@ -1,17 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\PlasmaBot;
 
-use Illuminate\Support\Facades\App;
-use Spatie\QueueableAction\QueueableAction;
+use App\Exceptions\PlasmaBotException;
+use App\Exceptions\ZenonCliException;
+use App\Services\ZenonCli\ZenonCli;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class ReceiveAll
 {
-    use QueueableAction;
+    use AsAction;
 
-    public function execute(): void
+    public string $commandSignature = 'plasma-bot:receive-all';
+
+    public function __construct(
+        private readonly ZenonCli $cli
+    ) {
+        $this->cli->setNodeUrl(config('services.plasma-bot.node'));
+        $this->cli->setKeystore(config('services.plasma-bot.keystore'));
+        $this->cli->setPassphrase(config('services.plasma-bot.passphrase'));
+    }
+
+    /**
+     * @throws PlasmaBotException
+     */
+    public function handle(): void
     {
-        $plasmaBot = App::make(\App\Services\PlasmaBot::class);
-        $plasmaBot->receiveAll();
+        try {
+            $this->cli->receiveAll();
+        } catch (ZenonCliException $e) {
+            throw new PlasmaBotException($e->getMessage());
+        }
     }
 }

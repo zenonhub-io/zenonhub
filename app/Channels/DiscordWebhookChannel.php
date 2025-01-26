@@ -1,27 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Channels;
 
-use App\Services\Discord\DiscordWebHook;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\App;
-use NotificationChannels\Discord\DiscordChannel as BaseChannel;
+use Illuminate\Support\Facades\Http;
 
-class DiscordWebhookChannel extends BaseChannel
+class DiscordWebhookChannel
 {
-    /**
-     * Send the given notification.
-     *
-     * @param  mixed  $notifiable
-     * @return void
-     */
-    public function send($notifiable, Notification $notification)
+    public function send(mixed $notifiable, Notification $notification): void
     {
-        $webhook = $notifiable->routeNotificationFor('discordWebhook', $notification);
+        $webhookUrl = $notifiable->routeNotificationFor('discordWebhook', $notification);
         $message = $notification->toDiscordWebhook($notifiable);
+        $payload = collect($message->toArray())->forget('file')->all();
 
-        App::make(DiscordWebHook::class, [
-            'webhook' => $webhook,
-        ])->send($message);
+        Http::post($webhookUrl, $payload);
     }
 }

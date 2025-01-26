@@ -1,16 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use Illuminate\Database\Eloquent\Model;
+use Database\Factories\Nom\BridgeNetworkTokenFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class BridgeNetworkToken extends Model
+class BridgeNetworkToken extends Pivot
 {
-    protected $table = 'nom_bridge_network_tokens';
+    use HasFactory;
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
     public $timestamps = false;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_bridge_network_tokens';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
     protected $fillable = [
         'bridge_network_id',
         'token_id',
@@ -26,35 +48,44 @@ class BridgeNetworkToken extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'metadata' => 'array',
-        'is_bridgeable' => 'boolean',
-        'is_redeemable' => 'boolean',
-        'is_owned' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'metadata' => 'array',
+            'is_bridgeable' => 'boolean',
+            'is_redeemable' => 'boolean',
+            'is_owned' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return BridgeNetworkTokenFactory::new();
+    }
+
+    //
+    // Methods
 
     //
     // Relations
 
     public function network(): BelongsTo
     {
-        return $this->belongsTo(BridgeNetwork::class, 'bridge_network_id', 'id');
+        return $this->belongsTo(BridgeNetwork::class);
     }
 
     public function token(): BelongsTo
     {
-        return $this->belongsTo(Token::class, 'token_id', 'id');
-    }
-
-    //
-    // Methods
-
-    public static function findByTokenAddress(int $networkId, string $address): BridgeNetworkToken
-    {
-        return static::whereHas('network', fn ($q) => $q->where('id', $networkId))
-            ->where('token_address', $address)
-            ->sole();
+        return $this->belongsTo(Token::class);
     }
 }

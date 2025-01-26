@@ -1,32 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
-use App\Models\Markable\Favorite;
-use App\Services\ZenonSdk;
+use App\DataTransferObjects\Nom\MomentumDTO;
+use App\Models\Favorite;
+use App\Services\ZenonSdk\ZenonSdk;
+use App\Traits\ModelCacheKeyTrait;
+use Database\Factories\Nom\MomentumFactory;
 use DigitalSloth\ZnnPhp\Utilities as ZnnUtilities;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
+use Throwable;
 
 class Momentum extends Model
 {
-    use HasFactory, Markable;
-
-    protected static array $marks = [
-        Favorite::class,
-    ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_momentums';
+    use HasFactory, Markable, ModelCacheKeyTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -36,11 +31,18 @@ class Momentum extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_momentums';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_id',
         'producer_account_id',
         'producer_pillar_id',
@@ -51,36 +53,59 @@ class Momentum extends Model
         'created_at',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'created_at' => 'datetime',
+    protected static array $marks = [
+        Favorite::class,
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return MomentumFactory::new();
+    }
+
+    /**
+     * Get the current frontier momentum.
+     */
+    public static function getFrontier(): Momentum
+    {
+        return self::latest('id')->first();
+    }
 
     //
     // Relations
 
     public function chain(): BelongsTo
     {
-        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+        return $this->belongsTo(Chain::class);
     }
 
-    public function producer_account(): BelongsTo
+    public function producerAccount(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'producer_account_id', 'id');
+        return $this->belongsTo(Account::class, 'producer_account_id');
     }
 
-    public function producer_pillar(): BelongsTo
+    public function producerPillar(): BelongsTo
     {
-        return $this->belongsTo(Pillar::class, 'producer_pillar_id', 'id');
+        return $this->belongsTo(Pillar::class, 'producer_pillar_id');
     }
 
-    public function account_blocks(): HasMany
+    public function accountBlocks(): HasMany
     {
-        return $this->hasMany(AccountBlock::class, 'momentum_id', 'id');
+        return $this->hasMany(AccountBlock::class, 'momentum_id');
     }
 
     //
@@ -88,75 +113,61 @@ class Momentum extends Model
 
     public function scopeWhereListSearch($query, $search)
     {
-        $query->where('height', '>', 0);
-
         if (is_numeric($search)) {
             return $query->where('height', $search);
-        } else {
-            return $query->where('hash', $search);
         }
+
+        return $query->where('hash', $search);
     }
 
     //
     // Attributes
 
-    public function getDecodedDataAttribute()
+    public function getDecodedDataAttribute(): string
     {
         $data = base64_decode($this->data);
 
         return ZnnUtilities::toHex($data);
     }
 
-    public function getDisplayHeightAttribute()
+    public function getDisplayHeightAttribute(): string
     {
         return number_format($this->height);
     }
 
-    public function getNextMomentumAttribute()
+    public function getNextMomentumAttribute(): ?Model
     {
         return self::where('height', ($this->height + 1))->first();
     }
 
-    public function getPreviousMomentumAttribute()
+    public function getPreviousMomentumAttribute(): ?Model
     {
-        $previous = ($this->height - 1);
-
-        if ($previous > 0) {
-            return self::where('height', $previous)->first();
-        }
-
-        return false;
+        return self::where('height', ($this->height - 1))->first();
     }
 
-    public function getRawJsonAttribute()
+    public function getRawJsonAttribute(): ?MomentumDTO
     {
-        $cacheKey = "nom.momentum.rawJson.{$this->id}";
+        $cacheKey = $this->cacheKey('raw-json');
+        $data = Cache::get($cacheKey);
 
         try {
-            $znn = App::make(ZenonSdk::class);
-            $data = $znn->ledger->getMomentumByHash($this->hash)['data'];
-            Cache::forever($cacheKey, $data);
-        } catch (\Throwable $throwable) {
-            $data = Cache::get($cacheKey);
+            $newData = app(ZenonSdk::class)->getMomentumsByHash($this->hash);
+            Cache::forever($cacheKey, $newData);
+            $data = $newData;
+        } catch (Throwable $throwable) {
+            // If API request fails, we do not need to do anything,
+            // we will return previously cached data (retrieved at the start of the function).
         }
 
         return $data;
     }
 
-    public function getIsFavouritedAttribute()
+    public function getIsFavouriteAttribute(): bool
     {
         if ($user = auth()->user()) {
-            return Favorite::findExisting($this, $user);
+            return Favorite::has($this, $user);
         }
 
         return false;
-    }
-
-    //
-    // Methods
-
-    public static function findByHash($hash)
-    {
-        return static::where('hash', $hash)->first();
     }
 }

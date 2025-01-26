@@ -1,40 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Seo;
 
 trait OpenGraph
 {
-    /**
-     * Fill the Open Graph meta tags from the configuration.
-     */
-    protected function fillOpenGraphDefaults(): void
-    {
-        $this
-            ->openGraphType(config('meta_tags.open_graph.type') ?: '')
-            ->openGraphSiteName(config('meta_tags.open_graph.site_name') ?: '')
-            ->openGraphTitle(config('meta_tags.open_graph.title') ?: '')
-            ->openGraphUrl(config('meta_tags.open_graph.url') ?: '')
-            ->openGraphImage(config('meta_tags.open_graph.image') ?: '');
-    }
-
-    /**
-     * Update the Open Graph Title based on the regular title.
-     */
-    protected function autoFillOpenGraph(bool $overwrite = false): void
-    {
-        if (! config('meta_tags.open_graph.auto_fill')) {
-            return;
-        }
-
-        if ($this->title) {
-            if ($overwrite || ! $this->getMetaByProperty('og:title')->first()?->content) {
-                $this->openGraphTitle($this->title);
-            }
-        }
-
-        $this->openGraphUrl(url()->current());
-    }
-
     /**
      * Setter for the 'og:type' Meta Property.
      */
@@ -73,5 +44,36 @@ trait OpenGraph
     public function openGraphImage(string $value, bool $replace = true): self
     {
         return $this->metaByProperty('og:image', $value, $replace);
+    }
+
+    /**
+     * Fill the Open Graph meta tags from the configuration.
+     */
+    protected function fillOpenGraphDefaults(): void
+    {
+        $this
+            ->openGraphType(config('meta-tags.open_graph.type') ?: '')
+            ->openGraphSiteName(config('meta-tags.open_graph.site_name') ?: '')
+            ->openGraphTitle(config('meta-tags.open_graph.title') ?: '')
+            ->openGraphUrl(config('meta-tags.open_graph.url') ?: '')
+            ->openGraphImage(config('meta-tags.open_graph.image') ?: '');
+    }
+
+    /**
+     * Update the Open Graph Title based on the regular title.
+     */
+    protected function autoFillOpenGraph(bool $overwrite = false): void
+    {
+        if (! config('meta-tags.open_graph.auto_fill')) {
+            return;
+        }
+
+        if ($this->title) {
+            if ($overwrite || ! $this->getMetaByProperty('og:title')->first()?->content) {
+                $this->openGraphTitle($this->title);
+            }
+        }
+
+        $this->openGraphUrl(url()->current());
     }
 }

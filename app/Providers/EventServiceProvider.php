@@ -1,40 +1,87 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Events\Indexer\Accelerator\PhaseCreated;
+use App\Events\Indexer\Accelerator\ProjectCreated;
+use App\Events\Indexer\AccountBlockInserted;
+use App\Events\Indexer\Bridge\TokenUnwraped;
+use App\Events\Indexer\Bridge\UnwrapRedeemed;
+use App\Events\Indexer\Plasma\StartFuse;
+use App\Events\Indexer\Token\TokenMinted;
+use App\Listeners\AccountBlockInsertedListener;
+use App\Listeners\Notifications\Accelerator\PhaseCreatedListener;
+use App\Listeners\Notifications\Accelerator\ProjectCreatedListener;
+use App\Listeners\StartFuseListener;
+use App\Listeners\TokenMintedListener;
+use App\Listeners\TokenUnwrapedListener;
+use App\Listeners\UnwrapRedeemedListener;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event to listener mappings for the application.
-     *
-     * @var array<class-string, array<int, class-string>>
+     * Registers the non-discoverable event listeners.
      */
-    protected $listen = [
-        Registered::class => [
-            \Illuminate\Auth\Listeners\SendEmailVerificationNotification::class,
-        ],
-    ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-        //
+        $this->registerIndexerListener();
+        $this->registerRewardListener();
+        $this->registerPlasmaBotListener();
+        $this->registerBridgeListener();
+        $this->registerNotificationListeners();
     }
 
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     *
-     * @return bool
-     */
-    public function shouldDiscoverEvents()
+    private function registerIndexerListener(): void
     {
-        return true;
+        Event::listen(
+            AccountBlockInserted::class,
+            AccountBlockInsertedListener::class
+        );
+    }
+
+    private function registerRewardListener(): void
+    {
+        Event::listen(
+            TokenMinted::class,
+            TokenMintedListener::class
+        );
+
+        Event::listen(
+            UnwrapRedeemed::class,
+            UnwrapRedeemedListener::class
+        );
+    }
+
+    private function registerPlasmaBotListener(): void
+    {
+        Event::listen(
+            StartFuse::class,
+            StartFuseListener::class
+        );
+    }
+
+    private function registerBridgeListener(): void
+    {
+        Event::listen(
+            TokenUnwraped::class,
+            TokenUnwrapedListener::class
+        );
+    }
+
+    private function registerNotificationListeners(): void
+    {
+        Event::listen(
+            ProjectCreated::class,
+            ProjectCreatedListener::class
+        );
+
+        Event::listen(
+            PhaseCreated::class,
+            PhaseCreatedListener::class
+        );
     }
 }

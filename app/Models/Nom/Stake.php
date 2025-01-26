@@ -1,22 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Nom;
 
 use Carbon\Carbon;
+use Database\Factories\Nom\StakeFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Str;
 
 class Stake extends Model
 {
     use HasFactory;
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'nom_stakes';
 
     /**
      * Indicates if the model should be timestamped.
@@ -26,14 +24,22 @@ class Stake extends Model
     public $timestamps = false;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'nom_stakes';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
-    public $fillable = [
+    protected $fillable = [
         'chain_id',
         'account_id',
         'token_id',
+        'account_block_id',
         'amount',
         'duration',
         'hash',
@@ -42,21 +48,32 @@ class Stake extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'started_at' => 'datetime',
-        'ended_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return StakeFactory::new();
+    }
 
     //
     // Relations
 
     public function chain(): BelongsTo
     {
-        return $this->belongsTo(Chain::class, 'chain_id', 'id');
+        return $this->belongsTo(Chain::class);
     }
 
     public function account(): BelongsTo
@@ -69,25 +86,35 @@ class Stake extends Model
         return $this->belongsTo(Token::class);
     }
 
+    public function accountBlock(): BelongsTo
+    {
+        return $this->belongsTo(AccountBlock::class);
+    }
+
     //
     // Scopes
 
-    public function scopeIsActive($query)
+    public function scopeWhereActive($query)
     {
         return $query->whereNull('ended_at');
     }
 
-    public function scopeIsZnn($query)
+    public function scopeWhereInactive($query)
     {
-        return $query->where('token_id', znn_token()->id);
+        return $query->whereNotNull('ended_at');
     }
 
-    public function scopeIsEthLp($query)
+    public function scopeWhereZnn($query)
     {
-        return $query->where('token_id', lp_eth_token()->id);
+        return $query->where('token_id', app('znnToken')->id);
     }
 
-    public function scopeIsEnded($query)
+    public function scopeWhereEthLp($query)
+    {
+        return $query->where('token_id', app('znnEthLpToken')->id);
+    }
+
+    public function scopeWhereEnded($query)
     {
         return $query->whereNotNull('ended_at');
     }
@@ -100,41 +127,32 @@ class Stake extends Model
     //
     // Attributes
 
-    public function getDisplayAmountAttribute()
+    public function getDisplayAmountAttribute(): string
     {
-        return $this->token->getDisplayAmount($this->amount);
+        return $this->token->getFormattedAmount($this->amount);
     }
 
-    public function getEndDateAttribute()
+    public function getEndDateAttribute(): Carbon
     {
         return Carbon::parse($this->started_at)->addSeconds($this->duration);
     }
 
-    public function getDisplayDurationAttribute()
+    public function getDisplayDurationAttribute(): string
     {
-        $endDate = \Carbon\Carbon::parse($this->started_at->format('Y-m-d H:i:s'))->addSeconds($this->duration);
+        $endDate = Carbon::parse($this->started_at->format('Y-m-d H:i:s'))->addSeconds($this->duration);
         $days = $this->started_at->diffInDays($endDate);
 
-        return $days.' '.\Str::plural('day', $days);
+        return $days . ' ' . Str::plural('day', $days);
     }
 
-    public function getCurrentDurationAttribute()
+    public function getDisplayCurrentDurationAttribute(): string
     {
-        $duration = now()->timestamp - $this->started_at->timestamp;
+        if ($this->ended_at) {
+            $duration = $this->ended_at->timestamp - $this->started_at->timestamp;
+        } else {
+            $duration = now()->timestamp - $this->started_at->timestamp;
+        }
 
         return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
-    }
-
-    //
-    // Methods
-
-    public static function findByHash($hash)
-    {
-        return static::where('hash', $hash)->first();
-    }
-
-    public function displayAmount($decimals = null)
-    {
-        $this->token->getDisplayAmount($this->amount, $decimals);
     }
 }

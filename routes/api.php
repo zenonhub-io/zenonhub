@@ -1,5 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\Api\Nom\AcceleratorController;
+use App\Http\Controllers\Api\Nom\BridgeController;
+use App\Http\Controllers\Api\Nom\HtlcController;
+use App\Http\Controllers\Api\Nom\LedgerController;
+use App\Http\Controllers\Api\Nom\LiquidityController;
+use App\Http\Controllers\Api\Nom\PillarsController;
+use App\Http\Controllers\Api\Nom\PlasmaController;
+use App\Http\Controllers\Api\Nom\SentinelController;
+use App\Http\Controllers\Api\Nom\StakeController;
+use App\Http\Controllers\Api\Nom\StatsController;
+use App\Http\Controllers\Api\Nom\SwapController;
+use App\Http\Controllers\Api\Nom\TokenController;
+use App\Http\Controllers\Api\PlasmaBot\CreateFuseController;
+use App\Http\Controllers\Api\PlasmaBot\FuseExpirationController;
+use App\Http\Controllers\Api\Utilities\AccountLpBalancesController;
+use App\Http\Controllers\Api\Utilities\AddressFromPublicKeyController;
+use App\Http\Controllers\Api\Utilities\RewardTotalsController;
+use App\Http\Controllers\Api\Utilities\TokenPriceController;
+use App\Http\Controllers\Api\Utilities\TokenSupplyController;
+use App\Http\Controllers\Api\Utilities\TransactionStatsController;
+use App\Http\Controllers\Api\Utilities\VerifySignedMessageController;
+use App\Http\Controllers\Api\Utilities\ZtsFromHashController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -8,122 +33,120 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| routes are loaded within the "api" middleware group which includes
+| the middleware most often needed by APIs. Build something great!
 |
 */
 
+Route::get('/user', fn (Request $request) => $request->user())->middleware(['auth:sanctum']);
+
 Route::group(['middleware' => ['throttle:60,1']], function () {
-    Route::prefix('nom')->group(function () {
-        Route::prefix('accelerator')->name('Accelerator.')->group(function () {
-            Route::get('get-all', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getAll'])->name('getAll');
-            Route::get('get-project-by-id', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getProjectById'])->name('getProjectById');
-            Route::get('get-phase-by-id', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getPhaseById'])->name('getPhaseById');
-            Route::get('get-pillar-votes', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getPillarVotes'])->name('getPillarVotes');
-            Route::get('get-vote-breakdown', [\App\Http\Controllers\Api\Nom\Accelerator::class, 'getVoteBreakdown'])->name('getVoteBreakdown');
-        });
 
-        Route::prefix('bridge')->name('Bridge.')->group(function () {
-            Route::get('get-bridge-info', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getBridgeInfo'])->name('getBridgeInfo');
-            Route::get('get-security-info', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getSecurityInfo'])->name('getSecurityInfo');
-            Route::get('get-orchestrator-info', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getOrchestratorInfo'])->name('getOrchestratorInfo');
-            Route::get('get-time-challenges-info', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getTimeChallengesInfo'])->name('getTimeChallengesInfo');
-            Route::get('get-network-info', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getNetworkInfo'])->name('getNetworkInfo');
-            Route::get('get-all-networks', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllNetworks'])->name('getAllNetworks');
-            Route::get('get-redeemable-in', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getRedeemableIn'])->name('getRedeemableIn');
-            Route::get('get-confirmations-to-finality', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getConfirmationsToFinality'])->name('getConfirmationsToFinality');
-            Route::get('get-wrap-token-request-by-id', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getWrapTokenRequestById'])->name('getWrapTokenRequestById');
-            Route::get('get-all-wrap-token-requests', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllWrapTokenRequests'])->name('getAllWrapTokenRequests');
-            Route::get('get-all-wrap-token-requests-by-to-address', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllWrapTokenRequestsByToAddress'])->name('getAllWrapTokenRequestsByToAddress');
-            Route::get('get-all-wrap-token-requests-by-to-address-network-class-and-chain-id', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllWrapTokenRequestsByToAddressNetworkClassAndChainId'])->name('getAllWrapTokenRequestsByToAddressNetworkClassAndChainId');
-            Route::get('get-all-unsigned-wrap-token-requests', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllUnsignedWrapTokenRequests'])->name('getAllUnsignedWrapTokenRequests');
-            Route::get('get-unwrap-token-request-by-hash-and-log', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getUnwrapTokenRequestByHashAndLog'])->name('getUnwrapTokenRequestByHashAndLog');
-            Route::get('get-all-unwrap-token-requests', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllUnwrapTokenRequests'])->name('getAllUnwrapTokenRequests');
-            Route::get('get-all-unwrap-token-requests-by-to-address', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getAllUnwrapTokenRequestsByToAddress'])->name('getAllUnwrapTokenRequestsByToAddress');
-            Route::get('get-fee-token-pair', [\App\Http\Controllers\Api\Nom\Bridge::class, 'getFeeTokenPair'])->name('getFeeTokenPair');
-        });
+    // Custom
+    Route::get('utilities/address-from-public-key', AddressFromPublicKeyController::class)->name('api.utilities.address-from-public-key');
+    Route::get('utilities/zts-from-hash', ZtsFromHashController::class)->name('api.utilities.zts-from-hash');
+    Route::post('utilities/verify-signed-message', VerifySignedMessageController::class)->name('api.utilities.verify-signed-message');
 
-        Route::prefix('htlc')->name('Htlc.')->group(function () {
-            Route::get('get-by-id', [\App\Http\Controllers\Api\Nom\Htlc::class, 'getById'])->name('getById');
-            Route::get('get-proxy-unlock-status', [\App\Http\Controllers\Api\Nom\Htlc::class, 'getProxyUnlockStatus'])->name('getProxyUnlockStatus');
-        });
+    // ZenonOrg
+    Route::get('utilities/account-lp-balances', AccountLpBalancesController::class)->name('api.utilities.account-lp-balances');
+    Route::get('utilities/reward-totals', RewardTotalsController::class)->name('api.utilities.reward-totals');
 
-        Route::prefix('ledger')->name('Ledger.')->group(function () {
-            Route::get('get-frontier-account-block', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getFrontierAccountBlock'])->name('getFrontierAccountBlock');
-            Route::get('get-unconfirmed-blocks-by-address', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getUnconfirmedBlocksByAddress'])->name('getUnconfirmedBlocksByAddress');
-            Route::get('get-unreceived-blocks-by-address', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getUnreceivedBlocksByAddress'])->name('getUnreceivedBlocksByAddress');
-            Route::get('get-account-block-by-hash', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getAccountBlockByHash'])->name('getAccountBlockByHash');
-            Route::get('get-account-blocks-by-height', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getAccountBlocksByHeight'])->name('getAccountBlocksByHeight');
-            Route::get('get-account-blocks-by-page', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getAccountBlocksByPage'])->name('getAccountBlocksByPage');
-            Route::get('get-frontier-momentum', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getFrontierMomentum'])->name('getFrontierMomentum');
-            Route::get('get-momentum-before-time', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getMomentumBeforeTime'])->name('getMomentumBeforeTime');
-            Route::get('get-momentums-by-page', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getMomentumsByPage'])->name('getMomentumsByPage');
-            Route::get('get-momentum-by-hash', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getMomentumByHash'])->name('getMomentumByHash');
-            Route::get('get-momentums-by-height', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getMomentumsByHeight'])->name('getMomentumsByHeight');
-            Route::get('get-detailed-momentums-by-height', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getDetailedMomentumsByHeight'])->name('getDetailedMomentumsByHeight');
-            Route::get('get-account-info-by-address', [\App\Http\Controllers\Api\Nom\Ledger::class, 'getAccountInfoByAddress'])->name('getAccountInfoByAddress');
-        });
+    // Misc
+    Route::get('utilities/tx-stats', TransactionStatsController::class)->name('api.utilities.tx-stats');
 
-        Route::prefix('liquidity')->name('Liquidity.')->group(function () {
-            Route::get('get-liquidity-info', [\App\Http\Controllers\Api\Nom\Liquidity::class, 'getLiquidityInfo'])->name('getLiquidityInfo');
-            Route::get('get-security-info', [\App\Http\Controllers\Api\Nom\Liquidity::class, 'getSecurityInfo'])->name('getSecurityInfo');
-            Route::get('get-liquidity-stake-entries-by-address', [\App\Http\Controllers\Api\Nom\Liquidity::class, 'getLiquidityStakeEntriesByAddress'])->name('getLiquidityStakeEntriesByAddress');
-            Route::get('get-uncollected-reward', [\App\Http\Controllers\Api\Nom\Liquidity::class, 'getUncollectedReward'])->name('getUncollectedReward');
-            Route::get('get-frontier-reward-by-page', [\App\Http\Controllers\Api\Nom\Liquidity::class, 'getFrontierRewardByPage'])->name('getFrontierRewardByPage');
-            Route::get('get-time-challenges-info', [\App\Http\Controllers\Api\Nom\Liquidity::class, 'getTimeChallengesInfo'])->name('getTimeChallengesInfo');
-        });
+    // CMC/CG
+    Route::get('utilities/token-supply/{token}/{value?}', TokenSupplyController::class)->name('api.utilities.token-supply');
+    Route::get('utilities/prices', TokenPriceController::class)->name('api.utilities.token-price');
 
-        Route::prefix('pillars')->name('Pillar.')->group(function () {
-            Route::get('get-qsr-registration-cost', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getQsrRegistrationCost'])->name('getQsrRegistrationCost');
-            Route::get('check-name-availability', [\App\Http\Controllers\Api\Nom\Pillars::class, 'checkNameAvailability'])->name('checkNameAvailability');
-            Route::get('get-all', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getAll'])->name('getAll');
-            Route::get('get-by-owner', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getByOwner'])->name('getByOwner');
-            Route::get('get-by-name', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getByName'])->name('getByName');
-            Route::get('get-delegated-pillar', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getDelegatedPillar'])->name('getDelegatedPillar');
-            Route::get('get-deposited-qsr', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getDepositedQsr'])->name('getDepositedQsr');
-            Route::get('get-uncollected-reward', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getUncollectedReward'])->name('getUncollectedReward');
-            Route::get('get-frontier-reward-by-page', [\App\Http\Controllers\Api\Nom\Pillars::class, 'getFrontierRewardByPage'])->name('getFrontierRewardByPage');
-        });
-
-        Route::prefix('plasma')->name('Plasma.')->group(function () {
-            Route::get('get', [\App\Http\Controllers\Api\Nom\Plasma::class, 'get'])->name('get');
-            Route::get('get-entries-by-address', [\App\Http\Controllers\Api\Nom\Plasma::class, 'getEntriesByAddress'])->name('getEntriesByAddress');
-            Route::get('get-required-po-w-for-account-block', [\App\Http\Controllers\Api\Nom\Plasma::class, 'getRequiredPoWForAccountBlock'])->name('getRequiredPoWForAccountBlock');
-        });
-
-        Route::prefix('sentinel')->name('Sentinel.')->group(function () {
-            Route::get('get-by-owner', [\App\Http\Controllers\Api\Nom\Sentinel::class, 'getByOwner'])->name('getByOwner');
-            Route::get('get-all-active', [\App\Http\Controllers\Api\Nom\Sentinel::class, 'getAllActive'])->name('getAllActive');
-            Route::get('get-deposited-qsr', [\App\Http\Controllers\Api\Nom\Sentinel::class, 'getDepositedQsr'])->name('getDepositedQsr');
-            Route::get('get-uncollected-reward', [\App\Http\Controllers\Api\Nom\Sentinel::class, 'getUncollectedReward'])->name('getUncollectedReward');
-            Route::get('get-frontier-reward-by-page', [\App\Http\Controllers\Api\Nom\Sentinel::class, 'getFrontierRewardByPage'])->name('getFrontierRewardByPage');
-        });
-
-        Route::prefix('stake')->name('Stake.')->group(function () {
-            Route::get('get-entries-by-address', [\App\Http\Controllers\Api\Nom\Stake::class, 'getEntriesByAddress'])->name('getEntriesByAddress');
-            Route::get('get-uncollected-reward', [\App\Http\Controllers\Api\Nom\Stake::class, 'getUncollectedReward'])->name('getUncollectedReward');
-            Route::get('get-frontier-reward-by-page', [\App\Http\Controllers\Api\Nom\Stake::class, 'getFrontierRewardByPage'])->name('getFrontierRewardByPage');
-        });
-
-        Route::prefix('stats')->name('Stats.')->group(function () {
-            Route::get('runtime-info', [\App\Http\Controllers\Api\Nom\Stats::class, 'runtimeInfo'])->name('runtimeInfo');
-            Route::get('process-info', [\App\Http\Controllers\Api\Nom\Stats::class, 'processInfo'])->name('processInfo');
-            Route::get('sync-info', [\App\Http\Controllers\Api\Nom\Stats::class, 'syncInfo'])->name('syncInfo');
-            Route::get('network-info', [\App\Http\Controllers\Api\Nom\Stats::class, 'networkInfo'])->name('networkInfo');
-        });
-
-        Route::prefix('swap')->name('Swap.')->group(function () {
-            Route::get('get-assets-by-key-id-hash', [\App\Http\Controllers\Api\Nom\Swap::class, 'getAssetsByKeyIdHash'])->name('getAssetsByKeyIdHash');
-            Route::get('get-assets', [\App\Http\Controllers\Api\Nom\Swap::class, 'getAssets'])->name('getAssets');
-            Route::get('get-legacy-pillars', [\App\Http\Controllers\Api\Nom\Swap::class, 'getLegacyPillars'])->name('getLegacyPillars');
-        });
-
-        Route::prefix('token')->name('Token.')->group(function () {
-            Route::get('get-all', [\App\Http\Controllers\Api\Nom\Token::class, 'getAll'])->name('getAll');
-            Route::get('get-by-owner', [\App\Http\Controllers\Api\Nom\Token::class, 'getByOwner'])->name('getByOwner');
-            Route::get('get-by-zts', [\App\Http\Controllers\Api\Nom\Token::class, 'getByZts'])->name('getByZts');
-        });
+    Route::group(['middleware' => ['auth:sanctum', 'ability:plasma-bot']], function () {
+        Route::post('plasma-bot/fuse', CreateFuseController::class)->name('plasmaBot.fuse');
+        Route::get('plasma-bot/expiration/{address}', FuseExpirationController::class)->name('plasmaBot.expiration');
     });
+
+    Route::get('nom/accelerator/get-all', [AcceleratorController::class, 'getAll'])->name('api.accelerator.get-all');
+    Route::get('nom/accelerator/get-project-by-id', [AcceleratorController::class, 'getProjectById'])->name('api.accelerator.get-project-by-id');
+    Route::get('nom/accelerator/get-phase-by-id', [AcceleratorController::class, 'getPhaseById'])->name('api.accelerator.get-phase-by-id');
+    Route::get('nom/accelerator/get-pillar-votes', [AcceleratorController::class, 'getPillarVotes'])->name('api.accelerator.get-pillar-votes');
+    Route::get('nom/accelerator/get-vote-breakdown', [AcceleratorController::class, 'getVoteBreakdown'])->name('api.accelerator.get-vote-breakdown');
+
+    Route::get('nom/bridge/get-bridge-info', [BridgeController::class, 'getBridgeInfo'])->name('api.bridge.get-bridge-info');
+    Route::get('nom/bridge/get-security-info', [BridgeController::class, 'getSecurityInfo'])->name('api.bridge.get-security-info');
+    Route::get('nom/bridge/get-orchestrator-info', [BridgeController::class, 'getOrchestratorInfo'])->name('api.bridge.get-orchestrator-info');
+    Route::get('nom/bridge/get-time-challenges-info', [BridgeController::class, 'getTimeChallengesInfo'])->name('api.bridge.get-time-challenges-info');
+    Route::get('nom/bridge/get-network-info', [BridgeController::class, 'getNetworkInfo'])->name('api.bridge.get-network-info');
+    Route::get('nom/bridge/get-all-networks', [BridgeController::class, 'getAllNetworks'])->name('api.bridge.get-all-networks');
+    Route::get('nom/bridge/get-redeemable-in', [BridgeController::class, 'getRedeemableIn'])->name('api.bridge.get-redeemable-in');
+    Route::get('nom/bridge/get-confirmations-to-finality', [BridgeController::class, 'getConfirmationsToFinality'])->name('api.bridge.get-confirmations-to-finality');
+    Route::get('nom/bridge/get-wrap-token-request-by-id', [BridgeController::class, 'getWrapTokenRequestById'])->name('api.bridge.get-wrap-token-request-by-id');
+    Route::get('nom/bridge/get-all-wrap-token-requests', [BridgeController::class, 'getAllWrapTokenRequests'])->name('api.bridge.get-all-wrap-token-requests');
+    Route::get('nom/bridge/get-all-wrap-token-requests-by-to-address', [BridgeController::class, 'getAllWrapTokenRequestsByToAddress'])->name('api.bridge.get-all-wrap-token-requests-by-to-address');
+    Route::get('nom/bridge/get-all-wrap-token-requests-by-to-address-network-class-and-chain-id', [BridgeController::class, 'getAllWrapTokenRequestsByToAddressNetworkClassAndChainId'])->name('api.bridge.get-all-wrap-token-requests-by-to-address-network-class-and-chain-id');
+    Route::get('nom/bridge/get-all-unsigned-wrap-token-requests', [BridgeController::class, 'getAllUnsignedWrapTokenRequests'])->name('api.bridge.get-all-unsigned-wrap-token-requests');
+    Route::get('nom/bridge/get-unwrap-token-request-by-hash-and-log', [BridgeController::class, 'getUnwrapTokenRequestByHashAndLog'])->name('api.bridge.get-unwrap-token-request-by-hash-and-log');
+    Route::get('nom/bridge/get-all-unwrap-token-requests', [BridgeController::class, 'getAllUnwrapTokenRequests'])->name('api.bridge.get-all-unwrap-token-requests');
+    Route::get('nom/bridge/get-all-unwrap-token-requests-by-to-address', [BridgeController::class, 'getAllUnwrapTokenRequestsByToAddress'])->name('api.bridge.get-all-unwrap-token-requests-by-to-address');
+    Route::get('nom/bridge/get-fee-token-pair', [BridgeController::class, 'getFeeTokenPair'])->name('api.bridge.get-fee-token-pair');
+
+    Route::get('nom/htlc/get-by-id', [HtlcController::class, 'getById'])->name('api.htlc.get-by-id');
+    Route::get('nom/htlc/get-proxy-unlock-status', [HtlcController::class, 'getProxyUnlockStatus'])->name('api.htlc.get-proxy-unlock-status');
+
+    Route::get('nom/ledger/get-frontier-account-block', [LedgerController::class, 'getFrontierAccountBlock'])->name('api.ledger.get-frontier-account-block');
+    Route::get('nom/ledger/get-unconfirmed-blocks-by-address', [LedgerController::class, 'getUnconfirmedBlocksByAddress'])->name('api.ledger.get-unconfirmed-blocks-by-address');
+    Route::get('nom/ledger/get-unreceived-blocks-by-address', [LedgerController::class, 'getUnreceivedBlocksByAddress'])->name('api.ledger.get-unreceived-blocks-by-address');
+    Route::get('nom/ledger/get-account-block-by-hash', [LedgerController::class, 'getAccountBlockByHash'])->name('api.ledger.get-account-block-by-hash');
+    Route::get('nom/ledger/get-account-blocks-by-height', [LedgerController::class, 'getAccountBlocksByHeight'])->name('api.ledger.get-account-blocks-by-height');
+    Route::get('nom/ledger/get-account-blocks-by-page', [LedgerController::class, 'getAccountBlocksByPage'])->name('api.ledger.get-account-blocks-by-page');
+    Route::get('nom/ledger/get-frontier-momentum', [LedgerController::class, 'getFrontierMomentum'])->name('api.ledger.get-frontier-momentum');
+    Route::get('nom/ledger/get-momentum-before-time', [LedgerController::class, 'getMomentumBeforeTime'])->name('api.ledger.get-momentum-before-time');
+    Route::get('nom/ledger/get-momentums-by-page', [LedgerController::class, 'getMomentumsByPage'])->name('api.ledger.get-momentums-by-page');
+    Route::get('nom/ledger/get-momentum-by-hash', [LedgerController::class, 'getMomentumByHash'])->name('api.ledger.get-momentum-by-hash');
+    Route::get('nom/ledger/get-momentums-by-height', [LedgerController::class, 'getMomentumsByHeight'])->name('api.ledger.get-momentums-by-height');
+    Route::get('nom/ledger/get-detailed-momentums-by-height', [LedgerController::class, 'getDetailedMomentumsByHeight'])->name('api.ledger.get-detailed-momentums-by-height');
+    Route::get('nom/ledger/get-account-info-by-address', [LedgerController::class, 'getAccountInfoByAddress'])->name('api.ledger.get-account-info-by-address');
+
+    Route::get('nom/liquidity/get-liquidity-info', [LiquidityController::class, 'getLiquidityInfo'])->name('api.liquidity.get-liquidity-info');
+    Route::get('nom/liquidity/get-security-info', [LiquidityController::class, 'getSecurityInfo'])->name('api.liquidity.get-security-info');
+    Route::get('nom/liquidity/get-liquidity-stake-entries-by-address', [LiquidityController::class, 'getLiquidityStakeEntriesByAddress'])->name('api.liquidity.get-liquidity-stake-entries-by-address');
+    Route::get('nom/liquidity/get-uncollected-reward', [LiquidityController::class, 'getUncollectedReward'])->name('api.liquidity.get-uncollected-reward');
+    Route::get('nom/liquidity/get-frontier-reward-by-page', [LiquidityController::class, 'getFrontierRewardByPage'])->name('api.liquidity.get-frontier-reward-by-page');
+    Route::get('nom/liquidity/get-time-challenges-info', [LiquidityController::class, 'getTimeChallengesInfo'])->name('api.liquidity.get-time-challenges-info');
+
+    Route::get('nom/pillar/get-qsr-registration-cost', [PillarsController::class, 'getQsrRegistrationCost'])->name('api.pillar.get-qsr-registration-cost');
+    Route::get('nom/pillar/check-name-availability', [PillarsController::class, 'checkNameAvailability'])->name('api.pillar.check-name-availability');
+    Route::get('nom/pillar/get-all', [PillarsController::class, 'getAll'])->name('api.pillar.get-all');
+    Route::get('nom/pillar/get-by-owner', [PillarsController::class, 'getByOwner'])->name('api.pillar.get-by-owner');
+    Route::get('nom/pillar/get-by-name', [PillarsController::class, 'getByName'])->name('api.pillar.get-by-name');
+    Route::get('nom/pillar/get-delegated-pillar', [PillarsController::class, 'getDelegatedPillar'])->name('api.pillar.get-delegated-pillar');
+    Route::get('nom/pillar/get-deposited-qsr', [PillarsController::class, 'getDepositedQsr'])->name('api.pillar.get-deposited-qsr');
+    Route::get('nom/pillar/get-uncollected-reward', [PillarsController::class, 'getUncollectedReward'])->name('api.pillar.get-uncollected-reward');
+    Route::get('nom/pillar/get-frontier-reward-by-page', [PillarsController::class, 'getFrontierRewardByPage'])->name('api.pillar.get-frontier-reward-by-page');
+
+    Route::get('nom/plasma/get', [PlasmaController::class, 'get'])->name('api.plasma.get');
+    Route::get('nom/plasma/get-entries-by-address', [PlasmaController::class, 'getEntriesByAddress'])->name('api.plasma.get-entries-by-address');
+    Route::get('nom/plasma/get-required-po-w-for-account-block', [PlasmaController::class, 'getRequiredPoWForAccountBlock'])->name('api.plasma.get-required-po-w-for-account-block');
+
+    Route::get('nom/sentinel/get-by-owner', [SentinelController::class, 'getByOwner'])->name('api.sentinel.get-by-owner');
+    Route::get('nom/sentinel/get-all-active', [SentinelController::class, 'getAllActive'])->name('api.sentinel.get-all-active');
+    Route::get('nom/sentinel/get-deposited-qsr', [SentinelController::class, 'getDepositedQsr'])->name('api.sentinel.get-deposited-qsr');
+    Route::get('nom/sentinel/get-uncollected-reward', [SentinelController::class, 'getUncollectedReward'])->name('api.sentinel.get-uncollected-reward');
+    Route::get('nom/sentinel/get-frontier-reward-by-page', [SentinelController::class, 'getFrontierRewardByPage'])->name('api.sentinel.get-frontier-reward-by-page');
+
+    Route::get('nom/stake/get-entries-by-address', [StakeController::class, 'getEntriesByAddress'])->name('api.stake.get-entries-by-address');
+    Route::get('nom/stake/get-uncollected-reward', [StakeController::class, 'getUncollectedReward'])->name('api.stake.get-uncollected-reward');
+    Route::get('nom/stake/get-frontier-reward-by-page', [StakeController::class, 'getFrontierRewardByPage'])->name('api.stake.get-frontier-reward-by-page');
+
+    Route::get('nom/stats/runtime-info', [StatsController::class, 'runtimeInfo'])->name('api.stats.runtime-info');
+    Route::get('nom/stats/process-info', [StatsController::class, 'processInfo'])->name('api.stats.process-info');
+    Route::get('nom/stats/sync-info', [StatsController::class, 'syncInfo'])->name('api.stats.sync-info');
+    Route::get('nom/stats/network-info', [StatsController::class, 'networkInfo'])->name('api.stats.network-info');
+
+    Route::get('nom/swap/get-assets-by-key-id-hash', [SwapController::class, 'getAssetsByKeyIdHash'])->name('api.swap.get-assets-by-key-id-hash');
+    Route::get('nom/swap/get-assets', [SwapController::class, 'getAssets'])->name('api.swap.get-assets');
+    Route::get('nom/swap/get-legacy-pillars', [SwapController::class, 'getLegacyPillars'])->name('api.swap.get-legacy-pillars');
+
+    Route::get('nom/token/get-all', [TokenController::class, 'getAll'])->name('api.token.get-all');
+    Route::get('nom/token/get-by-owner', [TokenController::class, 'getByOwner'])->name('api.token.get-by-owner');
+    Route::get('nom/token/get-by-zts', [TokenController::class, 'getByZts'])->name('api.token.get-by-zts');
 
     //    Route::group([], function () {
     //        Route::prefix('accounts')->name('accounts.')->group(function () {
@@ -137,14 +160,4 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
     //        });
     //    });
 
-    Route::prefix('utilities')->name('Utilities.')->group(function () {
-        Route::get('address-from-public-key', [App\Http\Controllers\Api\Utilities::class, 'addressFromPublicKey'])->name('addressFromPublicKey');
-        Route::post('verify-signed-message', [App\Http\Controllers\Api\Utilities::class, 'verifySignedMessage'])->name('verifySignedMessage');
-        Route::get('account-lp-balances', [App\Http\Controllers\Api\Utilities::class, 'accountLpBalances'])->name('accountLpBalances');
-        Route::get('token-supply/{token}/{value?}', [App\Http\Controllers\Api\Utilities::class, 'tokenSupply'])->name('tokenSupply');
-        Route::get('prices', [App\Http\Controllers\Api\Utilities::class, 'tokenPrice'])->name('tokenPrice');
-        Route::get('reward-totals', [App\Http\Controllers\Api\Utilities::class, 'rewardTotals'])->name('rewardTotals');
-        Route::post('plasma-bot/fuse', [App\Http\Controllers\Api\Utilities::class, 'plasmaBotFuse'])->name('plasmaBot.fuse');
-        Route::get('plasma-bot/expiration/{address}', [App\Http\Controllers\Api\Utilities::class, 'plasmaBotExpiration'])->name('plasmaBot.expiration');
-    });
 });

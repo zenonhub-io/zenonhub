@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -14,13 +16,6 @@ return [
     |
     */
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-        'scheme' => 'https',
-    ],
-
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -29,6 +24,27 @@ return [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
+    'slack' => [
+        'notifications' => [
+            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+            'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
+        ],
+    ],
+
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
+
+    'zenon' => [
+        'http_node_url' => env('ZNN_HTTP_NODE_URL', 'http://127.0.0.1:35997'),
+        'ws_node_url' => env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997'),
+        'throw_errors' => env('ZNN_NODE_THROW_ERRORS', true),
+        'cli_executable' => env('ZNN_CLI_EXECUTABLE_PATH', 'bin/znn-cli/osx'),
     ],
 
     'discourse' => [
@@ -55,7 +71,22 @@ return [
         'api_key' => env('ETHERSCAN_API_KEY'),
     ],
 
-    'bitquery' => [
-        'api_key' => env('BITQUERY_API_KEY'),
+    'bscscan' => [
+        'api_key' => env('BSCSCAN_API_KEY'),
+    ],
+
+    'orchestrators-status' => [
+        'api_url' => env('ORCHESTRATORS_STATUS_API'),
+    ],
+
+    'public-rpc-nodes' => [
+        'api_url' => env('PUBLIC_RPC_NODE_STATS_API'),
+    ],
+
+    'plasma-bot' => [
+        'node' => env('PLASMA_BOT_NODE_URL', env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997')),
+        'keystore' => env('PLASMA_BOT_KEYSTORE'),
+        'passphrase' => env('PLASMA_BOT_PASSPHRASE'),
+        'address' => env('PLASMA_BOT_ADDRESS'),
     ],
 ];
