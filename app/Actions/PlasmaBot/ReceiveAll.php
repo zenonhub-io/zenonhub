@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Actions\PlasmaBot;
 
-use App\Exceptions\PlasmaBotException;
 use App\Exceptions\ZenonCliException;
 use App\Services\ZenonCli\ZenonCli;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class ReceiveAll
@@ -23,15 +23,12 @@ class ReceiveAll
         $this->cli->setPassphrase(config('services.plasma-bot.passphrase'));
     }
 
-    /**
-     * @throws PlasmaBotException
-     */
     public function handle(): void
     {
         try {
             $this->cli->receiveAll();
         } catch (ZenonCliException $e) {
-            throw new PlasmaBotException($e->getMessage());
+            Log::error('Plasma Bot - Error receiving all');
         }
     }
 }
