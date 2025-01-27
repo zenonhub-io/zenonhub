@@ -25,6 +25,7 @@ class PlasmaBotEntry extends Model
         'hash',
         'amount',
         'is_confirmed',
+        'should_expire',
         'expires_at',
     ];
 
@@ -35,6 +36,8 @@ class PlasmaBotEntry extends Model
      */
     protected $casts = [
         'expires_at' => 'datetime',
+        'is_confirmed' => 'bool',
+        'should_expire' => 'bool',
     ];
 
     //
@@ -62,9 +65,14 @@ class PlasmaBotEntry extends Model
     {
         return $query->where('expires_at', '<', now())
             ->orWhere(function ($query) {
+                $query->where('should_expire', true);
                 $query->whereNull('expires_at')
                     ->whereHas('account', function ($query2) {
-                        $query2->whereRaw('(SELECT MAX(created_at) FROM nom_account_blocks WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id) < ?', [
+                        $query2->whereRaw('(
+                            SELECT MAX(created_at)
+                            FROM nom_account_blocks
+                            WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id
+                        ) < ?', [
                             now()->subDays(30),
                         ]);
                     });

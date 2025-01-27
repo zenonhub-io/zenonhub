@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('hash')->nullable()->index();
             $table->integer('amount');
             $table->boolean('is_confirmed')->default(0);
+            $table->boolean('should_expire')->default(1);
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
