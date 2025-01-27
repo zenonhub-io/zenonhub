@@ -23,7 +23,7 @@ class TransactionsOverview extends BaseComponent
     private function getStats(): array
     {
         return Cache::remember('tile.transactions-overview', now()->addMinutes(10), fn () => [
-            'total' => Number::abbreviate(AccountBlock::max('id'), 2),
+            'total' => Number::abbreviate(AccountBlock::count(), 2),
             'daily' => Number::abbreviate(AccountBlock::whereDate('created_at', now())->count(), 2),
         ]);
     }
