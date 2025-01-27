@@ -68,13 +68,14 @@ class PlasmaBotEntry extends Model
                 $query->where('should_expire', true);
                 $query->whereNull('expires_at')
                     ->whereHas('account', function ($query2) {
-                        $query2->whereRaw('(
-                            SELECT MAX(created_at)
-                            FROM nom_account_blocks
-                            WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id
-                        ) < ?', [
-                            now()->subDays(30),
-                        ]);
+                        $query2->whereDoesntHave('sentBlocks')
+                            ->orWhereRaw('(
+                                SELECT MAX(created_at)
+                                FROM nom_account_blocks
+                                WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id
+                            ) < ?', [
+                                now()->subDays(30),
+                            ]);
                     });
             });
     }
