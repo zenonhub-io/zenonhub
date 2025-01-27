@@ -6,14 +6,21 @@ namespace App\Livewire\Tiles;
 
 use App\Livewire\BaseComponent;
 use App\Models\Nom\AccountBlock;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 
 class TransactionsOverview extends BaseComponent
 {
-    public function render()
+    public function render(): View
     {
-        return view('livewire.tiles.transactions-overview', [
-            'total' => Number::abbreviate(AccountBlock::count(), 2),
+        return view('livewire.tiles.transactions-overview', $this->getStats());
+    }
+
+    private function getStats(): array
+    {
+        return Cache::remember('tile.transactions-overview', now()->addMinutes(10), fn () => [
+            'total' => Number::abbreviate(AccountBlock::max('id'), 2),
             'daily' => Number::abbreviate(AccountBlock::whereDate('created_at', now())->count(), 2),
             'latest' => AccountBlock::latest('id')->first(),
         ]);
