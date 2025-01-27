@@ -17,7 +17,7 @@ class PillarRevokedListener extends BaseListener
 {
     use AsAction;
 
-    private const NOTIFICATION_TYPE = 'network-pillar';
+    private const string NOTIFICATION_TYPE = 'network-pillar';
 
     /**
      * Handle the event.

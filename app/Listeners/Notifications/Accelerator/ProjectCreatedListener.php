@@ -18,7 +18,7 @@ class ProjectCreatedListener extends BaseListener
 {
     use AsAction;
 
-    private const NOTIFICATION_TYPE = 'network-az';
+    private const string NOTIFICATION_TYPE = 'network-az';
 
     /**
      * Handle the event.

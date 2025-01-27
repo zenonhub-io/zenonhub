@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Actions\PlasmaBot;
 
 use App\Models\PlasmaBotEntry;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Throwable;
 
 class CancelExpired
 {
@@ -17,7 +19,13 @@ class CancelExpired
     {
         $expiredEntries = PlasmaBotEntry::whereExpired()->whereConfirmed()->get();
         $expiredEntries->each(function ($entry) {
-            Cancel::run($entry);
+            try {
+                Cancel::run($entry);
+            } catch (Throwable $e) {
+                Log::error('Plasma Bot - Error canceling expired entry', [
+                    'entry' => $entry,
+                ]);
+            }
         });
     }
 }

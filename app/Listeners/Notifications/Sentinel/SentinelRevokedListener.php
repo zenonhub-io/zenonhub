@@ -17,7 +17,7 @@ class SentinelRevokedListener extends BaseListener
 {
     use AsAction;
 
-    private const NOTIFICATION_TYPE = 'network-sentinel';
+    private const string NOTIFICATION_TYPE = 'network-sentinel';
 
     /**
      * Handle the event.

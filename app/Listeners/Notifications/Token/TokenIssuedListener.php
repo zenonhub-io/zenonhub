@@ -17,7 +17,7 @@ class TokenIssuedListener extends BaseListener
 {
     use AsAction;
 
-    private const NOTIFICATION_TYPE = 'network-token';
+    private const string NOTIFICATION_TYPE = 'network-token';
 
     /**
      * Handle the event.

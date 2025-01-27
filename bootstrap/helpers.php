@@ -102,7 +102,7 @@ function hex_to_rgba(string $hex, ?float $alpha = 1): string
     return implode(',', $rgb);
 }
 
-function systemVersionNumber(): string
+function appVersionNumber(): string
 {
     return Illuminate\Support\Facades\Cache::rememberForever('system_version_number', function () {
         $composerFile = base_path('composer.json');
