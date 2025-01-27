@@ -20,6 +20,9 @@ export default defineConfig({
                 src: 'resources/svg/*',
                 dest: 'svg'
             },{
+                src: 'resources/img/*',
+                dest: 'img'
+            },{
                 src: 'node_modules/bootstrap-icons/font/fonts/*',
                 dest: 'resources/scss/fonts'
             }]

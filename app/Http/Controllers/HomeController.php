@@ -12,8 +12,8 @@ class HomeController
     public function __invoke(): View
     {
         MetaTags::title('Zenon Hub | Explore the Zenon Network (Network of Momentum)', false)
-            ->twitterImage(url('img/meta-big.png'))
-            ->openGraphImage(url('img/meta-big.png'));
+            ->twitterImage(asset('build/img/meta-big.png'))
+            ->openGraphImage(asset('build/img/meta-big.png'));
 
         return view('home');
     }
