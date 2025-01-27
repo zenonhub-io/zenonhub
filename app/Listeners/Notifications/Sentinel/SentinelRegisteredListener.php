@@ -17,7 +17,7 @@ class SentinelRegisteredListener extends BaseListener
 {
     use AsAction;
 
-    private const NOTIFICATION_TYPE = 'network-sentinel';
+    private const string NOTIFICATION_TYPE = 'network-sentinel';
 
     /**
      * Handle the event.
@@ -25,7 +25,7 @@ class SentinelRegisteredListener extends BaseListener
     public function handle(AccountBlock $accountBlock, Sentinel $sentinel): void
     {
         $this->sendToUsers($sentinel);
-        $this->sendToNetworkBot($sentinel);
+        // $this->sendToNetworkBot($sentinel);
     }
 
     public function asListener(SentinelRegistered $sentinelRegisteredEvent): void
