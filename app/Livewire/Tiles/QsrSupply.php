@@ -18,7 +18,7 @@ class QsrSupply extends BaseComponent
 
     private function getStats(): array
     {
-        return Cache::remember('tile.znn-supply', now()->addMinutes(10), function () {
+        return Cache::remember('tile.qsr-supply', now()->addMinutes(10), function () {
             $qsrToken = app('qsrToken');
 
             return [
