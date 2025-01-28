@@ -28,7 +28,7 @@ class ReceiveAll
         try {
             $this->cli->receiveAll();
         } catch (ZenonCliException $e) {
-            Log::error('Plasma Bot - Error receiving all');
+            Log::warning('Plasma Bot - Error receiving all');
         }
     }
 }

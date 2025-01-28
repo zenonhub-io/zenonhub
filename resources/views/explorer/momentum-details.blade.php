@@ -68,10 +68,16 @@
                     <x-cards.body>
                         <x-stats.mini-stat
                             :title="__('Producer')"
-                            :info="__('The pillar that produced the momentum')">
-                                <x-link :href="route('pillar.detail', ['slug' => $momentum->producerPillar->slug])">
-                                    {{ $momentum->producerPillar->slug }}
-                                </x-link>
+                            :info="__($momentum->producerPillar ? 'The pillar that produced the momentum' : 'The account that produced the momentum')">
+                                @if($momentum->producerPillar)
+                                    <x-link :href="route('pillar.detail', ['slug' => $momentum->producerPillar->slug])">
+                                        {{ $momentum->producerPillar->slug }}
+                                    </x-link>
+                                @else
+                                    <x-link :href="route('explorer.account.detail', ['address' => $momentum->producerAccount->address])">
+                                        <x-address :account="$momentum->producerAccount" :always-short="true" />
+                                    </x-link>
+                                @endif
                         </x-stats.mini-stat>
                     </x-cards.body>
                 </x-cards.card>
