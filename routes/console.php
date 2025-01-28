@@ -14,11 +14,13 @@ Artisan::command('nom:reset-db', function () {
     Artisan::call('db:seed --class=DatabaseSeeder');
     Artisan::call('db:seed --class=NomSeeder');
     Artisan::call('db:seed --class=GenesisSeeder');
+    Artisan::call('nom:create-or-update-latest-momentums-view');
     Artisan::call('nom:create-or-update-latest-account-blocks-view');
     Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
 })->purpose('Resets all NoM data back to genesis');
 
 Artisan::command('site:after-deploy', function () {
+    Artisan::call('nom:create-or-update-latest-momentums-view');
     Artisan::call('nom:create-or-update-latest-account-blocks-view');
     Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
     Artisan::call('nom:update-contract-methods');
