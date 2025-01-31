@@ -58,7 +58,7 @@ Route::group(['middleware' => ['throttle:60,1']], function () {
     Route::get('utilities/token-supply/{token}/{value?}', TokenSupplyController::class)->name('api.utilities.token-supply');
     Route::get('utilities/prices', TokenPriceController::class)->name('api.utilities.token-price');
 
-    Route::group(['middleware' => ['auth:sanctum', 'ability:plasma-bot']], function () {
+    Route::group(['middleware' => ['auth:sanctum', 'abilities:plasma-bot']], function () {
         Route::post('plasma-bot/fuse', CreateFuseController::class)->name('plasmaBot.fuse');
         Route::get('plasma-bot/expiration/{address}', FuseExpirationController::class)->name('plasmaBot.expiration');
     });

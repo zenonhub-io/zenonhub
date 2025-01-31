@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 
 /**
  * The first thing we will do is create a new Laravel application instance
@@ -28,7 +30,10 @@ return Application::configure()
         __DIR__ . '/../app/Listeners',
     ])
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'abilities' => CheckAbilities::class,
+            'ability' => CheckForAnyAbility::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
