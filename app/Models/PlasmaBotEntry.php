@@ -63,20 +63,25 @@ class PlasmaBotEntry extends Model
 
     public function scopeWhereExpired(Builder $query): Builder
     {
-        return $query->where('expires_at', '<', now())
-            ->orWhere(function ($query) {
-                $query->where('should_expire', true);
-                $query->whereNull('expires_at')
-                    ->whereHas('account', function ($query2) {
-                        $query2->whereDoesntHave('sentBlocks')
-                            ->orWhereRaw('(
-                                SELECT MAX(created_at)
-                                FROM nom_account_blocks
-                                WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id
-                            ) < ?', [
-                                now()->subDays(30),
-                            ]);
-                    });
+        return $query->where('should_expire', true)
+            ->where(function ($query) {
+                $query->where(function ($query) {
+                    // Check if expiry date is in the past
+                    $query->whereNotNull('expires_at')
+                        ->where('expires_at', '<', now());
+                })->orWhere(function ($query) {
+                    $query->whereNull('expires_at') // Check if no expiry date exists
+                        ->whereHas('account', function ($query2) {
+                            $query2->whereDoesntHave('sentBlocks') // No sentBlocks exist
+                                ->orWhereRaw('(
+                                    SELECT MAX(created_at)
+                                    FROM nom_account_blocks
+                                    WHERE nom_account_blocks.account_id = plasma_bot_entries.account_id
+                                 ) < ?', [
+                                    now()->subDays(30), // Last sentBlock is older than 30 days
+                                ]);
+                        });
+                });
             });
     }
 }
