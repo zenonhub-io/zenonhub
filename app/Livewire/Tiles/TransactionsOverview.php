@@ -24,7 +24,7 @@ class TransactionsOverview extends BaseComponent
     {
         return Cache::remember('tile.transactions-overview', now()->addMinutes(10), fn () => [
             'total' => Number::abbreviate(AccountBlock::count(), 2),
-            'daily' => Number::abbreviate(AccountBlock::whereDate('created_at', now())->count(), 2),
+            'daily' => Number::abbreviate(AccountBlock::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->count(), 2),
         ]);
     }
 }

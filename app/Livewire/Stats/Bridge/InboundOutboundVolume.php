@@ -103,15 +103,10 @@ class InboundOutboundVolume extends Component
         foreach ($this->dateRange as $date) {
             $query = BridgeStatHistory::where('token_id', $token->id);
 
-            if ($this->timeframe === 'y') {
-                $startDate = $this->getPeriodStart($date);
-                $endDate = $this->getPeriodEnd($date);
-                $query->whereBetween('date', [$startDate, $endDate]);
-                $title = $date->format('M Y');
-            } else {
-                $query->whereDate('date', $date);
-                $title = $date->format('jS M');
-            }
+            $startDate = $this->getPeriodStart($date);
+            $endDate = $this->getPeriodEnd($date);
+            $query->whereBetween('date', [$startDate, $endDate]);
+            $title = $date->format('M Y');
 
             $data = $query->selectRaw('CAST(SUM(unwrapped_amount) AS SIGNED) as inbound_amount')
                 ->selectRaw('CAST(SUM(wrapped_amount) AS SIGNED) as outbound_amount')

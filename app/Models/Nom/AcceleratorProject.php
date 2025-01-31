@@ -210,18 +210,6 @@ class AcceleratorProject extends Model implements Sitemapable
         });
     }
 
-    public function scopeShouldSendVotingReminder($query)
-    {
-        return $query
-            ->whereTime('created_at', '>=', now()->subHour()->startOfHour()->format('H:i:s'))
-            ->whereTime('created_at', '<', now()->subHour()->endOfHour()->format('H:i:s'))
-            ->where(function ($q) {
-                $q->whereDate('created_at', now()->subDays(5))
-                    ->orWhereDate('created_at', now()->subDays(10))
-                    ->orWhereDate('created_at', now()->subDays(13));
-            });
-    }
-
     //
     // Attributes
 

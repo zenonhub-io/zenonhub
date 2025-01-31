@@ -20,8 +20,8 @@ class AccountsOverview extends BaseComponent
     {
         return Cache::remember('tile.accounts-overview', now()->addMinutes(10), fn () => [
             'total' => Number::abbreviate(Account::count(), 2),
-            'dailyActive' => Account::whereDate('last_active_at', now())->count(),
-            'dailyCreated' => Account::whereDate('first_active_at', now())->count(),
+            'dailyActive' => Account::whereBetween('last_active_at', [now()->startOfDay(), now()->endOfDay()])->count(),
+            'dailyCreated' => Account::whereBetween('first_active_at', [now()->startOfDay(), now()->endOfDay()])->count(),
         ]);
     }
 }
