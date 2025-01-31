@@ -127,23 +127,6 @@ class AcceleratorPhase extends Model implements Sitemapable
         return $query->where('status', AcceleratorPhaseStatusEnum::PAID->value);
     }
 
-    public function scopeShouldSendVotingReminder($query)
-    {
-        return $query
-            ->whereTime('created_at', '>=', now()->subHour()->startOfHour()->format('H:i:s'))
-            ->whereTime('created_at', '<', now()->subHour()->endOfHour()->format('H:i:s'))
-            ->where(function ($q) {
-                $q->whereDate('created_at', now()->subWeek())
-                    ->orWhereDate('created_at', now()->subWeeks(2))
-                    ->orWhereDate('created_at', now()->subWeeks(3))
-                    ->orWhereDate('created_at', now()->subWeeks(4))
-                    ->orWhereDate('created_at', now()->subWeeks(5))
-                    ->orWhereDate('created_at', now()->subWeeks(6))
-                    ->orWhereDate('created_at', now()->subWeeks(7))
-                    ->orWhereDate('created_at', now()->subDays(8));
-            });
-    }
-
     //
     // Attributes
 

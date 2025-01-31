@@ -66,51 +66,72 @@ class NetworkStats
 
     private function getTotalTx(Carbon $date, string $operator = '='): int
     {
-        return AccountBlock::whereDate('created_at', $operator, $date)->count();
+        if ($operator === '=') {
+            return AccountBlock::whereBetween('created_at', [
+                $date->copy()->startOfDay(),
+                $date->copy()->endOfDay(),
+            ])->count();
+        }
+
+        return AccountBlock::where('created_at', '<=', $date->copy()->endOfDay())->count();
     }
 
-    /**
-     * Get the total number of addresses in the network up to the given date
-     */
     private function getTotalAddresses(Carbon $date): int
     {
         return Account::whereHas('sentBlocks', function ($query) use ($date) {
-            $query->whereDate('created_at', '<=', $date);
+            $query->where('created_at', '<=', $date->copy()->endOfDay());
         })->orWhereHas('receivedBlocks', function ($query) use ($date) {
-            $query->whereDate('created_at', '<=', $date);
+            $query->where('created_at', '<=', $date->copy()->endOfDay());
         })->count();
     }
 
-    /**
-     * Get the total number of addresses registered on the given date
-     */
     private function getTotalDailyAddresses(Carbon $date): int
     {
-        return Account::whereDate('first_active_at', $date)->count();
+        return Account::whereBetween('first_active_at', [
+            $date->copy()->startOfDay(),
+            $date->copy()->endOfDay(),
+        ])->count();
     }
 
-    /**
-     * Get the total number of addresses active on the given date
-     */
     private function getTotalActiveAddresses(Carbon $date): int
     {
         return Account::whereHas('sentBlocks', function ($query) use ($date) {
-            $query->whereDate('created_at', $date);
+            $query->whereBetween('created_at', [
+                $date->copy()->startOfDay(),
+                $date->copy()->endOfDay(),
+            ]);
         })->count();
     }
 
     private function getTotalTokens(Carbon $date, string $operator = '='): int
     {
-        return Token::whereDate('created_at', $operator, $date)->count();
+        if ($operator === '=') {
+            return Token::whereBetween('created_at', [
+                $date->copy()->startOfDay(),
+                $date->copy()->endOfDay(),
+            ])->count();
+        }
+
+        return Token::where('created_at', '<=', $date->copy()->endOfDay())->count();
     }
 
     private function getTotalStakes(Carbon $date, string $operator = '='): int
     {
         $znnToken = app('znnToken');
 
+        if ($operator === '=') {
+            return Stake::where('token_id', $znnToken->id)
+                ->whereActive()
+                ->whereBetween('started_at', [
+                    $date->copy()->startOfDay(),
+                    $date->copy()->endOfDay(),
+                ])
+                ->count();
+        }
+
         return Stake::where('token_id', $znnToken->id)
             ->whereActive()
-            ->whereDate('started_at', $operator, $date)
+            ->where('started_at', '<=', $date->copy()->endOfDay())
             ->count();
     }
 
@@ -118,33 +139,65 @@ class NetworkStats
     {
         $znnToken = app('znnToken');
 
+        if ($operator === '=') {
+            return Stake::where('token_id', $znnToken->id)
+                ->whereActive()
+                ->whereBetween('started_at', [
+                    $date->copy()->startOfDay(),
+                    $date->copy()->endOfDay(),
+                ])
+                ->sum('amount');
+        }
+
         return Stake::where('token_id', $znnToken->id)
             ->whereActive()
-            ->whereDate('started_at', $operator, $date)
+            ->where('started_at', '<=', $date->copy()->endOfDay())
             ->sum('amount');
     }
 
     private function getTotalFusions(Carbon $date, string $operator = '='): int
     {
+        if ($operator === '=') {
+            return Plasma::whereActive()
+                ->whereBetween('started_at', [
+                    $date->copy()->startOfDay(),
+                    $date->copy()->endOfDay(),
+                ])
+                ->count();
+        }
+
         return Plasma::whereActive()
-            ->whereDate('started_at', $operator, $date)
+            ->where('started_at', '<=', $date->copy()->endOfDay())
             ->count();
     }
 
     private function getTotalFused(Carbon $date, string $operator = '='): mixed
     {
+        if ($operator === '=') {
+            return Plasma::whereActive()
+                ->whereBetween('started_at', [
+                    $date->copy()->startOfDay(),
+                    $date->copy()->endOfDay(),
+                ])
+                ->sum('amount');
+        }
+
         return Plasma::whereActive()
-            ->whereDate('started_at', $operator, $date)
+            ->where('started_at', '<=', $date->copy()->endOfDay())
             ->sum('amount');
     }
 
     private function getTotalPillars(Carbon $date): int
     {
-        return Pillar::whereActive()->whereDate('created_at', '<=', $date)->count();
+        return Pillar::whereActive()
+            ->where('created_at', '<=', $date->copy()->endOfDay())
+            ->count();
     }
 
     private function getTotalSentinels(Carbon $date): int
     {
-        return Sentinel::whereActive()->whereDate('created_at', '<=', $date)->count();
+        return Sentinel::whereActive()
+            ->where('created_at', '<=', $date->copy()->endOfDay())
+            ->count();
     }
 }

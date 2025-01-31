@@ -63,14 +63,18 @@ class TokenStats
 
     private function getDailyMinted(Token $token, Carbon $date): string
     {
-        $minted = $token->mints()->whereDate('created_at', $date)->sum('amount');
+        $minted = $token->mints()
+            ->whereBetween('created_at', [$date->copy()->startOfDay(), $date->copy()->endOfDay()])
+            ->sum('amount');
 
         return number_format($minted, 0, '.', '');
     }
 
     private function getDailyBurned(Token $token, Carbon $date): string
     {
-        $burns = $token->burns()->whereDate('created_at', $date)->sum('amount');
+        $burns = $token->burns()
+            ->whereBetween('created_at', [$date->copy()->startOfDay(), $date->copy()->endOfDay()])
+            ->sum('amount');
 
         return number_format($burns, 0, '.', '');
     }
@@ -89,13 +93,17 @@ class TokenStats
                 ->sum('genesis_qsr_balance');
         }
 
-        $totalMints = $token->mints()->whereDate('created_at', '<=', $date)->sum('amount');
-        $totalBurns = $token->burns()->whereDate('created_at', '<=', $date)->sum('amount');
+        $totalMints = $token->mints()
+            ->where('created_at', '<=', $date->copy()->endOfDay())
+            ->sum('amount');
+
+        $totalBurns = $token->burns()
+            ->where('created_at', '<=', $date->copy()->endOfDay())
+            ->sum('amount');
 
         return number_format((($genesisSupply + $totalMints) - $totalBurns), 0, '.', '');
     }
 
-    // TODO - This is way to slow...
     private function getTotalHolders(Token $token, Carbon $date): int
     {
         return $token->holders()->count();
@@ -106,17 +114,16 @@ class TokenStats
             ->whereNotEmbedded()
             ->chunk(200, function ($accounts) use ($token, $date, &$accountCount) {
                 foreach ($accounts as $account) {
-
                     $sent = $account->sentBlocks()
                         ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
-                        ->whereDate('created_at', '<=', $date)
+                        ->where('created_at', '<=', $date->copy()->endOfDay())
                         ->where('token_id', $token->id)
                         ->where('amount', '>', '0')
                         ->first()->total;
 
                     $received = $account->receivedBlocks()
                         ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
-                        ->whereDate('created_at', '<=', $date)
+                        ->where('created_at', '<=', $date->copy()->endOfDay())
                         ->where('token_id', $token->id)
                         ->where('amount', '>', '0')
                         ->first()->total;
@@ -144,12 +151,16 @@ class TokenStats
 
     private function getTotalTransactions(Token $token, Carbon $date): string
     {
-        return (string) $token->transactions()->whereDate('created_at', $date)->count();
+        return (string) $token->transactions()
+            ->whereBetween('created_at', [$date->copy()->startOfDay(), $date->copy()->endOfDay()])
+            ->count();
     }
 
     private function getTotalTransferred(Token $token, Carbon $date): string
     {
-        $transferred = $token->transactions()->whereDate('created_at', $date)->sum('amount');
+        $transferred = $token->transactions()
+            ->whereBetween('created_at', [$date->copy()->startOfDay(), $date->copy()->endOfDay()])
+            ->sum('amount');
 
         return number_format($transferred, 0, '.', '');
     }
@@ -158,23 +169,23 @@ class TokenStats
     {
         if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
 
-            $totalPillars = Pillar::whereDate('created_at', '<=', $date)
+            $totalPillars = Pillar::where('created_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
                     $query->whereNull('revoked_at')
-                        ->orWhereDate('revoked_at', '<=', $date);
+                        ->orWhere('revoked_at', '<=', $date->copy()->endOfDay());
                 })->count();
 
-            $totalSentinels = Sentinel::whereDate('created_at', '<=', $date)
+            $totalSentinels = Sentinel::where('created_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
                     $query->whereNull('revoked_at')
-                        ->orWhereDate('revoked_at', '<=', $date);
+                        ->orWhere('revoked_at', '<=', $date->copy()->endOfDay());
                 })->count();
 
             $totalStaked = Stake::where('token_id', $token->id)
-                ->whereDate('started_at', '<=', $date)
+                ->where('started_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
                     $query->whereNull('ended_at')
-                        ->orWhereDate('ended_at', '<=', $date);
+                        ->orWhere('ended_at', '<=', $date->copy()->endOfDay());
                 })->sum('amount');
 
             $totalZnnLocked = ($totalPillars * config('nom.pillar.znnStakeAmount'))
@@ -185,17 +196,16 @@ class TokenStats
         }
 
         if ($token->token_standard === NetworkTokensEnum::QSR->value) {
-
-            $totalSentinels = Sentinel::whereDate('created_at', '<=', $date)
+            $totalSentinels = Sentinel::where('created_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
                     $query->whereNull('revoked_at')
-                        ->orWhereDate('revoked_at', '<=', $date);
+                        ->orWhere('revoked_at', '<=', $date->copy()->endOfDay());
                 })->count();
 
-            $totalFused = Plasma::whereDate('started_at', '<=', $date)
+            $totalFused = Plasma::where('started_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
                     $query->whereNull('ended_at')
-                        ->orWhereDate('ended_at', '<=', $date);
+                        ->orWhere('ended_at', '<=', $date->copy()->endOfDay());
                 })->sum('amount');
 
             $totalQsrLocked = ($totalSentinels * config('nom.sentinel.qsrDepositAmount'))
