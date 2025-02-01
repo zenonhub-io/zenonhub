@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\FavoriteAccountsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\TokensRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\VerifiedAccountsRelationManager;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -66,26 +68,35 @@ class UserResource extends Resource
                                 Forms\Components\DateTimePicker::make('two_factor_confirmed_at')
                                     ->hidden(fn (User $user): bool => $user->two_factor_confirmed_at !== null)
                                     ->disabled(),
-
-                                Forms\Components\Actions::make([
-                                    Forms\Components\Actions\Action::make('disable_2fa')
-                                        ->label(__('Disable 2FA'))
-                                        ->color('warning')
-                                        ->action(fn (User $user) => static::doDisable2Fa($user)),
-                                ])
-                                    ->hidden(fn (User $user): bool => $user->two_factor_confirmed_at === null)
-                                    ->fullWidth(),
                             ]),
-                        Tabs\Tab::make('Tab 3')
+                        Tabs\Tab::make('Notifications')
                             ->schema([
-
+                                Forms\Components\CheckboxList::make('notificationTypes')
+                                    ->relationship(titleAttribute: 'name'),
                             ]),
                     ]),
 
-                Forms\Components\Group::make()
+                Tabs::make('Tabs')
                     ->columnSpan(1)
-                    ->schema([
-                        Section::make('Actions')
+                    ->tabs([
+
+                        Tabs\Tab::make('Info')
+                            ->schema([
+                                Forms\Components\Placeholder::make('last_seen_at')
+                                    ->label(__('Last seen'))
+                                    ->content(fn (User $record): ?string => $record->last_seen_at?->diffForHumans()),
+                                Forms\Components\Placeholder::make('email_verified_at')
+                                    ->label(__('Activated'))
+                                    ->content(fn (User $record): ?string => $record->email_verified_at?->format('d/m/Y h:i A')),
+                                Forms\Components\Placeholder::make('created_at')
+                                    ->label(__('Created'))
+                                    ->content(fn (User $record): ?string => $record->created_at?->format('d/m/Y h:i A')),
+                                Forms\Components\Placeholder::make('updated_at')
+                                    ->label(__('Updated'))
+                                    ->content(fn (User $record): ?string => $record->updated_at?->format('d/m/Y h:i A')),
+                            ]),
+
+                        Tabs\Tab::make('Actions')
                             ->schema([
                                 Forms\Components\Actions::make([
                                     Forms\Components\Actions\Action::make('resend_verification')
@@ -103,18 +114,18 @@ class UserResource extends Resource
                                         ->action(fn (User $user) => static::doSendPasswordReset($user)),
                                 ])
                                     ->fullWidth(),
-                            ])
-                            ->hidden(fn (string $operation): bool => $operation === 'create'),
 
-                        Section::make('Info')
-                            ->schema([
-                                Forms\Components\DateTimePicker::make('last_login_at')->disabled(),
-                                Forms\Components\DateTimePicker::make('last_seen_at')->disabled(),
-                                Forms\Components\DateTimePicker::make('created_at')->disabled(),
-                                Forms\Components\DateTimePicker::make('updated_at')->disabled(),
-                            ])
-                            ->hidden(fn (string $operation): bool => $operation === 'create'),
-                    ]),
+                                Forms\Components\Actions::make([
+                                    Forms\Components\Actions\Action::make('disable_2fa')
+                                        ->label(__('Disable 2FA'))
+                                        ->color('warning')
+                                        ->action(fn (User $user) => static::doDisable2Fa($user)),
+                                ])
+                                    ->hidden(fn (User $user): bool => $user->two_factor_confirmed_at === null)
+                                    ->fullWidth(),
+                            ]),
+                    ])
+                    ->hidden(fn (string $operation): bool => $operation === 'create'),
             ]);
     }
 
@@ -148,7 +159,9 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            TokensRelationManager::class,
+            FavoriteAccountsRelationManager::class,
+            VerifiedAccountsRelationManager::class,
         ];
     }
 

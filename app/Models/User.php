@@ -86,6 +86,17 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
         )->withPivot('nickname', 'verified_at');
     }
 
+    public function favoriteAccounts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Account::class,
+            'markable_favorites',
+            'user_id',
+            'markable_id'
+        )->wherePivot('markable_type', Account::class)
+            ->withPivot('label', 'metadata', 'created_at', 'updated_at');
+    }
+
     public function notificationTypes(): BelongsToMany
     {
         return $this->belongsToMany(
