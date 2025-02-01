@@ -38,9 +38,9 @@ class FuseExpirationController extends ApiController
         $expirationDate = $fuse->expires_at;
 
         if (! $expirationDate) {
-            $account = load_account($address);
-            if ($account && $account->latest_block) {
-                $account->latest_block->created_at->addDays(30);
+            $account = load_account($address)->loadMissing('latestBlock');
+            if ($account && $account->latestBlock) {
+                $account->latestBlock->created_at->addDays(30);
             }
         }
 
