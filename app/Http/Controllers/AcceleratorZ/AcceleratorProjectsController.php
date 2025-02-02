@@ -13,7 +13,11 @@ class AcceleratorProjectsController
     public function index(?string $tab = 'all'): View
     {
         MetaTags::title('Accelerator-Z Projects: Fueling Innovation in the Network of Momentum')
-            ->description('Explore the diverse array of innovative projects funded by Accelerator-Z within the Network of Momentum ecosystem. A list of all Accelerator-Z projects showing their phases, votes and funding request.');
+            ->description('Explore the diverse array of innovative projects funded by Accelerator-Z within the Network of Momentum ecosystem. A list of all Accelerator-Z projects showing their phases, votes and funding request.')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('accelerator-z.list'),
+            ]);
 
         return view('accelerator-z.list', [
             'tab' => $tab,
@@ -29,7 +33,11 @@ class AcceleratorProjectsController
         }
 
         MetaTags::title("{$project->name} - Project details")
-            ->description("Discover {$project->name}, a venture powered by Accelerator-Z within the Network of Momentum ecosystem. Explore its status, phases votes and more.");
+            ->description("Discover {$project->name}, a venture powered by Accelerator-Z within the Network of Momentum ecosystem. Explore its status, phases votes and more.")
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('accelerator-z.project.detail', ['hash' => $project->hash]),
+            ]);
 
         return view('accelerator-z.project-detail', [
             'project' => $project,

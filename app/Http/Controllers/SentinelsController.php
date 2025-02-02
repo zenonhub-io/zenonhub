@@ -12,7 +12,11 @@ class SentinelsController
     public function __invoke(?string $tab = 'all'): View
     {
         //        MetaTags::title('')
-        //            ->description('');
+        //            ->description('')
+        //            ->meta([
+        //                'robots' => 'index,follow',
+        //                'canonical' => route('sentinels', ['tab' => $tab]),
+        //            ]);
 
         return view('sentinels.list', [
             'tab' => $tab,

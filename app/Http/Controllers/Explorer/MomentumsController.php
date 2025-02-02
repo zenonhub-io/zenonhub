@@ -13,7 +13,11 @@ class MomentumsController
     public function index(): View
     {
         MetaTags::title('Momentums')
-            ->description('A list of the latest confirmed Momentums (blocks) on the Zenon Network. The timestamp, producer, number of transactions and hash are shown in the list');
+            ->description('A list of the latest confirmed Momentums (blocks) on the Zenon Network. The timestamp, producer, number of transactions and hash are shown in the list')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('explorer.momentum.list'),
+            ]);
 
         return view('explorer.momentum-list');
     }
@@ -30,7 +34,11 @@ class MomentumsController
         }
 
         MetaTags::title(__('Momentum #:height details (:hash)', ['height' => $momentum->height, 'hash' => $momentum->hash]))
-            ->description(__('Momentum :height (:hash) detail page showing the network height, producing pillar and a list of transactions', ['height' => $momentum->height, 'hash' => $momentum->hash]));
+            ->description(__('Momentum #:height (:hash) detail page showing the network height, producing pillar and a list of transactions', ['height' => $momentum->height, 'hash' => $momentum->hash]))
+            ->meta([
+                'robots' => 'noindex,nofollow',
+                'canonical' => route('explorer.momentum.detail', ['hash' => $momentum->hash]),
+            ]);
 
         return view('explorer.momentum-details', [
             'tab' => $tab,

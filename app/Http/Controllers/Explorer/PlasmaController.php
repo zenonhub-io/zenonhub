@@ -15,7 +15,11 @@ class PlasmaController
     public function __invoke(): View
     {
         MetaTags::title('Plasma (Fused QSR)')
-            ->description('A list of all the addresses in the Zenon Network actively fusing QSR into plasma sorted by creation timestamp in descending order');
+            ->description('A list of all the addresses in the Zenon Network actively fusing QSR into plasma sorted by creation timestamp in descending order')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('explorer.plasma.list'),
+            ]);
 
         return view('explorer.plasma-list', [
             'stats' => $this->getStats(),

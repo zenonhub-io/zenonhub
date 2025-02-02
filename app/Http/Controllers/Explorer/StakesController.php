@@ -15,7 +15,11 @@ class StakesController
     public function __invoke(?string $tab = 'znn'): View
     {
         MetaTags::title('Staking')
-            ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order');
+            ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('explorer.stake.list', ['tab' => $tab]),
+            ]);
 
         $token = match ($tab) {
             'znn' => app('znnToken'),

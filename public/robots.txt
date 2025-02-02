@@ -1,2 +1,21 @@
 User-agent: *
-Disallow:
+# Disallow everything inside admin, horizon
+Disallow: /admin/
+Disallow: /horizon/
+
+# Disallow APIs or dynamically generated redundant routes
+Disallow: /api/
+Disallow: /explorer/momentum/*
+Disallow: /explorer/transaction/*
+Disallow: /explorer/account/*
+Disallow: /explorer/token/*
+Disallow: /profile/*
+
+# Restrict query parameter indexing to avoid duplicate content
+Disallow: /*?*
+
+# Allow general pages like home, info, donate, advertise
+Allow: /
+
+# Allow sitemaps
+Sitemap: https://zenonhub.io/sitemap.xml
