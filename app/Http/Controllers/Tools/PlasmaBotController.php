@@ -12,7 +12,11 @@ class PlasmaBotController
     public function __invoke(): View
     {
         MetaTags::title('Plasma Bot')
-            ->description('Use the plasma bot tool to fuse some plasma to you address allowing for faster feeless transactions');
+            ->description('Use the plasma bot tool to fuse some plasma to you address allowing for faster feeless transactions')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('tools.plasma-bot'),
+            ]);
 
         return view('tools.plasma-bot');
     }

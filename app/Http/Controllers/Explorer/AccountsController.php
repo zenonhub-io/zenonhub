@@ -13,7 +13,11 @@ class AccountsController
     public function index(?string $tab = 'all'): View
     {
         MetaTags::title('Accounts')
-            ->description('The top account addresses in the Zenon Network in descending order by the amount of Zenon (ZNN) each account holds');
+            ->description('The top account addresses in the Zenon Network in descending order by the amount of Zenon (ZNN) each account holds')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('explorer.account.list', ['tab' => $tab]),
+            ]);
 
         return view('explorer.account-list', [
             'tab' => $tab,
@@ -36,8 +40,16 @@ class AccountsController
             'Address ' . $account->address . ' details',
         ])->filter()->implode(' | ');
 
+        $metaDescription = $account->is_embedded_contract
+            ? __('Explore detailed information about the embedded :contract on Zenon, including balances and transactions.', ['contract' => $account->name])
+            : __('This page contains details about a Zenon account (:address), including balances, token holdings, and transaction history, rewards and Accelerator-Z projects', ['address' => $account->address]);
+
         MetaTags::title($metaTitle)
-            ->description(__('he Address :address page shows key account details including balances, total rewards, plasma as well as detailed lists of transactions, rewards, delegations, token holdings, stakes, fusions and projects', ['address' => $account->address]));
+            ->description($metaDescription)
+            ->meta([
+                'robots' => $account->is_embedded_contract && $tab === 'transactions' ? 'index,follow' : 'noindex,nofollow',
+                'canonical' => route('explorer.account.detail', ['address' => $account->address]),
+            ]);
 
         return view('explorer.account-details', [
             'tab' => $tab,

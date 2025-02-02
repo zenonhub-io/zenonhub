@@ -11,7 +11,11 @@ class AdvertisingController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Advertise on Zenon Hub', false);
+        MetaTags::title('Advertise on Zenon Hub', false)
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('advertise'),
+            ]);
 
         return view('advertise');
     }

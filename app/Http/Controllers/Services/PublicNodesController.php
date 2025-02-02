@@ -11,7 +11,11 @@ class PublicNodesController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Public Nodes');
+        MetaTags::title('Public Nodes')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('services.public-nodes'),
+            ]);
 
         return view('services.public-nodes');
     }

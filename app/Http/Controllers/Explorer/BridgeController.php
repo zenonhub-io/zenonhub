@@ -12,7 +12,11 @@ class BridgeController
     public function __invoke(?string $tab = 'inbound'): View
     {
         MetaTags::title('Bridge')
-            ->description('A list of all incoming and outgoing bridge transactions and a list of LP providers, showing sender and receiver addresses, amount and network');
+            ->description('A list of all incoming and outgoing bridge transactions and a list of LP providers, showing sender and receiver addresses, amount and network')
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('explorer.bridge', ['tab' => $tab]),
+            ]);
 
         return view('explorer.bridge-list', [
             'tab' => $tab,

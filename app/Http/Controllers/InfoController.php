@@ -11,7 +11,11 @@ class InfoController
 {
     public function __invoke(): View
     {
-        MetaTags::title('About Zenon Hub', false);
+        MetaTags::title('About Zenon Hub', false)
+            ->meta([
+                'robots' => 'index,follow',
+                'canonical' => route('info'),
+            ]);
 
         return view('info');
     }
