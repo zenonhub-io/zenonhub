@@ -12,10 +12,8 @@ class PolicyController
     public function __invoke(): View
     {
         MetaTags::title('Privacy Policy')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('policy'),
-            ]);
+            ->canonical(route('policy'))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('policy');
     }

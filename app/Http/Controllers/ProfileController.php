@@ -12,10 +12,8 @@ class ProfileController
     public function __invoke(?string $tab = 'details'): View
     {
         MetaTags::title('Manage your account')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('profile', ['tab' => $tab]),
-            ]);
+            ->canonical(route('profile', ['tab' => $tab]))
+            ->metaByName('robots', 'noindex,nofollow');
 
         return view('profile', [
             'tab' => $tab,

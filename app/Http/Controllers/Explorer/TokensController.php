@@ -14,10 +14,8 @@ class TokensController
     {
         MetaTags::title('Tokens')
             ->description('The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('explorer.token.list'),
-            ]);
+            ->canonical(route('explorer.token.list', ['tab' => $tab]))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('explorer.token-list', [
             'tab' => $tab,
@@ -39,10 +37,8 @@ class TokensController
 
         MetaTags::title(__(':name (:symbol) - Token details', ['name' => $token->name, 'symbol' => $token->symbol]))
             ->description(__('The :name (:symbol) token detail page shows total and current supply information, holder count and detailed lists of holders, transactions, mints and burns', ['name' => $token->name, 'symbol' => $token->symbol]))
-            ->meta([
-                'robots' => $token->is_network && $tab === 'holders' ? 'index,follow' : 'noindex,nofollow',
-                'canonical' => route('explorer.token.detail', ['zts' => $token->token_standard]),
-            ]);
+            ->canonical(route('explorer.token.detail', ['zts' => $token->token_standard]))
+            ->metaByName('robots', $token->is_network && $tab === 'holders' ? 'index,nofollow' : 'noindex,nofollow');
 
         return view('explorer.token-details', [
             'tab' => $tab,

@@ -12,10 +12,8 @@ class TermsController
     public function __invoke(): View
     {
         MetaTags::title('Terms & Conditions')
-            ->meta([
-                'robots' => 'index,follow',
-                // 'canonical' => route('terms'),
-            ]);
+            // ->canonical(route('terms'))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('terms');
     }

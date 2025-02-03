@@ -13,10 +13,8 @@ class BridgeController
     {
         MetaTags::title('Bridge')
             ->description('A list of all incoming and outgoing bridge transactions and a list of LP providers, showing sender and receiver addresses, amount and network')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('explorer.bridge.list', ['tab' => $tab]),
-            ]);
+            ->canonical(route('explorer.bridge.list', ['tab' => $tab]))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('explorer.bridge-list', [
             'tab' => $tab,

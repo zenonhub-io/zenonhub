@@ -12,10 +12,8 @@ class InfoController
     public function __invoke(): View
     {
         MetaTags::title('About Zenon Hub', false)
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('info'),
-            ]);
+            ->canonical(route('info'))
+            ->metaByName('robots', 'index,follow');
 
         return view('info');
     }

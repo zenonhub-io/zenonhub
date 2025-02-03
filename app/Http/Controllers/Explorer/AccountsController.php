@@ -14,10 +14,8 @@ class AccountsController
     {
         MetaTags::title('Accounts')
             ->description('The top account addresses in the Zenon Network in descending order by the amount of Zenon (ZNN) each account holds')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('explorer.account.list', ['tab' => $tab]),
-            ]);
+            ->canonical(route('explorer.account.list', ['tab' => $tab]))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('explorer.account-list', [
             'tab' => $tab,
@@ -46,10 +44,8 @@ class AccountsController
 
         MetaTags::title($metaTitle)
             ->description($metaDescription)
-            ->meta([
-                'robots' => $account->is_embedded_contract && $tab === 'transactions' ? 'index,follow' : 'noindex,nofollow',
-                'canonical' => route('explorer.account.detail', ['address' => $account->address]),
-            ]);
+            ->canonical(route('explorer.account.detail', ['address' => $account->address]))
+            ->metaByName('robots', $account->is_embedded_contract && $tab === 'transactions' ? 'index,nofollow' : 'noindex,nofollow');
 
         return view('explorer.account-details', [
             'tab' => $tab,
