@@ -19,7 +19,9 @@ use App\Http\Controllers\InfoController;
 use App\Http\Controllers\Pillars\PillarsController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RobotsTxtController;
 use App\Http\Controllers\Services\PublicNodesController;
+use App\Http\Controllers\SitemapXmlController;
 use App\Http\Controllers\Stats\AcceleratorZStatsController;
 use App\Http\Controllers\Stats\BridgeStatsController;
 use App\Http\Controllers\Stats\PublicNodesStatsController;
@@ -91,10 +93,5 @@ Route::middleware([
     Route::get('profile/{tab?}', ProfileController::class)->name('profile');
 });
 
-Route::get('sitemap.xml', function () {
-    $file = storage_path('app/sitemap/sitemap.xml');
-
-    return response()->file($file, [
-        'Content-Type' => 'application/xml',
-    ]);
-})->name('sitemap');
+Route::get('robots.txt', RobotsTxtController::class)->name('robots');
+Route::get('sitemap.xml', SitemapXmlController::class)->name('sitemap');

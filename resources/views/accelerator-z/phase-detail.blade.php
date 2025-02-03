@@ -101,7 +101,7 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Link')">
-                                <x-link :href="$phase->url" :navigate="false" :new-tab="true">
+                                <x-link :href="external_url($phase->url)" :navigate="false" :new-tab="true">
                                     {{ $phase->url }}
                                 </x-link>
                             </x-stats.list-item>
