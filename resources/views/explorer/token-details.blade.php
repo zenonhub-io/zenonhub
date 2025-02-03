@@ -84,7 +84,7 @@
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Decimals')" :stat="$token->decimals" />
                             <x-stats.list-item :title="__('Domain')">
-                                <x-link :href="$token->domain" :new-tab="true" :navigate="false">{{ $token->domain }}</x-link>
+                                <x-link :href="external_url($token->domain)" :new-tab="true" :navigate="false">{{ $token->domain }}</x-link>
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Owner')">
                                 <x-address :account="$token->owner" :always-short="true" :copyable="true" />
