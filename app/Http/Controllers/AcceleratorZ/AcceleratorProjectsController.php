@@ -14,10 +14,8 @@ class AcceleratorProjectsController
     {
         MetaTags::title('Accelerator-Z Projects: Fueling Innovation in the Network of Momentum')
             ->description('Explore the diverse array of innovative projects funded by Accelerator-Z within the Network of Momentum ecosystem. A list of all Accelerator-Z projects showing their phases, votes and funding request.')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('accelerator-z.list'),
-            ]);
+            ->canonical(route('accelerator-z.list'))
+            ->metaByName('robots', 'index,follow');
 
         return view('accelerator-z.list', [
             'tab' => $tab,
@@ -34,10 +32,8 @@ class AcceleratorProjectsController
 
         MetaTags::title("{$project->name} - Project details")
             ->description("Discover {$project->name}, a venture powered by Accelerator-Z within the Network of Momentum ecosystem. Explore its status, phases votes and more.")
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('accelerator-z.project.detail', ['hash' => $project->hash]),
-            ]);
+            ->canonical(route('accelerator-z.project.detail', ['hash' => $project->hash]))
+            ->metaByName('robots', 'index,follow');
 
         return view('accelerator-z.project-detail', [
             'project' => $project,

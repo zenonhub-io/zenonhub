@@ -16,10 +16,8 @@ class StakesController
     {
         MetaTags::title('Staking')
             ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('explorer.stake.list', ['tab' => $tab]),
-            ]);
+            ->canonical(route('explorer.stake.list', ['tab' => $tab]))
+            ->metaByName('robots', 'index,nofollow');
 
         $token = match ($tab) {
             'znn' => app('znnToken'),

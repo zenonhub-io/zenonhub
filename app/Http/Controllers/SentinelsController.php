@@ -13,10 +13,8 @@ class SentinelsController
     {
         //        MetaTags::title('')
         //            ->description('')
-        //            ->meta([
-        //                'robots' => 'index,follow',
-        //                'canonical' => route('sentinels', ['tab' => $tab]),
-        //            ]);
+        //            ->canonical(route('sentinels', ['tab' => $tab]))
+        //            ->metaByName('robots', 'index,nofollow');
 
         return view('sentinels.list', [
             'tab' => $tab,

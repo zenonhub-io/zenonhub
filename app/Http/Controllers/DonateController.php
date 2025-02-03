@@ -13,10 +13,8 @@ class DonateController
     public function __invoke(): View
     {
         MetaTags::title('Donate to Zenon Hub', false)
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('donate'),
-            ]);
+            ->canonical(route('donate'))
+            ->metaByName('robots', 'index,nofollow');
 
         $donationAccount = Account::firstWhere('address', config('zenon-hub.donation_address'));
         $excludeAddresses = Account::whereEmbedded() // Exclude AZ + rewards

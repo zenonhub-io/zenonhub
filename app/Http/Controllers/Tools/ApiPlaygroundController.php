@@ -13,10 +13,8 @@ class ApiPlaygroundController
     {
         MetaTags::title('API Playground')
             ->description('Explore and test the public RPC endpoints of the Zenon Network and see the results right in your browser')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('tools.api-playground'),
-            ]);
+            ->canonical(route('tools.api-playground'))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('tools.api-playground');
     }

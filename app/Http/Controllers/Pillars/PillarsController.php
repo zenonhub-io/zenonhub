@@ -14,10 +14,8 @@ class PillarsController
     {
         MetaTags::title('Zenon Network Pillars: Explore the Backbone of the Network of Momentum')
             ->description("Discover the complete list of Zenon Network's pillars and delve into essential statistics. Explore key data on weight, engagement, reward sharing, and network stability")
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('pillar.list', ['tab' => $tab]),
-            ]);
+            ->canonical(route('pillar.list', ['tab' => $tab]))
+            ->metaByName('robots', 'index,follow');
 
         return view('pillars.list', [
             'tab' => $tab,
@@ -34,10 +32,8 @@ class PillarsController
 
         MetaTags::title("{$pillar->name} - Pillar details")
             ->description("Explore the on-chain activity of {$pillar->name} in the Zenon Network. Discover information about its delegators, votes and updates")
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('pillar.detail', ['slug' => $pillar->slug]),
-            ]);
+            ->canonical(route('pillar.detail', ['slug' => $pillar->slug]))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('pillars.detail', [
             'tab' => $tab,

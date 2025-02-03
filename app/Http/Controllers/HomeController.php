@@ -14,10 +14,8 @@ class HomeController
         MetaTags::title('Zenon Hub | Explore the Zenon Network (Network of Momentum)', false)
             ->twitterImage(asset('build/img/meta-big.png'))
             ->openGraphImage(asset('build/img/meta-big.png'))
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('home'),
-            ]);
+            ->canonical(route('home'))
+            ->metaByName('robots', 'index,follow');
 
         return view('home');
     }

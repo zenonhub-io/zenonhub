@@ -13,10 +13,8 @@ class PlasmaBotController
     {
         MetaTags::title('Plasma Bot')
             ->description('Use the plasma bot tool to fuse some plasma to you address allowing for faster feeless transactions')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('tools.plasma-bot'),
-            ]);
+            ->canonical(route('tools.plasma-bot'))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('tools.plasma-bot');
     }

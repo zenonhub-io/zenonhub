@@ -19,10 +19,8 @@ class BridgeStatsController
     {
         MetaTags::title('Bridge Stats')
             ->description('The Bridge Stats page shows a detailed overview of the Multi-Chain Bridge including its status, admin actions, security info and supported networks')
-            ->meta([
-                'robots' => 'index,follow',
-                'canonical' => route('stats.bridge', ['tab' => $tab]),
-            ]);
+            ->canonical(route('stats.bridge', ['tab' => $tab]))
+            ->metaByName('robots', 'index,nofollow');
 
         return view('stats.bridge', [
             'tab' => $tab,
