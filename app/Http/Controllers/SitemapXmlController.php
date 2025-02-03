@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Response;
 
 class SitemapXmlController
 {
-    public function __invoke(): Response
+    public function __invoke(): \Illuminate\Http\Response
     {
         $file = storage_path('app/sitemap/sitemap.xml');
+        $content = file_get_contents($file);
 
-        return response()->file($file, [
+        return Response::make($content, 200, [
             'Content-Type' => 'application/xml',
         ]);
     }
