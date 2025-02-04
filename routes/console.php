@@ -94,7 +94,3 @@ Schedule::call(function () {
 Schedule::command('sync:public-nodes')->cron('5 */6 * * *');
 
 Schedule::command('site:generate-sitemap')->daily();
-
-Schedule::command('horizon:snapshot')
-    ->everyFiveMinutes()
-    ->environments('production');

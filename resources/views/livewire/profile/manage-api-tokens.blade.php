@@ -40,7 +40,7 @@
             @foreach ($this->user->tokens->sortBy('name') as $token)
                 <div class="list-group-item d-flex align-items-baseline">
                     <div class="flex-fill">
-                        <span class="d-block text-sm text-heading fw-semibold">{{ $token->name }}</span>
+                        <span class="d-block text-sm text-heading fw-semibold">{{ $token->name }} {!! collect($token->abilities)->filter(fn($ability) => $ability !== '*')->map(fn($ability) => sprintf('<span class="badge badge-sm text-bg-light ms-2">%s</span>', $ability))->implode(' ') !!}</span>
                         @if ($token->last_used_at)
                             <div class="d-block text-xs text-muted mt-2">
                                 {{ __('Last used') }}: <x-date-time.carbon :date="$token->last_used_at" class="d-inline fw-bold" />
