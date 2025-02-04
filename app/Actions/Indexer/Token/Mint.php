@@ -92,7 +92,7 @@ class Mint extends AbstractContractMethodProcessor
             if (! $accountBlock->account->is_embedded_contract) {
                 throw new IndexerActionValidationException('Normal account trying to mint network owned token');
             }
-        } elseif ($accountBlock->account->is_embedded_contract || $token->owner_id !== $accountBlock->account_id) {
+        } elseif ($token->owner_id !== $accountBlock->account_id) {
             throw new IndexerActionValidationException('Attempt to mint token by an unauthorized account');
         }
     }
