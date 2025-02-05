@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Nom\Account;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,10 +15,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -84,6 +86,17 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         )->withPivot('nickname', 'verified_at');
     }
 
+    public function favoriteAccounts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Account::class,
+            'markable_favorites',
+            'user_id',
+            'markable_id'
+        )->wherePivot('markable_type', Account::class)
+            ->withPivot('label', 'metadata', 'created_at', 'updated_at');
+    }
+
     public function notificationTypes(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -100,5 +113,10 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasRole('admin');
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->username;
     }
 }
