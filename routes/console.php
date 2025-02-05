@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 Artisan::command('nom:reset-db', function () {
-    // Artisan::call('migrate:rollback');
-    // Artisan::call('migrate');
     Artisan::call('db:seed --class=DatabaseSeeder');
     Artisan::call('db:seed --class=NomSeeder');
     Artisan::call('db:seed --class=GenesisSeeder');
@@ -49,31 +47,6 @@ Artisan::command('indexer:remove-locks', function () {
     $emergencyLock->release();
 });
 
-Schedule::command('indexer:run')
-    ->everyTenSeconds()
-    ->withoutOverlapping(3)
-    ->runInBackground();
-
-Schedule::call(function () {
-    Artisan::call('sync:pillar-metrics');
-    Artisan::call('sync:pillar-stats');
-    Artisan::call('sync:token-prices');
-    Artisan::call('sync:bridge-status');
-    Artisan::call('sync:orchestrators');
-
-    Artisan::call('plasma-bot:cancel-expired');
-    Artisan::call('plasma-bot:receive-all');
-
-    // Check the indexer has inserted a momentum in the last 15 minutes
-    $latestMomentum = Momentum::getFrontier();
-    if ($latestMomentum->created_at < now()->subMinutes(15)) {
-        Log::critical('Indexer has stopped running, last momentum:', [
-            'height' => $latestMomentum->height,
-            'date' => $latestMomentum->created_at->format('Y-m-d H:i:s'),
-        ]);
-    }
-})->everyFiveMinutes();
-
 Schedule::call(function () {
 
     $date = now()->subDay()->endOfDay();
@@ -94,4 +67,45 @@ Schedule::call(function () {
 
 Schedule::command('sync:public-nodes')->cron('5 */6 * * *');
 
-Schedule::command('site:generate-sitemap')->daily();
+if (app()->environment('production')) {
+    Schedule::command('indexer:run')
+        ->everyTenSeconds()
+        ->withoutOverlapping(3)
+        ->runInBackground();
+
+    Schedule::call(function () {
+        Artisan::call('sync:pillar-metrics');
+        Artisan::call('sync:pillar-stats');
+        Artisan::call('sync:token-prices');
+        Artisan::call('sync:bridge-status');
+        Artisan::call('sync:orchestrators');
+
+        Artisan::call('plasma-bot:cancel-expired');
+        Artisan::call('plasma-bot:receive-all');
+
+        // Check the indexer has inserted a momentum in the last 15 minutes
+        $latestMomentum = Momentum::getFrontier();
+        if ($latestMomentum->created_at < now()->subMinutes(15)) {
+            Log::critical('Indexer has stopped running, last momentum:', [
+                'height' => $latestMomentum->height,
+                'date' => $latestMomentum->created_at->format('Y-m-d H:i:s'),
+            ]);
+        }
+    })->everyFiveMinutes();
+
+    Schedule::command('site:generate-sitemap')->daily();
+
+} else {
+    Schedule::command('indexer:run')
+        ->everyMinute()
+        ->withoutOverlapping(3)
+        ->runInBackground();
+
+    Schedule::call(function () {
+        Artisan::call('sync:pillar-metrics');
+        Artisan::call('sync:pillar-stats');
+        Artisan::call('sync:token-prices');
+        Artisan::call('sync:bridge-status');
+        Artisan::call('sync:orchestrators');
+    })->hourly();
+}
