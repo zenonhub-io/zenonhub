@@ -20,11 +20,8 @@ class UserRolesSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         Role::create(['name' => 'admin']);
-        Role::create(['name' => 'developer']);
-        Role::create(['name' => 'member']);
-        Role::create(['name' => 'user']);
-
-        Role::create(['name' => 'pro', 'guard_name' => 'api']);
-        Role::create(['name' => 'basic', 'guard_name' => 'api']);
+        Role::create(['name' => 'vip']);
+        Role::create(['name' => 'premium']);
+        Role::create(['name' => 'free']);
     }
 }
