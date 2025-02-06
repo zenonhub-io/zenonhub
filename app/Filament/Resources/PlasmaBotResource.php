@@ -34,20 +34,22 @@ class PlasmaBotResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('account.address')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('amount')->numeric()->sortable(),
-                Tables\Columns\IconColumn::make('should_expire')->sortable()->boolean(),
-                Tables\Columns\TextColumn::make('expires_at')
+                Tables\Columns\TextColumn::make('account.last_active_at')
+                    ->label('Last active')
                     ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('account.last_active_at')
-                    ->label('Last Active')
+                Tables\Columns\TextColumn::make('amount')->numeric()->sortable(),
+                Tables\Columns\IconColumn::make('should_expire')->label('Expirable')->sortable()->boolean(),
+                Tables\Columns\TextColumn::make('expires_at')
+                    ->label('Expires')
                     ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created')
                     ->sortable()
                     ->dateTime(),
             ])
