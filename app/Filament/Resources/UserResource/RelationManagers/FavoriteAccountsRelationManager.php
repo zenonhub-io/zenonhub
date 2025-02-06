@@ -32,7 +32,10 @@ class FavoriteAccountsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('label')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('address')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->sortable()->dateTime(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created')
+                    ->sortable()
+                    ->dateTime(),
             ])
             ->filters([
                 //
