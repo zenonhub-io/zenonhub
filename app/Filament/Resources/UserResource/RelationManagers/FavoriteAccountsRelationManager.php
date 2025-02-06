@@ -30,9 +30,9 @@ class FavoriteAccountsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('label')
             ->columns([
-                Tables\Columns\TextColumn::make('label'),
-                Tables\Columns\TextColumn::make('address'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime(),
+                Tables\Columns\TextColumn::make('label')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('address')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->sortable()->dateTime(),
             ])
             ->filters([
                 //

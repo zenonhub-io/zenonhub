@@ -39,13 +39,21 @@ class TokensRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('abilities')
                     ->label('Abilities')
                     ->colors(['info'])
                     ->badge(),
-                Tables\Columns\TextColumn::make('last_used_at')->dateTime()->since()->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->dateTimeTooltip(),
+                Tables\Columns\TextColumn::make('last_used_at')
+                    ->sortable()
+                    ->dateTime()
+                    ->since()
+                    ->dateTimeTooltip(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->sortable()
+                    ->dateTime()
+                    ->since()
+                    ->dateTimeTooltip(),
             ])
             ->filters([
                 //
