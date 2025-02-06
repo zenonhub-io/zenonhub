@@ -14,15 +14,18 @@ class AuthenticateLoginAttempt
     {
         $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-
-            $user->login_ip = $request->ip();
-            $user->last_login_at = now();
-            $user->save();
-
-            return $user;
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return null;
         }
 
-        return null;
+        if (! $user->registration_ip) {
+            $user->registration_ip = $request->ip();
+        }
+
+        $user->login_ip = $request->ip();
+        $user->last_login_at = now();
+        $user->save();
+
+        return $user;
     }
 }

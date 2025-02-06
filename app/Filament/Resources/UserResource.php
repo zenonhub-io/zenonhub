@@ -15,10 +15,9 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -64,9 +63,8 @@ class UserResource extends Resource
                                     ->revealable()
                                     ->same('password')
                                     ->required(fn (string $context): bool => $context === 'create'),
-
                                 Forms\Components\DateTimePicker::make('two_factor_confirmed_at')
-                                    ->hidden(fn (User $user): bool => $user->two_factor_confirmed_at !== null)
+                                    ->hidden(fn (User $user): bool => $user->two_factor_confirmed_at === null)
                                     ->disabled(),
                             ]),
                         Tabs\Tab::make('Notifications')
@@ -81,12 +79,13 @@ class UserResource extends Resource
                     ->tabs([
 
                         Tabs\Tab::make('Info')
+                            ->columns(2)
                             ->schema([
                                 Forms\Components\Placeholder::make('last_seen_at')
                                     ->label(__('Last seen'))
                                     ->content(fn (User $record): ?string => $record->last_seen_at?->diffForHumans()),
                                 Forms\Components\Placeholder::make('email_verified_at')
-                                    ->label(__('Activated'))
+                                    ->label(__('Verified'))
                                     ->content(fn (User $record): ?string => $record->email_verified_at?->format('d/m/Y h:i A')),
                                 Forms\Components\Placeholder::make('created_at')
                                     ->label(__('Created'))
@@ -94,10 +93,17 @@ class UserResource extends Resource
                                 Forms\Components\Placeholder::make('updated_at')
                                     ->label(__('Updated'))
                                     ->content(fn (User $record): ?string => $record->updated_at?->format('d/m/Y h:i A')),
+                                Forms\Components\Placeholder::make('registration_ip')
+                                    ->label(__('Registration IP'))
+                                    ->content(fn (User $record): ?string => $record->registration_ip),
+                                Forms\Components\Placeholder::make('login_ip')
+                                    ->label(__('Login IP'))
+                                    ->content(fn (User $record): ?string => $record->login_ip),
                             ]),
 
                         Tabs\Tab::make('Actions')
                             ->schema([
+
                                 Forms\Components\Actions::make([
                                     Forms\Components\Actions\Action::make('resend_verification')
                                         ->label(__('Resend verification email'))
@@ -112,6 +118,14 @@ class UserResource extends Resource
                                         ->label(__('Send password reset email'))
                                         ->color('info')
                                         ->action(fn (User $user) => static::doSendPasswordReset($user)),
+                                ])
+                                    ->fullWidth(),
+
+                                Forms\Components\Actions::make([
+                                    Forms\Components\Actions\Action::make('force_logout')
+                                        ->label(__('Force logout'))
+                                        ->color('warning')
+                                        ->action(fn (User $user) => static::doForceLogout($user)),
                                 ])
                                     ->fullWidth(),
 
@@ -139,12 +153,32 @@ class UserResource extends Resource
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->colors(['info'])
                     ->badge(),
-                Tables\Columns\TextColumn::make('last_seen_at')->dateTime()->since()->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime(),
+                Tables\Columns\IconColumn::make('email_verified_at')
+                    ->label('Verified')
+                    ->icon(fn (?string $state): string => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                    ->color(fn (?string $state): string => $state ? 'success' : 'danger'),
+                Tables\Columns\TextColumn::make('last_seen_at')
+                    ->label('Last seen')
+                    ->dateTime()
+                    ->since()
+                    ->dateTimeTooltip(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created')
+                    ->dateTime(),
             ])
             ->filters([
-                Filter::make('email_verified')
-                    ->query(fn (Builder $query): Builder => $query->whereNotNull('email_verified_at')),
+                Tables\Filters\TernaryFilter::make('email_verified_at')
+                    ->label('Email verification')
+                    ->nullable()
+                    ->placeholder('All users')
+                    ->trueLabel('Verified users')
+                    ->falseLabel('Not verified users'),
+                Tables\Filters\TernaryFilter::make('last_seen_at')
+                    ->label('Active users')
+                    ->nullable()
+                    ->placeholder('All users')
+                    ->trueLabel('Active users')
+                    ->falseLabel('Inactive user'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -200,6 +234,18 @@ class UserResource extends Resource
 
         Notification::make()
             ->title(__('2FA has been disabled'))
+            ->success()
+            ->send();
+    }
+
+    public static function doForceLogout(User $user): void
+    {
+        Auth::setUser($user);
+        Auth::logout();
+        Auth::forgetUser();
+
+        Notification::make()
+            ->title(__('User has been logged out'))
             ->success()
             ->send();
     }
