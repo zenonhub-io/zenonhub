@@ -25,6 +25,8 @@ class TokensRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\DateTimePicker::make('expires_at')
+                    ->nullable(),
                 Forms\Components\Select::make('abilities')
                     ->multiple()
                     ->options([
@@ -44,12 +46,20 @@ class TokensRelationManager extends RelationManager
                     ->label('Abilities')
                     ->colors(['info'])
                     ->badge(),
+                Tables\Columns\TextColumn::make('expires_at')
+                    ->label('Expires')
+                    ->sortable()
+                    ->dateTime()
+                    ->since()
+                    ->dateTimeTooltip(),
                 Tables\Columns\TextColumn::make('last_used_at')
+                    ->label('Last used')
                     ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created')
                     ->sortable()
                     ->dateTime()
                     ->since()
