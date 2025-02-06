@@ -32,7 +32,10 @@ class VerifiedAccountsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('nickname')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('address')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('verified_at')->sortable()->dateTime(),
+                Tables\Columns\TextColumn::make('verified_at')
+                    ->label('Created')
+                    ->sortable()
+                    ->dateTime(),
             ])
             ->filters([
                 //
