@@ -30,9 +30,9 @@ class VerifiedAccountsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nickname')
             ->columns([
-                Tables\Columns\TextColumn::make('nickname'),
-                Tables\Columns\TextColumn::make('address'),
-                Tables\Columns\TextColumn::make('verified_at')->dateTime(),
+                Tables\Columns\TextColumn::make('nickname')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('address')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('verified_at')->sortable()->dateTime(),
             ])
             ->filters([
                 //
