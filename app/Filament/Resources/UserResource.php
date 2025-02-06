@@ -85,7 +85,7 @@ class UserResource extends Resource
                                     ->label(__('Last seen'))
                                     ->content(fn (User $record): ?string => $record->last_seen_at?->diffForHumans()),
                                 Forms\Components\Placeholder::make('email_verified_at')
-                                    ->label(__('Activated'))
+                                    ->label(__('Verified'))
                                     ->content(fn (User $record): ?string => $record->email_verified_at?->format('d/m/Y h:i A')),
                                 Forms\Components\Placeholder::make('created_at')
                                     ->label(__('Created'))
@@ -153,10 +153,18 @@ class UserResource extends Resource
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->colors(['info'])
                     ->badge(),
-                Tables\Columns\TextColumn::make('last_seen_at')->dateTime()
+                Tables\Columns\IconColumn::make('email_verified_at')
+                    ->label('Verified')
+                    ->icon(fn (?string $state): string => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                    ->color(fn (?string $state): string => $state ? 'success' : 'danger'),
+                Tables\Columns\TextColumn::make('last_seen_at')
+                    ->label('Last seen')
+                    ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created')
+                    ->dateTime(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('email_verified_at')
