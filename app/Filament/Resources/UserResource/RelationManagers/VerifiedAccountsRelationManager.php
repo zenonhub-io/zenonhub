@@ -7,6 +7,7 @@ namespace App\Filament\Resources\UserResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -17,10 +18,10 @@ class VerifiedAccountsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
+            ->columns(1)
             ->schema([
-                Forms\Components\TextInput::make('nickname')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\TextInput::make('nickname')->required(),
+                Forms\Components\TextInput::make('address')->disabled(),
             ]);
     }
 
@@ -37,8 +38,9 @@ class VerifiedAccountsRelationManager extends RelationManager
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->modalWidth(MaxWidth::Medium),
+                Tables\Actions\DetachAction::make(),
             ]);
     }
 }

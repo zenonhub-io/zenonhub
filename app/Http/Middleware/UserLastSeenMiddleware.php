@@ -16,11 +16,13 @@ class UserLastSeenMiddleware
 {
     public function handle(Request $request, Closure $next): Response|JsonResponse|RedirectResponse
     {
-        if (! Auth::check()) {
+
+        $user = Auth::user();
+
+        if (! $user) {
             return $next($request);
         }
 
-        $user = Auth::user();
         $cacheKey = 'user_last_seen_' . $user->id;
 
         if (Cache::has($cacheKey)) {

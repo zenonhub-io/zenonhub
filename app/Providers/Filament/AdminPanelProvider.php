@@ -31,10 +31,11 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                // 'primary' => Color::Amber,
                 'primary' => Color::hex(config('zenon-hub.colours.zenon-green')),
                 'secondary' => Color::hex(config('zenon-hub.colours.zenon-blue')),
             ])
+            // ->brandLogo(asset("build/svg/logo.svg"))
+            ->favicon(asset('favicon-32x32.png'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
