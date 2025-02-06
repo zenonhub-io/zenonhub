@@ -155,8 +155,9 @@ class UserResource extends Resource
                     ->badge(),
                 Tables\Columns\IconColumn::make('email_verified_at')
                     ->label('Verified')
-                    ->icon(fn (?string $state): string => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
-                    ->color(fn (?string $state): string => $state ? 'success' : 'danger'),
+                    ->getStateUsing(fn (User $record): bool => $record->email_verified_at !== null)
+                    ->icon(fn (bool $state): string => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                 Tables\Columns\TextColumn::make('last_seen_at')
                     ->label('Last seen')
                     ->dateTime()
