@@ -34,7 +34,6 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'registration_ip' => Request::ip(),
-            'privacy_confirmed_at' => now(),
         ]);
     }
 }
