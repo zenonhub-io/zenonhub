@@ -147,24 +147,28 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('username')->searchable(),
+                Tables\Columns\TextColumn::make('username')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('roles.name')->label('Role')
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Role')
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->colors(['info'])
                     ->badge(),
                 Tables\Columns\IconColumn::make('email_verified_at')
                     ->label('Verified')
+                    ->sortable()
                     ->getStateUsing(fn (User $record): bool => $record->email_verified_at !== null)
                     ->icon(fn (bool $state): string => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
                     ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                 Tables\Columns\TextColumn::make('last_seen_at')
                     ->label('Last seen')
+                    ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created')
+                    ->sortable()
                     ->dateTime(),
             ])
             ->filters([
