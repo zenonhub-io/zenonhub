@@ -100,6 +100,6 @@ class TimeChallenge extends Model
 
     public function getEndsAtAttribute(): Carbon
     {
-        now()->addSeconds($this->ends_in * 10);
+        return now()->addSeconds($this->ends_in * 10);
     }
 }
