@@ -64,6 +64,7 @@ class PlasmaBotResource extends Resource
             ->actions([
                 Tables\Actions\Action::make('End')
                     ->hiddenLabel()
+                    ->hidden(fn (PlasmaBotEntry $entry) => $entry->created_at->lessThan(now()->subHours(10)))
                     ->icon('heroicon-o-x-circle')
                     ->iconSize(IconSize::Large)
                     ->color('danger')
