@@ -69,6 +69,34 @@ it('sets a new bridge network', function () {
         ]);
 });
 
+it('restores a deleted network', function () {
+
+    BridgeNetwork::factory()->create([
+        'network_class' => '321',
+        'chain_identifier' => '1',
+        'name' => 'Test',
+        'contract_address' => '0x' . bin2hex(random_bytes(20)),
+        'meta_data' => [
+            'Data' => 'Don\'t trust. Verify. <3',
+        ],
+    ])->delete();
+
+    $accountBlock = createSetNetworkAccountBlock();
+
+    SetNetwork::run($accountBlock);
+
+    $network = BridgeNetwork::first();
+
+    expect(BridgeNetwork::get())->toHaveCount(1)
+        ->and($network->name)->toEqual($accountBlock->data->decoded['name'])
+        ->and($network->network_class)->toEqual($accountBlock->data->decoded['networkClass'])
+        ->and($network->chain_identifier)->toEqual($accountBlock->data->decoded['chainId'])
+        ->and($network->contract_address)->toEqual($accountBlock->data->decoded['contractAddress'])
+        ->and($network->meta_data)->toEqual([
+            'Data' => 'Don\'t trust. Verify. <3',
+        ]);
+});
+
 it('dispatches the network set event', function () {
 
     $accountBlock = createSetNetworkAccountBlock();
