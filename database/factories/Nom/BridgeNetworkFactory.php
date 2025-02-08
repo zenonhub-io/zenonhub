@@ -23,7 +23,7 @@ class BridgeNetworkFactory extends Factory
             'chain_id' => '1',
             'chain_identifier' => '1',
             'network_class' => fake()->randomNumber(4),
-            'name' => fake()->title(),
+            'name' => fake()->word(),
             'contract_address' => '0x' . bin2hex(random_bytes(20)),
             'meta_data' => [],
             'created_at' => now(),

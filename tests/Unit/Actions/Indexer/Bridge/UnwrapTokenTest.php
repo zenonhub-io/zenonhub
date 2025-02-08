@@ -46,7 +46,7 @@ function createUnwrapTokenAccountBlock(array $overrides = []): AccountBlock
             'logIndex' => '74',
             'toAddress' => Account::factory()->create()->address,
             'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
-            'amount' => '485000000',
+            'amount' => '5000000000',
             'signature' => 'QPQwxC20ItxXJySGrR+PJMEvv3YbeOaD5tpSAxMAigdtnTT\/WBx6HlCTxExmmFcVZGtH\/misEDRIQ9QyREVqQQA=',
         ],
     ];
@@ -79,6 +79,70 @@ it('unwraps a token', function () {
         ->and($unwrap->toAccount->address)->toEqual($accountBlock->data->decoded['toAddress'])
         ->and($unwrap->amount)->toEqual($accountBlock->data->decoded['amount'])
         ->and($unwrap->token->token_standard)->toEqual($accountBlock->data->decoded['tokenAddress']);
+});
+
+it('updates total unwrapped and held balances', function () {
+
+    $accountBlockZnn = createUnwrapTokenAccountBlock([
+        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'data' => [
+            'networkClass' => '321',
+            'chainId' => '1',
+            'transactionHash' => bin2hex(random_bytes(32)),
+            'logIndex' => '74',
+            'toAddress' => Account::factory()->create()->address,
+            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
+            'amount' => '5000000000',
+            'signature' => 'QPQwxC20ItxXJySGrR+PJMEvv3YbeOaD5tpSAxMAigdtnTT\/WBx6HlCTxExmmFcVZGtH\/misEDRIQ9QyREVqQQA=',
+        ],
+    ]);
+
+    $accountBlockQsr = createUnwrapTokenAccountBlock([
+        'data' => [
+            'networkClass' => '321',
+            'chainId' => '1',
+            'transactionHash' => bin2hex(random_bytes(32)),
+            'logIndex' => '74',
+            'toAddress' => Account::factory()->create()->address,
+            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->token_standard,
+            'amount' => '5000000000',
+            'signature' => 'QPQwxC20ItxXJySGrR+PJMEvv3YbeOaD5tpSAxMAigdtnTT\/WBx6HlCTxExmmFcVZGtH\/misEDRIQ9QyREVqQQA=',
+        ],
+    ]);
+
+    $bridgeNetwork = BridgeNetwork::factory()->create([
+        'network_class' => '321',
+        'total_znn_wrapped' => '5000000000',
+        'total_znn_held' => '5000000000',
+        'total_qsr_wrapped' => '5000000000',
+        'total_qsr_held' => '5000000000',
+    ]);
+
+    BridgeNetworkToken::factory()->create([
+        'bridge_network_id' => $bridgeNetwork->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_address' => NetworkTokensEnum::ZNN->value,
+        'is_redeemable' => true,
+        'is_bridgeable' => true,
+    ]);
+
+    BridgeNetworkToken::factory()->create([
+        'bridge_network_id' => $bridgeNetwork->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->id,
+        'token_address' => NetworkTokensEnum::QSR->value,
+        'is_redeemable' => true,
+        'is_bridgeable' => true,
+    ]);
+
+    UnwrapToken::run($accountBlockZnn);
+    UnwrapToken::run($accountBlockQsr);
+
+    $bridgeNetwork->refresh();
+
+    expect($bridgeNetwork->total_znn_held)->toEqual(0)
+        ->and($bridgeNetwork->total_znn_unwrapped)->toEqual('5000000000')
+        ->and($bridgeNetwork->total_qsr_held)->toEqual(0)
+        ->and($bridgeNetwork->total_qsr_unwrapped)->toEqual('5000000000');
 });
 
 it('dispatches the token unwrapped event', function () {

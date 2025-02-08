@@ -76,6 +76,47 @@ it('wraps a token', function () {
         ->and($wrap->to_address)->toEqual($accountBlock->data->decoded['toAddress']);
 });
 
+it('updates total wrapped and held balances', function () {
+
+    $accountBlockZnn = createWrapTokenAccountBlock([
+        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'amount' => (string) (50 * NOM_DECIMALS),
+    ]);
+
+    $accountBlockQsr = createWrapTokenAccountBlock([
+        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'amount' => (string) (50 * NOM_DECIMALS),
+    ]);
+
+    $bridgeNetwork = BridgeNetwork::factory()->create([
+        'network_class' => '321',
+    ]);
+
+    BridgeNetworkToken::factory()->create([
+        'bridge_network_id' => $bridgeNetwork->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'is_redeemable' => true,
+        'is_bridgeable' => true,
+    ]);
+
+    BridgeNetworkToken::factory()->create([
+        'bridge_network_id' => $bridgeNetwork->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->id,
+        'is_redeemable' => true,
+        'is_bridgeable' => true,
+    ]);
+
+    WrapToken::run($accountBlockZnn);
+    WrapToken::run($accountBlockQsr);
+
+    $bridgeNetwork->refresh();
+
+    expect($bridgeNetwork->total_znn_held)->toEqual($accountBlockZnn->amount)
+        ->and($bridgeNetwork->total_znn_wrapped)->toEqual($accountBlockZnn->amount)
+        ->and($bridgeNetwork->total_qsr_held)->toEqual($accountBlockQsr->amount)
+        ->and($bridgeNetwork->total_qsr_wrapped)->toEqual($accountBlockQsr->amount);
+});
+
 it('dispatches the token wrapped event', function () {
 
     BridgeNetworkToken::factory()->create([
