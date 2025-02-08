@@ -31,11 +31,17 @@ class SetNetwork extends AbstractContractMethodProcessor
         }
 
         $chain = app('currentChain');
-        $bridgeNetwork = BridgeNetwork::firstOrNew([
+        $attributes = [
             'chain_id' => $chain->id,
             'network_class' => $blockData['networkClass'],
             'chain_identifier' => $blockData['chainId'],
-        ]);
+        ];
+
+        $bridgeNetwork = BridgeNetwork::where($attributes)->withTrashed()->first() ?: new BridgeNetwork($attributes);
+
+        if ($bridgeNetwork->trashed()) {
+            $bridgeNetwork->restore();
+        }
 
         $bridgeNetwork->name = $blockData['name'];
         $bridgeNetwork->contract_address = $blockData['contractAddress'];
