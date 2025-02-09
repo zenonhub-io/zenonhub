@@ -81,7 +81,7 @@ class Delegate extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Invalid pillar');
         }
 
-        if ($pillar->revoked_at !== null && $accountBlock->created_at > $pillar->revoked_at) {
+        if ($pillar->revoked_at && $accountBlock->created_at > $pillar->revoked_at) {
             throw new IndexerActionValidationException('Pillar is revoked');
         }
     }
