@@ -124,8 +124,9 @@ it('ensure only valid pillars can be delegated to', function () {
 
 it('ensure only active pillars can be delegated to', function () {
 
-    Pillar::factory()->revoked()->create([
+    Pillar::factory()->create([
         'name' => 'Test',
+        'revoked_at' => '2020-11-24 12:00:40', // This must be before the genesis date
     ]);
     $accountBlock = createDelegateAccountBlock();
     $account = $accountBlock->account;
