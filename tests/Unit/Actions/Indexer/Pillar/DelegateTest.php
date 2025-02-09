@@ -85,7 +85,28 @@ it('clears any existing delegations', function () {
 
     Delegate::run($accountBlock);
 
-    expect($account->delegations()->wherePivotNull('ended_at')->get())->toHaveCount(1);
+    expect($account->delegations()->wherePivotNull('ended_at')->get())->toHaveCount(1)
+        ->and($account->delegations()->get())->toHaveCount(2);
+});
+
+it('ignores existing delegation to the same pillar', function () {
+
+    $pillar = Pillar::factory()->create([
+        'name' => 'Test',
+    ]);
+
+    $account = Account::factory()->create();
+    $account->delegations()->attach($pillar->id, [
+        'started_at' => now()->subDays(2),
+    ]);
+
+    $accountBlock = createDelegateAccountBlock([
+        'account' => $account,
+    ]);
+
+    Delegate::run($accountBlock);
+
+    expect($account->delegations()->get())->toHaveCount(1);
 });
 
 it('dispatches the account delegated event', function () {
