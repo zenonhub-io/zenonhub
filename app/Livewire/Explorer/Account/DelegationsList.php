@@ -6,6 +6,7 @@ namespace App\Livewire\Explorer\Account;
 
 use App\Livewire\BaseTable;
 use App\Models\Nom\Account;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
@@ -24,6 +25,7 @@ class DelegationsList extends BaseTable
     public function builder(): Builder
     {
         return Account::find($this->accountId)?->delegations()
+            ->withPivot('started_at', 'ended_at', 'duration')
             ->select(
                 'nom_pillars.*',
                 'nom_delegations.started_at as delegation_started_at',
@@ -58,6 +60,18 @@ class DelegationsList extends BaseTable
                 )
                 ->label(
                     fn ($row, Column $column) => $row->delegation_ended_at ? view('components.tables.columns.date', ['date' => $row->delegation_ended_at]) : null
+                ),
+            Column::make('Duration')
+                ->sortable(
+                    fn (Builder $query, string $direction) => $query->orderBy('nom_delegations.ended_at', $direction)
+                )
+                ->label(
+                    function ($row, Column $column): string {
+                        $endDate = $row->delegation_ended_at ?: now();
+                        $duration = Carbon::parse($endDate)->timestamp - Carbon::parse($row->delegation_started_at)->timestamp;
+
+                        return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
+                    }
                 ),
         ];
     }
