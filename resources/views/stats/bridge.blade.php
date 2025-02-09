@@ -36,9 +36,11 @@
                 @endif
             </x-alerts.alert>
             @foreach($status->getTimeChallenges() as $challenge)
-                <x-alerts.alert type="warning" class="mb-6 rounded-4">
-                    <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
-                </x-alerts.alert>
+                @if ($challenge->ends_in > 0)
+                    <x-alerts.alert type="warning" class="mb-6 rounded-4">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
+                    </x-alerts.alert>
+                @endif
             @endforeach
             <div class="row mb-6 gy-6">
                 <div class="col-24 col-md-8">
@@ -83,12 +85,13 @@
 
     @if ($tab === 'security')
         <div class="container-fluid px-3 px-md-6">
-
             @if ($status->getTimeChallenges()->count())
                 @foreach($status->getTimeChallenges() as $challenge)
-                    <x-alerts.alert type="warning" class="mb-6 rounded-4">
-                        <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
-                    </x-alerts.alert>
+                    @if ($challenge->ends_in > 0)
+                        <x-alerts.alert type="warning" class="mb-6 rounded-4">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i> A time challenge is in place for {{ $challenge->contractMethod->contract->name }}.{{ $challenge->contractMethod->name }}. The challenge will expire in {{  number_format($challenge->ends_in) }} momentums, {{ $challenge->ends_at->diffForHumans() }}
+                        </x-alerts.alert>
+                    @endif
                 @endforeach
             @else
                 <x-alerts.alert type="info" class="mb-6 rounded-4">
