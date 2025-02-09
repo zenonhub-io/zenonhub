@@ -16,8 +16,6 @@ export default class Core {
     }
 
     initListeners() {
-        console.log('initListeners');
-
         document.addEventListener('livewire:navigating', () => {
             this.destroyPageControls();
         })
@@ -28,8 +26,6 @@ export default class Core {
     }
 
     attachEvents() {
-        console.log('attacheEvents');
-
         Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
             succeed(({ snapshot, effect }) => {
                 this.destroyPageControls();
