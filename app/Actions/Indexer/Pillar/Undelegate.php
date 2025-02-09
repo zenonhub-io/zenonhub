@@ -8,11 +8,9 @@ use App\Actions\Indexer\AbstractContractMethodProcessor;
 use App\Events\Indexer\Pillar\AccountUndelegated;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
-use App\Models\Nom\Pillar;
-use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class Undelegate extends AbstractContractMethodProcessor
 {
@@ -21,13 +19,13 @@ class Undelegate extends AbstractContractMethodProcessor
         $accountBlock->load('account');
         $blockData = $accountBlock->data->decoded;
 
-        $delegation = $accountBlock->account
+        $delegations = $accountBlock->account
             ->delegations()
             ->wherePivotNull('ended_at')
-            ->first();
+            ->get();
 
         try {
-            $this->validateAction($accountBlock, $delegation);
+            $this->validateAction($accountBlock, $delegations);
         } catch (IndexerActionValidationException $e) {
             Log::error('Contract Method Processor - Pillar: Undelegate failed', [
                 'accountBlock' => $accountBlock->hash,
@@ -38,21 +36,24 @@ class Undelegate extends AbstractContractMethodProcessor
             return;
         }
 
-        Cache::forget($delegation->cacheKey('pillar-rank', 'updated_at'));
+        $delegations->each(function ($delegation) use ($accountBlock) {
 
-        $accountBlock->account
-            ->delegations()
-            ->updateExistingPivot($delegation->id, [
-                'ended_at' => $accountBlock->created_at,
-            ]);
+            Cache::forget($delegation->cacheKey('pillar-rank', 'updated_at'));
 
-        AccountUndelegated::dispatch($accountBlock, $accountBlock->account, $delegation);
+            $accountBlock->account
+                ->delegations()
+                ->updateExistingPivot($delegation->id, [
+                    'ended_at' => $accountBlock->created_at,
+                ]);
+
+            AccountUndelegated::dispatch($accountBlock, $accountBlock->account, $delegation);
+
+        });
 
         Log::info('Contract Method Processor - Pillar: Undelegate complete', [
             'accountBlock' => $accountBlock->hash,
             'blockData' => $blockData,
             'account' => $accountBlock->account->address,
-            'pillar' => $delegation->name,
         ]);
 
         $this->setBlockAsProcessed($accountBlock);
@@ -65,26 +66,12 @@ class Undelegate extends AbstractContractMethodProcessor
     {
         /**
          * @var AccountBlock $accountBlock
-         * @var Pillar $delegation
+         * @var Collection $delegations
          */
-        [$accountBlock, $delegation] = func_get_args();
+        [$accountBlock, $delegations] = func_get_args();
 
-        if (! $delegation) {
-            throw new IndexerActionValidationException('Delegating pillar not found');
+        if (! $delegations->count()) {
+            throw new IndexerActionValidationException('No delegation found');
         }
-    }
-
-    private function notifyUsers($pillar): void
-    {
-        $subscribedUsers = User::whereHas('notification_types', fn ($query) => $query->where('code', 'pillar-delegator-lost'))
-            ->whereHas('nom_accounts', function ($query) use ($pillar) {
-                $query->whereHas('pillars', fn ($query) => $query->where('id', $pillar->id));
-            })
-            ->get();
-
-        Notification::send(
-            $subscribedUsers,
-            new \App\Notifications\Nom\Pillar\LostDelegator($pillar, $accountBlock->account)
-        );
     }
 }
