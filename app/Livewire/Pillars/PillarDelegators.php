@@ -6,6 +6,7 @@ namespace App\Livewire\Pillars;
 
 use App\Livewire\BaseTable;
 use App\Models\Nom\Pillar;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Rappasoft\LaravelLivewireTables\Views\Column;
@@ -29,6 +30,7 @@ class PillarDelegators extends BaseTable
             ->select(
                 'nom_accounts.*',
                 'nom_delegations.started_at as delegation_started_at',
+                'nom_delegations.ended_at as delegation_ended_at',
                 DB::raw('CAST(znn_balance AS SIGNED) as formatted_znn_balance')
             )
             ->getQuery();
@@ -68,6 +70,17 @@ class PillarDelegators extends BaseTable
                 )
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->delegation_started_at])
+                ),
+            Column::make('Duration')
+                ->sortable(
+                    fn (Builder $query, string $direction) => $query->orderBy('nom_delegations.ended_at', $direction)
+                )
+                ->label(
+                    function ($row, Column $column): string {
+                        $duration = now()->timestamp - Carbon::parse($row->delegation_started_at)->timestamp;
+
+                        return now()->subSeconds($duration)->diffForHumans(['parts' => 2], true);
+                    }
                 ),
         ];
     }

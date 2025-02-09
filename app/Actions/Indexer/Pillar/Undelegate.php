@@ -42,6 +42,7 @@ class Undelegate extends AbstractContractMethodProcessor
 
             $accountBlock->account
                 ->delegations()
+                ->wherePivotNull('ended_at')
                 ->updateExistingPivot($delegation->id, [
                     'ended_at' => $accountBlock->created_at,
                 ]);
