@@ -34,6 +34,19 @@ class Delegate extends AbstractContractMethodProcessor
             return;
         }
 
+        // End any existing delegations
+        $accountBlock->account
+            ->delegations()
+            ->wherePivotNull('ended_at')
+            ->pluck('id')
+            ->each(function ($id) use ($accountBlock) {
+                $accountBlock->account
+                    ->delegations()
+                    ->updateExistingPivot($id, [
+                        'ended_at' => $accountBlock->created_at,
+                    ]);
+            });
+
         Cache::forget($pillar->cacheKey('pillar-rank', 'updated_at'));
 
         $accountBlock->account->delegations()->attach($pillar->id, [

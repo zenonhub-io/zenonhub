@@ -47,7 +47,7 @@ function createUndelegateAccountBlock(array $overrides = []): AccountBlock
     return MockAccountBlockFactory::create($accountBlockDTO);
 }
 
-it('undelegates to a pillar', function () {
+it('undelegates to a active pillar', function () {
 
     $pillar = Pillar::factory()->create();
     $accountBlock = createUndelegateAccountBlock();
@@ -61,6 +61,42 @@ it('undelegates to a pillar', function () {
 
     expect($pillar->delegators()->wherePivotNotNull('ended_at')->get())->toHaveCount(1)
         ->and($account->delegations()->wherePivotNotNull('ended_at')->get())->toHaveCount(1);
+});
+
+it('undelegates to a revoked pillar', function () {
+
+    $pillar = Pillar::factory()->revoked()->create();
+    $accountBlock = createUndelegateAccountBlock();
+    $account = $accountBlock->account;
+
+    $account->delegations()->attach($pillar->id, [
+        'started_at' => $accountBlock->created_at,
+    ]);
+
+    Undelegate::run($accountBlock);
+
+    expect($pillar->delegators()->wherePivotNotNull('ended_at')->get())->toHaveCount(1)
+        ->and($account->delegations()->wherePivotNotNull('ended_at')->get())->toHaveCount(1);
+});
+
+it('ends all active delegations', function () {
+
+    $pillar = Pillar::factory()->revoked()->create();
+    $accountBlock = createUndelegateAccountBlock();
+    $account = $accountBlock->account;
+
+    $account->delegations()->attach($pillar->id, [
+        'started_at' => now()->subDays(2),
+    ]);
+
+    $account->delegations()->attach($pillar->id, [
+        'started_at' => $accountBlock->created_at,
+    ]);
+
+    Undelegate::run($accountBlock);
+
+    expect($pillar->delegators()->wherePivotNotNull('ended_at')->get())->toHaveCount(2)
+        ->and($account->delegations()->wherePivotNotNull('ended_at')->get())->toHaveCount(2);
 });
 
 it('dispatches the account delegated event', function () {
@@ -94,7 +130,7 @@ it('ensure only active delegations can be undelegated', function () {
     Log::shouldReceive('error')
         ->with(
             'Contract Method Processor - Pillar: Undelegate failed',
-            Mockery::on(fn ($data) => $data['error'] === 'Delegating pillar not found')
+            Mockery::on(fn ($data) => $data['error'] === 'No delegation found')
         )
         ->once();
 

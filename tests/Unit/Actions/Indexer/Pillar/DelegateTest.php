@@ -68,6 +68,26 @@ it('delegates to a pillar', function () {
         ->and($account->delegations()->first()->id)->toEqual($pillar->id);
 });
 
+it('clears any existing delegations', function () {
+
+    Pillar::factory()->create([
+        'name' => 'Test',
+    ]);
+
+    $account = Account::factory()->create();
+    $account->delegations()->attach(Pillar::factory()->create()->id, [
+        'started_at' => now()->subDays(2),
+    ]);
+
+    $accountBlock = createDelegateAccountBlock([
+        'account' => $account,
+    ]);
+
+    Delegate::run($accountBlock);
+
+    expect($account->delegations()->wherePivotNull('ended_at')->get())->toHaveCount(1);
+});
+
 it('dispatches the account delegated event', function () {
 
     Pillar::factory()->create([
