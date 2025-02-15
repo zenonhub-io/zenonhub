@@ -50,6 +50,11 @@ class PlasmaList extends BaseTable
     {
         return [
             Column::make('ID', 'id')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
+                        $query->where('hash', $searchTerm);
+                    })
+                )
                 ->hideIf(true),
             Column::make('From', 'from_account_id')
                 ->label(

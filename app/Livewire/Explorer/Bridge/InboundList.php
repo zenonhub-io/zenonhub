@@ -52,6 +52,11 @@ class InboundList extends BaseTable
     {
         return [
             Column::make('ID', 'id')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
+                        $query->where('from_address', $searchTerm);
+                    })
+                )
                 ->hideIf(true),
             Column::make('Network')
                 ->label(
@@ -59,7 +64,6 @@ class InboundList extends BaseTable
                 ),
             Column::make('From')
                 ->label(
-
                     function ($row, Column $column) {
                         if (! $row->from_address) {
                             return __('Unknown');
@@ -72,7 +76,6 @@ class InboundList extends BaseTable
                             'navigate' => false,
                             'newTab' => true,
                         ]);
-
                     }
                 ),
             Column::make('')

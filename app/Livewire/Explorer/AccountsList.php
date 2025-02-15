@@ -62,6 +62,12 @@ class AccountsList extends BaseTable
 
         return [
             Column::make('ID', 'id')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
+                        $query->where('name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('address', $searchTerm);
+                    })
+                )
                 ->hideIf(true),
             Column::make('Address')
                 ->label(
@@ -69,11 +75,6 @@ class AccountsList extends BaseTable
                         'row' => $row,
                         'alwaysShort' => true,
                     ])
-                )->searchable(
-                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
-                        $query->where('name', 'like', '%' . $searchTerm . '%')
-                            ->orWhere('address', $searchTerm);
-                    })
                 ),
             Column::make('Height')
                 ->label(
