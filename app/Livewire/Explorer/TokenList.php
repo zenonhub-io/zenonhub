@@ -45,9 +45,15 @@ class TokenList extends BaseTable
     {
         return [
             Column::make('ID', 'id')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
+                        $query->where('name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('symbol', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('token_standard', $searchTerm);
+                    })
+                )
                 ->hideIf(true),
             Column::make('Name')
-                ->searchable()
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('name', $direction)
                 )
@@ -72,7 +78,6 @@ class TokenList extends BaseTable
                     fn ($row, Column $column) => $row->getFormattedAmount($row->total_supply)
                 ),
             Column::make('Token Standard')
-                ->searchable()
                 ->label(
                     fn ($row, Column $column) => $row->token_standard
                 ),

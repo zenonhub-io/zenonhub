@@ -38,9 +38,14 @@ class MomentumsList extends BaseTable
     {
         return [
             Column::make('ID', 'id')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
+                        $query->where('height', $searchTerm)
+                            ->orWhere('hash', $searchTerm);
+                    })
+                )
                 ->hideIf(true),
             Column::make('Height', 'height')
-                ->searchable()
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('height', $direction)
                 )
@@ -48,7 +53,6 @@ class MomentumsList extends BaseTable
                     fn ($row, Column $column) => $row->display_height
                 ),
             Column::make('Hash', 'hash')
-                ->searchable()
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
