@@ -25,6 +25,7 @@ class StakesList extends BaseTable
     public function builder(): Builder
     {
         return Account::find($this->accountId)?->stakes()
+            ->with(['token'])
             ->select('*')
             ->getQuery();
     }
@@ -38,7 +39,7 @@ class StakesList extends BaseTable
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
                 )
                 ->label(
-                    fn ($row, Column $column) => app('znnToken')->getFormattedAmount($row->amount) . ' ZNN'
+                    fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount) . ' ' . $row->token->symbol
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(
@@ -89,6 +90,19 @@ class StakesList extends BaseTable
                         $builder->whereNull('ended_at');
                     } elseif ($value === 'inactive') {
                         $builder->whereNotNull('ended_at');
+                    }
+                }),
+            SelectFilter::make('Token')
+                ->options([
+                    '' => 'All',
+                    'znn' => 'ZNN',
+                    'znnethlp' => 'ZNN-ETH-LP',
+                ])
+                ->filter(function (Builder $builder, string $value) {
+                    if ($value === 'znn') {
+                        $builder->where('token_id', app('znnToken')->id);
+                    } elseif ($value === 'znnethlp') {
+                        $builder->where('token_id', app('znnEthLpToken')->id);
                     }
                 }),
         ];
