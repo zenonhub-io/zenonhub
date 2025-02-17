@@ -218,6 +218,9 @@ class UserResource extends Resource
         ];
     }
 
+    //
+    // Action Helpers
+
     public static function doResendEmailVerification(User $user): void
     {
         $user->sendEmailVerificationNotification();

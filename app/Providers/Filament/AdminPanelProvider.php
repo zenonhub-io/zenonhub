@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\SiteLink;
+use App\Filament\Widgets\UsersOverview;
 use App\Http\Middleware\InjectLivewire;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -31,6 +33,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
+                'blue' => Color::Blue,
+                'yellow' => Color::Yellow,
+                'green' => Color::Green,
                 'primary' => Color::hex(config('zenon-hub.colours.zenon-green')),
                 'secondary' => Color::hex(config('zenon-hub.colours.zenon-blue')),
             ])
@@ -44,7 +49,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                SiteLink::class,
+                UsersOverview::class,
+
             ])
             ->middleware([
                 EncryptCookies::class,
