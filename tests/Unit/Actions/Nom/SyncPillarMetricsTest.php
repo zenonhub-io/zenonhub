@@ -6,8 +6,9 @@ use App\Actions\Sync\PillarMetrics;
 use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Nom\Pillar;
 use App\Services\ZenonSdk\ZenonSdk;
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
 
@@ -15,10 +16,11 @@ uses()->group('nom', 'nom-actions', 'sync-pillar-metrics');
 
 beforeEach(function () {
 
-    $this->seed(NomSeeder::class);
+    $this->seed(DatabaseSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
 
-    $pillarJson = Storage::json('nom-json/test/pillars.json');
+    $pillarJson = Storage::json('json/test/pillars.json');
     $this->pillarDTOs = PillarDTO::collect($pillarJson, Collection::class);
 
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {

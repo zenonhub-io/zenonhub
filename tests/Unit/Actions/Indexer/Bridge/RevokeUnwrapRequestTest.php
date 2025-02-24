@@ -14,7 +14,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeUnwrap;
 use App\Models\Nom\ContractMethod;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +23,7 @@ uses()->group('indexer', 'indexer-actions', 'bridge-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 

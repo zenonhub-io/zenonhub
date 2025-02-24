@@ -40,7 +40,7 @@ class ApiPlayground extends Component
     public function mount(): void
     {
         $this->extraFields = new HoneypotData;
-        $this->availableRequests = Storage::json('nom-json/api-playground.json');
+        $this->availableRequests = Storage::json('json/api-playground.json');
         $this->getRequestInputs();
     }
 

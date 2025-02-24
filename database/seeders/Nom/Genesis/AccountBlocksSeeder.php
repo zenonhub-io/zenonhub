@@ -22,12 +22,12 @@ class AccountBlocksSeeder extends Seeder
         AccountBlockData::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $chainId = app('currentChain')->id;
-        $accountBlocks = Storage::json('nom-json/genesis/account-blocks.json');
+        $chain = app('currentChain');
+        $accountBlocks = Storage::json('json/nom/genesis-account-blocks.json');
 
-        collect($accountBlocks)->each(function ($accountBlock) use ($chainId) {
+        collect($accountBlocks)->each(function ($accountBlock) use ($chain) {
             AccountBlock::insert([
-                'chain_id' => $chainId,
+                'chain_id' => $chain->id,
                 'account_id' => load_account($accountBlock['account'])->id,
                 'to_account_id' => load_account($accountBlock['to_account'])->id,
                 'momentum_id' => 1,
@@ -35,7 +35,7 @@ class AccountBlocksSeeder extends Seeder
                 'height' => 1,
                 'nonce' => '0000000000000000',
                 'hash' => $accountBlock['hash'],
-                'created_at' => '2021-11-24 12:00:00',
+                'created_at' => $chain->created_at->format('Y-m-d H:i:s'),
             ]);
         });
     }

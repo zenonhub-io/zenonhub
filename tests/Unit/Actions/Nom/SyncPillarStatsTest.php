@@ -5,13 +5,15 @@ declare(strict_types=1);
 use App\Actions\Sync\PillarStats;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\PillarStatHistory;
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 
 uses()->group('nom', 'nom-actions', 'sync-pillar-stats');
 
 beforeEach(function () {
-    $this->seed(NomSeeder::class);
+    $this->seed(DatabaseSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
 });
 

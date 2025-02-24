@@ -27,6 +27,10 @@ return [
     'momentumsPerEpoch' => NOM_MOMENTUMS_PER_EPOCH,
     'rewardTimeLimit' => 3600,
 
+    // ZTS
+    'znn_zts' => env('ZTS_ZNN', 'zts1znnxxxxxxxxxxxxx9z4ulx'),
+    'qsr_zts' => env('ZTS_QSR', 'zts1qsrxxxxxxxxxxxxxmrhjll'),
+
     // Accelerator
     'accelerator' => [
         'projectNameLengthMax' => 30,

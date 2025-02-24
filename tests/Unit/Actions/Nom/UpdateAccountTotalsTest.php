@@ -9,14 +9,14 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Plasma;
 use App\Models\Nom\Stake;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 
 uses()->group('nom', 'nom-actions', 'update-account-totals');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 

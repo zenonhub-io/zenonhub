@@ -12,14 +12,14 @@ use App\Models\Nom\Pillar;
 use App\Models\Nom\Token;
 use App\Models\Nom\TokenMint;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 
 uses()->group('nom', 'nom-actions', 'process-block-rewards');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 

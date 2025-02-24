@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use Database\Seeders\Nom\Test\AccountBlocksSeeder;
-use Database\Seeders\Nom\Test\MomentumsSeeder;
-use Database\Seeders\Nom\Test\PillarsSeeder;
+use Database\Seeders\Test\AccountBlocksSeeder;
+use Database\Seeders\Test\MomentumsSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 use Illuminate\Database\Seeder;
 
 class TestGenesisSeeder extends Seeder

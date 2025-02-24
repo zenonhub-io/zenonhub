@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom\Test;
+namespace Database\Seeders\Test;
 
 use App\DataTransferObjects\Nom\MomentumDTO;
 use App\Models\Nom\Momentum;
@@ -22,7 +22,7 @@ class MomentumsSeeder extends Seeder
         Momentum::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $momentumJson = Storage::json('nom-json/test/momentums.json');
+        $momentumJson = Storage::json('json/test/momentums.json');
         $momentumDTOs = MomentumDTO::collect($momentumJson, Collection::class);
 
         $momentumDTOs->each(function ($momentumDTO) {

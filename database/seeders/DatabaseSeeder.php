@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use Database\Seeders\Site\ChainsSeeder;
+use Database\Seeders\Site\CurrenciesSeeder;
 use Database\Seeders\Site\NotificationTypesSeeder;
 use Database\Seeders\Site\UserRolesSeeder;
 use Illuminate\Database\Seeder;
@@ -18,6 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             NotificationTypesSeeder::class,
             UserRolesSeeder::class,
+            CurrenciesSeeder::class,
+            ChainsSeeder::class,
         ]);
     }
 }

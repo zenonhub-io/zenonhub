@@ -11,8 +11,8 @@ use App\Models\Nom\Momentum;
 use App\Services\Indexer;
 use App\Services\ZenonSdk\ZenonSdk;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Mockery\MockInterface;
@@ -21,12 +21,12 @@ uses()->group('indexer', 'indexer-services', 'indexer');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
 
     // setup the mock to return predefined Json for specific calls
-    $momentumsJson = Storage::json('nom-json/test/momentums.json');
-    $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
+    $momentumsJson = Storage::json('json/test/momentums.json');
+    $accountBlocksJson = Storage::json('json/test/transactions.json');
     $this->momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
     $this->accountBlockDTOs = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
 

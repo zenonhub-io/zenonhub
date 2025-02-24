@@ -31,6 +31,7 @@ class Chain extends Model
         'chain_identifier',
         'version',
         'name',
+        'code',
         'is_active',
         'created_at',
     ];
@@ -45,11 +46,6 @@ class Chain extends Model
         return [
             'created_at' => 'datetime',
         ];
-    }
-
-    public static function getCurrentChainId(): Chain
-    {
-        return self::first();
     }
 
     //

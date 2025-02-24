@@ -6,8 +6,8 @@ use App\Actions\Sync\Orchestrators;
 use App\Models\Nom\Orchestrator;
 use App\Models\Nom\Pillar;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 use Illuminate\Support\Facades\Http;
 
 uses()->group('nom', 'nom-actions', 'sync-orchestrators');
@@ -15,7 +15,7 @@ uses()->group('nom', 'nom-actions', 'sync-orchestrators');
 beforeEach(function () {
 
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
 
     Http::fake([

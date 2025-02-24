@@ -18,7 +18,7 @@ use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Pillar;
 use App\Models\Nom\Vote;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +27,7 @@ uses()->group('indexer', 'indexer-actions', 'accelerator-actions', 'accelerator-
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 

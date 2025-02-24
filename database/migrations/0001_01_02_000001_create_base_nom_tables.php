@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('chain_identifier');
             $table->integer('version');
             $table->string('name');
+            $table->string('code');
             $table->boolean('is_active');
             $table->timestamp('created_at')->index();
         });
