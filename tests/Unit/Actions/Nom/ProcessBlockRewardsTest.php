@@ -27,7 +27,7 @@ beforeEach(function () {
 // it('doesnt process blocks to the liquidity contract', function () {
 //
 //    $mint = TokenMint::factory()->create([
-//        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+//        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
 //        'issuer_id' => Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->id,
 //        'receiver_id' => Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value)->id,
 //        'amount' => 50 * config('nom.decimals'),
@@ -43,7 +43,7 @@ beforeEach(function () {
 it('correctly assigns reward data', function () {
 
     $mint = TokenMint::factory()->create([
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'issuer_id' => Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->id,
         'receiver_id' => Account::factory()->create(),
         'amount' => 50 * config('nom.decimals'),
@@ -56,14 +56,14 @@ it('correctly assigns reward data', function () {
         ->and($reward->chain_id)->toBe($mint->chain_id)
         ->and($reward->account_block_id)->toBe($mint->account_block_id)
         ->and($reward->account_id)->toBe($mint->receiver_id)
-        ->and($reward->token->token_standard)->toBe(NetworkTokensEnum::ZNN->value)
+        ->and($reward->token->token_standard)->toBe(NetworkTokensEnum::ZNN->zts())
         ->and($reward->created_at->timestamp)->toBe($mint->created_at->timestamp);
 });
 
 it('correctly assigns reward token', function () {
 
     $mint = TokenMint::factory()->create([
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->zts())->id,
         'issuer_id' => Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->id,
         'receiver_id' => Account::factory()->create(),
         'amount' => 50 * config('nom.decimals'),
@@ -73,13 +73,13 @@ it('correctly assigns reward token', function () {
 
     $reward = AccountReward::with('token')->first();
     expect(AccountReward::get())->toHaveCount(1)
-        ->and($reward->token->token_standard)->toBe(NetworkTokensEnum::QSR->value);
+        ->and($reward->token->token_standard)->toBe(NetworkTokensEnum::QSR->zts());
 });
 
 it('correctly assigns delegate rewards', function () {
 
     $mint = TokenMint::factory()->create([
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'issuer_id' => Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->id,
         'receiver_id' => Account::factory()->create(),
         'amount' => 50 * config('nom.decimals'),
@@ -100,7 +100,7 @@ it('correctly assigns pillar rewards', function () {
     ]);
 
     $mint = TokenMint::factory()->create([
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'issuer_id' => Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->id,
         'receiver_id' => $rewardReceiver,
         'amount' => 50 * config('nom.decimals'),
@@ -131,7 +131,7 @@ it('correctly assigns sentinel rewards', function () {
 it('correctly assigns stake rewards', function () {
 
     $mint = TokenMint::factory()->create([
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'issuer_id' => Account::firstWhere('address', EmbeddedContractsEnum::STAKE->value)->id,
         'receiver_id' => Account::factory()->create(),
         'amount' => 50 * config('nom.decimals'),

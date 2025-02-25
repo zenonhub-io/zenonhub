@@ -32,7 +32,7 @@ function createSentinelRevokeAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::SENTINEL->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Sentinel', 'Revoke'),
     ];

@@ -33,12 +33,12 @@ function createMintAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::TOKEN->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (0 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Token', 'Mint'),
         'data' => [
-            'tokenStandard' => NetworkTokensEnum::ZNN->value,
+            'tokenStandard' => NetworkTokensEnum::ZNN->zts(),
             'amount' => (string) (5 * NOM_DECIMALS),
             'receiveAddress' => Account::factory()->create()->address,
         ],
@@ -166,7 +166,7 @@ it('doesnt pass validation minting more than tne max supply', function () {
 
 it('doesnt pass validation minting network token from non-embedded contract', function () {
 
-    $znn = load_token(NetworkTokensEnum::ZNN->value);
+    $znn = load_token(NetworkTokensEnum::ZNN->zts());
     $accountBlock = createMintAccountBlock([
         'data' => [
             'tokenStandard' => $znn->token_standard,

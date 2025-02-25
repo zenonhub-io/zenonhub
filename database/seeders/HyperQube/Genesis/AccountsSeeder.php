@@ -23,8 +23,8 @@ class AccountsSeeder extends Seeder
                 'chain_id' => $chain->id,
                 'address' => $accountData['Address'],
             ], [
-                'genesis_znn_balance' => $accountData['BalanceList']['zts1znnxxxxxxxxxxxxx9z4ulx'] ?? 0,
-                'genesis_qsr_balance' => $accountData['BalanceList']['zts1qsrxxxxxxxxxxxxxmrhjll'] ?? 0,
+                'genesis_znn_balance' => $accountData['BalanceList']['zts1utylzxxxxxxxxxxx6agxt0'] ?? 0,
+                'genesis_qsr_balance' => $accountData['BalanceList']['zts1utylqxxxxxxxxxxxdzq2gc'] ?? 0,
             ]);
         });
     }

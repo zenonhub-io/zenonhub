@@ -86,7 +86,7 @@ class Mint extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Attempt to mint more than max supply');
         }
 
-        $networkMintableTokens = [NetworkTokensEnum::ZNN->value, NetworkTokensEnum::QSR->value];
+        $networkMintableTokens = [NetworkTokensEnum::ZNN->zts(), NetworkTokensEnum::QSR->zts()];
 
         if (in_array($token->token_standard, $networkMintableTokens, true)) {
             if (! $accountBlock->account->is_embedded_contract) {

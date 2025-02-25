@@ -35,7 +35,7 @@ function createUnwrapTokenAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::BRIDGE->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (1 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Bridge', 'UnwrapToken'),
@@ -45,7 +45,7 @@ function createUnwrapTokenAccountBlock(array $overrides = []): AccountBlock
             'transactionHash' => bin2hex(random_bytes(32)),
             'logIndex' => '74',
             'toAddress' => Account::factory()->create()->address,
-            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
+            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->token_standard,
             'amount' => '5000000000',
             'signature' => 'QPQwxC20ItxXJySGrR+PJMEvv3YbeOaD5tpSAxMAigdtnTT\/WBx6HlCTxExmmFcVZGtH\/misEDRIQ9QyREVqQQA=',
         ],
@@ -63,8 +63,8 @@ it('unwraps a token', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
-        'token_address' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
+        'token_address' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->token_standard,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -84,14 +84,14 @@ it('unwraps a token', function () {
 it('updates total unwrapped and held balances', function () {
 
     $accountBlockZnn = createUnwrapTokenAccountBlock([
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'data' => [
             'networkClass' => '321',
             'chainId' => '1',
             'transactionHash' => bin2hex(random_bytes(32)),
             'logIndex' => '74',
             'toAddress' => Account::factory()->create()->address,
-            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
+            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->token_standard,
             'amount' => '5000000000',
             'signature' => 'QPQwxC20ItxXJySGrR+PJMEvv3YbeOaD5tpSAxMAigdtnTT\/WBx6HlCTxExmmFcVZGtH\/misEDRIQ9QyREVqQQA=',
         ],
@@ -104,7 +104,7 @@ it('updates total unwrapped and held balances', function () {
             'transactionHash' => bin2hex(random_bytes(32)),
             'logIndex' => '74',
             'toAddress' => Account::factory()->create()->address,
-            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->token_standard,
+            'tokenAddress' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->zts())->token_standard,
             'amount' => '5000000000',
             'signature' => 'QPQwxC20ItxXJySGrR+PJMEvv3YbeOaD5tpSAxMAigdtnTT\/WBx6HlCTxExmmFcVZGtH\/misEDRIQ9QyREVqQQA=',
         ],
@@ -120,16 +120,16 @@ it('updates total unwrapped and held balances', function () {
 
     BridgeNetworkToken::factory()->create([
         'bridge_network_id' => $bridgeNetwork->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
-        'token_address' => NetworkTokensEnum::ZNN->value,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
+        'token_address' => NetworkTokensEnum::ZNN->zts(),
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
 
     BridgeNetworkToken::factory()->create([
         'bridge_network_id' => $bridgeNetwork->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->id,
-        'token_address' => NetworkTokensEnum::QSR->value,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->zts())->id,
+        'token_address' => NetworkTokensEnum::QSR->zts(),
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -151,8 +151,8 @@ it('dispatches the token unwrapped event', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
-        'token_address' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
+        'token_address' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->token_standard,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -222,8 +222,8 @@ it('ensures only redeemable tokens can be unwrapped', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
-        'token_address' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->token_standard,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
+        'token_address' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->token_standard,
         'is_redeemable' => false,
         'is_bridgeable' => true,
     ]);

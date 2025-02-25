@@ -62,7 +62,7 @@ class Fuse extends AbstractContractMethodProcessor
          */
         [$accountBlock] = func_get_args();
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::QSR->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::QSR->zts()) {
             throw new IndexerActionValidationException('Invalid token, must be QSR');
         }
 

@@ -32,7 +32,7 @@ function createStakeAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::STAKE->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (100 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Stake', 'Stake'),
@@ -77,7 +77,7 @@ it('dispatches the start stake event', function () {
 it('doesnt pass validation with invalid token', function () {
 
     $accountBlock = createStakeAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'token' => load_token(NetworkTokensEnum::QSR->zts()),
     ]);
 
     Event::fake();

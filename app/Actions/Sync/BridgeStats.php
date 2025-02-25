@@ -28,8 +28,8 @@ class BridgeStats
     {
         $networks = BridgeNetwork::get();
         $tokens = Token::whereIn('token_standard', [
-            NetworkTokensEnum::ZNN->value,
-            NetworkTokensEnum::QSR->value,
+            NetworkTokensEnum::ZNN->zts(),
+            NetworkTokensEnum::QSR->zts(),
         ])->get();
 
         $tokens->each(function (Token $token) use ($date, $networks): void {

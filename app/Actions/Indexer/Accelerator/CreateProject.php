@@ -90,7 +90,7 @@ class CreateProject extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Max QSR funds exceeded');
         }
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
             throw new IndexerActionValidationException('Token fee must be ZNN');
         }
 

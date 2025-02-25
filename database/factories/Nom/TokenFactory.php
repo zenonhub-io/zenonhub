@@ -48,7 +48,7 @@ class TokenFactory extends Factory
             'name' => 'ZNN',
             'symbol' => 'ZNN',
             'domain' => 'zenon.network',
-            'token_standard' => NetworkTokensEnum::ZNN->value,
+            'token_standard' => NetworkTokensEnum::ZNN->zts(),
         ]);
     }
 
@@ -59,7 +59,7 @@ class TokenFactory extends Factory
             'name' => 'QSR',
             'symbol' => 'QSR',
             'domain' => 'zenon.network',
-            'token_standard' => NetworkTokensEnum::QSR->value,
+            'token_standard' => NetworkTokensEnum::QSR->zts(),
         ]);
     }
 }

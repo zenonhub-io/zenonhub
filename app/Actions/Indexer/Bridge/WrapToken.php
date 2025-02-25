@@ -44,13 +44,13 @@ class WrapToken extends AbstractContractMethodProcessor
             'created_at' => $accountBlock->created_at,
         ]);
 
-        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+        if ($token->token_standard === NetworkTokensEnum::ZNN->zts()) {
             $network->total_znn_wrapped += $wrap->amount;
             $network->total_znn_held += $wrap->amount;
             $network->save();
         }
 
-        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+        if ($token->token_standard === NetworkTokensEnum::QSR->zts()) {
             $network->total_qsr_wrapped += $wrap->amount;
             $network->total_qsr_held += $wrap->amount;
             $network->save();

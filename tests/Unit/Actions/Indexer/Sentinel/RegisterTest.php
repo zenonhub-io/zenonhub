@@ -32,7 +32,7 @@ function createSentinelRegisterAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::SENTINEL->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (5000 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Sentinel', 'Register'),
@@ -70,7 +70,7 @@ it('dispatches the sentinel registered event', function () {
 it('ensure sentinels can only be registered with ZNN tokens', function () {
 
     $accountBlock = createSentinelRegisterAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'token' => load_token(NetworkTokensEnum::QSR->zts()),
     ]);
 
     Event::fake();

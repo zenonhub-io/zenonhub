@@ -44,8 +44,8 @@ class TokenStats
     public function asCommand(Command $command): void
     {
         $tokens = Token::whereIn('token_standard', [
-            NetworkTokensEnum::ZNN->value,
-            NetworkTokensEnum::QSR->value,
+            NetworkTokensEnum::ZNN->zts(),
+            NetworkTokensEnum::QSR->zts(),
         ])->get();
         $period = CarbonPeriod::create(AccountBlock::min('created_at'), AccountBlock::max('created_at'));
         $progressBar = new ProgressBar(new ConsoleOutput, $period->count() * $tokens->count());
@@ -83,12 +83,12 @@ class TokenStats
     {
         $genesisSupply = 0;
 
-        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+        if ($token->token_standard === NetworkTokensEnum::ZNN->zts()) {
             $genesisSupply = Account::where('genesis_znn_balance', '>', '0')
                 ->sum('genesis_znn_balance');
         }
 
-        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+        if ($token->token_standard === NetworkTokensEnum::QSR->zts()) {
             $genesisSupply = Account::where('genesis_qsr_balance', '>', '0')
                 ->sum('genesis_qsr_balance');
         }
@@ -130,11 +130,11 @@ class TokenStats
 
                     $genesisBalance = 0;
 
-                    if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+                    if ($token->token_standard === NetworkTokensEnum::ZNN->zts()) {
                         $genesisBalance = $account->genesis_znn_balance;
                     }
 
-                    if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+                    if ($token->token_standard === NetworkTokensEnum::QSR->zts()) {
                         $genesisBalance = $account->genesis_qsr_balance;
                     }
 
@@ -167,7 +167,7 @@ class TokenStats
 
     private function getTotalLocked(Token $token, Carbon $date): string
     {
-        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+        if ($token->token_standard === NetworkTokensEnum::ZNN->zts()) {
 
             $totalPillars = Pillar::where('created_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
@@ -195,7 +195,7 @@ class TokenStats
             return number_format($totalZnnLocked, 0, '.', '');
         }
 
-        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+        if ($token->token_standard === NetworkTokensEnum::QSR->zts()) {
             $totalSentinels = Sentinel::where('created_at', '<=', $date->copy()->endOfDay())
                 ->where(function ($query) use ($date) {
                     $query->whereNull('revoked_at')

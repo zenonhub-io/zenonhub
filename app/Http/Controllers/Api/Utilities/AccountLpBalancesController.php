@@ -14,7 +14,7 @@ class AccountLpBalancesController extends ApiController
 {
     public function __invoke(): JsonResponse
     {
-        $lpToken = Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->value);
+        $lpToken = Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->zts());
         $accounts = Account::whereHas(
             'stakes',
             fn ($q) => $q->where('token_id', $lpToken->id)

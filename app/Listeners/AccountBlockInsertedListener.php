@@ -74,7 +74,7 @@ class AccountBlockInsertedListener
 
     private function dispatchLiquidityProgramProcessor(AccountBlock $accountBlock): void
     {
-        if ($accountBlock->token?->token_standard !== NetworkTokensEnum::QSR->value) {
+        if ($accountBlock->token?->token_standard !== NetworkTokensEnum::QSR->zts()) {
             return;
         }
 
@@ -99,8 +99,8 @@ class AccountBlockInsertedListener
         }
 
         if (
-            ($accountBlock->token->token_standard === NetworkTokensEnum::ZNN->value && $accountBlock->amount >= $znnValue) ||
-            ($accountBlock->token->token_standard === NetworkTokensEnum::QSR->value && $accountBlock->amount >= $qsrValue)
+            ($accountBlock->token->token_standard === NetworkTokensEnum::ZNN->zts() && $accountBlock->amount >= $znnValue) ||
+            ($accountBlock->token->token_standard === NetworkTokensEnum::QSR->zts() && $accountBlock->amount >= $qsrValue)
         ) {
             Notification::send(new WhaleAlertBot, (new WhaleAlert($accountBlock)));
         }

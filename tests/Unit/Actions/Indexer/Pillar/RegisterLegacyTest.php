@@ -34,7 +34,7 @@ function createPillarRegisterLegacyAccountBlock(array $overrides = []): AccountB
     $default = [
         'account' => $account,
         'toAccount' => load_account(EmbeddedContractsEnum::PILLAR->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (15000 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Pillar', 'RegisterLegacy'),
@@ -93,7 +93,7 @@ it('dispatches the pillar registered event', function () {
 it('ensure pillars can only be registered with ZNN tokens', function () {
 
     $accountBlock = createPillarRegisterLegacyAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'token' => load_token(NetworkTokensEnum::QSR->zts()),
     ]);
 
     Event::fake();
