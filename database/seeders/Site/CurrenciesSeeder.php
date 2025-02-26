@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom;
+namespace Database\Seeders\Site;
 
 use App\Models\Nom\Currency;
 use Illuminate\Database\Seeder;

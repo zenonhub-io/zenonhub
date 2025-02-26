@@ -21,12 +21,12 @@ class PillarsSeeder extends Seeder
         Pillar::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $chainId = app('currentChain')->id;
-        $pillars = Storage::json('nom-json/genesis/genesis.json')['PillarConfig']['Pillars'];
+        $chain = app('currentChain');
+        $pillars = Storage::json('json/nom/genesis.json')['PillarConfig']['Pillars'];
 
-        collect($pillars)->each(function ($pillarData) use ($chainId) {
+        collect($pillars)->each(function ($pillarData) use ($chain) {
             $pillar = Pillar::create([
-                'chain_id' => $chainId,
+                'chain_id' => $chain->id,
                 'owner_id' => load_account($pillarData['StakeAddress'])->id,
                 'producer_account_id' => load_account($pillarData['BlockProducingAddress'])->id,
                 'withdraw_account_id' => load_account($pillarData['RewardWithdrawAddress'])->id,
@@ -36,7 +36,7 @@ class PillarsSeeder extends Seeder
                 'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],
                 'delegate_rewards' => $pillarData['GiveDelegateRewardPercentage'],
                 'is_legacy' => 1,
-                'created_at' => '2021-11-24 12:00:00',
+                'created_at' => $chain->created_at->format('Y-m-d H:i:s'),
             ]);
 
             $pillar->updateHistory()->create([
@@ -45,7 +45,7 @@ class PillarsSeeder extends Seeder
                 'momentum_rewards' => $pillarData['GiveBlockRewardPercentage'],
                 'delegate_rewards' => $pillarData['GiveDelegateRewardPercentage'],
                 'is_reward_change' => false,
-                'updated_at' => '2021-11-24 12:00:00',
+                'updated_at' => $chain->created_at->format('Y-m-d H:i:s'),
             ]);
         });
     }

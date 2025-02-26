@@ -11,7 +11,8 @@ class ProfileController
 {
     public function __invoke(?string $tab = 'details'): View
     {
-        MetaTags::title('Manage your account')
+        MetaTags::title('Manage Your Account')
+            ->description('Access and update your personal details, settings, and account preferences on Zenon Hub')
             ->canonical(route('profile', ['tab' => $tab]))
             ->metaByName('robots', 'noindex,nofollow');
 

@@ -26,7 +26,7 @@ class StakeFactory extends Factory
         return [
             'chain_id' => 1,
             'account_id' => Account::factory(),
-            'token_id' => load_token(NetworkTokensEnum::ZNN->value),
+            'token_id' => load_token(NetworkTokensEnum::ZNN->zts()),
             'account_block_id' => AccountBlock::factory(),
             'amount' => (string) (1 * config('nom.decimals')),
             'duration' => '31104000',

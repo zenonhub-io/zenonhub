@@ -32,22 +32,22 @@ class UpdateContractMethods
 
     public function handle(): void
     {
-        foreach ($this->contracts as $contract => $abiClass) {
+        foreach ($this->contracts as $contractName => $abiClass) {
             $abi = new $abiClass;
             $methods = $abi->getMethods();
 
-            $blockContract = Contract::updateOrCreate([
-                'name' => $contract,
-                'chain_id' => 1,
+            $contract = Contract::updateOrCreate([
+                'name' => $contractName,
+                'chain_id' => app('currentChain')->id,
             ], [
-                'account_id' => Account::where('name', 'LIKE', "{$contract}%")
+                'account_id' => Account::where('name', 'LIKE', "{$contractName}%")
                     ->where('is_embedded_contract', 1)
                     ->first()?->id,
             ]);
 
             foreach ($methods as $method) {
                 ContractMethod::updateOrCreate([
-                    'contract_id' => $blockContract->id,
+                    'contract_id' => $contract->id,
                     'name' => $method,
                 ], [
                     'signature' => $abi->getMethodSignature($method),

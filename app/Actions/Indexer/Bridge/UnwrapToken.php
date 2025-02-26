@@ -54,13 +54,13 @@ class UnwrapToken extends AbstractContractMethodProcessor
             $unwrap->save();
         }
 
-        if ($token->token_standard === NetworkTokensEnum::ZNN->value) {
+        if ($token->token_standard === NetworkTokensEnum::ZNN->zts()) {
             $network->total_znn_unwrapped += $unwrap->amount;
             $network->total_znn_held -= $unwrap->amount;
             $network->save();
         }
 
-        if ($token->token_standard === NetworkTokensEnum::QSR->value) {
+        if ($token->token_standard === NetworkTokensEnum::QSR->zts()) {
             $network->total_qsr_unwrapped += $unwrap->amount;
             $network->total_qsr_held -= $unwrap->amount;
             $network->save();

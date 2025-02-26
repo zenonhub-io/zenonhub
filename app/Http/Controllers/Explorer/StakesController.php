@@ -14,9 +14,19 @@ class StakesController
 {
     public function __invoke(?string $tab = 'znn'): View
     {
-        MetaTags::title('Staking')
-            ->description('A list of all staking entries for ZNN and ETH LP tokens on the Zenon Network, displayed by start timestamp in descending order')
-            ->canonical(route('explorer.stake.list', ['tab' => $tab]))
+        if ($tab === 'znn') {
+            $title = 'ZNN Staking Entries: All accounts staking ZNN tokens';
+            $description = 'Explore all active ZNN staking entries on the Zenon Network, listed in descending order by start timestamp. View total staked amounts and staking durations';
+            $canonical = route('explorer.stake.list');
+        } else {
+            $title = 'ZNN-ETH-LP Staking Entries: All accounts staking ZNN-ETH-LP tokens';
+            $description = 'Discover all ZNN-ETH-LP staking entries on the Zenon Network, sorted by start timestamp. Gain insights into staking amounts, durations, and participants';
+            $canonical = route('explorer.stake.list', ['tab' => $tab]);
+        }
+
+        MetaTags::title($title)
+            ->description($description)
+            ->canonical($canonical)
             ->metaByName('robots', 'index,nofollow');
 
         $token = match ($tab) {

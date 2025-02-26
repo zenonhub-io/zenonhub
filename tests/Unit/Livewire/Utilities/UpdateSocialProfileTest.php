@@ -8,7 +8,7 @@ use App\Models\Nom\Token;
 use App\Models\SocialProfile;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Livewire\Livewire;
 
@@ -16,7 +16,7 @@ uses()->group('livewire', 'utilities', 'update-social-profile');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 

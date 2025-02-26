@@ -17,7 +17,7 @@ use App\Models\Nom\BridgeWrap;
 use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Token;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +26,7 @@ uses()->group('indexer', 'indexer-actions', 'bridge-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 
@@ -35,7 +35,7 @@ function createWrapTokenAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::BRIDGE->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (50 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Bridge', 'WrapToken'),
@@ -58,7 +58,7 @@ it('wraps a token', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -79,12 +79,12 @@ it('wraps a token', function () {
 it('updates total wrapped and held balances', function () {
 
     $accountBlockZnn = createWrapTokenAccountBlock([
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (50 * NOM_DECIMALS),
     ]);
 
     $accountBlockQsr = createWrapTokenAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'token' => load_token(NetworkTokensEnum::QSR->zts()),
         'amount' => (string) (50 * NOM_DECIMALS),
     ]);
 
@@ -94,14 +94,14 @@ it('updates total wrapped and held balances', function () {
 
     BridgeNetworkToken::factory()->create([
         'bridge_network_id' => $bridgeNetwork->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
 
     BridgeNetworkToken::factory()->create([
         'bridge_network_id' => $bridgeNetwork->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::QSR->zts())->id,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -123,7 +123,7 @@ it('dispatches the token wrapped event', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -164,7 +164,7 @@ it('ensures only valid tokens can be bridged', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'is_redeemable' => true,
         'is_bridgeable' => true,
     ]);
@@ -194,7 +194,7 @@ it('ensures only bridgeable tokens can be wrapped', function () {
         'bridge_network_id' => BridgeNetwork::factory()->create([
             'network_class' => '321',
         ])->id,
-        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->value)->id,
+        'token_id' => Token::firstWhere('token_standard', NetworkTokensEnum::ZNN->zts())->id,
         'is_redeemable' => true,
         'is_bridgeable' => false,
     ]);

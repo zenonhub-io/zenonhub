@@ -7,18 +7,18 @@ use App\DataTransferObjects\Nom\MomentumDTO;
 use App\Events\Indexer\MomentumInserted;
 use App\Models\Nom\Momentum;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 use Illuminate\Support\Collection;
 
 uses()->group('indexer', 'indexer-actions', 'insert-momentum');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
 
-    $momentumsJson = Storage::json('nom-json/test/momentums.json');
+    $momentumsJson = Storage::json('json/test/momentums.json');
     $this->momentumDTOs = MomentumDTO::collect($momentumsJson, Collection::class);
 });
 

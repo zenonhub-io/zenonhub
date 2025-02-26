@@ -64,7 +64,7 @@ class Stake extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
             throw new IndexerActionValidationException('Invalid stake token');
         }
 

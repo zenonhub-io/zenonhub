@@ -16,7 +16,7 @@ class ProcessLiquidityProgramRewards
     public function handle(AccountBlock $accountBlock): void
     {
         AccountReward::create([
-            'chain_id' => $accountBlock->chain->id,
+            'chain_id' => $accountBlock->chain_id,
             'account_block_id' => $accountBlock->id,
             'account_id' => $accountBlock->toAccount->id,
             'token_id' => $accountBlock->token->id,

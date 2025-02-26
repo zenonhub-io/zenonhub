@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom\Test;
+namespace Database\Seeders\Test;
 
 use App\DataTransferObjects\Nom\PillarDTO;
 use App\Models\Nom\Pillar;
@@ -24,7 +24,7 @@ class PillarsSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         $chain = app('currentChain');
-        $pillarsJson = Storage::json('nom-json/test/pillars.json');
+        $pillarsJson = Storage::json('json/test/pillars.json');
         $pillarsDTO = PillarDTO::collect($pillarsJson, Collection::class);
 
         $pillarsDTO->each(function ($pillarDTO) use ($chain) {
@@ -53,7 +53,7 @@ class PillarsSeeder extends Seeder
                 'total_momentums_produced' => 0,
                 'is_legacy' => 1,
                 'revoked_at' => null,
-                'created_at' => '2021-11-24 12:00:00',
+                'created_at' => $chain->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => null,
             ]);
 
@@ -68,7 +68,7 @@ class PillarsSeeder extends Seeder
                 'momentum_rewards' => $pillarDTO->giveMomentumRewardPercentage - 1,
                 'delegate_rewards' => $pillarDTO->giveDelegateRewardPercentage - 1,
                 'is_reward_change' => 1,
-                'updated_at' => '2021-11-24 12:00:00',
+                'updated_at' => $chain->created_at->format('Y-m-d H:i:s'),
             ]);
         });
     }

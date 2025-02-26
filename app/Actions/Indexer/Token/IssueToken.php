@@ -109,7 +109,7 @@ class IssueToken extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Max and total supply do not match');
         }
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
             throw new IndexerActionValidationException('Send block must be ZNN');
         }
 

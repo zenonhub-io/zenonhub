@@ -60,8 +60,8 @@ class TokenPrices
     public function asCommand(Command $command): void
     {
         $tokens = Token::whereIn('token_standard', [
-            NetworkTokensEnum::ZNN->value,
-            NetworkTokensEnum::QSR->value,
+            NetworkTokensEnum::ZNN->zts(),
+            NetworkTokensEnum::QSR->zts(),
         ])->get();
 
         $progressBar = new ProgressBar(new ConsoleOutput, $tokens->count());

@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Http;
 
 class TokenPrice
 {
-    private array $tokenIdMap = [
-        NetworkTokensEnum::ZNN->value => 'zenon-2',
-        NetworkTokensEnum::QSR->value => 'quasar',
-    ];
-
     private string $baseUrl = 'https://api.coingecko.com/api/v3';
 
     /**
@@ -58,10 +53,20 @@ class TokenPrice
      */
     private function getTokenId(Token $token): string
     {
-        if (! isset($this->tokenIdMap[$token->token_standard])) {
+        $tokenIdMap = $this->getTokenIdMap();
+
+        if (! isset($tokenIdMap[$token->token_standard])) {
             throw new TokenPriceException('Token standard not supported');
         }
 
-        return $this->tokenIdMap[$token->token_standard];
+        return $tokenIdMap[$token->token_standard];
+    }
+
+    private function getTokenIdMap(): array
+    {
+        return [
+            NetworkTokensEnum::ZNN->zts() => 'zenon-2',
+            NetworkTokensEnum::QSR->zts() => 'quasar',
+        ];
     }
 }

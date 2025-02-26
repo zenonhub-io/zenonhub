@@ -15,12 +15,12 @@ class AccountsSeeder extends Seeder
      */
     public function run(): void
     {
-        $chainId = app('currentChain')->id;
-        $accounts = Storage::json('nom-json/genesis/genesis.json')['GenesisBlocks']['Blocks'];
+        $chain = app('currentChain');
+        $accounts = Storage::json('json/nom/genesis.json')['GenesisBlocks']['Blocks'];
 
-        collect($accounts)->each(function ($accountData) use ($chainId) {
+        collect($accounts)->each(function ($accountData) use ($chain) {
             Account::updateOrInsert([
-                'chain_id' => $chainId,
+                'chain_id' => $chain->id,
                 'address' => $accountData['Address'],
             ], [
                 'genesis_znn_balance' => $accountData['BalanceList']['zts1znnxxxxxxxxxxxxx9z4ulx'] ?? 0,

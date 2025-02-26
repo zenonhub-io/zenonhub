@@ -6,11 +6,11 @@ namespace App\Enums\Nom;
 
 enum NetworkTokensEnum: string
 {
-    case EMPTY = 'zts1qqqqqqqqqqqqqqqqtq587y';
-    case ZNN = 'zts1znnxxxxxxxxxxxxx9z4ulx';
-    case QSR = 'zts1qsrxxxxxxxxxxxxxmrhjll';
-    case LP_ZNN_ETH = 'zts17d6yr02kh0r9qr566p7tg6';
-    case WBTC = 'zts14pmddt35kawqweg3re08zj';
+    case EMPTY = 'Empty';
+    case ZNN = 'ZNN';
+    case QSR = 'QSR';
+    case LP_ZNN_ETH = 'ZNNETHLP';
+    case WBTC = 'WBTC';
 
     public function label(): string
     {
@@ -23,14 +23,14 @@ enum NetworkTokensEnum: string
         };
     }
 
-    public function symbol(): string
+    public function zts(): string
     {
         return match ($this) {
-            self::EMPTY => 'Empty',
-            self::ZNN => 'ZNN',
-            self::QSR => 'QSR',
-            self::LP_ZNN_ETH => 'ZNNETHLP',
-            self::WBTC => 'WBTC',
+            self::EMPTY => 'zts1qqqqqqqqqqqqqqqqtq587y',
+            self::ZNN => config('nom.znn_zts'),
+            self::QSR => config('nom.qsr_zts'),
+            self::LP_ZNN_ETH => 'zts17d6yr02kh0r9qr566p7tg6',
+            self::WBTC => 'zts14pmddt35kawqweg3re08zj',
         };
     }
 }

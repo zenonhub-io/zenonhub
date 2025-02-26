@@ -14,7 +14,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Plasma;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +23,7 @@ uses()->group('indexer', 'indexer-actions', 'plasma-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 
@@ -34,7 +34,7 @@ function createFuseAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => $account,
         'toAccount' => load_account(EmbeddedContractsEnum::PLASMA->value),
-        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'token' => load_token(NetworkTokensEnum::QSR->zts()),
         'amount' => (string) (50 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Plasma', 'Fuse'),
@@ -79,7 +79,7 @@ it('dispatches the fused event', function () {
 it('doesnt pass validation with invalid token', function () {
 
     $accountBlock = createFuseAccountBlock([
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
     ]);
 
     Event::fake();

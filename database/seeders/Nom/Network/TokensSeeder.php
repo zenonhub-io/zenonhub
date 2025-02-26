@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom;
+namespace Database\Seeders\Nom\Network;
 
 use App\Models\Nom\Token;
 use Illuminate\Database\Seeder;
@@ -20,12 +20,12 @@ class TokensSeeder extends Seeder
         Token::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $chainId = app('currentChain')->id;
-        $tokens = Storage::json('nom-json/genesis/genesis.json')['TokenConfig']['Tokens'];
+        $chain = app('currentChain');
+        $tokens = Storage::json('json/nom/genesis.json')['TokenConfig']['Tokens'];
 
-        collect($tokens)->each(function ($tokenData) use ($chainId) {
+        collect($tokens)->each(function ($tokenData) use ($chain) {
             Token::insert([
-                'chain_id' => $chainId,
+                'chain_id' => $chain->id,
                 'owner_id' => load_account($tokenData['owner'])->id,
                 'name' => $tokenData['tokenName'],
                 'symbol' => $tokenData['tokenSymbol'],
@@ -38,7 +38,7 @@ class TokensSeeder extends Seeder
                 'is_burnable' => $tokenData['isBurnable'],
                 'is_mintable' => $tokenData['isMintable'],
                 'is_utility' => $tokenData['isUtility'],
-                'created_at' => '2021-11-24 12:00:00',
+                'created_at' => $chain->created_at->format('Y-m-d H:i:s'),
             ]);
         });
     }

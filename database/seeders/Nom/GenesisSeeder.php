@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders;
+namespace Database\Seeders\Nom;
 
 use Database\Seeders\Nom\Genesis\AccountBlocksSeeder;
 use Database\Seeders\Nom\Genesis\AccountsSeeder;

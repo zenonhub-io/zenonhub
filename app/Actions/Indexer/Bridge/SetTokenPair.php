@@ -88,7 +88,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Invalid token');
         }
 
-        if ($blockData['owned'] && in_array($blockData['tokenStandard'], [NetworkTokensEnum::ZNN->value, NetworkTokensEnum::QSR->value], true)) {
+        if ($blockData['owned'] && in_array($blockData['tokenStandard'], [NetworkTokensEnum::ZNN->zts(), NetworkTokensEnum::QSR->zts()], true)) {
             throw new IndexerActionValidationException('Unable to assign ZNN or QSR token standard');
         }
 
@@ -96,7 +96,7 @@ class SetTokenPair extends AbstractContractMethodProcessor
         //            throw new IndexerActionValidationException('Invalid contractAddress');
         //        }
 
-        if ($blockData['tokenStandard'] === NetworkTokensEnum::EMPTY->value) {
+        if ($blockData['tokenStandard'] === NetworkTokensEnum::EMPTY->zts()) {
             throw new IndexerActionValidationException('Unable to assign empty ZTS');
         }
 

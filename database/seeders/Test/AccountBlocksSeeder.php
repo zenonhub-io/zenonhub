@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom\Test;
+namespace Database\Seeders\Test;
 
 use App\DataTransferObjects\Nom\AccountBlockDTO;
 use App\Models\Nom\AccountBlock;
@@ -24,7 +24,7 @@ class AccountBlocksSeeder extends Seeder
         AccountBlockData::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $accountBlocksJson = Storage::json('nom-json/test/transactions.json');
+        $accountBlocksJson = Storage::json('json/test/transactions.json');
         $accountBlocksDTO = AccountBlockDTO::collect($accountBlocksJson, Collection::class);
 
         $accountBlocksDTO->each(function ($accountBlockDTO) {

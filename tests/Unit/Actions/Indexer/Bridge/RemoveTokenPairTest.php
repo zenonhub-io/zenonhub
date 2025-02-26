@@ -16,7 +16,7 @@ use App\Models\Nom\BridgeNetworkToken;
 use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Token;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -25,7 +25,7 @@ uses()->group('indexer', 'indexer-actions', 'bridge-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 
@@ -34,7 +34,7 @@ function createRemoveTokenPaidAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => load_account(config('nom.bridge.initialBridgeAdmin')),
         'toAccount' => load_account(EmbeddedContractsEnum::BRIDGE->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (1 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Bridge', 'RemoveTokenPair'),

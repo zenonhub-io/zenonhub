@@ -176,6 +176,6 @@ class GenerateApiPlaygroundJson
     private function saveJson(): void
     {
         $json = json_encode($this->availableRequests);
-        Storage::put('nom-json/api-playground.json', $json);
+        Storage::put('json/api-playground.json', $json);
     }
 }

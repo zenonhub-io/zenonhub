@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom;
+namespace Database\Seeders\HyperQube\Network;
 
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Models\Nom\Account;
@@ -20,10 +20,10 @@ class AccountsSeeder extends Seeder
         Account::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $chainId = app('currentChain')->id;
+        $chain = app('currentChain');
 
         Account::updateOrCreate([
-            'chain_id' => $chainId,
+            'chain_id' => $chain->id,
             'address' => config('explorer.burn_address'),
         ], [
             'name' => 'Burn Address',
@@ -32,12 +32,20 @@ class AccountsSeeder extends Seeder
 
         foreach (EmbeddedContractsEnum::cases() as $address) {
             Account::updateOrCreate([
-                'chain_id' => $chainId,
+                'chain_id' => $chain->id,
                 'address' => $address->value,
             ], [
                 'name' => $address->label(),
                 'is_embedded_contract' => true,
             ]);
         }
+
+        Account::updateOrCreate([
+            'chain_id' => $chain->id,
+            'address' => config('nom.bridge.initialBridgeAdmin'),
+        ], [
+            'name' => 'Bridge admin',
+            'is_embedded_contract' => false,
+        ]);
     }
 }

@@ -14,7 +14,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Token;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use DigitalSloth\ZnnPhp\Utilities;
 use Illuminate\Support\Facades\Event;
@@ -24,7 +24,7 @@ uses()->group('indexer', 'indexer-actions', 'token-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 
@@ -38,7 +38,7 @@ function createUpdateTokenAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => $account,
         'toAccount' => load_account(EmbeddedContractsEnum::TOKEN->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (1 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Token', 'UpdateToken'),

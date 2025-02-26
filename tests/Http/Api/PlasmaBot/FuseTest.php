@@ -5,13 +5,13 @@ declare(strict_types=1);
 use App\Models\Nom\Account;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 
 uses()->group('site', 'routes');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
 });
 
 it('rejects requests with invalid token abilities', function () {

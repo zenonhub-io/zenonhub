@@ -92,7 +92,7 @@ class Register extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Delegate reward percentage is invalid');
         }
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
             throw new IndexerActionValidationException('Token must be ZNN');
         }
 

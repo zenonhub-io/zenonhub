@@ -9,20 +9,20 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Plasma;
 use App\Models\Nom\Stake;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 
 uses()->group('nom', 'nom-actions', 'update-account-totals');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 
 it('updates an accounts current balance', function () {
 
-    $token = load_token(NetworkTokensEnum::ZNN->value);
+    $token = load_token(NetworkTokensEnum::ZNN->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();
@@ -48,7 +48,7 @@ it('updates an accounts current balance', function () {
 
 it('updates an accounts current znn balance', function () {
 
-    $token = load_token(NetworkTokensEnum::ZNN->value);
+    $token = load_token(NetworkTokensEnum::ZNN->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();
@@ -70,7 +70,7 @@ it('updates an accounts current znn balance', function () {
 
 it('updates an accounts znn send and received totals', function () {
 
-    $token = load_token(NetworkTokensEnum::ZNN->value);
+    $token = load_token(NetworkTokensEnum::ZNN->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();
@@ -102,7 +102,7 @@ it('updates an accounts znn send and received totals', function () {
 
 it('updates an accounts current qsr balance', function () {
 
-    $token = load_token(NetworkTokensEnum::QSR->value);
+    $token = load_token(NetworkTokensEnum::QSR->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();
@@ -124,7 +124,7 @@ it('updates an accounts current qsr balance', function () {
 
 it('updates an accounts qsr send and received totals', function () {
 
-    $token = load_token(NetworkTokensEnum::QSR->value);
+    $token = load_token(NetworkTokensEnum::QSR->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();
@@ -156,7 +156,7 @@ it('updates an accounts qsr send and received totals', function () {
 
 it('accounts for an addresses genesis znn balance', function () {
 
-    $token = load_token(NetworkTokensEnum::ZNN->value);
+    $token = load_token(NetworkTokensEnum::ZNN->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();
@@ -180,7 +180,7 @@ it('accounts for an addresses genesis znn balance', function () {
 
 it('accounts for an addresses genesis qsr balance', function () {
 
-    $token = load_token(NetworkTokensEnum::QSR->value);
+    $token = load_token(NetworkTokensEnum::QSR->zts());
 
     $sender = Account::factory()->create();
     $receiver = Account::factory()->create();

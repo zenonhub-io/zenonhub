@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 
 uses()->group('site', 'routes');
 
 beforeEach(function () {
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
 });
 
 // it('pillar pages return a successful response', function () {

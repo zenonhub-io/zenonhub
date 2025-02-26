@@ -159,12 +159,12 @@ Tx: $txLink");
     private function getDiscordHighlightColour(): int
     {
         $colour = 0x607D8B; // Grey
-        if ($this->block->token->token_standard === NetworkTokensEnum::ZNN->value) {
+        if ($this->block->token->token_standard === NetworkTokensEnum::ZNN->zts()) {
             $colour = config('zenon-hub.colours.zenon-green');
-        } elseif ($this->block->token->token_standard === NetworkTokensEnum::QSR->value) {
+        } elseif ($this->block->token->token_standard === NetworkTokensEnum::QSR->zts()) {
             $colour = config('zenon-hub.colours.zenon-blue');
         }
 
-        return (int) $colour;
+        return (int) str_replace('#', '0x', $colour);
     }
 }

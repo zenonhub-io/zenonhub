@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Livewire\Profile\ManageAddresses;
 use App\Models\User;
-use Database\Seeders\Nom\ChainsSeeder;
+use Database\Seeders\Site\ChainsSeeder;
 use Livewire\Livewire;
 
 uses()->group('profile', 'manage-addresses');

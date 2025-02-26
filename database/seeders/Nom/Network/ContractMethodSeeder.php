@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom;
+namespace Database\Seeders\Nom\Network;
 
 use App\Actions\Nom\UpdateContractMethods;
 use App\Models\Nom\Contract;

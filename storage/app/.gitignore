@@ -1,6 +1,6 @@
 *
-!nom-json/
-!nom-json/**
+!json/
+!json/**
 !private/
 !public/
 !.gitignore

@@ -12,9 +12,19 @@ class TokensController
 {
     public function index(?string $tab = 'all'): View
     {
-        MetaTags::title('Tokens')
-            ->description('The list of ZTS Tokens, their supply and the number of holders in the Network of Momentum')
-            ->canonical(route('explorer.token.list', ['tab' => $tab]))
+        if ($tab === 'all') {
+            $title = 'All Tokens List: Supply & Holders in the Zenon Network';
+            $description = 'Explore all tokens on the Zenon Network. View their total supply, current supply, and detailed holder statistics in one place';
+            $canonical = route('explorer.token.list');
+        } else {
+            $title = sprintf('%s Tokens List: Supply & Holders in the Zenon Network', str($tab)->singular()->title());
+            $description = "Discover {$tab} tokens in the Zenon Network. Learn about their supply, holders, and key statistics for deeper insights";
+            $canonical = route('explorer.token.list', ['tab' => $tab]);
+        }
+
+        MetaTags::title($title)
+            ->description($description)
+            ->canonical($canonical)
             ->metaByName('robots', 'index,nofollow');
 
         return view('explorer.token-list', [
@@ -35,10 +45,10 @@ class TokensController
             abort(404);
         }
 
-        MetaTags::title(__(':name (:symbol) - Token details', ['name' => $token->name, 'symbol' => $token->symbol]))
-            ->description(__('The :name (:symbol) token detail page shows total and current supply information, holder count and detailed lists of holders, transactions, mints and burns', ['name' => $token->name, 'symbol' => $token->symbol]))
+        MetaTags::title(__(':name (:symbol) - Token Details & Statistics', ['name' => $token->name, 'symbol' => $token->symbol]))
+            ->description(__('Discover detailed statistics for the :name (:symbol) token, including total and current supply, holder count, transactions, and mint/burn records on the Zenon Network', ['name' => $token->name, 'symbol' => $token->symbol]))
             ->canonical(route('explorer.token.detail', ['zts' => $token->token_standard]))
-            ->metaByName('robots', $token->is_network && $tab === 'holders' ? 'index,nofollow' : 'noindex,nofollow');
+            ->metaByName('robots', $token->is_network && $tab === 'holders' ? 'index,follow' : 'noindex,follow');
 
         return view('explorer.token-details', [
             'tab' => $tab,

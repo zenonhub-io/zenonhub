@@ -20,7 +20,7 @@ class BridgeNetworkFactory extends Factory
     public function definition(): array
     {
         return [
-            'chain_id' => '1',
+            'chain_id' => 1,
             'chain_identifier' => '1',
             'network_class' => fake()->randomNumber(4),
             'name' => fake()->word(),

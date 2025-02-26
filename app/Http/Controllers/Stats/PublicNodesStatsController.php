@@ -15,9 +15,9 @@ class PublicNodesStatsController
 {
     public function __invoke(?string $tab = 'overview'): View
     {
-        MetaTags::title('Zenon RPC Node Stats')
-            ->description('The Public RPC node stats page displays the Zenon Network public RPC node stats including their geographic distribution, version and network data')
-            ->canonical(route('stats.public-nodes', ['tab' => $tab]))
+        MetaTags::title('Zenon RPC Node Stats: Geographic Distribution & Performance')
+            ->description('View detailed statistics for Zenon Network public RPC nodes, including geographic locations, versions and network data')
+            ->canonical(route('stats.public-nodes'))
             ->metaByName('robots', 'index,nofollow');
 
         return view('stats.nodes', [

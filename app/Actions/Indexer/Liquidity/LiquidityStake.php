@@ -63,7 +63,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
          */
         [$accountBlock] = func_get_args();
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->zts()) {
             throw new IndexerActionValidationException('Invalid stake token');
         }
 

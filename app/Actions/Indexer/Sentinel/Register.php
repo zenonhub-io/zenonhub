@@ -58,7 +58,7 @@ class Register extends AbstractContractMethodProcessor
          */
         [$accountBlock] = func_get_args();
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->value) {
+        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
             throw new IndexerActionValidationException('Invalid token');
         }
 

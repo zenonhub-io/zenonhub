@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders\Nom;
+namespace Database\Seeders\Nom\Network;
 
+use App\Models\Nom\Account;
 use App\Models\Nom\BridgeAdmin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
@@ -19,10 +20,11 @@ class BridgeSeeder extends Seeder
         BridgeAdmin::truncate();
         Schema::enableForeignKeyConstraints();
 
-        $adminAccount = load_account(config('nom.bridge.initialBridgeAdmin'), 'Bridge admin');
+        $bridgeAdmin = Account::firstWhere('address', config('nom.bridge.initialBridgeAdmin'));
+
         BridgeAdmin::query()
             ->updateOrInsert([
-                'account_id' => $adminAccount->id,
+                'account_id' => $bridgeAdmin->id,
             ], [
                 'nominated_at' => '2023-05-03 10:17:30',
                 'accepted_at' => '2023-05-03 10:17:30',

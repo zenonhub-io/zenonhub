@@ -15,7 +15,7 @@ use App\Models\Nom\ContractMethod;
 use App\Models\Nom\Stake;
 use App\Models\Nom\Token;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +24,7 @@ uses()->group('indexer', 'indexer-actions', 'liquidity-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 
     Token::insert([
@@ -49,7 +49,7 @@ function createLiquidityStakeAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => Account::factory()->create(),
         'toAccount' => load_account(EmbeddedContractsEnum::LIQUIDITY->value),
-        'token' => load_token(NetworkTokensEnum::LP_ZNN_ETH->value),
+        'token' => load_token(NetworkTokensEnum::LP_ZNN_ETH->zts()),
         'amount' => (string) (100 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Liquidity', 'LiquidityStake'),
@@ -94,7 +94,7 @@ it('dispatches the start stake event', function () {
 it('doesnt pass validation with invalid token', function () {
 
     $accountBlock = createLiquidityStakeAccountBlock([
-        'token' => load_token(NetworkTokensEnum::QSR->value),
+        'token' => load_token(NetworkTokensEnum::QSR->zts()),
     ]);
 
     Event::fake();

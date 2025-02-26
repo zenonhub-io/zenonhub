@@ -1,0 +1,1144 @@
+{
+    "ChainIdentifier": 26,
+    "ExtraData": "HYPERQUBE Z UNIFORM 60",
+    "GenesisTimestampSec": 1739923200,
+    "SporkAddress": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+    "PillarConfig": {
+        "Pillars": [
+            {
+                "Name": "Stark",
+                "BlockProducingAddress": "z1qrszr9ht9untfgdmjjnyv4x5xhhdcfgzexd2ty",
+                "RewardWithdrawAddress": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr",
+                "StakeAddress": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "AST",
+                "BlockProducingAddress": "z1qp07s74snrmews9jt80906duwwdt3fcdfjmnyh",
+                "RewardWithdrawAddress": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh",
+                "StakeAddress": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "ZenonORG",
+                "BlockProducingAddress": "z1qrgyaagsswaelnk5m7rju80yfr45eetknhgr5z",
+                "RewardWithdrawAddress": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj",
+                "StakeAddress": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "Octopos01",
+                "BlockProducingAddress": "z1qr5z2gz8sm26qadge4kn0enramu24jc250nl6n",
+                "RewardWithdrawAddress": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5",
+                "StakeAddress": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "build_republic",
+                "BlockProducingAddress": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm",
+                "RewardWithdrawAddress": "z1qpldzm3dqdqrnv2xle7l3n8j2nqye38ttjgz67",
+                "StakeAddress": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "Mariposa01",
+                "BlockProducingAddress": "z1qzcrjpk5nfpv5f2ljfft8fftfa2tughhqszmmn",
+                "RewardWithdrawAddress": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted",
+                "StakeAddress": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "IgnitionHQZ",
+                "BlockProducingAddress": "z1qqmw4ehps2c8uvsjzlr7w5f6u9lrzh9ajww2yy",
+                "RewardWithdrawAddress": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+                "StakeAddress": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "Zed",
+                "BlockProducingAddress": "z1qqqakt0wjdq0vewuylegzm5wtc3p6np5vgxvxs",
+                "RewardWithdrawAddress": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl",
+                "StakeAddress": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "ZenonORG2",
+                "BlockProducingAddress": "z1qqudnypz3n8nfxxxgstv2awk2cs0fyhr5t7xd5",
+                "RewardWithdrawAddress": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe",
+                "StakeAddress": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "Nexus",
+                "BlockProducingAddress": "z1qrmsz72tvhzywv9sgtxav4zmagarzc0x8c9y4q",
+                "RewardWithdrawAddress": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn",
+                "StakeAddress": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "sosqube",
+                "BlockProducingAddress": "z1qpgkxg9g9djkt2pvzs90clxkg6uxzswh9er8nt",
+                "RewardWithdrawAddress": "z1qqwwzcqn6wuw47lkewq5eluudq807wsl023lac",
+                "StakeAddress": "z1qzypy59sjzgweda2natpqsvmreehtmhvh2rm98",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "Anvil-HQZ",
+                "BlockProducingAddress": "z1qzrul2qauykcxfrvecmr9zqv47a8xr2r8yweem",
+                "RewardWithdrawAddress": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q",
+                "StakeAddress": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "ATSocy.com",
+                "BlockProducingAddress": "z1qz2v6h8hzlfptarfgv9t2qg8vpyp92xy5fpmaq",
+                "RewardWithdrawAddress": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp",
+                "StakeAddress": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "Europa",
+                "BlockProducingAddress": "z1qpp4nn0atzjdntlvz6tzufpw2ujvxluu0qlefm",
+                "RewardWithdrawAddress": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees",
+                "StakeAddress": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "HyperGrowth",
+                "BlockProducingAddress": "z1qrwtnx2s6e4u3wdcqlldvnzn8yvgz7k4pwxa8t",
+                "RewardWithdrawAddress": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86",
+                "StakeAddress": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "edgepillar.com_hqz",
+                "BlockProducingAddress": "z1qpha7l9na7sn0a6vs3mrhz64w3mexg4zeaw8z2",
+                "RewardWithdrawAddress": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va",
+                "StakeAddress": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "znnoutlawz",
+                "BlockProducingAddress": "z1qquznf6lne2m32fhc5ntdsj34xwzpd26p3krzv",
+                "RewardWithdrawAddress": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w",
+                "StakeAddress": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "BDE",
+                "BlockProducingAddress": "z1qrn304m7ljyvazvjg3d0yq9xccz83x5sw5q057",
+                "RewardWithdrawAddress": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu",
+                "StakeAddress": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "tapwo",
+                "BlockProducingAddress": "z1qqpupsxcwykym2lh6yk6jvazaqjeluglsa9x37",
+                "RewardWithdrawAddress": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht",
+                "StakeAddress": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "ZenonORG3",
+                "BlockProducingAddress": "z1qpz8f7mh0x3g0nmhufh7c8k0w97z0mafu73ur7",
+                "RewardWithdrawAddress": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn",
+                "StakeAddress": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "ZenonORG4",
+                "BlockProducingAddress": "z1qqs4kevk5pxqegmmfkg87fehseqf3gjlnzklur",
+                "RewardWithdrawAddress": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7",
+                "StakeAddress": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "StakeServe",
+                "BlockProducingAddress": "z1qzd3nnlaz4lu3hv76fhnz9m9s9daedpw2xuevj",
+                "RewardWithdrawAddress": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf",
+                "StakeAddress": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "EmeraldCap",
+                "BlockProducingAddress": "z1qzfjt9hs4mx73w5ap6h7x55wen68cs6s48anue",
+                "RewardWithdrawAddress": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40",
+                "StakeAddress": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "ZnnkinSkywalker",
+                "BlockProducingAddress": "z1qryx09k0x94ylacp8nvpwzj3gxg27x3vrvnegl",
+                "RewardWithdrawAddress": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt",
+                "StakeAddress": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "WotGasFees",
+                "BlockProducingAddress": "z1qrc49wuawp2zrdqyqxcrml2njek656xld22zws",
+                "RewardWithdrawAddress": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham",
+                "StakeAddress": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            },
+            {
+                "Name": "lilNutz",
+                "BlockProducingAddress": "z1qp0cz7yxa96x0ux7qemrsnjsvy0nwzcyyywpma",
+                "RewardWithdrawAddress": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt",
+                "StakeAddress": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt",
+                "Amount": 1500000000000,
+                "RegistrationTime": 0,
+                "RevokeTime": 0,
+                "GiveBlockRewardPercentage": 0,
+                "GiveDelegateRewardPercentage": 100,
+                "PillarType": 1
+            }
+        ],
+        "Delegations": [],
+        "LegacyEntries": []
+    },
+    "TokenConfig": {
+        "Tokens": [
+            {
+                "owner": "z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0",
+                "tokenName": "utilZ",
+                "tokenSymbol": "utilZ",
+                "tokenDomain": "hyperqube.network",
+                "totalSupply": 165000000000000,
+                "maxSupply": 9007199254740991,
+                "decimals": 8,
+                "isMintable": true,
+                "isBurnable": true,
+                "isUtility": true,
+                "tokenStandard": "zts1utylzxxxxxxxxxxx6agxt0"
+            },
+            {
+                "owner": "z1qxemdeddedxt0kenxxxxxxxxxxxxxxxxh9amk0",
+                "tokenName": "utilQ",
+                "tokenSymbol": "utilQ",
+                "tokenDomain": "hyperqube.network",
+                "totalSupply": 1267800000000000,
+                "maxSupply": 9007199254740991,
+                "decimals": 8,
+                "isMintable": true,
+                "isBurnable": true,
+                "isUtility": true,
+                "tokenStandard": "zts1utylqxxxxxxxxxxxdzq2gc"
+            }
+        ]
+    },
+    "PlasmaConfig": {
+        "Fusions": [
+            {
+                "owner": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr",
+                "id": "85b559d52ef7e23b358cbceb12aeadcf5397bad860d8d50c4cd348246379e913",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr"
+            },
+            {
+                "owner": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr",
+                "id": "8d3a261582f0f7d01b0a7c6024da87e5637b5929cb71bc0f954cf14093e3059e",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr"
+            },
+            {
+                "owner": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr",
+                "id": "347ab55f43bf3e41cfedc07df54bdb30ead1704a1fbcef9e4205e8297e862126",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrszr9ht9untfgdmjjnyv4x5xhhdcfgzexd2ty"
+            },
+            {
+                "owner": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh",
+                "id": "3558bcc8fe744d2cf68157a1a6ba298fd71292042b32fc06d26bc5f0a6c926f8",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh"
+            },
+            {
+                "owner": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh",
+                "id": "eddd183d91976b55a77be3d1e22d775f260f02d7928574e529b415ee93401431",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh"
+            },
+            {
+                "owner": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh",
+                "id": "71b606978ec34c26c56622111603551d5719a49ed5e5cd60471ae2ac57bf61a9",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qp07s74snrmews9jt80906duwwdt3fcdfjmnyh"
+            },
+            {
+                "owner": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj",
+                "id": "73f089316c3ca5074c59c1080b07a24e2d675aa884ed4a431a8b98ed89790b6b",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj"
+            },
+            {
+                "owner": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj",
+                "id": "21f7eda96e1290e2bcb7f0642565969c3bd40143722023cfd3a24d78f05b2027",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj"
+            },
+            {
+                "owner": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj",
+                "id": "f9a7cb238c6b04a5e18ba3d690635eb03ac478c14d06e0d18213021c3065adb5",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrgyaagsswaelnk5m7rju80yfr45eetknhgr5z"
+            },
+            {
+                "owner": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5",
+                "id": "ed4928ca52fa6068d6fd75999a1212473025ca124dff3bbc7bb0a1d33eeafdd1",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5"
+            },
+            {
+                "owner": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5",
+                "id": "948995ffd751bc0646609f8ba3ea4a7c60c9600a2538391278bbafb3c4873d79",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5"
+            },
+            {
+                "owner": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5",
+                "id": "c5a40ea9f88507e7babfc68758508fb8db508b89b034ed21a176ce79487c2b58",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qr5z2gz8sm26qadge4kn0enramu24jc250nl6n"
+            },
+            {
+                "owner": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm",
+                "id": "f6c4aff1383342b6618f550f600698c0d3ef4b54102227a66982528250c29a31",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm"
+            },
+            {
+                "owner": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm",
+                "id": "e1613af0212432cc84476aa0f97cc934d3a552b320f72488951e0f5403945b49",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpldzm3dqdqrnv2xle7l3n8j2nqye38ttjgz67"
+            },
+            {
+                "owner": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm",
+                "id": "e0f77679b8851e0c802551d81e35c8b048cc2c43a6ac613b00eee5379cd910f4",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm"
+            },
+            {
+                "owner": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted",
+                "id": "4a7e2aa2009076679c45937dbe75a9b62edb724722f5d75eb35db467b94b1d36",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted"
+            },
+            {
+                "owner": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted",
+                "id": "f7521f1dae0d609852e72bfbcb749f4f790df76df39b888dbc79ac0049b2c7cd",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted"
+            },
+            {
+                "owner": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted",
+                "id": "51d5ce55996552b640d6c4f78e26ac11001a7911e6fd1430cb3912212981b757",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzcrjpk5nfpv5f2ljfft8fftfa2tughhqszmmn"
+            },
+            {
+                "owner": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+                "id": "d728bb2cdef7978de7ef801a7b799ca08acdd02b52209f0336e106ec369e9aaa",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a"
+            },
+            {
+                "owner": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+                "id": "9a5d22ab9fb27275e0a83e09fea51020a15000d6a964268715a0b9b71b20003a",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a"
+            },
+            {
+                "owner": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+                "id": "cff69528d4310e5b3eaf51ad4a32414a1b6b429052a4c552149c0c6c47b849ea",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqmw4ehps2c8uvsjzlr7w5f6u9lrzh9ajww2yy"
+            },
+            {
+                "owner": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl",
+                "id": "b2af6038a1823dadb955084aba91312faa6ca675db11cb521d64385b4de2e7fc",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl"
+            },
+            {
+                "owner": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl",
+                "id": "0a57b3122422d9f719b286839fb8fe497b11d6b2313142ccaf9226d6600a2b8c",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl"
+            },
+            {
+                "owner": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl",
+                "id": "32b55be34f1b4db9103f1c8a7ceb9eb2ad8847f04fb84ef17dd1a18c66847ca3",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqqakt0wjdq0vewuylegzm5wtc3p6np5vgxvxs"
+            },
+            {
+                "owner": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe",
+                "id": "1617279456112bbe6d24190958d03f5a2f5c7692fcc0f0b8f44354666130a645",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe"
+            },
+            {
+                "owner": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe",
+                "id": "61f3072c03f5c31cce2d3d3a7669eda96e48bb1989ef0197bff6fa5a34af5040",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe"
+            },
+            {
+                "owner": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe",
+                "id": "057d21ae1f8d906aaeb0b3df92ff297e17cc8dc743a6c4a7b9e5eeb927b875e9",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqudnypz3n8nfxxxgstv2awk2cs0fyhr5t7xd5"
+            },
+            {
+                "owner": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn",
+                "id": "f7a2da2febc4455650510ced41f0040cdf3f4eaa8814d9b2ca442d204d4c3865",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn"
+            },
+            {
+                "owner": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn",
+                "id": "97a5dbf707b3fea8dea57adab8d1df1234f4584a6d09d86a2d853f945ba76119",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn"
+            },
+            {
+                "owner": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn",
+                "id": "e3b21d8d4c4ce625751f9d475eaa2641f8d7f5e51d07c29f3b3e87d6342be4f4",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrmsz72tvhzywv9sgtxav4zmagarzc0x8c9y4q"
+            },
+            {
+                "owner": "z1qzypy59sjzgweda2natpqsvmreehtmhvh2rm98",
+                "id": "b691841a04fdd24799ee88fb31bb17d897a7284d40132aac805eca22de180263",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzypy59sjzgweda2natpqsvmreehtmhvh2rm98"
+            },
+            {
+                "owner": "z1qzypy59sjzgweda2natpqsvmreehtmhvh2rm98",
+                "id": "3ea6437f66cc99c04f15e195c158c61a1863f2e6e11d6afb1369dedde7a8caef",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqwwzcqn6wuw47lkewq5eluudq807wsl023lac"
+            },
+            {
+                "owner": "z1qzypy59sjzgweda2natpqsvmreehtmhvh2rm98",
+                "id": "b51f7ea7da3d612d152d1694025c594900b9a3e6c76332499af9a8c5235e99fe",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpgkxg9g9djkt2pvzs90clxkg6uxzswh9er8nt"
+            },
+            {
+                "owner": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q",
+                "id": "2983bff4dd3db02c85f9ba3c72c35a64b3e03638f05efc484f63d691fa186d95",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q"
+            },
+            {
+                "owner": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q",
+                "id": "095ddf8d39d77f96b01164e3fdcdbcbc37b92c7a28f3d1c8a7af585e0ebd891a",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q"
+            },
+            {
+                "owner": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q",
+                "id": "f627148c843e9ee23060e0e977a9d3d067d39f445234e13d313c0df8e275c345",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzrul2qauykcxfrvecmr9zqv47a8xr2r8yweem"
+            },
+            {
+                "owner": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp",
+                "id": "c9ac52abc250c16da7312b070bcf8ed3d6d9628210e2d76c0c1e74d5a121365d",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp"
+            },
+            {
+                "owner": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp",
+                "id": "6569660ac8f99ddf01f98187cac1ebcf1bcd4a791ac615e63b6d20e12aacad7c",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp"
+            },
+            {
+                "owner": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp",
+                "id": "423cd3b2b72f29fd81dd6b1a2aa628f4cc5f3ba8d18b00ca815b919d596460a0",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qz2v6h8hzlfptarfgv9t2qg8vpyp92xy5fpmaq"
+            },
+            {
+                "owner": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees",
+                "id": "5722c0b0d037a81640abc3ddadc6aa8ed1025636eb1f35aa02bfdd9c170cb046",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees"
+            },
+            {
+                "owner": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees",
+                "id": "6a20907aa223399d57535af7f29fe8b01db013769bdded1fcfc78864d6bf4402",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees"
+            },
+            {
+                "owner": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees",
+                "id": "ce5735ebefe76acd7cda72f989c73c37dedbc95d7f616fd3d98459ad753aa046",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpp4nn0atzjdntlvz6tzufpw2ujvxluu0qlefm"
+            },
+            {
+                "owner": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86",
+                "id": "e943c0865c148a11937913943c72b216503a7b64fb9d257a48a4d3290995ff4c",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86"
+            },
+            {
+                "owner": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86",
+                "id": "6ff867c28ea603ec2d6038ed9fd6b10e686fe3e38554d26dd1b643a98414e696",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86"
+            },
+            {
+                "owner": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86",
+                "id": "288f5124e7a7034bebb80d3ae95f69cd1990590223b5f9ae447bf36df02c5b0b",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrwtnx2s6e4u3wdcqlldvnzn8yvgz7k4pwxa8t"
+            },
+            {
+                "owner": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va",
+                "id": "6563314e73ffbad20456fffc3de0f0b609cdacc033371d58e0d6928bdd6978f5",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va"
+            },
+            {
+                "owner": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va",
+                "id": "831feb382897831172396492fc84d0c19e75030f1aa7173ceb3f574cca9f9d72",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va"
+            },
+            {
+                "owner": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va",
+                "id": "38c767fed3c8bd484ad0804b1f20bc9a2018c034d490ae1ef1165d8c1dc52215",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpha7l9na7sn0a6vs3mrhz64w3mexg4zeaw8z2"
+            },
+            {
+                "owner": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w",
+                "id": "dd680259da2409c2872d5a18d1ffe36dc8bd215c6c23e5d46e8a6e653700b516",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w"
+            },
+            {
+                "owner": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w",
+                "id": "b7f7083bb8147ee3d5e8727be117d111c60edd392f14ec83854f6fc82a0c5cd8",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w"
+            },
+            {
+                "owner": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w",
+                "id": "1d06453bfcc6e88e3aefe01444af3725eed1fa5dc039170ce7fc539c951aa829",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qquznf6lne2m32fhc5ntdsj34xwzpd26p3krzv"
+            },
+            {
+                "owner": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu",
+                "id": "9fd0104cedc2215e94265e2ecb63e3d75355f55cf1de90f471eaa30573411f53",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu"
+            },
+            {
+                "owner": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu",
+                "id": "53d13ae65aa3d4415ccc9909c40ceb198fb167c46f4b6932d43823b2c538d361",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu"
+            },
+            {
+                "owner": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu",
+                "id": "e5cb23b5ba641e8693d69a5188951852753be3b075c08550190c5de0c67f6506",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrn304m7ljyvazvjg3d0yq9xccz83x5sw5q057"
+            },
+            {
+                "owner": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht",
+                "id": "eb9b9a83dddf113e0224733d5322630f67f6ad0ad08f316697b87aaf9f61274e",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht"
+            },
+            {
+                "owner": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht",
+                "id": "8b9c90386d4579ac65e3069c742f6ea2fd7990e7d8901b4203d4d89f3fc971a0",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht"
+            },
+            {
+                "owner": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht",
+                "id": "0f93bbef453dc3c1a65e8fc3c91721dcc767a2bce46324d75f6b744367b5beb9",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqpupsxcwykym2lh6yk6jvazaqjeluglsa9x37"
+            },
+            {
+                "owner": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn",
+                "id": "08d3028ba986706bb918a0627f4fd9519179c40e2fbec32b5af79ed0311c51f1",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn"
+            },
+            {
+                "owner": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn",
+                "id": "8f1c33ba3f4b899edbcebeb87726ecc2f31ea382932fa6ecfa2c357f5951202f",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn"
+            },
+            {
+                "owner": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn",
+                "id": "609a5335f97659d964981718a9796149306b38efca2da035d323a835a7e80fc3",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpz8f7mh0x3g0nmhufh7c8k0w97z0mafu73ur7"
+            },
+            {
+                "owner": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7",
+                "id": "579348140e67d9f82aa242207908d49b7a97f2dc227fc5b608d967e5c7f14f28",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7"
+            },
+            {
+                "owner": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7",
+                "id": "412d98e189fc7eb820beebe0848866ec5fa005b8cd6d6bae8ebc2bc9ccd6b7ad",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7"
+            },
+            {
+                "owner": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7",
+                "id": "a4c21f1c191c9917a4dec26172938ab775267d65daca8e11390bc2e358d7da51",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qqs4kevk5pxqegmmfkg87fehseqf3gjlnzklur"
+            },
+            {
+                "owner": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf",
+                "id": "da07d23c6b350fc842f1ca7230f68084b54178806e997eac8519d1ffd3f76a47",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf"
+            },
+            {
+                "owner": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf",
+                "id": "c0a87db5372feabde050dea0395eb34d4a232c808d924376b27a04cbf259c308",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf"
+            },
+            {
+                "owner": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf",
+                "id": "06eb8307c6e99b931c9b1eb950ee770b20c50bb977612b5bbc34203acd642487",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzd3nnlaz4lu3hv76fhnz9m9s9daedpw2xuevj"
+            },
+            {
+                "owner": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40",
+                "id": "768b79eae31bdf00acedc9d3bcb4216d821f18aaacd9b4f4308798f322817aec",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40"
+            },
+            {
+                "owner": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40",
+                "id": "f53910faed80a2301615adc43d79957adf5b3651866a02a468c81964fa19ed97",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40"
+            },
+            {
+                "owner": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40",
+                "id": "2c3725c225dec94647001be0ea77c99c481077f1724be5832d1d046b2ce28b08",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzfjt9hs4mx73w5ap6h7x55wen68cs6s48anue"
+            },
+            {
+                "owner": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt",
+                "id": "1d2455d727cbdd0a1fac0d85efe9ba61718ebeb33cc19af314e35a5352e242aa",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt"
+            },
+            {
+                "owner": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt",
+                "id": "e6183dc91b2d16ec495a80921b8b51581a508149566da87e6d36c5e4c536e7ba",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt"
+            },
+            {
+                "owner": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt",
+                "id": "81cbd846f452c712a530955ed1a2fe59542c3b5d57cf191d355a61882c9e541b",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qryx09k0x94ylacp8nvpwzj3gxg27x3vrvnegl"
+            },
+            {
+                "owner": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham",
+                "id": "6f8f052185b96f3fa54f0d8f7927140f888ce1b09ba5e20c1b2f57193bf64a04",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham"
+            },
+            {
+                "owner": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham",
+                "id": "fb37f9d550f3a5d4061dd0f2efa59bd2f6a256d9efdf2f4b98d4baa689f559bf",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham"
+            },
+            {
+                "owner": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham",
+                "id": "a3b17d082d4e9d1e9a5026913e6630579829fbb5542350b0e13c8e66638a9987",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qrc49wuawp2zrdqyqxcrml2njek656xld22zws"
+            },
+            {
+                "owner": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt",
+                "id": "4c6108673e958a4b380194132a06b09366da56963c701ea44bb36ef940753bd1",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt"
+            },
+            {
+                "owner": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt",
+                "id": "4351b670be17582d93fad3d4768c4d8b01367c16c840370a3e3d9d326ed6ddc1",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt"
+            },
+            {
+                "owner": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt",
+                "id": "cfd6d7ed9c49956de2a59ed822dc7bc3f64c780e0a0642f549b452476b964fd0",
+                "amount": 100000000000,
+                "withdrawHeight": 1,
+                "beneficiaryAddress": "z1qp0cz7yxa96x0ux7qemrsnjsvy0nwzcyyywpma"
+            }
+        ]
+    },
+    "SwapConfig": {
+        "Entries": []
+    },
+    "SporkConfig": {
+        "Sporks": [
+            {
+                "id": "6d2b1e6cb4025f2f45533f0fe22e9b7ce2014d91cc960471045fa64eee5a6ba3",
+                "name": "az",
+                "description": "az",
+                "activated": true,
+                "enforcementHeight": 0
+            },
+            {
+                "id": "ceb7e3808ef17ea910adda2f3ab547be4cdfb54de8400ce3683258d06be1354b",
+                "name": "htlc",
+                "description": "htlc",
+                "activated": true,
+                "enforcementHeight": 0
+            },
+            {
+                "id": "ddd43466769461c5b5d109c639da0f50a7eeb96ad6e7274b1928a35c431d7b1b",
+                "name": "bridge-liq",
+                "description": "bridge-liq",
+                "activated": false,
+                "enforcementHeight": 0
+            },
+            {
+                "id": "c35c80695e6f1739ce19bd9b31e4a6702335fafd643139eb73b76541be2ca9e4",
+                "name": "hyperqube-no-pillar-reg",
+                "description": "hyperqube-no-pillar-reg",
+                "activated": true,
+                "enforcementHeight": 0
+            }
+        ]
+    },
+    "GenesisBlocks": {
+        "Blocks": [
+            {
+                "Address": "z1qxemdeddedxaccelerat0rxxxxxxxxxxp4tk22",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 1000000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 100000000000000
+                }
+            },
+            {
+                "Address": "z1qphj2m3w8fq0kx2qlkhld38v9kxe7fyyd8kzwr",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qrz46axeah84um3hc8zjhdxvyukxgduvnlkpwh",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qr8n5pznl60hac8lmw0j7xpvxfzhs0qv32k9hj",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qrzk707688lyzgsgvpv0xcxjljm5jrf5q2rru5",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qq4z9y4w2dz9z2xmquv4qphkp7wqs3mq2r53hm",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzztns6d2d2veucpq6y7fl0jddxwfxs5vazted",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qrjuk3kt2t0ynjdynwyk69s4epgvjwc483x66a",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qpwzsvx6jl7hs2xzum6ae08ztjem7y4wl5hskl",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qqyd72wp67lkxrxnwyfyxp0awy552089h9vsfe",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qrl0lhuj538ucz7h54y42nj5cp2pztepzww8fn",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzypy59sjzgweda2natpqsvmreehtmhvh2rm98",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzwve20m6uyefm79e2tmk290plyvn98lxjs43q",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qz529j9d2vu0xan22w0ksr6xr6r8cuftrmhmlp",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qp6vqwxuznkaqwuy5e065hgd9dv09kyxdphees",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qrfc4s22lvp4f90ekk5fyfjmt4k54mg2w0ct86",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzgxr0nmz8udguayapq6gs27aamy2eg68h73va",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzk4v3kp8km9p8kcu2k9u49788ma6ehlp4m60w",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qq4zghj7582t975j4vfe4eea83lcpzvqjfvvvu",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qqhvhekfa9nh9ccyuz5955e5xfyxmmuc2gstht",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzf4r0rjee8gzd3c038dg39yax302lygry3dfn",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzyc8uxwxusk3s2cg80c4vxgm37jvckj26ktw7",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qp3d56z2pd5m7774qdsatlng6m6306nstmjmuf",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qrgaff0jra7vy9hmtfq3pfqln5lc0dw626kz40",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qzhpdmueq9k7fyfhhqsy4yrzp6syre9sk0wezt",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qpqr550yrvdcz2hmhsp6uj55sjcmex2h3vvham",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qr37v9avk6qj8eplsxle5x2lm46j3syn6f53lt",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 10000000000000,
+                    "zts1utylzxxxxxxxxxxx6agxt0": 1000000000000
+                }
+            },
+            {
+                "Address": "z1qxemdeddedxpyllarxxxxxxxxxxxxxxxsy3fmg",
+                "BalanceList": {
+                    "zts1utylzxxxxxxxxxxx6agxt0": 39000000000000
+                }
+            },
+            {
+                "Address": "z1qxemdeddedxplasmaxxxxxxxxxxxxxxxxsctrp",
+                "BalanceList": {
+                    "zts1utylqxxxxxxxxxxxdzq2gc": 7800000000000
+                }
+            }
+        ]
+    }
+}

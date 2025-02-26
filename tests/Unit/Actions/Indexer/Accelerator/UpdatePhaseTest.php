@@ -15,7 +15,7 @@ use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\ContractMethod;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
 use Database\Seeders\TestGenesisSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +24,7 @@ uses()->group('indexer', 'indexer-actions', 'accelerator-actions');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(TestGenesisSeeder::class);
 });
 
@@ -38,7 +38,7 @@ function createUpdatePhaseAccountBlock(array $overrides = []): AccountBlock
     $default = [
         'account' => $project->owner,
         'toAccount' => load_account(EmbeddedContractsEnum::ACCELERATOR->value),
-        'token' => load_token(NetworkTokensEnum::ZNN->value),
+        'token' => load_token(NetworkTokensEnum::ZNN->zts()),
         'amount' => (string) (1 * NOM_DECIMALS),
         'blockType' => AccountBlockTypesEnum::SEND,
         'contractMethod' => ContractMethod::findByContractMethod('Accelerator', 'UpdatePhase'),

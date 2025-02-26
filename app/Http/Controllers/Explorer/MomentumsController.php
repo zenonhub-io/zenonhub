@@ -12,8 +12,8 @@ class MomentumsController
 {
     public function index(): View
     {
-        MetaTags::title('Momentums')
-            ->description('A list of the latest confirmed Momentums (blocks) on the Zenon Network. The timestamp, producer, number of transactions and hash are shown in the list')
+        MetaTags::title('Latest Momentums: Confirmed Blocks in the Zenon Network')
+            ->description('Browse the latest confirmed Momentums (blocks) on the Zenon Network, including timestamps, producers, transaction counts, and hashes')
             ->canonical(route('explorer.momentum.list'))
             ->metaByName('robots', 'index,nofollow');
 
@@ -31,8 +31,8 @@ class MomentumsController
             abort(404);
         }
 
-        MetaTags::title(__('Momentum #:height details (:hash)', ['height' => $momentum->height, 'hash' => $momentum->hash]))
-            ->description(__('Momentum #:height (:hash) detail page showing the network height, producing pillar and a list of transactions', ['height' => $momentum->height, 'hash' => $momentum->hash]))
+        MetaTags::title(__('Momentum #:height Details: Hash :hash', ['height' => $momentum->height, 'hash' => short_hash($momentum->hash)]))
+            ->description(__('View details for Momentum #:height (:hash), including the network height, producing pillar, and transaction list', ['height' => $momentum->height, 'hash' => $momentum->hash]))
             ->canonical(route('explorer.momentum.detail', ['hash' => $momentum->hash]))
             ->metaByName('robots', 'noindex,nofollow');
 

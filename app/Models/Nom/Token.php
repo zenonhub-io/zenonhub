@@ -238,20 +238,20 @@ class Token extends Model implements Sitemapable
     {
         $totalLocked = 0;
 
-        if ($this->token_standard === NetworkTokensEnum::ZNN->value) {
+        if ($this->token_standard === NetworkTokensEnum::ZNN->zts()) {
             $pillarLockup = Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->znn_balance;
             $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->znn_balance;
             $stakingLockup = Account::firstWhere('address', EmbeddedContractsEnum::STAKE->value)->znn_balance;
             $totalLocked = ($pillarLockup + $sentinelLockup + $stakingLockup);
         }
 
-        if ($this->token_standard === NetworkTokensEnum::QSR->value) {
+        if ($this->token_standard === NetworkTokensEnum::QSR->zts()) {
             $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->qsr_balance;
             $plasmaLockup = Account::firstWhere('address', EmbeddedContractsEnum::PLASMA->value)->qsr_balance;
             $totalLocked = ($sentinelLockup + $plasmaLockup);
         }
 
-        if ($this->token_standard === NetworkTokensEnum::LP_ZNN_ETH->value) {
+        if ($this->token_standard === NetworkTokensEnum::LP_ZNN_ETH->zts()) {
             $liquidityAccount = Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value);
             $totalLocked = $liquidityAccount->tokens()
                 ->where('token_id', $this->id)
@@ -269,9 +269,9 @@ class Token extends Model implements Sitemapable
     public function getHasLockedTokensAttribute(): bool
     {
         return in_array($this->token_standard, [
-            NetworkTokensEnum::ZNN->value,
-            NetworkTokensEnum::QSR->value,
-            NetworkTokensEnum::LP_ZNN_ETH->value,
+            NetworkTokensEnum::ZNN->zts(),
+            NetworkTokensEnum::QSR->zts(),
+            NetworkTokensEnum::LP_ZNN_ETH->zts(),
         ], true);
     }
 

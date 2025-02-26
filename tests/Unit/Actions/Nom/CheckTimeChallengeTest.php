@@ -6,14 +6,14 @@ use App\Actions\Nom\CheckTimeChallenge;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\TimeChallenge;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\Nom\Test\PillarsSeeder;
-use Database\Seeders\NomSeeder;
+use Database\Seeders\Nom\NetworkSeeder;
+use Database\Seeders\Test\PillarsSeeder;
 
 uses()->group('nom', 'nom-actions', 'check-time-challenge');
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-    $this->seed(NomSeeder::class);
+    $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
 });
 
