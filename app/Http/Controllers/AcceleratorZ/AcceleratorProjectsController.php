@@ -12,9 +12,19 @@ class AcceleratorProjectsController
 {
     public function index(?string $tab = 'all'): View
     {
-        MetaTags::title('Accelerator-Z Projects: Fueling Innovation in the Network of Momentum')
-            ->description('Explore the diverse array of innovative projects funded by Accelerator-Z within the Network of Momentum ecosystem. A list of all Accelerator-Z projects showing their phases, votes and funding request.')
-            ->canonical(route('accelerator-z.list'))
+        if ($tab === 'all') {
+            $title = 'Accelerator-Z Projects List: Fueling Innovation in the Network of Momentum';
+            $description = 'Discover all Accelerator-Z projects fostering innovation within the Network of Momentum ecosystem. Explore project phases, voting details, and funding requests in one place.';
+            $canonical = route('accelerator-z.list');
+        } else {
+            $title = sprintf('%s Accelerator-Z Projects List: Fueling Innovation in the Network of Momentum', str($tab)->singular()->title());
+            $description = "Browse {$tab} Accelerator-Z projects fostering Network of Momentum innovation. Learn more about project phases, votes, and funding";
+            $canonical = route('accelerator-z.list', ['tab' => $tab]);
+        }
+
+        MetaTags::title($title)
+            ->description($description)
+            ->canonical($canonical)
             ->metaByName('robots', 'index,follow');
 
         return view('accelerator-z.list', [
@@ -30,8 +40,8 @@ class AcceleratorProjectsController
             abort(404);
         }
 
-        MetaTags::title("{$project->name} - Project details")
-            ->description("Discover {$project->name}, a venture powered by Accelerator-Z within the Network of Momentum ecosystem. Explore its status, phases votes and more.")
+        MetaTags::title("{$project->name} - Accelerator-Z Project Details")
+            ->description("Learn more about {$project->name}, a project funded by Accelerator-Z in the Network of Momentum. Explore its funding status, phases, votes, and other key details")
             ->canonical(route('accelerator-z.project.detail', ['hash' => $project->hash]))
             ->metaByName('robots', 'index,follow');
 

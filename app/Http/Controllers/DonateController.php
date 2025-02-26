@@ -12,7 +12,8 @@ class DonateController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Donate to Zenon Hub', false)
+        MetaTags::title('Donate to Zenon Hub: Support Our Mission', false)
+            ->description('Contribute to Zenon Hub and help us continue building innovative tools for the Network of Momentum')
             ->canonical(route('donate'))
             ->metaByName('robots', 'index,nofollow');
 

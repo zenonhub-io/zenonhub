@@ -12,8 +12,8 @@ class TransactionsController
 {
     public function index(): View
     {
-        MetaTags::title('Transactions')
-            ->description('A list of transactions that have been confirmed on the Zenon Network. The list consists of transactions from sending and receiving tokens and the interactions with embedded smart contracts')
+        MetaTags::title('Zenon Network Transactions: Confirmed Transfers & Smart Contract Interactions')
+            ->description('Browse confirmed transactions on the Zenon Network, including token transfers and embedded smart contract interactions')
             ->canonical(route('explorer.transaction.list'))
             ->metaByName('robots', 'index,nofollow');
 
@@ -31,8 +31,8 @@ class TransactionsController
             abort(404);
         }
 
-        MetaTags::title(__('Transaction details (:hash)', ['hash' => $transaction->hash]))
-            ->description(__('Detailed transaction info for hash :hash. The transaction status, block type, confirmation and token transfer are shown', ['hash' => $transaction->hash]))
+        MetaTags::title(__('Transaction Details: Hash :hash', ['hash' => short_hash($transaction->hash)]))
+            ->description(__('View detailed information for transaction :hash, including status, block type, confirmation, and token transfer data', ['hash' => $transaction->hash]))
             ->canonical(route('explorer.transaction.detail', ['hash' => $transaction->hash]))
             ->metaByName('robots', 'noindex,nofollow');
 

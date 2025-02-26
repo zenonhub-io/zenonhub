@@ -12,9 +12,19 @@ class PillarsController
 {
     public function index(?string $tab = 'all'): View
     {
-        MetaTags::title('Zenon Network Pillars: Explore the Backbone of the Network of Momentum')
-            ->description("Discover the complete list of Zenon Network's pillars and delve into essential statistics. Explore key data on weight, engagement, reward sharing, and network stability")
-            ->canonical(route('pillar.list', ['tab' => $tab]))
+        if ($tab === 'all') {
+            $title = 'Pillars List: Explore the validator nodes of the Network of Momentum';
+            $description = "Explore the complete list of Zenon Network's pillars, including their weight, engagement, reward sharing, and overall contribution to network stability";
+            $canonical = route('pillar.list');
+        } else {
+            $title = sprintf('%s Pillars List: Explore the validator nodes of the Network of Momentum', str($tab)->singular()->title());
+            $description = "Browse {$tab} pillars of the Zenon Network and explore weight, engagement, reward sharing, and their role in strengthening the Network of Momentum";
+            $canonical = route('pillar.list', ['tab' => $tab]);
+        }
+
+        MetaTags::title($title)
+            ->description($description)
+            ->canonical($canonical)
             ->metaByName('robots', 'index,follow');
 
         return view('pillars.list', [
@@ -30,10 +40,10 @@ class PillarsController
             abort(404);
         }
 
-        MetaTags::title("{$pillar->name} - Pillar details")
-            ->description("Explore the on-chain activity of {$pillar->name} in the Zenon Network. Discover information about its delegators, votes and updates")
+        MetaTags::title("{$pillar->name} - Zenon Network Pillar Details")
+            ->description("Delve into {$pillar->name}'s on-chain activity in the Zenon Network, including delegators, votes, reward engagement, and latest updates")
             ->canonical(route('pillar.detail', ['slug' => $pillar->slug]))
-            ->metaByName('robots', 'index,nofollow');
+            ->metaByName('robots', 'index,follow');
 
         return view('pillars.detail', [
             'tab' => $tab,
