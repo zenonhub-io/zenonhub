@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Utilities;
 
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Nom\Account;
 use App\Models\Nom\Token;
@@ -14,7 +13,7 @@ class AccountLpBalancesController extends ApiController
 {
     public function __invoke(): JsonResponse
     {
-        $lpToken = Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->zts());
+        $lpToken = Token::firstWhere('token_standard', app('znnEthLpToken')->token_standard);
         $accounts = Account::whereHas(
             'stakes',
             fn ($q) => $q->where('token_id', $lpToken->id)

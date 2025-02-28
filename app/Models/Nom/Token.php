@@ -6,7 +6,6 @@ namespace App\Models\Nom;
 
 use App\DataTransferObjects\Nom\TokenDTO;
 use App\Enums\Nom\EmbeddedContractsEnum;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Favorite;
 use App\Models\SocialProfile;
 use App\Services\ZenonSdk\ZenonSdk;
@@ -238,20 +237,20 @@ class Token extends Model implements Sitemapable
     {
         $totalLocked = 0;
 
-        if ($this->token_standard === NetworkTokensEnum::ZNN->zts()) {
+        if ($this->token_standard === app('znnToken')->token_standard) {
             $pillarLockup = Account::firstWhere('address', EmbeddedContractsEnum::PILLAR->value)->znn_balance;
             $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->znn_balance;
             $stakingLockup = Account::firstWhere('address', EmbeddedContractsEnum::STAKE->value)->znn_balance;
             $totalLocked = ($pillarLockup + $sentinelLockup + $stakingLockup);
         }
 
-        if ($this->token_standard === NetworkTokensEnum::QSR->zts()) {
+        if ($this->token_standard === app('qsrToken')->token_standard) {
             $sentinelLockup = Account::firstWhere('address', EmbeddedContractsEnum::SENTINEL->value)->qsr_balance;
             $plasmaLockup = Account::firstWhere('address', EmbeddedContractsEnum::PLASMA->value)->qsr_balance;
             $totalLocked = ($sentinelLockup + $plasmaLockup);
         }
 
-        if ($this->token_standard === NetworkTokensEnum::LP_ZNN_ETH->zts()) {
+        if ($this->token_standard === app('znnEthLpToken')->token_standard) {
             $liquidityAccount = Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value);
             $totalLocked = $liquidityAccount->tokens()
                 ->where('token_id', $this->id)
@@ -269,9 +268,9 @@ class Token extends Model implements Sitemapable
     public function getHasLockedTokensAttribute(): bool
     {
         return in_array($this->token_standard, [
-            NetworkTokensEnum::ZNN->zts(),
-            NetworkTokensEnum::QSR->zts(),
-            NetworkTokensEnum::LP_ZNN_ETH->zts(),
+            app('znnToken')->token_standard,
+            app('qsrToken')->token_standard,
+            app('znnEthLpToken')->token_standard,
         ], true);
     }
 
@@ -297,19 +296,28 @@ class Token extends Model implements Sitemapable
 
     public function getRawJsonAttribute(): ?TokenDTO
     {
-        $cacheKey = $this->cacheKey('raw-json', 'updated_at');
-        $data = Cache::get($cacheKey);
+        if ($this->is_network) {
 
-        try {
-            $newData = app(ZenonSdk::class)->getByZts($this->token_standard);
-            Cache::forever($cacheKey, $newData);
-            $data = $newData;
-        } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            $cacheKey = $this->cacheKey('raw-json', 'updated_at');
+            $data = Cache::get($cacheKey);
+
+            try {
+                $newData = app(ZenonSdk::class)->getByZts($this->token_standard);
+                Cache::put($cacheKey, $newData, now()->addDay());
+                $data = $newData;
+            } catch (Throwable $throwable) {
+                // If API request fails, we do not need to do anything,
+                // we will return previously cached data (retrieved at the start of the function).
+            }
+
+            return $data;
         }
 
-        return $data;
+        try {
+            return app(ZenonSdk::class)->getByZts($this->token_standard);
+        } catch (Throwable $throwable) {
+            return null;
+        }
     }
 
     public function getAvatarSvgAttribute()

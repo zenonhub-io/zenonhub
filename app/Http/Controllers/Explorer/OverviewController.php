@@ -15,8 +15,8 @@ class OverviewController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Zenon Network Overview: Momentums, Transactions, Accounts, & Tokens')
-            ->description('Explore the Zenon Network through its momentums, transactions, accounts, tokens, and more on Zenon Hub')
+        MetaTags::title(__('Zenon Network Overview: Momentums, Transactions, Accounts, & Tokens'))
+            ->description(__('Explore the Zenon Network through its momentums, transactions, accounts, tokens, and more on Zenon Hub'))
             ->canonical(route('explorer.overview'))
             ->metaByName('robots', 'index,nofollow');
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Pillar;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Pillar\PillarRegistered;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -85,7 +84,7 @@ class RegisterLegacy extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Delegate reward percentage is invalid');
         }
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
+        if ($accountBlock->token->token_standard !== app('znnToken')->token_standard) {
             throw new IndexerActionValidationException('Token must be ZNN');
         }
 

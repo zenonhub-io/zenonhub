@@ -50,14 +50,14 @@ class AffiliateList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('Total ZNN')
+            Column::make(__('Total :znn', ['znn' => app('znnToken')->symbol]))
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('total_znn ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => app('znnToken')->getFormattedAmount($row->total_znn)
                 ),
-            Column::make('Total QSR')
+            Column::make(__('Total :qsr', ['qsr' => app('qsrToken')->symbol]))
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('total_qsr ' . $direction)
                 )

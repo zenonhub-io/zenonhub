@@ -55,6 +55,6 @@ class NoMServiceProvider extends ServiceProvider
 
         $this->app->singleton('znnEthLpToken', fn ($app, $params) => Token::firstWhere('token_standard', NetworkTokensEnum::LP_ZNN_ETH->zts()));
 
-        $this->app->singleton('currentChain', fn ($app, $params) => Chain::firstWhere('code', config('zenon-hub.chain_code')));
+        $this->app->singleton('currentChain', fn ($app, $params) => Chain::firstWhere('code', config('nom.chain_code')));
     }
 }

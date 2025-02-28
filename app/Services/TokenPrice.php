@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Exceptions\TokenPriceException;
 use App\Models\Nom\Currency;
 use App\Models\Nom\Token;
@@ -65,8 +64,8 @@ class TokenPrice
     private function getTokenIdMap(): array
     {
         return [
-            NetworkTokensEnum::ZNN->zts() => 'zenon-2',
-            NetworkTokensEnum::QSR->zts() => 'quasar',
+            app('znnToken')->token_standard => 'zenon-2',
+            app('qsrToken')->token_standard => 'quasar',
         ];
     }
 }

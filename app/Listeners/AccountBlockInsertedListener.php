@@ -9,7 +9,6 @@ use App\Actions\Nom\UpdateAccountTotals;
 use App\Bots\BridgeAlertBot;
 use App\Bots\WhaleAlertBot;
 use App\Enums\Nom\EmbeddedContractsEnum;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\AccountBlockInserted;
 use App\Factories\ContractMethodProcessorFactory;
 use App\Models\Nom\Account;
@@ -74,7 +73,7 @@ class AccountBlockInsertedListener
 
     private function dispatchLiquidityProgramProcessor(AccountBlock $accountBlock): void
     {
-        if ($accountBlock->token?->token_standard !== NetworkTokensEnum::QSR->zts()) {
+        if ($accountBlock->token?->token_standard !== app('qsrToken')->token_standard) {
             return;
         }
 
@@ -99,8 +98,8 @@ class AccountBlockInsertedListener
         }
 
         if (
-            ($accountBlock->token->token_standard === NetworkTokensEnum::ZNN->zts() && $accountBlock->amount >= $znnValue) ||
-            ($accountBlock->token->token_standard === NetworkTokensEnum::QSR->zts() && $accountBlock->amount >= $qsrValue)
+            ($accountBlock->token->token_standard === app('znnToken')->token_standard && $accountBlock->amount >= $znnValue) ||
+            ($accountBlock->token->token_standard === app('qsrToken')->token_standard && $accountBlock->amount >= $qsrValue)
         ) {
             Notification::send(new WhaleAlertBot, (new WhaleAlert($accountBlock)));
         }

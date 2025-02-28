@@ -12,16 +12,16 @@ class BridgeController
 {
     public function __invoke(?string $tab = 'inbound'): View
     {
-        $title = sprintf('%s Bridge Transactions: Track Transfers into the Zenon Network', Str::headline($tab));
-        $description = "View a detailed list of {$tab} bridge transactions, including sender and receiver addresses, amounts, and networks.";
+        $title = __(':tab Bridge Transactions: Track Transfers into the Zenon Network', ['tab' => Str::headline($tab)]);
+        $description = __('View a detailed list of :tab bridge transactions, including sender and receiver addresses, amounts, and networks', ['tab' => $tab]);
         $canonical = route('explorer.bridge.list');
 
         if ($tab === 'outbound') {
-            $title = sprintf('%s Bridge Transactions: Track Transfers from the Zenon Network', Str::headline($tab));
+            $title = __(':tab Bridge Transactions: Track Transfers from the Zenon Network', ['tab' => Str::headline($tab)]);
             $canonical = route('explorer.bridge.list', ['tab' => $tab]);
         } elseif ($tab === 'networks') {
-            $title = 'Bridge Networks: Supported Chains and Wrapped Tokens';
-            $description = 'Discover supported bridge networks, including their names, contract addresses, and total wrapped tokens on Zenon';
+            $title = __('Bridge Networks: Supported Chains and Wrapped Tokens');
+            $description = __('Discover supported bridge networks, including their names, contract addresses, and total wrapped tokens on Zenon');
         }
 
         MetaTags::title($title)

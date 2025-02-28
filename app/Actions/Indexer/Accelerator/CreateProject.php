@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Accelerator;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Accelerator\ProjectCreated;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AcceleratorProject;
@@ -90,7 +89,7 @@ class CreateProject extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Max QSR funds exceeded');
         }
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
+        if ($accountBlock->token->token_standard !== app('znnToken')->token_standard) {
             throw new IndexerActionValidationException('Token fee must be ZNN');
         }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Sync;
 
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Exceptions\TokenPriceException;
 use App\Models\Nom\Currency;
 use App\Models\Nom\Token;
@@ -60,8 +59,8 @@ class TokenPrices
     public function asCommand(Command $command): void
     {
         $tokens = Token::whereIn('token_standard', [
-            NetworkTokensEnum::ZNN->zts(),
-            NetworkTokensEnum::QSR->zts(),
+            app('znnToken')->token_standard,
+            app('qsrToken')->token_standard,
         ])->get();
 
         $progressBar = new ProgressBar(new ConsoleOutput, $tokens->count());

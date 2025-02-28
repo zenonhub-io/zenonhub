@@ -95,8 +95,8 @@ class StakesList extends BaseTable
             SelectFilter::make('Token')
                 ->options([
                     '' => 'All',
-                    'znn' => 'ZNN',
-                    'znnethlp' => 'ZNN-ETH-LP',
+                    'znn' => app('znnToken')->name,
+                    'znnethlp' => app('znnEthLpToken')->name,
                 ])
                 ->filter(function (Builder $builder, string $value) {
                     if ($value === 'znn') {

@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Throwable;
 
@@ -240,19 +239,11 @@ class AccountBlock extends Model
 
     public function getRawJsonAttribute(): ?AccountBlockDTO
     {
-        $cacheKey = $this->cacheKey('raw-json');
-        $data = Cache::get($cacheKey);
-
         try {
-            $newData = app(ZenonSdk::class)->getAccountBlockByHash($this->hash);
-            Cache::forever($cacheKey, $newData);
-            $data = $newData;
+            return app(ZenonSdk::class)->getAccountBlockByHash($this->hash);
         } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            return null;
         }
-
-        return $data;
     }
 
     public function getIsUnreceivedAttribute(): bool

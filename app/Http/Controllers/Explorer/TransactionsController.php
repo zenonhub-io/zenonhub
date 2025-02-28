@@ -12,8 +12,8 @@ class TransactionsController
 {
     public function index(): View
     {
-        MetaTags::title('Zenon Network Transactions: Confirmed Transfers & Smart Contract Interactions')
-            ->description('Browse confirmed transactions on the Zenon Network, including token transfers and embedded smart contract interactions')
+        MetaTags::title(__('Zenon Network Transactions: Confirmed Transfers & Smart Contract Interactions'))
+            ->description(__('Browse confirmed transactions on the Zenon Network, including token transfers and embedded smart contract interactions'))
             ->canonical(route('explorer.transaction.list'))
             ->metaByName('robots', 'index,nofollow');
 

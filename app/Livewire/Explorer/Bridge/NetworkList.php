@@ -43,11 +43,11 @@ class NetworkList extends BaseTable
                         'newTab' => true,
                     ])
                 ),
-            Column::make('Wrapped ZNN')
+            Column::make(__('Wrapped :znn', ['znn' => app('znnToken')->symbol]))
                 ->label(
                     fn ($row, Column $column) => app('znnToken')->getFormattedAmount($row->total_znn_held)
                 ),
-            Column::make('Wrapped QSR')
+            Column::make(__('Wrapped :qsr', ['qsr' => app('qsrToken')->symbol]))
                 ->label(
                     fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->total_qsr_held)
                 ),

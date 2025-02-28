@@ -13,12 +13,12 @@ class TokensController
     public function index(?string $tab = 'all'): View
     {
         if ($tab === 'all') {
-            $title = 'All Tokens List: Supply & Holders in the Zenon Network';
-            $description = 'Explore all tokens on the Zenon Network. View their total supply, current supply, and detailed holder statistics in one place';
+            $title = __('All Tokens List: Supply & Holders in the Zenon Network');
+            $description = __('Explore all tokens on the Zenon Network. View their total supply, current supply, and detailed holder statistics in one place');
             $canonical = route('explorer.token.list');
         } else {
-            $title = sprintf('%s Tokens List: Supply & Holders in the Zenon Network', str($tab)->singular()->title());
-            $description = "Discover {$tab} tokens in the Zenon Network. Learn about their supply, holders, and key statistics for deeper insights";
+            $title = __(':tab Tokens List: Supply & Holders in the Zenon Network', ['tab' => str($tab)->singular()->title()]);
+            $description = __('Discover :tab tokens in the Zenon Network. Learn about their supply, holders, and key statistics for deeper insights', ['tab' => $tab]);
             $canonical = route('explorer.token.list', ['tab' => $tab]);
         }
 

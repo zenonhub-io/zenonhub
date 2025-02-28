@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Plasma;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Plasma\StartFuse;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -62,7 +61,7 @@ class Fuse extends AbstractContractMethodProcessor
          */
         [$accountBlock] = func_get_args();
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::QSR->zts()) {
+        if ($accountBlock->token->token_standard !== app('qsrToken')->token_standard) {
             throw new IndexerActionValidationException('Invalid token, must be QSR');
         }
 

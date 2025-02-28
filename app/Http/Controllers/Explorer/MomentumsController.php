@@ -12,8 +12,8 @@ class MomentumsController
 {
     public function index(): View
     {
-        MetaTags::title('Latest Momentums: Confirmed Blocks in the Zenon Network')
-            ->description('Browse the latest confirmed Momentums (blocks) on the Zenon Network, including timestamps, producers, transaction counts, and hashes')
+        MetaTags::title(__('Latest Momentums: Confirmed Blocks in the Zenon Network'))
+            ->description(__('Browse the latest confirmed Momentums (blocks) on the Zenon Network, including timestamps, producers, transaction counts, and hashes'))
             ->canonical(route('explorer.momentum.list'))
             ->metaByName('robots', 'index,nofollow');
 

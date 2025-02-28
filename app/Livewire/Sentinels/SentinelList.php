@@ -42,14 +42,14 @@ class SentinelList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('ZNN Balance', 'owner.znn_balance')
+            Column::make(__(':znn Balance', ['znn' => app('znnToken')->symbol]), 'owner.znn_balance')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(owner.znn_balance AS SIGNED) ' . $direction)
                 )
                 ->format(
                     fn ($value, $row, Column $column) => $row->owner->display_znn_balance
                 ),
-            Column::make('QSR Balance', 'owner.qsr_balance')
+            Column::make(__(':qsr Balance', ['qsr' => app('qsrToken')->symbol]), 'owner.qsr_balance')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(owner.qsr_balance AS SIGNED) ' . $direction)
                 )

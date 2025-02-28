@@ -47,8 +47,8 @@
                     <x-cards.body>
                         <x-stats.mini-stat
                             :title="__('Weight')"
-                            :stat="$pillar->display_weight . ' ZNN'"
-                            :info="__('Total ZNN delegated to the pillar')"
+                            :stat="__(':weight :znn', ['weight' => $pillar->display_weight, 'znn' => app('znnToken')->symbol])"
+                            :info="__('Total :znn delegated to the pillar', ['znn' => app('znnToken')->symbol])"
                         />
                     </x-cards.body>
                 </x-cards.card>

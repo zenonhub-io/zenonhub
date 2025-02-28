@@ -1,10 +1,12 @@
 <x-app-layout>
 
     <x-includes.header :title="__('Staking')">
-        <x-navigation.header.responsive-nav :items="[
-            __('ZNN') => route('explorer.stake.list'),
-            __('ZNN-ETH-LP') => route('explorer.stake.list', ['tab' => 'znn-eth-lp']),
-        ]" :active="$tab" />
+        @if (app('znnEthLpToken'))
+            <x-navigation.header.responsive-nav :items="[
+                app('znnToken')->symbol => route('explorer.stake.list'),
+                app('znnEthLpToken')->symbol => route('explorer.stake.list', ['tab' => 'znn-eth-lp']),
+            ]" :active="$tab" />
+        @endif
     </x-includes.header>
 
     <div class="container-fluid px-3 px-md-6">

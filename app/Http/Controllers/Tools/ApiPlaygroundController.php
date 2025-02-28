@@ -11,8 +11,8 @@ class ApiPlaygroundController
 {
     public function __invoke(): View
     {
-        MetaTags::title('API Playground: RPC Endpoint Testing & Exploration')
-            ->description('Explore and test the public RPC endpoints of the Zenon Network and see the results right in your browser')
+        MetaTags::title(__('API Playground: RPC Endpoint Testing & Exploration'))
+            ->description(__('Explore and test the public RPC endpoints of the Zenon Network and see the results right in your browser'))
             ->canonical(route('tools.api-playground'))
             ->metaByName('robots', 'index,nofollow');
 

@@ -11,8 +11,8 @@ class HomeController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Zenon Hub | Explore the Zenon Network (Network of Momentum)', false)
-            ->description('Discover Zenon Hub – your portal to the innovative Zenon Network. Track transactions, addresses, tokens, and explore activity on the cutting-edge Network of Momentum')
+        MetaTags::title(__('Zenon Hub | Explore the Zenon Network (Network of Momentum)'), false)
+            ->description(__('Discover Zenon Hub – your portal to the innovative Zenon Network. Track transactions, addresses, tokens, and explore activity on the cutting-edge Network of Momentum'))
             ->twitterImage(asset('build/img/meta-big.png'))
             ->openGraphImage(asset('build/img/meta-big.png'))
             ->canonical(route('home'))

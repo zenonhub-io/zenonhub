@@ -18,8 +18,8 @@ class AcceleratorZStatsController
 {
     public function __invoke(?string $tab = 'overview'): View
     {
-        MetaTags::title('Accelerator-Z Stats: Projects, Voting, and Contributor Insights')
-            ->description('Get detailed statistics on the Accelerator-Z embedded smart contract, including project progress, pillar voting engagement, and contributor activity')
+        MetaTags::title(__('Accelerator-Z Stats: Projects, Voting, and Contributor Insights'))
+            ->description(__('Get detailed statistics on the Accelerator-Z embedded smart contract, including project progress, pillar voting engagement, and contributor activity'))
             ->canonical(route('stats.accelerator-z'))
             ->metaByName('robots', 'index,nofollow');
 

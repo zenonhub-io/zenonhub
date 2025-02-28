@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Sentinel;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Sentinel\SentinelRegistered;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -58,7 +57,7 @@ class Register extends AbstractContractMethodProcessor
          */
         [$accountBlock] = func_get_args();
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
+        if ($accountBlock->token->token_standard !== app('znnToken')->token_standard) {
             throw new IndexerActionValidationException('Invalid token');
         }
 

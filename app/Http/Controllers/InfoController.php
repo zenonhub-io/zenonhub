@@ -11,7 +11,7 @@ class InfoController
 {
     public function __invoke(): View
     {
-        MetaTags::title('About Zenon Hub: Empowering Blockchain Innovation', false)
+        MetaTags::title(__('About Zenon Hub: Our Mission & Vision'), false)
             ->description('Learn more about Zenon Hub, our mission, vision, and commitment to advancing blockchain technology and community innovation')
             ->canonical(route('info'))
             ->metaByName('robots', 'index,follow');

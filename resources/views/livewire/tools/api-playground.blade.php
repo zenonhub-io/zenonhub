@@ -35,7 +35,7 @@
                                 'Pending Unwraps' => 'request=Bridge.getAllUnsignedWrapTokenRequests&data[pageIndex]=0&data[pageSize]=5',
                                 'Latest Momentum' => 'request=Ledger.getFrontierMomentum',
                                 'Account Info' => 'request=Ledger.getAccountInfoByAddress',
-                                'ZNN Token Info' => 'request=Token.getByZts&data[token]=zts1znnxxxxxxxxxxxxx9z4ulx',
+                                __(':znn Token Info', ['znn' => app('znnToken')->symbol]) => 'request=Token.getByZts&data[token]='.app('znnToken')->token_standard,
                             ] as $title => $link)
                                 <div class="list-group-item d-flex align-items-center">
                                     <x-link :href="url('tools/api-playground?' . $link)" class="stretched-link">
