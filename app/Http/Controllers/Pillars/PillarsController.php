@@ -13,12 +13,12 @@ class PillarsController
     public function index(?string $tab = 'all'): View
     {
         if ($tab === 'all') {
-            $title = 'Pillars List: Explore the validator nodes of the Network of Momentum';
-            $description = "Explore the complete list of Zenon Network's pillars, including their weight, engagement, reward sharing, and overall contribution to network stability";
+            $title = __('Pillars List: Explore the Validator Nodes of the Network of Momentum');
+            $description = __("Explore the complete list of Zenon Network's pillars, including their weight, engagement, reward sharing, and overall contribution to network stability");
             $canonical = route('pillar.list');
         } else {
-            $title = sprintf('%s Pillars List: Explore the validator nodes of the Network of Momentum', str($tab)->singular()->title());
-            $description = "Browse {$tab} pillars of the Zenon Network and explore weight, engagement, reward sharing, and their role in strengthening the Network of Momentum";
+            $title = __(':tab Pillars List: Explore the Validator Nodes of the Network of Momentum', ['tab' => str($tab)->singular()->title()]);
+            $description = __('Browse :tab pillars of the Zenon Network and explore weight, engagement, reward sharing, and their role in strengthening the Network of Momentum', ['tab' => $tab]);
             $canonical = route('pillar.list', ['tab' => $tab]);
         }
 
@@ -40,8 +40,8 @@ class PillarsController
             abort(404);
         }
 
-        MetaTags::title("{$pillar->name} - Zenon Network Pillar Details")
-            ->description("Delve into {$pillar->name}'s on-chain activity in the Zenon Network, including delegators, votes, reward engagement, and latest updates")
+        MetaTags::title(__(':name - Zenon Network Pillar Details', ['name' => $pillar->name]))
+            ->description(__("Delve into :name's on-chain activity in the Zenon Network, including delegators, votes, reward engagement, and latest updates", ['name' => $pillar->name]))
             ->canonical(route('pillar.detail', ['slug' => $pillar->slug]))
             ->metaByName('robots', 'index,follow');
 

@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 use Maize\Markable\Markable;
 use Throwable;
 
@@ -147,19 +146,11 @@ class Momentum extends Model
 
     public function getRawJsonAttribute(): ?MomentumDTO
     {
-        $cacheKey = $this->cacheKey('raw-json');
-        $data = Cache::get($cacheKey);
-
         try {
-            $newData = app(ZenonSdk::class)->getMomentumsByHash($this->hash);
-            Cache::forever($cacheKey, $newData);
-            $data = $newData;
+            return app(ZenonSdk::class)->getMomentumsByHash($this->hash);
         } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            return null;
         }
-
-        return $data;
     }
 
     public function getIsFavouriteAttribute(): bool

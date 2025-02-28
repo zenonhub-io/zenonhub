@@ -200,7 +200,7 @@
                 <div class="col-12 col-lg-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('ZNN Paid')">
+                            <x-stats.mini-stat :title="__(':znn Paid', ['znn' => app('znnToken')->symbol])">
                                 <span class="text-primary">
                                     {{ $stats['znn_paid'] }}
                                 </span>
@@ -211,7 +211,7 @@
                 <div class="col-12 col-lg-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('QSR Paid')">
+                            <x-stats.mini-stat :title="__(':qsr Paid', ['qsr' => app('qsrToken')->symbol])">
                                 <span class="text-secondary">
                                     {{ $stats['qsr_paid'] }}
                                 </span>

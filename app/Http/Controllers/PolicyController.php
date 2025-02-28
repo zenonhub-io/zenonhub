@@ -11,8 +11,8 @@ class PolicyController
 {
     public function __invoke(): View
     {
-        MetaTags::title('Privacy Policy')
-            ->description('Understand how Zenon Hub collects, uses, and protects your data in compliance with privacy regulations')
+        MetaTags::title(__('Privacy Policy'))
+            ->description(__('Understand how Zenon Hub collects, uses, and protects your data in compliance with privacy regulations'))
             ->canonical(route('policy'))
             ->metaByName('robots', 'index,nofollow');
 

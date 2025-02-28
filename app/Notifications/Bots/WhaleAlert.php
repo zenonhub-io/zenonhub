@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Notifications\Bots;
 
 use App\Channels\DiscordWebhookChannel;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Services\Discord\Embed;
@@ -159,9 +158,9 @@ Tx: $txLink");
     private function getDiscordHighlightColour(): int
     {
         $colour = 0x607D8B; // Grey
-        if ($this->block->token->token_standard === NetworkTokensEnum::ZNN->zts()) {
+        if ($this->block->token->token_standard === app('znnToken')->token_standard) {
             $colour = config('zenon-hub.colours.zenon-green');
-        } elseif ($this->block->token->token_standard === NetworkTokensEnum::QSR->zts()) {
+        } elseif ($this->block->token->token_standard === app('qsrToken')->token_standard) {
             $colour = config('zenon-hub.colours.zenon-blue');
         }
 

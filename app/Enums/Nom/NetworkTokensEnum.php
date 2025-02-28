@@ -12,12 +12,23 @@ enum NetworkTokensEnum: string
     case LP_ZNN_ETH = 'ZNNETHLP';
     case WBTC = 'WBTC';
 
-    public function label(): string
+    public function name(): string
     {
         return match ($this) {
             self::EMPTY => 'Empty',
-            self::ZNN => 'ZNN',
-            self::QSR => 'QSR',
+            self::ZNN => config('nom.tokens.znn.name'),
+            self::QSR => config('nom.tokens.qsr.name'),
+            self::LP_ZNN_ETH => 'wZNN-wETH-LP-ETH',
+            self::WBTC => 'WrappedBTC',
+        };
+    }
+
+    public function symbol(): string
+    {
+        return match ($this) {
+            self::EMPTY => 'Empty',
+            self::ZNN => config('nom.tokens.znn.symbol'),
+            self::QSR => config('nom.tokens.qsr.symbol'),
             self::LP_ZNN_ETH => 'wZNN-wETH-LP-ETH',
             self::WBTC => 'WrappedBTC',
         };
@@ -27,8 +38,8 @@ enum NetworkTokensEnum: string
     {
         return match ($this) {
             self::EMPTY => 'zts1qqqqqqqqqqqqqqqqtq587y',
-            self::ZNN => config('nom.znn_zts'),
-            self::QSR => config('nom.qsr_zts'),
+            self::ZNN => config('nom.tokens.znn.zts'),
+            self::QSR => config('nom.tokens.qsr.zts'),
             self::LP_ZNN_ETH => 'zts17d6yr02kh0r9qr566p7tg6',
             self::WBTC => 'zts14pmddt35kawqweg3re08zj',
         };

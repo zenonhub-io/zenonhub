@@ -16,8 +16,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 @foreach([
-                                    'znn' => 'ZNN',
-                                    'qsr' => 'QSR',
+                                    'znn' => app('znnToken')->symbol,
+                                    'qsr' => app('qsrToken')->symbol,
                                 ] as $tokenKey => $tokenTitle)
                                     <li><a class="dropdown-item {{ $token === $tokenKey ? 'active' : '' }}" href="#" wire:click="$set('token','{{ $tokenKey }}')">{{ $tokenTitle }}</a></li>
                                 @endforeach
@@ -26,8 +26,7 @@
                         @foreach([
                             '7d' => '7D',
                             '30d' => '30D',
-                            'w' => 'W',
-                            'm' => 'M',
+                            '60d' => '60D',
                             'y' => 'Y',
                         ] as $timeframeKey => $timeframeTitle)
                             <a href="#"

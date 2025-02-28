@@ -18,8 +18,8 @@ class AcceleratorPhaseController
             abort(404);
         }
 
-        MetaTags::title("{$phase->name} - Accelerator-Z Phase Details")
-            ->description("Discover {$phase->name} phase of the {$phase->project->name} project, funded by Accelerator-Z within the Network of Momentum ecosystem. Explore its funding status, votes and more")
+        MetaTags::title(__(':phase_name - Accelerator-Z Phase Details', ['phase_name' => $phase->name]))
+            ->description(__('Discover :phase_name phase of the :project_name project, funded by Accelerator-Z within the Network of Momentum ecosystem. Explore its funding status, votes and more', ['phase_name' => $phase->name, 'project_name' => $phase->project->name]))
             ->canonical(route('accelerator-z.phase.detail', ['hash' => $phase->hash]))
             ->metaByName('robots', 'index,follow');
 

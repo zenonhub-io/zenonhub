@@ -3,9 +3,6 @@
 declare(strict_types=1);
 
 return [
-
-    'chain_code' => env('CHAIN_CODE', 'nom'),
-
     'google_analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-68QQY4TT6Z'),
 
     'donation_address' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',

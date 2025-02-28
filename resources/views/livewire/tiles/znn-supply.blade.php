@@ -1,7 +1,7 @@
 <div>
     <x-cards.card>
         <x-cards.body>
-            <x-stats.mini-stat :title="__('ZNN Supply')">
+            <x-stats.mini-stat :title="__(':znn Supply', ['znn' => app('znnToken')->symbol])">
                 <span class="text-primary">
                     {{ $total_supply }}
                 </span>

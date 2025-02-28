@@ -148,7 +148,7 @@ class AcceleratorPhase extends Model implements Sitemapable
 
         try {
             $newData = app(ZenonSdk::class)->getPhaseById($this->hash);
-            Cache::forever($cacheKey, $newData);
+            Cache::put($cacheKey, $newData, now()->addDay());
             $data = $newData;
         } catch (Throwable $throwable) {
             // If API request fails, we do not need to do anything,

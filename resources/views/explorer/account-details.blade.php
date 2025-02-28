@@ -55,7 +55,7 @@
             <div class="col-12">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('ZNN')">
+                        <x-stats.mini-stat :title="app('znnToken')->symbol">
 {{--                            <span class="text-primary" data-bs-toggle="tooltip" data-bs-title="{{ $account->display_znn_balance }}">--}}
 {{--                                {{ Number::abbreviate(app('znnToken')->getDisplayAmount($account->znn_balance), 2) }}--}}
 {{--                            </span>--}}
@@ -69,7 +69,7 @@
             <div class="col-12">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('QSR')">
+                        <x-stats.mini-stat :title="app('qsrToken')->symbol">
                             <span class="text-secondary">
                                 {{ $account->display_qsr_balance }}
                             </span>
@@ -143,10 +143,10 @@
                                     @endif
                                 </span>
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Fused QSR')" :stat="$account->display_qsr_fused" />
-                            <x-stats.list-item :title="__('Staked ZNN')" :stat="$account->display_znn_staked" />
-                            <x-stats.list-item :title="__('ZNN Rewards')" :stat="$account->display_znn_rewards" />
-                            <x-stats.list-item :title="__('QSR Rewards')" :stat="$account->display_qsr_rewards" :hr="false" />
+                            <x-stats.list-item :title="__('Fused :qsr', ['qsr' => app('qsrToken')->symbol])" :stat="$account->display_qsr_fused" />
+                            <x-stats.list-item :title="__('Staked :znn', ['znn' => app('znnToken')->symbol])" :stat="$account->display_znn_staked" />
+                            <x-stats.list-item :title="__(':znn Rewards', ['znn' => app('znnToken')->symbol])" :stat="$account->display_znn_rewards" />
+                            <x-stats.list-item :title="__(':qsr Rewards', ['qsr' => app('qsrToken')->symbol])" :stat="$account->display_qsr_rewards" :hr="false" />
                             <hr class="d-block d-lg-none my-0 mb-3">
                         </div>
                     </div>

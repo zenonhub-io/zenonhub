@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Sync;
 
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\BridgeNetwork;
 use App\Models\Nom\BridgeStatHistory;
@@ -28,8 +27,8 @@ class BridgeStats
     {
         $networks = BridgeNetwork::get();
         $tokens = Token::whereIn('token_standard', [
-            NetworkTokensEnum::ZNN->zts(),
-            NetworkTokensEnum::QSR->zts(),
+            app('znnToken')->token_standard,
+            app('qsrToken')->token_standard,
         ])->get();
 
         $tokens->each(function (Token $token) use ($date, $networks): void {

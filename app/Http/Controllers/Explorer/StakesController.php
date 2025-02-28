@@ -15,12 +15,12 @@ class StakesController
     public function __invoke(?string $tab = 'znn'): View
     {
         if ($tab === 'znn') {
-            $title = 'ZNN Staking Entries: All accounts staking ZNN tokens';
-            $description = 'Explore all active ZNN staking entries on the Zenon Network, listed in descending order by start timestamp. View total staked amounts and staking durations';
+            $title = __(':znn Staking Entries: All Accounts Staking :znn Tokens', ['znn' => app('znnToken')->symbol]);
+            $description = __('Explore all active :znn staking entries on the Zenon Network, listed in descending order by start timestamp. View total staked amounts and staking durations', ['znn' => app('znnToken')->symbol]);
             $canonical = route('explorer.stake.list');
         } else {
-            $title = 'ZNN-ETH-LP Staking Entries: All accounts staking ZNN-ETH-LP tokens';
-            $description = 'Discover all ZNN-ETH-LP staking entries on the Zenon Network, sorted by start timestamp. Gain insights into staking amounts, durations, and participants';
+            $title = __(':znnethlp Staking Entries: All Accounts Staking :znnethlp Tokens', ['znnethlp' => app('znnEthLpToken')->symbol]);
+            $description = __('Discover all :znnethlp staking entries on the Zenon Network, sorted by start timestamp. Gain insights into staking amounts, durations, and participants', ['znnethlp' => app('znnEthLpToken')->symbol]);
             $canonical = route('explorer.stake.list', ['tab' => $tab]);
         }
 

@@ -21,6 +21,10 @@ if (! defined('NOM_MOMENTUMS_PER_EPOCH')) {
 return [
 
     // Common
+    'chain_code' => env('CHAIN_CODE', 'nom'),
+    'network_name' => env('NETWORK_NAME', 'Zenon Network'),
+    'network_name_alt' => env('NETWORK_NAME_ALT', 'Network of Momentum'),
+
     'decimals' => NOM_DECIMALS,
     'secondsInDay' => NOM_SECONDS_IN_DAY,
     'momentumsPerHour' => NOM_MOMENTUMS_PER_HOUR,
@@ -28,8 +32,18 @@ return [
     'rewardTimeLimit' => 3600,
 
     // ZTS
-    'znn_zts' => env('ZTS_ZNN', 'zts1znnxxxxxxxxxxxxx9z4ulx'),
-    'qsr_zts' => env('ZTS_QSR', 'zts1qsrxxxxxxxxxxxxxmrhjll'),
+    'tokens' => [
+        'znn' => [
+            'name' => env('TOKEN_ZNN_NAME', 'ZNN'),
+            'symbol' => env('TOKEN_ZNN_SYMBOL', 'ZNN'),
+            'zts' => env('TOKEN_ZNN_ZTS', 'zts1znnxxxxxxxxxxxxx9z4ulx'),
+        ],
+        'qsr' => [
+            'name' => env('TOKEN_QSR_NAME', 'QSR'),
+            'symbol' => env('TOKEN_QSR_SYMBOL', 'QSR'),
+            'zts' => env('ZTS_QSR', 'zts1qsrxxxxxxxxxxxxxmrhjll'),
+        ],
+    ],
 
     // Accelerator
     'accelerator' => [

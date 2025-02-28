@@ -15,7 +15,7 @@
                 <div class="col-12 col-sm-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('ZNN Available')">
+                            <x-stats.mini-stat :title="__(':znn Available', ['znn' => app('znnToken')->symbol])">
                                 <span class="text-primary">
                                     {{ $stats['znnBalance'] }}
                                 </span>
@@ -26,7 +26,7 @@
                 <div class="col-12 col-sm-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('QSR Available')">
+                            <x-stats.mini-stat :title="__(':qsr Available', ['qsr' => app('qsrToken')->symbol])">
                                 <span class="text-secondary">
                                     {{ $stats['qsrBalance'] }}
                                 </span>
@@ -46,7 +46,7 @@
                 <div class="col-12 col-lg-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('ZNN Paid')">
+                            <x-stats.mini-stat :title="__(':znn Paid', ['znn' => app('znnToken')->symbol])">
                                 <span class="text-primary">
                                     {{ $stats['znnPaid'] }}
                                 </span>
@@ -57,7 +57,7 @@
                 <div class="col-12 col-lg-8">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('QSR Paid')">
+                            <x-stats.mini-stat :title="__(':qsr Paid', ['qsr' => app('qsrToken')->symbol])">
                                 <span class="text-secondary">
                                     {{ $stats['qsrPaid'] }}
                                 </span>
@@ -76,7 +76,7 @@
             <div class="row mb-6 gy-6">
                 <div class="col-24 col-md-12">
                     <x-cards.card>
-                        <x-cards.heading :title="__('ZNN Paid/Remaining')" />
+                        <x-cards.heading :title="__(':znn Paid/Remaining', ['znn' => app('znnToken')->symbol])" />
                         <x-cards.body class="p-2" style="height: 12rem">
                             <livewire:livewire-pie-chart
                                 key="{{ $stats['znnDonutChart']->reactiveKey() }}"
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-24 col-md-12">
                     <x-cards.card>
-                        <x-cards.heading :title="__('QSR Paid/Remaining')" />
+                        <x-cards.heading :title="__(':qsr Paid/Remaining', ['qsr' => app('qsrToken')->symbol])" />
                         <x-cards.body class="p-2" style="height: 12rem">
                             <livewire:livewire-pie-chart
                                 key="{{ $stats['qsrDonutChart']->reactiveKey() }}"
@@ -154,7 +154,7 @@
                 <div class="col-12 col-lg-6">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('ZNN Paid')">
+                            <x-stats.mini-stat :title="__(':znn Paid', ['znn' => app('znnToken')->symbol])">
                                 <span class="text-primary">
                                     {{ $stats['znnPaid'] }}
                                 </span>
@@ -165,7 +165,7 @@
                 <div class="col-12 col-lg-6">
                     <x-cards.card>
                         <x-cards.body>
-                            <x-stats.mini-stat :title="__('QSR Paid')">
+                            <x-stats.mini-stat :title="__(':qsr Paid', ['qsr' => app('qsrToken')->symbol])">
                                 <span class="text-secondary">
                                     {{ $stats['qsrPaid'] }}
                                 </span>

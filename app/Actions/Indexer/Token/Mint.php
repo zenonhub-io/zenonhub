@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Token;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Token\TokenMinted;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -86,7 +85,7 @@ class Mint extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Attempt to mint more than max supply');
         }
 
-        $networkMintableTokens = [NetworkTokensEnum::ZNN->zts(), NetworkTokensEnum::QSR->zts()];
+        $networkMintableTokens = [app('znnToken')->token_standard, app('qsrToken')->token_standard];
 
         if (in_array($token->token_standard, $networkMintableTokens, true)) {
             if (! $accountBlock->account->is_embedded_contract) {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Token;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Token\TokenIssued;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -109,7 +108,7 @@ class IssueToken extends AbstractContractMethodProcessor
             throw new IndexerActionValidationException('Max and total supply do not match');
         }
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
+        if ($accountBlock->token->token_standard !== app('znnToken')->token_standard) {
             throw new IndexerActionValidationException('Send block must be ZNN');
         }
 

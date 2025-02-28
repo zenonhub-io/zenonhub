@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Models\Nom\Momentum;
 use App\Models\Nom\Token;
 use Illuminate\Support\Facades\Artisan;
@@ -55,8 +54,8 @@ Schedule::call(function () {
     App\Actions\Sync\NetworkStats::run($date);
 
     $tokens = Token::whereIn('token_standard', [
-        NetworkTokensEnum::ZNN->zts(),
-        NetworkTokensEnum::QSR->zts(),
+        app('znnToken')->token_standard,
+        app('qsrToken')->token_standard,
     ])->get();
 
     $tokens->each(function (Token $token) use ($date): void {

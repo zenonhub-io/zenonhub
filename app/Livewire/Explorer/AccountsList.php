@@ -80,14 +80,14 @@ class AccountsList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => $row->display_height
                 ),
-            Column::make('ZNN')
+            Column::make(app('znnToken')->symbol)
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(znn_balance AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $znnToken->getFormattedAmount($row->znn_balance)
                 ),
-            Column::make('QSR')
+            Column::make(app('qsrToken')->symbol)
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(qsr_balance AS SIGNED) ' . $direction)
                 )

@@ -105,7 +105,7 @@ class Sentinel extends Model
 
         try {
             $newData = app(ZenonSdk::class)->getSentinelByOwner($this->owner->address);
-            Cache::forever($cacheKey, $newData);
+            Cache::put($cacheKey, $newData, now()->addDay());
             $data = $newData;
         } catch (Throwable $throwable) {
             // If API request fails, we do not need to do anything,

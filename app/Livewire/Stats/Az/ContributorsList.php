@@ -51,14 +51,14 @@ class ContributorsList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('ZNN Paid')
+            Column::make(__(':znn Paid', ['znn' => app('znnToken')->symbol]))
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('znn_paid ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $znnToken->getFormattedAmount($row->znn_paid)
                 ),
-            Column::make('QSR Paid')
+            Column::make(__(':qsr Paid', ['qsr' => app('qsrToken')->symbol]))
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('qsr_paid ' . $direction)
                 )

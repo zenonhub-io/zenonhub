@@ -2,11 +2,11 @@
 
 <div {{ $attributes->merge(['class' => "d-block d-md-flex justify-content-md-evenly mb-4"]) }}>
     <div class="text-start text-md-center mb-2 mb-md-0">
-        <span class="d-inline d-md-block text-muted text-sm">ZNN</span>
+        <span class="d-inline d-md-block text-muted text-sm">{{ app('znnToken')->symbol }}</span>
         <span class="float-end float-md-none text-primary">{{ $item->display_znn_requested }}</span>
     </div>
     <div class="text-start text-md-center mb-2 mb-md-0">
-        <span class="d-inline d-md-block text-muted text-sm">QSR</span>
+        <span class="d-inline d-md-block text-muted text-sm">{{ app('qsrToken')->symbol }}</span>
         <span class="float-end float-md-none text-secondary">{{ $item->display_qsr_requested }}</span>
     </div>
     <div class="text-start text-md-center">

@@ -27,7 +27,7 @@
             <div class="col-12 col-sm-8">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('ZNN Request')">
+                        <x-stats.mini-stat :title="__(':znn Requested', ['znn' => app('znnToken')->symbol])">
                                 <span class="text-primary">
                                     {{ $project->display_znn_requested }}
                                 </span>
@@ -38,7 +38,7 @@
             <div class="col-12 col-sm-8">
                 <x-cards.card>
                     <x-cards.body>
-                        <x-stats.mini-stat :title="__('QSR Request')">
+                        <x-stats.mini-stat :title="__(':qsr Requested', ['qsr' => app('qsrToken')->symbol])">
                                 <span class="text-secondary">
                                     {{ $project->display_qsr_requested }}
                                 </span>
@@ -66,14 +66,14 @@
             <x-cards.body>
                 <div class="row gy-4">
                     <div class="col-12 col-sm-8">
-                        <x-stats.mini-stat :title="__('ZNN Request')" :centered="true">
+                        <x-stats.mini-stat :title="__(':znn Request', ['znn' => app('znnToken')->symbol])" :centered="true">
                             <span class="text-primary">
                                 {{ $project->display_znn_requested }}
                             </span>
                         </x-stats.mini-stat>
                     </div>
                     <div class="col-12 col-sm-8">
-                        <x-stats.mini-stat :title="__('QSR Request')" :centered="true">
+                        <x-stats.mini-stat :title="__(':qsr Request', ['qsr' => app('qsrToken')->symbol])" :centered="true">
                             <span class="text-secondary">
                                 {{ $project->display_qsr_requested }}
                             </span>

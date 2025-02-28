@@ -17,8 +17,8 @@ class BridgeStatsController
 {
     public function __invoke(?string $tab = 'overview'): View
     {
-        MetaTags::title('Bridge Stats: Multi-Chain Bridge Status & Insights')
-            ->description('Explore detailed insights on the Multi-Chain Bridge, including current status, admin actions, security details, orchestrator details and affiliate leaderboard')
+        MetaTags::title(__('Bridge Stats: Multi-Chain Bridge Status & Insights'))
+            ->description(__('Explore detailed insights on the Multi-Chain Bridge, including current status, admin actions, security details, orchestrator details and affiliate leaderboard'))
             ->canonical(route('stats.bridge'))
             ->metaByName('robots', 'index,nofollow');
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Stake;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Stake\StartStake;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -64,7 +63,7 @@ class Stake extends AbstractContractMethodProcessor
         [$accountBlock] = func_get_args();
         $blockData = $accountBlock->data->decoded;
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::ZNN->zts()) {
+        if ($accountBlock->token->token_standard !== app('znnToken')->token_standard) {
             throw new IndexerActionValidationException('Invalid stake token');
         }
 

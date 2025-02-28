@@ -45,8 +45,8 @@ class TokenFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'owner_id' => load_account(EmbeddedContractsEnum::TOKEN->value),
-            'name' => 'ZNN',
-            'symbol' => 'ZNN',
+            'name' => NetworkTokensEnum::ZNN->name(),
+            'symbol' => NetworkTokensEnum::ZNN->symbol(),
             'domain' => 'zenon.network',
             'token_standard' => NetworkTokensEnum::ZNN->zts(),
         ]);
@@ -56,8 +56,8 @@ class TokenFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'owner_id' => load_account(EmbeddedContractsEnum::TOKEN->value),
-            'name' => 'QSR',
-            'symbol' => 'QSR',
+            'name' => NetworkTokensEnum::QSR->name(),
+            'symbol' => NetworkTokensEnum::QSR->symbol(),
             'domain' => 'zenon.network',
             'token_standard' => NetworkTokensEnum::QSR->zts(),
         ]);

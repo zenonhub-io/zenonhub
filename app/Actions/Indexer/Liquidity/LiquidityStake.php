@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Indexer\Liquidity;
 
 use App\Actions\Indexer\AbstractContractMethodProcessor;
-use App\Enums\Nom\NetworkTokensEnum;
 use App\Events\Indexer\Stake\StartStake;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
@@ -63,7 +62,7 @@ class LiquidityStake extends AbstractContractMethodProcessor
          */
         [$accountBlock] = func_get_args();
 
-        if ($accountBlock->token->token_standard !== NetworkTokensEnum::LP_ZNN_ETH->zts()) {
+        if ($accountBlock->token->token_standard !== app('znnEthLpToken')->token_standard) {
             throw new IndexerActionValidationException('Invalid stake token');
         }
 
