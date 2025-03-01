@@ -294,29 +294,12 @@ class Token extends Model implements Sitemapable
         return $existingPrice ? $existingPrice->pivot->price : '0';
     }
 
-    public function getRawJsonAttribute(): ?TokenDTO
+    public function getRawJsonAttribute(): TokenDTO|array
     {
-        if ($this->is_network) {
-
-            $cacheKey = $this->cacheKey('raw-json', 'updated_at');
-            $data = Cache::get($cacheKey);
-
-            try {
-                $newData = app(ZenonSdk::class)->getByZts($this->token_standard);
-                Cache::put($cacheKey, $newData, now()->addDay());
-                $data = $newData;
-            } catch (Throwable $throwable) {
-                // If API request fails, we do not need to do anything,
-                // we will return previously cached data (retrieved at the start of the function).
-            }
-
-            return $data;
-        }
-
         try {
             return app(ZenonSdk::class)->getByZts($this->token_standard);
         } catch (Throwable $throwable) {
-            return null;
+            return ['error' => __('Data unavailable, please try again')];
         }
     }
 
