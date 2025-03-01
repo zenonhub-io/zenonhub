@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Throwable;
 
 class Sentinel extends Model
@@ -98,21 +97,13 @@ class Sentinel extends Model
     //
     // Attributes
 
-    public function getRawJsonAttribute(): ?SentinelDTO
+    public function getRawJsonAttribute(): SentinelDTO|array
     {
-        $cacheKey = $this->cacheKey('raw-json');
-        $data = Cache::get($cacheKey);
-
         try {
-            $newData = app(ZenonSdk::class)->getSentinelByOwner($this->owner->address);
-            Cache::put($cacheKey, $newData, now()->addDay());
-            $data = $newData;
+            return app(ZenonSdk::class)->getSentinelByOwner($this->owner->address);
         } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            return ['error' => __('Data unavailable, please try again')];
         }
-
-        return $data;
     }
 
     public function getIsRevokableAttribute(?Carbon $dateTime): bool

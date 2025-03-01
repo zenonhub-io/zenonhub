@@ -28,6 +28,7 @@ Artisan::command('site:after-deploy', function () {
     Artisan::call('sync:pillar-metrics');
     Artisan::call('sync:token-prices');
     Artisan::call('site:generate-sitemap');
+    Artisan::call('tools:generate-api-playground-json');
     Artisan::call('filament:optimize');
 })->purpose('Sets up the site after a deploy');
 

@@ -523,28 +523,12 @@ class Account extends Model implements Sitemapable
         return false;
     }
 
-    public function getRawJsonAttribute(): ?AccountDTO
+    public function getRawJsonAttribute(): AccountDTO|array
     {
-        if ($this->is_embedded_contract) {
-            $cacheKey = $this->cacheKey('raw-json', 'last_active_at');
-            $data = Cache::get($cacheKey);
-
-            try {
-                $newData = app(ZenonSdk::class)->getAccountInfoByAddress($this->address);
-                Cache::put($cacheKey, $newData, now()->addDay());
-                $data = $newData;
-            } catch (Throwable $throwable) {
-                // If API request fails, we do not need to do anything,
-                // we will return previously cached data (retrieved at the start of the function).
-            }
-
-            return $data;
-        }
-
         try {
             return app(ZenonSdk::class)->getAccountInfoByAddress($this->address);
         } catch (Throwable $throwable) {
-            return null;
+            return ['error' => __('Data unavailable, please try again')];
         }
     }
 

@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Laravel\Scout\Searchable;
 use Maize\Markable\Markable;
@@ -285,21 +284,13 @@ class Pillar extends Model implements Sitemapable
             );
     }
 
-    public function getRawJsonAttribute(): ?PillarDTO
+    public function getRawJsonAttribute(): PillarDTO|array
     {
-        $cacheKey = $this->cacheKey('raw-json', 'updated_at');
-        $data = Cache::get($cacheKey);
-
         try {
-            $newData = app(ZenonSdk::class)->getPillarByOwner($this->owner->address);
-            Cache::put($cacheKey, $newData, now()->addDay());
-            $data = $newData;
+            return app(ZenonSdk::class)->getPillarByOwner($this->owner->address);
         } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            return ['error' => __('Data unavailable, please try again')];
         }
-
-        return $data;
     }
 
     public function getIsProducingAttribute(): bool

@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -243,20 +242,12 @@ class AcceleratorProject extends Model implements Sitemapable
         return 'Quorum reached';
     }
 
-    public function getRawJsonAttribute(): ?AcceleratorProjectDTO
+    public function getRawJsonAttribute(): AcceleratorProjectDTO|array
     {
-        $cacheKey = $this->cacheKey('raw-json', 'updated_at');
-        $data = Cache::get($cacheKey);
-
         try {
-            $newData = app(ZenonSdk::class)->getProjectById($this->hash);
-            Cache::put($cacheKey, $newData, now()->addDay());
-            $data = $newData;
+            return app(ZenonSdk::class)->getProjectById($this->hash);
         } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            return ['error' => __('Data unavailable, please try again')];
         }
-
-        return $data;
     }
 }

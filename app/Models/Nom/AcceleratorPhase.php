@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -141,20 +140,12 @@ class AcceleratorPhase extends Model implements Sitemapable
         return 'Quorum reached';
     }
 
-    public function getRawJsonAttribute(): ?AcceleratorPhaseDTO
+    public function getRawJsonAttribute(): AcceleratorPhaseDTO|array
     {
-        $cacheKey = $this->cacheKey('raw-json', 'updated_at');
-        $data = Cache::get($cacheKey);
-
         try {
-            $newData = app(ZenonSdk::class)->getPhaseById($this->hash);
-            Cache::put($cacheKey, $newData, now()->addDay());
-            $data = $newData;
+            return app(ZenonSdk::class)->getPhaseById($this->hash);
         } catch (Throwable $throwable) {
-            // If API request fails, we do not need to do anything,
-            // we will return previously cached data (retrieved at the start of the function).
+            return ['error' => __('Data unavailable, please try again')];
         }
-
-        return $data;
     }
 }
