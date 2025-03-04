@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
 
 class BridgeStatus
 {
-    public BridgeStatusDTO $bridgeStatusDTO;
+    public ?BridgeStatusDTO $bridgeStatusDTO;
 
     public function __construct()
     {
@@ -23,12 +23,12 @@ class BridgeStatus
 
     public function isBridgeOnline(): bool
     {
-        return $this->bridgeStatusDTO->bridgeOnline;
+        return $this->bridgeStatusDTO?->bridgeOnline ?? false;
     }
 
     public function isOrchestratorsOnline(): bool
     {
-        return $this->bridgeStatusDTO->orchestratorsOnline;
+        return $this->bridgeStatusDTO?->orchestratorsOnline ?? false;
     }
 
     public function isKeyGenAllowed(): bool
@@ -84,7 +84,7 @@ class BridgeStatus
             ->get();
     }
 
-    public function getLatestTx(): AccountBlock
+    public function getLatestTx(): ?AccountBlock
     {
         return AccountBlock::whereHas('contractMethod', function ($q) {
             $q->whereIn('name', [

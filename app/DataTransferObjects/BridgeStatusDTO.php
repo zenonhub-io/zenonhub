@@ -15,8 +15,8 @@ class BridgeStatusDTO extends Data
     public function __construct(
         public bool $bridgeOnline,
         public bool $orchestratorsOnline,
-        public float $orchestratorsOnlinePercentage,
-        public float $orchestratorsRequiredOnlinePercentage,
+        public ?float $orchestratorsOnlinePercentage,
+        public ?float $orchestratorsRequiredOnlinePercentage,
         public int $totalOrchestratorsCount,
         public int $totalOrchestratorsOnlineCount,
         public int $totalOrchestratorsOfflineCount,

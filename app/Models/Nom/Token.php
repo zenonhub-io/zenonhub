@@ -250,7 +250,7 @@ class Token extends Model implements Sitemapable
             $totalLocked = ($sentinelLockup + $plasmaLockup);
         }
 
-        if ($this->token_standard === app('znnEthLpToken')->token_standard) {
+        if ($this->token_standard === app('znnEthLpToken')?->token_standard) {
             $liquidityAccount = Account::firstWhere('address', EmbeddedContractsEnum::LIQUIDITY->value);
             $totalLocked = $liquidityAccount->tokens()
                 ->where('token_id', $this->id)

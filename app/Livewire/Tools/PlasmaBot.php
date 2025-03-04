@@ -52,21 +52,13 @@ class PlasmaBot extends Component
 
     public function render(): View
     {
-        $account = load_account(config('services.plasma-bot.address'));
-        $totalQsrAvailable = $account->qsr_balance;
-        $fusedQsr = $account->fusions()->whereActive()->sum('amount');
-        $percentageUsed = ($fusedQsr / $totalQsrAvailable) * 100;
-        $nextExpiring = PlasmaBotEntry::whereNotNull('expires_at')->orderBy('expires_at', 'desc')->first();
-
         return view('livewire.tools.plasma-bot', [
-            'account' => $account,
-            'percentageAvailable' => 100 - $percentageUsed,
-            'percentageUsed' => $percentageUsed,
-            'nextExpiring' => $nextExpiring,
+            'enabled' => $this->isBotEnabled(),
+            'stats' => $this->getBotData(),
         ]);
     }
 
-    public function fusePlasma()
+    public function fusePlasma(): void
     {
         $this->protectAgainstSpam();
         $this->validate();
@@ -127,5 +119,30 @@ class PlasmaBot extends Component
             'medium' => __('80 QSR fused for 24 hours'),
             'high' => __('120 QSR fused for 12 hours'),
         };
+    }
+
+    private function isBotEnabled(): bool
+    {
+        return config('services.plasma-bot.enabled');
+    }
+
+    private function getBotData(): array
+    {
+        if (! $this->isBotEnabled()) {
+            return [];
+        }
+
+        $account = load_account(config('services.plasma-bot.address'));
+        $totalQsrAvailable = $account->qsr_balance;
+        $fusedQsr = $account->fusions()->whereActive()->sum('amount');
+        $percentageUsed = ($fusedQsr / $totalQsrAvailable) * 100;
+        $nextExpiring = PlasmaBotEntry::whereNotNull('expires_at')->orderBy('expires_at', 'desc')->first();
+
+        return [
+            'account' => $account,
+            'percentageAvailable' => 100 - $percentageUsed,
+            'percentageUsed' => $percentageUsed,
+            'nextExpiring' => $nextExpiring,
+        ];
     }
 }

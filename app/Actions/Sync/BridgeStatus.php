@@ -65,7 +65,7 @@ class BridgeStatus
 
         return BridgeStatusDTO::from([
             'bridgeOnline' => $bridgeOnline,
-            'orchestratorsOnline' => $orchestratorsOnlinePercentage >= $orchestratorsRequiredOnlinePercentage,
+            'orchestratorsOnline' => $orchestratorsOnlinePercentage && $orchestratorsOnlinePercentage >= $orchestratorsRequiredOnlinePercentage,
             'orchestratorsOnlinePercentage' => $orchestratorsOnlinePercentage,
             'orchestratorsRequiredOnlinePercentage' => $orchestratorsRequiredOnlinePercentage,
             'totalOrchestratorsCount' => Orchestrator::count(),
@@ -87,9 +87,14 @@ class BridgeStatus
         ]);
     }
 
-    private function getOrchestratorOnlinePercent(): float
+    private function getOrchestratorOnlinePercent(): ?float
     {
         $total = Orchestrator::count();
+
+        if (! $total) {
+            return null;
+        }
+
         $online = Orchestrator::whereActive()->count();
         $percent = 0;
         if ($online > 0 && $total > 0) {
@@ -99,9 +104,14 @@ class BridgeStatus
         return round($percent, 1);
     }
 
-    private function getOrchestratorRequiredOnlinePercent(): float
+    private function getOrchestratorRequiredOnlinePercent(): ?float
     {
         $total = Orchestrator::count();
+
+        if (! $total) {
+            return null;
+        }
+
         $required = ceil($total * 0.66) + 1;
         $percent = ($required / $total) * 100;
 
