@@ -26,7 +26,7 @@ host('hyperqube')
     ->set('deploy_path', fn () => getenv('DEPLOYER_HYPERQUBE_PATH'))
     ->set('branch', 'main')
     ->setLabels([
-        'stage' => 'hyperqube',
+        'stage' => 'live',
     ]);
 
 host('develop')
