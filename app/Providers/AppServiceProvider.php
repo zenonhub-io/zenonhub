@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Services\BridgeStatus;
-use App\Services\Discord\DiscordWebHook;
 use App\Services\Seo\MetaTags;
 use App\Services\TokenPrice;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -22,20 +20,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerServices();
-
-        //
-        // Old
-
-        $this->app->singleton(DiscordWebHook::class, function ($app, $params) {
-            $httpClient = new Client;
-
-            return new DiscordWebHook($httpClient, $params['webhook']);
-        });
-
-        $this->app->singleton('discourse.api', fn ($app, $params) => new DiscourseAPI(
-            config('services.discourse.host'),
-            config('services.discourse.key')
-        ));
     }
 
     /**
