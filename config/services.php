@@ -84,6 +84,7 @@ return [
     ],
 
     'plasma-bot' => [
+        'enabled' => env('PLASMA_BOT_ENABLED', true),
         'node' => env('PLASMA_BOT_NODE_URL', env('ZNN_WS_NODE_URL', 'ws://127.0.0.1:35997')),
         'keystore' => env('PLASMA_BOT_KEYSTORE'),
         'passphrase' => env('PLASMA_BOT_PASSPHRASE'),

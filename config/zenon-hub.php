@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 return [
+
+    'nom_explorer_url' => env('NOM_EXPLORER_URL', 'https://zenonhub.test'),
+    'hqz_explorer_url' => env('HQZ_EXPLORER_URL', 'https://zenonhub-hqz.test'),
+
     'google_analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-68QQY4TT6Z'),
 
     'donation_address' => 'z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm',

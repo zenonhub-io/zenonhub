@@ -20,16 +20,20 @@ class PublicNodes
 
     public function handle(): void
     {
-        $this->updatePublicNodes();
+        $apiUrl = config('services.public-rpc-nodes.api_url');
+
+        if (! $apiUrl) {
+            return;
+        }
+
+        $this->updatePublicNodes($apiUrl);
         $this->updateNodeHistory();
 
         Cache::forever('public-node-data-updated', now()->timestamp);
     }
 
-    private function updatePublicNodes(): void
+    private function updatePublicNodes(string $apiUrl): void
     {
-        $apiUrl = config('services.public-rpc-nodes.api_url');
-
         try {
             $nodeJson = Http::get($apiUrl)->throw()->json();
         } catch (RequestException $e) {

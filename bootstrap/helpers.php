@@ -6,6 +6,13 @@ use App\Models\Nom\Account;
 use App\Models\Nom\Token;
 use App\Services\ZenonSdk\ZenonSdk;
 
+if (! function_exists('is_hqz')) {
+    function is_hqz(): bool
+    {
+        return app('currentChain')->code === 'hqz';
+    }
+}
+
 if (! function_exists('load_account')) {
     function load_account(string $address, ?string $name = null): Account
     {
@@ -57,7 +64,7 @@ if (! function_exists('load_token')) {
 }
 
 if (! function_exists('short_address')) {
-    function short_address(Account $account)
+    function short_address(Account $account): string
     {
         if ($account->has_custom_label) {
             return $account->custom_label;

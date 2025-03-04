@@ -123,25 +123,32 @@ class AcceleratorZStatsController
 
     private function getEngagementStats(): array
     {
+        $acceptedProjectsPercentage = null;
         $totalProjects = AcceleratorProject::count();
         $acceptedProjects = AcceleratorProject::whereIn('status', [
             AcceleratorProjectStatusEnum::ACCEPTED->value,
             AcceleratorProjectStatusEnum::COMPLETE->value,
         ])->count();
 
-        $acceptedProjectsPercentage = ($acceptedProjects / $totalProjects) * 100;
+        if ($totalProjects) {
+            $acceptedProjectsPercentage = round(($acceptedProjects / $totalProjects) * 100);
+        }
 
+        $votingPillarPercentage = null;
         $votingPillars = Pillar::whereActive()->whereHas('votes')->count();
         $totalPillars = Pillar::whereActive()->count();
-        $votingPillarPercentage = ($votingPillars / $totalPillars) * 100;
+
+        if ($votingPillars) {
+            $votingPillarPercentage = round(($votingPillars / $totalPillars) * 100);
+        }
 
         $avgVoteTime = Pillar::avg('az_avg_vote_time');
 
         return [
             'votingPillars' => $votingPillars,
-            'percentageVotingPillars' => round($votingPillarPercentage),
+            'percentageVotingPillars' => $votingPillarPercentage,
             'avgVoteTime' => now()->subSeconds($avgVoteTime)->diffForHumans(['parts' => 2], true),
-            'percentageAcceptedProjects' => round($acceptedProjectsPercentage),
+            'percentageAcceptedProjects' => $acceptedProjectsPercentage,
         ];
     }
 
