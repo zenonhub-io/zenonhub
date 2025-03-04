@@ -39,7 +39,7 @@ jobs:
 
       - name: Create deploy env file
         run: |
-          echo "${{ secrets.STAGING_DEPLOY_ENV }}" > ./deploy/.env
+          echo "${{ secrets.DEPLOY_ENV }}" > ./deploy/.env
 
       - name: Deploy
         uses: deployphp/action@v1
