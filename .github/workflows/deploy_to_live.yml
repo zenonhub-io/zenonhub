@@ -41,17 +41,11 @@ jobs:
         run: |
           echo "${{ secrets.DEPLOY_ENV }}" > ./deploy/.env
 
-      - name: Deploy Mainnet
+      - name: Deploy
         uses: deployphp/action@v1
         with:
           private-key: ${{ secrets.LIVE_DEPLOY_PRIVATE_KEY }}
           dep: deploy live
-
-      - name: Deploy HyperQube
-        uses: deployphp/action@v1
-        with:
-          private-key: ${{ secrets.LIVE_DEPLOY_PRIVATE_KEY }}
-          dep: deploy hyperqube
 
       - name: Discord notification
         if: always()
