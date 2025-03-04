@@ -22,6 +22,10 @@ class Orchestrators
     {
         $apiUrl = config('services.orchestrators-status.api_url');
 
+        if (! $apiUrl) {
+            return;
+        }
+
         try {
             $orchestratorJson = Http::get($apiUrl)->throw()->json('pillars');
         } catch (RequestException $e) {
@@ -33,7 +37,9 @@ class Orchestrators
             return;
         }
 
-        $pillarIds = collect($orchestratorJson)->map(fn ($orchestratorData) => $this->processOrchestratorData($orchestratorData)?->pillar_id)->filter();
+        $pillarIds = collect($orchestratorJson)
+            ->map(fn ($orchestratorData) => $this->processOrchestratorData($orchestratorData)?->pillar_id)
+            ->filter();
 
         Orchestrator::whereNotIn('pillar_id', $pillarIds->toArray())->delete();
     }

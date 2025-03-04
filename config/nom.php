@@ -35,7 +35,7 @@ return [
         'qsr' => [
             'name' => env('TOKEN_QSR_NAME', 'QSR'),
             'symbol' => env('TOKEN_QSR_SYMBOL', 'QSR'),
-            'zts' => env('ZTS_QSR', 'zts1qsrxxxxxxxxxxxxxmrhjll'),
+            'zts' => env('TOKEN_QSR_ZTS', 'zts1qsrxxxxxxxxxxxxxmrhjll'),
         ],
     ],
 

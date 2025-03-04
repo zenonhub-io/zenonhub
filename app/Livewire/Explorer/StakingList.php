@@ -25,7 +25,7 @@ class StakingList extends BaseTable
     {
         $tokenId = app('znnToken')->id;
 
-        if ($this->tab === 'znn-eth-lp') {
+        if ($this->tab === 'znn-eth-lp' && app('znnEthLpToken')) {
             $tokenId = app('znnEthLpToken')->id;
         }
 
