@@ -45,7 +45,7 @@ jobs:
         uses: deployphp/action@v1
         with:
           private-key: ${{ secrets.LIVE_DEPLOY_PRIVATE_KEY }}
-          dep: deploy live
+          dep: deploy --hosts=mainnet,hyperqube
 
       - name: Discord notification
         if: always()

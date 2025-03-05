@@ -17,7 +17,7 @@ class PlasmaBotController
             ->metaByName('robots', 'index,nofollow');
 
         return view('tools.plasma-bot', [
-            'enabled' => config('services.plasma-bot.enable'),
+            'enabled' => config('services.plasma-bot.enabled'),
         ]);
     }
 }

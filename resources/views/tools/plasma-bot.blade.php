@@ -9,7 +9,7 @@
 
         <hr>
 
-        @if($enabled)
+        @if ($enabled)
             <livewire:tools.plasma-bot />
         @else
             <x-alerts.alert type="info">
