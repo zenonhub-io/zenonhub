@@ -18,7 +18,7 @@ host('mainnet')
     ->set('deploy_path', fn () => getenv('DEPLOYER_LIVE_PATH'))
     ->set('branch', 'main')
     ->setLabels([
-        'stage' => 'live',
+        'stage' => 'prod',
     ]);
 
 host('hyperqube')
@@ -26,7 +26,7 @@ host('hyperqube')
     ->set('deploy_path', fn () => getenv('DEPLOYER_HYPERQUBE_PATH'))
     ->set('branch', 'main')
     ->setLabels([
-        'stage' => 'live',
+        'stage' => 'prod',
     ]);
 
 host('develop')
