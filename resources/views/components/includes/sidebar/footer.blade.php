@@ -11,10 +11,13 @@
             <i class="bi-heart-fill" style="font-size: 1.1rem;"></i>
         </x-link>
     </div>
-    <div class="col">
-        <x-link :href="route('services.public-nodes')" data-bs-toggle="tooltip" data-bs-title="{{ __('Nodes') }}"
-                class="btn rounded-pill bg-body-secondary-hover">
-            <i class="bi-hdd-rack-fill" style="font-size: 1.1rem;"></i>
-        </x-link>
-    </div>
+
+    @if (app('currentChain')->code === 'nom')
+        <div class="col">
+            <x-link :href="route('services.public-nodes')" data-bs-toggle="tooltip" data-bs-title="{{ __('Nodes') }}"
+                    class="btn rounded-pill bg-body-secondary-hover">
+                <i class="bi-hdd-rack-fill" style="font-size: 1.1rem;"></i>
+            </x-link>
+        </div>
+    @endif
 </div>
