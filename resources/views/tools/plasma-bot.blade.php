@@ -9,7 +9,13 @@
 
         <hr>
 
-        <livewire:tools.plasma-bot />
+        @if($enabled)
+            <livewire:tools.plasma-bot />
+        @else
+            <x-alerts.alert type="info">
+                <i class="bi bi-info-circle-fill me-2"></i> The bot is currently disabled, please check back later
+            </x-alerts.alert>
+        @endif
     </div>
 
 </x-app-layout>

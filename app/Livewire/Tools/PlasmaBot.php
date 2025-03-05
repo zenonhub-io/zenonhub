@@ -52,10 +52,7 @@ class PlasmaBot extends Component
 
     public function render(): View
     {
-        return view('livewire.tools.plasma-bot', [
-            'enabled' => $this->isBotEnabled(),
-            'stats' => $this->getBotData(),
-        ]);
+        return view('livewire.tools.plasma-bot', $this->getBotData());
     }
 
     public function fusePlasma(): void
