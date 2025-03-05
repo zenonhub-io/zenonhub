@@ -62,8 +62,8 @@
                         <nav class="navbar navbar-vertical navbar-expand navbar-dark">
                             <x-includes.sidebar.nav />
                         </nav>
-                        <div class="mt-auto w-100 pt-6 pt-md-4 border-top">
-                            <x-includes.sidebar.adverts />
+                        <div class="mt-auto w-100 border-top">
+{{--                            <x-includes.sidebar.adverts />--}}
                             <x-includes.sidebar.footer />
                         </div>
                     </div>
