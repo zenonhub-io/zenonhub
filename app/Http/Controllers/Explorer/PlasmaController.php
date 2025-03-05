@@ -32,8 +32,10 @@ class PlasmaController
             $totalPlasma = $qsrToken->getDisplayAmount($totalPlasma);
 
             $avgAmount = Plasma::whereActive()->avg('amount');
-            $avgAmount = round($avgAmount);
-            $avgAmount = $qsrToken->getFormattedAmount($avgAmount, 2);
+            if ($avgAmount > 0) {
+                $avgAmount = round($avgAmount);
+                $avgAmount = $qsrToken->getFormattedAmount($avgAmount, 2);
+            }
 
             $totalFusions = Plasma::whereActive()->count();
             $totalFusions = number_format($totalFusions);

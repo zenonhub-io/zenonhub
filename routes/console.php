@@ -68,10 +68,18 @@ Schedule::call(function () {
 Schedule::command('sync:public-nodes')->cron('5 */6 * * *');
 
 if (app()->environment('production')) {
-    Schedule::command('indexer:run')
-        ->everyTenSeconds()
-        ->withoutOverlapping(3)
-        ->runInBackground();
+
+    if (app('currentChain')->code === 'nom') {
+        Schedule::command('indexer:run')
+            ->everyTenSeconds()
+            ->withoutOverlapping(3)
+            ->runInBackground();
+    } else {
+        Schedule::command('indexer:run')
+            ->everyMinute()
+            ->withoutOverlapping(3)
+            ->runInBackground();
+    }
 
     Schedule::call(function () {
         Artisan::call('sync:pillar-metrics');
@@ -80,8 +88,10 @@ if (app()->environment('production')) {
         Artisan::call('sync:bridge-status');
         Artisan::call('sync:orchestrators');
 
-        Artisan::call('plasma-bot:cancel-expired');
-        Artisan::call('plasma-bot:receive-all');
+        if (config('services.plasma-bot.enabled')) {
+            Artisan::call('plasma-bot:cancel-expired');
+            Artisan::call('plasma-bot:receive-all');
+        }
 
         // Check the indexer has inserted a momentum in the last 15 minutes
         $latestMomentum = Momentum::getFrontier();
