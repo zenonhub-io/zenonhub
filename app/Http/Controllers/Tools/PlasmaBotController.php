@@ -16,6 +16,8 @@ class PlasmaBotController
             ->canonical(route('tools.plasma-bot'))
             ->metaByName('robots', 'index,nofollow');
 
-        return view('tools.plasma-bot');
+        return view('tools.plasma-bot', [
+            'enabled' => config('services.plasma-bot.enable'),
+        ]);
     }
 }
