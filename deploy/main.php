@@ -13,7 +13,7 @@ set('repository', fn () => getenv('DEPLOYER_REPO'));
 set('remote_user', fn () => getenv('DEPLOYER_USER'));
 set('port', fn () => getenv('DEPLOYER_PORT'));
 
-host('live')
+host('mainnet')
     ->set('hostname', fn () => getenv('DEPLOYER_LIVE_HOST'))
     ->set('deploy_path', fn () => getenv('DEPLOYER_LIVE_PATH'))
     ->set('branch', 'main')
