@@ -34,7 +34,7 @@ class MetaTags
             ->keywords(config('meta-tags.defaults.keywords') ?: '');
 
         if (config('meta-tags.auto_canonical_link')) {
-            $this->canonical(request()->fullUrl());
+            $this->canonical(request()->url());
         }
 
         $this->autoFillOverwrite = true;
