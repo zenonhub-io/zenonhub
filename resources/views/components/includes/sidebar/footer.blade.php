@@ -12,7 +12,7 @@
         </x-link>
     </div>
 
-    @if (app('currentChain')->code === 'nom')
+    @if (! is_hqz())
         <div class="col">
             <x-link :href="route('services.public-nodes')" data-bs-toggle="tooltip" data-bs-title="{{ __('Nodes') }}"
                     class="btn rounded-pill bg-body-secondary-hover">

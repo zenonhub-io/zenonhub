@@ -11,10 +11,6 @@ class AppLayout extends Component
 {
     public function render(): View
     {
-        if (is_hqz()) {
-            return view('layouts.app-hqz');
-        }
-
-        return view('layouts.app-nom');
+        return view('layouts.app');
     }
 }

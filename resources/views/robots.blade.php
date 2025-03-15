@@ -1,9 +1,13 @@
 User-agent: *
 
-Disallow: /admin/
-Disallow: /horizon/
-Disallow: /api/
+@if (is_hqz())
+    Disallow: *
+@else
+    Disallow: /admin/
+    Disallow: /horizon/
+    Disallow: /api/
 
-Allow: /
+    Allow: /
 
-Sitemap: {{ $sitemap }}
+    Sitemap: {{ $sitemap }}
+@endif
