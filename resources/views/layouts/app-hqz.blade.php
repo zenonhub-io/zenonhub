@@ -16,7 +16,7 @@
         @stack('headTags')
 
         <!-- GA Tracking -->
-        @if (app()->isProduction())
+        @if (config('zenon-hub.google_analytics_id') && app()->isProduction())
             <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('zenon-hub.google_analytics_id') }}"></script>
             <script>
                 window.dataLayer = window.dataLayer || [];

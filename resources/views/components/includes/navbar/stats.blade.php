@@ -7,7 +7,7 @@
     <span class="text-muted"><livewire:utilities.bridge-status /></span>
 </div>
 
-@if (app('currentChain')->code === 'nom')
+@if (! is_hqz())
     <div class="gap-1 text-xs d-none d-lg-flex">
         <span class="text-heading fw-semibold">{{ app('znnToken')->symbol }}:</span>
         <span class="text-primary">${{ number_format(app('znnToken')->price, 2) }}</span>
