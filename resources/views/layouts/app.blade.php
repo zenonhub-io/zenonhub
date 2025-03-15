@@ -29,15 +29,21 @@
     </head>
     <body class="bg-dark">
         <header class="app-navbar navbar sticky-top p-1 justify-content-between" data-bs-theme="dark">
-            <div class="navbar-brand px-3 d-flex align-items-center">
+            <div class="navbar-brand ps-3 d-flex align-items-center">
                 <x-includes.navbar.brand />
             </div>
             <div class="d-md-flex d-none align-items-center gap-6">
                 <x-includes.navbar.stats />
             </div>
             <div class="d-flex align-items-center gap-2 pe-1">
+                <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
+                        x-data
+                        x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false, size: 'modal-lg'})">
+                    <i class="bi bi-search fs-3"></i>
+                </button>
+                <x-includes.navbar.user />
                 <div class="dropdown">
-                    <span class="btn btn-outline-primary btn-xs dropdown-toggle mx-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="btn btn-outline-primary btn-xs dropdown-toggle me-0 me-md-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ __(is_hqz() ? 'HQZ' : 'NoM') }}
                     </span>
                     <ul class="dropdown-menu">
@@ -45,12 +51,6 @@
                         <li><a class="dropdown-item {{ is_hqz() ? 'active' : '' }}" href="{{ config('zenon-hub.hqz_explorer_url') }}">{{ __('HQZ') }}</a></li>
                     </ul>
                 </div>
-                <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
-                        x-data
-                        x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false, size: 'modal-lg'})">
-                    <i class="bi bi-search fs-3"></i>
-                </button>
-                <x-includes.navbar.user />
                 <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700 d-md-none" type="button"
                         data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
                         aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation"
