@@ -36,6 +36,15 @@
                 <x-includes.navbar.stats />
             </div>
             <div class="d-flex align-items-center gap-2 pe-1">
+                <div class="dropdown">
+                    <span class="btn btn-outline-primary btn-xs dropdown-toggle mx-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ __(is_hqz() ? 'HQZ' : 'NoM') }}
+                    </span>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item {{ ! is_hqz() ? 'active' : '' }}" href="{{ config('zenon-hub.nom_explorer_url') }}">{{ __('NoM') }}</a></li>
+                        <li><a class="dropdown-item {{ is_hqz() ? 'active' : '' }}" href="{{ config('zenon-hub.hqz_explorer_url') }}">{{ __('HQZ') }}</a></li>
+                    </ul>
+                </div>
                 <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
                         x-data
                         x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false, size: 'modal-lg'})">
@@ -62,8 +71,24 @@
                         <nav class="navbar navbar-vertical navbar-expand navbar-dark">
                             <x-includes.sidebar.nav />
                         </nav>
-                        <div class="mt-auto w-100 border-top">
-{{--                            <x-includes.sidebar.adverts />--}}
+                        <div class="mt-auto w-100 pt-6 pt-md-4 border-top">
+                            @if(is_hqz())
+                                <x-cards.card class="mx-4">
+                                    <x-cards.body class="pt-3">
+                                        <div class="vstack text-center">
+                                            <img src="{{ asset('build/img/adverts/hqz.png') }}" class="img-fluid mb-2 mx-auto" style="width: 100px" alt="Hyperqube_z Network">
+                                            <p class="lead mb-4">
+                                                {{ __('Hyperqube_z Extension Chain') }}
+                                            </p>
+                                            <x-link href="https://forum.hypercore.one/t/hyperqube-z-launch-instructions/583" class="btn btn-sm btn-outline-primary w-full">
+                                                {{ __('Learn more') }} <i class="bi bi-arrow-right ms-2"></i>
+                                            </x-link>
+                                        </div>
+                                    </x-cards.body>
+                                </x-cards.card>
+                            @else
+                                <x-includes.sidebar.adverts />
+                            @endif
                             <x-includes.sidebar.footer />
                         </div>
                     </div>
