@@ -35,15 +35,15 @@
             <div class="d-md-flex d-none align-items-center gap-6">
                 <x-includes.navbar.stats />
             </div>
-            <div class="d-flex align-items-center gap-2 pe-1">
-                <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
+            <div class="d-flex align-items-center gap-1 pe-1">
+                <button class="btn d-flex align-items-center py-1 px-2 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
                         x-data
                         x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false, size: 'modal-lg'})">
                     <i class="bi bi-search fs-3"></i>
                 </button>
                 <x-includes.navbar.user />
                 <div class="dropdown">
-                    <span class="btn btn-outline-primary btn-xs dropdown-toggle me-0 me-md-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="btn btn-outline-primary btn-xs dropdown-toggle me-0 me-md-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ __(is_hqz() ? 'HQZ' : 'NoM') }}
                     </span>
                     <ul class="dropdown-menu">

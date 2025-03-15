@@ -1,6 +1,6 @@
 @if (auth()->check())
     <div class="dropdown">
-        <a class="btn d-flex align-items-center py-1 px-3 rounded-pill
+        <a class="btn d-flex align-items-center py-1 px-2 rounded-pill
             bg-body-secondary-hover border-0 border-lg-1 border-gray-700"
            href="#" role="button"
            data-bs-toggle="dropdown"
