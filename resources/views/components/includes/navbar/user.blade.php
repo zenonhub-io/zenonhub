@@ -6,7 +6,8 @@
            data-bs-toggle="dropdown"
            aria-haspopup="false" aria-expanded="false"
         >
-            <i class="bi bi-person-circle fs-3"></i> <span class="fs-6 d-none d-sm-inline ms-2">
+            <i class="bi bi-person-circle fs-3"></i>
+            <span class="fs-6 d-none d-sm-inline ms-2">
                 {{ auth()->user()?->username }}
             </span>
         </a>
@@ -43,6 +44,6 @@
 @else
     <x-link :href="route('login')" class="h4 mb-0 fw-bolder" class="btn d-flex align-items-center py-1 px-3 rounded-pill
             bg-body-secondary-hover border-0 border-lg-1 border-gray-700 fs-6"
-    ><i class="bi bi-person-circle fs-5 me-2"></i> {{ __('Sign in') }}
+    ><i class="bi bi-person-circle fs-5 me-2"></i> <span class="d-none d-sm-block">{{ __('Sign in') }}</span>
     </x-link>
 @endif
