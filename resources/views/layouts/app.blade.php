@@ -47,8 +47,8 @@
                         {{ __(is_hqz() ? 'HQZ' : 'NoM') }}
                     </span>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item {{ ! is_hqz() ? 'active' : '' }}" href="{{ config('zenon-hub.nom_explorer_url') }}">{{ __('NoM') }}</a></li>
-                        <li><a class="dropdown-item {{ is_hqz() ? 'active' : '' }}" href="{{ config('zenon-hub.hqz_explorer_url') }}">{{ __('HQZ') }}</a></li>
+                        <li><a class="dropdown-item" href="{{ config('zenon-hub.nom_explorer_url') }}">{{ __('NoM') }}</a></li>
+                        <li><a class="dropdown-item" href="{{ config('zenon-hub.hqz_explorer_url') }}">{{ __('HQZ') }}</a></li>
                     </ul>
                 </div>
                 <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700 d-md-none" type="button"
