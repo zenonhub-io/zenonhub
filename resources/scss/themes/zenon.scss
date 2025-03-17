@@ -9,11 +9,6 @@
 // Mixins
 @import "zenon/light";
 @import "zenon/dark";
-@import "zenon/styles";
-
-.theme-zenon {
-	@include zenon-styles;
-}
 
 [data-bs-theme="light"],
 :root:not([data-bs-theme="dark"]) {
