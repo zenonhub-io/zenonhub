@@ -157,13 +157,13 @@ Tx: $txLink");
 
     private function getDiscordHighlightColour(): int
     {
-        $colour = 0x607D8B; // Grey
+        $colour = config('zenon-hub.colours.zenon-black');
         if ($this->block->token->token_standard === app('znnToken')->token_standard) {
             $colour = config('zenon-hub.colours.zenon-green');
         } elseif ($this->block->token->token_standard === app('qsrToken')->token_standard) {
             $colour = config('zenon-hub.colours.zenon-blue');
         }
 
-        return (int) str_replace('#', '0x', $colour);
+        return hexdec(str_replace('#', '', $colour));
     }
 }

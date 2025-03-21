@@ -38,7 +38,7 @@ class PublicNodesStatsController
                 ->selectRaw('COUNT(*) AS count')
                 ->whereNotNull('longitude')
                 ->whereNotNull('latitude')
-                ->groupBy('latitude', 'longitude', 'city')
+                ->groupBy('city')
                 ->get();
 
             return $mapMarkers->map(fn (PublicNode $publicNode) => [
@@ -55,7 +55,7 @@ class PublicNodesStatsController
         return Cache::remember('stats.nodes.top-countries', now()->addDay(), fn () => PublicNode::select('country', 'country_code')
             ->selectRaw('COUNT(*) AS count')
             ->whereNotNull('country')
-            ->groupBy('country', 'country_code')
+            ->groupBy('country')
             ->orderBy('count', 'desc')
             ->limit('10')
             ->get());
