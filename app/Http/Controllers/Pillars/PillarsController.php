@@ -41,7 +41,7 @@ class PillarsController
         }
 
         MetaTags::title(__(':name - Zenon Network Pillar Details', ['name' => $pillar->name]))
-            ->description(__("Delve into :name's on-chain activity in the Zenon Network, including delegators, votes, reward engagement, and latest updates", ['name' => $pillar->name]))
+            ->description(__("Delve into :name's on-chain activity in the Zenon Network, including delegators, votes, rewards and engagement", ['name' => $pillar->name]))
             ->canonical(route('pillar.detail', ['slug' => $pillar->slug]))
             ->metaByName('robots', 'index,follow');
 
