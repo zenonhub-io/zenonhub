@@ -211,7 +211,7 @@ class Pillar extends Model implements Sitemapable
 
     public function scopeWhereTop30($query)
     {
-        return $query->orderBy('weight', 'desc')
+        return $query->orderByRaw('CAST(weight AS SIGNED) DESC')
             ->limit(30);
     }
 

@@ -73,6 +73,11 @@ class PillarList extends BaseTable
                 ->format(
                     fn ($value, $row, Column $column) => $row->display_weight
                 ),
+            Column::make('APR', 'delegate_apr')
+                ->sortable()
+                ->format(
+                    fn ($value, $row, Column $column) => $row->delegate_apr . ' %'
+                ),
             Column::make('Engagement', 'az_engagement')
                 ->sortable()
                 ->view('components.tables.columns.pillar.az-engagement'),

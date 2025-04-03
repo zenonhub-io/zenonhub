@@ -30,19 +30,25 @@ class Register extends AbstractContractMethodProcessor
             return;
         }
 
-        $sentinel = Sentinel::create([
-            'chain_id' => $accountBlock->chain_id,
-            'owner_id' => $accountBlock->account_id,
-            'created_at' => $accountBlock->created_at,
-        ]);
+        $existingSentinel = Sentinel::whereOwner($accountBlock->account_id)
+            ->whereActive()
+            ->exists();
 
-        SentinelRegistered::dispatch($accountBlock, $sentinel);
+        if (! $existingSentinel) {
+            $sentinel = Sentinel::create([
+                'chain_id' => $accountBlock->chain_id,
+                'owner_id' => $accountBlock->account_id,
+                'created_at' => $accountBlock->created_at,
+            ]);
 
-        Log::info('Contract Method Processor - Sentinel: Register complete', [
-            'accountBlock' => $accountBlock->hash,
-            'blockData' => $blockData,
-            'sentinel' => $sentinel,
-        ]);
+            SentinelRegistered::dispatch($accountBlock, $sentinel);
+
+            Log::info('Contract Method Processor - Sentinel: Register complete', [
+                'accountBlock' => $accountBlock->hash,
+                'blockData' => $blockData,
+                'sentinel' => $sentinel,
+            ]);
+        }
 
         $this->setBlockAsProcessed($accountBlock);
     }

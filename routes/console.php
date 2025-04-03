@@ -83,6 +83,7 @@ if (app()->environment('production')) {
 
     Schedule::call(function () {
         Artisan::call('sync:pillar-metrics');
+        Artisan::call('sync:pillars-apr');
         Artisan::call('sync:pillar-stats');
         Artisan::call('sync:token-prices');
         Artisan::call('sync:bridge-status');
@@ -113,6 +114,7 @@ if (app()->environment('production')) {
 
     Schedule::call(function () {
         Artisan::call('sync:pillar-metrics');
+        Artisan::call('sync:pillars-apr');
         Artisan::call('sync:pillar-stats');
         Artisan::call('sync:token-prices');
         Artisan::call('sync:bridge-status');
