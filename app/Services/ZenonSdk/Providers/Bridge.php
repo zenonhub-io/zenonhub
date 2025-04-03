@@ -24,8 +24,6 @@ trait Bridge
     public function getPendingIncoming(): int
     {
         try {
-            $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
-
             return $this->sdk->bridge->getAllUnsignedWrapTokenRequests()['data']['count'];
         } catch (Exception $e) {
             throw new ZenonRpcException('Unable to getPendingIncoming - ' . $e->getMessage());
