@@ -69,16 +69,10 @@ class UpdateAccountTotals implements ShouldBeUnique
     private function saveCurrentBalance(): void
     {
         $accountTokenIds = $this->account->tokens()->pluck('token_id');
-
-        $sentTokens = $this->account->sentBlocks()
-            ->select('token_id')
-            ->whereNotNull('token_id');
-
-        $receivedTokens = $this->account->receivedBlocks()
-            ->select('token_id')
-            ->whereNotNull('token_id');
-
-        $tokenIds = $sentTokens->union($receivedTokens)
+        $tokenIds = $this->account->blocks()
+            ->whereNotNull('token_id')
+            ->distinct()
+            ->get(['token_id'])
             ->pluck('token_id')
             ->push(app('znnToken')->id, app('qsrToken')->id)
             ->unique();
