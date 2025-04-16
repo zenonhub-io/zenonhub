@@ -29,14 +29,14 @@
     </head>
     <body class="bg-dark">
         <header class="app-navbar navbar sticky-top p-1 justify-content-between" data-bs-theme="dark">
-            <div class="navbar-brand ps-3 d-flex align-items-center">
+            <div class="navbar-brand ps-2 d-flex align-items-center">
                 <x-includes.navbar.brand />
             </div>
             <div class="d-md-flex d-none align-items-center gap-6">
                 <x-includes.navbar.stats />
             </div>
-            <div class="d-flex align-items-center gap-1 pe-1">
-                <button class="btn d-flex align-items-center py-1 px-2 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn d-flex align-items-center py-1 px-3 rounded-pill bg-body-secondary-hover border-0 border-lg-1 border-gray-700" type="button"
                         x-data
                         x-on:click="$dispatch('open-livewire-modal', { alias: 'site-search', params: {}, static: false, keyboard: false, size: 'modal-lg'})">
                     <i class="bi bi-search fs-3"></i>
