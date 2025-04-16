@@ -48,9 +48,10 @@ class SiteSearch extends Component
             return;
         }
 
+        $this->results['momentums'] = $this->searchMomentums();
+
         if (strlen($this->search) >= 4) {
             $this->results['transactions'] = $this->searchTransactions();
-            $this->results['momentums'] = $this->searchMomentums();
             $this->results['accounts'] = $this->searchAccounts();
         }
 
@@ -73,10 +74,17 @@ class SiteSearch extends Component
 
     private function searchMomentums(): Collection
     {
-        return Momentum::where('hash', $this->search)->get()
+        $query = Momentum::where('height', $this->search);
+
+        if (strlen($this->search) >= 4) {
+            $query->orWhere('hash', $this->search);
+        }
+
+        return $query->get()
             ->map(fn (Momentum $momentum) => SearchResultDTO::from([
                 'group' => 'momentums',
                 'title' => $momentum->hash,
+                'comment' => sprintf('Height #%s', $momentum->height),
                 'link' => route('explorer.momentum.detail', ['hash' => $momentum->hash]),
             ]));
     }
