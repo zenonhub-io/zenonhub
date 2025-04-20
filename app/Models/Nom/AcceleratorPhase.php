@@ -140,12 +140,12 @@ class AcceleratorPhase extends Model implements Sitemapable
         return 'Quorum reached';
     }
 
-    public function getRawJsonAttribute(): AcceleratorPhaseDTO|array
+    public function getRawJsonAttribute(): ?AcceleratorPhaseDTO
     {
         try {
             return app(ZenonSdk::class)->getPhaseById($this->hash);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 }

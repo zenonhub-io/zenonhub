@@ -284,12 +284,12 @@ class Pillar extends Model implements Sitemapable
             );
     }
 
-    public function getRawJsonAttribute(): PillarDTO|array
+    public function getRawJsonAttribute(): ?PillarDTO
     {
         try {
             return app(ZenonSdk::class)->getPillarByOwner($this->owner->address);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 

@@ -97,12 +97,12 @@ class Sentinel extends Model
     //
     // Attributes
 
-    public function getRawJsonAttribute(): SentinelDTO|array
+    public function getRawJsonAttribute(): ?SentinelDTO
     {
         try {
             return app(ZenonSdk::class)->getSentinelByOwner($this->owner->address);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 
