@@ -184,7 +184,7 @@
         <div class="mx-3 mx-md-6">
             <x-cards.card>
                 <x-cards.body>
-                    <x-code-highlighters.json :code="$transaction->raw_json" />
+                    <x-code-highlighters.json :code="$transaction->raw_json ?: ['error' => __('Data unavailable, please try again')]" />
                 </x-cards.body>
             </x-cards.card>
         </div>

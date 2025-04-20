@@ -144,12 +144,12 @@ class Momentum extends Model
         return self::where('height', ($this->height - 1))->first();
     }
 
-    public function getRawJsonAttribute(): MomentumDTO|array
+    public function getRawJsonAttribute(): ?MomentumDTO
     {
         try {
             return app(ZenonSdk::class)->getMomentumsByHash($this->hash);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 
