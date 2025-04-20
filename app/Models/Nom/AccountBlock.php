@@ -237,12 +237,12 @@ class AccountBlock extends Model
             ->first();
     }
 
-    public function getRawJsonAttribute(): AccountBlockDTO|array
+    public function getRawJsonAttribute(): ?AccountBlockDTO
     {
         try {
             return app(ZenonSdk::class)->getAccountBlockByHash($this->hash);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 

@@ -242,12 +242,12 @@ class AcceleratorProject extends Model implements Sitemapable
         return 'Quorum reached';
     }
 
-    public function getRawJsonAttribute(): AcceleratorProjectDTO|array
+    public function getRawJsonAttribute(): ?AcceleratorProjectDTO
     {
         try {
             return app(ZenonSdk::class)->getProjectById($this->hash);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 }

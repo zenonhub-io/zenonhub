@@ -523,12 +523,12 @@ class Account extends Model implements Sitemapable
         return false;
     }
 
-    public function getRawJsonAttribute(): AccountDTO|array
+    public function getRawJsonAttribute(): ?AccountDTO
     {
         try {
             return app(ZenonSdk::class)->getAccountInfoByAddress($this->address);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 

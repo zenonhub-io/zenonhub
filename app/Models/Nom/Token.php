@@ -294,12 +294,12 @@ class Token extends Model implements Sitemapable
         return $existingPrice ? $existingPrice->pivot->price : '0';
     }
 
-    public function getRawJsonAttribute(): TokenDTO|array
+    public function getRawJsonAttribute(): ?TokenDTO
     {
         try {
             return app(ZenonSdk::class)->getByZts($this->token_standard);
         } catch (Throwable $throwable) {
-            return ['error' => __('Data unavailable, please try again')];
+            return null;
         }
     }
 
