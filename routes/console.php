@@ -47,6 +47,10 @@ Artisan::command('indexer:remove-locks', function () {
     $emergencyLock->release();
 });
 
+Artisan::command('indexer:pause', function () {
+    Cache::lock('indexerEmergencyLock', 0, 'indexer')->get();
+});
+
 Schedule::call(function () {
 
     $date = now()->subDay()->endOfDay();
