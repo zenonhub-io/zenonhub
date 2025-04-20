@@ -17,26 +17,31 @@ class BridgeStatus extends Component
 
         $indicator = 'success';
         $message = 'Bridge & Orchestrators online';
+        $usable = true;
 
         if ($bridgeOnline && ! $orchestratorsOnline) {
             $indicator = 'warning';
             $message = 'Orchestrators offline';
+            $usable = false;
         }
 
         if (! $bridgeOnline && $orchestratorsOnline) {
             $indicator = 'danger';
             $message = 'Bridge offline';
+            $usable = false;
         }
 
         if (! $bridgeOnline && ! $orchestratorsOnline) {
             $indicator = 'danger';
             $message = 'Bridge & Orchestrators offline';
+            $usable = false;
         }
 
         return view('livewire.utilities.bridge-status', [
             'status' => $bridgeOnline,
             'message' => __($message),
             'indicator' => $indicator,
+            'usable' => $usable,
         ]);
     }
 }
