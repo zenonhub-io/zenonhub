@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
 
-    'pillar_missed_momentum_limit' => 15,
+    'pillar_missed_momentum_limit' => 7,
 
     /*
     |--------------------------------------------------------------------------
