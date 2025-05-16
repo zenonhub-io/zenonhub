@@ -43,12 +43,12 @@ class PillarMetrics
 
         $pillar->rank = $pillarDTO->rank;
         $pillar->weight = $pillarDTO->weight;
-        $pillar->produced_momentums = $pillarDTO->currentStats->producedMomentums;
-        $pillar->expected_momentums = $pillarDTO->currentStats->expectedMomentums;
+        $pillar->produced_momentums = $currentProducedMomentums;
+        $pillar->expected_momentums = $currentExpectedMomentums;
 
         if ($missed) {
             $pillar->missed_momentums = min($pillar->missed_momentums + 1, 999);
-        } elseif ($pillar->expected_momentums > 0) {
+        } elseif ($pillar->produced_momentums > 0) {
             $pillar->missed_momentums = 0;
         }
 
