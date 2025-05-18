@@ -29,14 +29,14 @@ class PillarMetrics
         $missed = false;
         $currentProducedMomentums = $pillarDTO->currentStats->producedMomentums;
         $currentExpectedMomentums = $pillarDTO->currentStats->expectedMomentums;
-        $previousProducedMomentums = $pillar->produced_momentums;
-        $previousExpectedMomentums = $pillar->expected_momentums;
 
-        // Check if no new momentums have been produced
-        // Check if expected momentums have changed
+        // Produced momentums changed
+        // Ensure there are expected momentums
+        // Current produced is less than expected
         if (
-            $currentProducedMomentums === $previousProducedMomentums &&
-            $currentExpectedMomentums !== $previousExpectedMomentums
+            $currentProducedMomentums !== $pillar->produced_momentums &&
+            $currentExpectedMomentums > 0 &&
+            $currentProducedMomentums < $currentExpectedMomentums
         ) {
             $missed = true;
         }
@@ -47,8 +47,10 @@ class PillarMetrics
         $pillar->expected_momentums = $currentExpectedMomentums;
 
         if ($missed) {
+            // Increment missed momentums, ensuring it doesn't exceed 999
             $pillar->missed_momentums = min($pillar->missed_momentums + 1, 999);
         } elseif ($pillar->produced_momentums > 0) {
+            // If it has produced momentums reset missed momentums to 0
             $pillar->missed_momentums = 0;
         }
 
