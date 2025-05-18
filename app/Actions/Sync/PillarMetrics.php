@@ -8,6 +8,7 @@ use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\Pillar;
 use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -30,16 +31,22 @@ class PillarMetrics
         $currentProducedMomentums = $pillarDTO->currentStats->producedMomentums;
         $currentExpectedMomentums = $pillarDTO->currentStats->expectedMomentums;
 
-        // Produced momentums changed
+        // Produced momentums has not changed
         // Ensure there are expected momentums
         // Current produced is less than expected
         if (
-            $currentProducedMomentums !== $pillar->produced_momentums &&
-            $currentExpectedMomentums > 0 &&
-            $currentProducedMomentums < $currentExpectedMomentums
+            $currentProducedMomentums === $pillar->produced_momentums &&
+            $currentExpectedMomentums > $currentProducedMomentums &&
+            $currentExpectedMomentums > 0
         ) {
             $missed = true;
         }
+
+        Log::debug('Pillar metrics', [
+            'missed' => $missed,
+            'produced' => $pillar->produced_momentums,
+            'expected' => $pillar->expected_momentums,
+        ]);
 
         $pillar->rank = $pillarDTO->rank;
         $pillar->weight = $pillarDTO->weight;

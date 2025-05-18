@@ -87,7 +87,7 @@ it('counts missed momentums', function () {
 
     expect($pillar->expected_momentums)->toBe(15)
         ->and($pillar->produced_momentums)->toEqual(5)
-        ->and($pillar->missed_momentums)->toEqual(1);
+        ->and($pillar->missed_momentums)->toEqual(2);
 });
 
 it('resets the missed momentum count', function () {
