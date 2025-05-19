@@ -71,7 +71,7 @@ class PlasmaController extends NomController
         try {
             $response = $this->znn->plasma->getRequiredPoWForAccountBlock(
                 $request->input('address'),
-                $request->input('block_type'),
+                (int) $request->input('block_type'),
                 $request->input('to_address'),
                 $request->input('data')
             );

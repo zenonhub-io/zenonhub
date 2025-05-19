@@ -68,8 +68,8 @@ class BridgeController extends NomController
 
         try {
             $response = $this->znn->bridge->getNetworkInfo(
-                $request->input('network_class'),
-                $request->input('chain_id'),
+                (int) $request->input('network_class'),
+                (int) $request->input('chain_id'),
             );
 
             return $this->success($response['data']);
@@ -141,7 +141,7 @@ class BridgeController extends NomController
         try {
             $response = $this->znn->bridge->getConfirmationsToFinality(
                 $request->input('wrap_token_request'),
-                $request->input('confirmations_to_finality'),
+                (int) $request->input('confirmations_to_finality'),
                 $request->input('momentum')
             );
 
@@ -154,7 +154,7 @@ class BridgeController extends NomController
     public function getWrapTokenRequestById(Request $request): JsonResponse
     {
         $validator = Validator::make($request->input(), [
-            'id' => 'required|numeric',
+            'id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -284,7 +284,7 @@ class BridgeController extends NomController
         try {
             $response = $this->znn->bridge->getUnwrapTokenRequestByHashAndLog(
                 $request->input('tx_hash'),
-                $request->input('log_index'),
+                (int) $request->input('log_index'),
             );
 
             return $this->success($response['data']);
