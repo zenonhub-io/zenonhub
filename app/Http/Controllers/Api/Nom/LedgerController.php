@@ -114,8 +114,8 @@ class LedgerController extends NomController
         try {
             $response = $this->znn->ledger->getAccountBlocksByHeight(
                 $request->input('address'),
-                $request->input('height', 25),
-                $request->input('count', 5)
+                (int) $request->input('height', 25),
+                (int) $request->input('count', 5)
             );
 
             return $this->success($response['data']);
@@ -171,7 +171,9 @@ class LedgerController extends NomController
         }
 
         try {
-            $response = $this->znn->ledger->getMomentumBeforeTime($request->input('time', now()->timestamp));
+            $response = $this->znn->ledger->getMomentumBeforeTime(
+                (int) $request->input('time', now()->timestamp)
+            );
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -213,7 +215,9 @@ class LedgerController extends NomController
         }
 
         try {
-            $response = $this->znn->ledger->getMomentumByHash($request->input('hash'));
+            $response = $this->znn->ledger->getMomentumByHash(
+                $request->input('hash')
+            );
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
@@ -234,8 +238,8 @@ class LedgerController extends NomController
 
         try {
             $response = $this->znn->ledger->getMomentumsByHeight(
-                $request->input('height', 1),
-                $request->input('count', 100),
+                (int) $request->input('height', 1),
+                (int) $request->input('count', 100),
             );
 
             return $this->success($response['data']);
@@ -257,8 +261,8 @@ class LedgerController extends NomController
 
         try {
             $response = $this->znn->ledger->getDetailedMomentumsByHeight(
-                $request->input('height', 1),
-                $request->input('count', 100),
+                (int) $request->input('height', 1),
+                (int) $request->input('count', 100),
             );
 
             return $this->success($response['data']);

@@ -47,7 +47,7 @@ class StakeController extends NomController
         }
 
         try {
-            $response = $this->znn->stake->getUncollectedReward($request->input('address', 0));
+            $response = $this->znn->stake->getUncollectedReward($request->input('address'));
 
             return $this->success($response['data']);
         } catch (Exception $exception) {
