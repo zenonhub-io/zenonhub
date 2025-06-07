@@ -2,29 +2,38 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <div class="d-flex align-items-center mb-1">
-                    <div class="title-icon">
-                        @if ($token->socialProfile?->avatar)
-                            <img src="{{ $token->socialProfile?->avatar }}" class="rounded" alt="{{ $token->name }} Logo"/>
-                        @else
-                            {!! $token->avatar_svg !!}
-                        @endif
+                <div class="d-flex">
+                    @if ($token->socialProfile?->avatar)
+                        <div class="flex-fill ms-auto d-flex align-items-start me-3">
+                            <img src="{{ $token->socialProfile?->avatar }}" class="rounded img-fluid" alt="{{ $token->name }} Logo" style="min-width: 60px; max-width: 60px;"/>
+                        </div>
+                    @endif
+                    <div class="flex-fill">
+                        <div class="d-flex align-items-center">
+                            @if (! $token->socialProfile?->avatar)
+                                <div class="title-icon me-3">
+                                    {!! $token->avatar_svg !!}
+                                </div>
+                            @endif
+                            <h5 class="text-muted">
+                                {{ __('Token') }}
+                                <x-copy :text="$token->token_standard" class="ms-2" :tooltip="__('Copy ZTS')" />
+                                @if(! $token->is_network)
+                                    <span class="pointer ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
+                                        <i class="bi bi-pencil-square"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#edit-token-{{ $token->token_standard }}"></i>
+                                    </span>
+                                @endif
+                            </h5>
+                        </div>
+                        <x-includes.header-title>
+                            <h1 class="ls-tight text-wrap text-break">
+                                {{ $token->name }} <span class="text-sm">{{ $token->symbol }}</span>
+                            </h1>
+                        </x-includes.header-title>
                     </div>
-                    <h5 class="text-muted ms-3">{{ __('Token') }}</h5>
                 </div>
-                <x-includes.header-title>
-                    <h1 class="ls-tight text-wrap text-break">
-                        {{ $token->name }} <span class="text-sm">{{ $token->symbol }}</span>
-                        <x-copy :text="$token->token_standard" class="ms-2 text-md" :tooltip="__('Copy ZTS')" />
-                        @if(! $token->is_network)
-                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
-                                <i class="bi bi-pencil-square"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#edit-token-{{ $token->token_standard }}"></i>
-                            </span>
-                        @endif
-                    </h1>
-                </x-includes.header-title>
                 @if ($token->socialProfile)
                     <div class="d-flex align-items-center gap-3 mt-1">
                         <x-social-profile.links :social-profile="$token->socialProfile" />
