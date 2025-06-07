@@ -7,7 +7,7 @@
                         <x-svg file="zenon/az" />
                     </div>
                     <h5 class="text-muted ms-3">
-                        {{ __('Phase') }} {{ $phase->phase_number }}
+                        {{ __('Phase') }} {{ $phase->phase_number }} | {{ $phase->project->name }}
                         <x-copy :text="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="ms-2" :tooltip="__('Copy URL')" />
                     </h5>
                 </div>
