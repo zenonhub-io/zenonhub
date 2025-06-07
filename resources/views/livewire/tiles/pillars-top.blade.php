@@ -16,7 +16,7 @@
             @foreach ($pillars as $pillar)
                 <li class="list-group-item d-flex align-items-start justify-content-between px-6 bg-body-secondary-hover">
                     <div class="d-block">
-                        <div class="d-flex align-items-center mb-1">
+                        <div class="d-flex align-items-center">
                             @if ($pillar->socialProfile?->avatar)
                                 <div class="title-icon me-2">
                                     <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded" alt="{{ $pillar->name }} Logo"/>

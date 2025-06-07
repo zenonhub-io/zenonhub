@@ -3,12 +3,14 @@
         <div class="row justify-content-between align-items-center mb-4">
             <div class="col-24 col-sm">
                 <div class="d-flex align-items-start flex-column">
-                    <h5 class="text-muted">{{ __('Transaction') }}</h5>
-                    <div class="d-flex align-items-center mb-1">
+                    <h5 class="text-muted">
+                        {{ __('Transaction') }}
+                        <x-copy :text="$transaction->hash" class="ms-2" :tooltip="__('Copy hash')" />
+                    </h5>
+                    <div class="d-flex align-items-center">
                         <x-includes.header-title>
                             <h1 class="ls-tight text-wrap text-break">
                                 {{ short_hash($transaction->hash, 6) }}
-                                <x-copy :text="$transaction->hash" class="ms-2 text-md" :tooltip="__('Copy hash')" />
                             </h1>
                         </x-includes.header-title>
                     </div>

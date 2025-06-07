@@ -2,16 +2,18 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <div class="d-flex align-items-center mb-1">
+                <div class="d-flex align-items-center">
                     <div class="title-icon">
                         <x-svg file="zenon/az" />
                     </div>
-                    <h5 class="text-muted ms-3">{{ __('Phase') }}</h5>
+                    <h5 class="text-muted ms-3">
+                        {{ __('Phase') }} {{ $phase->phase_number }}
+                        <x-copy :text="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="ms-2" :tooltip="__('Copy URL')" />
+                    </h5>
                 </div>
                 <x-includes.header-title>
                     <h1 class="ls-tight text-wrap text-break">
                         {{ $phase->name }}
-                        <x-copy :text="route('accelerator-z.phase.detail', ['hash' => $phase->hash])" class="ms-2 text-md" :tooltip="__('Copy URL')" />
                     </h1>
                 </x-includes.header-title>
             </div>
