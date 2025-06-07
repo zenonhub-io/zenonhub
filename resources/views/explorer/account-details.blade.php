@@ -2,45 +2,53 @@
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <div class="d-flex align-items-center mb-1">
-                    <div class="title-icon">
-                        @if ($account->socialProfile?->avatar)
-                            <img src="{{ $account->socialProfile?->avatar }}" class="rounded" alt="{{ $account->address }} Logo"/>
-                        @else
-                            {!! $account->avatar_svg !!}
-                        @endif
+                <div class="d-flex">
+                    @if ($account->socialProfile?->avatar)
+                        <div class="flex-fill ms-auto d-flex align-items-center align-items-md-start me-3">
+                            <img src="{{ $account->socialProfile?->avatar }}" class="rounded img-fluid" alt="{{ $account->address }} Logo" style="min-width: 60px; max-width: 60px;"/>
+                        </div>
+                    @endif
+                    <div class="flex-fill">
+                        <div class="d-flex align-items-center">
+                            @if (! $account->socialProfile?->avatar)
+                                <div class="title-icon me-3">
+                                    {!! $account->avatar_svg !!}
+                                </div>
+                            @endif
+                            <h5 class="text-muted">
+                                {{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}
+                                @if (! $account->is_embedded_contract)
+                                    <span class="pointer ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit Account') }}">
+                                        <i class="bi bi-pencil-square"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#edit-account-{{ $account->address }}"></i>
+                                    </span>
+                                @endif
+                                <x-copy :text="$account->address" class="ms-2" :tooltip="__('Copy Address')" />
+                                @auth
+                                    <span class="pointer ms-2 " data-bs-toggle="tooltip" data-bs-title="{{ __('Favorite') }}">
+                                        <i class="bi {{ $account->is_favourite ? 'bi-star-fill' : 'bi-star' }}"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#edit-favorite-address-{{ $account->address }}"></i>
+                                    </span>
+                                @else
+                                    <x-link class="ms-2 text-muted" :href="route('login', ['redirect' => url()->current()])">
+                                        <i
+                                            class="bi bi-star"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-title="Add Favorite"
+                                        ></i>
+                                    </x-link>
+                                @endauth
+                            </h5>
+                        </div>
+                        <x-includes.header-title>
+                            <h1 class="ls-tight text-wrap text-break">
+                                {{ $account->address }}
+                            </h1>
+                        </x-includes.header-title>
                     </div>
-                    <h5 class="text-muted ms-3">{{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}</h5>
                 </div>
-                <x-includes.header-title>
-                    <h1 class="ls-tight text-wrap text-break">
-                        {{ $account->address }}
-
-                        @if (! $account->is_embedded_contract)
-                            <span class="pointer text-md ms-3" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
-                                <i class="bi bi-pencil-square"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#edit-account-{{ $account->address }}"></i>
-                            </span>
-                        @endif
-                        <x-copy :text="$account->address" class="ms-3 text-md" :tooltip="__('Copy Address')" />
-                        @auth
-                            <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Favorite') }}">
-                                <i class="bi {{ $account->is_favourite ? 'bi-star-fill' : 'bi-star' }}"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#edit-favorite-address-{{ $account->address }}"></i>
-                            </span>
-                        @else
-                            <x-link class="text-md ms-2 text-body" :href="route('login', ['redirect' => url()->current()])">
-                                <i
-                                    class="bi bi-star"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-title="Add Favorite"
-                                ></i>
-                            </x-link>
-                        @endauth
-                    </h1>
-                </x-includes.header-title>
                 @if ($account->socialProfile)
                     <div class="d-flex align-items-center gap-3 mt-1">
                         <x-social-profile.links :social-profile="$account->socialProfile" />
@@ -56,9 +64,6 @@
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat :title="app('znnToken')->symbol">
-{{--                            <span class="text-primary" data-bs-toggle="tooltip" data-bs-title="{{ $account->display_znn_balance }}">--}}
-{{--                                {{ Number::abbreviate(app('znnToken')->getDisplayAmount($account->znn_balance), 2) }}--}}
-{{--                            </span>--}}
                             <span class="text-primary">
                                 {{ $account->display_znn_balance }}
                             </span>
