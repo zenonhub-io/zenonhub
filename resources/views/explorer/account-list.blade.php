@@ -15,11 +15,13 @@
         @auth
             <livewire:explorer.accounts-list :tab="$tab" lazy />
         @else
-            <x-alerts.alert type="info" class="m-6">
-                <i class="bi bi-info-circle-fill me-2"></i> {!! __(':loginLink to save your favorite accounts', [
+            <x-cards.card class="mx-3 mx-md-6">
+                <x-cards.body>
+                    <i class="bi bi-info-circle-fill me-2"></i> {!! __(':loginLink to save your favorite accounts', [
                     'loginLink' => '<a href="'.route('login', ['redirect' => url()->current()]).'">'.__('Login').'</a>',
                 ]) !!}
-            </x-alerts.alert>
+                </x-cards.body>
+            </x-cards.card>
         @endauth
     @endif
 </x-app-layout>
