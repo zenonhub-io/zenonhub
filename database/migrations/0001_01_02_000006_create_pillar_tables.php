@@ -29,6 +29,8 @@ return new class extends Migration
             $table->integer('missed_momentums')->default(0);
             $table->integer('momentum_rewards')->default(0);
             $table->integer('delegate_rewards')->default(0);
+            $table->decimal('owner_apr')->default(0);
+            $table->decimal('delegate_apr')->default(0);
             $table->decimal('az_engagement', 5)->nullable()->index();
             $table->bigInteger('az_avg_vote_time')->nullable()->index();
             $table->integer('avg_momentums_produced')->default(0)->index();

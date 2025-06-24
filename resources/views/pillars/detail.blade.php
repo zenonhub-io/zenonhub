@@ -1,33 +1,37 @@
 <x-app-layout>
-
-    <x-slot:breadcrumbs>
-        {{ Breadcrumbs::render('pillar.detail', $pillar) }}
-    </x-slot>
-
     <x-includes.header :responsive-border="false">
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex align-items-start flex-column">
-                <div class="d-flex align-items-center mb-1">
-                    <div class="title-icon">
-                        @if ($pillar->socialProfile?->avatar)
-                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded" alt="{{ $pillar->name }} Logo"/>
-                        @else
-                            <x-svg file="zenon/pillar" />
-                        @endif
+                <div class="d-flex">
+                    @if ($pillar->socialProfile?->avatar)
+                        <div class="flex-fill ms-auto d-flex align-items-start me-3">
+                            <img src="{{ $pillar->socialProfile?->avatar }}" class="rounded img-fluid" alt="{{ $pillar->name }} Logo" style="min-width: 60px; max-width: 60px;"/>
+                        </div>
+                    @endif
+                    <div class="flex-fill">
+                        <div class="d-flex align-items-center">
+                            @if (! $pillar->socialProfile?->avatar)
+                                <div class="title-icon me-3">
+                                    <x-svg file="zenon/pillar" />
+                                </div>
+                            @endif
+                            <h5 class="text-muted">
+                                {{ __('Pillar') }}
+                                <x-copy :text="route('pillar.detail', ['slug' => $pillar->slug])" class="ms-2" :tooltip="__('Copy URL')" />
+                                <span class="pointer ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit Pillar') }}">
+                                    <i class="bi bi-pencil-square"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#edit-pillar-{{ $pillar->slug }}"></i>
+                                </span>
+                            </h5>
+                        </div>
+                        <x-includes.header-title>
+                            <h1 class="ls-tight text-wrap text-break">
+                                {{ $pillar->name }}
+                            </h1>
+                        </x-includes.header-title>
                     </div>
-                    <h5 class="text-muted ms-3">{{ __('Pillar') }}</h5>
                 </div>
-                <x-includes.header-title>
-                    <h1 class="ls-tight text-wrap text-break">
-                        {{ $pillar->name }}
-                        <x-copy :text="route('pillar.detail', ['slug' => $pillar->slug])" class="ms-2 text-md" :tooltip="__('Copy URL')" />
-                        <span class="pointer text-md ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
-                            <i class="bi bi-pencil-square"
-                               data-bs-toggle="modal"
-                               data-bs-target="#edit-pillar-{{ $pillar->slug }}"></i>
-                        </span>
-                    </h1>
-                </x-includes.header-title>
                 @if ($pillar->socialProfile)
                     <div class="d-flex align-items-center gap-3 mt-1">
                         <x-social-profile.links :social-profile="$pillar->socialProfile" />
@@ -57,9 +61,9 @@
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
-                            :title="__('Rewards')"
-                            :info="__('Momentum / Delegate rewards %')">
-                            {{ $pillar->momentum_rewards }} / {{ $pillar->delegate_rewards }}
+                            :title="__('APR')"
+                            :info="__('Current delegate APR %')">
+                            {{ $pillar->delegate_apr }} %
                         </x-stats.mini-stat>
                     </x-cards.body>
                 </x-cards.card>
@@ -84,13 +88,13 @@
                 <x-cards.card>
                     <x-cards.body>
                         <x-stats.mini-stat
-                            :title="__('Orchestrator')"
-                            :info="__('Indicates if the pillar runs an orchestrator and its status')">
-                            @if($pillar->orchestrator)
-                                <x-stats.indicator :type="$pillar->orchestrator->is_active ? 'success' : 'danger'" />
-                                {{ ($pillar->orchestrator->is_active ? 'Online' : 'Offline') }}
+                            :title="__('Voting')"
+                            :info="__('% of Accelerator-Z projects and phases voted on')">
+                            @if (! is_null($pillar->az_engagement))
+                                <x-stats.indicator :type="$pillar->az_status_indicator" />
+                                {{ number_format($pillar->az_engagement) }}%
                             @else
-                                {{ __('None') }}
+                                -
                             @endif
                         </x-stats.mini-stat>
                     </x-cards.body>
@@ -103,14 +107,15 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Rank')" :stat="'# ' . $pillar->display_rank" />
-                            <x-stats.list-item :title="__('Voting')" :info="__('% of Accelerator-Z projects and phases voted on')">
-                                @if (! is_null($pillar->az_engagement))
-                                    <x-stats.indicator :type="$pillar->az_status_indicator" />
-                                    {{ number_format($pillar->az_engagement) }}%
+                            <x-stats.list-item :title="__('Orchestrator')" :info="__('Indicates if the pillar runs an orchestrator and its status')">
+                                @if($pillar->orchestrator)
+                                    <x-stats.indicator :type="$pillar->orchestrator->is_active ? 'success' : 'danger'" />
+                                    {{ ($pillar->orchestrator->is_active ? 'Online' : 'Offline') }}
                                 @else
-                                    -
+                                    {{ __('None') }}
                                 @endif
                             </x-stats.list-item>
+                            <x-stats.list-item :title="__('Rewards')" stat="{{ $pillar->momentum_rewards }} / {{ $pillar->delegate_rewards }}" :info="__('Momentum / Delegate rewards %')" />
                             <x-stats.list-item :title="__('Registration cost')" :stat="$pillar->display_qsr_burn .' QSR'" />
                             <x-stats.list-item :title="__('Produced momentums')" :stat="number_format($pillar->momentums()->count())" />
                             <x-stats.list-item :title="__('Total delegators')" :stat="number_format($pillar->activeDelegators()->count())" :hr="false" />
@@ -119,8 +124,13 @@
                     </div>
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-2">
+                            <x-stats.list-item :title="__('Legacy')" stat="{{ $pillar->is_legacy ? __('Yes') : __('No') }}" />
                             <x-stats.list-item :title="__('Spawned')">
-                                <x-date-time.carbon :date="$pillar->created_at" />
+                                @if ($pillar->is_legacy)
+                                    {{ __('Genesis') }}
+                                @else
+                                    <x-date-time.carbon :date="$pillar->created_at" />
+                                @endif
                             </x-stats.list-item>
                             @if ($pillar->revoked_at)
                                 <x-stats.list-item :title="__('Revoked')">

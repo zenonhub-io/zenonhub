@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pillars;
 
 use App\Models\Nom\Pillar;
+use App\Services\AprData\PillarsApr;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Number;
 use MetaTags;
 
 class PillarsController
@@ -29,6 +32,7 @@ class PillarsController
 
         return view('pillars.list', [
             'tab' => $tab,
+            'stats' => $this->getStats(),
         ]);
     }
 
@@ -49,5 +53,21 @@ class PillarsController
             'tab' => $tab,
             'pillar' => $pillar,
         ]);
+    }
+
+    private function getStats(): array
+    {
+        return Cache::remember('pillars-list.stats', now()->addHour(), function () {
+            $delegatedZnn = Pillar::sum('weight');
+            $delegatedZnn = app('znnToken')->getDisplayAmount($delegatedZnn);
+            $delegateApr = (new PillarsApr)->delegateApr;
+
+            return [
+                'active' => Pillar::whereProducing()->count(),
+                'inactive' => Pillar::whereNotProducing()->count(),
+                'avgApr' => Number::format($delegateApr, 2),
+                'delegatedZnn' => Number::abbreviate($delegatedZnn, 2),
+            ];
+        });
     }
 }

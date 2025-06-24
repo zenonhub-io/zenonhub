@@ -141,7 +141,7 @@ class BridgeController extends NomController
         try {
             $response = $this->znn->bridge->getConfirmationsToFinality(
                 $request->input('wrap_token_request'),
-                (int) $request->input('confirmations_to_finality'),
+                $request->input('confirmations_to_finality'),
                 $request->input('momentum')
             );
 
@@ -284,7 +284,7 @@ class BridgeController extends NomController
         try {
             $response = $this->znn->bridge->getUnwrapTokenRequestByHashAndLog(
                 $request->input('tx_hash'),
-                (int) $request->input('log_index'),
+                $request->input('log_index'),
             );
 
             return $this->success($response['data']);
