@@ -6,7 +6,8 @@
            data-bs-toggle="dropdown"
            aria-haspopup="false" aria-expanded="false"
         >
-            <i class="bi bi-person-circle fs-3"></i> <span class="fs-6 ms-2">
+            <i class="bi bi-person-circle fs-3"></i>
+            <span class="fs-6 ms-2">
                 {{ auth()->user()?->username }}
             </span>
         </a>

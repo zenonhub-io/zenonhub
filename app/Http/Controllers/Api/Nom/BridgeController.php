@@ -141,7 +141,7 @@ class BridgeController extends NomController
         try {
             $response = $this->znn->bridge->getConfirmationsToFinality(
                 $request->input('wrap_token_request'),
-                (int) $request->input('confirmations_to_finality'),
+                $request->input('confirmations_to_finality'),
                 $request->input('momentum')
             );
 

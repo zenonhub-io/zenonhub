@@ -20,8 +20,8 @@ class SentinelsApr extends BaseApr
 
     public float $sentinelApr = 0 {
         get {
-        return $this->sentinelApr;
-    }
+            return $this->sentinelApr;
+        }
     }
 
     private float $yearlyZnnRewardPoolForSentinels = 0;

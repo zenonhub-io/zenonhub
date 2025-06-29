@@ -21,20 +21,20 @@ class PillarsApr extends BaseApr
 
     public float $pillarTop30Apr = 0 {
         get {
-        return $this->pillarTop30Apr;
-    }
+            return $this->pillarTop30Apr;
+        }
     }
 
     public float $pillarNotTop30Apr = 0 {
         get {
-        return $this->pillarNotTop30Apr;
-    }
+            return $this->pillarNotTop30Apr;
+        }
     }
 
     public float $delegateApr = 0 {
         get {
-        return $this->delegateApr;
-    }
+            return $this->delegateApr;
+        }
     }
 
     private Collection $pillars;

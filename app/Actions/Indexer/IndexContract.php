@@ -10,6 +10,7 @@ use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Contract;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -35,6 +36,9 @@ class IndexContract
                         $blockProcessorClass = ContractMethodProcessorFactory::create($accountBlock->contractMethod);
                         $blockProcessorClass::run($accountBlock);
                     } catch (ContractMethodProcessorNotFound $e) {
+                        Log::info('Index contract error', [
+                            'error' => $e->getMessage(),
+                        ]);
                     }
 
                     $progressBar->advance();
