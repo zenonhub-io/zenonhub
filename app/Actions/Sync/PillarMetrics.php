@@ -48,7 +48,7 @@ class PillarMetrics
 
         if ($missed) {
             $pillar->missed_momentums = min($pillar->missed_momentums + 1, 999);
-        } elseif ($pillar->expected_momentums > 0) {
+        } elseif ($pillar->produced_momentums > 0) {
             $pillar->missed_momentums = 0;
         }
 
