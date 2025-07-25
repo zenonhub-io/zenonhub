@@ -86,15 +86,15 @@ class UpdateSocialProfile extends Component
             'message' => $this->message,
             'signature' => $this->signature,
 
-            'bio' => $this->socialProfileForm['bio'],
-            'avatar' => $this->socialProfileForm['avatar'],
-            'website' => $this->socialProfileForm['website'],
-            'email' => $this->socialProfileForm['email'],
-            'x' => $this->socialProfileForm['x'],
-            'telegram' => $this->socialProfileForm['telegram'],
-            'github' => $this->socialProfileForm['github'],
-            'medium' => $this->socialProfileForm['medium'],
-            'discord' => $this->socialProfileForm['discord'],
+            'bio' => $this->socialProfileForm['bio'] ?? null,
+            'avatar' => $this->socialProfileForm['avatar'] ?? null,
+            'website' => $this->socialProfileForm['website'] ?? null,
+            'email' => $this->socialProfileForm['email'] ?? null,
+            'x' => $this->socialProfileForm['x'] ?? null,
+            'telegram' => $this->socialProfileForm['telegram'] ?? null,
+            'github' => $this->socialProfileForm['github'] ?? null,
+            'medium' => $this->socialProfileForm['medium'] ?? null,
+            'discord' => $this->socialProfileForm['discord'] ?? null,
         ], $rules)->validateWithBag('verifyAddress');
 
         if (! $this->hasUserVerifiedAddress) {
