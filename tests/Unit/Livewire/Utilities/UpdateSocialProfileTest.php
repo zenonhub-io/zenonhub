@@ -97,6 +97,43 @@ test('it creates a new social profile', function () {
     expect($pillar->socialProfile()->get())->toHaveCount(1);
 });
 
+test('it updates a partial social profile via signature', function () {
+
+    $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
+    $account->public_key = 'Pu6pBONZKbCMTZMYMrCKe8c59Rv/WOt2ZHUxuo9ifyY=';
+    $account->save();
+
+    $pillar = Pillar::factory()->create([
+        'owner_id' => $account,
+    ]);
+
+    $profileData = [
+        'avatar' => 'https://www.imagelink.com/avatar.com',
+    ];
+
+    Livewire::test(UpdateSocialProfile::class, [
+        'itemId' => $pillar->slug,
+        'itemType' => 'pillar',
+    ])->set([
+        'socialProfileForm' => $profileData,
+        'message' => 'TEST',
+        'signature' => '8d70ae934e6efda81e762088ce490328da886c1b9c22a2fd3cb53188cc972cc13c670d6da507b10cac0aa22148a0452c47c12ea20e72402cee5838aae3f35904',
+    ])->call('saveProfile')
+        ->assertDispatched('social-profile.updated');
+
+    $socialProfile = $pillar->socialProfile;
+
+    expect($socialProfile->bio)->toBeNull()
+        ->and($socialProfile->avatar)->toEqual($profileData['avatar'])
+        ->and($socialProfile->website)->toBeNull()
+        ->and($socialProfile->email)->toBeNull()
+        ->and($socialProfile->x)->toBeNull()
+        ->and($socialProfile->telegram)->toBeNull()
+        ->and($socialProfile->github)->toBeNull()
+        ->and($socialProfile->medium)->toBeNull()
+        ->and($socialProfile->discord)->toBeNull();
+});
+
 test('it updates an existing social profile via signature', function () {
 
     $account = load_account('z1qqslnf593pwpqrg5c29ezeltl8ndsrdep6yvmm');
