@@ -20,16 +20,48 @@ beforeEach(function () {
 
     Http::fake([
         config('services.orchestrators-status.api_url') => Http::response([
-            'online_percentage' => 100,
-            'pillars' => [
-                [
-                    'online_status' => true,
-                    'pillar_name' => 'Pillar1',
-                    'stake_address' => 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar1',
-                ], [
-                    'online_status' => false,
-                    'pillar_name' => 'Pillar2',
-                    'stake_address' => 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar2',
+            'data' => [
+                'bridge_status' => 'online',
+                'online_count' => 15,
+                'orchestrators' => [
+                    [
+                        'api_pillar_name' => 'Pillar1',
+                        'error' => null,
+                        'ip' => '127.0.0.1',
+                        'last_checked' => '2025-10-22T14:29:53.511981',
+                        'name_mismatch' => false,
+                        'network_stats' => [
+                            'eth' => [
+                                'unwraps' => 0,
+                                'wraps' => 0,
+                            ],
+                        ],
+                        'pillar_name' => 'Pillar1',
+                        'pillar_url' => 'Pillar1',
+                        'producer_address' => 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1',
+                        'state' => '0 (LiveState)',
+                        'state_num' => 0,
+                        'status' => 'online',
+                    ], [
+
+                        'api_pillar_name' => 'Pillar2',
+                        'error' => null,
+                        'ip' => '127.0.0.2',
+                        'last_checked' => '2025-10-22T14:29:53.511981',
+                        'name_mismatch' => false,
+                        'network_stats' => [
+                            'eth' => [
+                                'unwraps' => 0,
+                                'wraps' => 0,
+                            ],
+                        ],
+                        'pillar_name' => 'Pillar2',
+                        'pillar_url' => 'Pillar2',
+                        'producer_address' => 'z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod2',
+                        'state' => 'Unknown',
+                        'state_num' => null,
+                        'status' => 'offline',
+                    ],
                 ],
             ],
         ]),
@@ -45,7 +77,7 @@ it('syncs orchestrators from the json data', function () {
 
     expect(Orchestrator::count())->toBe(2)
         ->and($orchestrator->pillar->name)->toEqual('Pillar1')
-        ->and($orchestrator->account->address)->toEqual('z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpyllar1')
+        ->and($orchestrator->account->address)->toEqual('z1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxprod1')
         ->and($orchestrator->is_active)->toBeTrue()
         ->and($pillar->orchestrator->is_active)->toBeTrue();
 });
