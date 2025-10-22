@@ -86,13 +86,14 @@ class BridgeStatus
 
     public function getLatestTx(): ?AccountBlock
     {
-        return AccountBlock::whereHas('contractMethod', function ($q) {
-            $q->whereIn('name', [
-                'WrapToken',
-                'UpdateWrapRequest',
-                'UnwrapToken',
-            ]);
-        })
+        $bridgeInteractions = [
+            'WrapToken',
+            'UpdateWrapRequest',
+            'UnwrapToken',
+            'Redeem',
+        ];
+
+        return AccountBlock::whereHas('contractMethod', fn ($query) => $query->whereIn('name', $bridgeInteractions))
             ->latest('id')
             ->first();
     }
