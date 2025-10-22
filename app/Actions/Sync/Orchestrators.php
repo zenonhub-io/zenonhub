@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Sync;
 
-use App\Models\Nom\Account;
 use App\Models\Nom\Orchestrator;
 use App\Models\Nom\Pillar;
 use Illuminate\Http\Client\RequestException;
@@ -21,13 +20,17 @@ class Orchestrators
     public function handle(): void
     {
         $apiUrl = config('services.orchestrators-status.api_url');
+        $apiToken = config('services.orchestrators-status.api_token');
 
         if (! $apiUrl) {
             return;
         }
 
         try {
-            $orchestratorJson = Http::get($apiUrl)->throw()->json('pillars');
+            $orchestratorJson = Http::withHeader('X-API-Key', $apiToken)
+                ->get($apiUrl)
+                ->throw()
+                ->json('data.orchestrators');
         } catch (RequestException $e) {
             Log::error('Sync Orchestrators - Failed to fetch orchestrator list', [
                 'url' => $apiUrl,
@@ -47,19 +50,18 @@ class Orchestrators
     private function processOrchestratorData(array $orchestratorData): ?Orchestrator
     {
         $pillar = Pillar::firstWhere('name', $orchestratorData['pillar_name']);
-        $account = Account::firstWhere('address', $orchestratorData['stake_address']);
 
-        if (! $pillar || ! $account) {
+        if (! $pillar) {
             return null;
         }
 
         $orchestrator = Orchestrator::firstOrCreate([
             'pillar_id' => $pillar->id,
         ], [
-            'account_id' => $account->id,
+            'account_id' => $pillar->producer_account_id,
         ]);
 
-        $orchestrator->is_active = $orchestratorData['online_status'];
+        $orchestrator->is_active = $orchestratorData['status'] === 'online' ? 1 : 0;
         $orchestrator->save();
 
         return $orchestrator;

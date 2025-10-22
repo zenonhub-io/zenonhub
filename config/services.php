@@ -77,6 +77,7 @@ return [
 
     'orchestrators-status' => [
         'api_url' => env('ORCHESTRATORS_STATUS_API'),
+        'api_token' => env('ORCHESTRATORS_STATUS_API_TOKEN'),
     ],
 
     'public-rpc-nodes' => [
