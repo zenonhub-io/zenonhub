@@ -87,6 +87,19 @@ class Indexer
         ]);
     }
 
+    public function pause(): void
+    {
+        Cache::lock('indexerEmergencyLock', 0, 'indexer')->get();
+    }
+
+    public function resume(): void
+    {
+        $lock = Cache::lock('indexerLock', 0, 'indexer');
+        $emergencyLock = Cache::lock('indexerEmergencyLock', 0, 'indexer');
+        $lock->release();
+        $emergencyLock->release();
+    }
+
     private function setCurrentHeight(): void
     {
         // If DB only has genesis data start from height 2, don't re-index genesis
