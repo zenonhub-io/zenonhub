@@ -12,8 +12,5 @@ class SiteLink extends Widget
 
     protected static bool $isLazy = false;
 
-    /**
-     * @var view-string
-     */
-    protected static string $view = 'filament.widgets.site-link';
+    protected string $view = 'filament.widgets.site-link';
 }

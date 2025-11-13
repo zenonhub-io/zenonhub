@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class TokensRelationManager extends RelationManager
@@ -17,17 +21,17 @@ class TokensRelationManager extends RelationManager
 
     protected static ?string $title = 'API Tokens';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(1)
-            ->schema([
-                Forms\Components\TextInput::make('name')
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('expires_at')
+                DateTimePicker::make('expires_at')
                     ->nullable(),
-                Forms\Components\Select::make('abilities')
+                Select::make('abilities')
                     ->multiple()
                     ->options([
                         'plasma-bot' => 'Plasma Bot',
@@ -41,24 +45,24 @@ class TokensRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('abilities')
+                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('abilities')
                     ->label('Abilities')
                     ->colors(['info'])
                     ->badge(),
-                Tables\Columns\TextColumn::make('expires_at')
+                TextColumn::make('expires_at')
                     ->label('Expires')
                     ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('last_used_at')
+                TextColumn::make('last_used_at')
                     ->label('Last used')
                     ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Created')
                     ->sortable()
                     ->dateTime()
@@ -68,10 +72,10 @@ class TokensRelationManager extends RelationManager
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->modalWidth(MaxWidth::Medium),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make()
+                    ->modalWidth(Width::Medium),
+                DeleteAction::make(),
             ]);
     }
 }

@@ -17,7 +17,7 @@
         "deployer/deployer": "*",
         "digitalsloth/znn-php": "^1.0",
         "diglactic/laravel-breadcrumbs": "*",
-        "filament/filament": "^3.2",
+        "filament/filament": "^4.0",
         "guzzlehttp/guzzle": "^7.8",
         "laravel-notification-channels/telegram": "^5.0",
         "laravel-notification-channels/twitter": "^8.1",

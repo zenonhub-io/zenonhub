@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Models\Nom\Momentum;
 use App\Models\Nom\Token;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 
 Artisan::command('nom:reset-db', function () {
     Artisan::call('db:seed --class=DatabaseSeeder');
@@ -39,17 +38,6 @@ Artisan::command('site:create-stats', function () {
     Artisan::call('sync:project-status');
     Artisan::call('sync:pillar-engagement-scores');
 })->purpose('Create initial stats for the site');
-
-Artisan::command('indexer:remove-locks', function () {
-    $lock = Cache::lock('indexerLock', 0, 'indexer');
-    $emergencyLock = Cache::lock('indexerEmergencyLock', 0, 'indexer');
-    $lock->release();
-    $emergencyLock->release();
-});
-
-Artisan::command('indexer:pause', function () {
-    Cache::lock('indexerEmergencyLock', 0, 'indexer')->get();
-});
 
 Schedule::call(function () {
 

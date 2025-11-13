@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\DetachAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class FavoriteAccountsRelationManager extends RelationManager
 {
     protected static string $relationship = 'favoriteAccounts';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(1)
-            ->schema([
-                Forms\Components\TextInput::make('label')->required(),
-                Forms\Components\TextInput::make('address')->disabled(),
+            ->components([
+                TextInput::make('label')->required(),
+                TextInput::make('address')->disabled(),
             ]);
     }
 
@@ -30,9 +32,9 @@ class FavoriteAccountsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('label')
             ->columns([
-                Tables\Columns\TextColumn::make('label')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('address')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('label')->searchable()->sortable(),
+                TextColumn::make('address')->searchable()->sortable(),
+                TextColumn::make('created_at')
                     ->label('Created')
                     ->sortable()
                     ->dateTime(),
@@ -40,10 +42,10 @@ class FavoriteAccountsRelationManager extends RelationManager
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->modalWidth(MaxWidth::Medium),
-                Tables\Actions\DetachAction::make(),
+            ->recordActions([
+                EditAction::make()
+                    ->modalWidth(Width::Medium),
+                DetachAction::make(),
             ]);
     }
 }
