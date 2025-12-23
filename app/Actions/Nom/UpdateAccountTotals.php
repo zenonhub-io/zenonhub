@@ -46,8 +46,7 @@ class UpdateAccountTotals implements ShouldBeUnique
             $this->saveRewardTotals();
 
             $this->account->save();
-
-        }, 3);
+        });
     }
 
     public function asCommand(Command $command): void

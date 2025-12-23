@@ -13,9 +13,11 @@ use App\Exceptions\ZenonRpcException;
 use App\Models\Nom\Momentum;
 use App\Services\ZenonSdk\ZenonSdk;
 use Illuminate\Contracts\Cache\Lock;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
@@ -24,7 +26,7 @@ class Indexer
 {
     protected ?int $currentDbHeight = null;
 
-    protected ?int $momentumsPerBatch = 500;
+    protected ?int $momentumsPerBatch = 1000;
 
     protected ConsoleOutput $output;
 
@@ -68,8 +70,8 @@ class Indexer
             try {
                 $this->processMomentums();
             } catch (Throwable $exception) {
-                $this->writeOutput('Indexer error rolling back');
-                Log::debug('Indexer - Error', [
+                $this->writeOutput($exception->getMessage());
+                Log::debug('Indexer - Error Rollback', [
                     'message' => $exception->getMessage(),
                 ]);
                 break;
@@ -192,6 +194,13 @@ class Indexer
                 });
 
                 DB::commit();
+            } catch (UniqueConstraintViolationException $exception) {
+                if (Str::contains($exception->getMessage(), 'nom_momentums.nom_momentums_height_unique')) {
+                    $this->pause();
+                    DB::rollBack();
+                    Log::error($exception);
+                    throw new IndexerException("Indexing error, paused - {$exception->getMessage()}");
+                }
             } catch (Throwable $exception) {
                 DB::rollBack();
                 Log::error($exception);

@@ -39,6 +39,14 @@ return [
         ],
     ],
 
+    // Public nodes
+    'public_nodes' => [
+        'backups' => [
+            'https://my.hc1node.com:35997',
+            'https://node.atsocy.com:35997',
+        ],
+    ],
+
     //
     // --- Default Network of Momentum Config Below ---
     //
