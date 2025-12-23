@@ -74,7 +74,7 @@ class MomentumsList extends BaseTable
                         'pillar' => $row->producerPillar,
                     ])
                 ),
-            Column::make('Transactions')
+            Column::make('Tnxs')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('account_blocks_count', $direction)
                 )

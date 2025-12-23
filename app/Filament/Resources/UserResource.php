@@ -4,17 +4,31 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Filament\Resources\UserResource\RelationManagers\FavoriteAccountsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\TokensRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\VerifiedAccountsRelationManager;
 use App\Models\User;
-use Filament\Forms;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Form;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +36,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
+use UnitEnum;
 
 class UserResource extends Resource
 {
@@ -29,53 +44,53 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'username';
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static string|UnitEnum|null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 1;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
 
                 Tabs::make('Tabs')
                     ->columnSpan(1)
                     ->tabs([
-                        Tabs\Tab::make('Details')
+                        Tab::make('Details')
                             ->schema([
-                                Forms\Components\TextInput::make('username')->required(),
-                                Forms\Components\TextInput::make('email')->email()->required(),
-                                Forms\Components\Select::make('roles')
+                                TextInput::make('username')->required(),
+                                TextInput::make('email')->email()->required(),
+                                Select::make('roles')
                                     ->relationship('roles', 'name')
                                     ->getOptionLabelFromRecordUsing(fn (Model $record) => Str::headline($record->name))
                                     ->multiple()
                                     ->preload()
                                     ->searchable(),
                             ]),
-                        Tabs\Tab::make('Security')
+                        Tab::make('Security')
                             ->schema([
-                                Forms\Components\TextInput::make('password')
+                                TextInput::make('password')
                                     ->password()
                                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                     ->dehydrated(fn (?string $state): bool => filled($state))
                                     ->revealable()
                                     ->required(fn (string $context): bool => $context === 'create'),
-                                Forms\Components\TextInput::make('passwordConfirmation')
+                                TextInput::make('passwordConfirmation')
                                     ->password()
                                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                                     ->dehydrated(fn (?string $state): bool => filled($state))
                                     ->revealable()
                                     ->same('password')
                                     ->required(fn (string $context): bool => $context === 'create'),
-                                Forms\Components\DateTimePicker::make('two_factor_confirmed_at')
+                                DateTimePicker::make('two_factor_confirmed_at')
                                     ->hidden(fn (User $user): bool => $user->two_factor_confirmed_at === null)
                                     ->disabled(),
                             ]),
-                        Tabs\Tab::make('Notifications')
+                        Tab::make('Notifications')
                             ->schema([
-                                Forms\Components\CheckboxList::make('notificationTypes')
+                                CheckboxList::make('notificationTypes')
                                     ->relationship(titleAttribute: 'name'),
                             ]),
                     ]),
@@ -84,34 +99,34 @@ class UserResource extends Resource
                     ->columnSpan(1)
                     ->tabs([
 
-                        Tabs\Tab::make('Info')
+                        Tab::make('Info')
                             ->columns(2)
                             ->schema([
-                                Forms\Components\Placeholder::make('last_seen_at')
+                                Placeholder::make('last_seen_at')
                                     ->label(__('Last seen'))
                                     ->content(fn (User $record): ?string => $record->last_seen_at?->diffForHumans()),
-                                Forms\Components\Placeholder::make('email_verified_at')
+                                Placeholder::make('email_verified_at')
                                     ->label(__('Verified'))
                                     ->content(fn (User $record): ?string => $record->email_verified_at?->format('d/m/Y h:i A')),
-                                Forms\Components\Placeholder::make('created_at')
+                                Placeholder::make('created_at')
                                     ->label(__('Created'))
                                     ->content(fn (User $record): ?string => $record->created_at?->format('d/m/Y h:i A')),
-                                Forms\Components\Placeholder::make('updated_at')
+                                Placeholder::make('updated_at')
                                     ->label(__('Updated'))
                                     ->content(fn (User $record): ?string => $record->updated_at?->format('d/m/Y h:i A')),
-                                Forms\Components\Placeholder::make('registration_ip')
+                                Placeholder::make('registration_ip')
                                     ->label(__('Registration IP'))
                                     ->content(fn (User $record): ?string => $record->registration_ip),
-                                Forms\Components\Placeholder::make('login_ip')
+                                Placeholder::make('login_ip')
                                     ->label(__('Login IP'))
                                     ->content(fn (User $record): ?string => $record->login_ip),
                             ]),
 
-                        Tabs\Tab::make('Actions')
+                        Tab::make('Actions')
                             ->schema([
 
-                                Forms\Components\Actions::make([
-                                    Forms\Components\Actions\Action::make('resend_verification')
+                                Actions::make([
+                                    Action::make('resend_verification')
                                         ->label(__('Resend verification email'))
                                         ->color('info')
                                         ->action(fn (User $user) => static::doResendEmailVerification($user)),
@@ -119,24 +134,24 @@ class UserResource extends Resource
                                     ->hidden(fn (User $user): bool => $user->email_verified_at !== null)
                                     ->fullWidth(),
 
-                                Forms\Components\Actions::make([
-                                    Forms\Components\Actions\Action::make('send_password_reset')
+                                Actions::make([
+                                    Action::make('send_password_reset')
                                         ->label(__('Send password reset email'))
                                         ->color('info')
                                         ->action(fn (User $user) => static::doSendPasswordReset($user)),
                                 ])
                                     ->fullWidth(),
 
-                                Forms\Components\Actions::make([
-                                    Forms\Components\Actions\Action::make('force_logout')
+                                Actions::make([
+                                    Action::make('force_logout')
                                         ->label(__('Force logout'))
                                         ->color('warning')
                                         ->action(fn (User $user) => static::doForceLogout($user)),
                                 ])
                                     ->fullWidth(),
 
-                                Forms\Components\Actions::make([
-                                    Forms\Components\Actions\Action::make('disable_2fa')
+                                Actions::make([
+                                    Action::make('disable_2fa')
                                         ->label(__('Disable 2FA'))
                                         ->color('warning')
                                         ->action(fn (User $user) => static::doDisable2Fa($user)),
@@ -153,50 +168,50 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('username')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('roles.name')
+                TextColumn::make('username')->searchable()->sortable(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('roles.name')
                     ->label('Role')
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->colors(['info'])
                     ->badge(),
-                Tables\Columns\IconColumn::make('email_verified_at')
+                IconColumn::make('email_verified_at')
                     ->label('Verified')
                     ->sortable()
                     ->getStateUsing(fn (User $record): bool => $record->email_verified_at !== null)
                     ->icon(fn (bool $state): string => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
                     ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
-                Tables\Columns\TextColumn::make('last_seen_at')
+                TextColumn::make('last_seen_at')
                     ->label('Last seen')
                     ->sortable()
                     ->dateTime()
                     ->since()
                     ->dateTimeTooltip(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Created')
                     ->sortable()
                     ->dateTime(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('email_verified_at')
+                TernaryFilter::make('email_verified_at')
                     ->label('Email verification')
                     ->nullable()
                     ->placeholder('All users')
                     ->trueLabel('Verified users')
                     ->falseLabel('Not verified users'),
-                Tables\Filters\TernaryFilter::make('last_seen_at')
+                TernaryFilter::make('last_seen_at')
                     ->label('Active users')
                     ->nullable()
                     ->placeholder('All users')
                     ->trueLabel('Active users')
                     ->falseLabel('Inactive user'),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -213,8 +228,8 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 

@@ -97,13 +97,12 @@ class InsertAccountBlock
         $descendants->each(function ($descendant) use ($parentBlock) {
             $child = AccountBlock::firstWhere('hash', $descendant->hash);
 
-            if (! $child) {
+            if (! $child || $child->parent_id) {
                 return;
             }
 
             $child->parent_id = $parentBlock->id;
             $child->save();
-
         });
     }
 
@@ -120,11 +119,15 @@ class InsertAccountBlock
             return;
         }
 
-        $pairedAccountBlock->paired_account_block_id = $block->id;
-        $pairedAccountBlock->save();
+        if (! $pairedAccountBlock->paired_account_block_id) {
+            $pairedAccountBlock->paired_account_block_id = $block->id;
+            $pairedAccountBlock->save();
+        }
 
-        $block->paired_account_block_id = $pairedAccountBlock->id;
-        $block->save();
+        if (! $block->paired_account_block_id) {
+            $block->paired_account_block_id = $pairedAccountBlock->id;
+            $block->save();
+        }
 
         Log::debug('Link paired account block - link found');
     }

@@ -17,7 +17,7 @@
                             @endif
                             <h5 class="text-muted">
                                 {{ __('Account') }} {{ $account->has_custom_label ? ' | '.$account->custom_label : '' }}
-                                @if (! $account->is_embedded_contract)
+                                @if (! $account->is_embedded_contract || is_admin())
                                     <span class="pointer ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit Account') }}">
                                         <i class="bi bi-pencil-square"
                                            data-bs-toggle="modal"

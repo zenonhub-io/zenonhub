@@ -18,7 +18,7 @@
                             <h5 class="text-muted">
                                 {{ __('Token') }}
                                 <x-copy :text="$token->token_standard" class="ms-2" :tooltip="__('Copy ZTS')" />
-                                @if(! $token->is_network)
+                                @if(! $token->is_network || is_admin())
                                     <span class="pointer ms-2" data-bs-toggle="tooltip" data-bs-title="{{ __('Edit') }}">
                                         <i class="bi bi-pencil-square"
                                            data-bs-toggle="modal"

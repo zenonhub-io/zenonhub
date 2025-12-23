@@ -8,6 +8,7 @@ use Database\Seeders\Site\ChainsSeeder;
 use Database\Seeders\Site\CurrenciesSeeder;
 use Database\Seeders\Site\NotificationTypesSeeder;
 use Database\Seeders\Site\UserRolesSeeder;
+use Database\Seeders\Site\UsersSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             NotificationTypesSeeder::class,
             UserRolesSeeder::class,
+            UsersSeeder::class,
             CurrenciesSeeder::class,
             ChainsSeeder::class,
         ]);

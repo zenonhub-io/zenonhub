@@ -146,3 +146,10 @@ if (! function_exists('hex_to_rgba')) {
         return implode(',', $rgb);
     }
 }
+
+if (! function_exists('is_admin')) {
+    function is_admin(): bool
+    {
+        return auth()->user()?->hasRole('admin');
+    }
+}
