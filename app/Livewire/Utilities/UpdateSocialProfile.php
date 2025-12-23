@@ -134,10 +134,14 @@ class UpdateSocialProfile extends Component
 
     private function checkUserHasVerifiedAddress(): void
     {
-        $userControlsAddress = auth()->user()?->whereRelation('verifiedAccounts', 'address', $this->address)->count();
-
-        if ($userControlsAddress > 0) {
+        if (is_admin()) {
             $this->hasUserVerifiedAddress = true;
+        } else {
+            $userControlsAddress = auth()->user()?->whereRelation('verifiedAccounts', 'address', $this->address)->count();
+
+            if ($userControlsAddress > 0) {
+                $this->hasUserVerifiedAddress = true;
+            }
         }
     }
 

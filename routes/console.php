@@ -7,9 +7,9 @@ use App\Models\Nom\Token;
 use Illuminate\Support\Facades\Artisan;
 
 Artisan::command('nom:reset-db', function () {
-    Artisan::call('db:seed --class=DatabaseSeeder');
-    Artisan::call('db:seed --class=NomSeeder');
-    Artisan::call('db:seed --class=GenesisSeeder');
+    Artisan::call('migrate:fresh --seed');
+    Artisan::call('db:seed --class="Database\\\Seeders\\\Nom\\\NetworkSeeder"');
+    Artisan::call('db:seed --class="Database\\\Seeders\\\Nom\\\GenesisSeeder"');
     Artisan::call('nom:create-or-update-latest-momentums-view');
     Artisan::call('nom:create-or-update-latest-account-blocks-view');
     Artisan::call('nom:create-or-update-embedded-contract-account-blocks-view');
