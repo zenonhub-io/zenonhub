@@ -150,6 +150,10 @@ if (! function_exists('hex_to_rgba')) {
 if (! function_exists('is_admin')) {
     function is_admin(): bool
     {
-        return auth()->user()?->hasRole('admin');
+        if (! auth()->check()) {
+            return false;
+        }
+
+        return auth()->user()->hasRole('admin');
     }
 }
