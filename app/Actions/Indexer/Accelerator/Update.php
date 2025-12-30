@@ -40,7 +40,7 @@ class Update extends AbstractContractMethodProcessor
 
         $projects->each(function (AcceleratorProject $project) use ($accountBlock) {
             if ($project->status === AcceleratorProjectStatusEnum::NEW) {
-                if (! $project->getIsVotingOpenAttribute($accountBlock->created_at)) {
+                if ($project->is_quorum_reached || ! $project->getIsVotingOpenAttribute($accountBlock->created_at)) {
 
                     $project->status = ($project->is_quorum_reached && $project->total_yes_votes > $project->total_no_votes)
                         ? AcceleratorProjectStatusEnum::ACCEPTED
