@@ -21,13 +21,13 @@ host('mainnet')
         'stage' => 'prod',
     ]);
 
-host('hyperqube')
-    ->set('hostname', fn () => getenv('DEPLOYER_HYPERQUBE_HOST'))
-    ->set('deploy_path', fn () => getenv('DEPLOYER_HYPERQUBE_PATH'))
-    ->set('branch', 'main')
-    ->setLabels([
-        'stage' => 'prod',
-    ]);
+// host('hyperqube')
+//    ->set('hostname', fn () => getenv('DEPLOYER_HYPERQUBE_HOST'))
+//    ->set('deploy_path', fn () => getenv('DEPLOYER_HYPERQUBE_PATH'))
+//    ->set('branch', 'main')
+//    ->setLabels([
+//        'stage' => 'prod',
+//    ]);
 
 host('develop')
     ->set('hostname', fn () => getenv('DEPLOYER_STAGING_HOST'))
