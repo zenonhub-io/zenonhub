@@ -77,7 +77,6 @@ if (app()->environment('production')) {
         Artisan::call('sync:pillar-metrics');
         Artisan::call('sync:pillars-apr');
         Artisan::call('sync:pillar-stats');
-        Artisan::call('sync:token-prices');
         Artisan::call('sync:bridge-status');
         Artisan::call('sync:orchestrators');
 
@@ -96,6 +95,7 @@ if (app()->environment('production')) {
         }
     })->everyFiveMinutes();
 
+    Schedule::command('sync:token-prices')->hourly();
     Schedule::command('site:generate-sitemap')->daily();
 
 } else {
