@@ -35,12 +35,24 @@ class TokenPrices
                 return;
             }
 
-            $token->prices()->syncWithoutDetaching([
-                $currency->id => [
+            $existingPrice = $token->prices()
+                ->wherePivot('currency_id', $currency->id)
+                ->wherePivot('timestamp', $timestamp)
+                ->exists();
+
+            if ($existingPrice) {
+                $token->prices()
+                    ->wherePivot('currency_id', $currency->id)
+                    ->wherePivot('timestamp', $timestamp)
+                    ->updateExistingPivot($currency->id, [
+                        'price' => $price,
+                    ], false);
+            } else {
+                $token->prices()->attach($currency->id, [
                     'price' => $price,
                     'timestamp' => $timestamp,
-                ],
-            ]);
+                ]);
+            }
         });
     }
 
