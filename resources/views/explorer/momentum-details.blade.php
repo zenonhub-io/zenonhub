@@ -115,12 +115,33 @@
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[
             __('Transactions') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'transactions']),
+            __('Data') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'data']),
             __('JSON') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'json']),
         ]" :active="$tab" />
     </x-includes.header>
 
     @if ($tab === 'transactions')
         <livewire:explorer.momentum.transactions-list :momentumId="$momentum->id" lazy />
+    @endif
+
+    @if ($tab === 'data')
+        <div class="mx-3 mx-md-6 mb-4">
+            @if($momentum->data)
+                <x-cards.card>
+                    <x-cards.body>
+                        <h4 class="mb-3">{{ __('Raw') }}</h4>
+                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset text-wrap">{{ $momentum->data }}</pre>
+                        <hr class="my-6">
+                        <h4 class="mb-3">{{ __('Decoded') }}</h4>
+                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset"><code class="lang-json">{{ base64_decode($momentum->data) }}</code></pre>
+                    </x-cards.body>
+                </x-cards.card>
+            @else
+                <x-alerts.alert type="info">
+                    <i class="bi bi-info-circle-fill me-2"></i> {{ __('No momentum data') }}
+                </x-alerts.alert>
+            @endif
+        </div>
     @endif
 
     @if ($tab === 'json')

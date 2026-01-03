@@ -176,6 +176,15 @@ class AccountBlock extends Model
         return $query->where('to_account_id', '!=', '1');
     }
 
+    public function scopeHideReceiveBlocks($query)
+    {
+        return $query->whereIn('block_type', [
+            AccountBlockTypesEnum::GENESIS,
+            AccountBlockTypesEnum::SEND,
+            AccountBlockTypesEnum::CONTRACT_SEND,
+        ]);
+    }
+
     public function scopeNotContractUpdate($query)
     {
         return $query->where(function ($q) {
