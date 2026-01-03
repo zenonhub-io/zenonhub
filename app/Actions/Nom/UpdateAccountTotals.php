@@ -70,8 +70,7 @@ class UpdateAccountTotals implements ShouldBeUnique
         $accountTokenIds = $this->account->tokens()->pluck('token_id');
         $tokenIds = $this->account->blocks()
             ->whereNotNull('token_id')
-            ->distinct()
-            ->get(['token_id'])
+            ->groupBy('token_id')
             ->pluck('token_id')
             ->push(app('znnToken')->id, app('qsrToken')->id)
             ->unique();
@@ -80,17 +79,20 @@ class UpdateAccountTotals implements ShouldBeUnique
 
         $tokenIds->each(function ($tokenId) use ($accountTokenIds) {
 
-            $sent = $this->account->sentBlocks()
-                ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
+            $totals = DB::table('nom_account_blocks')
                 ->where('token_id', $tokenId)
-                ->first()->total;
+                ->where(function ($query) {
+                    $query->where('account_id', $this->account->id)
+                        ->orWhere('to_account_id', $this->account->id);
+                })
+                ->selectRaw('
+                    CAST(COALESCE(SUM(CASE WHEN account_id = ? THEN amount END), 0) AS CHAR) as sent,
+                    CAST(COALESCE(SUM(CASE WHEN to_account_id = ? AND paired_account_block_id IS NOT NULL THEN amount END), 0) AS CHAR) as received
+                ', [$this->account->id, $this->account->id])
+                ->first();
 
-            $received = $this->account->receivedBlocks()
-                ->selectRaw('CAST(SUM(amount) AS DECIMAL(65,0)) as total')
-                ->where('token_id', $tokenId)
-                ->whereNotNull('paired_account_block_id')
-                ->first()->total;
-
+            $sent = $totals->sent;
+            $received = $totals->received;
             $balance = $received - $sent;
 
             // Token contract behaves differently, it never holds tokens so balance is always 0
