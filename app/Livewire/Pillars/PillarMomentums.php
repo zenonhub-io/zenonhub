@@ -2,36 +2,35 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Pillars;
 
 use App\Livewire\BaseTable;
-use App\Models\Nom\Momentum;
+use App\Models\Nom\Pillar;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class MomentumsList extends BaseTable
+class PillarMomentums extends BaseTable
 {
+    public int $pillarId;
+
     public function configure(): void
     {
         parent::configure();
 
-        $this->setPrimaryKey('id')
-            ->setDefaultSort('created_at', 'desc');
-
-        //        $this->setTableRowUrl(fn ($row) => route('explorer.momentum.detail', $row->hash))
-        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
+        $this->setPrimaryKey('id');
     }
 
     public function builder(): Builder
     {
-        $model = new class extends Momentum
-        {
-            protected $table = 'view_latest_nom_momentums';
-        };
-
-        return $model::with('producerPillar')
-            ->select('*')
-            ->withCount('accountBlocks');
+        return Pillar::find($this->pillarId)?->momentums()
+            ->select([
+                'id',
+                'hash',
+                'height',
+                'created_at',
+            ])
+            ->withCount('accountBlocks')
+            ->getQuery();
     }
 
     public function columns(): array
@@ -68,12 +67,6 @@ class MomentumsList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.date', ['date' => $row->created_at, 'human' => true])
                 ),
-            Column::make('Pillar')
-                ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.pillar-link', [
-                        'pillar' => $row->producerPillar,
-                    ])
-                ),
             Column::make('Blocks')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('account_blocks_count', $direction)
@@ -95,4 +88,22 @@ class MomentumsList extends BaseTable
     {
         return [];
     }
+
+    //    public function bulkActions(): array
+    //    {
+    //        return [
+    //            'export' => 'Export',
+    //        ];
+    //    }
+    //
+    //    public function export()
+    //    {
+    //        $rows = $this->getSelected();
+    //
+    //        dd($rows);
+    //
+    //        $this->clearSelected();
+    //
+    //        //return Excel::download(new UsersExport($users), 'users.xlsx');
+    //    }
 }

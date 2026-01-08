@@ -20,10 +20,10 @@ class MomentumsController
         return view('explorer.momentum-list');
     }
 
-    public function show(string $hash, ?string $tab = 'transactions'): View
+    public function show(string $hash, ?string $tab = 'blocks'): View
     {
         $momentum = Momentum::where('hash', $hash)
-            ->with('producerAccount', 'producerPillar')
+            ->with(['producerAccount', 'producerPillar'])
             ->withCount('accountBlocks')
             ->first();
 

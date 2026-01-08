@@ -100,7 +100,7 @@ class OutboundList extends BaseTable
                         'hash' => $row->accountBlock->hash,
                         'alwaysShort' => true,
                         'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
             Column::make('Timestamp', 'created_at')

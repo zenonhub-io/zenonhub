@@ -84,13 +84,13 @@ class MintsList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => $token->getFormattedAmount($row->amount)
                 ),
-            Column::make('TX Hash')
+            Column::make('Block Hash')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->accountBlock->hash,
                         'alwaysShort' => true,
                         'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->accountBlock->hash]),
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
             Column::make('Timestamp')

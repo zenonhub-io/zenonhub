@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
-class TransactionsList extends BaseTable
+class BlocksList extends BaseTable
 {
     public int $accountId;
 
@@ -77,13 +77,13 @@ class TransactionsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
-            Column::make('TX Hash')
+            Column::make('Hash')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
                         'alwaysShort' => true,
                         'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
                 ),
             Column::make('')

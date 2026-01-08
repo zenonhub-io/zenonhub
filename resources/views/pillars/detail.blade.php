@@ -125,7 +125,7 @@
                     <div class="col-24 col-lg-12">
                         <div class="vstack gap-2">
                             <x-stats.list-item :title="__('Legacy')" stat="{{ $pillar->is_legacy ? __('Yes') : __('No') }}" />
-                            <x-stats.list-item :title="__('Spawned')">
+                            <x-stats.list-item :title="__('Created')">
                                 @if ($pillar->is_legacy)
                                     {{ __('Genesis') }}
                                 @else
@@ -159,6 +159,7 @@
         <x-navigation.header.responsive-nav :items="[
             __('Delegators') => route('pillar.detail', ['slug' => $pillar->slug, 'tab' => 'delegators']),
             __('Votes') => route('pillar.detail', ['slug' => $pillar->slug, 'tab' => 'votes']),
+            __('Momentums') => route('pillar.detail', ['slug' => $pillar->slug, 'tab' => 'momentums']),
             __('Updates') => route('pillar.detail', ['slug' => $pillar->slug, 'tab' => 'updates']),
             __('JSON') => route('pillar.detail', ['slug' => $pillar->slug, 'tab' => 'json'])
         ]" :active="$tab" />
@@ -170,6 +171,10 @@
 
     @if ($tab === 'votes')
         <livewire:pillars.pillar-votes :pillar-id="$pillar->id" />
+    @endif
+
+    @if ($tab === 'momentums')
+        <livewire:pillars.pillar-momentums :pillar-id="$pillar->id" />
     @endif
 
     @if ($tab === 'updates')

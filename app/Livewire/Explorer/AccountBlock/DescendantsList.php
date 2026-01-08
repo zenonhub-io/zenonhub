@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer\Transaction;
+namespace App\Livewire\Explorer\AccountBlock;
 
 use App\Livewire\BaseTable;
 use App\Models\Nom\AccountBlock;
@@ -11,7 +11,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class DescendantsList extends BaseTable
 {
-    public int $transactionId;
+    public int $blockId;
 
     public function configure(): void
     {
@@ -43,7 +43,7 @@ class DescendantsList extends BaseTable
 
     public function builder(): Builder
     {
-        return AccountBlock::find($this->transactionId)?->descendants()
+        return AccountBlock::find($this->blockId)?->descendants()
             ->with(['account', 'toAccount', 'contractMethod', 'token'])
             ->select('*')
             ->getQuery();
@@ -97,14 +97,14 @@ class DescendantsList extends BaseTable
 
                     return null;
                 }),
-            Column::make('TX Hash')
+            Column::make('Hash')
                 ->label(
 
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
                         'alwaysShort' => true,
                         'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
                 ),
             Column::make('Timestamp')

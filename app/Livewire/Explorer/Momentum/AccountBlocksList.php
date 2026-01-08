@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer;
+namespace App\Livewire\Explorer\Momentum;
 
 use App\Livewire\BaseTable;
-use App\Models\Nom\AccountBlock;
+use App\Models\Nom\Momentum;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class TransactionList extends BaseTable
+class AccountBlocksList extends BaseTable
 {
+    public int $momentumId;
+
     public function configure(): void
     {
         parent::configure();
@@ -41,32 +43,24 @@ class TransactionList extends BaseTable
 
     public function builder(): Builder
     {
-        $model = new class extends AccountBlock
-        {
-            protected $table = 'view_latest_nom_account_blocks';
-        };
-
-        return $model::with('account', 'toAccount', 'contractMethod', 'token')
-            ->select('*');
+        return Momentum::find($this->momentumId)?->accountBlocks()
+            ->with(['account', 'toAccount', 'contractMethod', 'token'])
+            ->select('*')
+            ->getQuery();
     }
 
     public function columns(): array
     {
         return [
             Column::make('ID', 'id')
-                ->searchable(
-                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
-                        $query->where('hash', $searchTerm);
-                    })
-                )
                 ->hideIf(true),
             Column::make('Hash')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
                         'alwaysShort' => true,
-                        'copyable' => true,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                        'copyable' => false,
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
                 ),
             Column::make('From')

@@ -73,7 +73,7 @@
                             :info="__($momentum->producerPillar ? 'The pillar that produced the momentum' : 'The account that produced the momentum')">
                                 @if($momentum->producerPillar)
                                     <x-link :href="route('pillar.detail', ['slug' => $momentum->producerPillar->slug])">
-                                        {{ $momentum->producerPillar->slug }}
+                                        {{ $momentum->producerPillar->name }}
                                     </x-link>
                                 @else
                                     <x-link :href="route('explorer.account.detail', ['address' => $momentum->producerAccount->address])">
@@ -104,7 +104,7 @@
                             <x-stats.list-item :title="__('Producer')">
                                 <x-address :account="$momentum->producerAccount" :always-short="true" :copyable="true" />
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Transactions')" :stat="$momentum->account_blocks_count" :hr="false" />
+                            <x-stats.list-item :title="__('Account Blocks')" :stat="$momentum->account_blocks_count" :hr="false" />
                         </div>
                     </div>
                 </div>
@@ -114,14 +114,14 @@
 
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[
-            __('Transactions') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'transactions']),
+            __('Account Blocks') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'blocks']),
             __('Data') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'data']),
             __('JSON') => route('explorer.momentum.detail', ['hash' => $momentum->hash, 'tab' => 'json']),
-        ]" :active="$tab" />
+        ]" :active="$tab === 'blocks' ? 'account-blocks' : $tab" />
     </x-includes.header>
 
-    @if ($tab === 'transactions')
-        <livewire:explorer.momentum.transactions-list :momentumId="$momentum->id" lazy />
+    @if ($tab === 'blocks')
+        <livewire:explorer.momentum.account-blocks-list :momentumId="$momentum->id" lazy />
     @endif
 
     @if ($tab === 'data')

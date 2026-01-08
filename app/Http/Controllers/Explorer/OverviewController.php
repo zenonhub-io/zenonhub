@@ -15,8 +15,8 @@ class OverviewController
 {
     public function __invoke(): View
     {
-        MetaTags::title(__('Zenon Network Overview: Momentums, Transactions, Accounts, & Tokens'))
-            ->description(__('Explore the Zenon Network through its momentums, transactions, accounts, tokens, and more on Zenon Hub'))
+        MetaTags::title(__('Zenon Network Overview: Momentums, Blocks, Accounts, & Tokens'))
+            ->description(__('Explore the Zenon Network through its momentums, blocks, accounts, tokens, and more on Zenon Hub'))
             ->canonical(route('explorer.overview'))
             ->metaByName('robots', 'index,nofollow');
 
@@ -29,7 +29,7 @@ class OverviewController
     {
         return [
             'momentums' => number_format(Momentum::max('height')),
-            'transactions' => number_format(AccountBlock::count()),
+            'blocks' => number_format(AccountBlock::count()),
             'addresses' => number_format(Account::count()),
             'tokens' => number_format(Token::count()),
         ];
