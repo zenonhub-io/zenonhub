@@ -107,14 +107,14 @@ Breadcrumbs::for('explorer.momentum', function (BreadcrumbTrail $trail, App\Mode
     $trail->push('Details', route('explorer.momentum.detail', ['hash' => $momentum->hash]));
 });
 
-Breadcrumbs::for('explorer.transactions', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('explorer.blocks', function (BreadcrumbTrail $trail) {
     $trail->parent('explorer');
-    $trail->push('Transactions', route('explorer.transaction.list'));
+    $trail->push('Blocks', route('explorer.block.list'));
 });
 
-Breadcrumbs::for('explorer.transaction', function (BreadcrumbTrail $trail, App\Models\Nom\AccountBlock $accountBlock) {
-    $trail->parent('explorer.transactions');
-    $trail->push('Details', route('explorer.transaction.detail', ['hash' => $accountBlock->hash]));
+Breadcrumbs::for('explorer.block', function (BreadcrumbTrail $trail, App\Models\Nom\AccountBlock $accountBlock) {
+    $trail->parent('explorer.blocks');
+    $trail->push('Details', route('explorer.block.detail', ['hash' => $accountBlock->hash]));
 });
 
 Breadcrumbs::for('explorer.accounts', function (BreadcrumbTrail $trail) {

@@ -23,7 +23,7 @@ class SiteSearch extends Component
     private ?int $totalResults = null;
 
     private array $results = [
-        'transactions' => [],
+        'blocks' => [],
         'momentums' => [],
         'accounts' => [],
         'pillars' => [],
@@ -51,7 +51,7 @@ class SiteSearch extends Component
         $this->results['momentums'] = $this->searchMomentums();
 
         if (strlen($this->search) >= 4) {
-            $this->results['transactions'] = $this->searchTransactions();
+            $this->results['blocks'] = $this->searchBlocks();
             $this->results['accounts'] = $this->searchAccounts();
         }
 
@@ -62,13 +62,13 @@ class SiteSearch extends Component
         $this->totalResults = $this->getTotalResultsCount();
     }
 
-    private function searchTransactions(): Collection
+    private function searchBlocks(): Collection
     {
         return AccountBlock::where('hash', $this->search)->get()
-            ->map(fn (AccountBlock $tx) => SearchResultDTO::from([
-                'group' => 'transactions',
-                'title' => $tx->hash,
-                'link' => route('explorer.transaction.detail', ['hash' => $tx->hash]),
+            ->map(fn (AccountBlock $block) => SearchResultDTO::from([
+                'group' => 'blocks',
+                'title' => $block->hash,
+                'link' => route('explorer.block.detail', ['hash' => $block->hash]),
             ]));
     }
 

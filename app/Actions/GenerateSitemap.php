@@ -54,7 +54,7 @@ class GenerateSitemap
 
             ->add($this->addItem('explorer.overview'))
             ->add($this->addItem('explorer.momentum.list'))
-            ->add($this->addItem('explorer.transaction.list'))
+            ->add($this->addItem('explorer.block.list'))
             ->add($this->addItem('explorer.account.list'))
             ->add($this->addItem('explorer.account.list', ['tab' => 'contracts']))
             ->add($this->addItem('explorer.account.list', ['tab' => 'pillars']))

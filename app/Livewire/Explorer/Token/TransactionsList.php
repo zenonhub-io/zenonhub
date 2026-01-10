@@ -45,7 +45,18 @@ class TransactionsList extends BaseTable
     {
         return Token::find($this->tokenId)?->transactions()
             ->with(['account', 'toAccount', 'contractMethod'])
-            ->select('*')
+            ->select([
+                'id',
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ])
             ->where('amount', '>', '0')
             ->getQuery();
     }
@@ -57,6 +68,19 @@ class TransactionsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
+            Column::make('Hash')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
+                    ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
+                ),
             Column::make('From')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.address', [
@@ -78,25 +102,12 @@ class TransactionsList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $token->getFormattedAmount($row->amount)
-                ),
-            Column::make('TX Hash')
-                ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash', [
-                        'hash' => $row->hash,
-                        'alwaysShort' => true,
-                        'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
-                    ])
                 ),
             Column::make('Timestamp')
                 ->sortable(

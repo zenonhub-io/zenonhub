@@ -56,7 +56,7 @@ it('cancels a stake', function () {
     $accountBlock = createCancelLiquidityStakeAccountBlock([
         'account' => $stake->account,
         'data' => [
-            'id' => $stake->hash,
+            'id' => $stake->accountBlock->hash,
         ],
     ]);
 
@@ -77,7 +77,7 @@ it('dispatches the end stake event', function () {
     $accountBlock = createCancelLiquidityStakeAccountBlock([
         'account' => $stake->account,
         'data' => [
-            'id' => $stake->hash,
+            'id' => $stake->accountBlock->hash,
         ],
     ]);
 
@@ -96,7 +96,7 @@ it('ensures only stake owner can cancel stakes', function () {
     ]);
     $accountBlock = createCancelLiquidityStakeAccountBlock([
         'data' => [
-            'id' => $stake->hash,
+            'id' => $stake->accountBlock->hash,
         ],
     ]);
 
@@ -124,7 +124,7 @@ it('enforces stake duration time', function () {
     $accountBlock = createCancelLiquidityStakeAccountBlock([
         'account' => $stake->account,
         'data' => [
-            'id' => $stake->hash,
+            'id' => $stake->accountBlock->hash,
         ],
     ]);
 

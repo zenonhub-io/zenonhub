@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer\Momentum;
+namespace App\Livewire\Explorer\AccountBlock;
 
 use App\Livewire\BaseTable;
-use App\Models\Nom\Momentum;
+use App\Models\Nom\AccountBlock;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class TransactionsList extends BaseTable
+class DescendantsList extends BaseTable
 {
-    public int $momentumId;
+    public int $blockId;
 
     public function configure(): void
     {
@@ -43,9 +43,20 @@ class TransactionsList extends BaseTable
 
     public function builder(): Builder
     {
-        return Momentum::find($this->momentumId)?->accountBlocks()
+        return AccountBlock::find($this->blockId)?->descendants()
             ->with(['account', 'toAccount', 'contractMethod', 'token'])
-            ->select('*')
+            ->select([
+                'id',
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ])
             ->getQuery();
     }
 
@@ -54,6 +65,19 @@ class TransactionsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
+            Column::make('Hash')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
+                    ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
+                ),
             Column::make('From')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.address', [
@@ -75,10 +99,6 @@ class TransactionsList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
@@ -97,15 +117,6 @@ class TransactionsList extends BaseTable
 
                     return null;
                 }),
-            Column::make('TX Hash')
-                ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash', [
-                        'hash' => $row->hash,
-                        'alwaysShort' => true,
-                        'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
-                    ])
-                ),
             Column::make('Timestamp')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)

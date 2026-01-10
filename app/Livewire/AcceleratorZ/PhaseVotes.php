@@ -29,7 +29,15 @@ class PhaseVotes extends BaseTable
         return AcceleratorPhase::find($this->phaseId)?->votes()
             ->with(['votable', 'pillar'])
             ->leftJoin('nom_pillars', 'nom_votes.pillar_id', '=', 'nom_pillars.id')
-            ->select('nom_votes.*', 'nom_pillars.name as pillar_name')
+            ->select([
+                'nom_votes.id',
+                'nom_votes.pillar_id',
+                'nom_votes.vote',
+                'nom_votes.created_at',
+                'nom_votes.votable_type',
+                'nom_votes.votable_id',
+                'nom_pillars.name as pillar_name',
+            ])
             ->getQuery();
     }
 

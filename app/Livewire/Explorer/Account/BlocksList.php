@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
-class TransactionsList extends BaseTable
+class BlocksList extends BaseTable
 {
     public int $accountId;
 
@@ -77,14 +77,18 @@ class TransactionsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
-            Column::make('TX Hash')
+            Column::make('Hash')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
                         'alwaysShort' => true,
-                        'copyable' => false,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('')
                 ->label(function ($row, Column $column) {
@@ -121,10 +125,6 @@ class TransactionsList extends BaseTable
 
                     return sprintf('%s: %s', $label, $address);
                 })->html(),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)

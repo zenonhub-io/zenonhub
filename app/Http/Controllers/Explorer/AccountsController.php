@@ -32,7 +32,7 @@ class AccountsController
         ]);
     }
 
-    public function show(string $address, ?string $tab = 'transactions'): View
+    public function show(string $address, ?string $tab = 'blocks'): View
     {
         $account = Account::where('address', $address)
             ->withCount('sentBlocks')
@@ -48,13 +48,13 @@ class AccountsController
             : __('Address :name | Zenon Account Details', ['name' => short_hash($account->address)]);
 
         $description = $account->is_embedded_contract
-            ? __('Get insights on the embedded :contract in Zenon, including balances and transaction details', ['contract' => $account->name])
-            : __('Discover details about Zenon account (:address), including balances, token holdings, rewards, transactions, and Accelerator-Z projects', ['address' => $account->address]);
+            ? __('Get insights on the embedded :contract in Zenon, including balances and block details', ['contract' => $account->name])
+            : __('Discover details about Zenon account (:address), including balances, token holdings, rewards, blocks, and Accelerator-Z projects', ['address' => $account->address]);
 
         MetaTags::title($title)
             ->description($description)
             ->canonical(route('explorer.account.detail', ['address' => $account->address]))
-            ->metaByName('robots', $account->is_embedded_contract && $tab === 'transactions' ? 'index,nofollow' : 'noindex,nofollow');
+            ->metaByName('robots', $account->is_embedded_contract && $tab === 'blocks' ? 'index,nofollow' : 'noindex,nofollow');
 
         return view('explorer.account-details', [
             'tab' => $tab,

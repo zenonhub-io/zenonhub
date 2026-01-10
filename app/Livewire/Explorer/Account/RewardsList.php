@@ -26,8 +26,16 @@ class RewardsList extends BaseTable
     public function builder(): Builder
     {
         return Account::find($this->accountId)?->rewards()
-            ->with(['account', 'token'])
-            ->select('*')
+            ->with(['account', 'token', 'accountBlock'])
+            ->select([
+                'id',
+                'account_id',
+                'token_id',
+                'account_block_id',
+                'type',
+                'amount',
+                'created_at',
+            ])
             ->getQuery();
     }
 
@@ -36,6 +44,15 @@ class RewardsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
+            Column::make('Hash')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->accountBlock->hash,
+                        'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
+                    ])
+                ),
             Column::make('Type')
                 ->label(
                     fn ($row, Column $column) => $row->type->label()

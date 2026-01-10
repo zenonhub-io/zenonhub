@@ -35,7 +35,7 @@ class PillarEngagementScore
         $votes = $pillar->votes()->whereHasMorph('votable', [
             AcceleratorProject::class,
             AcceleratorPhase::class,
-        ])->with('votable')->get();
+        ])->with(['votable'])->get();
         $totalVotes = $votes->map(function ($vote) use ($pillar) {
             if ($vote->votable->created_at >= $pillar->created_at) {
                 return 1;
@@ -58,7 +58,7 @@ class PillarEngagementScore
                 AcceleratorProject::class,
                 AcceleratorPhase::class,
             ])
-            ->with('votable')
+            ->with(['votable'])
             ->get()
             ->map(fn ($vote) => $vote->created_at->timestamp - $vote->votable->created_at->timestamp)
             ->average();

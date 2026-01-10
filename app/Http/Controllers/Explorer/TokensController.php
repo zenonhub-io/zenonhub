@@ -35,7 +35,7 @@ class TokensController
     public function show(string $zts, ?string $tab = 'holders'): View
     {
         $token = Token::where('token_standard', $zts)
-            ->with('owner')
+            ->with(['owner'])
             ->withCount(['holders as holders_count' => fn ($query) => $query->where('balance', '>', '0')])
             ->withSum('mints as total_minted', 'amount')
             ->withSum('burns as total_burned', 'amount')

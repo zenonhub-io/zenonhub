@@ -1,23 +1,23 @@
 <div>
     <x-cards.card>
         <x-cards.body>
-            <x-stats.mini-stat :title="__('Transactions')">
+            <x-stats.mini-stat :title="__('Account Blocks')">
                 {{ $total }}
             </x-stats.mini-stat>
             <div class="bg-dark-subtle rounded border mt-4">
                 <div class="p-4">
-                    <h6 class="text-muted">{{ __('Daily TX') }}</h6>
+                    <h6 class="text-muted">{{ __('Daily Blocks') }}</h6>
                     <div class="d-block text-wrap lead text-wrap text-break">
                         {{ $daily }}
                     </div>
                     <hr class="my-4">
-                    <h6 class="text-muted">{{ __('Latest TX') }}</h6>
+                    <h6 class="text-muted">{{ __('Latest Block') }}</h6>
                     <div class="d-block text-wrap lead text-wrap text-break">
                         <x-hash
                             :hash="$latest->hash"
                             :either-side="5"
                             :always-short="true"
-                            :link="route('explorer.transaction.detail', [
+                            :link="route('explorer.block.detail', [
                                 'hash' => $latest->hash
                             ])"
                         />

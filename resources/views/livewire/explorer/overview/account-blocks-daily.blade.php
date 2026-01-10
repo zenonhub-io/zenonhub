@@ -3,7 +3,7 @@
         <x-cards.body>
             <div class="row justify-content-between align-items-center">
                 <div class="col-24 col-xl">
-                    <h4>{{ __('Transactions') }}</h4>
+                    <h4>{{ __('Blocks') }}</h4>
                     <div class="d-block text-muted text-sm">
                         <x-date-time.carbon :date="$dateRange->first()" format="jS M Y" :show-tooltip="false" class="d-inline" /> - <x-date-time.carbon :date="$dateRange->last()" format="jS M Y" :show-tooltip="false" class="d-inline" />
                     </div>
@@ -42,9 +42,9 @@
                 </div>
             </div>
             <div class="mx-n4 h-100">
-                <livewire:livewire-column-chart
+                <livewire:livewire-line-chart
                     key="{{ $chartData->reactiveKey() }}"
-                    :column-chart-model="$chartData"
+                    :line-chart-model="$chartData"
                 />
             </div>
         </x-cards.body>

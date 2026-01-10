@@ -16,11 +16,11 @@
             </div>
             <div class="col-12 col-lg-6">
                 <x-cards.card class="bg-body-secondary-hover card-hover">
-                    <x-link :href="route('explorer.transaction.list')" class="stretched-link">
+                    <x-link :href="route('explorer.block.list')" class="stretched-link">
                         <x-cards.body>
                             <x-stats.mini-stat
-                                :title="__('Transactions')"
-                                :stat="$stats['transactions']"
+                                :title="__('Account Blocks')"
+                                :stat="$stats['blocks']"
                             />
                         </x-cards.body>
                     </x-link>
@@ -53,7 +53,7 @@
         </div>
         <div class="row mb-6 gy-6">
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.transactions-daily lazy />
+                <livewire:explorer.overview.account-blocks-daily lazy />
             </div>
             <div class="col-24 col-lg-12">
                 <livewire:explorer.overview.accounts-active lazy />
@@ -64,7 +64,7 @@
                 <livewire:explorer.overview.momentums-latest lazy />
             </div>
             <div class="col-24 col-lg-12">
-                <livewire:explorer.overview.transactions-latest lazy />
+                <livewire:explorer.overview.account-blocks-latest lazy />
             </div>
         </div>
     </div>

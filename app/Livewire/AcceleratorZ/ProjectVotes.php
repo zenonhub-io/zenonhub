@@ -8,7 +8,6 @@ use App\Enums\Nom\VoteEnum;
 use App\Livewire\BaseTable;
 use App\Models\Nom\AcceleratorProject;
 use Illuminate\Database\Eloquent\Builder;
-use phpDocumentor\Reflection\Type;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
@@ -29,7 +28,15 @@ class ProjectVotes extends BaseTable
         return AcceleratorProject::find($this->projectId)?->votes()
             ->with(['votable', 'pillar'])
             ->leftJoin('nom_pillars', 'nom_votes.pillar_id', '=', 'nom_pillars.id')
-            ->select('nom_votes.*', 'nom_pillars.name as pillar_name')
+            ->select([
+                'nom_votes.id',
+                'nom_votes.pillar_id',
+                'nom_votes.vote',
+                'nom_votes.created_at',
+                'nom_votes.votable_type',
+                'nom_votes.votable_id',
+                'nom_pillars.name as pillar_name',
+            ])
             ->getQuery();
     }
 

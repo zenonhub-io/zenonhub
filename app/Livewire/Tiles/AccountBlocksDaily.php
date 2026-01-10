@@ -2,35 +2,33 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Explorer\Overview;
+namespace App\Livewire\Tiles;
 
-use App\Livewire\BaseComponent;
 use App\Livewire\DateRangePickerTrait;
 use App\Models\Nom\AccountBlock;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\BaseChartModel;
 use Illuminate\View\View;
+use Livewire\Component;
 
-class TransactionsDaily extends BaseComponent
+class AccountBlocksDaily extends Component
 {
     use DateRangePickerTrait;
 
     public function mount(): void
     {
-        $this->timeframe = '7d';
         $this->endDate = now();
     }
 
     public function render(): View
     {
         $this->setDateRange();
-        $chartModel = LivewireCharts::lineChartModel()
-            ->setAnimated(true)
+        $chartModel = LivewireCharts::columnChartModel()
             ->setJsonConfig($this->getChartConfig());
 
         $chartData = $this->addChartData($chartModel);
 
-        return view('livewire.explorer.overview.transactions-daily', compact('chartData'), [
+        return view('livewire.tiles.account-blocks-daily', compact('chartData'), [
             'chartData' => $chartData,
             'dateRange' => $this->dateRange,
         ]);
@@ -40,7 +38,7 @@ class TransactionsDaily extends BaseComponent
     {
         return [
             'chart' => [
-                'height' => '150px',
+                'height' => '257px',
             ],
             'stroke' => [
                 'curve' => 'smooth',
@@ -56,16 +54,25 @@ class TransactionsDaily extends BaseComponent
             ],
             'yaxis' => [
                 'show' => true,
+                'axisBorder' => [
+                    'show' => true,
+                    'color' => config('zenon-hub.colours.bg-dark'),
+                ],
+                'axisTicks' => [
+                    'show' => true,
+                    'color' => config('zenon-hub.colours.bg-dark'),
+                ],
             ],
             'xaxis' => [
                 'labels' => [
                     'show' => false,
                 ],
                 'axisBorder' => [
-                    'show' => false,
+                    'show' => true,
+                    'color' => config('zenon-hub.colours.bg-dark'),
                 ],
                 'axisTicks' => [
-                    'show' => false,
+                    'show' => true,
                     'color' => config('zenon-hub.colours.bg-dark'),
                 ],
             ],
@@ -78,8 +85,8 @@ class TransactionsDaily extends BaseComponent
         $endDate = $this->dateRange->last()->endOfDay();
 
         // Perform a single query to get count account block grouped by date
-        $data = AccountBlock::whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        $data = AccountBlock::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -92,11 +99,12 @@ class TransactionsDaily extends BaseComponent
             $formattedDate = $date->format('Y-m-d');
             $count = $dataByDate->has($formattedDate) ? $dataByDate[$formattedDate]->count : 0;
 
-            $chartModel->addPoint(
+            $chartModel->addColumn(
                 $date->format('jS M Y'),
                 $count,
+                config('zenon-hub.colours.zenon-blue'),
                 [
-                    'tooltip' => sprintf('%s Transactions', number_format($count)),
+                    'tooltip' => sprintf('%s Blocks', number_format($count)),
                 ]
             );
         }

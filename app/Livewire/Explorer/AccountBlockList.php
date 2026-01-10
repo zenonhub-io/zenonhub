@@ -9,7 +9,7 @@ use App\Models\Nom\AccountBlock;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class TransactionList extends BaseTable
+class AccountBlockList extends BaseTable
 {
     public function configure(): void
     {
@@ -46,8 +46,22 @@ class TransactionList extends BaseTable
             protected $table = 'view_latest_nom_account_blocks';
         };
 
-        return $model::with('account', 'toAccount', 'contractMethod', 'token')
-            ->select('*');
+        return $model::query()
+            ->with([
+                'account', 'toAccount', 'contractMethod', 'token',
+            ])
+            ->select([
+                'id',
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ]);
     }
 
     public function columns(): array
@@ -66,8 +80,12 @@ class TransactionList extends BaseTable
                         'hash' => $row->hash,
                         'alwaysShort' => true,
                         'copyable' => true,
-                        'link' => route('explorer.transaction.detail', ['hash' => $row->hash]),
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('From')
                 ->label(
@@ -90,10 +108,7 @@ class TransactionList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
+
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)

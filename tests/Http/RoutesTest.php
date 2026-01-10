@@ -74,8 +74,8 @@ beforeEach(function () {
 //        'explorer.momentum.detail' => [
 //            'hash' => '123',
 //        ],
-//        'explorer.transaction.list' => [],
-//        'explorer.transaction.detail' => [
+//        'explorer.block.list' => [],
+//        'explorer.block.detail' => [
 //            'hash' => '123',
 //        ],
 //        'explorer.account.list' => [],

@@ -37,7 +37,6 @@ class Stake extends AbstractContractMethodProcessor
             'account_block_id' => $accountBlock->id,
             'amount' => $accountBlock->amount,
             'duration' => $blockData['durationInSec'],
-            'hash' => $accountBlock->hash,
             'started_at' => $accountBlock->created_at,
         ]);
 

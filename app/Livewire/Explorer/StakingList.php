@@ -29,8 +29,20 @@ class StakingList extends BaseTable
             $tokenId = app('znnEthLpToken')->id;
         }
 
-        return Stake::with('account', 'token')
-            ->select('*')
+        return Stake::query()
+            ->with([
+                'account', 'token', 'accountBlock',
+            ])
+            ->select([
+                'id',
+                'token_id',
+                'account_id',
+                'account_block_id',
+                'amount',
+                'duration',
+                'started_at',
+                'ended_at',
+            ])
             ->where('token_id', $tokenId)
             ->whereActive();
     }
@@ -39,17 +51,17 @@ class StakingList extends BaseTable
     {
         return [
             Column::make('ID', 'id')
-                ->searchable(
-                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
-                        $query->where('hash', $searchTerm);
-                    })
-                )
                 ->hideIf(true),
-            Column::make('Address')
+            Column::make('Hash')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->whereRelation('accountBlock', 'hash', $searchTerm)
+                )
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', [
-                        'row' => $row->account,
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->accountBlock->hash,
                         'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
             Column::make('Amount')
@@ -58,6 +70,13 @@ class StakingList extends BaseTable
                 )
                 ->label(
                     fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount) . ' ' . $row->token->symbol
+                ),
+            Column::make('Address')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(

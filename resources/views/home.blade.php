@@ -13,13 +13,13 @@
                 <livewire:tiles.accounts-overview lazy />
             </div>
             <div class="col-24 col-sm-12 col-xl-6">
-                <livewire:tiles.transactions-overview lazy />
+                <livewire:tiles.account-blocks-overview lazy />
             </div>
         </div>
 
         <div class="row mb-6 gy-6">
             <div class="col-24 col-lg-12">
-                <livewire:tiles.transactions-daily lazy timeframe="30d" />
+                <livewire:tiles.account-blocks-daily lazy timeframe="30d" />
             </div>
             <div class="col-24 col-lg-12">
                 <livewire:tiles.accounts-total lazy timeframe="30d" />

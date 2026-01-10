@@ -195,7 +195,7 @@
                             </x-stats.list-item>
                             <x-stats.list-item :title="__('Funding Tx')">
                                 @if(! $account->is_embedded_contract && $account->fundingBlock)
-                                    <x-hash :hash="$account->fundingBlock->hash" :always-short="true" :copyable="true" :link="route('explorer.transaction.detail', ['hash' => $account->fundingBlock->hash])" />
+                                    <x-hash :hash="$account->fundingBlock->hash" :always-short="true" :copyable="true" :link="route('explorer.block.detail', ['hash' => $account->fundingBlock->hash])" />
                                 @else
                                     -
                                 @endif
@@ -216,7 +216,7 @@
 
     <x-includes.header>
         <x-navigation.header.responsive-nav :items="[
-            __('Transactions') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'transactions']),
+            __('Blocks') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'blocks']),
             __('Tokens') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'tokens']),
             __('Rewards') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'rewards']),
             __('Delegations') => route('explorer.account.detail', ['address' => $account->address, 'tab' => 'delegations']),
@@ -227,8 +227,8 @@
         ]" :active="$tab" />
     </x-includes.header>
 
-    @if ($tab === 'transactions')
-        <livewire:explorer.account.transactions-list :accountId="$account->id" lazy />
+    @if ($tab === 'blocks')
+        <livewire:explorer.account.blocks-list :accountId="$account->id" lazy />
     @endif
 
     @if ($tab === 'tokens')

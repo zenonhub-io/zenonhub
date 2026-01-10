@@ -107,7 +107,7 @@ Tx: $txLink");
 
     private function formatTxLink(string $channel): string
     {
-        return route('explorer.transaction.detail', [
+        return route('explorer.block.detail', [
             'hash' => $this->block->hash,
             'utm_source' => 'whale_bot',
             'utm_medium' => $channel,

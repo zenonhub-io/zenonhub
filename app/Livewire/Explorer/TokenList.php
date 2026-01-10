@@ -19,16 +19,25 @@ class TokenList extends BaseTable
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('holders_count', 'desc');
-
-        //        $this->setTableRowUrl(fn ($row) => route('explorer.token.detail', $row->token_standard))
-        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
     }
 
     public function builder(): Builder
     {
-        $query = Token::with('owner')
-            ->select('*')
-            ->withCount(['holders as holders_count' => fn ($query) => $query->where('balance', '>', '0')]);
+        $query = Token::query()
+            ->with(['owner'])
+            ->select([
+                'id',
+                'owner_id',
+                'name',
+                'symbol',
+                'token_standard',
+                'total_supply',
+                'decimals',
+                'created_at',
+            ])
+            ->withCount([
+                'holders as holders_count' => fn ($query) => $query->where('balance', '>', '0'),
+            ]);
 
         if ($this->tab === 'network') {
             $query->whereRelation('owner', 'is_embedded_contract', '1');
