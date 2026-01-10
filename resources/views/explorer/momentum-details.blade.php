@@ -129,11 +129,11 @@
             @if($momentum->data)
                 <x-cards.card>
                     <x-cards.body>
-                        <h4 class="mb-3">{{ __('Raw') }}</h4>
-                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset text-wrap">{{ $momentum->data }}</pre>
-                        <hr class="my-6">
                         <h4 class="mb-3">{{ __('Decoded') }}</h4>
                         <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset"><code class="lang-json">{{ base64_decode($momentum->data) }}</code></pre>
+                        <hr class="my-6">
+                        <h4 class="mb-3">{{ __('Raw') }}</h4>
+                        <pre class="line-numbers mb-0 p-4 border rounded bg-body-tertiary shadow-inset text-wrap">{{ $momentum->data }}</pre>
                     </x-cards.body>
                 </x-cards.card>
             @else
