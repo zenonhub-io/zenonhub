@@ -29,7 +29,23 @@ class PillarList extends BaseTable
 
     public function builder(): Builder
     {
-        $query = Pillar::with('orchestrator', 'socialProfile')
+        $query = Pillar::query()
+            ->with(['orchestrator', 'socialProfile'])
+            ->select([
+                'id',
+                'rank',
+                'name',
+                'slug',
+                'weight',
+                'delegate_apr',
+                'az_engagement',
+                'delegate_rewards',
+                'momentum_rewards',
+                'produced_momentums',
+                'expected_momentums',
+                'missed_momentums',
+                'revoked_at',
+            ])
             ->withCount('activeDelegators');
 
         if ($this->tab === 'active') {

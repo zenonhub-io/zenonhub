@@ -26,11 +26,13 @@ class DelegationsList extends BaseTable
     {
         return Account::find($this->accountId)?->delegations()
             ->withPivot('started_at', 'ended_at', 'duration')
-            ->select(
-                'nom_pillars.*',
+            ->select([
+                'nom_pillars.id',
+                'nom_pillars.name',
+                'nom_pillars.slug',
                 'nom_delegations.started_at as delegation_started_at',
                 'nom_delegations.ended_at as delegation_ended_at',
-            )
+            ])
             ->getQuery();
     }
 

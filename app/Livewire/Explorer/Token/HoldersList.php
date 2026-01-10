@@ -25,7 +25,13 @@ class HoldersList extends BaseTable
     public function builder(): Builder
     {
         return Token::find($this->tokenId)?->holders()
-            ->select('*', DB::raw('CAST(balance AS SIGNED) as formatted_balance'))
+            ->select([
+                'nom_accounts.id',
+                'nom_accounts.address',
+                'nom_accounts.name',
+                'balance',
+                DB::raw('CAST(balance AS SIGNED) as formatted_balance'),
+            ])
             ->wherePivot('balance', '>', 0)
             ->getQuery();
     }

@@ -45,7 +45,18 @@ class DescendantsList extends BaseTable
     {
         return AccountBlock::find($this->blockId)?->descendants()
             ->with(['account', 'toAccount', 'contractMethod', 'token'])
-            ->select('*')
+            ->select([
+                'id',
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ])
             ->getQuery();
     }
 
@@ -54,6 +65,19 @@ class DescendantsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
+            Column::make('Hash')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->hash,
+                        'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
+                    ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
+                ),
             Column::make('From')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.address', [
@@ -75,10 +99,6 @@ class DescendantsList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
@@ -97,16 +117,6 @@ class DescendantsList extends BaseTable
 
                     return null;
                 }),
-            Column::make('Hash')
-                ->label(
-
-                    fn ($row, Column $column) => view('components.tables.columns.hash', [
-                        'hash' => $row->hash,
-                        'alwaysShort' => true,
-                        'copyable' => false,
-                        'link' => route('explorer.block.detail', ['hash' => $row->hash]),
-                    ])
-                ),
             Column::make('Timestamp')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderBy('created_at', $direction)

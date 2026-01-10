@@ -24,12 +24,20 @@ class AccountsList extends BaseTable
 
     public function builder(): Builder
     {
-        $query = Account::with('firstBlock', 'latestBlock')
-            ->select(
-                '*',
+        $query = Account::query()
+            ->with([
+                'firstBlock', 'latestBlock',
+            ])
+            ->select([
+                'id',
+                'address',
+                'name',
+                'znn_balance',
+                'qsr_balance',
+                'last_active_at',
                 DB::raw('CAST(znn_balance AS SIGNED) as formatted_znn_balance'),
                 DB::raw('CAST(qsr_balance AS SIGNED) as formatted_qsr_balance'),
-            )
+            ])
             ->withCount('sentBlocks');
 
         if ($this->tab === 'contracts') {

@@ -27,12 +27,15 @@ class PillarDelegators extends BaseTable
     {
         return Pillar::find($this->pillarId)?->activeDelegators()
             ->withPivot('started_at')
-            ->select(
-                'nom_accounts.*',
+            ->select([
+                'nom_accounts.id',
+                'nom_accounts.address',
+                'nom_accounts.name',
+                'nom_accounts.znn_balance',
                 'nom_delegations.started_at as delegation_started_at',
                 'nom_delegations.ended_at as delegation_ended_at',
-                DB::raw('CAST(znn_balance AS SIGNED) as formatted_znn_balance')
-            )
+                DB::raw('CAST(znn_balance AS SIGNED) as formatted_znn_balance'),
+            ])
             ->getQuery();
     }
 

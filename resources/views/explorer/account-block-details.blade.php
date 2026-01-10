@@ -93,24 +93,24 @@
                             <x-stats.list-item :title="__('Hash')">
                                 <x-hash :hash="$block->hash" :always-short="true" :copyable="true"/>
                             </x-stats.list-item>
-                            <x-stats.list-item :title="__('Timestamp')">
-                                <x-date-time.carbon :date="$block->created_at"/>
-                            </x-stats.list-item>
-                            <x-stats.list-item :title="__('Received')">
-                                @if($block->pairedAccountBlock)
-                                    <x-date-time.carbon :date="$block->pairedAccountBlock->created_at"/>
-                                @else
-                                    -
-                                @endif
-                            </x-stats.list-item>
                             <x-stats.list-item :title="__('Type')" :stat="$block->display_actual_type"/>
-                            <x-stats.list-item :title="__('Amount')" :hr="false">
+                            <x-stats.list-item :title="__('Amount')">
                                 @if ($block->token && $block->amount > 0)
                                     {{ $block->display_amount }}
                                     <x-link
                                         :href="route('explorer.token.detail', ['zts' => $block->token->token_standard])">
                                         {{ $block->token->symbol }}
                                     </x-link>
+                                @else
+                                    -
+                                @endif
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Timestamp')">
+                                <x-date-time.carbon :date="$block->created_at"/>
+                            </x-stats.list-item>
+                            <x-stats.list-item :title="__('Received')" :hr="false">
+                                @if($block->pairedAccountBlock)
+                                    <x-date-time.carbon :date="$block->pairedAccountBlock->created_at"/>
                                 @else
                                     -
                                 @endif

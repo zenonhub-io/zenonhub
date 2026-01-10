@@ -25,7 +25,13 @@ class BurnsList extends BaseTable
     {
         return Token::find($this->tokenId)?->burns()
             ->with(['account', 'accountBlock'])
-            ->select('*')
+            ->select([
+                'id',
+                'account_id',
+                'account_block_id',
+                'amount',
+                'created_at',
+            ])
             ->getQuery();
     }
 
@@ -36,11 +42,13 @@ class BurnsList extends BaseTable
         return [
             Column::make('ID', 'id')
                 ->hideIf(true),
-            Column::make('Issuer')
+            Column::make('Hash')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', [
-                        'row' => $row->account,
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->accountBlock->hash,
                         'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
             Column::make('Amount')
@@ -50,13 +58,11 @@ class BurnsList extends BaseTable
                 ->label(
                     fn ($row, Column $column) => $token->getFormattedAmount($row->amount)
                 ),
-            Column::make('Block Hash')
+            Column::make('Issuer')
                 ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.hash', [
-                        'hash' => $row->accountBlock->hash,
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
                         'alwaysShort' => true,
-                        'copyable' => false,
-                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
             Column::make('Timestamp')

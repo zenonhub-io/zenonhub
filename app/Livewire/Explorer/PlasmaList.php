@@ -41,8 +41,19 @@ class PlasmaList extends BaseTable
 
     public function builder(): Builder
     {
-        return Plasma::with('fromAccount', 'toAccount')
-            ->select('*')
+        return Plasma::query()
+            ->with([
+                'fromAccount', 'toAccount', 'accountBlock',
+            ])
+            ->select([
+                'id',
+                'from_account_id',
+                'to_account_id',
+                'account_block_id',
+                'amount',
+                'started_at',
+                'ended_at',
+            ])
             ->whereActive();
     }
 
@@ -50,12 +61,19 @@ class PlasmaList extends BaseTable
     {
         return [
             Column::make('ID', 'id')
-                ->searchable(
-                    fn (Builder $query, $searchTerm) => $query->where(function ($query) use ($searchTerm) {
-                        $query->where('hash', $searchTerm);
-                    })
-                )
                 ->hideIf(true),
+            Column::make('Hash')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->whereRelation('accountBlock', 'hash', $searchTerm)
+                )
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->accountBlock->hash,
+                        'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
+                    ])
+                ),
             Column::make('From', 'from_account_id')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.address', [

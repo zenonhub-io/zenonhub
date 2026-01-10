@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignId('account_block_id')->references('id')->on('nom_account_blocks');
             $table->string('amount')->default(0)->index();
             $table->bigInteger('duration')->index();
-            $table->string('hash');
             $table->timestamp('started_at')->index();
             $table->timestamp('ended_at')->index()->nullable();
         });

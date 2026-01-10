@@ -29,7 +29,14 @@ class PillarVotes extends BaseTable
     {
         return Pillar::find($this->pillarId)?->votes()
             ->with(['votable'])
-            ->select('nom_votes.*')
+            ->select([
+                'nom_votes.id',
+                'nom_votes.pillar_id',
+                'nom_votes.vote',
+                'nom_votes.created_at',
+                'nom_votes.votable_type',
+                'nom_votes.votable_id',
+            ])
             ->whereHasMorph(
                 'votable',
                 [AcceleratorProject::class, AcceleratorPhase::class]

@@ -25,8 +25,16 @@ class StakesList extends BaseTable
     public function builder(): Builder
     {
         return Account::find($this->accountId)?->stakes()
-            ->with(['token'])
-            ->select('*')
+            ->with(['token', 'accountBlock'])
+            ->select([
+                'id',
+                'token_id',
+                'account_block_id',
+                'amount',
+                'duration',
+                'started_at',
+                'ended_at',
+            ])
             ->getQuery();
     }
 
@@ -34,6 +42,18 @@ class StakesList extends BaseTable
     {
         return [
             Column::make('ID', 'id')->hideIf(true),
+            Column::make('Hash')
+                ->searchable(
+                    fn (Builder $query, $searchTerm) => $query->whereRelation('accountBlock', 'hash', $searchTerm)
+                )
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.hash', [
+                        'hash' => $row->accountBlock->hash,
+                        'alwaysShort' => true,
+                        'copyable' => true,
+                        'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
+                    ])
+                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)

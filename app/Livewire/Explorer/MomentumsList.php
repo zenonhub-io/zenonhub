@@ -17,9 +17,6 @@ class MomentumsList extends BaseTable
 
         $this->setPrimaryKey('id')
             ->setDefaultSort('created_at', 'desc');
-
-        //        $this->setTableRowUrl(fn ($row) => route('explorer.momentum.detail', $row->hash))
-        //            ->setTableRowUrlTarget(fn ($row) => 'navigate');
     }
 
     public function builder(): Builder
@@ -30,7 +27,13 @@ class MomentumsList extends BaseTable
         };
 
         return $model::with('producerPillar')
-            ->select('*')
+            ->select([
+                'id',
+                'producer_pillar_id',
+                'height',
+                'hash',
+                'created_at',
+            ])
             ->withCount('accountBlocks');
     }
 

@@ -82,9 +82,13 @@ class BlocksList extends BaseTable
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
                         'alwaysShort' => true,
-                        'copyable' => false,
+                        'copyable' => true,
                         'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('')
                 ->label(function ($row, Column $column) {
@@ -121,10 +125,6 @@ class BlocksList extends BaseTable
 
                     return sprintf('%s: %s', $label, $address);
                 })->html(),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)

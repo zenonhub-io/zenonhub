@@ -31,8 +31,25 @@ class ProjectList extends BaseTable
 
     public function builder(): Builder
     {
-        $query = AcceleratorProject::with('phases')
-            ->select('*');
+        $query = AcceleratorProject::with(['phases'])
+            ->select([
+                'id',
+                'hash',
+                'name',
+                'slug',
+                'url',
+                'description',
+                'status',
+                'znn_requested',
+                'znn_price',
+                'qsr_requested',
+                'qsr_price',
+                'total_votes',
+                'total_yes_votes',
+                'total_no_votes',
+                'total_abstain_votes',
+                'created_at',
+            ]);
 
         if ($this->tab === 'open') {
             $query->whereOpen();

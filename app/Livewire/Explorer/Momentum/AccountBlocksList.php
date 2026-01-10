@@ -45,7 +45,18 @@ class AccountBlocksList extends BaseTable
     {
         return Momentum::find($this->momentumId)?->accountBlocks()
             ->with(['account', 'toAccount', 'contractMethod', 'token'])
-            ->select('*')
+            ->select([
+                'id',
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ])
             ->getQuery();
     }
 
@@ -59,9 +70,13 @@ class AccountBlocksList extends BaseTable
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->hash,
                         'alwaysShort' => true,
-                        'copyable' => false,
+                        'copyable' => true,
                         'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('From')
                 ->label(
@@ -83,10 +98,6 @@ class AccountBlocksList extends BaseTable
                         'row' => $row->toAccount,
                         'alwaysShort' => true,
                     ])
-                ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('Amount')
                 ->sortable(

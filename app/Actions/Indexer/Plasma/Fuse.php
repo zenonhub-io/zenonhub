@@ -36,7 +36,6 @@ class Fuse extends AbstractContractMethodProcessor
             'to_account_id' => load_account($blockData['address'])->id,
             'account_block_id' => $accountBlock->id,
             'amount' => $accountBlock->amount,
-            'hash' => $accountBlock->hash,
             'started_at' => $accountBlock->created_at,
         ]);
 

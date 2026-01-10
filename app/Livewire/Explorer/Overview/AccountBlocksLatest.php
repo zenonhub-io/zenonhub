@@ -13,7 +13,20 @@ class AccountBlocksLatest extends BaseComponent
     public function render(): View
     {
         return view('livewire.explorer.overview.account-blocks-latest', [
-            'blocks' => AccountBlock::with('token', 'account', 'toAccount', 'contractMethod')
+            'blocks' => AccountBlock::query()
+                ->select([
+                    'id',
+                    'account_id',
+                    'to_account_id',
+                    'token_id',
+                    'contract_method_id',
+                    'hash',
+                    'amount',
+                    'created_at',
+                ])
+                ->with([
+                    'account', 'toAccount', 'contractMethod', 'token',
+                ])
                 ->notToBurn()
                 ->notContractUpdate()
                 ->limit(6)

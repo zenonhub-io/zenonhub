@@ -17,7 +17,8 @@ class PillarMomentums extends BaseTable
     {
         parent::configure();
 
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+            ->setDefaultSort('created_at', 'desc');
     }
 
     public function builder(): Builder

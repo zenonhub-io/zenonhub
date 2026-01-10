@@ -46,8 +46,22 @@ class AccountBlockList extends BaseTable
             protected $table = 'view_latest_nom_account_blocks';
         };
 
-        return $model::with('account', 'toAccount', 'contractMethod', 'token')
-            ->select('*');
+        return $model::query()
+            ->with([
+                'account', 'toAccount', 'contractMethod', 'token',
+            ])
+            ->select([
+                'id',
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ]);
     }
 
     public function columns(): array
@@ -68,6 +82,10 @@ class AccountBlockList extends BaseTable
                         'copyable' => true,
                         'link' => route('explorer.block.detail', ['hash' => $row->hash]),
                     ])
+                ),
+            Column::make('Type')
+                ->label(
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('From')
                 ->label(
@@ -90,10 +108,7 @@ class AccountBlockList extends BaseTable
                         'alwaysShort' => true,
                     ])
                 ),
-            Column::make('Type')
-                ->label(
-                    fn ($row, Column $column) => $row->display_actual_type
-                ),
+
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)

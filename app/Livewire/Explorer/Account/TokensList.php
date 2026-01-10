@@ -25,7 +25,15 @@ class TokensList extends BaseTable
     {
         return Account::find($this->accountId)?->tokens()
             ->withPivot(['balance', 'updated_at'])
-            ->select('*')
+            ->select([
+                'id',
+                'token_standard',
+                'name',
+                'symbol',
+                'decimals',
+                'total_supply',
+                'balance',
+            ])
             ->selectRaw('CAST(balance AS SIGNED) / POWER(10, decimals) as sort_balance')
             ->where('balance', '>', '0')
             ->getQuery();

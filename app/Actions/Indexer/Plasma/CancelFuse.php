@@ -16,7 +16,7 @@ class CancelFuse extends AbstractContractMethodProcessor
     public function handle(AccountBlock $accountBlock): void
     {
         $blockData = $accountBlock->data->decoded;
-        $plasma = Plasma::firstWhere('hash', $blockData['id']);
+        $plasma = Plasma::whereRelation('accountBlock', 'hash', $blockData['id'])->first();
 
         try {
             $this->validateAction($accountBlock, $plasma);

@@ -25,7 +25,14 @@ class PillarUpdates extends BaseTable
     {
         return Pillar::find($this->pillarId)?->updateHistory()
             ->with(['producerAccount', 'withdrawAccount'])
-            ->select('*')
+            ->select([
+                'id',
+                'withdraw_account_id',
+                'producer_account_id',
+                'momentum_rewards',
+                'delegate_rewards',
+                'updated_at',
+            ])
             ->getQuery();
     }
 

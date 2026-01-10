@@ -99,7 +99,7 @@ class OutboundList extends BaseTable
                     fn ($row, Column $column) => view('components.tables.columns.hash', [
                         'hash' => $row->accountBlock->hash,
                         'alwaysShort' => true,
-                        'copyable' => false,
+                        'copyable' => true,
                         'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
