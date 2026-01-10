@@ -53,10 +53,20 @@ class TransactionsList extends BaseTable
 
         $query = AccountBlockModelFactory::create($account)
             ->with(['account', 'toAccount', 'contractMethod', 'token'])
-            ->select('*');
+            ->select([
+                'hash',
+                'account_id',
+                'to_account_id',
+                'token_id',
+                'contract_method_id',
+                'paired_account_block_id',
+                'amount',
+                'block_type',
+                'created_at',
+            ]);
 
         if ($account->address !== config('explorer.burn_address')) {
-            $query->notToBurn();
+            $query->hideReceiveBlocks();
         }
 
         return $query;
@@ -113,7 +123,7 @@ class TransactionsList extends BaseTable
                 })->html(),
             Column::make('Type')
                 ->label(
-                    fn ($row, Column $column) => $row->display_type
+                    fn ($row, Column $column) => $row->display_actual_type
                 ),
             Column::make('Amount')
                 ->sortable(
