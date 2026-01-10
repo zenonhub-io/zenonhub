@@ -74,6 +74,13 @@ class PlasmaList extends BaseTable
                         'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
+            Column::make('Amount')
+                ->sortable(
+                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
+                )
+                ->label(
+                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' ' . app('qsrToken')->symbol
+                ),
             Column::make('From', 'from_account_id')
                 ->label(
                     fn ($row, Column $column) => view('components.tables.columns.address', [
@@ -93,13 +100,6 @@ class PlasmaList extends BaseTable
                         'row' => $row->toAccount,
                         'alwaysShort' => true,
                     ])
-                ),
-            Column::make('Amount')
-                ->sortable(
-                    fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
-                )
-                ->label(
-                    fn ($row, Column $column) => app('qsrToken')->getFormattedAmount($row->amount) . ' ' . app('qsrToken')->symbol
                 ),
             Column::make('Timestamp', 'started_at')
                 ->sortable(

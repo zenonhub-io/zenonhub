@@ -64,19 +64,19 @@ class StakingList extends BaseTable
                         'link' => route('explorer.block.detail', ['hash' => $row->accountBlock->hash]),
                     ])
                 ),
-            Column::make('Address')
-                ->label(
-                    fn ($row, Column $column) => view('components.tables.columns.address', [
-                        'row' => $row->account,
-                        'alwaysShort' => true,
-                    ])
-                ),
             Column::make('Amount')
                 ->sortable(
                     fn (Builder $query, string $direction) => $query->orderByRaw('CAST(amount AS SIGNED) ' . $direction)
                 )
                 ->label(
                     fn ($row, Column $column) => $row->token->getFormattedAmount($row->amount) . ' ' . $row->token->symbol
+                ),
+            Column::make('Address')
+                ->label(
+                    fn ($row, Column $column) => view('components.tables.columns.address', [
+                        'row' => $row->account,
+                        'alwaysShort' => true,
+                    ])
                 ),
             Column::make('Started', 'started_at')
                 ->sortable(
