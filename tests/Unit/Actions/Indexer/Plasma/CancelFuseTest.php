@@ -55,7 +55,7 @@ it('cancels a fuse', function () {
     $accountBlock = createCancelFuseAccountBlock([
         'account' => $plasma->fromAccount,
         'data' => [
-            'id' => $plasma->hash,
+            'id' => $plasma->accountBlock->hash,
         ],
     ]);
 
@@ -75,7 +75,7 @@ it('dispatches the end fuse event', function () {
     $accountBlock = createCancelFuseAccountBlock([
         'account' => $plasma->fromAccount,
         'data' => [
-            'id' => $plasma->hash,
+            'id' => $plasma->accountBlock->hash,
         ],
     ]);
 
@@ -93,7 +93,7 @@ it('ensures only plasma owners can cancel fuses', function () {
     ]);
     $accountBlock = createCancelFuseAccountBlock([
         'data' => [
-            'id' => $plasma->hash,
+            'id' => $plasma->accountBlock->hash,
         ],
     ]);
 
@@ -120,7 +120,7 @@ it('enforces plasma minimum expiration time', function () {
     $accountBlock = createCancelFuseAccountBlock([
         'account' => $plasma->fromAccount,
         'data' => [
-            'id' => $plasma->hash,
+            'id' => $plasma->accountBlock->hash,
         ],
     ]);
 
