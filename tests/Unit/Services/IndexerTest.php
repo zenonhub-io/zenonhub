@@ -92,6 +92,8 @@ it('respects the emergency lock', function () {
 
 it('inserts momentums', function () {
 
+    Event::fake();
+
     app(Indexer::class)->run();
 
     expect(Momentum::count())->toBe(7);
@@ -99,12 +101,16 @@ it('inserts momentums', function () {
 
 it('inserts account blocks', function () {
 
+    Event::fake();
+
     app(Indexer::class)->run();
 
     expect(AccountBlock::count())->toBe(9);
 });
 
 it('rolls back on exception', function () {
+
+    Event::fake();
 
     $this->mock(ZenonSdk::class, function (MockInterface $mock) {
         $mock->shouldReceive('getFrontierMomentum')
