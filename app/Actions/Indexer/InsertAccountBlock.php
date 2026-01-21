@@ -39,16 +39,19 @@ class InsertAccountBlock
         $momentum = Momentum::firstWhere('hash', $accountBlockDTO->confirmationDetail->momentumHash);
         $momentumAcknowledged = Momentum::firstWhere('hash', $accountBlockDTO->momentumAcknowledged->hash);
 
+        $accountUpdateData = [
+            'last_active_at' => $accountBlockDTO->confirmationDetail->momentumTimestamp,
+        ];
+
         if (! $account->public_key) {
-            $account->public_key = $accountBlockDTO->publicKey;
+            $accountUpdateData['public_key'] = $accountBlockDTO->publicKey;
         }
 
         if (! $account->first_active_at) {
-            $account->first_active_at = $accountBlockDTO->confirmationDetail->momentumTimestamp;
+            $accountUpdateData['first_active_at'] = $accountBlockDTO->confirmationDetail->momentumTimestamp;
         }
 
-        $account->last_active_at = $accountBlockDTO->confirmationDetail->momentumTimestamp;
-        $account->save();
+        $account->update($accountUpdateData);
 
         $block = AccountBlock::create([
             'chain_id' => $chain->id,

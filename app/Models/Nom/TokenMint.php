@@ -51,6 +51,7 @@ class TokenMint extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'string',
             'created_at' => 'datetime',
         ];
     }

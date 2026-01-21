@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models\Nom;
 
 use App\Enums\Nom\AccountRewardTypesEnum;
+use Database\Factories\Nom\AccountRewardFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,9 +52,18 @@ class AccountReward extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'string',
             'created_at' => 'datetime',
             'type' => AccountRewardTypesEnum::class,
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return AccountRewardFactory::new();
     }
 
     //

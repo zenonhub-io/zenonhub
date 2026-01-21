@@ -27,9 +27,11 @@ class SetUnwrapFromAddress
             return;
         }
 
-        $unwrap->load('bridgeNetwork');
-        $unwrap->from_address = $this->getFromAddress($unwrap);
-        $unwrap->save();
+        if ($fromAddress = $this->getFromAddress($unwrap)) {
+            $unwrap->update([
+                'from_address' => $fromAddress,
+            ]);
+        }
     }
 
     public function asCommand(Command $command): void
@@ -50,24 +52,20 @@ class SetUnwrapFromAddress
 
     private function getFromAddress(BridgeUnwrap $unwrap): ?string
     {
-        if ($unwrap->bridgeNetwork->name === 'Ethereum') {
-            return Http::get('https://api.etherscan.io/api', [
-                'module' => 'proxy',
-                'action' => 'eth_getTransactionByHash',
-                'txhash' => '0x' . $unwrap->transaction_hash,
-                'apikey' => config('services.etherscan.api_key'),
-            ])->json('result.from');
+        // $supportedNetworks = ['Ethereum', 'BNB Chain'];
+        $supportedNetworks = ['Ethereum'];
+        $unwrap->load('bridgeNetwork');
+
+        if (! in_array($unwrap->bridgeNetwork->name, $supportedNetworks, true)) {
+            return null;
         }
 
-        if ($unwrap->bridgeNetwork->name === 'BNB Chain') {
-            return Http::get('https://api.bscscan.com/api', [
-                'module' => 'proxy',
-                'action' => 'eth_getTransactionByHash',
-                'txhash' => '0x' . $unwrap->transaction_hash,
-                'apikey' => config('services.bscscan.api_key'),
-            ])->json('result.from');
-        }
-
-        return null;
+        return Http::get('https://api.etherscan.io/v2/api', [
+            'chainid' => $unwrap->bridgeNetwork->chain_identifier,
+            'module' => 'proxy',
+            'action' => 'eth_getTransactionByHash',
+            'txhash' => '0x' . $unwrap->transaction_hash,
+            'apikey' => config('services.etherscan.api_key'),
+        ])->json('result.from');
     }
 }

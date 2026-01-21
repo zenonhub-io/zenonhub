@@ -26,7 +26,7 @@ class Indexer
 {
     protected ?int $currentDbHeight = null;
 
-    protected ?int $momentumsPerBatch = 1000;
+    protected ?int $momentumsPerBatch = 100;
 
     protected ConsoleOutput $output;
 
@@ -184,25 +184,21 @@ class Indexer
         $momentums = $this->znn->getMomentumsByHeight($this->currentDbHeight, $this->momentumsPerBatch);
         $momentums->each(function (MomentumDTO $momentumDTO) {
             try {
-                DB::beginTransaction();
+                DB::transaction(function () use ($momentumDTO) {
+                    $this->insertMomentum->execute($momentumDTO);
 
-                $this->insertMomentum->execute($momentumDTO);
-
-                $momentumDTO->content->each(function (MomentumContentDTO $momentumContentDTO) {
-                    $accountBlockDTO = $this->znn->getAccountBlockByHash($momentumContentDTO->hash);
-                    $this->insertAccountBlock->execute($accountBlockDTO);
+                    $momentumDTO->content->each(function (MomentumContentDTO $momentumContentDTO) {
+                        $accountBlockDTO = $this->znn->getAccountBlockByHash($momentumContentDTO->hash);
+                        $this->insertAccountBlock->execute($accountBlockDTO);
+                    });
                 });
-
-                DB::commit();
             } catch (UniqueConstraintViolationException $exception) {
                 if (Str::contains($exception->getMessage(), 'nom_momentums.nom_momentums_height_unique')) {
                     $this->pause();
-                    DB::rollBack();
                     Log::error($exception);
                     throw new IndexerException("Indexing error, paused - {$exception->getMessage()}");
                 }
             } catch (Throwable $exception) {
-                DB::rollBack();
                 Log::error($exception);
                 throw new IndexerException("Indexing error, rollback - {$exception->getMessage()}");
             }

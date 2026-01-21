@@ -9,6 +9,7 @@ use App\Events\Indexer\Stake\StartStake;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Stake as StakeModel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Stake extends AbstractContractMethodProcessor
@@ -30,15 +31,23 @@ class Stake extends AbstractContractMethodProcessor
             return;
         }
 
-        $stake = StakeModel::create([
-            'chain_id' => $accountBlock->chain_id,
-            'account_id' => $accountBlock->account_id,
-            'token_id' => $accountBlock->token_id,
-            'account_block_id' => $accountBlock->id,
-            'amount' => $accountBlock->amount,
-            'duration' => $blockData['durationInSec'],
-            'started_at' => $accountBlock->created_at,
-        ]);
+        $stake = null;
+
+        DB::transaction(function () use ($accountBlock, $blockData, &$stake) {
+            $stake = StakeModel::create([
+                'chain_id' => $accountBlock->chain_id,
+                'account_id' => $accountBlock->account_id,
+                'token_id' => $accountBlock->token_id,
+                'account_block_id' => $accountBlock->id,
+                'amount' => $accountBlock->amount,
+                'duration' => $blockData['durationInSec'],
+                'started_at' => $accountBlock->created_at,
+            ]);
+
+            $stake->account->update([
+                'znn_staked' => bcadd($stake->account->znn_staked, $stake->amount),
+            ]);
+        });
 
         StartStake::dispatch($accountBlock, $stake);
 
