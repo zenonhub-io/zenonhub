@@ -17,15 +17,39 @@ class AccountsSeeder extends Seeder
     {
         $chain = app('currentChain');
         $accounts = Storage::json('json/nom/genesis.json')['GenesisBlocks']['Blocks'];
+        $znnToken = app('znnToken');
+        $qsrToken = app('qsrToken');
 
-        collect($accounts)->each(function ($accountData) use ($chain) {
-            Account::updateOrInsert([
+        collect($accounts)->each(function ($accountData) use ($chain, $znnToken, $qsrToken) {
+
+            $znnBalance = $accountData['BalanceList'][$znnToken->token_standard] ?? 0;
+            $qsrBalance = $accountData['BalanceList'][$qsrToken->token_standard] ?? 0;
+
+            $account = Account::updateOrCreate([
                 'chain_id' => $chain->id,
                 'address' => $accountData['Address'],
             ], [
-                'genesis_znn_balance' => $accountData['BalanceList']['zts1znnxxxxxxxxxxxxx9z4ulx'] ?? 0,
-                'genesis_qsr_balance' => $accountData['BalanceList']['zts1qsrxxxxxxxxxxxxxmrhjll'] ?? 0,
+                'znn_balance' => $znnBalance,
+                'znn_received' => $znnBalance,
+                'genesis_znn_balance' => $znnBalance,
+                'qsr_balance' => $qsrBalance,
+                'qsr_received' => $qsrBalance,
+                'genesis_qsr_balance' => $qsrBalance,
             ]);
+
+            if ($znnBalance > 0) {
+                $account->tokens()->attach($znnToken->id, [
+                    'balance' => $znnBalance,
+                    'updated_at' => $chain->created_at,
+                ]);
+            }
+
+            if ($qsrBalance > 0) {
+                $account->tokens()->attach($qsrToken->id, [
+                    'balance' => $qsrBalance,
+                    'updated_at' => $chain->created_at,
+                ]);
+            }
         });
     }
 }
