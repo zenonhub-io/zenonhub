@@ -22,6 +22,7 @@ class AccountBlocksLatest extends BaseComponent
                     'contract_method_id',
                     'hash',
                     'amount',
+                    'block_type',
                     'created_at',
                 ])
                 ->with([
