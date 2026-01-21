@@ -79,6 +79,19 @@ services:
             - '${PUSHER_METRICS_PORT:-9601}:9601'
         networks:
             - sail
+    znnd:
+        build:
+            context: './docker/znnd'
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+            - "35995:35995" # P2P
+            - "35997:35997" # HTTP RPC
+            - "35998:35998" # WS RPC
+        volumes:
+            - znnd-data:/root/.znn
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
@@ -86,4 +99,6 @@ volumes:
     sail-mysql:
         driver: local
     sail-redis:
+        driver: local
+    znnd-data:
         driver: local

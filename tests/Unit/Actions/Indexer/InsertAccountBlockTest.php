@@ -21,6 +21,8 @@ uses()->group('indexer', 'indexer-actions', 'insert-account-block');
 
 beforeEach(function () {
 
+    Event::fake();
+
     $this->seed(DatabaseSeeder::class);
     $this->seed(NetworkSeeder::class);
     $this->seed(PillarsSeeder::class);
@@ -209,8 +211,6 @@ it('associates raw and decoded data', function () {
 });
 
 it('dispatches account block inserted event once for each account block', function () {
-
-    Event::fake();
 
     $accountBlockDTO = $this->accountBlockDTOs->firstWhere('hash', 'txAddr1000000000000000000000000000000000000000000000000000000001');
     app(InsertAccountBlock::class)->execute($accountBlockDTO);

@@ -9,6 +9,7 @@ use App\Events\Indexer\Plasma\EndFuse;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Plasma;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CancelFuse extends AbstractContractMethodProcessor
@@ -30,8 +31,20 @@ class CancelFuse extends AbstractContractMethodProcessor
             return;
         }
 
-        $plasma->ended_at = $accountBlock->created_at;
-        $plasma->save();
+        DB::transaction(function () use ($plasma, $accountBlock) {
+
+            $plasma->ended_at = $accountBlock->created_at;
+            $plasma->save();
+
+            $plasma->fromAccount->update([
+                'qsr_fused' => bcsub($plasma->fromAccount->qsr_fused, $plasma->amount),
+            ]);
+
+            $plasma->toAccount->update([
+                'plasma_amount' => bcsub($plasma->toAccount->plasma_amount, $plasma->amount),
+            ]);
+
+        });
 
         EndFuse::dispatch($accountBlock, $plasma);
 

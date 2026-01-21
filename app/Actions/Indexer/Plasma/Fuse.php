@@ -9,6 +9,7 @@ use App\Events\Indexer\Plasma\StartFuse;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Plasma;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Fuse extends AbstractContractMethodProcessor
@@ -30,14 +31,26 @@ class Fuse extends AbstractContractMethodProcessor
             return;
         }
 
-        $plasma = Plasma::create([
-            'chain_id' => $accountBlock->chain_id,
-            'from_account_id' => $accountBlock->account_id,
-            'to_account_id' => load_account($blockData['address'])->id,
-            'account_block_id' => $accountBlock->id,
-            'amount' => $accountBlock->amount,
-            'started_at' => $accountBlock->created_at,
-        ]);
+        $plasma = null;
+
+        DB::transaction(function () use ($accountBlock, $blockData, &$plasma) {
+            $plasma = Plasma::create([
+                'chain_id' => $accountBlock->chain_id,
+                'from_account_id' => $accountBlock->account_id,
+                'to_account_id' => load_account($blockData['address'])->id,
+                'account_block_id' => $accountBlock->id,
+                'amount' => $accountBlock->amount,
+                'started_at' => $accountBlock->created_at,
+            ]);
+
+            $plasma->fromAccount->update([
+                'qsr_fused' => bcadd($plasma->fromAccount->qsr_fused, $plasma->amount),
+            ]);
+
+            $plasma->toAccount->update([
+                'plasma_amount' => bcadd($plasma->toAccount->plasma_amount, $plasma->amount),
+            ]);
+        });
 
         StartFuse::dispatch($accountBlock, $plasma);
 

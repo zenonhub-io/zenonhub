@@ -46,22 +46,36 @@ class ProcessBlockRewards
             return;
         }
 
-        AccountReward::create([
-            'chain_id' => $mint->chain_id,
-            'account_block_id' => $mint->accountBlock->id,
-            'account_id' => $rewardReceiver->id,
-            'token_id' => $token->id,
-            'type' => $rewardType,
-            'amount' => $mint->amount,
-            'created_at' => $mint->created_at,
-        ]);
+        DB::transaction(function () use ($mint, $rewardType, $token, $rewardReceiver) {
+            AccountReward::create([
+                'chain_id' => $mint->chain_id,
+                'account_block_id' => $mint->accountBlock->id,
+                'account_id' => $rewardReceiver->id,
+                'token_id' => $token->id,
+                'type' => $rewardType,
+                'amount' => $mint->amount,
+                'created_at' => $mint->created_at,
+            ]);
+
+            if ($token->id === app('znnToken')->id) {
+                $rewardReceiver->update([
+                    'znn_rewards' => bcadd($rewardReceiver->znn_rewards, $mint->amount),
+                ]);
+            }
+
+            if ($token->id === app('qsrToken')->id) {
+                $rewardReceiver->update([
+                    'qsr_rewards' => bcadd($rewardReceiver->qsr_rewards, $mint->amount),
+                ]);
+            }
+        }, 3);
     }
 
     public function asCommand(Command $command): void
     {
         DB::table('nom_account_rewards')->truncate();
 
-        $query = TokenMint::with('accountBlock', 'token', 'receiver');
+        $query = TokenMint::with(['accountBlock', 'token', 'receiver']);
 
         $totalBlocks = $query->count();
         $progressBar = new ProgressBar(new ConsoleOutput, $totalBlocks);

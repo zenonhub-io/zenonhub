@@ -200,7 +200,7 @@ return [
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,
             'memory' => 128,
-            'tries' => 1,
+            'tries' => 2,
             'timeout' => 60,
             'nice' => 0,
         ],

@@ -53,6 +53,7 @@ class BridgeWrap extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];

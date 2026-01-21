@@ -9,6 +9,7 @@ use App\Events\Indexer\Stake\EndStake;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\Stake;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Cancel extends AbstractContractMethodProcessor
@@ -30,8 +31,14 @@ class Cancel extends AbstractContractMethodProcessor
             return;
         }
 
-        $stake->ended_at = $accountBlock->created_at;
-        $stake->save();
+        DB::transaction(function () use ($accountBlock, $stake) {
+            $stake->ended_at = $accountBlock->created_at;
+            $stake->save();
+
+            $stake->account->update([
+                'znn_staked' => bcsub($stake->account->znn_staked, $stake->amount),
+            ]);
+        });
 
         EndStake::dispatch($accountBlock, $stake);
 
