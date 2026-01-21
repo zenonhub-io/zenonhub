@@ -1,0 +1,22 @@
+{
+  "DataPath": "/root/.znn",
+  "WalletPath": "/root/.znn/wallet",
+  "Name": "znnd-node",
+  "LogLevel": "info",
+  "RPC": {
+    "EnableHTTP": true,
+    "EnableWS": true,
+    "HTTPHost": "0.0.0.0",
+    "HTTPPort": 35997,
+    "WSHost": "0.0.0.0",
+    "WSPort": 35998,
+    "Endpoints": [],
+    "HTTPVirtualHosts": ["*"],
+    "HTTPCors": ["*"],
+    "WSOrigins": ["*"]
+  },
+  "Net": {
+    "ListenHost": "0.0.0.0",
+    "ListenPort": 35995
+  }
+}
