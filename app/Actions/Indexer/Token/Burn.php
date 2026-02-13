@@ -9,6 +9,7 @@ use App\Events\Indexer\Token\TokenBurned;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\TokenBurn;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Burn extends AbstractContractMethodProcessor
@@ -30,24 +31,29 @@ class Burn extends AbstractContractMethodProcessor
             return;
         }
 
-        $burn = TokenBurn::create([
-            'chain_id' => $accountBlock->chain_id,
-            'token_id' => $accountBlock->token_id,
-            'account_id' => $accountBlock->account_id,
-            'account_block_id' => $accountBlock->id,
-            'amount' => $accountBlock->amount,
-            'created_at' => $accountBlock->created_at,
-        ]);
+        $burn = null;
 
-        $token = $burn->token;
-        $token->total_supply -= $burn->amount;
+        DB::transaction(function () use ($accountBlock, &$burn) {
+            $burn = TokenBurn::create([
+                'chain_id' => $accountBlock->chain_id,
+                'token_id' => $accountBlock->token_id,
+                'account_id' => $accountBlock->account_id,
+                'account_block_id' => $accountBlock->id,
+                'amount' => $accountBlock->amount,
+                'created_at' => $accountBlock->created_at,
+            ]);
 
-        // For non-mintable coins, drop MaxSupply as well
-        if (! $token->is_mintable) {
-            $token->max_supply -= $burn->amount;
-        }
+            $burn->token->update([
+                'total_supply' => bcsub($burn->token->total_supply, $burn->amount),
+            ]);
 
-        $token->save();
+            // For non-mintable coins, drop MaxSupply as well
+            if (! $burn->token->is_mintable) {
+                $burn->token->update([
+                    'max_supply' => bcsub($burn->token->max_supply, $burn->amount),
+                ]);
+            }
+        });
 
         TokenBurned::dispatch($accountBlock, $burn);
 

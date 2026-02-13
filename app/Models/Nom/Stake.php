@@ -55,6 +55,7 @@ class Stake extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'string',
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
         ];

@@ -57,6 +57,7 @@ class BridgeUnwrap extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'string',
             'redeemed_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

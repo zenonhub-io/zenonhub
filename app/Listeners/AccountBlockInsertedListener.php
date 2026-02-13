@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
+use App\Actions\Nom\ProcessBlockTransfers;
 use App\Actions\Nom\ProcessLiquidityProgramRewards;
-use App\Actions\Nom\UpdateAccountTotals;
 use App\Bots\BridgeAlertBot;
 use App\Bots\WhaleAlertBot;
 use App\Enums\Nom\EmbeddedContractsEnum;
 use App\Events\Indexer\AccountBlockInserted;
 use App\Factories\ContractMethodProcessorFactory;
-use App\Models\Nom\Account;
 use App\Models\Nom\AccountBlock;
 use App\Notifications\Bots\BridgeAlert;
 use App\Notifications\Bots\WhaleAlert;
@@ -29,8 +28,7 @@ class AccountBlockInsertedListener
     public function handle(AccountBlock $accountBlock): void
     {
         $this->dispatchContractMethodProcessor($accountBlock);
-        $this->dispatchAccountTotalsProcessor($accountBlock->account);
-        $this->dispatchAccountTotalsProcessor($accountBlock->toAccount);
+        $this->dispatchBlockTransfersProcessor($accountBlock);
         $this->dispatchLiquidityProgramProcessor($accountBlock);
         $this->dispatchWhaleAlerts($accountBlock);
         $this->dispatchBridgeAlerts($accountBlock);
@@ -57,18 +55,13 @@ class AccountBlockInsertedListener
         }
     }
 
-    private function dispatchAccountTotalsProcessor(Account $account): void
+    private function dispatchBlockTransfersProcessor(AccountBlock $block): void
     {
-        if ($account->address === config('explorer.burn_address')) {
+        if ($block->account->address === config('explorer.burn_address')) {
             return;
         }
 
-        $delay = $account->is_embedded_contract
-            ? now()->addMinutes(5)
-            : now()->addMinutes(1);
-
-        UpdateAccountTotals::dispatch($account)
-            ->delay($delay->diffInSeconds(now()));
+        ProcessBlockTransfers::dispatch($block);
     }
 
     private function dispatchLiquidityProgramProcessor(AccountBlock $accountBlock): void

@@ -9,6 +9,7 @@ use App\Events\Indexer\Token\TokenMinted;
 use App\Exceptions\IndexerActionValidationException;
 use App\Models\Nom\AccountBlock;
 use App\Models\Nom\TokenMint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Mint extends AbstractContractMethodProcessor
@@ -31,19 +32,25 @@ class Mint extends AbstractContractMethodProcessor
             return;
         }
 
-        $mint = TokenMint::create([
-            'chain_id' => $accountBlock->chain_id,
-            'token_id' => load_token($blockData['tokenStandard'])->id,
-            'issuer_id' => $accountBlock->account_id,
-            'receiver_id' => load_account($blockData['receiveAddress'])->id,
-            'account_block_id' => $accountBlock->id,
-            'amount' => $blockData['amount'],
-            'created_at' => $accountBlock->created_at,
-        ]);
+        $mint = null;
 
-        $token = $mint->token;
-        $token->total_supply += $mint->amount;
-        $token->save();
+        DB::transaction(function () use ($accountBlock, $blockData, &$mint) {
+
+            $mint = TokenMint::create([
+                'chain_id' => $accountBlock->chain_id,
+                'token_id' => load_token($blockData['tokenStandard'])->id,
+                'issuer_id' => $accountBlock->account_id,
+                'receiver_id' => load_account($blockData['receiveAddress'])->id,
+                'account_block_id' => $accountBlock->id,
+                'amount' => $blockData['amount'],
+                'created_at' => $accountBlock->created_at,
+            ]);
+
+            $mint->token->update([
+                'total_supply' => bcadd($mint->token->total_supply, $mint->amount),
+            ]);
+
+        }, 3);
 
         TokenMinted::dispatch($accountBlock, $mint);
 
