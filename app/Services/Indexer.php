@@ -70,7 +70,7 @@ class Indexer
 
         while ($this->currentDbHeight < $targetHeight) {
             try {
-                $this->processMomentums();
+                $this->processMomentums($targetHeight);
             } catch (Throwable $exception) {
                 $this->writeOutput($exception->getMessage());
                 Log::debug('Indexer - Error Rollback', [
@@ -181,10 +181,15 @@ class Indexer
      * @throws ZenonRpcException
      * @throws Throwable
      */
-    private function processMomentums(): void
+    private function processMomentums(int $targetHeight): void
     {
         $momentums = $this->znn->getMomentumsByHeight($this->currentDbHeight, $this->momentumsPerBatch);
-        $momentums->each(function (MomentumDTO $momentumDTO) {
+        $momentums->each(function (MomentumDTO $momentumDTO) use ($targetHeight) {
+            // Skip processing if we've reached the target height
+            if ($momentumDTO->height > $targetHeight) {
+                return false; // Break out of the each loop
+            }
+
             try {
                 DB::transaction(function () use ($momentumDTO) {
                     $this->insertMomentum->execute($momentumDTO);
