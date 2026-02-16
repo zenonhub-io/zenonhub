@@ -50,23 +50,25 @@ class Indexer
             return;
         }
 
-        $momentumsToIndex = $momentum->height - $this->currentDbHeight;
+        // Index up to the 2nd latest momentum, allows invalid momentums to be rejected by the network
+        $targetHeight = $momentum->height - 1;
+        $momentumsToIndex = $targetHeight - $this->currentDbHeight;
 
         Log::debug('Indexer - Starting', [
             'current height' => $this->currentDbHeight,
-            'target height' => $momentum->height,
+            'target height' => $targetHeight,
             'to index' => $momentumsToIndex,
         ]);
 
         $this->writeOutput([
             'Start height: ' . $this->currentDbHeight,
-            'Target height: ' . $momentum->height,
+            'Target height: ' . $targetHeight,
             'Momentums to index: ' . $momentumsToIndex,
         ]);
 
         $progressBar = $this->initProgressBar($momentumsToIndex);
 
-        while ($this->currentDbHeight < $momentum->height) {
+        while ($this->currentDbHeight < $targetHeight) {
             try {
                 $this->processMomentums();
             } catch (Throwable $exception) {
@@ -85,7 +87,7 @@ class Indexer
 
         Log::debug('Indexer - Stopping', [
             'current height' => $this->currentDbHeight,
-            'target height' => $momentum->height,
+            'target height' => $targetHeight,
         ]);
     }
 
