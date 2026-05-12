@@ -6,6 +6,12 @@ Disallow: /
 Disallow: /admin/
 Disallow: /horizon/
 Disallow: /api/
+Disallow: /explorer/momentum/
+Disallow: /explorer/block/
+@foreach ($allowedAccounts as $address)
+Allow: /explorer/account/{{ $address }}/
+@endforeach
+Disallow: /explorer/account/
 
 Allow: /
 
