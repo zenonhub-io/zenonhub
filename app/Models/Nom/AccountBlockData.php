@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Throwable;
 
 class AccountBlockData extends Model
 {
@@ -72,13 +73,30 @@ class AccountBlockData extends Model
     //
     // Attributes
 
-    public function getJsonAttribute(): string
+    public function getIsJsonAttribute(): bool
     {
-        return json_encode($this->decoded, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+        if ($this->decoded) {
+            return true;
+        }
+
+        try {
+            $data = base64_decode($this->raw);
+            json_encode($data, JSON_THROW_ON_ERROR);
+        } catch (Throwable) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getParsedAttribute(): string
     {
-        return base64_decode($this->raw);
+        $data = $this->decoded ?: base64_decode($this->raw);
+
+        if ($this->getIsJsonAttribute()) {
+            return json_encode($data, JSON_PRETTY_PRINT);
+        }
+
+        return $data;
     }
 }
