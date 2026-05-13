@@ -81,7 +81,7 @@ class AccountBlockData extends Model
 
         try {
             $data = base64_decode($this->raw);
-            json_encode($data, JSON_THROW_ON_ERROR);
+            json_decode($data, flags: JSON_THROW_ON_ERROR);
         } catch (Throwable) {
             return false;
         }
@@ -94,6 +94,11 @@ class AccountBlockData extends Model
         $data = $this->decoded ?: base64_decode($this->raw);
 
         if ($this->getIsJsonAttribute()) {
+
+            if (is_string($data)) {
+                $data = json_decode($data);
+            }
+
             return json_encode($data, JSON_PRETTY_PRINT);
         }
 
