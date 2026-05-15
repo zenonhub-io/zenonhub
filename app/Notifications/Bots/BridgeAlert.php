@@ -64,7 +64,7 @@ class BridgeAlert extends Notification implements ShouldQueue
                     ->title(':robot: :rotating_light:')
                     ->description("**{$action}** was issued by {$issuerAccount}")
                     ->field('Data', "```
-{$this->block->data->json}
+{$this->block->data->parsed}
 ```")
                     ->field('Transaction', $txLink)
                     ->field('Admin', $adminLink)
@@ -88,7 +88,7 @@ class BridgeAlert extends Notification implements ShouldQueue
             ->line("*{$action}* was issued by {$adminAccount}\n")
             ->line('*Data*')
             ->line("```
-{$this->block->data->json}
+{$this->block->data->parsed}
 ```\n")
             ->line('*Transaction*')
             ->line("{$txLink}\n")

@@ -102,6 +102,10 @@ class AccountBlockData extends Model
             return json_encode($data, JSON_PRETTY_PRINT);
         }
 
+        if (! mb_check_encoding($data, 'UTF-8')) {
+            return bin2hex($data);
+        }
+
         return $data;
     }
 }
